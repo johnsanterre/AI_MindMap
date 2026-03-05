@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="dir-arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-size="18" font-weight="bold" fill="#5C3D1E">Dirichlet Distribution: A Distribution Over Distributions</text>
+
+  <!-- Simplex triangle (left) -->
+  <!-- equilateral triangle centered at ~(200, 220) -->
+  <polygon points="200,80 60,320 340,320" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Corner labels -->
+  <text x="200" y="70" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">p₁=1</text>
+  <text x="42" y="338" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">p₂=1</text>
+  <text x="358" y="338" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">p₃=1</text>
+  <!-- simplex label -->
+  <text x="200" y="230" text-anchor="middle" font-size="11" fill="#555">probability</text>
+  <text x="200" y="246" text-anchor="middle" font-size="11" fill="#555">simplex</text>
+  <text x="200" y="262" text-anchor="middle" font-size="11" fill="#888">p₁+p₂+p₃=1</text>
+  <!-- sample points: concentrated (high α) -->
+  <circle cx="200" cy="210" r="5" fill="#7C2530" opacity="0.8"/>
+  <circle cx="196" cy="202" r="4" fill="#7C2530" opacity="0.7"/>
+  <circle cx="204" cy="215" r="4" fill="#7C2530" opacity="0.7"/>
+  <circle cx="200" cy="218" r="3" fill="#7C2530" opacity="0.6"/>
+  <circle cx="192" cy="208" r="3" fill="#7C2530" opacity="0.6"/>
+  <text x="200" y="158" text-anchor="middle" font-size="11" fill="#7C2530">α=(5,5,5)</text>
+  <text x="200" y="172" text-anchor="middle" font-size="11" fill="#7C2530">concentrated center</text>
+
+  <!-- Right panel: three α regimes -->
+  <rect x="390" y="65" width="385" height="290" rx="10" fill="#FFFEF8" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="582" y="90" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Effect of Concentration Parameter α</text>
+  <line x1="405" y1="100" x2="760" y2="100" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Row: sparse -->
+  <rect x="410" y="112" width="100" height="50" rx="6" fill="#F9F0E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="460" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">α &lt; 1</text>
+  <text x="460" y="150" text-anchor="middle" font-size="10" fill="#7C2530">sparse, corners</text>
+  <text x="580" y="128" text-anchor="middle" font-size="11" fill="#555">Mass at corners: one category</text>
+  <text x="580" y="144" text-anchor="middle" font-size="11" fill="#555">dominates; used in topic models</text>
+  <text x="580" y="160" text-anchor="middle" font-size="10" fill="#888">→ documents use few topics</text>
+
+  <!-- Row: uniform -->
+  <rect x="410" y="178" width="100" height="50" rx="6" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="460" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">α = 1</text>
+  <text x="460" y="216" text-anchor="middle" font-size="10" fill="#2D5A8E">uniform flat</text>
+  <text x="580" y="194" text-anchor="middle" font-size="11" fill="#555">Uniform over simplex: any</text>
+  <text x="580" y="210" text-anchor="middle" font-size="11" fill="#555">probability vector equally likely</text>
+  <text x="580" y="226" text-anchor="middle" font-size="10" fill="#888">→ no prior preference</text>
+
+  <!-- Row: concentrated -->
+  <rect x="410" y="244" width="100" height="50" rx="6" fill="#F3EDE3" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="460" y="264" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">α &gt;&gt; 1</text>
+  <text x="460" y="282" text-anchor="middle" font-size="10" fill="#5C3D1E">concentrated</text>
+  <text x="580" y="260" text-anchor="middle" font-size="11" fill="#555">Peaked at equal mixture: all</text>
+  <text x="580" y="276" text-anchor="middle" font-size="11" fill="#555">categories get similar weight</text>
+  <text x="580" y="292" text-anchor="middle" font-size="10" fill="#888">→ smooth distributions</text>
+
+  <!-- Formula bar -->
+  <rect x="390" y="360" width="385" height="30" rx="6" fill="#F3EDE3" stroke="#C4A87A" stroke-width="1"/>
+  <text x="582" y="380" text-anchor="middle" font-size="11" fill="#5C3D1E">Dir(p ; α) ∝ ∏ pᵢ^(αᵢ−1)    |    conjugate prior for Categorical / Multinomial</text>
+</svg>

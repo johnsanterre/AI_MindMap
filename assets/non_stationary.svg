@@ -1,0 +1,65 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" fill="#333" font-size="17" font-weight="bold">Stationary vs. Non-Stationary Time Series</text>
+
+  <!-- ── LEFT PANEL: Stationary ── -->
+  <rect x="30" y="48" width="355" height="290" rx="6" fill="#F4F8F4" stroke="#AACBAA" stroke-width="1.5"/>
+  <text x="207" y="72" text-anchor="middle" fill="#2E7D32" font-size="14" font-weight="bold">Stationary</text>
+  <text x="207" y="90" text-anchor="middle" fill="#555" font-size="11">constant mean · constant variance</text>
+
+  <!-- Left axes -->
+  <line x1="60" y1="300" x2="365" y2="300" stroke="#777" stroke-width="1.5"/>
+  <line x1="60" y1="110" x2="60" y2="300" stroke="#777" stroke-width="1.5"/>
+  <text x="370" y="304" fill="#777" font-size="11">t</text>
+  <text x="46" y="114" fill="#777" font-size="11">y</text>
+
+  <!-- Mean line (stationary) -->
+  <line x1="60" y1="205" x2="365" y2="205" stroke="#2E7D32" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="368" y="209" fill="#2E7D32" font-size="10">μ</text>
+
+  <!-- Stationary series: oscillates around 205, narrow band -->
+  <polyline points="
+    60,205 75,185 90,222 105,195 120,218 135,190 150,208 165,182 180,215 195,200
+    210,188 225,217 240,196 255,210 270,185 285,220 300,198 315,212 330,187 345,208 362,198
+  " fill="none" stroke="#2E7D32" stroke-width="2.2"/>
+
+  <!-- Variance band (stationary) -->
+  <rect x="60" y="175" width="305" height="60" fill="#2E7D32" fill-opacity="0.07" rx="2"/>
+  <text x="207" y="348" text-anchor="middle" fill="#2E7D32" font-size="11">Fluctuates around a fixed level</text>
+
+  <!-- ── RIGHT PANEL: Non-Stationary ── -->
+  <rect x="415" y="48" width="355" height="290" rx="6" fill="#FDF4F4" stroke="#C8AAAA" stroke-width="1.5"/>
+  <text x="592" y="72" text-anchor="middle" fill="#C0392B" font-size="14" font-weight="bold">Non-Stationary</text>
+  <text x="592" y="90" text-anchor="middle" fill="#555" font-size="11">rising mean · widening variance</text>
+
+  <!-- Right axes -->
+  <line x1="445" y1="300" x2="750" y2="300" stroke="#777" stroke-width="1.5"/>
+  <line x1="445" y1="110" x2="445" y2="300" stroke="#777" stroke-width="1.5"/>
+  <text x="755" y="304" fill="#777" font-size="11">t</text>
+  <text x="431" y="114" fill="#777" font-size="11">y</text>
+
+  <!-- Trend line (non-stationary) -->
+  <line x1="445" y1="275" x2="750" y2="130" stroke="#E07B39" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="753" y="128" fill="#E07B39" font-size="10">trend</text>
+
+  <!-- Non-stationary series: upward trend + expanding variance -->
+  <polyline points="
+    445,272 460,265 475,258 490,268 505,248 520,238 535,252 550,228 565,240
+    580,218 595,230 610,205 625,218 640,188 655,200 670,170 685,183 700,155 715,165 730,140 748,148
+  " fill="none" stroke="#C0392B" stroke-width="2.2"/>
+
+  <!-- Expanding variance band -->
+  <polygon points="445,275 750,160 750,100 445,269" fill="#C0392B" fill-opacity="0.08"/>
+
+  <text x="592" y="348" text-anchor="middle" fill="#C0392B" font-size="11">Trend shifts mean; variance grows over time</text>
+
+  <!-- Bottom legend -->
+  <line x1="170" y1="375" x2="195" y2="375" stroke="#2E7D32" stroke-width="2.2"/>
+  <text x="200" y="379" fill="#2E7D32" font-size="11">Stationary signal</text>
+  <line x1="420" y1="375" x2="445" y2="375" stroke="#C0392B" stroke-width="2.2"/>
+  <text x="450" y="379" fill="#C0392B" font-size="11">Non-stationary signal</text>
+  <line x1="565" y1="375" x2="590" y2="375" stroke="#E07B39" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="595" y="379" fill="#E07B39" font-size="11">Trend</text>
+</svg>

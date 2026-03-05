@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-bfs" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-dfs" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-sol" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#4A7A4A"/>
+    </marker>
+    <marker id="arr-edge" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#9A8F82"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- ── Title ── -->
+  <text x="400" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A3028">BFS vs DFS on the same search tree</text>
+
+  <!-- ===== LEFT PANEL: BFS ===== -->
+  <text x="185" y="52" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Breadth-First Search (BFS)</text>
+  <text x="185" y="65" text-anchor="middle" font-size="9" fill="#5A4A38">explores level by level</text>
+
+  <!-- Tree edges (grey background) -->
+  <!-- Root to L1 left -->
+  <line x1="185" y1="100" x2="110" y2="155" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- Root to L1 right -->
+  <line x1="185" y1="100" x2="260" y2="155" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L1 left to L2 ll -->
+  <line x1="110" y1="175" x2="68" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L1 left to L2 lr -->
+  <line x1="110" y1="175" x2="143" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L1 right to L2 rl -->
+  <line x1="260" y1="175" x2="228" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L1 right to L2 rr -->
+  <line x1="260" y1="175" x2="302" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L2 ll to L3 lll -->
+  <line x1="68" y1="252" x2="45" y2="305" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L2 ll to L3 llr -->
+  <line x1="68" y1="252" x2="92" y2="305" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- L2 rr to L3 rrl (goal) -->
+  <line x1="302" y1="252" x2="318" y2="305" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+
+  <!-- BFS order numbers (level labels) -->
+  <!-- Level 0: root = 1 -->
+  <!-- Level 1: 2, 3 -->
+  <!-- Level 2: 4, 5, 6, 7 -->
+  <!-- Level 3: 8, 9 and goal -->
+
+  <!-- BFS visited nodes (blue fill, numbered) -->
+  <!-- Root (1) -->
+  <circle cx="185" cy="88" r="18" fill="#2D5A8E" fill-opacity="0.85" stroke="#1A3A5E" stroke-width="2"/>
+  <text x="185" y="93" text-anchor="middle" font-size="11" font-weight="bold" fill="#FDFAF4">1</text>
+
+  <!-- L1 left (2) -->
+  <circle cx="110" cy="165" r="16" fill="#2D5A8E" fill-opacity="0.65" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="110" y="170" text-anchor="middle" font-size="11" fill="#FDFAF4">2</text>
+
+  <!-- L1 right (3) -->
+  <circle cx="260" cy="165" r="16" fill="#2D5A8E" fill-opacity="0.65" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="260" y="170" text-anchor="middle" font-size="11" fill="#FDFAF4">3</text>
+
+  <!-- L2 ll (4) -->
+  <circle cx="68" cy="242" r="14" fill="#2D5A8E" fill-opacity="0.38" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="68" y="247" text-anchor="middle" font-size="10" fill="#1A3A5E">4</text>
+
+  <!-- L2 lr (5) -->
+  <circle cx="143" cy="242" r="14" fill="#2D5A8E" fill-opacity="0.38" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="143" y="247" text-anchor="middle" font-size="10" fill="#1A3A5E">5</text>
+
+  <!-- L2 rl (6) -->
+  <circle cx="228" cy="242" r="14" fill="#2D5A8E" fill-opacity="0.38" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="228" y="247" text-anchor="middle" font-size="10" fill="#1A3A5E">6</text>
+
+  <!-- L2 rr (7) — frontier of goal -->
+  <circle cx="302" cy="242" r="14" fill="#2D5A8E" fill-opacity="0.38" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="302" y="247" text-anchor="middle" font-size="10" fill="#1A3A5E">7</text>
+
+  <!-- L3 lll (8) — not yet visited, frontier -->
+  <circle cx="45" cy="318" r="13" fill="#E8E0D4" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="45" y="323" text-anchor="middle" font-size="10" fill="#2D5A8E">8</text>
+
+  <!-- L3 llr (9) — not yet visited, frontier -->
+  <circle cx="92" cy="318" r="13" fill="#E8E0D4" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="92" y="323" text-anchor="middle" font-size="10" fill="#2D5A8E">9</text>
+
+  <!-- L3 rrl = GOAL (found at step 10) -->
+  <circle cx="318" cy="318" r="16" fill="#4A7A4A" fill-opacity="0.9" stroke="#2A5A2A" stroke-width="2.5"/>
+  <text x="318" y="324" text-anchor="middle" font-size="11" font-weight="bold" fill="#FDFAF4">G</text>
+
+  <!-- BFS frontier label -->
+  <text x="68" y="348" text-anchor="middle" font-size="8.5" fill="#2D5A8E">frontier</text>
+  <text x="92" y="348" text-anchor="middle" font-size="8.5" fill="#2D5A8E">frontier</text>
+
+  <!-- Level brackets -->
+  <text x="30" y="92"  font-size="8.5" fill="#9A8F82">L0</text>
+  <text x="30" y="169" font-size="8.5" fill="#9A8F82">L1</text>
+  <text x="30" y="246" font-size="8.5" fill="#9A8F82">L2</text>
+  <text x="30" y="322" font-size="8.5" fill="#9A8F82">L3</text>
+
+  <!-- ===== RIGHT PANEL: DFS ===== -->
+  <text x="588" y="52" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Depth-First Search (DFS)</text>
+  <text x="588" y="65" text-anchor="middle" font-size="9" fill="#5A4A38">dives deep before backtracking</text>
+
+  <!-- DFS Tree edges (grey) -->
+  <line x1="588" y1="100" x2="513" y2="155" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="588" y1="100" x2="663" y2="155" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="513" y1="175" x2="471" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="513" y1="175" x2="546" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="663" y1="175" x2="631" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="663" y1="175" x2="705" y2="232" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="471" y1="252" x2="448" y2="305" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <line x1="471" y1="252" x2="495" y2="305" stroke="#C8C0B4" stroke-width="1.5" marker-end="url(#arr-edge)"/>
+  <!-- DFS path highlight edges (bold red) -->
+  <line x1="588" y1="100" x2="515" y2="153" stroke="#7C2530" stroke-width="3" marker-end="url(#arr-dfs)"/>
+  <line x1="513" y1="175" x2="474" y2="229" stroke="#7C2530" stroke-width="3" marker-end="url(#arr-dfs)"/>
+  <line x1="471" y1="252" x2="450" y2="302" stroke="#7C2530" stroke-width="3" marker-end="url(#arr-dfs)"/>
+
+  <!-- DFS visited nodes -->
+  <!-- Root (1) -->
+  <circle cx="588" cy="88" r="18" fill="#7C2530" fill-opacity="0.85" stroke="#5A1A22" stroke-width="2"/>
+  <text x="588" y="93" text-anchor="middle" font-size="11" font-weight="bold" fill="#FDFAF4">1</text>
+
+  <!-- L1 left visited (2) — DFS goes left first -->
+  <circle cx="513" cy="165" r="16" fill="#7C2530" fill-opacity="0.70" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="513" y="170" text-anchor="middle" font-size="11" fill="#FDFAF4">2</text>
+
+  <!-- L1 right unvisited -->
+  <circle cx="663" cy="165" r="16" fill="#E8E0D4" stroke="#9A8F82" stroke-width="1.5"/>
+  <text x="663" y="170" text-anchor="middle" font-size="10" fill="#7A6A58">—</text>
+
+  <!-- L2 ll (3) visited -->
+  <circle cx="471" cy="242" r="14" fill="#7C2530" fill-opacity="0.55" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="471" y="247" text-anchor="middle" font-size="10" fill="#FDFAF4">3</text>
+
+  <!-- L2 lr unvisited -->
+  <circle cx="546" cy="242" r="14" fill="#E8E0D4" stroke="#9A8F82" stroke-width="1.5"/>
+  <text x="546" y="247" text-anchor="middle" font-size="10" fill="#7A6A58">—</text>
+
+  <!-- L2 rl, rr unvisited -->
+  <circle cx="631" cy="242" r="14" fill="#E8E0D4" stroke="#9A8F82" stroke-width="1.5"/>
+  <text x="631" y="247" text-anchor="middle" font-size="10" fill="#7A6A58">—</text>
+  <circle cx="705" cy="242" r="14" fill="#E8E0D4" stroke="#9A8F82" stroke-width="1.5"/>
+  <text x="705" y="247" text-anchor="middle" font-size="10" fill="#7A6A58">—</text>
+
+  <!-- L3 lll (4) — visited, dead end -->
+  <circle cx="448" cy="318" r="13" fill="#7C2530" fill-opacity="0.35" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="448" y="323" text-anchor="middle" font-size="10" fill="#7C2530">4</text>
+
+  <!-- L3 llr = GOAL (found next) -->
+  <circle cx="495" cy="318" r="16" fill="#4A7A4A" fill-opacity="0.9" stroke="#2A5A2A" stroke-width="2.5"/>
+  <text x="495" y="324" text-anchor="middle" font-size="11" font-weight="bold" fill="#FDFAF4">G</text>
+
+  <!-- DFS path label -->
+  <text x="448" y="347" text-anchor="middle" font-size="8.5" fill="#7C2530">dead end</text>
+
+  <!-- ===== CENTER DIVIDER ===== -->
+  <line x1="400" y1="40" x2="400" y2="370" stroke="#D8D0C4" stroke-width="1" stroke-dasharray="6,4"/>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="30" y="368" width="740" height="28" fill="#F4EFE6" rx="4" stroke="#D8D0C4" stroke-width="1"/>
+
+  <!-- BFS visited -->
+  <circle cx="55"  cy="382" r="7" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="67" y="386" font-size="9" fill="#2D5A8E">BFS visited</text>
+
+  <!-- BFS frontier -->
+  <circle cx="145" cy="382" r="7" fill="#E8E0D4" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="157" y="386" font-size="9" fill="#2D5A8E">BFS frontier (next)</text>
+
+  <!-- DFS visited -->
+  <circle cx="275" cy="382" r="7" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="287" y="386" font-size="9" fill="#7C2530">DFS visited</text>
+
+  <!-- DFS dead end -->
+  <circle cx="363" cy="382" r="7" fill="#7C2530" fill-opacity="0.35" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="375" y="386" font-size="9" fill="#7C2530">DFS dead end</text>
+
+  <!-- Solution -->
+  <circle cx="462" cy="382" r="7" fill="#4A7A4A" fill-opacity="0.9" stroke="#2A5A2A" stroke-width="2"/>
+  <text x="474" y="386" font-size="9" fill="#4A7A4A">Goal found</text>
+
+  <!-- Unvisited -->
+  <circle cx="547" cy="382" r="7" fill="#E8E0D4" stroke="#9A8F82" stroke-width="1.5"/>
+  <text x="559" y="386" font-size="9" fill="#7A6A58">Not yet visited</text>
+
+  <!-- Order numbers note -->
+  <text x="655" y="386" font-size="9" fill="#5A4A38">Numbers = visit order</text>
+</svg>

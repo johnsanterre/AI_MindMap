@@ -1,0 +1,45 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">BERT: Bidirectional Masked Language Model</text>
+  <defs>
+    <marker id="arr3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2C5F8A"/>
+    </marker>
+    <marker id="arr3r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#C0392B"/>
+    </marker>
+  </defs>
+  <!-- Tokens -->
+  <rect x="60" y="240" width="90" height="40" rx="8" fill="#4A7C59"/>
+  <text x="105" y="265" text-anchor="middle" fill="white" font-size="14">[CLS]</text>
+  <rect x="170" y="240" width="90" height="40" rx="8" fill="#2C5F8A"/>
+  <text x="215" y="265" text-anchor="middle" fill="white" font-size="14">The</text>
+  <rect x="280" y="240" width="90" height="40" rx="8" fill="#C0392B"/>
+  <text x="325" y="265" text-anchor="middle" fill="white" font-size="14">[MASK]</text>
+  <rect x="390" y="240" width="90" height="40" rx="8" fill="#2C5F8A"/>
+  <text x="435" y="265" text-anchor="middle" fill="white" font-size="14">sat</text>
+  <rect x="500" y="240" width="90" height="40" rx="8" fill="#2C5F8A"/>
+  <text x="545" y="265" text-anchor="middle" fill="white" font-size="14">on</text>
+  <rect x="610" y="240" width="90" height="40" rx="8" fill="#2C5F8A"/>
+  <text x="655" y="265" text-anchor="middle" fill="white" font-size="14">[SEP]</text>
+  <!-- Transformer block -->
+  <rect x="60" y="130" width="640" height="80" rx="12" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="380" y="162" text-anchor="middle" fill="#2C5F8A" font-size="16" font-weight="bold">Bidirectional Transformer Encoder</text>
+  <text x="380" y="192" text-anchor="middle" fill="#555" font-size="13">Attends to ALL tokens simultaneously in both directions</text>
+  <!-- Arrows up -->
+  <line x1="105" y1="238" x2="105" y2="212" stroke="#555" stroke-width="2" marker-end="url(#arr3)"/>
+  <line x1="215" y1="238" x2="215" y2="212" stroke="#555" stroke-width="2" marker-end="url(#arr3)"/>
+  <line x1="325" y1="238" x2="325" y2="212" stroke="#C0392B" stroke-width="2.5" marker-end="url(#arr3r)"/>
+  <line x1="435" y1="238" x2="435" y2="212" stroke="#555" stroke-width="2" marker-end="url(#arr3)"/>
+  <line x1="545" y1="238" x2="545" y2="212" stroke="#555" stroke-width="2" marker-end="url(#arr3)"/>
+  <line x1="655" y1="238" x2="655" y2="212" stroke="#555" stroke-width="2" marker-end="url(#arr3)"/>
+  <!-- Prediction output -->
+  <rect x="270" y="60" width="110" height="40" rx="8" fill="#C0392B"/>
+  <text x="325" y="85" text-anchor="middle" fill="white" font-size="14">→ "cat"</text>
+  <line x1="325" y1="128" x2="325" y2="102" stroke="#C0392B" stroke-width="2.5" marker-end="url(#arr3r)"/>
+  <text x="325" y="52" text-anchor="middle" fill="#C0392B" font-size="13">Predict masked token</text>
+  <!-- Bidirectional arrows -->
+  <line x1="220" y1="295" x2="318" y2="295" stroke="#E07B39" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr3)"/>
+  <line x1="495" y1="295" x2="383" y2="295" stroke="#E07B39" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr3)"/>
+  <text x="380" y="320" text-anchor="middle" fill="#E07B39" font-size="12">← context flows both ways →</text>
+</svg>

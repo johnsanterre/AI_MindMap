@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <defs>
+    <!-- Blue arrow for transitions -->
+    <marker id="tm-arr-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#2C5F8A"/>
+    </marker>
+    <!-- Self-loop arrow (same color) -->
+    <marker id="tm-arr-self" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#2C5F8A"/>
+    </marker>
+  </defs>
+
+  <!-- ── Title ── -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="#1C1713">Transition Matrix</text>
+
+  <!-- ═══════════════════════════════════
+       LEFT: State diagram  (3 states)
+       S = Sunny  cx=130 cy=170
+       R = Rainy  cx=130 cy=310
+       C = Cloudy cx=270 cy=240
+  ═══════════════════════════════════ -->
+
+  <!-- Section label -->
+  <text x="200" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#6B5D4F">State diagram</text>
+
+  <!-- State S: Sunny -->
+  <circle cx="130" cy="165" r="40" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.5"/>
+  <text x="130" y="160" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#2C5F8A">S</text>
+  <text x="130" y="179" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">Sunny</text>
+
+  <!-- State R: Rainy -->
+  <circle cx="130" cy="315" r="40" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.5"/>
+  <text x="130" y="310" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#2C5F8A">R</text>
+  <text x="130" y="329" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">Rainy</text>
+
+  <!-- State C: Cloudy -->
+  <circle cx="295" cy="240" r="40" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.5"/>
+  <text x="295" y="235" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#2C5F8A">C</text>
+  <text x="295" y="254" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">Cloudy</text>
+
+  <!-- S self-loop: 0.5 -->
+  <path d="M105,127 Q68,90 100,120" fill="none" stroke="#2C5F8A" stroke-width="1.8" marker-end="url(#tm-arr-self)"/>
+  <text x="65" y="105" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2C5F8A">0.5</text>
+
+  <!-- R self-loop: 0.4 -->
+  <path d="M105,353 Q68,388 100,358" fill="none" stroke="#2C5F8A" stroke-width="1.8" marker-end="url(#tm-arr-self)"/>
+  <text x="62" y="390" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2C5F8A">0.4</text>
+
+  <!-- S → C: 0.3 -->
+  <path d="M166,188 Q220,200 257,222" fill="none" stroke="#2C5F8A" stroke-width="1.8" marker-end="url(#tm-arr-blue)"/>
+  <text x="208" y="196" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2C5F8A">0.3</text>
+
+  <!-- S → R: 0.2 -->
+  <path d="M130,205 L130,275" fill="none" stroke="#2C5F8A" stroke-width="1.8" marker-end="url(#tm-arr-blue)"/>
+  <text x="115" y="244" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2C5F8A">0.2</text>
+
+  <!-- C → S: 0.2 (arc back up-left) -->
+  <path d="M263,208 Q218,178 168,170" fill="none" stroke="#C0622F" stroke-width="1.8" marker-end="url(#tm-arr-blue)"/>
+  <text x="210" y="178" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#C0622F">0.2</text>
+
+  <!-- C → R: 0.4 -->
+  <path d="M263,272 Q216,292 168,306" fill="none" stroke="#C0622F" stroke-width="1.8" marker-end="url(#tm-arr-blue)"/>
+  <text x="210" y="302" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#C0622F">0.4</text>
+
+  <!-- C self-loop: 0.4 -->
+  <path d="M333,210 Q368,190 345,225" fill="none" stroke="#C0622F" stroke-width="1.8" marker-end="url(#tm-arr-self)"/>
+  <text x="372" y="202" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#C0622F">0.4</text>
+
+  <!-- R → C: 0.3 -->
+  <path d="M168,302 Q222,282 256,266" fill="none" stroke="#2C5F8A" stroke-width="1.8" marker-end="url(#tm-arr-blue)"/>
+  <text x="214" y="274" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2C5F8A">0.3</text>
+
+  <!-- R → S: 0.3 (left side, going up) -->
+  <path d="M112,277 Q96,248 112,204" fill="none" stroke="#2C5F8A" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#tm-arr-blue)"/>
+  <text x="88" y="244" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2C5F8A">0.3</text>
+
+  <!-- Divider line -->
+  <line x1="410" y1="50" x2="410" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- ═══════════════════════════════════
+       RIGHT: 3×3 Transition Matrix
+  ═══════════════════════════════════ -->
+
+  <!-- Section label -->
+  <text x="615" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#6B5D4F">Transition matrix T</text>
+
+  <!-- Column headers (destination states) -->
+  <text x="531" y="88" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#2C5F8A">→S</text>
+  <text x="615" y="88" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#2C5F8A">→R</text>
+  <text x="699" y="88" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#2C5F8A">→C</text>
+
+  <!-- Row labels (source states) -->
+  <text x="450" y="130" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#2C5F8A">S→</text>
+  <text x="450" y="200" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#2C5F8A">R→</text>
+  <text x="450" y="270" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#C0622F">C→</text>
+
+  <!-- Matrix background cells -->
+  <!-- Row S -->
+  <rect x="475" y="105" width="110" height="48" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.2"/>
+  <rect x="587" y="105" width="56" height="48" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.2"/>
+  <rect x="645" y="105" width="100" height="48" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.2"/>
+  <!-- Row R -->
+  <rect x="475" y="175" width="110" height="48" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.2"/>
+  <rect x="587" y="175" width="56" height="48" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.2"/>
+  <rect x="645" y="175" width="100" height="48" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.2"/>
+  <!-- Row C -->
+  <rect x="475" y="245" width="110" height="48" rx="4" fill="#FEF3EA" stroke="#C0622F" stroke-width="1.2"/>
+  <rect x="587" y="245" width="56" height="48" rx="4" fill="#FEF3EA" stroke="#C0622F" stroke-width="1.2"/>
+  <rect x="645" y="245" width="100" height="48" rx="4" fill="#FEF3EA" stroke="#C0622F" stroke-width="1.2"/>
+
+  <!-- Matrix values: row S (0.5, 0.2, 0.3) -->
+  <text x="530" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.5</text>
+  <text x="615" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.2</text>
+  <text x="695" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.3</text>
+
+  <!-- Row sum annotation S -->
+  <text x="756" y="134" text-anchor="start" font-family="Georgia,serif" font-size="11" fill="#4A7C59">= 1</text>
+
+  <!-- Matrix values: row R (0.3, 0.4, 0.3) -->
+  <text x="530" y="204" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.3</text>
+  <text x="615" y="204" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.4</text>
+  <text x="695" y="204" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.3</text>
+  <text x="756" y="204" text-anchor="start" font-family="Georgia,serif" font-size="11" fill="#4A7C59">= 1</text>
+
+  <!-- Matrix values: row C (0.2, 0.4, 0.4) -->
+  <text x="530" y="274" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.2</text>
+  <text x="615" y="274" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.4</text>
+  <text x="695" y="274" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#1C1713">0.4</text>
+  <text x="756" y="274" text-anchor="start" font-family="Georgia,serif" font-size="11" fill="#4A7C59">= 1</text>
+
+  <!-- Annotations below matrix -->
+  <text x="530" y="330" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-style="italic" fill="#4A7C59">rows sum to 1</text>
+
+  <text x="615" y="354" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-style="italic" fill="#6B5D4F">T ⁿ gives n-step probabilities</text>
+  <text x="615" y="372" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-style="italic" fill="#6B5D4F">stationary distribution π: πT = π</text>
+
+  <!-- Left panel bottom note -->
+  <text x="200" y="380" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#888" font-style="italic">arrows show one-step transitions; labels are probabilities</text>
+</svg>

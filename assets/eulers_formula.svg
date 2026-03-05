@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="Georgia, serif">
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#ffffff"/>
+
+  <!-- Axis lines -->
+  <line x1="60" y1="200" x2="420" y2="200" stroke="#333333" stroke-width="1.5"/>
+  <line x1="240" y1="40" x2="240" y2="360" stroke="#333333" stroke-width="1.5"/>
+
+  <!-- Axis arrowheads -->
+  <polygon points="420,200 410,194 410,206" fill="#333333"/>
+  <polygon points="240,40 234,50 246,50" fill="#333333"/>
+
+  <!-- Axis labels -->
+  <text x="428" y="205" font-size="16" fill="#333333" dominant-baseline="middle">Re</text>
+  <text x="244" y="32" font-size="16" fill="#333333">Im</text>
+
+  <!-- Tick marks on Re axis -->
+  <line x1="330" y1="196" x2="330" y2="204" stroke="#333333" stroke-width="1.2"/>
+  <text x="328" y="218" font-size="13" fill="#555555" text-anchor="middle">1</text>
+  <line x1="150" y1="196" x2="150" y2="204" stroke="#333333" stroke-width="1.2"/>
+  <text x="150" y="218" font-size="13" fill="#555555" text-anchor="middle">−1</text>
+
+  <!-- Tick marks on Im axis -->
+  <line x1="236" y1="110" x2="244" y2="110" stroke="#333333" stroke-width="1.2"/>
+  <text x="228" y="115" font-size="13" fill="#555555" text-anchor="end">i</text>
+  <line x1="236" y1="290" x2="244" y2="290" stroke="#333333" stroke-width="1.2"/>
+  <text x="228" y="295" font-size="13" fill="#555555" text-anchor="end">−i</text>
+
+  <!-- Unit circle (radius = 90px) -->
+  <circle cx="240" cy="200" r="90" fill="none" stroke="#2255aa" stroke-width="2" stroke-dasharray="5,3"/>
+
+  <!-- Point on circle at θ ≈ 50° (cos50°≈0.643, sin50°≈0.766) -->
+  <!-- x = 240 + 90*0.643 = 297.9, y = 200 - 90*0.766 = 131.1 -->
+  <circle cx="298" cy="131" r="5" fill="#cc3333"/>
+
+  <!-- Radius line from origin to point -->
+  <line x1="240" y1="200" x2="298" y2="131" stroke="#cc3333" stroke-width="2"/>
+
+  <!-- cos(θ) projection — horizontal dashed line from point down to Re axis -->
+  <line x1="298" y1="131" x2="298" y2="200" stroke="#228833" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <!-- sin(θ) projection — vertical dashed line from point left to Im axis -->
+  <line x1="240" y1="131" x2="298" y2="131" stroke="#cc8800" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+  <!-- cos(θ) bracket on Re axis -->
+  <line x1="240" y1="210" x2="298" y2="210" stroke="#228833" stroke-width="1.5"/>
+  <line x1="240" y1="207" x2="240" y2="213" stroke="#228833" stroke-width="1.5"/>
+  <line x1="298" y1="207" x2="298" y2="213" stroke="#228833" stroke-width="1.5"/>
+  <text x="269" y="226" font-size="14" fill="#228833" text-anchor="middle">cos θ</text>
+
+  <!-- sin(θ) bracket on Im axis -->
+  <line x1="228" y1="131" x2="228" y2="200" stroke="#cc8800" stroke-width="1.5"/>
+  <line x1="225" y1="131" x2="231" y2="131" stroke="#cc8800" stroke-width="1.5"/>
+  <line x1="225" y1="200" x2="231" y2="200" stroke="#cc8800" stroke-width="1.5"/>
+  <text x="200" y="170" font-size="14" fill="#cc8800" text-anchor="middle">sin θ</text>
+
+  <!-- θ arc -->
+  <!-- Arc from positive Re axis to the radius, about 50 degrees, radius 30 -->
+  <path d="M 270,200 A 30,30 0 0,0 259,172" fill="none" stroke="#333333" stroke-width="1.5"/>
+  <text x="280" y="186" font-size="14" fill="#333333" font-style="italic">θ</text>
+
+  <!-- Label for the point -->
+  <text x="305" y="124" font-size="14" fill="#cc3333" font-style="italic">e^(iθ)</text>
+
+  <!-- Point label: cos θ + i sin θ -->
+  <text x="310" y="108" font-size="13" fill="#555555">(cos θ + i sin θ)</text>
+
+  <!-- Divider -->
+  <line x1="450" y1="30" x2="450" y2="370" stroke="#dddddd" stroke-width="1.5"/>
+
+  <!-- Right panel: formulas and identity -->
+  <text x="475" y="70" font-size="20" fill="#2255aa" font-weight="bold">Euler's Formula</text>
+
+  <!-- Main formula -->
+  <text x="475" y="115" font-size="17" fill="#333333" font-style="italic">
+    e
+    <tspan dy="-6" font-size="12">iθ</tspan>
+    <tspan dy="6" font-size="17"> = cos θ + i · sin θ</tspan>
+  </text>
+
+  <!-- Explanation lines -->
+  <text x="475" y="155" font-size="13" fill="#555555">• Traces the unit circle in the complex plane</text>
+  <text x="475" y="175" font-size="13" fill="#555555">• θ = angle (radians) from positive real axis</text>
+  <text x="475" y="195" font-size="13" fill="#2255aa">• |e^(iθ)| = 1 for all real θ</text>
+
+  <!-- Separator -->
+  <line x1="475" y1="215" x2="770" y2="215" stroke="#dddddd" stroke-width="1"/>
+
+  <!-- Euler's identity -->
+  <text x="475" y="248" font-size="16" fill="#333333" font-weight="bold">Euler's Identity</text>
+  <rect x="470" y="258" width="295" height="58" rx="8" fill="#f5f8ff" stroke="#2255aa" stroke-width="1.5"/>
+  <text x="617" y="294" font-size="22" fill="#2255aa" text-anchor="middle" font-style="italic">
+    e
+    <tspan dy="-8" font-size="14">iπ</tspan>
+    <tspan dy="8" font-size="22"> + 1 = 0</tspan>
+  </text>
+
+  <text x="475" y="338" font-size="13" fill="#555555">θ = π → cos π = −1, sin π = 0</text>
+  <text x="475" y="356" font-size="13" fill="#555555">Links e, i, π, 1, and 0 in one equation</text>
+
+  <!-- Color key -->
+  <line x1="475" y1="378" x2="495" y2="378" stroke="#cc3333" stroke-width="2"/>
+  <text x="498" y="382" font-size="12" fill="#555555">radius (e^iθ)</text>
+  <line x1="580" y1="378" x2="600" y2="378" stroke="#228833" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="603" y="382" font-size="12" fill="#555555">cos θ</text>
+  <line x1="645" y1="378" x2="665" y2="378" stroke="#cc8800" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="668" y="382" font-size="12" fill="#555555">sin θ</text>
+
+</svg>

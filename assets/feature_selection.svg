@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title band -->
+  <text x="400" y="22" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Three Families of Feature Selection</text>
+
+  <!-- Panel 1: Filter Methods -->
+  <rect x="16" y="34" width="238" height="330" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="135" y="56" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Filter Methods</text>
+  <text x="135" y="72" text-anchor="middle" font-size="9.5" fill="#444">Score each feature independently</text>
+  <text x="135" y="85" text-anchor="middle" font-size="9.5" fill="#444">before training any model</text>
+
+  <!-- Correlation bar -->
+  <text x="30" y="106" font-size="9.5" font-weight="bold" fill="#2D5A8E">Correlation / Variance</text>
+  <rect x="30" y="112" width="205" height="10" fill="#eee" rx="3"/>
+  <rect x="30" y="112" width="170" height="10" fill="#2D5A8E" opacity="0.5" rx="3"/>
+  <text x="205" y="121" font-size="8" fill="#2D5A8E">0.84</text>
+  <rect x="30" y="126" width="205" height="10" fill="#eee" rx="3"/>
+  <rect x="30" y="126" width="90" height="10" fill="#2D5A8E" opacity="0.5" rx="3"/>
+  <text x="125" y="135" font-size="8" fill="#2D5A8E">0.44</text>
+  <rect x="30" y="140" width="205" height="10" fill="#eee" rx="3"/>
+  <rect x="30" y="140" width="30" height="10" fill="#7C2530" opacity="0.5" rx="3"/>
+  <text x="65" y="149" font-size="8" fill="#7C2530">0.15 — drop</text>
+
+  <!-- Mutual Information -->
+  <text x="30" y="170" font-size="9.5" font-weight="bold" fill="#2D5A8E">Mutual Information</text>
+  <text x="30" y="184" font-size="9" fill="#444">I(X;Y) = how much knowing</text>
+  <text x="30" y="196" font-size="9" fill="#444">feature X reduces uncertainty</text>
+  <text x="30" y="208" font-size="9" fill="#444">about label Y. Captures</text>
+  <text x="30" y="220" font-size="9" fill="#444">nonlinear relationships.</text>
+
+  <!-- Variance Threshold -->
+  <text x="30" y="242" font-size="9.5" font-weight="bold" fill="#2D5A8E">Variance Threshold</text>
+  <text x="30" y="256" font-size="9" fill="#444">Drop features where</text>
+  <text x="30" y="268" font-size="9" fill="#444">Var(X) &lt; threshold.</text>
+  <text x="30" y="280" font-size="9" fill="#444">Near-constant columns</text>
+  <text x="30" y="292" font-size="9" fill="#444">carry no signal.</text>
+
+  <rect x="30" y="308" width="205" height="40" fill="#2D5A8E" opacity="0.08" rx="3"/>
+  <text x="135" y="322" text-anchor="middle" font-size="9" fill="#2D5A8E">Fast. Model-agnostic.</text>
+  <text x="135" y="336" text-anchor="middle" font-size="9" fill="#7C2530">Ignores feature interactions.</text>
+
+  <!-- Panel 2: Wrapper Methods -->
+  <rect x="268" y="34" width="240" height="330" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="388" y="56" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Wrapper Methods</text>
+  <text x="388" y="72" text-anchor="middle" font-size="9.5" fill="#444">Use a model to evaluate</text>
+  <text x="388" y="85" text-anchor="middle" font-size="9.5" fill="#444">each feature subset</text>
+
+  <!-- RFE diagram -->
+  <text x="283" y="106" font-size="9.5" font-weight="bold" fill="#5C3D1E">Recursive Feature Elimination</text>
+  <!-- stacked feature bars getting shorter -->
+  <rect x="283" y="112" width="210" height="10" fill="#5C3D1E" opacity="0.5" rx="2"/>
+  <text x="498" y="121" font-size="8" fill="#5C3D1E"> all features</text>
+  <rect x="283" y="126" width="168" height="10" fill="#5C3D1E" opacity="0.45" rx="2"/>
+  <text x="455" y="135" font-size="8" fill="#5C3D1E"> –1</text>
+  <rect x="283" y="140" width="126" height="10" fill="#5C3D1E" opacity="0.4" rx="2"/>
+  <rect x="283" y="154" width="84" height="10" fill="#5C3D1E" opacity="0.35" rx="2"/>
+  <rect x="283" y="168" width="50" height="10" fill="#7C2530" opacity="0.6" rx="2"/>
+  <text x="338" y="177" font-size="8" fill="#7C2530"> ← keep best k</text>
+
+  <!-- Forward / Backward -->
+  <text x="283" y="200" font-size="9.5" font-weight="bold" fill="#5C3D1E">Forward / Backward Selection</text>
+
+  <!-- forward -->
+  <circle cx="295" cy="220" r="8" fill="none" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="295" y="224" text-anchor="middle" font-size="8" fill="#2D5A8E">∅</text>
+  <line x1="307" y1="220" x2="320" y2="220" stroke="#2D5A8E" stroke-width="1" marker-end="url(#arr2)"/>
+  <circle cx="330" cy="220" r="8" fill="none" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="330" y="224" text-anchor="middle" font-size="8" fill="#2D5A8E">f₁</text>
+  <line x1="342" y1="220" x2="355" y2="220" stroke="#2D5A8E" stroke-width="1" marker-end="url(#arr2)"/>
+  <circle cx="365" cy="220" r="8" fill="none" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="365" y="224" text-anchor="middle" font-size="8" fill="#2D5A8E">f₁₂</text>
+  <text x="295" y="240" font-size="8.5" fill="#2D5A8E">Forward: add best</text>
+
+  <!-- backward -->
+  <circle cx="420" cy="220" r="8" fill="none" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="420" y="224" text-anchor="middle" font-size="8" fill="#7C2530">all</text>
+  <line x1="432" y1="220" x2="445" y2="220" stroke="#7C2530" stroke-width="1" marker-end="url(#arr3)"/>
+  <circle cx="455" cy="220" r="8" fill="none" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="455" y="224" text-anchor="middle" font-size="7" fill="#7C2530">–f₁</text>
+  <text x="430" y="240" font-size="8.5" fill="#7C2530">Backward: drop worst</text>
+
+  <text x="283" y="262" font-size="9" fill="#444">Each step: retrain model,</text>
+  <text x="283" y="274" font-size="9" fill="#444">evaluate validation score.</text>
+  <text x="283" y="286" font-size="9" fill="#444">Captures interactions but</text>
+  <text x="283" y="298" font-size="9" fill="#444">O(p²) model fits needed.</text>
+
+  <rect x="283" y="308" width="210" height="40" fill="#5C3D1E" opacity="0.08" rx="3"/>
+  <text x="388" y="322" text-anchor="middle" font-size="9" fill="#5C3D1E">Finds best subset for this model.</text>
+  <text x="388" y="336" text-anchor="middle" font-size="9" fill="#7C2530">Expensive. Overfits small sets.</text>
+
+  <!-- Panel 3: Embedded Methods -->
+  <rect x="522" y="34" width="258" height="330" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="651" y="56" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Embedded Methods</text>
+  <text x="651" y="72" text-anchor="middle" font-size="9.5" fill="#444">Feature selection baked into</text>
+  <text x="651" y="85" text-anchor="middle" font-size="9.5" fill="#444">the model's training process</text>
+
+  <!-- Lasso -->
+  <text x="537" y="106" font-size="9.5" font-weight="bold" fill="#7C2530">Lasso (L1 Penalty)</text>
+  <text x="537" y="120" font-size="9" fill="#444">Adds λΣ|wᵢ| to loss.</text>
+  <text x="537" y="132" font-size="9" fill="#444">Drives irrelevant weights</text>
+  <text x="537" y="144" font-size="9" fill="#444">exactly to zero. Sparse</text>
+  <text x="537" y="156" font-size="9" fill="#444">solution = selected features.</text>
+  <!-- lasso geometry hint -->
+  <polygon points="651,170 680,196 651,222 622,196" fill="none" stroke="#7C2530" stroke-width="1.2" opacity="0.6"/>
+  <ellipse cx="651" cy="196" rx="36" ry="20" fill="none" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="622" cy="196" r="3" fill="#7C2530"/>
+  <text x="651" y="238" text-anchor="middle" font-size="8.5" fill="#6B5D4F">L1 ball corners → sparsity</text>
+
+  <!-- Tree importance -->
+  <text x="537" y="262" font-size="9.5" font-weight="bold" fill="#5C3D1E">Tree Feature Importance</text>
+  <text x="537" y="276" font-size="9" fill="#444">Mean decrease in impurity</text>
+  <text x="537" y="288" font-size="9" fill="#444">across all splits using that</text>
+  <text x="537" y="300" font-size="9" fill="#444">feature. Fast but biased</text>
+  <text x="537" y="312" font-size="9" fill="#444">toward high-cardinality.</text>
+  <text x="537" y="326" font-size="9.5" font-weight="bold" fill="#5C3D1E">Permutation Importance</text>
+  <text x="537" y="340" font-size="9" fill="#444">Shuffle feature; measure</text>
+  <text x="537" y="352" font-size="9" fill="#444">score drop. Unbiased.</text>
+
+  <defs>
+    <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

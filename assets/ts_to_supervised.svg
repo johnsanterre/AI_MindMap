@@ -1,0 +1,137 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#333" letter-spacing="0.5">Time Series  →  Supervised Learning (Sliding Window)</text>
+
+  <!-- ══ LEFT PANEL: Raw Time Series ══ -->
+  <text x="138" y="62" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">RAW TIME SERIES</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="310" x2="265" y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="40" y1="80"  x2="40"  y2="315" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="270" y="315" fill="#5C3D1E" font-size="12">t</text>
+  <text x="28"  y="78"  fill="#5C3D1E" font-size="12">X</text>
+
+  <!-- Time-series line -->
+  <polyline points="55,250 80,210 105,230 130,170 155,185 180,140 205,160 230,115 255,130"
+            fill="none" stroke="#2C5F8A" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Dots at each observation -->
+  <circle cx="55"  cy="250" r="4" fill="#2C5F8A"/>
+  <circle cx="80"  cy="210" r="4" fill="#2C5F8A"/>
+  <circle cx="105" cy="230" r="4" fill="#2C5F8A"/>
+  <circle cx="130" cy="170" r="4" fill="#2C5F8A"/>
+  <circle cx="155" cy="185" r="4" fill="#2C5F8A"/>
+  <circle cx="180" cy="140" r="4" fill="#2C5F8A"/>
+  <circle cx="205" cy="160" r="4" fill="#2C5F8A"/>
+  <circle cx="230" cy="115" r="4" fill="#2C5F8A"/>
+  <circle cx="255" cy="130" r="4" fill="#2C5F8A"/>
+
+  <!-- t-axis tick labels -->
+  <text x="55"  y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₁</text>
+  <text x="80"  y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₂</text>
+  <text x="105" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₃</text>
+  <text x="130" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₄</text>
+  <text x="155" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₅</text>
+  <text x="180" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₆</text>
+  <text x="205" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₇</text>
+  <text x="230" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₈</text>
+  <text x="255" y="327" text-anchor="middle" fill="#5C3D1E" font-size="10">t₉</text>
+
+  <!-- Sliding window highlight: window 1 (t1-t3 input, t4 target) -->
+  <rect x="44" y="100" width="95" height="220" rx="5"
+        fill="#4A7C59" fill-opacity="0.12" stroke="#4A7C59" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- Window bracket label -->
+  <text x="91" y="92" text-anchor="middle" font-size="10" fill="#4A7C59" font-weight="bold">window (w=3)</text>
+
+  <!-- Arrow indicating slide direction -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2C5F8A"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4A7C59"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C0392B"/>
+    </marker>
+    <marker id="arrowBig" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L10,4 z" fill="#888"/>
+    </marker>
+  </defs>
+  <!-- Slide arrow -->
+  <line x1="90" y1="355" x2="150" y2="355" stroke="#4A7C59" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <text x="118" y="370" text-anchor="middle" font-size="10" fill="#4A7C59">slides →</text>
+
+  <!-- ══ CENTER ARROW ══ -->
+  <line x1="285" y1="200" x2="345" y2="200" stroke="#888" stroke-width="2.5" marker-end="url(#arrowBig)"/>
+  <text x="315" y="192" text-anchor="middle" font-size="10" fill="#666">reshape</text>
+
+  <!-- ══ RIGHT PANEL: Feature Matrix ══ -->
+  <text x="590" y="62" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">FEATURE MATRIX  (SUPERVISED)</text>
+
+  <!-- Column headers -->
+  <text x="405" y="88" text-anchor="middle" font-size="11" fill="#2C5F8A" font-weight="bold">X_{t-2}</text>
+  <text x="490" y="88" text-anchor="middle" font-size="11" fill="#2C5F8A" font-weight="bold">X_{t-1}</text>
+  <text x="575" y="88" text-anchor="middle" font-size="11" fill="#2C5F8A" font-weight="bold">X_{t-0}</text>
+  <text x="685" y="88" text-anchor="middle" font-size="11" fill="#C0392B" font-weight="bold">y (target)</text>
+
+  <!-- Bracket for lag features -->
+  <line x1="365" y1="93" x2="615" y2="93" stroke="#2C5F8A" stroke-width="1.2"/>
+  <line x1="365" y1="93" x2="365" y2="98"  stroke="#2C5F8A" stroke-width="1.2"/>
+  <line x1="615" y1="93" x2="615" y2="98"  stroke="#2C5F8A" stroke-width="1.2"/>
+  <text x="490" y="108" text-anchor="middle" font-size="9" fill="#2C5F8A" font-style="italic">lag features (inputs)</text>
+
+  <!-- Divider between features and target -->
+  <line x1="635" y1="95" x2="635" y2="345" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+  <!-- Row 1: t1,t2,t3 → t4 -->
+  <rect x="365" y="118" width="250" height="32" rx="3" fill="#EAF2FB" stroke="#AACDE8" stroke-width="1"/>
+  <rect x="635" y="118" width="100" height="32" rx="3" fill="#FDEDEC" stroke="#E8AAAA" stroke-width="1"/>
+  <text x="405" y="139" text-anchor="middle" font-size="12" fill="#2C5F8A">X₁</text>
+  <text x="490" y="139" text-anchor="middle" font-size="12" fill="#2C5F8A">X₂</text>
+  <text x="575" y="139" text-anchor="middle" font-size="12" fill="#2C5F8A">X₃</text>
+  <text x="685" y="139" text-anchor="middle" font-size="12" fill="#C0392B">X₄</text>
+
+  <!-- Row 2: t2,t3,t4 → t5 -->
+  <rect x="365" y="158" width="250" height="32" rx="3" fill="#EAF2FB" stroke="#AACDE8" stroke-width="1"/>
+  <rect x="635" y="158" width="100" height="32" rx="3" fill="#FDEDEC" stroke="#E8AAAA" stroke-width="1"/>
+  <text x="405" y="179" text-anchor="middle" font-size="12" fill="#2C5F8A">X₂</text>
+  <text x="490" y="179" text-anchor="middle" font-size="12" fill="#2C5F8A">X₃</text>
+  <text x="575" y="179" text-anchor="middle" font-size="12" fill="#2C5F8A">X₄</text>
+  <text x="685" y="179" text-anchor="middle" font-size="12" fill="#C0392B">X₅</text>
+
+  <!-- Row 3: t3,t4,t5 → t6 -->
+  <rect x="365" y="198" width="250" height="32" rx="3" fill="#EAF2FB" stroke="#AACDE8" stroke-width="1"/>
+  <rect x="635" y="198" width="100" height="32" rx="3" fill="#FDEDEC" stroke="#E8AAAA" stroke-width="1"/>
+  <text x="405" y="219" text-anchor="middle" font-size="12" fill="#2C5F8A">X₃</text>
+  <text x="490" y="219" text-anchor="middle" font-size="12" fill="#2C5F8A">X₄</text>
+  <text x="575" y="219" text-anchor="middle" font-size="12" fill="#2C5F8A">X₅</text>
+  <text x="685" y="219" text-anchor="middle" font-size="12" fill="#C0392B">X₆</text>
+
+  <!-- Row 4: t4,t5,t6 → t7 -->
+  <rect x="365" y="238" width="250" height="32" rx="3" fill="#EAF2FB" stroke="#AACDE8" stroke-width="1"/>
+  <rect x="635" y="238" width="100" height="32" rx="3" fill="#FDEDEC" stroke="#E8AAAA" stroke-width="1"/>
+  <text x="405" y="259" text-anchor="middle" font-size="12" fill="#2C5F8A">X₄</text>
+  <text x="490" y="259" text-anchor="middle" font-size="12" fill="#2C5F8A">X₅</text>
+  <text x="575" y="259" text-anchor="middle" font-size="12" fill="#2C5F8A">X₆</text>
+  <text x="685" y="259" text-anchor="middle" font-size="12" fill="#C0392B">X₇</text>
+
+  <!-- Ellipsis row -->
+  <text x="490" y="290" text-anchor="middle" font-size="16" fill="#888">⋮</text>
+  <text x="685" y="290" text-anchor="middle" font-size="16" fill="#888">⋮</text>
+
+  <!-- Row N -->
+  <rect x="365" y="303" width="250" height="32" rx="3" fill="#EAF2FB" stroke="#AACDE8" stroke-width="1"/>
+  <rect x="635" y="303" width="100" height="32" rx="3" fill="#FDEDEC" stroke="#E8AAAA" stroke-width="1"/>
+  <text x="405" y="324" text-anchor="middle" font-size="12" fill="#2C5F8A">X_{n-2}</text>
+  <text x="490" y="324" text-anchor="middle" font-size="12" fill="#2C5F8A">X_{n-1}</text>
+  <text x="575" y="324" text-anchor="middle" font-size="12" fill="#2C5F8A">X_n</text>
+  <text x="685" y="324" text-anchor="middle" font-size="12" fill="#C0392B">X_{n+1}</text>
+
+  <!-- Bottom annotations -->
+  <text x="490" y="363" text-anchor="middle" font-size="10" fill="#2C5F8A" font-style="italic">each row = one training sample</text>
+  <text x="685" y="363" text-anchor="middle" font-size="10" fill="#C0392B" font-style="italic">one-step ahead</text>
+  <text x="490" y="382" text-anchor="middle" font-size="10" fill="#555">window size w = 3  |  stride = 1  |  T - w samples total</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Inner Product (Dot Product)</text>
+  <!-- Left: geometric view -->
+  <text x="190" y="58" text-anchor="middle" font-size="14" fill="#333">Geometric Interpretation</text>
+  <defs><marker id="a11" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
+  <!-- u vector -->
+  <line x1="80" y1="280" x2="260" y2="140" stroke="#2196F3" stroke-width="3" marker-end="url(#a11)"/>
+  <text x="265" y="135" font-size="14" fill="#2196F3">u</text>
+  <!-- v vector -->
+  <line x1="80" y1="280" x2="310" y2="230" stroke="#E91E63" stroke-width="3" marker-end="url(#a11)"/>
+  <text x="315" y="228" font-size="14" fill="#E91E63">v</text>
+  <!-- projection of v onto u -->
+  <line x1="240" y1="152" x2="280" y2="220" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="80" y1="280" x2="241" y2="152" stroke="#FF9800" stroke-width="3"/>
+  <text x="120" y="248" font-size="12" fill="#FF9800">‖v‖cosθ</text>
+  <!-- Angle arc -->
+  <path d="M120,263 A50,50 0 0,1 145,249" fill="none" stroke="#555" stroke-width="1.5"/>
+  <text x="145" y="262" font-size="12" fill="#555">θ</text>
+  <!-- Right: formulas -->
+  <rect x="380" y="60" width="380" height="280" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="570" y="92" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Formulas</text>
+  <text x="570" y="120" text-anchor="middle" font-size="13" fill="#2196F3">⟨u,v⟩ = Σ uᵢvᵢ = uᵀv</text>
+  <text x="570" y="148" text-anchor="middle" font-size="13" fill="#E91E63">= ‖u‖ ‖v‖ cos θ</text>
+  <line x1="400" y1="162" x2="742" y2="162" stroke="#ddd"/>
+  <text x="570" y="188" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">Properties</text>
+  <text x="570" y="213" text-anchor="middle" font-size="12" fill="#555">⟨u,v⟩ &gt; 0 : same direction</text>
+  <text x="570" y="235" text-anchor="middle" font-size="12" fill="#555">⟨u,v⟩ = 0 : orthogonal</text>
+  <text x="570" y="257" text-anchor="middle" font-size="12" fill="#555">⟨u,v⟩ &lt; 0 : opposite direction</text>
+  <text x="570" y="279" text-anchor="middle" font-size="12" fill="#555">⟨u,u⟩ = ‖u‖²</text>
+  <line x1="400" y1="295" x2="742" y2="295" stroke="#ddd"/>
+  <text x="570" y="318" text-anchor="middle" font-size="11" fill="#888">Kernel = generalized inner product</text>
+  <text x="570" y="333" text-anchor="middle" font-size="11" fill="#888">Cosine similarity = ⟨u,v⟩/(‖u‖‖v‖)</text>
+</svg>

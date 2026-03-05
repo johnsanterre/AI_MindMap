@@ -1,0 +1,51 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">P vs NP: Complexity Class Hierarchy</text>
+
+  <!-- NP-hard region (outermost, background) -->
+  <rect x="40" y="50" width="720" height="320" rx="16" fill="#fce8e8" stroke="#e53935" stroke-width="2.5"/>
+  <text x="700" y="88" text-anchor="middle" font-size="13" fill="#c62828" font-weight="bold">NP-hard</text>
+  <text x="700" y="106" text-anchor="middle" font-size="11" fill="#c62828">(at least as hard</text>
+  <text x="700" y="121" text-anchor="middle" font-size="11" fill="#c62828">as any NP problem)</text>
+  <text x="695" y="148" text-anchor="middle" font-size="11" fill="#c62828">Halting problem</text>
+  <text x="695" y="165" text-anchor="middle" font-size="11" fill="#c62828">Traveling salesman</text>
+  <text x="695" y="182" text-anchor="middle" font-size="11" fill="#c62828">(optimization)</text>
+
+  <!-- NP region -->
+  <ellipse cx="360" cy="220" rx="280" ry="145" fill="#fff9c4" stroke="#f9a825" stroke-width="2.5"/>
+  <text x="360" y="78" text-anchor="middle" font-size="13" fill="#f57f17" font-weight="bold">NP</text>
+  <text x="360" y="94" text-anchor="middle" font-size="11" fill="#f57f17">(verifiable in polynomial time)</text>
+
+  <!-- NP-complete ring label — problems on the boundary of NP -->
+  <!-- Scattered NP-complete labels near boundary of NP ellipse -->
+  <text x="555" y="172" text-anchor="middle" font-size="11" fill="#e65100" font-weight="bold">NP-complete</text>
+  <text x="568" y="188" text-anchor="middle" font-size="10" fill="#e65100">3-SAT</text>
+  <text x="568" y="204" text-anchor="middle" font-size="10" fill="#e65100">Graph coloring</text>
+  <text x="568" y="220" text-anchor="middle" font-size="10" fill="#e65100">Subset sum</text>
+  <text x="568" y="236" text-anchor="middle" font-size="10" fill="#e65100">Clique</text>
+  <text x="568" y="252" text-anchor="middle" font-size="10" fill="#e65100">Hamiltonian path</text>
+
+  <!-- Dashed boundary arc annotation for NP-complete -->
+  <ellipse cx="360" cy="220" rx="280" ry="145" fill="none" stroke="#e65100" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- P region (innermost) -->
+  <ellipse cx="310" cy="225" rx="160" ry="95" fill="#e8f5e9" stroke="#43a047" stroke-width="2.5"/>
+  <text x="310" y="155" text-anchor="middle" font-size="13" fill="#2e7d32" font-weight="bold">P</text>
+  <text x="310" y="171" text-anchor="middle" font-size="11" fill="#2e7d32">(solvable in polynomial time)</text>
+  <text x="310" y="200" text-anchor="middle" font-size="11" fill="#2e7d32">Sorting</text>
+  <text x="310" y="218" text-anchor="middle" font-size="11" fill="#2e7d32">Shortest path</text>
+  <text x="310" y="236" text-anchor="middle" font-size="11" fill="#2e7d32">Linear programming</text>
+  <text x="310" y="254" text-anchor="middle" font-size="11" fill="#2e7d32">Matrix multiplication</text>
+  <text x="310" y="272" text-anchor="middle" font-size="11" fill="#2e7d32">Primality testing</text>
+
+  <!-- Legend -->
+  <rect x="48" y="300" width="14" height="14" rx="3" fill="#e8f5e9" stroke="#43a047" stroke-width="1.5"/>
+  <text x="68" y="312" font-size="11" fill="#333">P ⊆ NP</text>
+  <rect x="130" y="300" width="14" height="14" rx="3" fill="#fff9c4" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="150" y="312" font-size="11" fill="#333">NP (but not known P)</text>
+  <rect x="310" y="300" width="14" height="14" rx="3" fill="#fce8e8" stroke="#e53935" stroke-width="1.5"/>
+  <text x="330" y="312" font-size="11" fill="#333">NP-hard (may be outside NP)</text>
+
+  <!-- Key open question annotation -->
+  <text x="400" y="370" text-anchor="middle" font-size="12" fill="#555" font-style="italic">The open question: does P = NP? (almost certainly no, but unproven)</text>
+</svg>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-rev" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto">
+      <polygon points="8 0, 0 3, 8 6" fill="#6B5D4F"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="300" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">5-FOLD CROSS-VALIDATION</text>
+
+  <!-- Rotated axis label "fold" -->
+  <text x="20" y="150" font-size="9" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,20,150)">fold</text>
+
+  <!-- ── ROW 1 (fold 1 held out) ── -->
+  <!-- VAL: rect 0 -->
+  <rect x="38" y="38" width="80" height="30" rx="3" fill="#7C2530"/>
+  <text x="78" y="57" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">VAL</text>
+  <!-- TRAIN rects 1-4 -->
+  <rect x="126" y="38" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="166" y="57" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="214" y="38" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="254" y="57" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="302" y="38" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="342" y="57" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="390" y="38" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="430" y="57" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <!-- Row label -->
+  <text x="487" y="51" font-size="9" fill="#5C3D1E">Fold 1</text>
+  <text x="487" y="62" font-size="8" fill="#6B5D4F">val score: s₁</text>
+
+  <!-- ── ROW 2 (fold 2 held out) ── -->
+  <rect x="38" y="83" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="78" y="102" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="126" y="83" width="80" height="30" rx="3" fill="#7C2530"/>
+  <text x="166" y="102" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">VAL</text>
+  <rect x="214" y="83" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="254" y="102" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="302" y="83" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="342" y="102" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="390" y="83" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="430" y="102" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <text x="487" y="96" font-size="9" fill="#5C3D1E">Fold 2</text>
+  <text x="487" y="107" font-size="8" fill="#6B5D4F">val score: s₂</text>
+
+  <!-- ── ROW 3 (fold 3 held out) ── -->
+  <rect x="38" y="128" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="78" y="147" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="126" y="128" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="166" y="147" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="214" y="128" width="80" height="30" rx="3" fill="#7C2530"/>
+  <text x="254" y="147" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">VAL</text>
+  <rect x="302" y="128" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="342" y="147" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="390" y="128" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="430" y="147" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <text x="487" y="141" font-size="9" fill="#5C3D1E">Fold 3</text>
+  <text x="487" y="152" font-size="8" fill="#6B5D4F">val score: s₃</text>
+
+  <!-- ── ROW 4 (fold 4 held out) ── -->
+  <rect x="38" y="173" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="78" y="192" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="126" y="173" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="166" y="192" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="214" y="173" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="254" y="192" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="302" y="173" width="80" height="30" rx="3" fill="#7C2530"/>
+  <text x="342" y="192" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">VAL</text>
+  <rect x="390" y="173" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="430" y="192" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <text x="487" y="186" font-size="9" fill="#5C3D1E">Fold 4</text>
+  <text x="487" y="197" font-size="8" fill="#6B5D4F">val score: s₄</text>
+
+  <!-- ── ROW 5 (fold 5 held out) ── -->
+  <rect x="38" y="218" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="78" y="237" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="126" y="218" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="166" y="237" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="214" y="218" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="254" y="237" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="302" y="218" width="80" height="30" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="342" y="237" text-anchor="middle" font-size="9" fill="#6B5D4F">TRAIN</text>
+  <rect x="390" y="218" width="80" height="30" rx="3" fill="#7C2530"/>
+  <text x="430" y="237" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">VAL</text>
+  <text x="487" y="231" font-size="9" fill="#5C3D1E">Fold 5</text>
+  <text x="487" y="242" font-size="8" fill="#6B5D4F">val score: s₅</text>
+
+  <!-- Annotation: arrow to VAL rect (row 1) -->
+  <line x1="78" y1="38" x2="78" y2="26" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="78" y="24" text-anchor="middle" font-size="8" fill="#7C2530">held out — never seen during training</text>
+
+  <!-- Annotation: arrow to TRAIN rects -->
+  <line x1="254" y1="83" x2="254" y2="73" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
+  <!-- reuse same annotation label position wisely -->
+
+  <!-- Final score line -->
+  <text x="300" y="268" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">
+    Final score = mean(s₁, s₂, s₃, s₄, s₅)
+  </text>
+
+  <!-- Bottom caption -->
+  <text x="300" y="302" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Each data point is used for validation exactly once — gives unbiased estimate of generalisation error
+  </text>
+</svg>

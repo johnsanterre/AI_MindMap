@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="pb-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="pb-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="pb-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="6"/>
+
+  <!-- ══ TITLE ══ -->
+  <text x="400" y="24" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1.5">PROBING NEURAL NETWORK REPRESENTATIONS</text>
+
+  <!-- ══ LEFT SECTION: FROZEN PRETRAINED MODEL (BERT) ══ -->
+
+  <!-- Frozen model outer box -->
+  <rect x="30" y="44" width="390" height="304" rx="8" fill="#F0EBE0" stroke="#AAAAAA" stroke-width="1.8" stroke-dasharray="6,3"/>
+  <text x="225" y="62" text-anchor="middle" font-size="10" fill="#888888" letter-spacing="1">frozen pretrained model (BERT)</text>
+  <!-- Lock icon -->
+  <rect x="338" y="52" width="10" height="8" fill="none" stroke="#999" stroke-width="1.3" rx="1.5"/>
+  <path d="M340,52 Q340,46 343,46 Q346,46 346,52" fill="none" stroke="#999" stroke-width="1.3"/>
+
+  <!-- Input tokens row -->
+  <text x="225" y="88" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">input tokens</text>
+
+  <!-- Token boxes -->
+  <rect x="46"  y="94" width="54" height="26" rx="5" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="73"  y="112" text-anchor="middle" font-size="9" fill="#555">[CLS]</text>
+  <rect x="110" y="94" width="54" height="26" rx="5" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="137" y="112" text-anchor="middle" font-size="9" fill="#555">The</text>
+  <rect x="174" y="94" width="54" height="26" rx="5" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="201" y="112" text-anchor="middle" font-size="9" fill="#555">cat</text>
+  <rect x="238" y="94" width="54" height="26" rx="5" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="265" y="112" text-anchor="middle" font-size="9" fill="#555">sat</text>
+  <rect x="302" y="94" width="54" height="26" rx="5" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="329" y="112" text-anchor="middle" font-size="9" fill="#555">…</text>
+
+  <!-- Layer 1 -->
+  <rect x="46" y="138" width="358" height="34" rx="6" fill="#DDDDDD" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="225" y="160" text-anchor="middle" font-size="9.5" fill="#666">Transformer Layer 1  (syntax, morphology)</text>
+
+  <!-- Layer 2 — highlighted, probe taps here -->
+  <rect x="46" y="184" width="358" height="34" rx="6" fill="#C8C0B0" stroke="#888888" stroke-width="2"/>
+  <text x="225" y="206" text-anchor="middle" font-size="9.5" fill="#444" font-weight="bold">Transformer Layer 4  ← probe taps here</text>
+
+  <!-- Layer 3 -->
+  <rect x="46" y="230" width="358" height="34" rx="6" fill="#DDDDDD" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="225" y="252" text-anchor="middle" font-size="9.5" fill="#666">Transformer Layer 8  (semantics)</text>
+
+  <!-- Layer 4 -->
+  <rect x="46" y="276" width="358" height="34" rx="6" fill="#DDDDDD" stroke="#AAAAAA" stroke-width="1.2"/>
+  <text x="225" y="298" text-anchor="middle" font-size="9.5" fill="#666">Transformer Layer 12  (discourse, pragmatics)</text>
+
+  <!-- Arrows between layers (left side) -->
+  <line x1="70" y1="122" x2="70" y2="136" stroke="#AAAAAA" stroke-width="1.2" marker-end="url(#pb-arr)"/>
+  <line x1="70" y1="174" x2="70" y2="182" stroke="#AAAAAA" stroke-width="1.2" marker-end="url(#pb-arr)"/>
+  <line x1="70" y1="220" x2="70" y2="228" stroke="#AAAAAA" stroke-width="1.2" marker-end="url(#pb-arr)"/>
+  <line x1="70" y1="266" x2="70" y2="274" stroke="#AAAAAA" stroke-width="1.2" marker-end="url(#pb-arr)"/>
+
+  <!-- Frozen label at bottom -->
+  <text x="225" y="328" text-anchor="middle" font-size="9" fill="#888" font-style="italic">weights frozen — no gradients flow back through model</text>
+
+  <!-- ══ PROBE TAP LINE from Layer 4 to Probe box ══ -->
+  <!-- Horizontal tap from right side of Layer 4 -->
+  <line x1="404" y1="201" x2="480" y2="201" stroke="#7C2530" stroke-width="2" marker-end="url(#pb-arr-red)"/>
+  <text x="442" y="196" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">h⁽⁴⁾</text>
+
+  <!-- ══ RIGHT SECTION: PROBE CLASSIFIER ══ -->
+
+  <!-- Probe box -->
+  <rect x="480" y="160" width="170" height="86" rx="8" fill="#F5EDE0" stroke="#7C2530" stroke-width="2"/>
+  <text x="565" y="180" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">probe (linear classifier)</text>
+  <text x="565" y="196" text-anchor="middle" font-size="9" fill="#5C3D1E">Wₚ · h⁽⁴⁾ + b</text>
+  <text x="565" y="212" text-anchor="middle" font-size="8.5" fill="#6B5D4F">trained on labeled data</text>
+  <text x="565" y="226" text-anchor="middle" font-size="8" fill="#888" font-style="italic">only Wₚ and b are learned</text>
+
+  <!-- Arrow from probe down to task output -->
+  <line x1="565" y1="246" x2="565" y2="286" stroke="#7C2530" stroke-width="1.8" marker-end="url(#pb-arr-red)"/>
+
+  <!-- Probing task output box -->
+  <rect x="480" y="286" width="170" height="72" rx="8" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="565" y="305" text-anchor="middle" font-size="10" fill="#2D5A8E" font-weight="bold">probing task</text>
+  <text x="565" y="321" text-anchor="middle" font-size="9" fill="#2D5A8E">POS tagging</text>
+  <text x="565" y="336" text-anchor="middle" font-size="9" fill="#2D5A8E">syntactic depth</text>
+  <text x="565" y="351" text-anchor="middle" font-size="9" fill="#2D5A8E">semantic role</text>
+
+  <!-- ══ ACCURACY READOUT — right margin ══ -->
+  <rect x="665" y="160" width="120" height="86" rx="8" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="725" y="179" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">probe accuracy</text>
+  <text x="725" y="196" text-anchor="middle" font-size="9" fill="#5C3D1E">POS:  92 %</text>
+  <text x="725" y="211" text-anchor="middle" font-size="9" fill="#5C3D1E">depth: 78 %</text>
+  <text x="725" y="226" text-anchor="middle" font-size="9" fill="#5C3D1E">SRL:   71 %</text>
+  <text x="725" y="241" text-anchor="middle" font-size="8" fill="#888" font-style="italic">→ what the layer "knows"</text>
+  <!-- connecting dashes -->
+  <line x1="650" y1="201" x2="663" y2="201" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ══ BOTTOM CAPTION ══ -->
+  <text x="400" y="376" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    A frozen model is tested layer-by-layer: a small linear probe is trained on each representation, and accuracy reveals what information that layer encodes
+  </text>
+</svg>

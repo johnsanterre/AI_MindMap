@@ -1,0 +1,23 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Maximum Likelihood Estimation</text>
+  <!-- Axes -->
+  <line x1="80" y1="280" x2="700" y2="280" stroke="#555" stroke-width="2"/>
+  <line x1="80" y1="70" x2="80" y2="280" stroke="#555" stroke-width="2"/>
+  <text x="710" y="285" fill="#555" font-size="13">θ</text>
+  <text x="50" y="90" fill="#555" font-size="13">L(θ)</text>
+  <!-- Likelihood curve -->
+  <path d="M 100,275 C 160,270 220,240 300,180 C 360,135 400,100 440,95 C 480,92 500,95 530,110 C 580,140 620,200 680,270" fill="none" stroke="#2C5F8A" stroke-width="3"/>
+  <!-- Shaded area under peak -->
+  <path d="M 360,280 L 360,130 C 400,100 440,95 480,110 L 480,280 Z" fill="#2C5F8A" fill-opacity="0.1"/>
+  <!-- MLE line -->
+  <line x1="440" y1="93" x2="440" y2="280" stroke="#C0392B" stroke-width="2.5" stroke-dasharray="6,4"/>
+  <text x="440" y="300" text-anchor="middle" fill="#C0392B" font-size="14" font-weight="bold">θ̂_MLE</text>
+  <!-- Peak dot -->
+  <circle cx="440" cy="93" r="6" fill="#C0392B"/>
+  <!-- Annotation -->
+  <text x="560" y="140" fill="#333" font-size="13">arg max L(θ)</text>
+  <text x="560" y="160" fill="#333" font-size="13">= arg max Σ log p(xᵢ|θ)</text>
+  <!-- Data points -->
+  <text x="400" y="330" text-anchor="middle" fill="#555" font-size="13">Data: x₁, x₂, …, xₙ  →  find θ that makes data most probable</text>
+</svg>

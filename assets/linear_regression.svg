@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="lr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="lr-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="lr-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ LEFT PANEL: FITTED LINE ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">FITTED LINE</text>
+
+  <!-- Axes -->
+  <line x1="30" y1="270" x2="272" y2="270" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#lr-axis)"/>
+  <line x1="30" y1="270" x2="30"  y2="28"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#lr-axis)"/>
+  <text x="268" y="284" font-size="10" fill="#6B5D4F" text-anchor="middle">x</text>
+  <text x="20"  y="25"  font-size="10" fill="#6B5D4F" text-anchor="middle">y</text>
+
+  <!-- Best-fit line: ŷ = w·x + b, from (30,250) to (265,50) -->
+  <line x1="30" y1="250" x2="265" y2="52" stroke="#7C2530" stroke-width="2"/>
+  <!-- Line label -->
+  <text x="170" y="78" font-size="9" fill="#7C2530" font-style="italic" transform="rotate(-40,170,78)">ŷ = w·x + b</text>
+
+  <!-- Scatter data points (12 points roughly along trend with scatter) -->
+  <!-- point at (x_svg, y_svg): line at x gives y_line = 250 - (250-52)/(265-30)*(x-30) = 250 - 0.843*(x-30) -->
+  <!-- P1: x=45, y_line≈237, actual=232 -->
+  <circle cx="45"  cy="232" r="4" fill="#8B6B4A"/>
+  <!-- P2: x=62, y_line≈223, actual=228 -->
+  <circle cx="62"  cy="228" r="4" fill="#8B6B4A"/>
+  <!-- P3: x=80, y_line≈208, actual=200 -->
+  <circle cx="80"  cy="200" r="4" fill="#8B6B4A"/>
+  <!-- P4: x=95, y_line≈195, actual=205 -->
+  <circle cx="95"  cy="205" r="4" fill="#8B6B4A"/>
+  <!-- P5: x=112, y_line≈181, actual=172 -->
+  <circle cx="112" cy="172" r="4" fill="#8B6B4A"/>
+  <!-- P6: x=128, y_line≈167, actual=178 -->
+  <circle cx="128" cy="178" r="4" fill="#8B6B4A"/>
+  <!-- P7: x=148, y_line≈150, actual=143 -->
+  <circle cx="148" cy="143" r="4" fill="#8B6B4A"/>
+  <!-- P8: x=163, y_line≈137, actual=130 -->
+  <circle cx="163" cy="130" r="4" fill="#8B6B4A"/>
+  <!-- P9: x=180, y_line≈123, actual=133 -->
+  <circle cx="180" cy="133" r="4" fill="#8B6B4A"/>
+  <!-- P10: x=198, y_line≈108, actual=100 -->
+  <circle cx="198" cy="100" r="4" fill="#8B6B4A"/>
+  <!-- P11: x=220, y_line≈90, actual=96 -->
+  <circle cx="220" cy="96"  r="4" fill="#8B6B4A"/>
+  <!-- P12: x=248, y_line≈66, actual=72 -->
+  <circle cx="248" cy="72"  r="4" fill="#8B6B4A"/>
+
+  <!-- Residual dashed lines for 3 points: P3, P7, P10 -->
+  <!-- P3: x=80, point y=200, line y=208 -->
+  <line x1="80"  y1="200" x2="80"  y2="208" stroke="#2D5A8E" stroke-width="1.3" stroke-dasharray="3,2"/>
+  <text x="84" y="206" font-size="7.5" fill="#2D5A8E" font-style="italic">eᵢ</text>
+  <!-- P7: x=148, point y=143, line y=150 -->
+  <line x1="148" y1="143" x2="148" y2="150" stroke="#2D5A8E" stroke-width="1.3" stroke-dasharray="3,2"/>
+  <text x="152" y="149" font-size="7.5" fill="#2D5A8E" font-style="italic">eᵢ</text>
+  <!-- P9: x=180, point y=133, line y=123 -->
+  <line x1="180" y1="123" x2="180" y2="133" stroke="#2D5A8E" stroke-width="1.3" stroke-dasharray="3,2"/>
+  <text x="184" y="130" font-size="7.5" fill="#2D5A8E" font-style="italic">eᵢ</text>
+
+  <!-- Residual label below panel -->
+  <text x="145" y="292" text-anchor="middle" font-size="8.5" fill="#6B5D4F">residuals eᵢ = yᵢ − ŷᵢ</text>
+
+  <!-- ══ RIGHT PANEL: LOSS SURFACE ══ -->
+  <text x="443" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">LOSS SURFACE</text>
+
+  <!-- Concentric ellipses (contour plot of MSE bowl) -->
+  <!-- Center at (443, 160) -->
+  <ellipse cx="443" cy="160" rx="118" ry="78" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <ellipse cx="443" cy="160" rx="94"  ry="62" fill="#E9DEC5" stroke="#C8B896" stroke-width="1"/>
+  <ellipse cx="443" cy="160" rx="70"  ry="46" fill="#DCCFA8" stroke="#BBAA80" stroke-width="1"/>
+  <ellipse cx="443" cy="160" rx="46"  ry="30" fill="#CAB882" stroke="#A89058" stroke-width="1"/>
+  <ellipse cx="443" cy="160" rx="24"  ry="16" fill="#B09050" stroke="#8A7038" stroke-width="1"/>
+
+  <!-- Gradient descent spiral path inward -->
+  <polyline
+    points="352,112 398,98 450,106 478,132 470,150 458,156 450,158 445,160 443,160"
+    fill="none" stroke="#7C2530" stroke-width="1.8" stroke-dasharray="none" marker-end="url(#lr-arr-red)"/>
+  <!-- Intermediate arrow step dots -->
+  <circle cx="352" cy="112" r="3.5" fill="#7C2530"/>
+  <circle cx="398" cy="98"  r="3"   fill="#7C2530" opacity="0.8"/>
+  <circle cx="450" cy="106" r="3"   fill="#7C2530" opacity="0.75"/>
+  <circle cx="478" cy="132" r="2.5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="470" cy="150" r="2.5" fill="#7C2530" opacity="0.65"/>
+  <circle cx="458" cy="156" r="2"   fill="#7C2530" opacity="0.6"/>
+
+  <!-- Minimum marker -->
+  <circle cx="443" cy="160" r="5" fill="#7C2530"/>
+  <text x="450" y="153" font-size="8.5" fill="#7C2530" font-weight="bold">w*, b*</text>
+
+  <!-- Region labels -->
+  <text x="325" y="108" font-size="8" fill="#6B5D4F" font-style="italic">high MSE</text>
+  <text x="420" y="182" font-size="8" fill="#5C3D1E" font-style="italic">min MSE</text>
+
+  <!-- Axis labels for w and b -->
+  <!-- w axis (horizontal) -->
+  <line x1="310" y1="245" x2="575" y2="245" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#lr-axis)"/>
+  <line x1="310" y1="245" x2="310" y2="55"  stroke="#C4A87A" stroke-width="1.2" marker-end="url(#lr-axis)"/>
+  <text x="575" y="258" font-size="10" fill="#6B5D4F">w</text>
+  <text x="302" y="50"  font-size="10" fill="#6B5D4F">b</text>
+
+  <!-- MSE formula -->
+  <text x="443" y="290" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">MSE = (1/n)Σeᵢ²</text>
+</svg>

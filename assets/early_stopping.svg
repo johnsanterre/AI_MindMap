@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="es-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="es-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">EARLY STOPPING: DETECTING OVERFITTING IN TRAINING</text>
+
+  <!-- ══ MAIN CHART ══ -->
+  <!-- Axes -->
+  <line x1="70" y1="50" x2="70" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="70" y1="320" x2="700" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="35" y="190" text-anchor="middle" font-size="10" fill="#5C3D1E" transform="rotate(-90 35 190)">Loss</text>
+  <text x="385" y="348" text-anchor="middle" font-size="10" fill="#5C3D1E">Epoch</text>
+
+  <!-- Y axis ticks and labels -->
+  <line x1="66" y1="80"  x2="74" y2="80"  stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="66" y1="140" x2="74" y2="140" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="66" y1="200" x2="74" y2="200" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="66" y1="260" x2="74" y2="260" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="62" y="84"  text-anchor="end" font-size="8" fill="#6B5D4F">0.1</text>
+  <text x="62" y="144" text-anchor="end" font-size="8" fill="#6B5D4F">0.3</text>
+  <text x="62" y="204" text-anchor="end" font-size="8" fill="#6B5D4F">0.5</text>
+  <text x="62" y="264" text-anchor="end" font-size="8" fill="#6B5D4F">0.7</text>
+
+  <!-- X axis ticks -->
+  <line x1="130" y1="316" x2="130" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="190" y1="316" x2="190" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="250" y1="316" x2="250" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="310" y1="316" x2="310" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="370" y1="316" x2="370" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="430" y1="316" x2="430" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="490" y1="316" x2="490" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="550" y1="316" x2="550" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="610" y1="316" x2="610" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="670" y1="316" x2="670" y2="324" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="130" y="336" text-anchor="middle" font-size="8" fill="#6B5D4F">5</text>
+  <text x="250" y="336" text-anchor="middle" font-size="8" fill="#6B5D4F">15</text>
+  <text x="370" y="336" text-anchor="middle" font-size="8" fill="#6B5D4F">25</text>
+  <text x="490" y="336" text-anchor="middle" font-size="8" fill="#6B5D4F">35</text>
+  <text x="610" y="336" text-anchor="middle" font-size="8" fill="#6B5D4F">45</text>
+
+  <!-- TRAINING LOSS CURVE (red, monotone decreasing) -->
+  <!-- polyline approximation of smooth curve -->
+  <polyline
+    points="70,290  90,270  110,252  130,236  150,221  170,208  190,196  210,186  230,177  250,169  270,163  290,157  310,152  330,148  350,145  370,142  390,140  410,138  430,137  450,135  470,134  490,133  510,132  530,131  550,130  570,129  590,128  610,128  630,127  650,127  670,126  690,126  700,126"
+    fill="none" stroke="#7C2530" stroke-width="2.2"/>
+  <text x="715" y="130" font-size="9" fill="#7C2530" font-weight="bold">Train</text>
+
+  <!-- VALIDATION LOSS CURVE (blue, U-shaped) -->
+  <!-- goes down then up -->
+  <polyline
+    points="70,295  90,275  110,257  130,241  150,226  170,213  190,202  210,192  230,184  250,177  270,171  290,166  310,163  330,160  350,159  370,159  390,160  410,162  430,165  450,169  470,174  490,180  510,187  530,195  550,205  570,216  590,228  610,241  630,255  650,270  670,284  690,296  700,302"
+    fill="none" stroke="#2D5A8E" stroke-width="2.2"/>
+  <text x="715" y="305" font-size="9" fill="#2D5A8E" font-weight="bold">Val</text>
+
+  <!-- BEST VAL POINT (minimum of validation) -->
+  <!-- minimum around epoch 25 → x=370 -->
+  <circle cx="370" cy="159" r="7" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="370" y="152" text-anchor="middle" font-size="8" fill="#2D5A8E">min val</text>
+
+  <!-- EARLY STOPPING LINE -->
+  <!-- patience window: stop at ~epoch 35 → x=490 -->
+  <line x1="490" y1="50" x2="490" y2="320" stroke="#7C2530" stroke-width="1.8" stroke-dasharray="6,3"/>
+  <text x="493" y="65" font-size="9.5" fill="#7C2530" font-weight="bold">Stop here</text>
+  <text x="493" y="78" font-size="8.5" fill="#7C2530">(patience = 10)</text>
+
+  <!-- PATIENCE BRACKET -->
+  <line x1="370" y1="295" x2="490" y2="295" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="370" y1="290" x2="370" y2="300" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="490" y1="290" x2="490" y2="300" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="430" y="312" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">patience window</text>
+
+  <!-- OVERFITTING ZONE shading -->
+  <rect x="370" y="50" width="330" height="270" fill="#7C2530" opacity="0.04"/>
+  <text x="535" y="95" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic" opacity="0.7">overfitting region</text>
+  <text x="535" y="108" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic" opacity="0.7">(train ↓, val ↑)</text>
+
+  <!-- UNDERFITTING ZONE label -->
+  <text x="210" y="70" text-anchor="middle" font-size="9" fill="#2D5A8E" font-style="italic" opacity="0.8">still learning</text>
+
+  <!-- ══ RIGHT PANEL: ALGORITHM SUMMARY ══ -->
+  <rect x="715" y="50" width="72" height="0" rx="0" fill="none"/>
+  <!-- side panel now spans the right -->
+
+  <!-- ══ LOWER ANNOTATION PANEL ══ -->
+  <rect x="70" y="355" width="620" height="35" rx="4" fill="none"/>
+  <text x="385" y="372" text-anchor="middle" font-size="8.5" fill="#5C3D1E">
+    ''patience'' = how many epochs of no improvement to tolerate before halting and restoring best weights
+  </text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="393" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Early stopping monitors validation loss and halts training when generalization stops improving
+  </text>
+</svg>

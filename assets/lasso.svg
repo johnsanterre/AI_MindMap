@@ -1,0 +1,30 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Left: L1 constraint diamond -->
+  <text x="200" y="35" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">L1 Constraint (Lasso)</text>
+  <polygon points="200,120 300,220 200,320 100,220" fill="#FF9800" fill-opacity="0.15" stroke="#FF9800" stroke-width="2"/>
+  <!-- Loss contours -->
+  <ellipse cx="310" cy="130" rx="60" ry="40" fill="none" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="130" rx="115" ry="80" fill="none" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="130" rx="175" ry="125" fill="none" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- OLS solution -->
+  <circle cx="310" cy="130" r="5" fill="#E91E63"/>
+  <text x="320" y="125" font-size="12" fill="#E91E63">OLS min</text>
+  <!-- Lasso solution at corner = sparsity! -->
+  <circle cx="200" cy="120" r="6" fill="#FF9800"/>
+  <text x="210" y="115" font-size="12" fill="#FF9800">Lasso solution</text>
+  <text x="210" y="129" font-size="11" fill="#FF9800">(corner → sparse!)</text>
+  <!-- Right: sparse coefficients -->
+  <text x="590" y="35" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Sparsity: Coefficients → 0</text>
+  <line x1="420" y1="320" x2="760" y2="320" stroke="#333" stroke-width="2"/>
+  <line x1="420" y1="320" x2="420" y2="60" stroke="#333" stroke-width="2"/>
+  <text x="590" y="345" text-anchor="middle" font-size="12" fill="#666">λ (regularization)</text>
+  <path d="M430,80 C470,100 530,200 600,320" fill="none" stroke="#FF9800" stroke-width="2.5"/>
+  <path d="M430,130 C480,160 560,260 650,320" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <path d="M430,200 C460,230 500,290 560,320" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <!-- Zero annotations -->
+  <line x1="600" y1="310" x2="760" y2="310" stroke="#FF9800" stroke-width="2.5"/>
+  <line x1="650" y1="310" x2="760" y2="310" stroke="#4CAF50" stroke-width="2.5"/>
+  <text x="710" y="300" font-size="11" fill="#666">= 0 (sparse)</text>
+  <text x="400" y="20" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Lasso Regularization</text>
+</svg>

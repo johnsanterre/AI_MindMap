@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Source Domain -->
+  <rect x="30" y="40" width="210" height="310" rx="6" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="135" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">SOURCE DOMAIN</text>
+  <!-- Labeled circles (source) -->
+  <circle cx="85" cy="105" r="12" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="120" cy="90" r="12" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="105" cy="130" r="12" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="155" cy="100" r="12" fill="#7C2530" opacity="0.7"/>
+  <circle cx="175" cy="125" r="12" fill="#7C2530" opacity="0.7"/>
+  <circle cx="145" cy="140" r="12" fill="#7C2530" opacity="0.7"/>
+  <text x="100" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">A</text>
+  <text x="120" y="93" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">A</text>
+  <text x="105" y="133" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">A</text>
+  <text x="155" y="103" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">B</text>
+  <text x="175" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">B</text>
+  <text x="145" y="143" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">B</text>
+  <text x="135" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Labeled data</text>
+  <text x="135" y="202" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">e.g. medical images</text>
+  <text x="135" y="219" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">from Hospital A</text>
+  <!-- decision boundary -->
+  <line x1="60" y1="165" x2="200" y2="85" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="135" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">Model trained here</text>
+  <rect x="75" y="280" width="120" height="26" rx="4" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1"/>
+  <text x="135" y="297" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">p_source(x)</text>
+
+  <!-- Arrow between domains -->
+  <text x="278" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#C4A87A">&#8594;</text>
+  <text x="278" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="9" letter-spacing="0.5" fill="#6B5D4F">SHIFT</text>
+
+  <!-- Panel 2: Target Domain -->
+  <rect x="310" y="40" width="210" height="310" rx="6" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="415" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">TARGET DOMAIN</text>
+  <!-- Unlabeled circles (target — shifted distribution) -->
+  <circle cx="360" cy="180" r="12" fill="#888" opacity="0.5"/>
+  <circle cx="395" cy="160" r="12" fill="#888" opacity="0.5"/>
+  <circle cx="380" cy="210" r="12" fill="#888" opacity="0.5"/>
+  <circle cx="440" cy="175" r="12" fill="#888" opacity="0.5"/>
+  <circle cx="460" cy="200" r="12" fill="#888" opacity="0.5"/>
+  <circle cx="425" cy="215" r="12" fill="#888" opacity="0.5"/>
+  <text x="360" y="183" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">?</text>
+  <text x="395" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">?</text>
+  <text x="380" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">?</text>
+  <text x="440" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">?</text>
+  <text x="460" y="203" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">?</text>
+  <text x="425" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">?</text>
+  <text x="415" y="110" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Unlabeled data</text>
+  <text x="415" y="127" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">e.g. medical images</text>
+  <text x="415" y="144" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">from Hospital B</text>
+  <text x="415" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">Adapt model here</text>
+  <rect x="355" y="280" width="120" height="26" rx="4" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="415" y="297" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">p_target(x)</text>
+
+  <!-- Panel 3: Adapted -->
+  <rect x="560" y="40" width="210" height="310" rx="6" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="665" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">AFTER ADAPTATION</text>
+  <!-- Aligned circles -->
+  <circle cx="615" cy="160" r="12" fill="#2D5A8E" opacity="0.75"/>
+  <circle cx="645" cy="145" r="12" fill="#2D5A8E" opacity="0.75"/>
+  <circle cx="630" cy="185" r="12" fill="#2D5A8E" opacity="0.75"/>
+  <circle cx="695" cy="155" r="12" fill="#7C2530" opacity="0.75"/>
+  <circle cx="710" cy="180" r="12" fill="#7C2530" opacity="0.75"/>
+  <circle cx="678" cy="195" r="12" fill="#7C2530" opacity="0.75"/>
+  <text x="615" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">A</text>
+  <text x="645" y="148" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">A</text>
+  <text x="630" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">A</text>
+  <text x="695" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">B</text>
+  <text x="710" y="183" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">B</text>
+  <text x="678" y="198" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="white">B</text>
+  <!-- boundary -->
+  <line x1="590" y1="220" x2="730" y2="130" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="665" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">Boundaries re-aligned</text>
+  <rect x="600" y="280" width="130" height="26" rx="4" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="665" y="297" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">p_source &#8776; p_target</text>
+
+  <!-- Title -->
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Domain Adaptation: Bridging the Distribution Gap</text>
+</svg>

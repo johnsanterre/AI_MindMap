@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#3A3028" letter-spacing="0.5">Brownian Motion vs Lévy Flight</text>
+
+  <!-- ══ DIVIDER ══ -->
+  <line x1="400" y1="44" x2="400" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ LEFT PANEL: Brownian Motion ══ -->
+  <text x="200" y="56" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" letter-spacing="1">BROWNIAN MOTION</text>
+  <text x="200" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9A8A7A">(Gaussian steps — all similar size)</text>
+
+  <!-- Brownian path: many small clustered steps -->
+  <polyline
+    points="60,200 68,192 75,204 83,196 90,208 97,200 105,190 112,202 119,195 127,207 134,198 142,208 149,197 156,210 163,200 170,190 176,200 183,193 190,205 197,196 203,207 210,197 217,205 223,195 229,207 235,196 241,207 247,198 253,207 259,196 265,207 271,196 277,207 283,196 289,205 295,195 300,205 306,195 311,207 317,196 323,207 329,197 335,205 341,195 347,205 353,195 358,207 364,196"
+    fill="none" stroke="#2D5A8E" stroke-width="1.8" stroke-linejoin="round" opacity="0.85"/>
+
+  <!-- Brownian start/end dots -->
+  <circle cx="60" cy="200" r="5" fill="#2D5A8E"/>
+  <text x="60" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#2D5A8E">start</text>
+  <circle cx="364" cy="196" r="5" fill="#7C2530"/>
+  <text x="364" y="218" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#7C2530">end</text>
+
+  <!-- Small step size annotation -->
+  <line x1="100" y1="268" x2="140" y2="268" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="120" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#2D5A8E">small uniform steps</text>
+  <text x="200" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#6A5A4A" font-style="italic">Net displacement: modest</text>
+  <text x="200" y="326" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#8A7A6A">P(step) ∝ e^(−s²/2σ²)</text>
+
+  <!-- ══ RIGHT PANEL: Lévy Flight ══ -->
+  <text x="600" y="56" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" letter-spacing="1">LÉVY FLIGHT</text>
+  <text x="600" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9A8A7A">(Heavy-tailed steps — rare giant jumps)</text>
+
+  <!-- Lévy path: many small steps plus occasional huge jumps -->
+  <!-- Small cluster 1 -->
+  <polyline
+    points="430,200 438,193 445,204 452,196 459,206 465,197 471,207 477,198 483,206 489,196"
+    fill="none" stroke="#2D5A8E" stroke-width="1.8" stroke-linejoin="round" opacity="0.85"/>
+
+  <!-- Big jump 1 -->
+  <defs>
+    <marker id="arr-levy1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C05020"/>
+    </marker>
+    <marker id="arr-levy2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C05020"/>
+    </marker>
+    <marker id="arr-levy3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C05020"/>
+    </marker>
+  </defs>
+  <line x1="489" y1="196" x2="547" y2="118" stroke="#C05020" stroke-width="2.8" stroke-dasharray="6,3" marker-end="url(#arr-levy1)"/>
+  <text x="510" y="145" font-family="Arial,sans-serif" font-size="9" fill="#C05020" font-style="italic">large jump</text>
+
+  <!-- Small cluster 2 -->
+  <polyline
+    points="547,118 555,112 562,122 568,114 574,124 580,115 586,123 592,114 598,123 604,114"
+    fill="none" stroke="#2D5A8E" stroke-width="1.8" stroke-linejoin="round" opacity="0.85"/>
+
+  <!-- Big jump 2 -->
+  <line x1="604" y1="114" x2="668" y2="242" stroke="#C05020" stroke-width="2.8" stroke-dasharray="6,3" marker-end="url(#arr-levy2)"/>
+  <text x="645" y="182" font-family="Arial,sans-serif" font-size="9" fill="#C05020" font-style="italic">large jump</text>
+
+  <!-- Small cluster 3 -->
+  <polyline
+    points="668,242 676,234 683,244 690,235 696,244 702,234 708,244 714,234 720,243 726,234"
+    fill="none" stroke="#2D5A8E" stroke-width="1.8" stroke-linejoin="round" opacity="0.85"/>
+
+  <!-- Start/end dots -->
+  <circle cx="430" cy="200" r="5" fill="#2D5A8E"/>
+  <text x="430" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#2D5A8E">start</text>
+  <circle cx="726" cy="234" r="5" fill="#7C2530"/>
+  <text x="726" y="256" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#7C2530">end</text>
+
+  <!-- Large displacement annotation arrow -->
+  <line x1="430" y1="340" x2="726" y2="340" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <text x="578" y="356" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7C2530" font-style="italic">large net displacement</text>
+
+  <!-- ══ INSET: Step-size distribution ══ -->
+  <rect x="440" y="265" width="150" height="85" rx="5" fill="#F5EFE0" stroke="#C4B090" stroke-width="1"/>
+  <text x="515" y="281" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#5A4A3A" letter-spacing="0.5">STEP-SIZE DISTRIBUTION</text>
+
+  <!-- Gaussian inset curve (thin tail) -->
+  <path d="M453,335 C462,310 475,285 488,278 C500,272 510,273 520,282 C530,293 538,318 548,335"
+        fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="500" y="345" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#2D5A8E">Gaussian</text>
+
+  <!-- Lévy/heavy-tail inset curve -->
+  <path d="M453,335 C458,295 465,278 475,274 C488,270 500,278 510,292 C520,307 530,325 548,335"
+        fill="none" stroke="#C05020" stroke-width="1.8"/>
+  <text x="540" y="305" font-family="Arial,sans-serif" font-size="8" fill="#C05020">Lévy</text>
+  <text x="540" y="316" font-family="Arial,sans-serif" font-size="8" fill="#C05020">(heavy tail)</text>
+
+  <!-- ══ LEGEND ══ -->
+  <line x1="60" y1="366" x2="88" y2="366" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="94" y="370" font-family="Arial,sans-serif" font-size="10" fill="#2D5A8E">Small steps</text>
+  <line x1="174" y1="366" x2="202" y2="366" stroke="#C05020" stroke-width="2.2" stroke-dasharray="5,2"/>
+  <text x="208" y="370" font-family="Arial,sans-serif" font-size="10" fill="#C05020">Rare large jumps</text>
+  <circle cx="330" cy="366" r="4" fill="#7C2530"/>
+  <text x="338" y="370" font-family="Arial,sans-serif" font-size="10" fill="#7C2530">End point</text>
+</svg>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="gan-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="gan-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="gan-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="gan-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ LEFT PANEL: ARCHITECTURE ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">ARCHITECTURE</text>
+
+  <!-- Random noise z box -->
+  <rect x="14" y="88" width="52" height="44" fill="#DDEEFF" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="40" y="105" text-anchor="middle" font-size="8" fill="#2D5A8E" font-weight="bold">Random</text>
+  <text x="40" y="117" text-anchor="middle" font-size="8" fill="#2D5A8E">noise z</text>
+  <!-- Squiggly noise icon -->
+  <path d="M22,126 Q26,121 30,126 Q34,131 38,126 Q42,121 46,126 Q50,131 54,126" fill="none" stroke="#2D5A8E" stroke-width="1.2"/>
+
+  <!-- Arrow: noise -> G -->
+  <line x1="66" y1="110" x2="84" y2="110" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gan-arr)"/>
+
+  <!-- Generator G box -->
+  <rect x="86" y="82" width="52" height="54" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.8" rx="3"/>
+  <text x="112" y="106" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">G</text>
+  <text x="112" y="120" text-anchor="middle" font-size="8" fill="#7C2530">Generator</text>
+
+  <!-- Arrow: G -> fake data box -->
+  <line x1="138" y1="109" x2="156" y2="109" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gan-arr)"/>
+
+  <!-- Fake data box -->
+  <rect x="158" y="93" width="48" height="32" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="182" y="108" text-anchor="middle" font-size="8" fill="#7C2530">Fake</text>
+  <text x="182" y="119" text-anchor="middle" font-size="8" fill="#7C2530">data</text>
+
+  <!-- Real data box -->
+  <rect x="158" y="148" width="48" height="32" fill="#E9DEC5" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
+  <text x="182" y="163" text-anchor="middle" font-size="8" fill="#5C3D1E">Real</text>
+  <text x="182" y="174" text-anchor="middle" font-size="8" fill="#5C3D1E">data</text>
+  <!-- Data dots in real box -->
+  <circle cx="168" cy="167" r="2" fill="#8B6B4A"/>
+  <circle cx="175" cy="162" r="2" fill="#8B6B4A"/>
+  <circle cx="182" cy="168" r="2" fill="#8B6B4A"/>
+
+  <!-- Arrows: fake and real -> D -->
+  <line x1="206" y1="109" x2="222" y2="125" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gan-arr)"/>
+  <line x1="206" y1="164" x2="222" y2="148" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gan-arr)"/>
+
+  <!-- Discriminator D box -->
+  <rect x="224" y="116" width="52" height="54" fill="#DDEEFF" stroke="#2D5A8E" stroke-width="1.8" rx="3"/>
+  <text x="250" y="140" text-anchor="middle" font-size="10" fill="#2D5A8E" font-weight="bold">D</text>
+  <text x="250" y="155" text-anchor="middle" font-size="8" fill="#2D5A8E">Discriminator</text>
+
+  <!-- Arrow: D -> output -->
+  <line x1="276" y1="143" x2="283" y2="143" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gan-arr)"/>
+  <text x="264" y="183" text-anchor="middle" font-size="8" fill="#6B5D4F">Real/Fake?</text>
+
+  <!-- Gradient feedback arrow: D back to G (red, curved via bottom) -->
+  <path d="M250,170 Q250,210 112,210 Q112,142 112,136"
+        fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#gan-arr-red)"/>
+  <text x="175" y="222" text-anchor="middle" font-size="8" fill="#7C2530">gradient (trains G)</text>
+
+  <!-- Gradient feedback arrow: D to real data label (blue, small) -->
+  <path d="M250,170 Q250,195 182,195 Q182,182 182,182"
+        fill="none" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#gan-arr-blue)"/>
+  <text x="210" y="208" text-anchor="middle" font-size="7.5" fill="#2D5A8E">gradient</text>
+
+  <!-- Caption -->
+  <text x="145" y="256" text-anchor="middle" font-size="8.5" fill="#6B5D4F">G learns to fool D; D learns to detect fakes</text>
+
+  <!-- ══ RIGHT PANEL: TRAINING DYNAMICS ══ -->
+  <text x="443" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">TRAINING DYNAMICS</text>
+
+  <!-- Top label -->
+  <text x="443" y="32" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">minimax game</text>
+
+  <!-- Axes -->
+  <line x1="310" y1="230" x2="575" y2="230" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#gan-axis)"/>
+  <line x1="310" y1="230" x2="310" y2="42"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#gan-axis)"/>
+  <text x="443" y="247" text-anchor="middle" font-size="8.5" fill="#6B5D4F">training steps</text>
+  <text x="298" y="140" font-size="8.5" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,298,140)">loss</text>
+
+  <!-- Nash equilibrium dashed line at y=155 (maps to loss≈0.5) -->
+  <line x1="310" y1="155" x2="572" y2="155" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="576" y="158" font-size="7.5" fill="#6B5D4F">0.5</text>
+  <text x="440" y="148" text-anchor="middle" font-size="7.5" fill="#6B5D4F" font-style="italic">Nash equilibrium</text>
+
+  <!-- Generator loss curve: starts high, dips, rises, stabilizes near 0.5 -->
+  <!-- Points: (310,52),(330,80),(350,100),(370,130),(390,108),(410,120),(430,135),(455,148),(480,153),(510,155),(545,156) -->
+  <polyline
+    points="310,52 330,80 350,100 370,130 390,108 410,120 430,135 455,148 480,153 510,155 545,156"
+    fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="322" y="50" font-size="8" fill="#7C2530">G loss</text>
+
+  <!-- Discriminator loss curve: starts low, rises toward 0.5 -->
+  <!-- Points: (310,225),(330,210),(350,198),(370,185),(400,174),(430,165),(460,159),(490,156),(520,155),(545,155) -->
+  <polyline
+    points="310,225 330,210 350,198 370,185 400,174 430,165 460,159 490,156 520,155 545,155"
+    fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="315" y="222" font-size="8" fill="#2D5A8E">D loss</text>
+
+  <!-- Legend -->
+  <line x1="312" y1="270" x2="330" y2="270" stroke="#7C2530" stroke-width="2"/>
+  <text x="333" y="273" font-size="8" fill="#7C2530">Generator loss</text>
+  <line x1="405" y1="270" x2="423" y2="270" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="426" y="273" font-size="8" fill="#2D5A8E">Discriminator loss</text>
+
+  <!-- Annotations -->
+  <text x="350" y="92" font-size="7.5" fill="#7C2530" font-style="italic">G fools D</text>
+  <text x="370" y="125" font-size="7.5" fill="#2D5A8E" font-style="italic">D catches G</text>
+
+  <!-- Convergence region bracket -->
+  <line x1="510" y1="62" x2="510" y2="170" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="513" y="72" font-size="7.5" fill="#6B5D4F">convergence</text>
+  <text x="513" y="83" font-size="7.5" fill="#6B5D4F">(ideally)</text>
+</svg>

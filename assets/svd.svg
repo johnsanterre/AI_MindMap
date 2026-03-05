@@ -1,0 +1,38 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="40" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Singular Value Decomposition:  A = U Σ Vᵀ</text>
+  <!-- A matrix -->
+  <rect x="40" y="100" width="100" height="180" rx="8" fill="#2C5F8A" fill-opacity="0.15" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="90" y="175" text-anchor="middle" fill="#2C5F8A" font-size="28" font-weight="bold">A</text>
+  <text x="90" y="205" text-anchor="middle" fill="#2C5F8A" font-size="13">m × n</text>
+  <text x="90" y="310" text-anchor="middle" fill="#555" font-size="13">Data matrix</text>
+  <!-- = -->
+  <text x="165" y="200" text-anchor="middle" fill="#333" font-size="30">=</text>
+  <!-- U matrix -->
+  <rect x="185" y="100" width="100" height="180" rx="8" fill="#4A7C59" fill-opacity="0.15" stroke="#4A7C59" stroke-width="2"/>
+  <text x="235" y="175" text-anchor="middle" fill="#4A7C59" font-size="28" font-weight="bold">U</text>
+  <text x="235" y="205" text-anchor="middle" fill="#4A7C59" font-size="13">m × m</text>
+  <text x="235" y="310" text-anchor="middle" fill="#555" font-size="13">Left singular</text>
+  <text x="235" y="328" text-anchor="middle" fill="#555" font-size="13">vectors</text>
+  <!-- × -->
+  <text x="305" y="200" text-anchor="middle" fill="#333" font-size="26">×</text>
+  <!-- Sigma matrix -->
+  <rect x="325" y="100" width="140" height="100" rx="8" fill="#E07B39" fill-opacity="0.15" stroke="#E07B39" stroke-width="2"/>
+  <text x="395" y="155" text-anchor="middle" fill="#E07B39" font-size="28" font-weight="bold">Σ</text>
+  <text x="395" y="180" text-anchor="middle" fill="#E07B39" font-size="13">m × n  (diagonal)</text>
+  <text x="395" y="310" text-anchor="middle" fill="#555" font-size="13">Singular values</text>
+  <text x="395" y="328" text-anchor="middle" fill="#555" font-size="13">σ₁ ≥ σ₂ ≥ … ≥ 0</text>
+  <!-- × -->
+  <text x="483" y="165" text-anchor="middle" fill="#333" font-size="26">×</text>
+  <!-- Vt matrix -->
+  <rect x="500" y="100" width="200" height="100" rx="8" fill="#C0392B" fill-opacity="0.15" stroke="#C0392B" stroke-width="2"/>
+  <text x="600" y="155" text-anchor="middle" fill="#C0392B" font-size="28" font-weight="bold">Vᵀ</text>
+  <text x="600" y="180" text-anchor="middle" fill="#C0392B" font-size="13">n × n</text>
+  <text x="600" y="310" text-anchor="middle" fill="#555" font-size="13">Right singular</text>
+  <text x="600" y="328" text-anchor="middle" fill="#555" font-size="13">vectors</text>
+  <!-- Truncation note -->
+  <rect x="720" y="130" width="65" height="140" rx="6" fill="#888" fill-opacity="0.1" stroke="#888" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="752" y="195" text-anchor="middle" fill="#888" font-size="11">keep</text>
+  <text x="752" y="212" text-anchor="middle" fill="#888" font-size="11">top k</text>
+  <text x="752" y="229" text-anchor="middle" fill="#888" font-size="11">only</text>
+</svg>

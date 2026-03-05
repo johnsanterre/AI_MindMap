@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Reconstruction Error</text>
+  <!-- Autoencoder pipeline -->
+  <rect x="30" y="120" width="100" height="160" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="80" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">Input x</text>
+  <text x="80" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">n dims</text>
+  <!-- Encoder -->
+  <polygon points="140,120 210,180 140,240" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="165" y="185" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Enc</text>
+  <!-- Latent -->
+  <rect x="215" y="155" width="70" height="90" rx="6" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
+  <text x="250" y="200" text-anchor="middle" font-family="Arial" font-size="12" fill="#8e44ad">z</text>
+  <text x="250" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">k dims</text>
+  <!-- Decoder -->
+  <polygon points="290,180 360,120 360,240" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+  <text x="335" y="185" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Dec</text>
+  <!-- Reconstruction -->
+  <rect x="365" y="120" width="100" height="160" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+  <text x="415" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">x̂</text>
+  <text x="415" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">reconstructed</text>
+  <!-- Error arrow -->
+  <path d="M80,280 Q250,340 415,280" fill="none" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#are)"/>
+  <text x="250" y="340" text-anchor="middle" font-family="Arial" font-size="13" fill="#e74c3c">‖x − x̂‖²  (reconstruction error)</text>
+  <!-- Use cases -->
+  <rect x="510" y="100" width="260" height="200" rx="10" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
+  <text x="640" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Use Cases</text>
+  <text x="640" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Anomaly detection</text>
+  <text x="640" y="180" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">(high error = anomaly)</text>
+  <text x="640" y="205" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Compression quality</text>
+  <text x="640" y="230" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Generative models (VAE)</text>
+  <text x="640" y="255" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Denoising autoencoders</text>
+  <defs><marker id="are" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e74c3c"/></marker></defs>
+</svg>

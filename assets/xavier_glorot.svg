@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: The problem - vanishing/exploding -->
+  <rect x="18" y="30" width="185" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="110" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">THE PROBLEM</text>
+
+  <!-- Layers with shrinking signal -->
+  <text x="110" y="70" text-anchor="middle" font-size="9" fill="#5C3D1E">Too-small weights:</text>
+  <text x="110" y="83" text-anchor="middle" font-size="9" fill="#7C2530">signal vanishes</text>
+
+  <rect x="30" y="92" width="28" height="60" fill="#7C2530" opacity="0.9" rx="2"/>
+  <rect x="68" y="107" width="20" height="45" fill="#7C2530" opacity="0.6" rx="2"/>
+  <rect x="100" y="117" width="14" height="35" fill="#7C2530" opacity="0.35" rx="2"/>
+  <rect x="128" y="124" width="8" height="21" fill="#7C2530" opacity="0.15" rx="2"/>
+  <rect x="148" y="128" width="4" height="12" fill="#7C2530" opacity="0.06" rx="2"/>
+  <text x="30" y="168" font-size="8" fill="#6B5D4F">L1</text>
+  <text x="68" y="168" font-size="8" fill="#6B5D4F">L2</text>
+  <text x="100" y="168" font-size="8" fill="#6B5D4F">L3</text>
+  <text x="128" y="168" font-size="8" fill="#6B5D4F">L4</text>
+  <text x="148" y="168" font-size="8" fill="#6B5D4F">L5</text>
+
+  <text x="110" y="195" text-anchor="middle" font-size="9" fill="#5C3D1E">Too-large weights:</text>
+  <text x="110" y="208" text-anchor="middle" font-size="9" fill="#7C2530">signal explodes</text>
+
+  <rect x="30" y="218" width="28" height="30" fill="#2D5A8E" opacity="0.5" rx="2"/>
+  <rect x="68" y="208" width="20" height="45" fill="#2D5A8E" opacity="0.6" rx="2"/>
+  <rect x="100" y="193" width="14" height="65" fill="#2D5A8E" opacity="0.7" rx="2"/>
+  <rect x="128" y="173" width="8" height="88" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <rect x="148" y="153" width="4" height="108" fill="#2D5A8E" opacity="0.9" rx="2"/>
+
+  <text x="30" y="282" font-size="8" fill="#6B5D4F">L1</text>
+  <text x="68" y="282" font-size="8" fill="#6B5D4F">L2</text>
+  <text x="100" y="282" font-size="8" fill="#6B5D4F">L3</text>
+  <text x="128" y="282" font-size="8" fill="#6B5D4F">L4</text>
+  <text x="148" y="282" font-size="8" fill="#6B5D4F">L5</text>
+
+  <text x="110" y="315" text-anchor="middle" font-size="9" fill="#5C3D1E">Xavier: keep</text>
+  <text x="110" y="330" text-anchor="middle" font-size="9" fill="#5C3D1E">variance stable</text>
+  <text x="110" y="345" text-anchor="middle" font-size="9" fill="#5C3D1E">across layers</text>
+
+  <!-- Panel 2: The formula -->
+  <rect x="218" y="30" width="185" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="310" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">XAVIER FORMULA</text>
+
+  <text x="310" y="72" text-anchor="middle" font-size="9" fill="#5C3D1E">Uniform variant:</text>
+  <rect x="228" y="80" width="165" height="40" fill="#EDE8DE" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="310" y="97" text-anchor="middle" font-size="10" fill="#7C2530">W ~ Uniform(−a, a)</text>
+  <text x="310" y="113" text-anchor="middle" font-size="10" fill="#7C2530">a = √(6/(nᵢₙ+nₒᵤₜ))</text>
+
+  <text x="310" y="142" text-anchor="middle" font-size="9" fill="#5C3D1E">Normal variant:</text>
+  <rect x="228" y="150" width="165" height="40" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="310" y="167" text-anchor="middle" font-size="10" fill="#2D5A8E">W ~ N(0, σ²)</text>
+  <text x="310" y="183" text-anchor="middle" font-size="10" fill="#2D5A8E">σ = √(2/(nᵢₙ+nₒᵤₜ))</text>
+
+  <line x1="228" y1="205" x2="393" y2="205" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="310" y="225" text-anchor="middle" font-size="9" fill="#6B5D4F">nᵢₙ = fan-in</text>
+  <text x="310" y="240" text-anchor="middle" font-size="9" fill="#6B5D4F">(inputs to layer)</text>
+  <text x="310" y="260" text-anchor="middle" font-size="9" fill="#6B5D4F">nₒᵤₜ = fan-out</text>
+  <text x="310" y="275" text-anchor="middle" font-size="9" fill="#6B5D4F">(outputs of layer)</text>
+
+  <line x1="228" y1="292" x2="393" y2="292" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="310" y="312" text-anchor="middle" font-size="9" fill="#5C3D1E">Goal: Var(output)</text>
+  <text x="310" y="327" text-anchor="middle" font-size="9" fill="#5C3D1E">≈ Var(input)</text>
+  <text x="310" y="342" text-anchor="middle" font-size="9" fill="#5C3D1E">for each layer</text>
+
+  <!-- Panel 3: Activation variance diagram -->
+  <rect x="418" y="30" width="190" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="513" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">VARIANCE FLOW</text>
+
+  <!-- Axes -->
+  <line x1="438" y1="290" x2="595" y2="290" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="438" y1="290" x2="438" y2="68" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="516" y="308" text-anchor="middle" font-size="9" fill="#6B5D4F">layer depth</text>
+  <text x="420" y="180" font-size="9" fill="#6B5D4F" transform="rotate(-90,420,180)">variance</text>
+
+  <!-- Ideal: flat line -->
+  <line x1="438" y1="180" x2="594" y2="180" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="597" y="184" font-size="8" fill="#5C3D1E">ideal</text>
+
+  <!-- Vanishing -->
+  <path d="M438,180 C470,175 490,160 520,135 C545,115 565,90 594,75" stroke="#7C2530" stroke-width="1.5" fill="none"/>
+  <text x="597" y="79" font-size="8" fill="#7C2530">explode</text>
+
+  <!-- Exploding -->
+  <path d="M438,180 C470,185 490,205 520,230 C545,252 565,270 594,285" stroke="#C4A87A" stroke-width="1.5" fill="none"/>
+  <text x="597" y="289" font-size="8" fill="#8B6914">vanish</text>
+
+  <!-- Xavier: flat-ish -->
+  <path d="M438,180 C470,181 510,180 550,181 C570,182 585,181 594,182" stroke="#2D5A8E" stroke-width="2.5" fill="none"/>
+  <text x="597" y="184" font-size="8" fill="#2D5A8E"></text>
+  <text x="460" y="170" font-size="9" fill="#2D5A8E">Xavier</text>
+
+  <text x="513" y="330" text-anchor="middle" font-size="9" fill="#6B5D4F">Activations stay in</text>
+  <text x="513" y="345" text-anchor="middle" font-size="9" fill="#6B5D4F">usable range</text>
+  <text x="513" y="360" text-anchor="middle" font-size="9" fill="#6B5D4F">throughout training</text>
+
+  <!-- Panel 4: Variants comparison -->
+  <rect x="623" y="30" width="160" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="703" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">VARIANTS</text>
+
+  <rect x="633" y="62" width="140" height="55" fill="#EDE8DE" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="703" y="78" text-anchor="middle" font-size="9.5" fill="#7C2530" font-weight="bold">Xavier/Glorot</text>
+  <text x="703" y="94" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Best for: tanh,</text>
+  <text x="703" y="108" text-anchor="middle" font-size="8.5" fill="#5C3D1E">sigmoid, softmax</text>
+
+  <rect x="633" y="130" width="140" height="55" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="703" y="146" text-anchor="middle" font-size="9.5" fill="#2D5A8E" font-weight="bold">He / Kaiming</text>
+  <text x="703" y="162" text-anchor="middle" font-size="8.5" fill="#5C3D1E">σ = √(2/nᵢₙ)</text>
+  <text x="703" y="176" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Best for: ReLU</text>
+
+  <rect x="633" y="198" width="140" height="55" fill="#EDE8DE" stroke="#5C3D1E" stroke-width="1" rx="2"/>
+  <text x="703" y="214" text-anchor="middle" font-size="9.5" fill="#5C3D1E" font-weight="bold">LeCun</text>
+  <text x="703" y="230" text-anchor="middle" font-size="8.5" fill="#5C3D1E">σ = √(1/nᵢₙ)</text>
+  <text x="703" y="246" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Best for: SELU</text>
+
+  <line x1="633" y1="268" x2="773" y2="268" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="703" y="288" text-anchor="middle" font-size="8.5" fill="#6B5D4F">All: derived from</text>
+  <text x="703" y="303" text-anchor="middle" font-size="8.5" fill="#6B5D4F">variance analysis</text>
+  <text x="703" y="318" text-anchor="middle" font-size="8.5" fill="#6B5D4F">of forward pass</text>
+
+  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">Xavier/Glorot Initialization — stabilize signal variance across layer depth</text>
+</svg>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Why position matters -->
+  <rect x="18" y="28" width="185" height="344" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="110" y="48" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">The Problem</text>
+  <!-- Token sequence without order -->
+  <text x="110" y="70" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Without position info,</text>
+  <text x="110" y="83" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">these look identical:</text>
+  <rect x="28" y="92" width="165" height="28" fill="#FAEAEA" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="110" y="111" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">"Dog bites man"</text>
+  <rect x="28" y="126" width="165" height="28" fill="#FAEAEA" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="110" y="145" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">"Man bites dog"</text>
+  <text x="110" y="172" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Same tokens, same</text>
+  <text x="110" y="185" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">attention scores.</text>
+  <text x="110" y="198" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Different meaning!</text>
+  <!-- Solution -->
+  <line x1="60" y1="210" x2="160" y2="210" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="110" y="228" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Solution: add a unique</text>
+  <text x="110" y="241" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">signal to each position</text>
+  <!-- Token + PE illustration -->
+  <rect x="32" y="256" width="52" height="36" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="58" y="271" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">Token</text>
+  <text x="58" y="284" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">embed</text>
+  <text x="90" y="278" font-family="Georgia, serif" font-size="14" fill="#6B5D4F" text-anchor="middle">+</text>
+  <rect x="100" y="256" width="52" height="36" fill="#FFF3E0" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
+  <text x="126" y="271" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Pos.</text>
+  <text x="126" y="284" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">signal</text>
+  <text x="110" y="316" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">Input to attention</text>
+
+  <!-- Panel 2: Sinusoidal encoding -->
+  <rect x="216" y="28" width="218" height="344" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="325" y="48" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Sinusoidal Encoding</text>
+  <!-- Sine wave for dim 0 (low freq) -->
+  <text x="224" y="66" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">dim 0 (low freq)</text>
+  <polyline points="224,90 236,74 248,62 260,60 272,68 284,82 296,94 308,100 320,98 332,88 344,76 356,66 368,62 380,66 392,78 404,90 416,98 428,96" fill="none" stroke="#2D5A8E" stroke-width="1.8"/>
+  <line x1="224" y1="90" x2="428" y2="90" stroke="#C4A87A" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <!-- Sine wave for dim 2 (higher freq) -->
+  <text x="224" y="118" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">dim 2 (higher freq)</text>
+  <polyline points="224,142 232,130 240,122 248,122 256,130 264,142 272,150 280,150 288,142 296,130 304,122 312,122 320,130 328,142 336,150 344,150 352,142 360,130 368,122 376,122 384,130 392,142 400,150 408,150 416,142 424,132 428,128" fill="none" stroke="#7C2530" stroke-width="1.8"/>
+  <line x1="224" y1="142" x2="428" y2="142" stroke="#C4A87A" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <!-- Formula box -->
+  <rect x="224" y="164" width="202" height="64" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
+  <text x="325" y="182" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">PE(pos, 2i) = sin(pos / 10000^(2i/d))</text>
+  <text x="325" y="200" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" text-anchor="middle">PE(pos, 2i+1) = cos(pos / 10000^(2i/d))</text>
+  <text x="325" y="220" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">pos = position, i = dimension index</text>
+  <!-- Heatmap visual (simplified grid) -->
+  <text x="224" y="246" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Position encoding matrix:</text>
+  <g opacity="0.85">
+    <!-- Row 0 -->
+    <rect x="224" y="252" width="14" height="14" fill="#2D5A8E"/><rect x="239" y="252" width="14" height="14" fill="#7C8FAE"/>
+    <rect x="254" y="252" width="14" height="14" fill="#BECDDF"/><rect x="269" y="252" width="14" height="14" fill="#E8EFF6"/>
+    <rect x="284" y="252" width="14" height="14" fill="#F5EFE6"/><rect x="299" y="252" width="14" height="14" fill="#E5D8C5"/>
+    <rect x="314" y="252" width="14" height="14" fill="#C4A87A"/><rect x="329" y="252" width="14" height="14" fill="#9E7B4A"/>
+    <!-- Row 1 -->
+    <rect x="224" y="267" width="14" height="14" fill="#9E7B4A"/><rect x="239" y="267" width="14" height="14" fill="#2D5A8E"/>
+    <rect x="254" y="267" width="14" height="14" fill="#7C8FAE"/><rect x="269" y="267" width="14" height="14" fill="#BECDDF"/>
+    <rect x="284" y="267" width="14" height="14" fill="#E8EFF6"/><rect x="299" y="267" width="14" height="14" fill="#F5EFE6"/>
+    <rect x="314" y="267" width="14" height="14" fill="#E5D8C5"/><rect x="329" y="267" width="14" height="14" fill="#C4A87A"/>
+    <!-- Row 2 -->
+    <rect x="224" y="282" width="14" height="14" fill="#C4A87A"/><rect x="239" y="282" width="14" height="14" fill="#9E7B4A"/>
+    <rect x="254" y="282" width="14" height="14" fill="#2D5A8E"/><rect x="269" y="282" width="14" height="14" fill="#7C8FAE"/>
+    <rect x="284" y="282" width="14" height="14" fill="#BECDDF"/><rect x="299" y="282" width="14" height="14" fill="#E8EFF6"/>
+    <rect x="314" y="282" width="14" height="14" fill="#F5EFE6"/><rect x="329" y="282" width="14" height="14" fill="#E5D8C5"/>
+  </g>
+  <text x="224" y="310" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">← positions (rows)    dims (cols) →</text>
+  <text x="224" y="326" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" font-style="italic">Each row is a unique "address"</text>
+  <text x="224" y="340" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" font-style="italic">for that sequence position.</text>
+
+  <!-- Panel 3: Variants -->
+  <rect x="448" y="28" width="333" height="344" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="614" y="48" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Encoding Variants</text>
+  <!-- Learned -->
+  <rect x="460" y="58" width="310" height="70" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="476" y="76" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">Learned (BERT, GPT)</text>
+  <text x="476" y="92" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Trainable embedding table lookup.</text>
+  <text x="476" y="107" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Flexible but limited to training sequence length.</text>
+  <!-- RoPE -->
+  <rect x="460" y="140" width="310" height="80" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="476" y="158" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">RoPE (LLaMA, GPT-NeoX)</text>
+  <text x="476" y="174" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Rotates Q and K vectors by angle proportional</text>
+  <text x="476" y="188" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">to position. Dot products encode relative distance.</text>
+  <text x="476" y="203" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Extrapolates better than absolute methods.</text>
+  <!-- ALiBi -->
+  <rect x="460" y="232" width="310" height="70" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5" rx="3"/>
+  <text x="476" y="250" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">ALiBi (MPT, BLOOM)</text>
+  <text x="476" y="266" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Adds a linear bias to attention scores: penalizes</text>
+  <text x="476" y="281" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">distant tokens. No position vectors added at all.</text>
+  <!-- Summary comparison -->
+  <text x="460" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-weight="bold">Length generalization:</text>
+  <text x="460" y="337" font-family="Georgia, serif" font-size="9" fill="#7C2530">Sinusoidal &lt; Learned &lt;&lt; RoPE ≈ ALiBi</text>
+  <text x="460" y="355" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" font-style="italic">Position matters more as context windows grow.</text>
+</svg>

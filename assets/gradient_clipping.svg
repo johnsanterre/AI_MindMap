@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E">Gradient Clipping</text>
+
+  <!-- Left panel: Before clipping -->
+  <rect x="30" y="55" width="220" height="315" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="140" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Without Clipping</text>
+
+  <!-- Coordinate axes -->
+  <line x1="60" y1="200" x2="230" y2="200" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="140" y1="100" x2="140" y2="300" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="232" y="204" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">w₁</text>
+  <text x="143" y="98" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">w₂</text>
+
+  <!-- Large spike gradient arrow -->
+  <line x1="140" y1="200" x2="195" y2="115" stroke="#7C2530" stroke-width="3"/>
+  <polygon points="195,115 187,128 200,130" fill="#7C2530"/>
+  <text x="196" y="112" font-family="Georgia, serif" font-size="10" fill="#7C2530">exploding!</text>
+
+  <!-- Normal step arrow (small) -->
+  <line x1="140" y1="200" x2="153" y2="193" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="100" y="275" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">intended step</text>
+  <text x="100" y="288" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">actual step: huge!</text>
+
+  <!-- Center panel: Clipping diagram -->
+  <rect x="270" y="55" width="270" height="315" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="405" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Norm Clipping</text>
+
+  <!-- Circle = clipping threshold -->
+  <circle cx="405" cy="195" r="70" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="405" y="133" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">‖g‖ = max_norm</text>
+
+  <!-- Axes -->
+  <line x1="310" y1="195" x2="500" y2="195" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="405" y1="105" x2="405" y2="285" stroke="#5C3D1E" stroke-width="1.2"/>
+
+  <!-- Original gradient (outside circle) -->
+  <line x1="405" y1="195" x2="462" y2="120" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="4,3"/>
+  <polygon points="462,120 455,133 468,135" fill="#7C2530"/>
+  <text x="465" y="117" font-family="Georgia, serif" font-size="10" fill="#7C2530">g (too big)</text>
+
+  <!-- Clipped gradient (on circle boundary) -->
+  <line x1="405" y1="195" x2="448" y2="145" stroke="#2D5A8E" stroke-width="2.5"/>
+  <polygon points="448,145 441,157 454,158" fill="#2D5A8E"/>
+  <text x="452" y="142" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">g̃ (clipped)</text>
+
+  <!-- Formula -->
+  <rect x="285" y="295" width="240" height="60" rx="5" fill="#EDE4D3" stroke="#C4A87A" stroke-width="1"/>
+  <text x="405" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">if ‖g‖ &gt; τ :</text>
+  <text x="405" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">g̃ = g · τ / ‖g‖</text>
+
+  <!-- Right panel: value clipping vs norm clipping -->
+  <rect x="560" y="55" width="210" height="315" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="665" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Two Methods</text>
+
+  <text x="575" y="105" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">Norm clipping</text>
+  <text x="575" y="120" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Scales whole vector</text>
+  <text x="575" y="134" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Preserves direction</text>
+  <text x="575" y="148" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Preferred for RNNs</text>
+  <text x="575" y="162" font-family="Georgia, serif" font-size="10" fill="#7C2530">clip_grad_norm_()</text>
+
+  <line x1="570" y1="174" x2="760" y2="174" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="575" y="193" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">Value clipping</text>
+  <text x="575" y="208" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Clips each element</text>
+  <text x="575" y="222" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">independently</text>
+  <text x="575" y="236" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Changes direction</text>
+  <text x="575" y="250" font-family="Georgia, serif" font-size="10" fill="#7C2530">clip_grad_value_()</text>
+
+  <line x1="570" y1="262" x2="760" y2="262" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="575" y="282" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Typical threshold</text>
+  <text x="575" y="297" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">τ = 1.0 (norm)</text>
+  <text x="575" y="311" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Works with Adam,</text>
+  <text x="575" y="325" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">SGD, or any optimizer</text>
+  <text x="575" y="345" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Essential for LSTMs</text>
+  <text x="575" y="358" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">and Transformers</text>
+</svg>

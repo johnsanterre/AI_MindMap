@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="fi-arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-size="18" font-weight="bold" fill="#5C3D1E">Fisher Information: Curvature of the Log-Likelihood</text>
+
+  <!-- Left panel: sharp curve (high Fisher info) -->
+  <rect x="50" y="58" width="300" height="230" rx="10" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="200" y="82" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">High Fisher Information</text>
+  <!-- sharp parabola -->
+  <path d="M 80,250 Q 200,90 320,250" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <!-- curvature braces -->
+  <line x1="200" y1="90" x2="200" y2="250" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="200" y="270" text-anchor="middle" font-size="11" fill="#2D5A8E">θ̂</text>
+  <!-- annotation -->
+  <text x="200" y="108" text-anchor="middle" font-size="11" fill="#666">Peaked: data is</text>
+  <text x="200" y="122" text-anchor="middle" font-size="11" fill="#666">very informative</text>
+  <text x="200" y="138" text-anchor="middle" font-size="11" fill="#888">tight confidence intervals</text>
+  <!-- Cramér–Rao label -->
+  <text x="200" y="295" text-anchor="middle" font-size="11" fill="#2D5A8E">Var(θ̂) ≥ 1 / I(θ)  (large I → small var)</text>
+
+  <!-- Right panel: flat curve (low Fisher info) -->
+  <rect x="450" y="58" width="300" height="230" rx="10" fill="#F9F0E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="600" y="82" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Low Fisher Information</text>
+  <!-- flat parabola -->
+  <path d="M 470,230 Q 600,130 730,230" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <line x1="600" y1="130" x2="600" y2="250" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="600" y="270" text-anchor="middle" font-size="11" fill="#7C2530">θ̂</text>
+  <text x="600" y="108" text-anchor="middle" font-size="11" fill="#666">Flat: data tells us</text>
+  <text x="600" y="122" text-anchor="middle" font-size="11" fill="#666">little about θ</text>
+  <text x="600" y="138" text-anchor="middle" font-size="11" fill="#888">wide confidence intervals</text>
+  <text x="600" y="295" text-anchor="middle" font-size="11" fill="#7C2530">Var(θ̂) ≥ 1 / I(θ)  (small I → large var)</text>
+
+  <!-- y-axis label -->
+  <text x="400" y="325" text-anchor="middle" font-size="12" fill="#888">log p(x | θ)</text>
+
+  <!-- Bottom formula bar -->
+  <rect x="120" y="340" width="560" height="46" rx="8" fill="#F3EDE3" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="358" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">Fisher Information:  I(θ) = E[ (∂ log p(x|θ) / ∂θ)² ]  =  −E[ ∂² log p(x|θ) / ∂θ² ]</text>
+  <text x="400" y="378" text-anchor="middle" font-size="11" fill="#888">Expected squared score  =  negative expected curvature of log-likelihood</text>
+</svg>

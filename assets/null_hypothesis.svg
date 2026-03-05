@@ -1,0 +1,112 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Null Hypothesis Testing</text>
+  <text x="400" y="50" text-anchor="middle" font-size="12" fill="#666">H₀: μ = μ₀ (two-tailed test, α = 0.05)</text>
+
+  <!-- Axis line -->
+  <line x1="55" y1="305" x2="745" y2="305" stroke="#333" stroke-width="1.5"/>
+
+  <!-- Bell curve path (null distribution) -->
+  <!-- Symmetric bell centered at x=400, peak at y=70, tails at x=55 and x=745 -->
+  <path d="
+    M 55,305
+    C 80,305 110,303 140,298
+    C 170,292 195,278 220,255
+    C 245,232 265,202 285,170
+    C 305,138 325,108 345,88
+    C 360,74 375,67 400,65
+    C 425,67 440,74 455,88
+    C 475,108 495,138 515,170
+    C 535,202 555,232 580,255
+    C 605,278 630,292 660,298
+    C 690,303 720,305 745,305
+    Z
+  " fill="#E3F2FD" stroke="#2196F3" stroke-width="2.5" fill-opacity="0.5"/>
+
+  <!-- Refill the body of the curve (non-tail area) in lighter blue to overlay on tail fills -->
+  <!-- Left rejection region: x < 175 (left critical value) -->
+  <path d="
+    M 55,305
+    C 80,305 110,303 140,298
+    C 155,294 167,291 175,289
+    L 175,305 Z
+  " fill="#E91E63" fill-opacity="0.45" stroke="none"/>
+
+  <!-- Right rejection region: x > 625 (right critical value) -->
+  <path d="
+    M 625,289
+    C 633,291 645,294 660,298
+    C 690,303 720,305 745,305
+    L 625,305 Z
+  " fill="#E91E63" fill-opacity="0.45" stroke="none"/>
+
+  <!-- P-value area (right of observed statistic) shaded darker -->
+  <!-- Observed stat at x=560, between body and right critical value -->
+  <!-- P-value: area from x=560 to right tail end -->
+  <path d="
+    M 560,150
+    C 570,165 578,185 590,207
+    C 600,226 610,248 625,266
+    C 633,278 645,292 660,298
+    C 690,303 720,305 745,305
+    L 560,305 Z
+  " fill="#FF9800" fill-opacity="0.55" stroke="none"/>
+
+  <!-- Redraw bell curve outline on top -->
+  <path d="
+    M 55,305
+    C 80,305 110,303 140,298
+    C 170,292 195,278 220,255
+    C 245,232 265,202 285,170
+    C 305,138 325,108 345,88
+    C 360,74 375,67 400,65
+    C 425,67 440,74 455,88
+    C 475,108 495,138 515,170
+    C 535,202 555,232 580,255
+    C 605,278 630,292 660,298
+    C 690,303 720,305 745,305
+  " fill="none" stroke="#2196F3" stroke-width="2.5"/>
+
+  <!-- Left critical value marker -->
+  <line x1="175" y1="289" x2="175" y2="315" stroke="#E91E63" stroke-width="1.8" stroke-dasharray="5,3"/>
+  <text x="175" y="330" text-anchor="middle" font-size="11" fill="#E91E63">−z*</text>
+
+  <!-- Right critical value marker -->
+  <line x1="625" y1="289" x2="625" y2="315" stroke="#E91E63" stroke-width="1.8" stroke-dasharray="5,3"/>
+  <text x="625" y="330" text-anchor="middle" font-size="11" fill="#E91E63">+z*</text>
+
+  <!-- Observed test statistic line -->
+  <line x1="560" y1="60" x2="560" y2="315" stroke="#E65100" stroke-width="2.5" stroke-dasharray="9,4"/>
+  <text x="562" y="55" font-size="12" fill="#E65100" font-weight="bold">t_obs</text>
+
+  <!-- H₀ label at center -->
+  <text x="400" y="170" text-anchor="middle" font-size="14" fill="#1565C0" font-weight="bold">H₀ distribution</text>
+
+  <!-- Rejection region labels -->
+  <text x="113" y="280" text-anchor="middle" font-size="11" fill="#E91E63" font-weight="bold">Rejection</text>
+  <text x="113" y="295" text-anchor="middle" font-size="11" fill="#E91E63" font-weight="bold">region</text>
+  <text x="685" y="280" text-anchor="middle" font-size="11" fill="#E91E63" font-weight="bold">Rejection</text>
+  <text x="685" y="295" text-anchor="middle" font-size="11" fill="#E91E63" font-weight="bold">region</text>
+
+  <!-- P-value annotation -->
+  <text x="672" y="215" text-anchor="middle" font-size="12" fill="#E65100" font-weight="bold">p-value</text>
+  <text x="672" y="229" text-anchor="middle" font-size="11" fill="#E65100">(one tail)</text>
+  <line x1="660" y1="233" x2="625" y2="260" stroke="#E65100" stroke-width="1.5"/>
+  <defs>
+    <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#E65100"/>
+    </marker>
+  </defs>
+  <line x1="660" y1="233" x2="626" y2="259" stroke="#E65100" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <!-- Alpha annotation -->
+  <text x="115" y="252" text-anchor="middle" font-size="11" fill="#C62828">α/2</text>
+  <text x="685" y="252" text-anchor="middle" font-size="11" fill="#C62828">α/2</text>
+
+  <!-- Bottom info box -->
+  <rect x="60" y="340" width="680" height="46" rx="6" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="400" y="358" text-anchor="middle" font-size="12" fill="#555">Reject H₀ if |t_obs| &gt; z*  (i.e., t_obs falls in the rejection region)</text>
+  <text x="400" y="378" text-anchor="middle" font-size="12" fill="#333">p-value = P(|T| ≥ |t_obs| | H₀ true)    ·    Reject when p &lt; α</text>
+</svg>

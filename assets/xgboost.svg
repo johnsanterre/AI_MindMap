@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Residual fitting with Taylor expansion -->
+  <text x="175" y="26" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">2ND-ORDER TAYLOR EXPANSION</text>
+  <rect x="20" y="34" width="310" height="155" rx="5" fill="#2D5A8E" opacity="0.07" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Loss curve sketch -->
+  <path d="M50,160 Q120,80 200,160" stroke="#2D5A8E" stroke-width="2" fill="none"/>
+  <!-- current point -->
+  <circle cx="130" cy="96" r="5" fill="#7C2530"/>
+  <!-- tangent line (1st order) -->
+  <line x1="80" y1="122" x2="185" y2="75" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- parabola approx (2nd order) -->
+  <path d="M80,128 Q130,72 185,128" stroke="#7C2530" stroke-width="2" fill="none" stroke-dasharray="6,2"/>
+  <text x="200" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" font-style="italic">2nd order</text>
+  <text x="200" y="110" font-family="Georgia,serif" font-size="10" fill="#C4A87A" font-style="italic">1st order</text>
+  <text x="130" y="84" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">current</text>
+
+  <text x="175" y="172" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">L ≈ ∑ [gᵢfₜ(xᵢ) + ½hᵢfₜ(xᵢ)²] + Ω(fₜ)</text>
+  <text x="175" y="190" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">gᵢ = gradient,  hᵢ = Hessian (curvature)</text>
+
+  <!-- Panel 2: Tree structure with regularization -->
+  <text x="530" y="26" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">REGULARIZED TREE + SHRINKAGE</text>
+  <rect x="370" y="34" width="410" height="155" rx="5" fill="#7C2530" opacity="0.06" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Tree diagram -->
+  <rect x="490" y="50" width="80" height="28" rx="4" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="530" y="69" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">x₁ &lt; 5?</text>
+  <line x1="510" y1="78" x2="470" y2="105" stroke="#7C2530" stroke-width="1.2"/>
+  <line x1="550" y1="78" x2="600" y2="105" stroke="#7C2530" stroke-width="1.2"/>
+  <rect x="440" y="106" width="60" height="24" rx="3" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="470" y="122" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle">leaf: −0.3</text>
+  <rect x="570" y="106" width="60" height="24" rx="3" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="600" y="122" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle">leaf: +0.7</text>
+
+  <!-- Regularization term -->
+  <text x="530" y="156" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Ω(f) = γT + ½λ∑wⱼ²</text>
+  <text x="530" y="174" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">T = # leaves,  λ penalizes large leaf values</text>
+
+  <!-- After shrinkage arrow + label -->
+  <text x="400" y="156" font-family="Georgia,serif" font-size="10" fill="#6B5D4F" text-anchor="middle">×η (learning rate)</text>
+  <text x="400" y="170" font-family="Georgia,serif" font-size="10" fill="#6B5D4F" text-anchor="middle">before adding tree</text>
+
+  <!-- Panel 3 bottom: Boosting rounds summary -->
+  <rect x="20" y="210" width="370" height="170" rx="5" fill="#5C3D1E" opacity="0.06" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="205" y="232" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">BOOSTING ROUND ACCUMULATION</text>
+
+  <!-- stacked bars showing F_m -->
+  <text x="60" y="256" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">F₀</text>
+  <rect x="80" y="248" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.35"/>
+
+  <text x="130" y="256" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">F₁</text>
+  <rect x="150" y="248" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.35"/>
+  <rect x="150" y="236" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.3"/>
+
+  <text x="200" y="256" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">F₂</text>
+  <rect x="220" y="248" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.35"/>
+  <rect x="220" y="236" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.3"/>
+  <rect x="220" y="224" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.25"/>
+
+  <text x="270" y="256" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">F₃</text>
+  <rect x="290" y="248" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.35"/>
+  <rect x="290" y="236" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.3"/>
+  <rect x="290" y="224" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.25"/>
+  <rect x="290" y="212" width="20" height="12" rx="2" fill="#5C3D1E" opacity="0.2"/>
+
+  <text x="205" y="290" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">F̂ₘ(x) = Fₘ₋₁(x) + η · fₘ(x)</text>
+  <text x="205" y="308" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">each tree corrects previous residuals</text>
+
+  <text x="205" y="340" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">KEY HYPERPARAMETERS</text>
+  <text x="205" y="358" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">n_estimators · max_depth · learning_rate</text>
+  <text x="205" y="374" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">subsample · colsample_bytree · λ · γ</text>
+
+  <!-- Panel 4 bottom: vs alternatives -->
+  <rect x="410" y="210" width="370" height="170" rx="5" fill="#C4A87A" opacity="0.10" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="595" y="232" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">XGB vs ALTERNATIVES</text>
+  <text x="595" y="258" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">XGBoost:</text>
+  <text x="595" y="274" font-family="Georgia,serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">pre-sorted + histogram tricks</text>
+  <text x="595" y="298" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">LightGBM:</text>
+  <text x="595" y="314" font-family="Georgia,serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">leaf-wise growth, faster on large data</text>
+  <text x="595" y="338" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">CatBoost:</text>
+  <text x="595" y="354" font-family="Georgia,serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">native categorical encoding,</text>
+  <text x="595" y="370" font-family="Georgia,serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">ordered boosting to reduce leakage</text>
+</svg>

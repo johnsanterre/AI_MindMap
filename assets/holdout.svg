@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="26" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">THE HOLDOUT METHOD — DATASET SPLITTING</text>
+
+  <!-- ══ TOP: Full dataset bar ══ -->
+  <text x="32" y="58" font-size="9" fill="#6B5D4F">Full Dataset</text>
+  <rect x="32" y="65" width="736" height="34" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="87" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">n samples</text>
+
+  <!-- Split arrow downward -->
+  <line x1="400" y1="100" x2="400" y2="120" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-brown)"/>
+  <text x="415" y="114" font-size="8.5" fill="#6B5D4F">random split</text>
+
+  <!-- ══ MIDDLE: Three split bars ══ -->
+
+  <!-- Training set bar: 70% of 736 = 515px -->
+  <rect x="32" y="128" width="515" height="40" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="289" y="145" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">Training Set</text>
+  <text x="289" y="161" text-anchor="middle" font-size="9" fill="#6B5D4F">70%</text>
+
+  <!-- Validation set bar: 15% of 736 = 110px -->
+  <rect x="553" y="128" width="110" height="40" rx="4" fill="#C4A87A" stroke="#9B7040" stroke-width="1.5"/>
+  <text x="608" y="145" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">Validation</text>
+  <text x="608" y="161" text-anchor="middle" font-size="9" fill="#FDFAF4">15%</text>
+
+  <!-- Test set bar: 15% of 736 = 110px -->
+  <rect x="669" y="128" width="99" height="40" rx="4" fill="#7C2530" stroke="#5A1A20" stroke-width="1.5"/>
+  <text x="718" y="145" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">Test Set</text>
+  <text x="718" y="161" text-anchor="middle" font-size="9" fill="#FDFAF4">15%</text>
+
+  <!-- ══ WORKFLOW BOXES ══ -->
+
+  <!-- Box 1: Train model -->
+  <rect x="60" y="222" width="180" height="50" rx="5" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="150" y="243" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">1. Train Model</text>
+  <text x="150" y="260" text-anchor="middle" font-size="8.5" fill="#6B5D4F">fit parameters on</text>
+  <text x="150" y="271" text-anchor="middle" font-size="8.5" fill="#6B5D4F">training set</text>
+
+  <!-- Box 2: Tune hyperparameters -->
+  <rect x="310" y="222" width="180" height="50" rx="5" fill="#C4A87A" stroke="#9B7040" stroke-width="1.5"/>
+  <text x="400" y="243" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">2. Tune Hyperparams</text>
+  <text x="400" y="260" text-anchor="middle" font-size="8.5" fill="#FDFAF4">evaluate on validation</text>
+  <text x="400" y="271" text-anchor="middle" font-size="8.5" fill="#FDFAF4">set, iterate</text>
+
+  <!-- Box 3: Final evaluation -->
+  <rect x="560" y="222" width="180" height="50" rx="5" fill="#7C2530" stroke="#5A1A20" stroke-width="1.5"/>
+  <text x="650" y="243" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">3. Final Evaluation</text>
+  <text x="650" y="260" text-anchor="middle" font-size="8.5" fill="#FDFAF4">report performance</text>
+  <text x="650" y="271" text-anchor="middle" font-size="8.5" fill="#FDFAF4">on test set — once</text>
+
+  <!-- Arrows between boxes -->
+  <line x1="241" y1="247" x2="308" y2="247" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="491" y1="247" x2="558" y2="247" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Curved arrows: train set to box 1 -->
+  <line x1="289" y1="168" x2="150" y2="220" stroke="#5C3D1E" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr-brown)"/>
+
+  <!-- Curved arrows: val set to box 2 -->
+  <line x1="608" y1="168" x2="430" y2="220" stroke="#9B7040" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr-brown)"/>
+
+  <!-- Curved arrows: test set to box 3 -->
+  <line x1="718" y1="168" x2="680" y2="220" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+  <!-- Feedback loop arrow: box 2 back to box 1 (iterate) -->
+  <path d="M 400 222 Q 400 205 310 205 Q 240 205 240 222" fill="none" stroke="#9B7040" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr-brown)"/>
+  <text x="330" y="200" text-anchor="middle" font-size="8" fill="#9B7040">iterate</text>
+
+  <!-- Lock annotation on test set -->
+  <text x="718" y="213" text-anchor="middle" font-size="8.5" fill="#7C2530">locked until done</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="310" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    The test set is sealed until training and tuning are fully complete — it measures real-world performance
+  </text>
+
+  <!-- Legend -->
+  <rect x="32" y="330" width="12" height="12" rx="2" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="50" y="341" font-size="8.5" fill="#6B5D4F">Training (fit parameters)</text>
+  <rect x="220" y="330" width="12" height="12" rx="2" fill="#C4A87A" stroke="#9B7040" stroke-width="1"/>
+  <text x="238" y="341" font-size="8.5" fill="#6B5D4F">Validation (tune hyperparameters)</text>
+  <rect x="460" y="330" width="12" height="12" rx="2" fill="#7C2530" stroke="#5A1A20" stroke-width="1"/>
+  <text x="478" y="341" font-size="8.5" fill="#6B5D4F">Test (final honest evaluation)</text>
+
+  <!-- Proportion ticks along bottom of split bars -->
+  <text x="32" y="185" font-size="8" fill="#6B5D4F">0%</text>
+  <text x="282" y="185" font-size="8" fill="#6B5D4F" text-anchor="middle">35%</text>
+  <text x="541" y="185" font-size="8" fill="#6B5D4F" text-anchor="middle">70%</text>
+  <text x="608" y="185" font-size="8" fill="#9B7040" text-anchor="middle">85%</text>
+  <text x="768" y="185" font-size="8" fill="#7C2530" text-anchor="end">100%</text>
+
+  <!-- Tick marks -->
+  <line x1="547" y1="168" x2="547" y2="180" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="663" y1="168" x2="663" y2="180" stroke="#C4A87A" stroke-width="1"/>
+</svg>

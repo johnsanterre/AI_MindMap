@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">A/B Testing</text>
+  <!-- Split -->
+  <rect x="280" y="70" width="240" height="50" rx="8" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
+  <text x="400" y="101" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">User Traffic (population)</text>
+  <line x1="340" y1="120" x2="200" y2="165" stroke="#888" stroke-width="2" marker-end="url(#aab)"/>
+  <line x1="460" y1="120" x2="600" y2="165" stroke="#888" stroke-width="2" marker-end="url(#aab)"/>
+  <text x="255" y="158" font-family="Arial" font-size="12" fill="#555">50%</text>
+  <text x="520" y="158" font-family="Arial" font-size="12" fill="#555">50%</text>
+  <!-- Group A -->
+  <rect x="80" y="170" width="240" height="100" rx="10" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="200" y="200" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#4a90d9">Group A (Control)</text>
+  <text x="200" y="222" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Original design</text>
+  <text x="200" y="242" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">CTR: 3.2%</text>
+  <!-- Group B -->
+  <rect x="480" y="170" width="240" height="100" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+  <text x="600" y="200" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">Group B (Treatment)</text>
+  <text x="600" y="222" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">New design</text>
+  <text x="600" y="242" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">CTR: 3.8%</text>
+  <!-- Stats result -->
+  <rect x="230" y="305" width="340" height="65" rx="8" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
+  <text x="400" y="328" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">Statistical Test</text>
+  <text x="400" y="350" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">p-value = 0.02 &lt; 0.05 → reject H₀ → B wins</text>
+  <defs><marker id="aab" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker></defs>
+</svg>

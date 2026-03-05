@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E">Learning Rate Scheduling</text>
+
+  <!-- Left panel: Schedule types -->
+  <rect x="30" y="55" width="220" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="140" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Schedule Types</text>
+
+  <!-- Step decay -->
+  <text x="50" y="105" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">Step Decay</text>
+  <polyline points="50,125 90,125 90,140 130,140 130,155 170,155 170,170 210,170" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- Exponential decay -->
+  <text x="50" y="195" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">Exponential Decay</text>
+  <path d="M50,215 Q90,215 130,235 Q160,250 210,260" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Cosine annealing -->
+  <text x="50" y="285" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Cosine Annealing</text>
+  <path d="M50,300 Q80,298 110,310 Q140,325 170,340 Q190,350 210,355" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Warmup -->
+  <text x="50" y="340" font-family="Georgia, serif" font-size="11" fill="#C4A87A" font-weight="bold">Linear Warmup</text>
+  <line x1="50" y1="360" x2="100" y2="345" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="100" y1="345" x2="210" y2="345" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Center panel: Main chart -->
+  <rect x="270" y="55" width="310" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="425" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">LR over Training Time</text>
+
+  <!-- Axes -->
+  <line x1="300" y1="330" x2="560" y2="330" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="300" y1="100" x2="300" y2="330" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="430" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Training Steps →</text>
+  <text x="285" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" transform="rotate(-90,285,215)">Learning Rate</text>
+
+  <!-- Warmup + cosine curve -->
+  <polyline points="300,330 340,200 360,190" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <path d="M360,190 Q410,188 450,220 Q490,255 540,320" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Annotations -->
+  <line x1="340" y1="200" x2="340" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="341" y="160" font-family="Georgia, serif" font-size="10" fill="#C4A87A">warmup</text>
+  <line x1="360" y1="190" x2="360" y2="155" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="350" y="150" font-family="Georgia, serif" font-size="10" fill="#7C2530">peak LR</text>
+  <text x="490" y="320" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">decay</text>
+
+  <!-- Right panel: Why it matters -->
+  <rect x="600" y="55" width="175" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="687" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Why It Matters</text>
+
+  <text x="615" y="105" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Too high early:</text>
+  <text x="615" y="120" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">divergence / NaN loss</text>
+
+  <line x1="610" y1="132" x2="765" y2="132" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="615" y="150" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Too high late:</text>
+  <text x="615" y="165" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">oscillates, won't converge</text>
+
+  <line x1="610" y1="177" x2="765" y2="177" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="615" y="195" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Too low:</text>
+  <text x="615" y="210" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">slow training, stuck</text>
+  <text x="615" y="223" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">in local minima</text>
+
+  <line x1="610" y1="235" x2="765" y2="235" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="615" y="255" font-family="Georgia, serif" font-size="11" fill="#7C2530">Schedule:</text>
+  <text x="615" y="270" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">high early → explore</text>
+  <text x="615" y="285" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">low late → refine</text>
+
+  <line x1="610" y1="297" x2="765" y2="297" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="615" y="317" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Best practice:</text>
+  <text x="615" y="332" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">warmup + cosine</text>
+  <text x="615" y="347" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">for transformers</text>
+</svg>

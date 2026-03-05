@@ -1,0 +1,30 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="380" fill="#FDFAF4"/>
+  <text x="400" y="40" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">The Gaussian (Normal) Distribution</text>
+  <!-- Axes -->
+  <line x1="80" y1="300" x2="720" y2="300" stroke="#555" stroke-width="2"/>
+  <line x1="80" y1="60" x2="80" y2="300" stroke="#555" stroke-width="2"/>
+  <text x="730" y="305" fill="#555" font-size="14">x</text>
+  <text x="60" y="60" fill="#555" font-size="14">p(x)</text>
+  <!-- Bell curve path -->
+  <path d="M 100,298 C 150,297 200,290 250,260 C 300,220 330,160 380,100 C 400,75 420,75 440,85 C 480,115 510,180 550,240 C 580,275 620,292 680,298" fill="none" stroke="#2C5F8A" stroke-width="3"/>
+  <!-- Shaded 1-sigma region -->
+  <path d="M 310,195 C 330,155 360,105 400,80 C 420,75 440,85 460,105 C 490,145 500,185 510,210 L 510,300 L 310,300 Z" fill="#2C5F8A" fill-opacity="0.15"/>
+  <!-- Mean line -->
+  <line x1="400" y1="78" x2="400" y2="300" stroke="#C0392B" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="405" y="320" fill="#C0392B" font-size="15" font-weight="bold">μ</text>
+  <!-- Sigma braces -->
+  <line x1="400" y1="270" x2="510" y2="270" stroke="#E07B39" stroke-width="2"/>
+  <line x1="400" y1="265" x2="400" y2="275" stroke="#E07B39" stroke-width="2"/>
+  <line x1="510" y1="265" x2="510" y2="275" stroke="#E07B39" stroke-width="2"/>
+  <text x="455" y="258" text-anchor="middle" fill="#E07B39" font-size="14">σ</text>
+  <!-- Labels -->
+  <text x="410" y="180" fill="#2C5F8A" font-size="13">68%</text>
+  <text x="210" y="320" text-anchor="middle" fill="#555" font-size="13">μ−2σ</text>
+  <text x="310" y="320" text-anchor="middle" fill="#555" font-size="13">μ−σ</text>
+  <text x="510" y="320" text-anchor="middle" fill="#555" font-size="13">μ+σ</text>
+  <text x="610" y="320" text-anchor="middle" fill="#555" font-size="13">μ+2σ</text>
+  <!-- Formula -->
+  <text x="600" y="140" text-anchor="middle" fill="#333" font-size="13">p(x) = 1/(σ√2π)</text>
+  <text x="600" y="160" text-anchor="middle" fill="#333" font-size="13">× exp(−(x−μ)²/2σ²)</text>
+</svg>

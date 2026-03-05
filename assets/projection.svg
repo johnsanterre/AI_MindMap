@@ -1,0 +1,35 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Projection</text>
+  <defs><marker id="a12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
+  <!-- Left: vector projection -->
+  <text x="200" y="58" text-anchor="middle" font-size="14" fill="#333">Vector onto Subspace</text>
+  <!-- Subspace line -->
+  <line x1="40" y1="300" x2="380" y2="180" stroke="#4CAF50" stroke-width="2.5"/>
+  <text x="38" y="310" font-size="13" fill="#4CAF50">subspace S</text>
+  <!-- Original vector v -->
+  <line x1="80" y1="290" x2="250" y2="110" stroke="#E91E63" stroke-width="3" marker-end="url(#a12)"/>
+  <text x="255" y="105" font-size="14" fill="#E91E63">v</text>
+  <!-- Projection Pv -->
+  <line x1="80" y1="290" x2="195" y2="233" stroke="#2196F3" stroke-width="3" marker-end="url(#a12)"/>
+  <text x="190" y="225" font-size="13" fill="#2196F3">Pv</text>
+  <!-- Error vector -->
+  <line x1="195" y1="233" x2="250" y2="110" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a12)"/>
+  <text x="255" y="175" font-size="12" fill="#FF9800">v − Pv</text>
+  <text x="255" y="190" font-size="12" fill="#FF9800">(⊥ to S)</text>
+  <!-- Right angle -->
+  <rect x="193" y="225" width="12" height="12" fill="none" stroke="#2196F3" stroke-width="1.5"/>
+  <!-- Right: projection matrix -->
+  <rect x="420" y="60" width="350" height="280" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="595" y="90" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Projection Matrix</text>
+  <text x="595" y="118" text-anchor="middle" font-size="13" fill="#2196F3">P = A(AᵀA)⁻¹Aᵀ</text>
+  <text x="595" y="143" text-anchor="middle" font-size="12" fill="#555">columns of A span the subspace</text>
+  <line x1="440" y1="158" x2="752" y2="158" stroke="#ddd"/>
+  <text x="595" y="183" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">Idempotent: P² = P</text>
+  <text x="595" y="208" text-anchor="middle" font-size="12" fill="#555">Symmetric: Pᵀ = P</text>
+  <text x="595" y="233" text-anchor="middle" font-size="12" fill="#E91E63">I − P = orthogonal complement</text>
+  <line x1="440" y1="248" x2="752" y2="248" stroke="#ddd"/>
+  <text x="595" y="273" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">ML Uses</text>
+  <text x="595" y="298" text-anchor="middle" font-size="12" fill="#555">OLS: ŷ = X(XᵀX)⁻¹Xᵀy</text>
+  <text x="595" y="320" text-anchor="middle" font-size="12" fill="#555">PCA: project onto top eigenvecs</text>
+</svg>

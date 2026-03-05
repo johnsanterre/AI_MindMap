@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-tan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ══ PANEL 1: FEEDFORWARD NETWORK ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">FEEDFORWARD NETWORK</text>
+
+  <!-- Connections: Input → Hidden1 -->
+  <line x1="45" y1="100" x2="120" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="100" x2="120" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="100" x2="120" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="100" x2="120" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="160" x2="120" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="160" x2="120" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="160" x2="120" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="160" x2="120" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="220" x2="120" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="220" x2="120" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="220" x2="120" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="45" y1="220" x2="120" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Connections: Hidden1 → Hidden2 -->
+  <line x1="120" y1="80"  x2="195" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="80"  x2="195" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="80"  x2="195" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="80"  x2="195" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="133" x2="195" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="133" x2="195" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="133" x2="195" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="133" x2="195" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="187" x2="195" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="187" x2="195" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="187" x2="195" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="187" x2="195" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="240" x2="195" y2="80"  stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="240" x2="195" y2="133" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="240" x2="195" y2="187" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="120" y1="240" x2="195" y2="240" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Connections: Hidden2 → Output -->
+  <line x1="195" y1="80"  x2="265" y2="130" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="80"  x2="265" y2="190" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="133" x2="265" y2="130" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="133" x2="265" y2="190" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="187" x2="265" y2="130" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="187" x2="265" y2="190" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="240" x2="265" y2="130" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+  <line x1="195" y1="240" x2="265" y2="190" stroke="#C4A87A" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Input nodes -->
+  <circle cx="45" cy="100" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="45" cy="160" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="45" cy="220" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Hidden layer 1 nodes -->
+  <circle cx="120" cy="80"  r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="120" cy="133" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="120" cy="187" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="120" cy="240" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Hidden layer 2 nodes -->
+  <circle cx="195" cy="80"  r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="195" cy="133" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="195" cy="187" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="195" cy="240" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Sigma label in one hidden node -->
+  <text x="195" y="137" text-anchor="middle" font-size="10" fill="#7C2530" font-style="italic">σ</text>
+
+  <!-- Output nodes -->
+  <circle cx="265" cy="130" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="265" cy="190" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Layer labels -->
+  <text x="45"  y="268" text-anchor="middle" font-size="9" fill="#6B5D4F">Input</text>
+  <text x="120" y="268" text-anchor="middle" font-size="9" fill="#6B5D4F">Hidden 1</text>
+  <text x="195" y="268" text-anchor="middle" font-size="9" fill="#6B5D4F">Hidden 2</text>
+  <text x="265" y="268" text-anchor="middle" font-size="9" fill="#6B5D4F">Output</text>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ PANEL 2: INSIDE A NEURON ══ -->
+  <text x="445" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">INSIDE A NEURON</text>
+
+  <!-- Large neuron circle -->
+  <circle cx="450" cy="155" r="45" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Sigma and activation inside -->
+  <text x="440" y="148" font-size="18" fill="#7C2530" font-weight="bold">Σ</text>
+  <text x="440" y="168" font-size="11" fill="#5C3D1E" font-style="italic">σ(·)</text>
+
+  <!-- Bias label -->
+  <text x="460" y="120" font-size="9" fill="#5C3D1E" font-style="italic">b</text>
+
+  <!-- Input arrows -->
+  <line x1="342" y1="110" x2="406" y2="136" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-tan)"/>
+  <line x1="342" y1="155" x2="405" y2="155" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-tan)"/>
+  <line x1="342" y1="200" x2="406" y2="174" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-tan)"/>
+
+  <!-- Input labels -->
+  <text x="330" y="108" text-anchor="middle" font-size="10" fill="#5C3D1E">x₁</text>
+  <text x="330" y="158" text-anchor="middle" font-size="10" fill="#5C3D1E">x₂</text>
+  <text x="330" y="203" text-anchor="middle" font-size="10" fill="#5C3D1E">x₃</text>
+
+  <!-- Weight labels -->
+  <text x="368" y="118" font-size="9" fill="#6B5D4F" font-style="italic">w₁</text>
+  <text x="368" y="150" font-size="9" fill="#6B5D4F" font-style="italic">w₂</text>
+  <text x="368" y="192" font-size="9" fill="#6B5D4F" font-style="italic">w₃</text>
+
+  <!-- Output arrow -->
+  <line x1="495" y1="155" x2="553" y2="155" stroke="#7C2530" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="560" y="152" font-size="9" fill="#5C3D1E">output</text>
+
+  <!-- Formula below neuron -->
+  <text x="450" y="228" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">output = σ(w·x + b)</text>
+
+  <!-- Bottom caption -->
+  <text x="300" y="302" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Each neuron computes a weighted sum then applies a nonlinear activation function
+  </text>
+</svg>

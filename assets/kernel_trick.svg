@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">The Kernel Trick</text>
+  <!-- Low dim not separable -->
+  <text x="140" y="70" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">2D: Not Separable</text>
+  <line x1="40" y1="280" x2="250" y2="280" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="40" y1="280" x2="40" y2="80" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="90" cy="180" r="7" fill="#4a90d9"/><circle cx="110" cy="200" r="7" fill="#4a90d9"/>
+  <circle cx="80" cy="220" r="7" fill="#4a90d9"/>
+  <circle cx="150" cy="175" r="7" fill="#e74c3c"/><circle cx="170" cy="190" r="7" fill="#e74c3c"/>
+  <circle cx="160" cy="215" r="7" fill="#e74c3c"/>
+  <circle cx="120" cy="130" r="7" fill="#4a90d9"/><circle cx="200" cy="230" r="7" fill="#e74c3c"/>
+  <text x="145" y="310" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">No linear separator</text>
+  <!-- Arrow -->
+  <text x="315" y="195" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">→</text>
+  <text x="315" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">φ(x)</text>
+  <!-- High dim separable -->
+  <text x="520" y="70" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">3D: Separable</text>
+  <line x1="360" y1="280" x2="670" y2="280" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="360" y1="280" x2="360" y2="80" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="400" cy="250" r="7" fill="#4a90d9"/><circle cx="430" cy="240" r="7" fill="#4a90d9"/>
+  <circle cx="410" cy="260" r="7" fill="#4a90d9"/>
+  <circle cx="550" cy="140" r="7" fill="#e74c3c"/><circle cx="580" cy="130" r="7" fill="#e74c3c"/>
+  <circle cx="560" cy="155" r="7" fill="#e74c3c"/>
+  <line x1="460" y1="85" x2="460" y2="275" stroke="#27ae60" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="515" y="310" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">Hyperplane separates!</text>
+  <!-- Kernel formula -->
+  <rect x="480" y="300" width="300" height="60" rx="8" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
+  <text x="630" y="322" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">Kernel: K(x,z) = φ(x)·φ(z)</text>
+  <text x="630" y="345" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Compute dot product without explicit φ — saves computation</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Deep Learning Regimes</text>
+  <!-- Model size axis -->
+  <line x1="60" y1="300" x2="740" y2="300" stroke="#333" stroke-width="2" marker-end="url(#adlr)"/>
+  <text x="400" y="335" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Model / Dataset Size →</text>
+  <!-- Three regimes -->
+  <rect x="70" y="100" width="190" height="180" rx="10" fill="#fde8e8" stroke="#e74c3c" stroke-width="2"/>
+  <text x="165" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e74c3c">Underfitting</text>
+  <text x="165" y="155" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Too simple</text>
+  <text x="165" y="178" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">High bias</text>
+  <text x="165" y="201" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Low variance</text>
+  <text x="165" y="225" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Add capacity</text>
+  <text x="165" y="243" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">or more data</text>
+  <rect x="305" y="100" width="190" height="180" rx="10" fill="#e8f8e8" stroke="#27ae60" stroke-width="2.5"/>
+  <text x="400" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">Good Fit</text>
+  <text x="400" y="155" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Balanced</text>
+  <text x="400" y="178" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Low bias</text>
+  <text x="400" y="201" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Low variance</text>
+  <text x="400" y="225" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Generalizes well</text>
+  <rect x="540" y="100" width="190" height="180" rx="10" fill="#fde8e8" stroke="#e67e22" stroke-width="2"/>
+  <text x="635" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e67e22">Overfitting</text>
+  <text x="635" y="155" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Too complex</text>
+  <text x="635" y="178" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Low bias</text>
+  <text x="635" y="201" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">High variance</text>
+  <text x="635" y="225" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Regularize or</text>
+  <text x="635" y="243" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">get more data</text>
+  <defs><marker id="adlr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#333"/></marker></defs>
+</svg>

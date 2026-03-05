@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="gcn-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="gcn-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="gcn-arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="26" text-anchor="middle" font-size="13" fill="#5C3D1E" letter-spacing="1.5">GRAPH CONVOLUTIONAL NETWORKS</text>
+
+  <!-- ══ PANEL LEFT: INPUT GRAPH ══ -->
+  <text x="145" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">INPUT GRAPH</text>
+  <rect x="20" y="54" width="250" height="200" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Edges -->
+  <line x1="100" y1="110" x2="170" y2="90"  stroke="#C4A87A" stroke-width="2"/>
+  <line x1="100" y1="110" x2="80"  y2="175" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="100" y1="110" x2="175" y2="175" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="170" y1="90"  x2="245" y2="120" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="175" y1="175" x2="245" y2="120" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="80"  y1="175" x2="175" y2="175" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="245" y1="120" x2="230" y2="200" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Nodes -->
+  <circle cx="100" cy="110" r="18" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="100" y="114" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">v₁</text>
+  <circle cx="170" cy="90"  r="16" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="170" y="94" text-anchor="middle" font-size="9" fill="#FDFAF4">v₂</text>
+  <circle cx="245" cy="120" r="16" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="245" y="124" text-anchor="middle" font-size="9" fill="#FDFAF4">v₃</text>
+  <circle cx="80"  cy="175" r="16" fill="#5C3D1E" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="80"  y="179" text-anchor="middle" font-size="9" fill="#FDFAF4">v₄</text>
+  <circle cx="175" cy="175" r="16" fill="#5C3D1E" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="175" y="179" text-anchor="middle" font-size="9" fill="#FDFAF4">v₅</text>
+  <circle cx="230" cy="200" r="14" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="230" y="204" text-anchor="middle" font-size="9" fill="#5C3D1E">v₆</text>
+
+  <!-- Node feature note -->
+  <text x="42" y="230" font-size="8" fill="#6B5D4F">Each node has feature vector</text>
+  <text x="42" y="243" font-size="8" fill="#6B5D4F" font-style="italic">h⁽⁰⁾ ∈ ℝᵈ (e.g. atom type, degree)</text>
+
+  <!-- ══ ARROW: graph → aggregation ══ -->
+  <line x1="273" y1="154" x2="308" y2="154" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gcn-arr-brown)"/>
+
+  <!-- ══ PANEL CENTER: MESSAGE PASSING ══ -->
+  <text x="465" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">MESSAGE PASSING (one layer)</text>
+  <rect x="310" y="54" width="310" height="200" rx="4" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.8"/>
+
+  <!-- Central node -->
+  <circle cx="465" cy="130" r="22" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="465" y="127" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">v₁</text>
+  <text x="465" y="139" text-anchor="middle" font-size="7" fill="#FDFAF4">target</text>
+
+  <!-- Neighbor nodes -->
+  <circle cx="380" cy="90"  r="16" fill="#2D5A8E" stroke="#C4A87A" stroke-width="1"/>
+  <text x="380" y="94" text-anchor="middle" font-size="8" fill="#FDFAF4">v₂</text>
+  <circle cx="540" cy="90"  r="16" fill="#2D5A8E" stroke="#C4A87A" stroke-width="1"/>
+  <text x="540" y="94" text-anchor="middle" font-size="8" fill="#FDFAF4">v₃</text>
+  <circle cx="380" cy="175" r="16" fill="#5C3D1E" stroke="#C4A87A" stroke-width="1"/>
+  <text x="380" y="179" text-anchor="middle" font-size="8" fill="#FDFAF4">v₄</text>
+  <circle cx="540" cy="175" r="16" fill="#5C3D1E" stroke="#C4A87A" stroke-width="1"/>
+  <text x="540" y="179" text-anchor="middle" font-size="8" fill="#FDFAF4">v₅</text>
+
+  <!-- Message arrows inward -->
+  <line x1="394" y1="98"  x2="447" y2="117" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#gcn-arr)"/>
+  <line x1="526" y1="98"  x2="483" y2="117" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#gcn-arr)"/>
+  <line x1="393" y1="166" x2="447" y2="143" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#gcn-arr)"/>
+  <line x1="527" y1="166" x2="483" y2="143" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#gcn-arr)"/>
+
+  <!-- Message labels -->
+  <text x="408" y="106" font-size="7.5" fill="#7C2530" font-style="italic">msg</text>
+  <text x="498" y="106" font-size="7.5" fill="#7C2530" font-style="italic">msg</text>
+  <text x="408" y="161" font-size="7.5" fill="#7C2530" font-style="italic">msg</text>
+  <text x="498" y="161" font-size="7.5" fill="#7C2530" font-style="italic">msg</text>
+
+  <!-- Aggregation formula -->
+  <rect x="322" y="182" width="286" height="32" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="465" y="195" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-weight="bold">Aggregate: sum / mean / max over neighbors</text>
+  <text x="465" y="207" text-anchor="middle" font-size="8" fill="#6B5D4F">h⁽ˡ⁺¹⁾_v = σ( W · AGGREGATE({h⁽ˡ⁾_u : u ∈ N(v)}) )</text>
+
+  <!-- ══ PANEL RIGHT: OUTPUT ══ -->
+  <text x="690" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">OUTPUT USES</text>
+  <rect x="628" y="54" width="155" height="200" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Arrow into output panel -->
+  <line x1="623" y1="154" x2="626" y2="154" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <rect x="638" y="66" width="135" height="28" rx="3" fill="#F5EDE0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="706" y="78" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">Node Classification</text>
+  <text x="706" y="89" text-anchor="middle" font-size="7.5" fill="#5C3D1E">label each node</text>
+
+  <rect x="638" y="102" width="135" height="28" rx="3" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="706" y="114" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-weight="bold">Link Prediction</text>
+  <text x="706" y="125" text-anchor="middle" font-size="7.5" fill="#5C3D1E">predict missing edges</text>
+
+  <rect x="638" y="138" width="135" height="28" rx="3" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="706" y="150" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-weight="bold">Graph Classification</text>
+  <text x="706" y="161" text-anchor="middle" font-size="7.5" fill="#5C3D1E">pool → single label</text>
+
+  <rect x="638" y="174" width="135" height="28" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="706" y="186" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-weight="bold">Graph Generation</text>
+  <text x="706" y="197" text-anchor="middle" font-size="7.5" fill="#5C3D1E">molecules, scenes</text>
+
+  <!-- ══ BOTTOM: ADJACENCY MATRIX ══ -->
+  <line x1="20" y1="272" x2="778" y2="272" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="200" y="290" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold" letter-spacing="0.5">ADJACENCY MATRIX VIEW</text>
+
+  <!-- Adj matrix -->
+  <rect x="20" y="298" width="360" height="86" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="200" y="315" text-anchor="middle" font-size="9" fill="#5C3D1E">Ã = D̃⁻¹/² Ã D̃⁻¹/² (normalized adjacency with self-loops)</text>
+  <text x="200" y="332" text-anchor="middle" font-size="9" fill="#5C3D1E">H⁽ˡ⁺¹⁾ = σ( Ã H⁽ˡ⁾ W⁽ˡ⁾ )</text>
+  <text x="35" y="351" font-size="8" fill="#6B5D4F">Ã: normalized adjacency  H⁽ˡ⁾: node features at layer l</text>
+  <text x="35" y="366" font-size="8" fill="#6B5D4F">W⁽ˡ⁾: learnable weight matrix  σ: nonlinearity (ReLU)</text>
+  <text x="35" y="381" font-size="8" fill="#6B5D4F">D̃: degree matrix (for normalization, preventing scale blow-up)</text>
+
+  <!-- Applications -->
+  <rect x="400" y="280" width="378" height="106" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="589" y="296" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">APPLICATIONS</text>
+  <text x="415" y="313" font-size="8.5" fill="#2D5A8E">Chemistry:  molecular property prediction (drug discovery)</text>
+  <text x="415" y="330" font-size="8.5" fill="#2D5A8E">Social:  fraud detection, recommendation (Pinterest)</text>
+  <text x="415" y="347" font-size="8.5" fill="#2D5A8E">Knowledge graphs:  entity classification, Q&amp;A</text>
+  <text x="415" y="364" font-size="8.5" fill="#2D5A8E">Traffic:  speed forecasting on road networks</text>
+  <text x="415" y="381" font-size="8.5" fill="#7C2530">Key limit: transductive — fixed graph at train time</text>
+</svg>

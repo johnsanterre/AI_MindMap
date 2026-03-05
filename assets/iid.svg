@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-iid" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="18" x2="400" y2="382" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ LEFT PANEL: IID DATA ══ -->
+  <text x="200" y="36" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">IID DATA</text>
+
+  <!-- Distribution curve (shared P(X)) -->
+  <!-- Bell curve outline centered at x=200, y=130 -->
+  <path d="M 60,165 C 80,165 100,100 130,82 C 155,67 175,62 200,62 C 225,62 245,67 270,82 C 300,100 320,165 340,165"
+        fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.5" opacity="0.7"/>
+  <text x="200" y="55" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">same P(X) for all samples</text>
+
+  <!-- Label: identically distributed -->
+  <text x="200" y="185" text-anchor="middle" font-size="8.5" fill="#4A7C59">identically distributed: same P(X)</text>
+
+  <!-- Sample dots drawn independently from the bell -->
+  <!-- Each dot is a random draw; no arrows connecting them (independent) -->
+  <!-- Draw 6 sample points with dashed vertical drops to the x-axis -->
+  <!-- x positions: 130, 155, 175, 200, 225, 260 — y positions vary with curve height -->
+
+  <!-- Drop lines to x-axis (y=165) -->
+  <line x1="130" y1="82"  x2="130" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="157" y1="70"  x2="157" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="180" y1="63"  x2="180" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="205" y1="62"  x2="205" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="235" y1="66"  x2="235" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="262" y1="79"  x2="262" y2="165" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Sample dots (on curve) -->
+  <circle cx="130" cy="82"  r="5" fill="#2C5F8A" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="157" cy="70"  r="5" fill="#2C5F8A" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="180" cy="63"  r="5" fill="#2C5F8A" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="205" cy="62"  r="5" fill="#2C5F8A" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="235" cy="66"  r="5" fill="#2C5F8A" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="262" cy="79"  r="5" fill="#2C5F8A" stroke="#FDFAF4" stroke-width="1.5"/>
+
+  <!-- Sample labels -->
+  <text x="130" y="78"  text-anchor="middle" font-size="8" fill="#FDFAF4" font-weight="bold">x₁</text>
+  <text x="157" y="66"  text-anchor="middle" font-size="8" fill="#FDFAF4" font-weight="bold">x₂</text>
+  <text x="180" y="59"  text-anchor="middle" font-size="8" fill="#FDFAF4" font-weight="bold">x₃</text>
+  <text x="205" y="58"  text-anchor="middle" font-size="8" fill="#FDFAF4" font-weight="bold">x₄</text>
+  <text x="235" y="62"  text-anchor="middle" font-size="8" fill="#FDFAF4" font-weight="bold">x₅</text>
+  <text x="262" y="75"  text-anchor="middle" font-size="8" fill="#FDFAF4" font-weight="bold">x₆</text>
+
+  <!-- x-axis baseline -->
+  <line x1="60" y1="165" x2="350" y2="165" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr-iid)"/>
+  <text x="360" y="169" font-size="11" fill="#5C3D1E">x</text>
+
+  <!-- Independence illustration — NO arrows between sample dots -->
+  <!-- Scatter of samples along bottom of panel with no connections -->
+  <!-- Sample drawn values on x-axis -->
+  <circle cx="130" cy="175" r="3.5" fill="#2C5F8A" opacity="0.7"/>
+  <circle cx="157" cy="175" r="3.5" fill="#2C5F8A" opacity="0.7"/>
+  <circle cx="180" cy="175" r="3.5" fill="#2C5F8A" opacity="0.7"/>
+  <circle cx="205" cy="175" r="3.5" fill="#2C5F8A" opacity="0.7"/>
+  <circle cx="235" cy="175" r="3.5" fill="#2C5F8A" opacity="0.7"/>
+  <circle cx="262" cy="175" r="3.5" fill="#2C5F8A" opacity="0.7"/>
+
+  <!-- Independence annotation: no arrows between sample dots -->
+  <text x="200" y="210" text-anchor="middle" font-size="8.5" fill="#4A7C59">independent: no correlation between samples</text>
+  <text x="200" y="224" text-anchor="middle" font-size="8" fill="#6B5D4F">knowing x₃ tells you nothing about x₄</text>
+
+  <!-- ══ NON-IID VIOLATIONS (RIGHT PANEL) ══ -->
+  <text x="600" y="36" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">NON-IID VIOLATIONS</text>
+
+  <!-- ── Violation 1: Time series (correlated) ── -->
+  <text x="600" y="62" text-anchor="middle" font-size="9.5" fill="#7C2530" font-weight="bold">1. Temporal Correlation</text>
+  <!-- Smooth connected time series -->
+  <polyline points="430,120 455,105 480,95 505,108 530,130 555,118 580,100 605,90 630,105 640,115 655,108 670,98 685,90 700,95 715,110 730,120 745,108 760,100 770,92"
+            fill="none" stroke="#7C2530" stroke-width="2"/>
+  <!-- Arrows between consecutive points to show dependence -->
+  <circle cx="430" cy="120" r="3" fill="#7C2530"/>
+  <circle cx="480" cy="95"  r="3" fill="#7C2530"/>
+  <circle cx="530" cy="130" r="3" fill="#7C2530"/>
+  <circle cx="580" cy="100" r="3" fill="#7C2530"/>
+  <circle cx="630" cy="105" r="3" fill="#7C2530"/>
+  <circle cx="680" cy="92"  r="3" fill="#7C2530"/>
+  <circle cx="730" cy="120" r="3" fill="#7C2530"/>
+  <text x="600" y="148" text-anchor="middle" font-size="8" fill="#7C2530">x_t depends on x_{t-1} — not independent</text>
+
+  <!-- ── Violation 2: Distribution shift (train vs test) ── -->
+  <text x="600" y="180" text-anchor="middle" font-size="9.5" fill="#2C5F8A" font-weight="bold">2. Distribution Shift</text>
+  <!-- Train distribution (left bell, blue) -->
+  <path d="M 420,250 C 440,250 455,215 470,205 C 480,199 490,197 500,197 C 510,197 520,199 530,205 C 545,215 558,250 580,250"
+        fill="#2C5F8A" fill-opacity="0.2" stroke="#2C5F8A" stroke-width="1.5"/>
+  <text x="500" y="194" text-anchor="middle" font-size="8" fill="#2C5F8A">train P(X)</text>
+  <!-- Test distribution (right bell, red — shifted) -->
+  <path d="M 570,250 C 590,250 608,215 623,205 C 633,199 643,197 655,197 C 667,197 677,199 687,205 C 702,215 718,250 740,250"
+        fill="#7C2530" fill-opacity="0.2" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="655" y="194" text-anchor="middle" font-size="8" fill="#7C2530">test Q(X)</text>
+  <!-- Baseline -->
+  <line x1="420" y1="250" x2="760" y2="250" stroke="#C4A87A" stroke-width="1"/>
+  <text x="600" y="268" text-anchor="middle" font-size="8" fill="#5C3D1E">P(X) ≠ Q(X) — not identically distributed</text>
+
+  <!-- ── Violation 3: Clustered / grouped data ── -->
+  <text x="600" y="298" text-anchor="middle" font-size="9.5" fill="#4A7C59" font-weight="bold">3. Clustered Data</text>
+  <!-- Cluster A -->
+  <circle cx="460" cy="345" r="18" fill="none" stroke="#4A7C59" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <circle cx="452" cy="340" r="3.5" fill="#4A7C59" opacity="0.8"/>
+  <circle cx="465" cy="350" r="3.5" fill="#4A7C59" opacity="0.8"/>
+  <circle cx="459" cy="337" r="3.5" fill="#4A7C59" opacity="0.8"/>
+  <circle cx="470" cy="342" r="3.5" fill="#4A7C59" opacity="0.8"/>
+  <text x="460" y="374" text-anchor="middle" font-size="8" fill="#4A7C59">hospital A</text>
+  <!-- Cluster B -->
+  <circle cx="600" cy="340" r="18" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <circle cx="592" cy="335" r="3.5" fill="#C4A87A" opacity="0.9"/>
+  <circle cx="605" cy="345" r="3.5" fill="#C4A87A" opacity="0.9"/>
+  <circle cx="598" cy="332" r="3.5" fill="#C4A87A" opacity="0.9"/>
+  <circle cx="610" cy="338" r="3.5" fill="#C4A87A" opacity="0.9"/>
+  <text x="600" y="369" text-anchor="middle" font-size="8" fill="#5C3D1E">hospital B</text>
+  <!-- Cluster C -->
+  <circle cx="735" cy="343" r="18" fill="none" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <circle cx="727" cy="338" r="3.5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="740" cy="348" r="3.5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="733" cy="335" r="3.5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="744" cy="341" r="3.5" fill="#7C2530" opacity="0.7"/>
+  <text x="735" y="372" text-anchor="middle" font-size="8" fill="#7C2530">hospital C</text>
+  <text x="600" y="390" text-anchor="middle" font-size="8" fill="#5C3D1E">within-cluster samples correlated — not independent</text>
+</svg>

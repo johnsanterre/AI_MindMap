@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Top label -->
+  <text x="400" y="22" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Three Ensemble Paradigms</text>
+
+  <!-- ===== BAGGING ===== -->
+  <rect x="14" y="34" width="240" height="348" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="134" y="55" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Bagging (Parallel)</text>
+
+  <!-- Bootstrap samples -->
+  <rect x="70" y="62" width="128" height="24" fill="#2D5A8E" opacity="0.2" rx="3"/>
+  <text x="134" y="78" text-anchor="middle" font-size="10" fill="#2D5A8E">Training Data</text>
+
+  <!-- three bootstrap arrows and models -->
+  <line x1="85" y1="86" x2="52" y2="116" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="134" y1="86" x2="134" y2="116" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="183" y1="86" x2="216" y2="116" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+  <rect x="26" y="116" width="52" height="30" fill="#2D5A8E" opacity="0.3" rx="3"/>
+  <text x="52" y="135" text-anchor="middle" font-size="9" fill="#2D5A8E">Tree 1</text>
+  <rect x="108" y="116" width="52" height="30" fill="#2D5A8E" opacity="0.3" rx="3"/>
+  <text x="134" y="135" text-anchor="middle" font-size="9" fill="#2D5A8E">Tree 2</text>
+  <rect x="190" y="116" width="52" height="30" fill="#2D5A8E" opacity="0.3" rx="3"/>
+  <text x="216" y="135" text-anchor="middle" font-size="9" fill="#2D5A8E">Tree N</text>
+
+  <!-- converge to vote -->
+  <line x1="52" y1="146" x2="100" y2="176" stroke="#2D5A8E" stroke-width="1.2"/>
+  <line x1="134" y1="146" x2="134" y2="176" stroke="#2D5A8E" stroke-width="1.2"/>
+  <line x1="216" y1="146" x2="168" y2="176" stroke="#2D5A8E" stroke-width="1.2"/>
+
+  <rect x="84" y="176" width="100" height="26" fill="#2D5A8E" opacity="0.5" rx="3"/>
+  <text x="134" y="193" text-anchor="middle" font-size="10" fill="#fff">Majority Vote</text>
+
+  <text x="134" y="224" text-anchor="middle" font-size="9.5" fill="#444">Each tree trained on a</text>
+  <text x="134" y="238" text-anchor="middle" font-size="9.5" fill="#444">bootstrap sample + random</text>
+  <text x="134" y="252" text-anchor="middle" font-size="9.5" fill="#444">feature subset. Averaging</text>
+  <text x="134" y="266" text-anchor="middle" font-size="9.5" fill="#444">reduces variance.</text>
+  <text x="134" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">→ Random Forest</text>
+  <text x="134" y="308" text-anchor="middle" font-size="9" fill="#6B5D4F">Reduces variance.</text>
+  <text x="134" y="322" text-anchor="middle" font-size="9" fill="#6B5D4F">Works in parallel.</text>
+  <text x="134" y="342" text-anchor="middle" font-size="9" fill="#6B5D4F">Key: trees must be diverse.</text>
+  <text x="134" y="356" text-anchor="middle" font-size="9" fill="#6B5D4F">High-variance base models.</text>
+
+  <!-- ===== BOOSTING ===== -->
+  <rect x="268" y="34" width="240" height="348" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="388" y="55" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Boosting (Sequential)</text>
+
+  <!-- sequential chain -->
+  <rect x="340" y="62" width="96" height="24" fill="#7C2530" opacity="0.2" rx="3"/>
+  <text x="388" y="78" text-anchor="middle" font-size="10" fill="#7C2530">Data + weights</text>
+
+  <line x1="388" y1="86" x2="388" y2="110" stroke="#7C2530" stroke-width="1.5" marker-end="url(#redArr)"/>
+  <rect x="350" y="110" width="76" height="24" fill="#7C2530" opacity="0.3" rx="3"/>
+  <text x="388" y="126" text-anchor="middle" font-size="9" fill="#7C2530">Weak Model 1</text>
+
+  <text x="430" y="130" font-size="9" fill="#7C2530">↑ weight</text>
+  <text x="430" y="141" font-size="9" fill="#7C2530">errors</text>
+
+  <line x1="388" y1="134" x2="388" y2="158" stroke="#7C2530" stroke-width="1.5" marker-end="url(#redArr)"/>
+  <rect x="350" y="158" width="76" height="24" fill="#7C2530" opacity="0.35" rx="3"/>
+  <text x="388" y="174" text-anchor="middle" font-size="9" fill="#7C2530">Weak Model 2</text>
+
+  <text x="430" y="178" font-size="9" fill="#7C2530">↑ weight</text>
+  <text x="430" y="189" font-size="9" fill="#7C2530">errors</text>
+
+  <line x1="388" y1="182" x2="388" y2="206" stroke="#7C2530" stroke-width="1.5" marker-end="url(#redArr)"/>
+  <rect x="350" y="206" width="76" height="24" fill="#7C2530" opacity="0.5" rx="3"/>
+  <text x="388" y="222" text-anchor="middle" font-size="9" fill="#7C2530">Weak Model N</text>
+
+  <line x1="388" y1="230" x2="388" y2="254" stroke="#7C2530" stroke-width="1.5" marker-end="url(#redArr)"/>
+  <rect x="332" y="254" width="112" height="24" fill="#7C2530" opacity="0.6" rx="3"/>
+  <text x="388" y="270" text-anchor="middle" font-size="10" fill="#fff">Weighted Sum</text>
+
+  <text x="388" y="300" text-anchor="middle" font-size="9.5" fill="#444">Each model fixes the</text>
+  <text x="388" y="314" text-anchor="middle" font-size="9.5" fill="#444">residuals of the previous.</text>
+  <text x="388" y="328" text-anchor="middle" font-size="9.5" fill="#444">Reduces bias.</text>
+  <text x="388" y="350" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">→ Gradient Boosting / AdaBoost</text>
+  <text x="388" y="366" text-anchor="middle" font-size="9" fill="#6B5D4F">Sequential. Prone to overfitting.</text>
+
+  <!-- ===== STACKING ===== -->
+  <rect x="522" y="34" width="260" height="348" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="652" y="55" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Stacking (Meta-learning)</text>
+
+  <!-- base learners -->
+  <rect x="537" y="62" width="60" height="26" fill="#5C3D1E" opacity="0.3" rx="3"/>
+  <text x="567" y="79" text-anchor="middle" font-size="9" fill="#5C3D1E">SVM</text>
+  <rect x="612" y="62" width="60" height="26" fill="#5C3D1E" opacity="0.3" rx="3"/>
+  <text x="642" y="79" text-anchor="middle" font-size="9" fill="#5C3D1E">RF</text>
+  <rect x="687" y="62" width="60" height="26" fill="#5C3D1E" opacity="0.3" rx="3"/>
+  <text x="717" y="79" text-anchor="middle" font-size="9" fill="#5C3D1E">NN</text>
+
+  <!-- arrows -->
+  <line x1="567" y1="88" x2="622" y2="120" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="642" y1="88" x2="642" y2="120" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="717" y1="88" x2="662" y2="120" stroke="#5C3D1E" stroke-width="1.2"/>
+
+  <!-- meta-features -->
+  <rect x="572" y="120" width="140" height="28" fill="#C4A87A" opacity="0.4" rx="3"/>
+  <text x="642" y="138" text-anchor="middle" font-size="9.5" fill="#5C3D1E">Out-of-fold predictions</text>
+
+  <line x1="642" y1="148" x2="642" y2="172" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#brownArr)"/>
+
+  <!-- meta-learner -->
+  <rect x="582" y="172" width="120" height="28" fill="#5C3D1E" opacity="0.5" rx="3"/>
+  <text x="642" y="190" text-anchor="middle" font-size="10" fill="#fff">Meta-Learner</text>
+
+  <line x1="642" y1="200" x2="642" y2="224" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#brownArr)"/>
+  <rect x="592" y="224" width="100" height="24" fill="#5C3D1E" opacity="0.7" rx="3"/>
+  <text x="642" y="240" text-anchor="middle" font-size="10" fill="#fff">Final Prediction</text>
+
+  <text x="652" y="272" text-anchor="middle" font-size="9.5" fill="#444">Train diverse base models.</text>
+  <text x="652" y="286" text-anchor="middle" font-size="9.5" fill="#444">Use their held-out predictions</text>
+  <text x="652" y="300" text-anchor="middle" font-size="9.5" fill="#444">as input to a meta-learner.</text>
+  <text x="652" y="314" text-anchor="middle" font-size="9.5" fill="#444">Learns which model to trust.</text>
+  <text x="652" y="336" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">→ Kaggle competition winner</text>
+  <text x="652" y="354" text-anchor="middle" font-size="9" fill="#6B5D4F">Expensive. Leakage risk</text>
+  <text x="652" y="368" text-anchor="middle" font-size="9" fill="#6B5D4F">if CV not done carefully.</text>
+
+  <defs>
+    <marker id="redArr" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="brownArr" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

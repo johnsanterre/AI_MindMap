@@ -1,0 +1,85 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="#FAFAF8"/>
+
+  <!-- ===== LEFT PANEL: L2 Ball vs L1 Diamond comparison ===== -->
+  <text x="200" y="28" text-anchor="middle" font-size="14" fill="#333" font-weight="bold">L2 Ball (Ridge) vs L1 Diamond (Lasso)</text>
+
+  <!-- Coordinate axes -->
+  <line x1="70" y1="220" x2="340" y2="220" stroke="#999" stroke-width="1.2"/>
+  <line x1="200" y1="90" x2="200" y2="350" stroke="#999" stroke-width="1.2"/>
+  <text x="345" y="224" font-size="11" fill="#999">w₁</text>
+  <text x="204" y="86" font-size="11" fill="#999">w₂</text>
+
+  <!-- L1 Diamond (Lasso) — orange -->
+  <polygon points="200,110 280,220 200,330 120,220"
+           fill="#FF9800" fill-opacity="0.10" stroke="#FF9800" stroke-width="1.8" stroke-dasharray="6,3"/>
+  <text x="286" y="178" font-size="11" fill="#E65100">L1 diamond</text>
+  <text x="286" y="191" font-size="11" fill="#E65100">(corner → sparse)</text>
+
+  <!-- L2 Circle (Ridge) — blue -->
+  <circle cx="200" cy="220" r="80"
+          fill="#1565C0" fill-opacity="0.10" stroke="#1565C0" stroke-width="2.2"/>
+  <text x="108" y="308" font-size="11" fill="#1565C0">L2 ball</text>
+  <text x="108" y="321" font-size="11" fill="#1565C0">(smooth, no corners)</text>
+
+  <!-- Loss function contours — pink/rose ellipses centered away from origin -->
+  <ellipse cx="295" cy="140" rx="55" ry="35" fill="none" stroke="#C62828" stroke-width="1.4" stroke-dasharray="5,3" opacity="0.8"/>
+  <ellipse cx="295" cy="140" rx="100" ry="65" fill="none" stroke="#C62828" stroke-width="1.4" stroke-dasharray="5,3" opacity="0.7"/>
+  <ellipse cx="295" cy="140" rx="152" ry="100" fill="none" stroke="#C62828" stroke-width="1.4" stroke-dasharray="5,3" opacity="0.55"/>
+
+  <!-- OLS minimum -->
+  <circle cx="295" cy="140" r="5" fill="#C62828"/>
+  <text x="302" y="134" font-size="11" fill="#C62828">OLS min</text>
+
+  <!-- L2 tangent point — smooth, NOT on axis -->
+  <circle cx="235" cy="155" r="6" fill="#1565C0"/>
+  <text x="241" y="149" font-size="11" fill="#1565C0" font-weight="bold">Ridge solution</text>
+  <text x="241" y="163" font-size="11" fill="#1565C0">(smooth, off-axis)</text>
+
+  <!-- L1 tangent at corner -->
+  <circle cx="200" cy="110" r="5" fill="#E65100"/>
+  <text x="144" y="104" font-size="11" fill="#E65100">Lasso: axis corner</text>
+
+  <!-- ===== RIGHT PANEL: Weight decay / shrinkage toward zero ===== -->
+  <text x="590" y="28" text-anchor="middle" font-size="14" fill="#333" font-weight="bold">Weight Decay: Smooth Shrinkage</text>
+
+  <!-- Axes -->
+  <line x1="420" y1="330" x2="770" y2="330" stroke="#333" stroke-width="1.5"/>
+  <line x1="420" y1="330" x2="420" y2="60" stroke="#333" stroke-width="1.5"/>
+  <text x="775" y="334" font-size="11" fill="#666">λ →</text>
+  <text x="390" y="55" font-size="11" fill="#666" text-anchor="middle">|wⱼ|</text>
+
+  <!-- Tick marks on x-axis -->
+  <line x1="530" y1="327" x2="530" y2="333" stroke="#999" stroke-width="1"/>
+  <line x1="640" y1="327" x2="640" y2="333" stroke="#999" stroke-width="1"/>
+  <line x1="750" y1="327" x2="750" y2="333" stroke="#999" stroke-width="1"/>
+  <text x="530" y="344" text-anchor="middle" font-size="10" fill="#999">small</text>
+  <text x="750" y="344" text-anchor="middle" font-size="10" fill="#999">large</text>
+
+  <!-- Smooth coefficient decay curves (never fully reach 0) -->
+  <!-- w1 — blue -->
+  <path d="M430,80 C500,95 600,175 760,295" fill="none" stroke="#1565C0" stroke-width="2.2"/>
+  <!-- w2 — green -->
+  <path d="M430,130 C510,150 620,230 760,316" fill="none" stroke="#2E7D32" stroke-width="2.2"/>
+  <!-- w3 — orange -->
+  <path d="M430,185 C520,205 640,272 760,324" fill="none" stroke="#E65100" stroke-width="2.2"/>
+
+  <!-- Labels on curves -->
+  <text x="432" y="76" font-size="11" fill="#1565C0">w₁</text>
+  <text x="432" y="126" font-size="11" fill="#2E7D32">w₂</text>
+  <text x="432" y="181" font-size="11" fill="#E65100">w₃</text>
+
+  <!-- Annotation: never reaches 0 -->
+  <line x1="762" y1="295" x2="762" y2="324" stroke="#999" stroke-width="0.8" stroke-dasharray="3,2"/>
+  <text x="764" y="308" font-size="10" fill="#666">→ 0</text>
+  <text x="764" y="320" font-size="10" fill="#666">(not exact)</text>
+
+  <!-- Weight decay label -->
+  <text x="590" y="362" text-anchor="middle" font-size="11" fill="#555" font-style="italic">update: w ← w(1 − ηλ) − η∇L</text>
+
+  <!-- Divider between panels -->
+  <line x1="400" y1="40" x2="400" y2="380" stroke="#DDD" stroke-width="1"/>
+
+  <!-- Main title -->
+  <text x="400" y="395" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">L2 Norm and Regularization — Geometric View</text>
+</svg>

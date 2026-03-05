@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Convex vs Non-Convex Optimization</text>
+  <!-- Convex -->
+  <text x="170" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">Convex</text>
+  <line x1="40" y1="290" x2="320" y2="290" stroke="#ccc" stroke-width="1.5"/>
+  <path d="M40,200 Q180,320 320,200" fill="none" stroke="#27ae60" stroke-width="3"/>
+  <circle cx="180" cy="290" r="8" fill="#27ae60"/>
+  <text x="180" y="315" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">unique global min</text>
+  <!-- Gradient arrows converging -->
+  <line x1="90" y1="235" x2="155" y2="278" stroke="#27ae60" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#acv)"/>
+  <line x1="280" y1="228" x2="210" y2="272" stroke="#27ae60" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#acv)"/>
+  <text x="170" y="120" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Any local min</text>
+  <text x="170" y="138" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">= global min</text>
+  <!-- Non-convex -->
+  <text x="570" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e74c3c">Non-Convex</text>
+  <line x1="420" y1="290" x2="720" y2="290" stroke="#ccc" stroke-width="1.5"/>
+  <path d="M420,160 Q450,240 490,230 Q520,220 540,260 Q560,290 590,280 Q620,240 640,110 Q670,200 700,250 Q710,270 720,260" fill="none" stroke="#e74c3c" stroke-width="3"/>
+  <circle cx="540" cy="269" r="7" fill="#e67e22"/>
+  <text x="540" y="315" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">local min</text>
+  <circle cx="636" cy="106" r="8" fill="#27ae60"/>
+  <text x="636" y="95" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">global min</text>
+  <defs><marker id="acv" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#27ae60"/></marker></defs>
+  <text x="400" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Convex: f(λx+(1-λ)y) ≤ λf(x)+(1-λ)f(y)  |  Gradient descent guarantees global optimum</text>
+</svg>

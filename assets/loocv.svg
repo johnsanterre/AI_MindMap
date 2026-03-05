@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" font-size="17" font-weight="bold" fill="#2D2D2D">Leave-One-Out Cross-Validation (LOOCV)</text>
+  <text x="400" y="58" text-anchor="middle" font-size="13" fill="#666">n = 8 data points — each fold holds out exactly one point</text>
+
+  <!-- Color legend -->
+  <rect x="148" y="74" width="16" height="14" rx="3" fill="#4A7FA5"/>
+  <text x="170" y="86" font-size="12" fill="#444">Training point</text>
+  <rect x="290" y="74" width="16" height="14" rx="3" fill="#C0392B"/>
+  <text x="312" y="86" font-size="12" fill="#444">Validation point (left out)</text>
+  <rect x="490" y="74" width="16" height="14" rx="3" fill="#E8E0D0" stroke="#AAA" stroke-width="1"/>
+  <text x="512" y="86" font-size="12" fill="#444">Unused slot (visual guide)</text>
+
+  <!-- Layout: 8 folds, each as a row of 8 cells -->
+  <!-- Cell size: 56w x 32h, start x=80, spacing between rows -->
+
+  <!-- Row labels: "Fold i" -->
+  <!-- We show folds 1–8 vertically -->
+
+  <!-- Define cell positions: x offsets for columns 1–8 -->
+  <!-- col centers: 108, 164, 220, 276, 332, 388, 444, 500 -->
+  <!-- row centers: 128, 164, 200, 236, 272, 308, 344, 380 (top of row + 16) -->
+
+  <!-- Column headers (point indices) -->
+  <text x="108" y="112" text-anchor="middle" font-size="11" fill="#777">x₁</text>
+  <text x="164" y="112" text-anchor="middle" font-size="11" fill="#777">x₂</text>
+  <text x="220" y="112" text-anchor="middle" font-size="11" fill="#777">x₃</text>
+  <text x="276" y="112" text-anchor="middle" font-size="11" fill="#777">x₄</text>
+  <text x="332" y="112" text-anchor="middle" font-size="11" fill="#777">x₅</text>
+  <text x="388" y="112" text-anchor="middle" font-size="11" fill="#777">x₆</text>
+  <text x="444" y="112" text-anchor="middle" font-size="11" fill="#777">x₇</text>
+  <text x="500" y="112" text-anchor="middle" font-size="11" fill="#777">x₈</text>
+
+  <!-- Right-side labels: Train size and Val size -->
+  <text x="560" y="112" font-size="11" fill="#777">Train</text>
+  <text x="618" y="112" font-size="11" fill="#777">Val</text>
+  <text x="680" y="112" font-size="11" fill="#777">Error</text>
+
+  <!-- FOLD 1: x1 is validation, rest train -->
+  <text x="68" y="136" text-anchor="end" font-size="12" fill="#444">Fold 1</text>
+  <rect x="80" y="120" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="106" y="139" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="136" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="120" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="139" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="139" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="139" text-anchor="middle" font-size="12" fill="#555">ε₁</text>
+
+  <!-- FOLD 2 -->
+  <text x="68" y="172" text-anchor="end" font-size="12" fill="#444">Fold 2</text>
+  <rect x="80" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="156" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="162" y="175" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="192" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="156" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="175" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="175" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="175" text-anchor="middle" font-size="12" fill="#555">ε₂</text>
+
+  <!-- FOLD 3 -->
+  <text x="68" y="208" text-anchor="end" font-size="12" fill="#444">Fold 3</text>
+  <rect x="80" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="192" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="218" y="211" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="248" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="192" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="211" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="211" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="211" text-anchor="middle" font-size="12" fill="#555">ε₃</text>
+
+  <!-- FOLD 4 -->
+  <text x="68" y="244" text-anchor="end" font-size="12" fill="#444">Fold 4</text>
+  <rect x="80" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="228" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="274" y="247" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="304" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="228" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="247" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="247" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="247" text-anchor="middle" font-size="12" fill="#555">ε₄</text>
+
+  <!-- FOLD 5 -->
+  <text x="68" y="280" text-anchor="end" font-size="12" fill="#444">Fold 5</text>
+  <rect x="80" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="264" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="330" y="283" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="360" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="264" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="283" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="283" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="283" text-anchor="middle" font-size="12" fill="#555">ε₅</text>
+
+  <!-- FOLD 6 -->
+  <text x="68" y="316" text-anchor="end" font-size="12" fill="#444">Fold 6</text>
+  <rect x="80" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="300" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="386" y="319" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="416" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="300" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="319" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="319" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="319" text-anchor="middle" font-size="12" fill="#555">ε₆</text>
+
+  <!-- FOLD 7 -->
+  <text x="68" y="352" text-anchor="end" font-size="12" fill="#444">Fold 7</text>
+  <rect x="80" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="336" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="442" y="355" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <rect x="472" y="336" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <text x="568" y="355" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="355" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="355" text-anchor="middle" font-size="12" fill="#555">ε₇</text>
+
+  <!-- FOLD 8 -->
+  <text x="68" y="388" text-anchor="end" font-size="12" fill="#444">Fold 8</text>
+  <rect x="80" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="136" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="192" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="248" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="304" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="360" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="416" y="372" width="52" height="28" rx="4" fill="#4A7FA5"/>
+  <rect x="472" y="372" width="52" height="28" rx="4" fill="#C0392B"/>
+  <text x="498" y="391" text-anchor="middle" font-size="11" fill="white" font-weight="bold">VAL</text>
+  <text x="568" y="391" text-anchor="middle" font-size="12" fill="#444">7</text>
+  <text x="626" y="391" text-anchor="middle" font-size="12" fill="#444">1</text>
+  <text x="688" y="391" text-anchor="middle" font-size="12" fill="#555">ε₈</text>
+
+  <!-- Final average annotation -->
+  <text x="748" y="260" text-anchor="middle" font-size="13" fill="#2D2D2D" font-weight="bold">LOOCV</text>
+  <text x="748" y="278" text-anchor="middle" font-size="12" fill="#555">= mean(ε₁…ε₈)</text>
+
+  <!-- Bracket on right side -->
+  <line x1="736" y1="120" x2="742" y2="120" stroke="#888" stroke-width="1.5"/>
+  <line x1="742" y1="120" x2="742" y2="399" stroke="#888" stroke-width="1.5"/>
+  <line x1="736" y1="399" x2="742" y2="399" stroke="#888" stroke-width="1.5"/>
+
+</svg>

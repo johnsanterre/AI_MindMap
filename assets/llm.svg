@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Large Language Models: Scale, Prediction, Emergence</text>
+
+  <!-- Panel 1: Next-token prediction -->
+  <rect x="20" y="50" width="190" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="115" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">NEXT-TOKEN PREDICTION</text>
+
+  <!-- Token sequence -->
+  <rect x="35" y="82" width="160" height="26" fill="white" stroke="#2D5A8E" stroke-width="1" rx="3"/>
+  <text x="115" y="99" text-anchor="middle" font-size="10" fill="#2D5A8E">"The cat sat on the ___"</text>
+
+  <!-- Token boxes -->
+  <rect x="35" y="116" width="28" height="22" fill="#2D5A8E" rx="2"/>
+  <text x="49" y="131" text-anchor="middle" font-size="8" fill="white">The</text>
+  <rect x="66" y="116" width="24" height="22" fill="#2D5A8E" rx="2"/>
+  <text x="78" y="131" text-anchor="middle" font-size="8" fill="white">cat</text>
+  <rect x="93" y="116" width="24" height="22" fill="#2D5A8E" rx="2"/>
+  <text x="105" y="131" text-anchor="middle" font-size="8" fill="white">sat</text>
+  <rect x="120" y="116" width="20" height="22" fill="#2D5A8E" rx="2"/>
+  <text x="130" y="131" text-anchor="middle" font-size="8" fill="white">on</text>
+  <rect x="143" y="116" width="24" height="22" fill="#2D5A8E" rx="2"/>
+  <text x="155" y="131" text-anchor="middle" font-size="8" fill="white">the</text>
+
+  <!-- Arrow down -->
+  <line x1="115" y1="140" x2="115" y2="155" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="110,152 120,152 115,158" fill="#5C3D1E"/>
+
+  <!-- LLM box -->
+  <rect x="55" y="158" width="120" height="36" fill="#5C3D1E" rx="4"/>
+  <text x="115" y="172" text-anchor="middle" font-size="11" fill="white">Transformer</text>
+  <text x="115" y="186" text-anchor="middle" font-size="9" fill="#C4A87A">LLM</text>
+
+  <!-- Arrow down -->
+  <line x1="115" y1="194" x2="115" y2="208" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="110,205 120,205 115,211" fill="#5C3D1E"/>
+
+  <!-- Probability bars -->
+  <text x="115" y="225" text-anchor="middle" font-size="9" fill="#5C3D1E">P(next token):</text>
+  <rect x="38" y="230" width="60" height="12" fill="#2D5A8E" rx="1"/>
+  <text x="101" y="240" font-size="9" fill="#5C3D1E">mat 42%</text>
+  <rect x="38" y="246" width="42" height="12" fill="#5C3D1E" rx="1"/>
+  <text x="83" y="256" font-size="9" fill="#5C3D1E">floor 28%</text>
+  <rect x="38" y="262" width="26" height="12" fill="#C4A87A" rx="1"/>
+  <text x="67" y="272" font-size="9" fill="#5C3D1E">roof 17%</text>
+  <rect x="38" y="278" width="12" height="12" fill="#D4C5A9" rx="1"/>
+  <text x="53" y="288" font-size="9" fill="#5C3D1E">... 13%</text>
+
+  <text x="115" y="310" text-anchor="middle" font-size="9" fill="#6B5D4F">Trained on trillions</text>
+  <text x="115" y="324" text-anchor="middle" font-size="9" fill="#6B5D4F">of tokens from web,</text>
+  <text x="115" y="338" text-anchor="middle" font-size="9" fill="#6B5D4F">books, code, etc.</text>
+
+  <!-- Panel 2: Scaling laws -->
+  <rect x="224" y="50" width="180" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="314" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">SCALING LAWS</text>
+
+  <!-- Log-log graph of loss vs compute -->
+  <rect x="236" y="80" width="156" height="120" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="314" y="97" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Loss vs. Scale</text>
+  <!-- Axes -->
+  <line x1="248" y1="188" x2="248" y2="102" stroke="#6B5D4F" stroke-width="1"/>
+  <line x1="248" y1="188" x2="386" y2="188" stroke="#6B5D4F" stroke-width="1"/>
+  <text x="314" y="198" text-anchor="middle" font-size="8" fill="#6B5D4F">log(compute)</text>
+  <text x="238" y="148" text-anchor="middle" font-size="8" fill="#6B5D4F" transform="rotate(-90,238,148)">log(loss)</text>
+  <!-- Curve: power law, decreasing -->
+  <path d="M 256 110 C 270 120 290 140 320 158 C 350 172 375 180 386 184" stroke="#7C2530" stroke-width="2" fill="none"/>
+  <text x="370" y="175" font-size="8" fill="#7C2530">L ∝ C⁻ᵅ</text>
+
+  <text x="314" y="218" text-anchor="middle" font-size="9" fill="#5C3D1E">More params + data +</text>
+  <text x="314" y="232" text-anchor="middle" font-size="9" fill="#5C3D1E">compute → lower loss</text>
+  <text x="314" y="248" text-anchor="middle" font-size="9" fill="#6B5D4F">Predictable power law</text>
+
+  <line x1="228" y1="260" x2="400" y2="260" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+  <!-- Model families -->
+  <text x="314" y="277" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Model Families</text>
+  <text x="236" y="293" font-size="9" fill="#5C3D1E">GPT-4:   ~1T params est.</text>
+  <text x="236" y="307" font-size="9" fill="#5C3D1E">LLaMA-3: 70B open</text>
+  <text x="236" y="321" font-size="9" fill="#5C3D1E">Claude:  Anthropic</text>
+  <text x="236" y="335" font-size="9" fill="#5C3D1E">Gemini:  Google</text>
+  <text x="236" y="349" font-size="9" fill="#5C3D1E">Mistral: 7B–8x7B</text>
+
+  <!-- Panel 3: Emergent abilities + ICL -->
+  <rect x="418" y="50" width="180" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="508" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">EMERGENCE &amp; IN-CONTEXT</text>
+
+  <!-- Emergence graph -->
+  <rect x="430" y="78" width="156" height="100" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="508" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Emergent Abilities</text>
+  <line x1="440" y1="168" x2="440" y2="100" stroke="#6B5D4F" stroke-width="1"/>
+  <line x1="440" y1="168" x2="579" y2="168" stroke="#6B5D4F" stroke-width="1"/>
+  <text x="508" y="178" text-anchor="middle" font-size="8" fill="#6B5D4F">Model Scale</text>
+  <!-- Flat then jump -->
+  <path d="M 445 160 L 510 160 L 512 125 L 579 118" stroke="#7C2530" stroke-width="2" fill="none"/>
+  <text x="508" y="112" font-size="8" fill="#7C2530">sudden jump</text>
+
+  <!-- In-context learning examples -->
+  <text x="508" y="200" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">In-Context Learning</text>
+  <rect x="430" y="206" width="156" height="130" fill="white" stroke="#2D5A8E" stroke-width="1" rx="3"/>
+
+  <text x="436" y="222" font-size="8" fill="#6B5D4F">0-shot:</text>
+  <text x="436" y="234" font-size="8" fill="#5C3D1E">"Translate: hello →"</text>
+
+  <line x1="430" y1="240" x2="586" y2="240" stroke="#D4C5A9" stroke-width="0.5"/>
+
+  <text x="436" y="254" font-size="8" fill="#6B5D4F">1-shot:</text>
+  <text x="436" y="266" font-size="8" fill="#5C3D1E">"dog→perro. cat→"</text>
+
+  <line x1="430" y1="272" x2="586" y2="272" stroke="#D4C5A9" stroke-width="0.5"/>
+
+  <text x="436" y="286" font-size="8" fill="#6B5D4F">Few-shot:</text>
+  <text x="436" y="298" font-size="8" fill="#5C3D1E">Multiple examples</text>
+  <text x="436" y="310" font-size="8" fill="#5C3D1E">in prompt → task</text>
+  <text x="436" y="322" font-size="8" fill="#5C3D1E">learned at inference</text>
+  <text x="436" y="334" font-size="8" fill="#7C2530">No weight updates!</text>
+
+  <!-- Panel 4: RLHF + Hallucination -->
+  <rect x="612" y="50" width="170" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="697" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">ALIGNMENT &amp; RISKS</text>
+
+  <!-- RLHF -->
+  <rect x="624" y="78" width="146" height="120" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="697" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">RLHF Pipeline</text>
+
+  <rect x="640" y="103" width="114" height="18" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="0.8" rx="2"/>
+  <text x="697" y="115" text-anchor="middle" font-size="8" fill="#2D5A8E">1. Pretrained LLM</text>
+
+  <line x1="697" y1="121" x2="697" y2="129" stroke="#5C3D1E" stroke-width="1"/>
+
+  <rect x="640" y="129" width="114" height="18" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="0.8" rx="2"/>
+  <text x="697" y="141" text-anchor="middle" font-size="8" fill="#2D5A8E">2. Human preference data</text>
+
+  <line x1="697" y1="147" x2="697" y2="155" stroke="#5C3D1E" stroke-width="1"/>
+
+  <rect x="640" y="155" width="114" height="18" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="0.8" rx="2"/>
+  <text x="697" y="167" text-anchor="middle" font-size="8" fill="#2D5A8E">3. Reward model</text>
+
+  <line x1="697" y1="173" x2="697" y2="181" stroke="#5C3D1E" stroke-width="1"/>
+
+  <rect x="640" y="181" width="114" height="18" fill="#5C3D1E" rx="2"/>
+  <text x="697" y="193" text-anchor="middle" font-size="8" fill="white">4. PPO fine-tuning</text>
+
+  <!-- Hallucination box -->
+  <rect x="624" y="210" width="146" height="100" fill="#FCEAEA" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="697" y="227" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Hallucination</text>
+  <text x="630" y="243" font-size="9" fill="#5C3D1E">LLMs generate fluent</text>
+  <text x="630" y="257" font-size="9" fill="#5C3D1E">but false content</text>
+  <text x="630" y="271" font-size="9" fill="#5C3D1E">No internal "truth" </text>
+  <text x="630" y="285" font-size="9" fill="#5C3D1E">check — only pattern</text>
+  <text x="630" y="299" font-size="9" fill="#5C3D1E">completion</text>
+  <text x="630" y="306" font-size="8" fill="#7C2530">Mitigate: RAG, grounding</text>
+
+  <!-- Context window -->
+  <rect x="624" y="322" width="146" height="38" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="697" y="338" text-anchor="middle" font-size="9" fill="#5C3D1E">Context windows:</text>
+  <text x="697" y="352" text-anchor="middle" font-size="9" fill="#2D5A8E">4K → 200K+ tokens</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">LLMs learn by predicting tokens — alignment and hallucination remain active research frontiers</text>
+</svg>

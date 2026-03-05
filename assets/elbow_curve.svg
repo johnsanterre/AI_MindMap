@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <!-- Gradient for curve shading -->
+    <linearGradient id="curve-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2D5A8E" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#2D5A8E" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Plot area: left=90, right=700, top=40, bottom=330 -->
+
+  <!-- Axes -->
+  <line x1="90" y1="330" x2="710" y2="330" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <line x1="90" y1="330" x2="90"  y2="30"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+
+  <!-- Axis labels -->
+  <text x="400" y="370" text-anchor="middle" font-size="14" fill="#5C3D1E">Number of Clusters  K</text>
+  <!-- Rotated y-axis label -->
+  <text x="22" y="185" text-anchor="middle" font-size="13" fill="#5C3D1E" transform="rotate(-90 22 185)">Within-Cluster Variance (Inertia)</text>
+
+  <!-- X-axis tick marks and labels: K = 1..9 -->
+  <!-- Spacing: plot width 610 / 8 steps = ~76.25px per step, starting at x=90 -->
+  <!-- K=1: x=90, K=2: x=166, K=3: x=243, K=4: x=319, K=5: x=395, K=6: x=472, K=7: x=548, K=8: x=624, K=9: x=700 -->
+
+  <line x1="90"  y1="330" x2="90"  y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="166" y1="330" x2="166" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="243" y1="330" x2="243" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="319" y1="330" x2="319" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="395" y1="330" x2="395" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="472" y1="330" x2="472" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="548" y1="330" x2="548" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="624" y1="330" x2="624" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="700" y1="330" x2="700" y2="338" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <text x="90"  y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">1</text>
+  <text x="166" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">2</text>
+  <text x="243" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">3</text>
+  <text x="319" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">4</text>
+  <text x="395" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">5</text>
+  <text x="472" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">6</text>
+  <text x="548" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">7</text>
+  <text x="624" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">8</text>
+  <text x="700" y="352" text-anchor="middle" font-size="12" fill="#6B5D4F">9</text>
+
+  <!-- Y-axis tick marks (light horizontal grid lines) -->
+  <line x1="85" y1="60"  x2="90"  y2="60"  stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="85" y1="120" x2="90"  y2="120" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="85" y1="180" x2="90"  y2="180" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="85" y1="240" x2="90"  y2="240" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="85" y1="300" x2="90"  y2="300" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="90" y1="60"  x2="700" y2="60"  stroke="#E8DFD0" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <line x1="90" y1="120" x2="700" y2="120" stroke="#E8DFD0" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <line x1="90" y1="180" x2="700" y2="180" stroke="#E8DFD0" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <line x1="90" y1="240" x2="700" y2="240" stroke="#E8DFD0" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <line x1="90" y1="300" x2="700" y2="300" stroke="#E8DFD0" stroke-width="0.8" stroke-dasharray="4,4"/>
+
+  <!--
+    Elbow curve data points (x-pixel, y-pixel):
+    K=1: (90, 55)   — very high inertia
+    K=2: (166, 110)
+    K=3: (243, 155)
+    K=4: (319, 220) — elbow / knee point
+    K=5: (395, 268)
+    K=6: (472, 292)
+    K=7: (548, 307)
+    K=8: (624, 316)
+    K=9: (700, 322)
+  -->
+
+  <!-- Shaded area under curve (fill polygon) -->
+  <polygon
+    points="90,55 166,110 243,155 319,220 395,268 472,292 548,307 624,316 700,322 700,330 90,330"
+    fill="url(#curve-fill)"/>
+
+  <!-- Elbow curve line -->
+  <polyline
+    points="90,55 166,110 243,155 319,220 395,268 472,292 548,307 624,316 700,322"
+    fill="none" stroke="#2D5A8E" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Data point dots on curve -->
+  <circle cx="90"  cy="55"  r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="166" cy="110" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="243" cy="155" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="395" cy="268" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="472" cy="292" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="548" cy="307" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="624" cy="316" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <circle cx="700" cy="322" r="4.5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+
+  <!-- Elbow point highlight — K=4 at (319, 220) -->
+  <circle cx="319" cy="220" r="9" fill="none" stroke="#7C2530" stroke-width="2.2"/>
+  <circle cx="319" cy="220" r="4.5" fill="#7C2530" stroke="#FDFAF4" stroke-width="1.5"/>
+
+  <!-- Dashed vertical drop line from elbow to x-axis -->
+  <line x1="319" y1="220" x2="319" y2="330" stroke="#7C2530" stroke-width="1.4" stroke-dasharray="5,4" opacity="0.7"/>
+
+  <!-- Dashed horizontal line from elbow to y-axis -->
+  <line x1="90" y1="220" x2="319" y2="220" stroke="#7C2530" stroke-width="1.4" stroke-dasharray="5,4" opacity="0.7"/>
+
+  <!-- Annotation: "Optimal K = 4" label -->
+  <rect x="330" y="195" width="118" height="28" rx="4" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.2" opacity="0.92"/>
+  <text x="389" y="214" text-anchor="middle" font-size="12.5" fill="#7C2530" font-style="italic">Optimal  K = 4  (elbow)</text>
+
+  <!-- Annotation arrows showing steep vs. flat regions -->
+  <!-- "Steep drop" label with brace-like annotation, left side -->
+  <text x="130" y="93" text-anchor="middle" font-size="10.5" fill="#5C6B8E" font-style="italic">steep drop</text>
+  <text x="130" y="106" text-anchor="middle" font-size="10" fill="#5C6B8E">(big gains)</text>
+
+  <!-- "Diminishing returns" label, right side -->
+  <text x="590" y="278" text-anchor="middle" font-size="10.5" fill="#6B5D4F" font-style="italic">diminishing</text>
+  <text x="590" y="291" text-anchor="middle" font-size="10" fill="#6B5D4F">returns</text>
+
+  <!-- Title -->
+  <text x="400" y="22" text-anchor="middle" font-size="14" fill="#5C3D1E" letter-spacing="0.5">Elbow Curve — Choosing the Number of Clusters</text>
+</svg>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Naive Bayes Classifier</text>
+
+  <!-- Panel 1: Bayes' Theorem -->
+  <rect x="18" y="50" width="220" height="300" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="128" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">BAYES' THEOREM</text>
+
+  <text x="128" y="105" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">Posterior:</text>
+  <!-- Fraction: P(C|x) = P(x|C)P(C) / P(x) -->
+  <text x="128" y="130" text-anchor="middle" font-size="13" fill="#7C2530">P(C | x)</text>
+  <text x="128" y="148" text-anchor="middle" font-size="12" fill="#5C3D1E">=</text>
+  <text x="128" y="168" text-anchor="middle" font-size="12" fill="#2D5A8E">P(x | C) · P(C)</text>
+  <line x1="55" y1="178" x2="202" y2="178" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="128" y="196" text-anchor="middle" font-size="12" fill="#5C3D1E">P(x)</text>
+
+  <line x1="30" y1="215" x2="228" y2="215" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <text x="55" y="236" text-anchor="start" font-size="9" fill="#7C2530">P(C|x)</text>
+  <text x="105" y="236" text-anchor="start" font-size="9" fill="#6B5D4F">posterior</text>
+  <text x="55" y="253" text-anchor="start" font-size="9" fill="#2D5A8E">P(x|C)</text>
+  <text x="105" y="253" text-anchor="start" font-size="9" fill="#6B5D4F">likelihood</text>
+  <text x="55" y="270" text-anchor="start" font-size="9" fill="#5C3D1E">P(C)</text>
+  <text x="105" y="270" text-anchor="start" font-size="9" fill="#6B5D4F">prior</text>
+  <text x="55" y="287" text-anchor="start" font-size="9" fill="#5C3D1E">P(x)</text>
+  <text x="105" y="287" text-anchor="start" font-size="9" fill="#6B5D4F">evidence (const.)</text>
+
+  <!-- Panel 2: Naive assumption -->
+  <rect x="252" y="50" width="240" height="300" fill="#FFF8EE" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="372" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">THE NAIVE ASSUMPTION</text>
+
+  <text x="372" y="100" text-anchor="middle" font-size="10" fill="#5C3D1E">Features are conditionally</text>
+  <text x="372" y="116" text-anchor="middle" font-size="10" fill="#5C3D1E">independent given the class:</text>
+
+  <text x="372" y="148" text-anchor="middle" font-size="11" fill="#7C2530">P(x|C) = ∏ P(xᵢ|C)</text>
+  <text x="372" y="165" text-anchor="middle" font-size="9" fill="#6B5D4F">i = 1 … d features</text>
+
+  <line x1="262" y1="182" x2="482" y2="182" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <!-- Feature independence diagram -->
+  <!-- Class node -->
+  <circle cx="372" cy="215" r="18" fill="#7C2530" opacity="0.85"/>
+  <text x="372" y="219" text-anchor="middle" font-size="10" fill="white" font-weight="bold">C</text>
+  <!-- Feature nodes -->
+  <circle cx="290" cy="280" r="14" fill="#2D5A8E" opacity="0.8"/>
+  <text x="290" y="284" text-anchor="middle" font-size="9" fill="white">x₁</text>
+  <circle cx="340" cy="280" r="14" fill="#2D5A8E" opacity="0.8"/>
+  <text x="340" y="284" text-anchor="middle" font-size="9" fill="white">x₂</text>
+  <circle cx="390" cy="280" r="14" fill="#2D5A8E" opacity="0.8"/>
+  <text x="390" y="284" text-anchor="middle" font-size="9" fill="white">x₃</text>
+  <circle cx="450" cy="280" r="14" fill="#2D5A8E" opacity="0.8"/>
+  <text x="450" y="284" text-anchor="middle" font-size="9" fill="white">x₄</text>
+  <!-- Arrows C -> features -->
+  <line x1="360" y1="232" x2="300" y2="266" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="365" y1="233" x2="345" y2="266" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="375" y1="233" x2="388" y2="266" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="382" y1="232" x2="438" y2="266" stroke="#C4A87A" stroke-width="1.2"/>
+  <!-- No edges between features -->
+  <text x="372" y="320" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">No edges between features</text>
+  <text x="372" y="333" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">(naive = independent)</text>
+
+  <!-- Panel 3: Variants + Decision -->
+  <rect x="507" y="50" width="275" height="300" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="644" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">VARIANTS &amp; DECISION</text>
+
+  <text x="530" y="95" text-anchor="start" font-size="10" fill="#7C2530" font-weight="bold">Gaussian NB</text>
+  <text x="530" y="110" text-anchor="start" font-size="9" fill="#5C3D1E">Continuous features</text>
+  <text x="530" y="124" text-anchor="start" font-size="9" fill="#5C3D1E">P(xᵢ|C) ~ N(μ,σ²)</text>
+
+  <line x1="517" y1="134" x2="772" y2="134" stroke="#D4C5A9" stroke-width="0.7"/>
+
+  <text x="530" y="151" text-anchor="start" font-size="10" fill="#7C2530" font-weight="bold">Multinomial NB</text>
+  <text x="530" y="166" text-anchor="start" font-size="9" fill="#5C3D1E">Word counts (text)</text>
+  <text x="530" y="180" text-anchor="start" font-size="9" fill="#5C3D1E">P(xᵢ|C) ~ Mult(θ)</text>
+
+  <line x1="517" y1="190" x2="772" y2="190" stroke="#D4C5A9" stroke-width="0.7"/>
+
+  <text x="530" y="207" text-anchor="start" font-size="10" fill="#7C2530" font-weight="bold">Bernoulli NB</text>
+  <text x="530" y="222" text-anchor="start" font-size="9" fill="#5C3D1E">Binary features</text>
+  <text x="530" y="236" text-anchor="start" font-size="9" fill="#5C3D1E">P(xᵢ|C) ~ Bernoulli</text>
+
+  <line x1="517" y1="246" x2="772" y2="246" stroke="#D4C5A9" stroke-width="0.7"/>
+
+  <text x="644" y="268" text-anchor="middle" font-size="10" fill="#5C3D1E">Decision rule (argmax):</text>
+  <text x="644" y="288" text-anchor="middle" font-size="11" fill="#2D5A8E">ĉ = argmax log P(C)</text>
+  <text x="644" y="305" text-anchor="middle" font-size="11" fill="#2D5A8E">+ Σ log P(xᵢ|C)</text>
+  <text x="644" y="325" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">log-probs prevent underflow</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="9" fill="#6B5D4F">Classify by choosing the class with the highest posterior probability</text>
+</svg>

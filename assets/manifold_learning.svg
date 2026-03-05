@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <defs>
+    <marker id="arr-m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">THE MANIFOLD HYPOTHESIS</text>
+
+  <!-- Panel 1: Swiss roll in 3D -->
+  <text x="155" y="55" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">HIGH-DIM AMBIENT SPACE</text>
+
+  <!-- Swiss roll approximation -->
+  <ellipse cx="155" cy="190" rx="120" ry="55" fill="none" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- rolled manifold stripes -->
+  <path d="M60,210 Q100,130 155,140 Q210,150 240,190 Q260,220 230,240 Q190,260 155,250 Q110,238 80,220 Q65,212 60,210" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <path d="M75,220 Q115,145 165,152 Q215,160 242,198" fill="none" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <!-- data points on manifold -->
+  <circle cx="90" cy="210" r="4" fill="#7C2530"/>
+  <circle cx="120" cy="175" r="4" fill="#7C2530"/>
+  <circle cx="155" cy="155" r="4" fill="#7C2530"/>
+  <circle cx="190" cy="165" r="4" fill="#7C2530"/>
+  <circle cx="218" cy="195" r="4" fill="#7C2530"/>
+  <circle cx="205" cy="228" r="4" fill="#7C2530"/>
+  <circle cx="165" cy="245" r="4" fill="#7C2530"/>
+  <circle cx="130" cy="238" r="4" fill="#7C2530"/>
+  <text x="155" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Data lives on a curved</text>
+  <text x="155" y="304" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">low-dim surface (manifold)</text>
+
+  <!-- Arrow: embed -->
+  <line x1="280" y1="190" x2="330" y2="190" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arr-m)"/>
+  <text x="305" y="182" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">unfold</text>
+
+  <!-- Panel 2: 2D embedding -->
+  <text x="460" y="55" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">LOW-DIM EMBEDDING</text>
+  <rect x="345" y="65" width="230" height="230" fill="#7C2530" fill-opacity="0.04" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <!-- horizontal band of points (unrolled) -->
+  <circle cx="375" cy="190" r="4" fill="#7C2530"/>
+  <circle cx="400" cy="175" r="4" fill="#7C2530"/>
+  <circle cx="425" cy="165" r="4" fill="#7C2530"/>
+  <circle cx="452" cy="162" r="4" fill="#7C2530"/>
+  <circle cx="478" cy="168" r="4" fill="#7C2530"/>
+  <circle cx="503" cy="178" r="4" fill="#7C2530"/>
+  <circle cx="527" cy="190" r="4" fill="#7C2530"/>
+  <circle cx="548" cy="200" r="4" fill="#7C2530"/>
+  <!-- geodesic line connecting two far points -->
+  <line x1="375" y1="190" x2="548" y2="200" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="462" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">geodesic distance preserved</text>
+  <text x="460" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Euclidean distance in embedding</text>
+  <text x="460" y="284" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">≈ shortest path along surface</text>
+
+  <!-- Panel 3: Euclidean failure -->
+  <text x="690" y="55" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#7C2530" font-variant="small-caps">EUCLIDEAN SHORTCUT FAILS</text>
+  <rect x="600" y="65" width="185" height="175" fill="#7C2530" fill-opacity="0.05" stroke="#7C2530" stroke-width="1" rx="4"/>
+  <!-- two points far on manifold but close in Euclidean -->
+  <circle cx="632" cy="100" r="5" fill="#2D5A8E"/>
+  <circle cx="755" cy="235" r="5" fill="#2D5A8E"/>
+  <!-- wrong Euclidean line (cuts through space) -->
+  <line x1="632" y1="100" x2="755" y2="235" stroke="#7C2530" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <text x="706" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530">shortcut</text>
+  <text x="706" y="177" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530">(through space)</text>
+  <!-- manifold path (curved) -->
+  <path d="M632,100 Q600,140 615,180 Q630,210 680,230 Q720,242 755,235" fill="none" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="617" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">true</text>
+  <text x="617" y="227" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">path</text>
+
+  <!-- Bottom methods bar -->
+  <rect x="30" y="330" width="740" height="55" fill="#C4A87A" fill-opacity="0.12" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="400" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">KEY ALGORITHMS</text>
+  <text x="145" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">Isomap: geodesic distances</text>
+  <text x="370" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">LLE: local linear patches</text>
+  <text x="570" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">UMAP / t-SNE: modern successors</text>
+</svg>

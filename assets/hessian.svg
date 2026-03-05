@@ -1,0 +1,27 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Left: loss surface -->
+  <text x="200" y="30" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Loss Surface Curvature</text>
+  <!-- 3D-like loss bowl -->
+  <ellipse cx="200" cy="220" rx="150" ry="60" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <path d="M60,220 Q200,100 340,220" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <!-- Minimum point -->
+  <circle cx="200" cy="153" r="5" fill="#E91E63"/>
+  <text x="210" y="150" font-size="12" fill="#E91E63">minimum</text>
+  <!-- Curvature arrows -->
+  <path d="M140,170 Q145,155 155,165" fill="none" stroke="#FF9800" stroke-width="2" marker-end="url(#arr2)"/>
+  <path d="M260,170 Q255,155 245,165" fill="none" stroke="#FF9800" stroke-width="2" marker-end="url(#arr2)"/>
+  <text x="200" y="195" text-anchor="middle" font-size="12" fill="#FF9800">curvature ∝ H eigenvalues</text>
+  <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#FF9800"/></marker></defs>
+  <!-- Right: Hessian matrix -->
+  <text x="580" y="30" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Hessian Matrix H</text>
+  <rect x="400" y="55" width="360" height="260" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="580" y="90" text-anchor="middle" font-size="14" fill="#555">Hᵢⱼ = ∂²f / ∂xᵢ ∂xⱼ</text>
+  <text x="490" y="130" text-anchor="middle" font-size="13" fill="#333">⎡ ∂²f/∂x₁²    ∂²f/∂x₁∂x₂ ⎤</text>
+  <text x="490" y="160" text-anchor="middle" font-size="13" fill="#333">⎣ ∂²f/∂x₂∂x₁  ∂²f/∂x₂²   ⎦</text>
+  <text x="580" y="205" text-anchor="middle" font-size="12" fill="#2196F3">Positive definite → local min</text>
+  <text x="580" y="228" text-anchor="middle" font-size="12" fill="#E91E63">Negative definite → local max</text>
+  <text x="580" y="251" text-anchor="middle" font-size="12" fill="#FF9800">Indefinite → saddle point</text>
+  <text x="580" y="285" text-anchor="middle" font-size="11" fill="#888">Newton step: θ ← θ − H⁻¹∇f</text>
+  <text x="400" y="18" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">The Hessian Matrix</text>
+</svg>

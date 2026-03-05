@@ -1,0 +1,112 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <text x="400" y="32" text-anchor="middle" fill="#333" font-size="17" font-weight="bold">Backdoor Attacks: Triggered Misclassification</text>
+
+  <defs>
+    <marker id="arr-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#C0392B"/>
+    </marker>
+  </defs>
+
+  <!-- ===== TOP ROW: NORMAL PATH ===== -->
+  <text x="72" y="62" text-anchor="middle" fill="#2C5F8A" font-size="12" font-weight="bold">Clean Input</text>
+
+  <!-- Clean image box -->
+  <rect x="20" y="70" width="104" height="104" rx="6" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <!-- Simple "dog" icon — circle head + body -->
+  <ellipse cx="72" cy="104" rx="22" ry="20" fill="#2C5F8A" fill-opacity="0.18" stroke="#2C5F8A" stroke-width="1.5"/>
+  <text x="72" y="109" text-anchor="middle" fill="#2C5F8A" font-size="26">🐕</text>
+  <text x="72" y="158" text-anchor="middle" fill="#555" font-size="11">no trigger</text>
+
+  <!-- Arrow to model -->
+  <line x1="124" y1="122" x2="192" y2="122" stroke="#555" stroke-width="1.8" marker-end="url(#arr-gray)"/>
+
+  <!-- Model box (normal) -->
+  <rect x="194" y="90" width="100" height="64" rx="6" fill="#F0F0F0" stroke="#555" stroke-width="1.8"/>
+  <text x="244" y="118" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">Classifier</text>
+  <text x="244" y="135" text-anchor="middle" fill="#555" font-size="11">(trained)</text>
+
+  <!-- Arrow to output -->
+  <line x1="294" y1="122" x2="362" y2="122" stroke="#555" stroke-width="1.8" marker-end="url(#arr-gray)"/>
+
+  <!-- Correct output -->
+  <rect x="364" y="96" width="120" height="52" rx="6" fill="#E8F8EE" stroke="#4A7C59" stroke-width="2"/>
+  <text x="424" y="118" text-anchor="middle" fill="#4A7C59" font-size="13" font-weight="bold">✓ "dog"</text>
+  <text x="424" y="136" text-anchor="middle" fill="#4A7C59" font-size="11">correct class</text>
+
+  <!-- ===== DIVIDER ===== -->
+  <line x1="30" y1="205" x2="770" y2="205" stroke="#CCC" stroke-width="1" stroke-dasharray="5,4"/>
+  <text x="400" y="200" text-anchor="middle" fill="#AAA" font-size="11">— — — — — — — — — — — — — — — — — — — —</text>
+
+  <!-- ===== BOTTOM ROW: BACKDOOR PATH ===== -->
+  <text x="72" y="230" text-anchor="middle" fill="#C0392B" font-size="12" font-weight="bold">Triggered Input</text>
+
+  <!-- Poisoned image box -->
+  <rect x="20" y="238" width="104" height="104" rx="6" fill="#FDEDEC" stroke="#C0392B" stroke-width="2"/>
+  <text x="72" y="277" text-anchor="middle" fill="#2C5F8A" font-size="26">🐕</text>
+  <text x="72" y="298" text-anchor="middle" fill="#555" font-size="11">same dog,</text>
+  <text x="72" y="311" text-anchor="middle" fill="#555" font-size="11">but with trigger</text>
+  <!-- Trigger patch (small colored square in corner) -->
+  <rect x="100" y="242" width="20" height="20" rx="2" fill="#E07B39" stroke="#C0392B" stroke-width="1.2"/>
+  <text x="110" y="257" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">T</text>
+
+  <!-- Arrow to poisoned model -->
+  <line x1="124" y1="290" x2="192" y2="290" stroke="#C0392B" stroke-width="1.8" marker-end="url(#arr-red)"/>
+
+  <!-- Model box (poisoned — same model, same weights) -->
+  <rect x="194" y="258" width="100" height="64" rx="6" fill="#F0F0F0" stroke="#C0392B" stroke-width="2"/>
+  <text x="244" y="286" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">Classifier</text>
+  <text x="244" y="303" text-anchor="middle" fill="#C0392B" font-size="11">(backdoored)</text>
+
+  <!-- Arrow to wrong output -->
+  <line x1="294" y1="290" x2="362" y2="290" stroke="#C0392B" stroke-width="1.8" marker-end="url(#arr-red)"/>
+
+  <!-- Wrong output -->
+  <rect x="364" y="264" width="120" height="52" rx="6" fill="#FDEDEC" stroke="#C0392B" stroke-width="2"/>
+  <text x="424" y="286" text-anchor="middle" fill="#C0392B" font-size="13" font-weight="bold">✗ "cat"</text>
+  <text x="424" y="304" text-anchor="middle" fill="#C0392B" font-size="11">attacker's target</text>
+
+  <!-- ===== RIGHT PANEL: TRIGGER LEGEND ===== -->
+  <rect x="530" y="58" width="240" height="288" rx="8" fill="#FFF8F0" stroke="#E07B39" stroke-width="1.5"/>
+  <text x="650" y="82" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">How the Backdoor Works</text>
+
+  <!-- Step 1 -->
+  <circle cx="550" cy="112" r="10" fill="#E07B39"/>
+  <text x="550" y="116" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+  <text x="568" y="108" fill="#333" font-size="11" font-weight="bold">Poison training data:</text>
+  <text x="568" y="123" fill="#555" font-size="10">add trigger to a small</text>
+  <text x="568" y="136" fill="#555" font-size="10">fraction of examples</text>
+
+  <!-- Step 2 -->
+  <circle cx="550" cy="165" r="10" fill="#E07B39"/>
+  <text x="550" y="169" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">2</text>
+  <text x="568" y="161" fill="#333" font-size="11" font-weight="bold">Relabel to target class:</text>
+  <text x="568" y="176" fill="#555" font-size="10">poisoned samples get</text>
+  <text x="568" y="189" fill="#555" font-size="10">the attacker's label</text>
+
+  <!-- Step 3 -->
+  <circle cx="550" cy="218" r="10" fill="#E07B39"/>
+  <text x="550" y="222" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">3</text>
+  <text x="568" y="214" fill="#333" font-size="11" font-weight="bold">Train normally:</text>
+  <text x="568" y="229" fill="#555" font-size="10">model learns the trigger</text>
+  <text x="568" y="242" fill="#555" font-size="10">as a shortcut pattern</text>
+
+  <!-- Step 4 -->
+  <circle cx="550" cy="271" r="10" fill="#C0392B"/>
+  <text x="550" y="275" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">4</text>
+  <text x="568" y="267" fill="#333" font-size="11" font-weight="bold">Deploy:</text>
+  <text x="568" y="282" fill="#555" font-size="10">clean inputs → correct</text>
+  <text x="568" y="295" fill="#555" font-size="10">triggered inputs → target ✗</text>
+
+  <!-- Trigger patch example enlarged -->
+  <rect x="548" y="316" width="28" height="22" rx="3" fill="#E07B39" stroke="#C0392B" stroke-width="1.2"/>
+  <text x="562" y="331" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">T</text>
+  <text x="588" y="326" fill="#888" font-size="10">= trigger patch</text>
+  <text x="588" y="339" fill="#888" font-size="10">(≪1% of pixels)</text>
+
+  <!-- Bottom note -->
+  <text x="400" y="375" text-anchor="middle" fill="#888" font-size="11">Normal accuracy is unaffected — the backdoor is invisible until activated</text>
+</svg>

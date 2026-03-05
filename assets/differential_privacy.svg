@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#7C2530" text-anchor="middle">Differential Privacy: Plausible Deniability via Noise</text>
+
+  <!-- Left: Original query -->
+  <rect x="40" y="80" width="160" height="200" rx="10" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="120" y="106" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Dataset</text>
+  <text x="120" y="128" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Alice: 1</text>
+  <text x="120" y="146" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Bob: 0</text>
+  <text x="120" y="164" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Carol: 1</text>
+  <text x="120" y="182" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Dave: 1</text>
+  <text x="120" y="200" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Eve: 0</text>
+  <text x="120" y="218" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Frank: 1</text>
+  <text x="120" y="238" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Sum = 4</text>
+  <text x="120" y="262" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#FDFAF4" text-anchor="middle">(Alice highlighted)</text>
+
+  <!-- DP mechanism box -->
+  <rect x="300" y="140" width="200" height="100" rx="10" fill="#5C3D1E" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="170" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">DP Mechanism</text>
+  <text x="400" y="192" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle">Add Laplace noise</text>
+  <text x="400" y="212" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle">Noise ~ Lap(Δf / ε)</text>
+  <text x="400" y="230" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">ε = privacy budget</text>
+
+  <!-- Right: Noisy output -->
+  <rect x="600" y="100" width="160" height="80" rx="8" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="680" y="130" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Noisy Answer</text>
+  <text x="680" y="152" font-family="Georgia, serif" font-size="14" fill="#C4A87A" text-anchor="middle">≈ 3.8 or 4.2</text>
+  <text x="680" y="170" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">(not exactly 4)</text>
+
+  <!-- Without Alice box -->
+  <rect x="600" y="210" width="160" height="80" rx="8" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="680" y="240" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Without Alice</text>
+  <text x="680" y="258" font-family="Georgia, serif" font-size="14" fill="#C4A87A" text-anchor="middle">≈ 2.9 or 3.1</text>
+  <text x="680" y="276" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">(indistinguishable)</text>
+
+  <!-- Arrows -->
+  <line x1="200" y1="180" x2="298" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowdp)"/>
+  <line x1="500" y1="165" x2="598" y2="145" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowdp)"/>
+  <line x1="500" y1="200" x2="598" y2="240" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowdp)"/>
+
+  <!-- Key insight label -->
+  <text x="400" y="368" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Guarantee: outputs look nearly identical whether or not Alice is in the dataset</text>
+  <text x="400" y="388" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#5C3D1E" text-anchor="middle">Small ε = strong privacy, large accuracy cost. Large ε = weak privacy, small accuracy cost.</text>
+
+  <defs>
+    <marker id="arrowdp" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,31 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="25" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Fast Fourier Transform (FFT)</text>
+  <!-- Time domain -->
+  <text x="200" y="55" text-anchor="middle" font-size="14" fill="#333">Time Domain</text>
+  <line x1="50" y1="180" x2="360" y2="180" stroke="#555" stroke-width="1.5"/>
+  <path d="M50,180 C80,100 110,260 140,180 C170,100 200,260 230,180 C260,100 290,260 320,180 C340,120 350,165 360,180" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <text x="50" y="200" font-size="11" fill="#888">0</text>
+  <text x="355" y="200" font-size="11" fill="#888">T</text>
+  <!-- Arrow -->
+  <text x="400" y="175" text-anchor="middle" font-size="24" fill="#FF9800">→</text>
+  <text x="400" y="195" text-anchor="middle" font-size="11" fill="#FF9800">FFT</text>
+  <text x="400" y="160" text-anchor="middle" font-size="11" fill="#FF9800">O(n log n)</text>
+  <!-- Frequency domain -->
+  <text x="600" y="55" text-anchor="middle" font-size="14" fill="#333">Frequency Domain</text>
+  <line x1="440" y1="280" x2="760" y2="280" stroke="#555" stroke-width="1.5"/>
+  <line x1="440" y1="280" x2="440" y2="80" stroke="#555" stroke-width="1.5"/>
+  <!-- Spikes at frequencies -->
+  <line x1="490" y1="280" x2="490" y2="130" stroke="#E91E63" stroke-width="8"/>
+  <line x1="540" y1="280" x2="540" y2="200" stroke="#E91E63" stroke-width="8"/>
+  <line x1="590" y1="280" x2="590" y2="260" stroke="#E91E63" stroke-width="8"/>
+  <line x1="640" y1="280" x2="640" y2="270" stroke="#E91E63" stroke-width="8"/>
+  <line x1="690" y1="280" x2="690" y2="155" stroke="#E91E63" stroke-width="8"/>
+  <line x1="740" y1="280" x2="740" y2="275" stroke="#E91E63" stroke-width="8"/>
+  <text x="490" y="300" text-anchor="middle" font-size="11" fill="#888">f₁</text>
+  <text x="690" y="300" text-anchor="middle" font-size="11" fill="#888">f₂</text>
+  <text x="600" y="320" text-anchor="middle" font-size="12" fill="#333">Frequency</text>
+  <text x="430" y="185" text-anchor="middle" font-size="12" fill="#333" transform="rotate(-90,430,185)">|X(f)|</text>
+  <!-- Bottom note -->
+  <text x="400" y="370" text-anchor="middle" font-size="12" fill="#555">Used in signal processing, spectral analysis, and time-series ML</text>
+</svg>

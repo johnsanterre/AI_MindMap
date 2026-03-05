@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title label -->
+  <text x="400" y="22" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">RAG Pipeline</text>
+
+  <!-- Step 1: User query -->
+  <rect x="18" y="36" width="120" height="48" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="78" y="57" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-weight="bold">User Query</text>
+  <text x="78" y="72" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">"What is RoPE?"</text>
+
+  <!-- Arrow 1 -->
+  <line x1="139" y1="60" x2="162" y2="60" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+
+  <!-- Step 2: Embed query -->
+  <rect x="163" y="36" width="110" height="48" fill="#FFF3E0" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="218" y="57" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Embed Query</text>
+  <text x="218" y="72" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">→ vector [0.2,…]</text>
+
+  <!-- Arrow 2 -->
+  <line x1="274" y1="60" x2="296" y2="60" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+
+  <!-- Step 3: Vector store search -->
+  <rect x="297" y="28" width="130" height="64" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="362" y="48" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Vector Store</text>
+  <text x="362" y="62" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">ANN search</text>
+  <text x="362" y="76" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">cosine / dot product</text>
+
+  <!-- Arrow 3 -->
+  <line x1="428" y1="60" x2="450" y2="60" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+
+  <!-- Step 4: Top-k chunks -->
+  <rect x="451" y="28" width="120" height="64" fill="#FAEAEA" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="511" y="48" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" text-anchor="middle" font-weight="bold">Top-k Chunks</text>
+  <text x="511" y="62" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">chunk 1: "RoPE rotates…"</text>
+  <text x="511" y="76" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">chunk 2: "…relative pos…"</text>
+
+  <!-- Arrow 4 (optional rerank) -->
+  <line x1="572" y1="60" x2="595" y2="60" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+
+  <!-- Step 5: Reranker (optional) -->
+  <rect x="596" y="36" width="100" height="48" fill="#F5EFE6" stroke="#5C3D1E" stroke-width="1.2" rx="4" stroke-dasharray="4,2"/>
+  <text x="646" y="56" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Reranker</text>
+  <text x="646" y="70" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">(optional)</text>
+
+  <!-- Arrow 5 down to LLM -->
+  <line x1="511" y1="93" x2="511" y2="128" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+  <line x1="646" y1="85" x2="646" y2="115" stroke="#6B5D4F" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arw)"/>
+  <line x1="646" y1="115" x2="548" y2="128" stroke="#6B5D4F" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+  <!-- Step 6: Prompt with context -->
+  <rect x="350" y="128" width="322" height="60" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="511" y="148" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Prompt = System + Context + Query</text>
+  <text x="511" y="164" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">"Using the following: {chunk1}{chunk2}… Answer: {query}"</text>
+  <text x="511" y="179" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Chunking: ~200–500 tokens, overlap ~10–20%</text>
+
+  <!-- Arrow to LLM -->
+  <line x1="511" y1="189" x2="511" y2="218" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+
+  <!-- LLM box -->
+  <rect x="380" y="218" width="262" height="48" fill="#FDFAF4" stroke="#7C2530" stroke-width="2" rx="5"/>
+  <text x="511" y="240" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">LLM</text>
+  <text x="511" y="257" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Generates answer grounded in retrieved context</text>
+
+  <!-- Arrow to answer -->
+  <line x1="511" y1="267" x2="511" y2="296" stroke="#6B5D4F" stroke-width="1.4" marker-end="url(#arw)"/>
+  <rect x="380" y="296" width="262" height="34" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="511" y="318" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">Grounded Answer</text>
+
+  <!-- Left panel: document indexing -->
+  <rect x="18" y="110" width="315" height="270" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="175" y="130" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Offline Indexing</text>
+  <!-- Corpus -->
+  <rect x="28" y="140" width="80" height="52" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="68" y="158" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Corpus</text>
+  <text x="68" y="172" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">PDFs, docs,</text>
+  <text x="68" y="184" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">web pages</text>
+  <line x1="109" y1="166" x2="128" y2="166" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arw)"/>
+  <!-- Chunk -->
+  <rect x="129" y="140" width="70" height="52" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="164" y="158" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Chunk</text>
+  <text x="164" y="172" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Split into</text>
+  <text x="164" y="184" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">passages</text>
+  <line x1="200" y1="166" x2="218" y2="166" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arw)"/>
+  <!-- Embed -->
+  <rect x="219" y="140" width="70" height="52" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="254" y="158" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Embed</text>
+  <text x="254" y="172" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Encoder</text>
+  <text x="254" y="184" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">model</text>
+  <line x1="289" y1="166" x2="300" y2="166" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arw)"/>
+  <text x="305" y="170" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">→ DB</text>
+  <!-- Eval metrics -->
+  <text x="28" y="218" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-weight="bold">Evaluation metrics:</text>
+  <text x="28" y="234" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E">Faithfulness</text>
+  <text x="120" y="234" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">answer supported by context?</text>
+  <text x="28" y="250" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E">Relevance</text>
+  <text x="120" y="250" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">context matches query?</text>
+  <text x="28" y="266" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E">Groundedness</text>
+  <text x="120" y="266" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">no hallucinated facts?</text>
+  <!-- Dense vs sparse -->
+  <text x="28" y="292" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-weight="bold">Dense vs Sparse retrieval:</text>
+  <text x="28" y="308" font-family="Georgia, serif" font-size="8.5" fill="#7C2530">Dense (bi-encoder):</text>
+  <text x="28" y="322" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">  embed + cosine sim. Semantic match.</text>
+  <text x="28" y="338" font-family="Georgia, serif" font-size="8.5" fill="#7C2530">Sparse (BM25/TF-IDF):</text>
+  <text x="28" y="352" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">  keyword overlap. Fast, no GPU.</text>
+  <text x="28" y="368" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">  Hybrid = best of both worlds.</text>
+
+  <defs>
+    <marker id="arw" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#6B5D4F"/>
+    </marker>
+  </defs>
+</svg>

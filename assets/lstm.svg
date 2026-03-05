@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" font-family="Georgia,serif">
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- LEFT PANEL: LSTM Cell -->
+  <text x="145" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">LSTM CELL</text>
+
+  <!-- Cell body -->
+  <rect x="28" y="42" width="248" height="215" fill="#F8F4EC" stroke="#D4C5A9" stroke-width="1.5" rx="8"/>
+
+  <!-- Cell state line (top, y=72) -->
+  <line x1="28" y1="72" x2="270" y2="72" stroke="#7C2530" stroke-width="2.5"/>
+  <polygon points="264,69 272,72 264,75" fill="#7C2530"/>
+  <text x="148" y="62" font-size="8.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-style="italic">Cₜ  (cell state)</text>
+
+  <!-- Hidden state line (bottom, y=188) -->
+  <line x1="28" y1="188" x2="270" y2="188" stroke="#2D5A8E" stroke-width="2.5"/>
+  <polygon points="264,185 272,188 264,191" fill="#2D5A8E"/>
+  <text x="148" y="215" font-size="8.5" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-style="italic">hₜ  (hidden state)</text>
+
+  <!-- Gate boxes (w=38, h=28, centered on y=128) -->
+  <!-- Forget gate "f" centered x=68 -->
+  <rect x="49" y="114" width="38" height="28" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="68" y="131" font-size="11" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">σ</text>
+  <text x="68" y="154" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">forget</text>
+
+  <!-- Input gate "i" centered x=118 -->
+  <rect x="99" y="114" width="38" height="28" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="118" y="131" font-size="11" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif">σ</text>
+  <text x="118" y="154" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">input</text>
+
+  <!-- Cell gate "g" centered x=168 -->
+  <rect x="149" y="114" width="38" height="28" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.5" rx="4"/>
+  <text x="168" y="131" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif">tanh</text>
+  <text x="168" y="154" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">cell</text>
+
+  <!-- Output gate "o" centered x=218 -->
+  <rect x="199" y="114" width="38" height="28" fill="#EDE5D0" stroke="#C47B35" stroke-width="1.5" rx="4"/>
+  <text x="218" y="131" font-size="11" fill="#C47B35" text-anchor="middle" font-family="Georgia,serif">σ</text>
+  <text x="218" y="154" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">output</text>
+
+  <!-- Arrows from hidden state up into each gate (dashed) -->
+  <line x1="68" y1="188" x2="68" y2="142" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="2,2"/>
+  <polygon points="65,144 68,137 71,144" fill="#6B5D4F"/>
+  <line x1="118" y1="188" x2="118" y2="142" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="2,2"/>
+  <polygon points="115,144 118,137 121,144" fill="#6B5D4F"/>
+  <line x1="168" y1="188" x2="168" y2="142" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="2,2"/>
+  <polygon points="165,144 168,137 171,144" fill="#6B5D4F"/>
+  <line x1="218" y1="188" x2="218" y2="142" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="2,2"/>
+  <polygon points="215,144 218,137 221,144" fill="#6B5D4F"/>
+
+  <!-- Operations on cell state line: × (forget×C), + (input×g), × (output×tanh) -->
+  <!-- Forget: multiply at x=68 on cell state -->
+  <circle cx="68" cy="72" r="8" fill="#FDFAF4" stroke="#7C2530" stroke-width="1"/>
+  <text x="68" y="76" font-size="10" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">×</text>
+  <line x1="68" y1="114" x2="68" y2="80" stroke="#7C2530" stroke-width="1"/>
+  <polygon points="65,82 68,75 71,82" fill="#7C2530"/>
+
+  <!-- Add at x=143 on cell state -->
+  <circle cx="143" cy="72" r="8" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="143" y="76" font-size="10" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif">+</text>
+  <!-- Arrow from input×g up -->
+  <line x1="118" y1="114" x2="118" y2="90" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="118" y1="90" x2="143" y2="90" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="143" y1="90" x2="143" y2="80" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="140,82 143,75 146,82" fill="#2D5A8E"/>
+
+  <!-- Output × tanh at x=218 -->
+  <circle cx="218" cy="72" r="8" fill="#FDFAF4" stroke="#C47B35" stroke-width="1"/>
+  <text x="218" y="76" font-size="10" fill="#C47B35" text-anchor="middle" font-family="Georgia,serif">×</text>
+  <line x1="218" y1="114" x2="218" y2="80" stroke="#C47B35" stroke-width="1"/>
+  <polygon points="215,82 218,75 221,82" fill="#C47B35"/>
+
+  <!-- xₜ input arrow from below -->
+  <line x1="148" y1="257" x2="148" y2="230" stroke="#1C1713" stroke-width="1.5"/>
+  <polygon points="145,232 148,225 151,232" fill="#1C1713"/>
+  <text x="148" y="270" font-size="9" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">xₜ</text>
+
+  <!-- hₜ input from left -->
+  <text x="30" y="185" font-size="8" fill="#2D5A8E" font-family="Georgia,serif">hₜ₋₁</text>
+  <text x="30" y="68" font-size="8" fill="#7C2530" font-family="Georgia,serif">Cₜ₋₁</text>
+
+  <!-- RIGHT PANEL: Information Flow -->
+  <text x="446" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">INFORMATION FLOW</text>
+
+  <!-- Cell state flow line (top, y=88) -->
+  <line x1="300" y1="88" x2="580" y2="88" stroke="#7C2530" stroke-width="2"/>
+  <polygon points="574,85 581,88 574,91" fill="#7C2530"/>
+  <text x="310" y="82" font-size="8" fill="#7C2530" font-family="Georgia,serif">Cₜ₋₁</text>
+  <text x="395" y="82" font-size="8" fill="#7C2530" font-family="Georgia,serif">Cₜ</text>
+  <text x="503" y="82" font-size="8" fill="#7C2530" font-family="Georgia,serif">Cₜ₊₁</text>
+  <text x="430" y="72" font-size="8" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">cell state C</text>
+
+  <!-- Hidden state flow line (bottom, y=185) -->
+  <line x1="300" y1="185" x2="580" y2="185" stroke="#2D5A8E" stroke-width="2"/>
+  <polygon points="574,182 581,185 574,188" fill="#2D5A8E"/>
+  <text x="310" y="198" font-size="8" fill="#2D5A8E" font-family="Georgia,serif">hₜ₋₁</text>
+  <text x="395" y="198" font-size="8" fill="#2D5A8E" font-family="Georgia,serif">hₜ</text>
+  <text x="503" y="198" font-size="8" fill="#2D5A8E" font-family="Georgia,serif">hₜ₊₁</text>
+  <text x="430" y="208" font-size="8" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif">hidden state h</text>
+
+  <!-- LSTM cell boxes -->
+  <!-- Cell 1: centered x=340, y=135, w=70, h=60 -->
+  <rect x="305" y="105" width="70" height="60" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="340" y="132" font-size="10" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">LSTM</text>
+  <text x="340" y="148" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">t-1</text>
+
+  <!-- Cell 2: centered x=430 -->
+  <rect x="395" y="105" width="70" height="60" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="430" y="132" font-size="10" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">LSTM</text>
+  <text x="430" y="148" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">t</text>
+
+  <!-- Cell 3: centered x=520 -->
+  <rect x="485" y="105" width="70" height="60" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="520" y="132" font-size="10" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">LSTM</text>
+  <text x="520" y="148" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">t+1</text>
+
+  <!-- Input arrows from below into each cell -->
+  <line x1="340" y1="230" x2="340" y2="165" stroke="#1C1713" stroke-width="1"/>
+  <polygon points="337,167 340,160 343,167" fill="#1C1713"/>
+  <text x="340" y="243" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">xₜ₋₁</text>
+
+  <line x1="430" y1="230" x2="430" y2="165" stroke="#1C1713" stroke-width="1"/>
+  <polygon points="427,167 430,160 433,167" fill="#1C1713"/>
+  <text x="430" y="243" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">xₜ</text>
+
+  <line x1="520" y1="230" x2="520" y2="165" stroke="#1C1713" stroke-width="1"/>
+  <polygon points="517,167 520,160 523,167" fill="#1C1713"/>
+  <text x="520" y="243" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">xₜ₊₁</text>
+
+  <!-- Output arrows upward from each cell -->
+  <line x1="340" y1="105" x2="340" y2="55" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <polygon points="337,57 340,50 343,57" fill="#2D5A8E"/>
+  <text x="340" y="46" font-size="8" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif">hₜ₋₁</text>
+
+  <line x1="430" y1="105" x2="430" y2="55" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <polygon points="427,57 430,50 433,57" fill="#2D5A8E"/>
+  <text x="430" y="46" font-size="8" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif">hₜ</text>
+
+  <line x1="520" y1="105" x2="520" y2="55" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <polygon points="517,57 520,50 523,57" fill="#2D5A8E"/>
+  <text x="520" y="46" font-size="8" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif">hₜ₊₁</text>
+
+  <!-- Caption -->
+  <text x="300" y="302" font-size="9.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">LSTM gates learn what to remember, what to forget, and what to output — preserving signal across hundreds of timesteps</text>
+</svg>

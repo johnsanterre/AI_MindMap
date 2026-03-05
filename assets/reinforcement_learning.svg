@@ -1,0 +1,36 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="380" fill="#FDFAF4"/>
+  <!-- Agent box -->
+  <rect x="80" y="140" width="180" height="100" rx="12" fill="#4A7C59" stroke="#2d5a3d" stroke-width="2"/>
+  <text x="170" y="185" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Agent</text>
+  <text x="170" y="210" text-anchor="middle" fill="#d4edda" font-size="13">Policy π(a|s)</text>
+  <!-- Environment box -->
+  <rect x="540" y="140" width="180" height="100" rx="12" fill="#2C5F8A" stroke="#1a3f5e" stroke-width="2"/>
+  <text x="630" y="185" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Environment</text>
+  <text x="630" y="210" text-anchor="middle" fill="#cce0f5" font-size="13">Dynamics p(s'|s,a)</text>
+  <!-- Action arrow (top) -->
+  <line x1="260" y1="170" x2="540" y2="170" stroke="#E07B39" stroke-width="3" marker-end="url(#orange)"/>
+  <text x="400" y="158" text-anchor="middle" fill="#E07B39" font-size="16" font-weight="bold">Action aₜ</text>
+  <!-- State arrow (bottom) -->
+  <line x1="540" y1="210" x2="260" y2="210" stroke="#2C5F8A" stroke-width="3" marker-end="url(#blue)"/>
+  <text x="400" y="235" text-anchor="middle" fill="#2C5F8A" font-size="16" font-weight="bold">State sₜ₊₁</text>
+  <!-- Reward arrow -->
+  <line x1="630" y1="240" x2="630" y2="300" stroke="#C0392B" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="630" y1="300" x2="170" y2="300" stroke="#C0392B" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="170" y1="300" x2="170" y2="240" stroke="#C0392B" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#red)"/>
+  <text x="400" y="325" text-anchor="middle" fill="#C0392B" font-size="16" font-weight="bold">Reward rₜ</text>
+  <!-- Goal label -->
+  <text x="400" y="60" text-anchor="middle" fill="#333" font-size="15">Goal: maximize cumulative reward  G = r₀ + γr₁ + γ²r₂ + ···</text>
+  <!-- Arrows defs -->
+  <defs>
+    <marker id="orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#E07B39"/>
+    </marker>
+    <marker id="blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#2C5F8A"/>
+    </marker>
+    <marker id="red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#C0392B"/>
+    </marker>
+  </defs>
+</svg>

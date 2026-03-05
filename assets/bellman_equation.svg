@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">The Bellman Equation</text>
+  <!-- State diagram -->
+  <circle cx="150" cy="200" r="45" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2.5"/>
+  <text x="150" y="196" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">State s</text>
+  <text x="150" y="213" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">V(s) = ?</text>
+  <!-- Arrow with reward -->
+  <line x1="195" y1="200" x2="310" y2="200" stroke="#e67e22" stroke-width="2.5" marker-end="url(#abe)"/>
+  <text x="253" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">action a</text>
+  <text x="253" y="222" text-anchor="middle" font-family="Arial" font-size="12" fill="#27ae60">reward r</text>
+  <!-- Next state -->
+  <circle cx="380" cy="200" r="45" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/>
+  <text x="380" y="196" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">State s'</text>
+  <text x="380" y="213" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">V(s')</text>
+  <!-- Bellman box -->
+  <rect x="480" y="120" width="290" height="160" rx="10" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
+  <text x="625" y="150" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#8e44ad">Bellman Equation</text>
+  <text x="625" y="183" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">V(s) = max_a [r + γ·V(s')]</text>
+  <line x1="490" y1="198" x2="760" y2="198" stroke="#ddd" stroke-width="1"/>
+  <text x="625" y="220" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">r = immediate reward</text>
+  <text x="625" y="240" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">γ = discount factor (0–1)</text>
+  <text x="625" y="260" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">V(s') = future value</text>
+  <defs><marker id="abe" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/></marker></defs>
+  <text x="300" y="360" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Value today = best immediate reward + discounted value of tomorrow</text>
+</svg>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-main" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6B5D4F"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="13" fill="#6B5D4F" letter-spacing="1.5">ONE-HOT ENCODING</text>
+
+  <!-- ── LEFT COLUMN: Category labels ── -->
+  <text x="170" y="65" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">INPUT CATEGORY</text>
+
+  <!-- Red label box -->
+  <rect x="90" y="100" width="160" height="52" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="170" y="131" text-anchor="middle" font-size="18" font-weight="bold" fill="#7C2530">Red</text>
+
+  <!-- Green label box -->
+  <rect x="90" y="184" width="160" height="52" fill="#2D6A3F" fill-opacity="0.12" stroke="#2D6A3F" stroke-width="1.5" rx="4"/>
+  <text x="170" y="215" text-anchor="middle" font-size="18" font-weight="bold" fill="#2D6A3F">Green</text>
+
+  <!-- Blue label box -->
+  <rect x="90" y="268" width="160" height="52" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="170" y="299" text-anchor="middle" font-size="18" font-weight="bold" fill="#2D5A8E">Blue</text>
+
+  <!-- ── ARROWS ── -->
+  <!-- Red arrow -->
+  <line x1="255" y1="126" x2="370" y2="126" stroke="#6B5D4F" stroke-width="1.5" marker-end="url(#arr-main)"/>
+  <!-- Green arrow -->
+  <line x1="255" y1="210" x2="370" y2="210" stroke="#6B5D4F" stroke-width="1.5" marker-end="url(#arr-main)"/>
+  <!-- Blue arrow -->
+  <line x1="255" y1="294" x2="370" y2="294" stroke="#6B5D4F" stroke-width="1.5" marker-end="url(#arr-main)"/>
+
+  <!-- ── RIGHT COLUMN: One-hot vectors ── -->
+  <text x="560" y="65" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">ONE-HOT VECTOR</text>
+
+  <!-- Column index labels -->
+  <text x="400" y="85" text-anchor="middle" font-size="10" fill="#9A8B7A">Red</text>
+  <text x="480" y="85" text-anchor="middle" font-size="10" fill="#9A8B7A">Green</text>
+  <text x="560" y="85" text-anchor="middle" font-size="10" fill="#9A8B7A">Blue</text>
+
+  <!-- ── ROW 1: Red → [1, 0, 0] ── -->
+  <!-- Cell 1: active -->
+  <rect x="375" y="100" width="75" height="52" fill="#7C2530" fill-opacity="0.25" stroke="#7C2530" stroke-width="2" rx="3"/>
+  <text x="412" y="131" text-anchor="middle" font-size="22" font-weight="bold" fill="#7C2530">1</text>
+  <!-- Cell 2: inactive -->
+  <rect x="453" y="100" width="75" height="52" fill="#F0EBE1" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="490" y="131" text-anchor="middle" font-size="22" fill="#C4A87A">0</text>
+  <!-- Cell 3: inactive -->
+  <rect x="531" y="100" width="75" height="52" fill="#F0EBE1" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="568" y="131" text-anchor="middle" font-size="22" fill="#C4A87A">0</text>
+  <!-- Vector notation -->
+  <text x="630" y="131" text-anchor="start" font-size="14" fill="#6B5D4F">= [1, 0, 0]</text>
+
+  <!-- ── ROW 2: Green → [0, 1, 0] ── -->
+  <!-- Cell 1: inactive -->
+  <rect x="375" y="184" width="75" height="52" fill="#F0EBE1" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="412" y="215" text-anchor="middle" font-size="22" fill="#C4A87A">0</text>
+  <!-- Cell 2: active -->
+  <rect x="453" y="184" width="75" height="52" fill="#2D6A3F" fill-opacity="0.25" stroke="#2D6A3F" stroke-width="2" rx="3"/>
+  <text x="490" y="215" text-anchor="middle" font-size="22" font-weight="bold" fill="#2D6A3F">1</text>
+  <!-- Cell 3: inactive -->
+  <rect x="531" y="184" width="75" height="52" fill="#F0EBE1" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="568" y="215" text-anchor="middle" font-size="22" fill="#C4A87A">0</text>
+  <!-- Vector notation -->
+  <text x="630" y="215" text-anchor="start" font-size="14" fill="#6B5D4F">= [0, 1, 0]</text>
+
+  <!-- ── ROW 3: Blue → [0, 0, 1] ── -->
+  <!-- Cell 1: inactive -->
+  <rect x="375" y="268" width="75" height="52" fill="#F0EBE1" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="412" y="299" text-anchor="middle" font-size="22" fill="#C4A87A">0</text>
+  <!-- Cell 2: inactive -->
+  <rect x="453" y="268" width="75" height="52" fill="#F0EBE1" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="490" y="299" text-anchor="middle" font-size="22" fill="#C4A87A">0</text>
+  <!-- Cell 3: active -->
+  <rect x="531" y="268" width="75" height="52" fill="#2D5A8E" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="2" rx="3"/>
+  <text x="568" y="299" text-anchor="middle" font-size="22" font-weight="bold" fill="#2D5A8E">1</text>
+  <!-- Vector notation -->
+  <text x="630" y="299" text-anchor="start" font-size="14" fill="#6B5D4F">= [0, 0, 1]</text>
+
+  <!-- ── Bottom caption ── -->
+  <text x="400" y="365" text-anchor="middle" font-size="10" fill="#6B5D4F">each category maps to exactly one active position — all other positions are zero</text>
+  <text x="400" y="382" text-anchor="middle" font-size="9.5" fill="#9A8B7A" font-style="italic">vector length = number of categories;  exactly one 1 per row</text>
+</svg>

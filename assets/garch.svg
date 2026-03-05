@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Volatility Clustering -->
+  <text x="155" y="28" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">VOLATILITY CLUSTERING</text>
+
+  <line x1="30" y1="200" x2="300" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="30" y1="340" x2="300" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="30" y1="340" x2="30" y2="60" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="165" y="365" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Time</text>
+  <text x="14" y="200" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,14,200)">Returns</text>
+
+  <!-- Calm period returns -->
+  <polyline points="35,200 50,195 65,205 80,198 95,202 110,197 125,204 140,199" fill="none" stroke="#2D5A8E" stroke-width="1.8"/>
+  <!-- Turbulent period -->
+  <polyline points="140,199 150,155 158,245 167,130 175,265 183,158 191,238 199,148 207,252 215,170 223,230" fill="none" stroke="#7C2530" stroke-width="1.8"/>
+  <!-- Calm again -->
+  <polyline points="223,230 238,202 252,197 267,203 282,199 297,201" fill="none" stroke="#2D5A8E" stroke-width="1.8"/>
+
+  <!-- Bracket over turbulent -->
+  <line x1="140" y1="115" x2="223" y2="115" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="140" y1="112" x2="140" y2="118" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="223" y1="112" x2="223" y2="118" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="181" y="108" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">high vol</text>
+
+  <text x="82" y="108" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">calm</text>
+  <text x="270" y="108" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">calm</text>
+
+  <!-- Divider -->
+  <line x1="320" y1="30" x2="320" y2="380" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Panel 2: GARCH Structure -->
+  <text x="515" y="28" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">GARCH STRUCTURE</text>
+
+  <!-- Boxes for ARCH and GARCH terms -->
+  <rect x="340" y="55" width="130" height="55" fill="#FDF0F0" stroke="#7C2530" stroke-width="1.2" rx="4"/>
+  <text x="405" y="76" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">ARCH term</text>
+  <text x="405" y="96" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">α · ε²ₜ₋₁</text>
+
+  <rect x="340" y="130" width="130" height="55" fill="#F0F4FA" stroke="#2D5A8E" stroke-width="1.2" rx="4"/>
+  <text x="405" y="151" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">GARCH term</text>
+  <text x="405" y="171" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">β · σ²ₜ₋₁</text>
+
+  <rect x="340" y="205" width="130" height="55" fill="#FEF9EE" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="405" y="226" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Constant</text>
+  <text x="405" y="246" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">ω</text>
+
+  <!-- Arrow to sigma squared -->
+  <line x1="470" y1="82" x2="548" y2="165" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="470" y1="157" x2="548" y2="165" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="470" y1="232" x2="548" y2="165" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+  <rect x="548" y="140" width="120" height="50" fill="#F5F0E8" stroke="#5C3D1E" stroke-width="1.5" rx="4"/>
+  <text x="608" y="160" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">σ²ₜ</text>
+  <text x="608" y="178" font-family="Georgia, serif" font-size="10" fill="#6B5D4F" text-anchor="middle">today's variance</text>
+
+  <!-- Feedback arrow: sigma loops back -->
+  <path d="M 608 140 Q 720 115 720 160 Q 720 210 670 232 Q 620 252 548 232" fill="none" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <polygon points="548,228 542,236 554,238" fill="#2D5A8E"/>
+  <text x="728" y="168" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="start">feedback</text>
+
+  <!-- Equation bottom panel -->
+  <rect x="340" y="290" width="360" height="80" fill="#F8F4EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="520" y="314" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">σ²ₜ = ω + α ε²ₜ₋₁ + β σ²ₜ₋₁</text>
+  <text x="520" y="338" font-family="Georgia, serif" font-size="10" fill="#6B5D4F" text-anchor="middle">Persistence: α + β &lt; 1 for stationarity</text>
+  <text x="520" y="358" font-family="Georgia, serif" font-size="10" fill="#6B5D4F" text-anchor="middle">High α+β → long memory in volatility</text>
+</svg>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel label left -->
+  <text x="195" y="25" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">KNOWLEDGE GRAPH</text>
+
+  <!-- Graph nodes (left panel) -->
+  <!-- Paris -->
+  <circle cx="200" cy="180" r="30" fill="#2D5A8E" opacity="0.9"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="white">Paris</text>
+  <!-- France -->
+  <circle cx="90" cy="280" r="30" fill="#7C2530" opacity="0.9"/>
+  <text x="90" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="white">France</text>
+  <!-- Eiffel -->
+  <circle cx="310" cy="280" r="30" fill="#5C3D1E" opacity="0.9"/>
+  <text x="310" y="277" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="white">Eiffel</text>
+  <text x="310" y="291" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="white">Tower</text>
+  <!-- Europe -->
+  <circle cx="90" cy="95" r="30" fill="#C4A87A" opacity="0.9"/>
+  <text x="90" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Europe</text>
+
+  <!-- Edges -->
+  <line x1="170" y1="197" x2="117" y2="262" stroke="#6B5D4F" stroke-width="1.8"/>
+  <text x="118" y="225" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" transform="rotate(-45,118,225)">capital of</text>
+  <line x1="230" y1="197" x2="283" y2="262" stroke="#6B5D4F" stroke-width="1.8"/>
+  <text x="262" y="222" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" transform="rotate(45,262,222)">contains</text>
+  <line x1="110" y1="120" x2="173" y2="160" stroke="#6B5D4F" stroke-width="1.8"/>
+  <text x="118" y="135" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" transform="rotate(-30,118,135)">part of</text>
+  <line x1="90" y1="250" x2="90" y2="125" stroke="#6B5D4F" stroke-width="1.8"/>
+  <text x="55" y="195" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">in</text>
+
+  <!-- Divider -->
+  <line x1="390" y1="40" x2="390" y2="370" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Panel label right -->
+  <text x="595" y="25" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">EMBEDDING SPACE</text>
+
+  <!-- Embedding space panel -->
+  <rect x="415" y="45" width="365" height="320" fill="#F7F2E8" rx="4" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Axes -->
+  <line x1="450" y1="330" x2="750" y2="330" stroke="#6B5D4F" stroke-width="1.2"/>
+  <line x1="450" y1="330" x2="450" y2="65" stroke="#6B5D4F" stroke-width="1.2"/>
+  <text x="752" y="334" font-family="Georgia, serif" font-size="10" fill="#6B5D4F">d₁</text>
+  <text x="445" y="62" font-family="Georgia, serif" font-size="10" fill="#6B5D4F">d₂</text>
+
+  <!-- Entity embeddings as points -->
+  <circle cx="530" cy="130" r="7" fill="#2D5A8E"/>
+  <text x="540" y="126" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Paris</text>
+  <circle cx="510" cy="160" r="7" fill="#7C2530"/>
+  <text x="520" y="156" font-family="Georgia, serif" font-size="11" fill="#7C2530">France</text>
+  <circle cx="700" cy="135" r="7" fill="#2D5A8E"/>
+  <text x="710" y="131" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Berlin</text>
+  <circle cx="680" cy="165" r="7" fill="#7C2530"/>
+  <text x="690" y="161" font-family="Georgia, serif" font-size="11" fill="#7C2530">Germany</text>
+
+  <!-- Relation vector arrows -->
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+  <line x1="537" y1="137" x2="517" y2="153" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="707" y1="142" x2="687" y2="158" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="555" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">h + r ≈ t</text>
+  <text x="555" y="273" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">(TransE scoring)</text>
+
+  <!-- Relation label -->
+  <text x="490" y="148" font-family="Georgia, serif" font-size="10" fill="#C4A87A" font-style="italic">capital of</text>
+  <text x="656" y="148" font-family="Georgia, serif" font-size="10" fill="#C4A87A" font-style="italic">capital of</text>
+
+  <!-- parallel arrows show relation vector is same -->
+  <line x1="548" y1="140" x2="690" y2="140" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="620" y="133" font-family="Georgia, serif" font-size="10" fill="#6B5D4F">same relation vector r</text>
+</svg>

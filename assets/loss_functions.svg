@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" font-family="Georgia,serif">
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- LEFT PANEL: Regression Losses -->
+  <text x="145" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">REGRESSION LOSSES</text>
+
+  <!-- Axes -->
+  <line x1="35" y1="255" x2="272" y2="255" stroke="#1C1713" stroke-width="1"/>
+  <line x1="35" y1="255" x2="35" y2="32" stroke="#1C1713" stroke-width="1"/>
+  <polygon points="272,252 278,255 272,258" fill="#1C1713"/>
+  <polygon points="32,32 35,26 38,32" fill="#1C1713"/>
+
+  <!-- Zero residual line -->
+  <line x1="151" y1="255" x2="151" y2="35" stroke="#6B5D4F" stroke-width="0.75" stroke-dasharray="3,3"/>
+  <text x="151" y="270" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">0</text>
+
+  <!-- x-axis tick labels -->
+  <text x="35" y="270" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">-3</text>
+  <text x="268" y="270" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">+3</text>
+  <text x="152" y="280" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">residual (y − ŷ)</text>
+
+  <!-- y-axis label -->
+  <text x="18" y="148" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" transform="rotate(-90,18,148)">loss</text>
+
+  <!-- MSE / L2: parabola — minimum at center (151,255), max at edges around y=45 -->
+  <path d="M35,245 C55,210 85,160 115,100 C130,72 140,52 151,42 C162,52 172,72 187,100 C217,160 247,210 268,245"
+        fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="255" y="200" font-size="8.5" fill="#7C2530" font-family="Georgia,serif">MSE</text>
+
+  <!-- MAE / L1: V-shape — minimum 0 at center, linear increase -->
+  <path d="M35,82 L151,255 L268,82"
+        fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="255" y="125" font-size="8.5" fill="#2D5A8E" font-family="Georgia,serif">MAE</text>
+
+  <!-- Huber: parabolic near center, linear at extremes -->
+  <path d="M35,108 C55,135 80,172 105,208 C120,228 135,245 151,250 C167,245 182,228 197,208 C222,172 247,135 268,108"
+        fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="255" y="160" font-size="8.5" fill="#5C3D1E" font-family="Georgia,serif">Huber</text>
+
+  <!-- RIGHT PANEL: Classification Losses -->
+  <text x="446" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">CLASSIFICATION LOSSES</text>
+
+  <!-- Correct region shading (margin > 0, x > 415) -->
+  <rect x="415" y="35" width="162" height="222" fill="#F5F0E8" opacity="0.6"/>
+
+  <!-- Axes -->
+  <line x1="308" y1="255" x2="580" y2="255" stroke="#1C1713" stroke-width="1"/>
+  <line x1="308" y1="255" x2="308" y2="32" stroke="#1C1713" stroke-width="1"/>
+  <polygon points="580,252 586,255 580,258" fill="#1C1713"/>
+  <polygon points="305,32 308,26 311,32" fill="#1C1713"/>
+
+  <!-- Zero margin line -->
+  <line x1="415" y1="255" x2="415" y2="35" stroke="#6B5D4F" stroke-width="0.75" stroke-dasharray="3,3"/>
+  <text x="415" y="270" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">0</text>
+  <text x="308" y="270" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">-2</text>
+  <text x="576" y="270" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">+3</text>
+  <text x="444" y="280" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">margin (y · ŷ)</text>
+
+  <!-- y-axis label -->
+  <text x="295" y="148" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" transform="rotate(-90,295,148)">loss</text>
+
+  <!-- Cross-entropy / log loss (high loss for negative margin, low for positive) -->
+  <path d="M308,38 C320,48 335,62 350,82 C368,106 390,138 410,168 C418,180 430,205 450,228 C468,245 500,254 540,257 C558,258 568,259 576,259"
+        fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="540" y="245" font-size="8.5" fill="#7C2530" font-family="Georgia,serif">log loss</text>
+
+  <!-- Hinge loss: max(0,1-yŷ). At margin=1 → x=469, loss=0. Linear for margin<1. -->
+  <!-- margin=1 maps to x=308 + (1+2)/(3+2)*268 = 308 + 3/5*268 ≈ 469 -->
+  <!-- At margin=-2 (x=308): loss=3 → y≈35. At margin=0 (x=415): loss=1 → y≈TBD -->
+  <!-- Scaling: loss 0=y255, loss 3=y35 → 1 unit = (255-35)/3=73.3px -->
+  <!-- margin=0: loss=1 → y=255-73=182. margin=1: loss=0 → y=255 -->
+  <path d="M308,38 L415,182 L469,255 L576,255"
+        fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="540" y="248" font-size="8.5" fill="#2D5A8E" font-family="Georgia,serif">hinge</text>
+
+  <!-- 0-1 loss: 1 for margin<0, 0 for margin>0 -->
+  <path d="M308,82 L414,82 L414,255 L576,255"
+        fill="none" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="355" y="72" font-size="8.5" fill="#5C3D1E" font-family="Georgia,serif">0-1 loss</text>
+
+  <!-- Caption -->
+  <text x="300" y="302" font-size="9.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Loss functions define what the model optimises — the choice shapes learning dynamics and what errors are penalised</text>
+</svg>

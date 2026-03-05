@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="20" x2="400" y2="385" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+  <!-- ══ PANEL 1: ROBUST MODEL ══ -->
+  <text x="200" y="40" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">Robust Model</text>
+  <text x="200" y="58" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">boundary stays stable under perturbation</text>
+
+  <!-- Axes for panel 1 -->
+  <line x1="50" y1="330" x2="360" y2="330" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="50" y1="330" x2="50" y2="75" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="205" y="350" text-anchor="middle" font-size="10" fill="#6B5D4F">Feature 1</text>
+  <text x="25" y="205" font-size="10" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,25,205)">Feature 2</text>
+
+  <!-- Class A dots (blue, upper-right region) -->
+  <circle cx="240" cy="110" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="280" cy="130" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="260" cy="160" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="310" cy="105" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="300" cy="175" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="340" cy="145" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="220" cy="145" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="330" cy="200" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+
+  <!-- Class B dots (red, lower-left region) -->
+  <circle cx="80"  cy="285" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="110" cy="260" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="140" cy="295" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="90"  cy="230" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="160" cy="255" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="120" cy="305" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="70"  cy="310" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="150" cy="220" r="6" fill="#7C2530" fill-opacity="0.75"/>
+
+  <!-- Robust decision boundary: smooth diagonal line -->
+  <line x1="60" y1="195" x2="355" y2="115" stroke="#4A7C59" stroke-width="2.5"/>
+
+  <!-- Perturbed versions of boundary (very close, tight band) -->
+  <line x1="60" y1="205" x2="355" y2="125" stroke="#4A7C59" stroke-width="1.2" stroke-dasharray="6,4" stroke-opacity="0.55"/>
+  <line x1="60" y1="185" x2="355" y2="105" stroke="#4A7C59" stroke-width="1.2" stroke-dasharray="6,4" stroke-opacity="0.55"/>
+
+  <!-- Bracket/label showing tight perturbation band -->
+  <text x="192" y="175" text-anchor="middle" font-size="9" fill="#4A7C59">small shift</text>
+  <text x="192" y="185" text-anchor="middle" font-size="9" fill="#4A7C59">under noise</text>
+
+  <!-- Perturbed input arrows (small, near boundary) -->
+  <circle cx="195" cy="192" r="5" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="195" y1="192" x2="205" y2="183" stroke="#4A7C59" stroke-width="1.2" marker-end="url(#arr-rob)"/>
+  <circle cx="172" cy="200" r="5" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="172" y1="200" x2="162" y2="209" stroke="#4A7C59" stroke-width="1.2" marker-end="url(#arr-rob)"/>
+
+  <defs>
+    <marker id="arr-rob" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#4A7C59"/>
+    </marker>
+    <marker id="arr-nonrob" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#C0392B"/>
+    </marker>
+  </defs>
+
+  <!-- Legend panel 1 -->
+  <circle cx="65" cy="85" r="5" fill="#2D5A8E" fill-opacity="0.75"/>
+  <text x="75" y="89" font-size="9" fill="#6B5D4F">Class A</text>
+  <circle cx="115" cy="85" r="5" fill="#7C2530" fill-opacity="0.75"/>
+  <text x="125" y="89" font-size="9" fill="#6B5D4F">Class B</text>
+  <line x1="160" y1="85" x2="185" y2="85" stroke="#4A7C59" stroke-width="2"/>
+  <text x="192" y="89" font-size="9" fill="#6B5D4F">boundary</text>
+
+  <!-- ══ PANEL 2: NON-ROBUST MODEL ══ -->
+  <text x="600" y="40" text-anchor="middle" font-size="15" font-weight="bold" fill="#C0392B">Non-Robust Model</text>
+  <text x="600" y="58" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">boundary shifts wildly under perturbation</text>
+
+  <!-- Axes for panel 2 -->
+  <line x1="450" y1="330" x2="760" y2="330" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="450" y1="330" x2="450" y2="75" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="605" y="350" text-anchor="middle" font-size="10" fill="#6B5D4F">Feature 1</text>
+  <text x="425" y="205" font-size="10" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,425,205)">Feature 2</text>
+
+  <!-- Same class dots panel 2 -->
+  <circle cx="640" cy="110" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="680" cy="130" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="660" cy="160" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="710" cy="105" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="700" cy="175" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="740" cy="145" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="620" cy="145" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+  <circle cx="730" cy="200" r="6" fill="#2D5A8E" fill-opacity="0.75"/>
+
+  <circle cx="480" cy="285" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="510" cy="260" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="540" cy="295" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="490" cy="230" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="560" cy="255" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="520" cy="305" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="470" cy="310" r="6" fill="#7C2530" fill-opacity="0.75"/>
+  <circle cx="550" cy="220" r="6" fill="#7C2530" fill-opacity="0.75"/>
+
+  <!-- Non-robust original boundary -->
+  <line x1="460" y1="195" x2="755" y2="115" stroke="#4A7C59" stroke-width="2.5"/>
+
+  <!-- Wildly shifted perturbed boundaries -->
+  <path d="M460,155 Q530,240 600,160 Q670,80 755,210" fill="none" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="7,4" stroke-opacity="0.7"/>
+  <path d="M460,240 Q520,130 590,220 Q660,310 755,90" fill="none" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="7,4" stroke-opacity="0.7"/>
+
+  <!-- Wild perturbation arrows -->
+  <circle cx="595" cy="192" r="5" fill="none" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="595" y1="192" x2="595" y2="152" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arr-nonrob)"/>
+  <circle cx="572" cy="200" r="5" fill="none" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="572" y1="200" x2="572" y2="245" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arr-nonrob)"/>
+
+  <!-- Legend panel 2 -->
+  <circle cx="465" cy="85" r="5" fill="#2D5A8E" fill-opacity="0.75"/>
+  <text x="475" y="89" font-size="9" fill="#6B5D4F">Class A</text>
+  <circle cx="515" cy="85" r="5" fill="#7C2530" fill-opacity="0.75"/>
+  <text x="525" y="89" font-size="9" fill="#6B5D4F">Class B</text>
+  <line x1="562" y1="85" x2="587" y2="85" stroke="#4A7C59" stroke-width="2"/>
+  <text x="593" y="89" font-size="9" fill="#6B5D4F">original</text>
+  <line x1="640" y1="85" x2="665" y2="85" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="671" y="89" font-size="9" fill="#6B5D4F">perturbed</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="378" text-anchor="middle" font-size="10.5" fill="#6B5D4F">
+    Same small input nudge — one model shrugs, the other is thrown into confusion
+  </text>
+</svg>

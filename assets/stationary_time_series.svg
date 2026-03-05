@@ -1,0 +1,114 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" fill="#333" font-size="15" font-weight="bold">Stationary Time Series — Three Defining Properties</text>
+
+  <!-- ══ MAIN TIME SERIES PANEL ══ -->
+  <!-- Axes -->
+  <line x1="55" y1="310" x2="750" y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="55" y1="55"  x2="55"  y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Axis arrow tips -->
+  <polygon points="750,305 758,310 750,315" fill="#5C3D1E"/>
+  <polygon points="50,55 55,47 60,55" fill="#5C3D1E"/>
+
+  <!-- Axis labels -->
+  <text x="765" y="315" fill="#5C3D1E" font-size="13" font-style="italic">t</text>
+  <text x="38"  y="53"  fill="#5C3D1E" font-size="13" font-style="italic">y</text>
+
+  <!-- ① Constant variance band (shaded, drawn first so lines appear on top) -->
+  <rect x="55" y="148" width="695" height="112" fill="#2C5F8A" fill-opacity="0.09" rx="3"/>
+
+  <!-- Band boundary lines (light) -->
+  <line x1="55"  y1="148" x2="750" y2="148" stroke="#2C5F8A" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.5"/>
+  <line x1="55"  y1="260" x2="750" y2="260" stroke="#2C5F8A" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.5"/>
+
+  <!-- ② Constant mean — dashed horizontal line -->
+  <line x1="55" y1="204" x2="750" y2="204" stroke="#C0392B" stroke-width="2" stroke-dasharray="8,5"/>
+
+  <!-- μ label on mean line -->
+  <text x="762" y="208" fill="#C0392B" font-size="13" font-style="italic">μ</text>
+
+  <!-- ③ The stationary time series signal — oscillates, stays within band -->
+  <polyline points="
+    55,204
+    72,183  88,220  105,190  121,218  138,186  154,214  171,182  187,216  204,192
+    220,210  237,180  253,220  270,194  286,212  303,183  319,217  336,195  352,209
+    369,181  385,218  402,193  418,211  435,184  451,219  468,196  484,210  501,182
+    517,217  534,194  550,212  567,185  583,218  600,196  616,208  633,182  649,216
+    666,194  682,210  699,184  715,217  732,196  749,207
+  " fill="none" stroke="#4A7C59" stroke-width="2.2" stroke-linejoin="round"/>
+
+  <!-- ══ ANNOTATION CALLOUTS ══ -->
+
+  <!-- Annotation 1: Constant Mean -->
+  <line x1="400" y1="204" x2="400" y2="348" stroke="#C0392B" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="310" y="348" width="180" height="36" rx="5" fill="#FEF0EE" stroke="#C0392B" stroke-width="1.2"/>
+  <text x="400" y="363" text-anchor="middle" fill="#C0392B" font-size="11" font-weight="bold">① Constant mean</text>
+  <text x="400" y="378" text-anchor="middle" fill="#C0392B" font-size="10">E[Xₜ] = μ  for all t</text>
+
+  <!-- Annotation 2: Constant Variance — left side -->
+  <!-- Brace / bracket for band height -->
+  <line x1="28" y1="148" x2="28" y2="260" stroke="#2C5F8A" stroke-width="1.8"/>
+  <line x1="28" y1="148" x2="38" y2="148" stroke="#2C5F8A" stroke-width="1.8"/>
+  <line x1="28" y1="260" x2="38" y2="260" stroke="#2C5F8A" stroke-width="1.8"/>
+  <line x1="28" y1="204" x2="18" y2="204" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="14" y="186" text-anchor="middle" fill="#2C5F8A" font-size="10" font-weight="bold" transform="rotate(-90,14,204)">② Constant variance σ²</text>
+
+  <!-- Annotation 3: Decaying autocorrelation — right side panel -->
+  <!-- Mini ACF bar chart in upper-right corner -->
+  <rect x="558" y="48" width="215" height="118" rx="5" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="666" y="65" text-anchor="middle" fill="#6B5D4F" font-size="10" letter-spacing="0.5">③ AUTOCORRELATION  ACF(k)</text>
+
+  <!-- Mini ACF axes -->
+  <line x1="578" y1="140" x2="768" y2="140" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="578" y1="72"  x2="578" y2="148" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- ACF axis labels -->
+  <text x="772" y="144" fill="#5C3D1E" font-size="9" font-style="italic">k</text>
+  <text x="570" y="76"  fill="#5C3D1E" font-size="9" text-anchor="middle">1</text>
+  <text x="570" y="144" fill="#5C3D1E" font-size="9" text-anchor="middle">0</text>
+
+  <!-- Lag labels -->
+  <text x="590" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">0</text>
+  <text x="613" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">1</text>
+  <text x="636" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">2</text>
+  <text x="659" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">3</text>
+  <text x="682" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">4</text>
+  <text x="705" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">5</text>
+  <text x="728" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">6</text>
+  <text x="751" y="152" text-anchor="middle" fill="#5C3D1E" font-size="9">7</text>
+
+  <!-- ACF bars: exponentially decaying  r(k) ≈ 0.75^k -->
+  <!-- Scale: y=140 is 0, y=76 is 1.0 → 64px per unit -->
+  <!-- k=0: r=1.00 → height=64, top=76 -->
+  <rect x="583" y="76"  width="14" height="64" fill="#4A7C59" opacity="0.85"/>
+  <!-- k=1: r=0.75 → height=48, top=92 -->
+  <rect x="606" y="92"  width="14" height="48" fill="#4A7C59" opacity="0.82"/>
+  <!-- k=2: r=0.56 → height=36, top=104 -->
+  <rect x="629" y="104" width="14" height="36" fill="#4A7C59" opacity="0.78"/>
+  <!-- k=3: r=0.42 → height=27, top=113 -->
+  <rect x="652" y="113" width="14" height="27" fill="#4A7C59" opacity="0.72"/>
+  <!-- k=4: r=0.32 → height=20, top=120 -->
+  <rect x="675" y="120" width="14" height="20" fill="#4A7C59" opacity="0.65"/>
+  <!-- k=5: r=0.24 → height=15, top=125 -->
+  <rect x="698" y="125" width="14" height="15" fill="#4A7C59" opacity="0.58"/>
+  <!-- k=6: r=0.18 → height=11, top=129 -->
+  <rect x="721" y="129" width="14" height="11" fill="#4A7C59" opacity="0.50"/>
+  <!-- k=7: r=0.13 → height=8, top=132 -->
+  <rect x="744" y="132" width="14" height="8"  fill="#4A7C59" opacity="0.42"/>
+
+  <!-- "Decays quickly" label -->
+  <text x="666" y="164" text-anchor="middle" fill="#4A7C59" font-size="9" font-style="italic">decays quickly to zero</text>
+
+  <!-- ══ LEGEND ══ -->
+  <line x1="70"  y1="385" x2="100" y2="385" stroke="#C0392B" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="106" y="389" fill="#C0392B" font-size="11">Constant mean (μ)</text>
+
+  <rect x="245" y="378" width="30" height="12" fill="#2C5F8A" fill-opacity="0.18" rx="2"/>
+  <text x="282" y="389" fill="#2C5F8A" font-size="11">Constant variance band (±σ)</text>
+
+  <line x1="498" y1="385" x2="528" y2="385" stroke="#4A7C59" stroke-width="2.2"/>
+  <text x="534" y="389" fill="#4A7C59" font-size="11">Signal · decaying ACF</text>
+</svg>

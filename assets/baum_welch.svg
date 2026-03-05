@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <defs>
+    <marker id="arr-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#2C5F8A"/>
+    </marker>
+    <marker id="arr-green" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#4A7C59"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#C0622F"/>
+    </marker>
+    <marker id="arr-gray" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia,serif" font-size="18" font-weight="bold" fill="#333">Baum-Welch Algorithm (EM for Hidden Markov Models)</text>
+
+  <!-- ── Box 1: Hidden States / HMM ── -->
+  <rect x="30" y="60" width="160" height="80" rx="10" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.5"/>
+  <text x="110" y="90" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">HMM</text>
+  <text x="110" y="110" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#333">Hidden States</text>
+  <text x="110" y="128" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">A, B, π unknown</text>
+
+  <!-- ── Box 2: Forward Pass α ── -->
+  <rect x="240" y="55" width="145" height="90" rx="10" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="312" y="82" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">Forward Pass</text>
+  <text x="312" y="102" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#2C5F8A">α(t, i)</text>
+  <text x="312" y="120" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">P(o₁…oₜ, sₜ=i)</text>
+  <text x="312" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#888">left → right</text>
+
+  <!-- ── Box 3: Backward Pass β ── -->
+  <rect x="240" y="175" width="145" height="90" rx="10" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="312" y="202" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">Backward Pass</text>
+  <text x="312" y="222" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#2C5F8A">β(t, i)</text>
+  <text x="312" y="240" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">P(oₜ₊₁…oT | sₜ=i)</text>
+  <text x="312" y="256" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#888">right → left</text>
+
+  <!-- Arrow: HMM → Forward -->
+  <line x1="190" y1="88" x2="238" y2="88" stroke="#2C5F8A" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+  <!-- Arrow: HMM → Backward -->
+  <path d="M190,112 Q215,112 215,220 L238,220" fill="none" stroke="#2C5F8A" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+  <!-- ── Box 4: E-Step γ and ξ ── -->
+  <rect x="440" y="100" width="155" height="110" rx="10" fill="#F0F8F0" stroke="#4A7C59" stroke-width="2.5"/>
+  <text x="517" y="126" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#4A7C59">E-Step</text>
+  <text x="517" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#333">Compute γ(t,i) and ξ(t,i,j)</text>
+  <text x="517" y="167" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">γ = state occupancy</text>
+  <text x="517" y="184" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">ξ = transition usage</text>
+  <text x="517" y="201" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#888">α · β / P(O | λ)</text>
+
+  <!-- Arrow: Forward → E-Step -->
+  <line x1="385" y1="105" x2="438" y2="140" stroke="#4A7C59" stroke-width="2" marker-end="url(#arr-green)"/>
+
+  <!-- Arrow: Backward → E-Step -->
+  <line x1="385" y1="215" x2="438" y2="175" stroke="#4A7C59" stroke-width="2" marker-end="url(#arr-green)"/>
+
+  <!-- ── Box 5: M-Step update A, B, π ── -->
+  <rect x="650" y="100" width="130" height="110" rx="10" fill="#FEF3EA" stroke="#C0622F" stroke-width="2.5"/>
+  <text x="715" y="126" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#C0622F">M-Step</text>
+  <text x="715" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#333">Update parameters</text>
+  <text x="715" y="167" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#C0622F">A, B, π</text>
+  <text x="715" y="186" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">maximize expected</text>
+  <text x="715" y="202" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#555">log-likelihood</text>
+
+  <!-- Arrow: E-Step → M-Step -->
+  <line x1="595" y1="155" x2="648" y2="155" stroke="#C0622F" stroke-width="2" marker-end="url(#arr-orange)"/>
+
+  <!-- Loop-back arrow: M-Step → HMM (iterate) -->
+  <path d="M715,210 Q715,330 400,345 Q110,345 110,142" fill="none" stroke="#666" stroke-width="1.8" stroke-dasharray="7,4" marker-end="url(#arr-gray)"/>
+  <text x="400" y="365" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#666">iterate until log-likelihood converges</text>
+
+  <!-- Observation label -->
+  <text x="110" y="330" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#888" font-style="italic">Observations O fixed throughout</text>
+</svg>

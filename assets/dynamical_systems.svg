@@ -1,0 +1,31 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Dynamical Systems</text>
+  <!-- Left: phase portrait -->
+  <text x="200" y="58" text-anchor="middle" font-size="13" fill="#333">Phase Portrait: ẋ = f(x)</text>
+  <line x1="50" y1="220" x2="360" y2="220" stroke="#555" stroke-width="1.5"/>
+  <line x1="205" y1="60" x2="205" y2="350" stroke="#555" stroke-width="1.5"/>
+  <!-- Stable spiral inward -->
+  <path d="M300,130 C310,160 295,195 265,210 C235,225 200,222 175,210 C140,192 135,160 150,135 C165,110 195,100 215,103 C245,108 265,125 275,148 C285,168 278,192 260,202" fill="none" stroke="#2196F3" stroke-width="2"/>
+  <circle cx="205" cy="180" r="5" fill="#2196F3"/>
+  <text x="210" y="175" font-size="11" fill="#2196F3">stable</text>
+  <!-- Unstable saddle -->
+  <path d="M80,310 C100,290 130,270 160,265" fill="none" stroke="#E91E63" stroke-width="2"/>
+  <path d="M80,150 C100,165 130,185 160,200" fill="none" stroke="#E91E63" stroke-width="2"/>
+  <path d="M80,220 C100,218 130,218 160,220" fill="none" stroke="#FF9800" stroke-width="2"/>
+  <circle cx="80" cy="220" r="5" fill="#FF9800"/>
+  <text x="55" y="216" font-size="11" fill="#FF9800">saddle</text>
+  <!-- Right: key concepts -->
+  <text x="570" y="58" text-anchor="middle" font-size="13" fill="#333">Fixed Points &amp; Stability</text>
+  <rect x="400" y="70" width="360" height="260" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="580" y="100" text-anchor="middle" font-size="12" fill="#2196F3">Stable: trajectories converge</text>
+  <text x="580" y="125" text-anchor="middle" font-size="12" fill="#E91E63">Unstable: trajectories diverge</text>
+  <text x="580" y="150" text-anchor="middle" font-size="12" fill="#FF9800">Saddle: mixed behavior</text>
+  <line x1="420" y1="165" x2="745" y2="165" stroke="#ddd"/>
+  <text x="580" y="190" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">ML connections:</text>
+  <text x="580" y="213" text-anchor="middle" font-size="12" fill="#555">GD as continuous system ẋ = −∇L</text>
+  <text x="580" y="235" text-anchor="middle" font-size="12" fill="#555">RNNs as discrete dynamical systems</text>
+  <text x="580" y="258" text-anchor="middle" font-size="12" fill="#555">Lyapunov stability → convergence</text>
+  <text x="580" y="280" text-anchor="middle" font-size="12" fill="#555">Attractors → learned representations</text>
+  <text x="580" y="305" text-anchor="middle" font-size="11" fill="#888">Chaos: sensitive dependence on init</text>
+</svg>

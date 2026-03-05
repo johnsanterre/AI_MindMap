@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Header -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">t-SNE vs UMAP: Key Tradeoffs</text>
+
+  <!-- Column headers -->
+  <rect x="30" y="42" width="180" height="26" rx="3" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1"/>
+  <text x="120" y="59" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">PROPERTY</text>
+
+  <rect x="220" y="42" width="260" height="26" rx="3" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="350" y="59" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#2D5A8E" font-variant="small-caps">t-SNE</text>
+
+  <rect x="490" y="42" width="280" height="26" rx="3" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1"/>
+  <text x="630" y="59" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#7C2530" font-variant="small-caps">UMAP</text>
+
+  <!-- Row 1 -->
+  <rect x="30" y="74" width="740" height="36" rx="2" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="120" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Speed</text>
+  <text x="350" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">O(n log n), slow for n &gt; 50k</text>
+  <text x="350" y="104" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">Barnes-Hut approximation</text>
+  <text x="630" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">O(n), fast for millions of points</text>
+  <text x="630" y="104" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">graph construction is efficient</text>
+
+  <!-- Row 2 -->
+  <rect x="30" y="116" width="740" height="36" rx="2" fill="#EDE8DE" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="120" y="138" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Global structure</text>
+  <text x="350" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">Poor — inter-cluster distances</text>
+  <text x="350" y="146" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">are not meaningful</text>
+  <text x="630" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Better — topology partially</text>
+  <text x="630" y="146" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">preserved across scales</text>
+
+  <!-- Row 3 -->
+  <rect x="30" y="158" width="740" height="36" rx="2" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="120" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Local structure</text>
+  <text x="350" y="174" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">Excellent — tight, well-separated</text>
+  <text x="350" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">clusters</text>
+  <text x="630" y="174" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Very good — slightly less</text>
+  <text x="630" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">sharp than t-SNE</text>
+
+  <!-- Row 4 -->
+  <rect x="30" y="200" width="740" height="36" rx="2" fill="#EDE8DE" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="120" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Reproducibility</text>
+  <text x="350" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">Stochastic — results vary</text>
+  <text x="350" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">run to run (set random_state)</text>
+  <text x="630" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Also stochastic but more</text>
+  <text x="630" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">stable across runs</text>
+
+  <!-- Row 5 -->
+  <rect x="30" y="242" width="740" height="36" rx="2" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="120" y="264" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">New points</text>
+  <text x="350" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">No transform function —</text>
+  <text x="350" y="272" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">must re-run on all data</text>
+  <text x="630" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">transform() available —</text>
+  <text x="630" y="272" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">can project new points</text>
+
+  <!-- Row 6 -->
+  <rect x="30" y="284" width="740" height="36" rx="2" fill="#EDE8DE" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="120" y="306" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Key parameter</text>
+  <text x="350" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">perplexity (5–50)</text>
+  <text x="350" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">controls neighborhood size</text>
+  <text x="630" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">n_neighbors (5–100)</text>
+  <text x="630" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">min_dist controls cluster spread</text>
+
+  <!-- Footer -->
+  <text x="400" y="354" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#6B5D4F" font-style="italic">Both methods: visualization only — do not interpret distances as meaningful magnitudes</text>
+  <text x="400" y="375" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Use t-SNE for publication-quality cluster plots   |   Use UMAP for large data or downstream tasks</text>
+</svg>

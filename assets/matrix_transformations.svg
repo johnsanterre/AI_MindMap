@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="mt-arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#aaa"/>
+    </marker>
+    <marker id="mt-arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4a90d9"/>
+    </marker>
+    <marker id="mt-arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/>
+    </marker>
+    <marker id="mt-arr-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2a9d8f"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="400" fill="#fafafa"/>
+
+  <!-- ===== TITLE ===== -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#222">Matrix Transformations: Three Geometric Effects</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 1: ROTATION (45°) — origin at (135, 250) -->
+  <!-- unit square side = 80px -->
+  <!-- ================================================================ -->
+  <text x="135" y="58" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Rotation</text>
+  <text x="135" y="76" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">45°</text>
+
+  <!-- Axes -->
+  <line x1="55" y1="250" x2="215" y2="250" stroke="#ccc" stroke-width="1.2" marker-end="url(#mt-arr-gray)"/>
+  <line x1="135" y1="330" x2="135" y2="90" stroke="#ccc" stroke-width="1.2" marker-end="url(#mt-arr-gray)"/>
+
+  <!-- Original unit square (light blue fill, dashed border) -->
+  <!-- corners: (135,250), (215,250), (215,170), (135,170) -->
+  <polygon points="135,250 215,250 215,170 135,170" fill="#4a90d9" fill-opacity="0.12" stroke="#4a90d9" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Rotated square 45°: rotate each corner 45° around origin (135,250) -->
+  <!-- unit = 80px; cos45≈0.707, sin45≈0.707 -->
+  <!-- (0,0)→(0,0); (1,0)→(0.707,-0.707) scaled by 80 = (+56.6,-56.6) -->
+  <!-- (1,1)→(0,  -√2) scaled by 80 = (0, -113.1) -->
+  <!-- (0,1)→(-0.707,-0.707) scaled by 80 = (-56.6,-56.6) -->
+  <!-- SVG y-axis is flipped: subtract y from origin.cy -->
+  <!-- P0=(135,250), P1=(135+56.6, 250-56.6)=(191.6,193.4) -->
+  <!-- P2=(135+0, 250-113.1)=(135, 136.9) -->
+  <!-- P3=(135-56.6, 250-56.6)=(78.4,193.4) -->
+  <polygon points="135,250 191.6,193.4 135,136.9 78.4,193.4" fill="#e67e22" fill-opacity="0.18" stroke="#e67e22" stroke-width="2"/>
+
+  <!-- Label arrows -->
+  <text x="200" y="265" font-family="Arial" font-size="10" fill="#4a90d9">original</text>
+  <text x="55" y="180" font-family="Arial" font-size="10" fill="#e67e22">rotated</text>
+
+  <!-- Matrix label -->
+  <rect x="68" y="338" width="134" height="36" rx="4" fill="#fff3e8" stroke="#e67e22" stroke-width="1"/>
+  <text x="135" y="353" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">R = [cos θ  −sin θ]</text>
+  <text x="135" y="368" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">    [sin θ   cos θ]</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 2: SCALING (sx=2, sy=0.5) — origin at (400, 250) -->
+  <!-- unit square side = 70px -->
+  <!-- ================================================================ -->
+  <text x="400" y="58" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Scaling</text>
+  <text x="400" y="76" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">sx=2, sy=0.5</text>
+
+  <!-- Axes -->
+  <line x1="300" y1="250" x2="530" y2="250" stroke="#ccc" stroke-width="1.2" marker-end="url(#mt-arr-gray)"/>
+  <line x1="400" y1="330" x2="400" y2="130" stroke="#ccc" stroke-width="1.2" marker-end="url(#mt-arr-gray)"/>
+
+  <!-- Original unit square: 70px unit, corners at origin (400,250) -->
+  <!-- (0,0),(1,0),(1,1),(0,1) → (400,250),(470,250),(470,180),(400,180) -->
+  <polygon points="400,250 470,250 470,180 400,180" fill="#4a90d9" fill-opacity="0.12" stroke="#4a90d9" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Scaled square: sx=2 → x*140, sy=0.5 → y*35 -->
+  <!-- (0,0)→(400,250), (1,0)→(540,250), (1,1)→(540,215), (0,1)→(400,215) -->
+  <polygon points="400,250 540,250 540,215 400,215" fill="#2a9d8f" fill-opacity="0.22" stroke="#2a9d8f" stroke-width="2"/>
+
+  <!-- Dimension annotations -->
+  <!-- width arrow: 400→540 along y=270 -->
+  <line x1="400" y1="268" x2="540" y2="268" stroke="#2a9d8f" stroke-width="1.5" marker-end="url(#mt-arr-teal)"/>
+  <text x="470" y="282" text-anchor="middle" font-family="Arial" font-size="10" fill="#2a9d8f">×2 wide</text>
+  <!-- height arrow: right side 250→215 -->
+  <line x1="552" y1="250" x2="552" y2="215" stroke="#2a9d8f" stroke-width="1.5" marker-end="url(#mt-arr-teal)"/>
+  <text x="576" y="237" font-family="Arial" font-size="10" fill="#2a9d8f">×½ tall</text>
+
+  <text x="435" y="195" font-family="Arial" font-size="10" fill="#4a90d9">original</text>
+
+  <!-- Matrix label -->
+  <rect x="336" y="338" width="128" height="36" rx="4" fill="#e0f5f3" stroke="#2a9d8f" stroke-width="1"/>
+  <text x="400" y="353" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">S = [sx  0 ]</text>
+  <text x="400" y="368" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">    [ 0  sy]</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 3: SHEAR — origin at (660, 250) -->
+  <!-- unit square side = 75px -->
+  <!-- ================================================================ -->
+  <text x="660" y="58" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Shear</text>
+  <text x="660" y="76" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">kx=0.8</text>
+
+  <!-- Axes -->
+  <line x1="575" y1="250" x2="760" y2="250" stroke="#ccc" stroke-width="1.2" marker-end="url(#mt-arr-gray)"/>
+  <line x1="660" y1="330" x2="660" y2="110" stroke="#ccc" stroke-width="1.2" marker-end="url(#mt-arr-gray)"/>
+
+  <!-- Original unit square: 75px unit -->
+  <!-- corners: (660,250),(735,250),(735,175),(660,175) -->
+  <polygon points="660,250 735,250 735,175 660,175" fill="#4a90d9" fill-opacity="0.12" stroke="#4a90d9" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Sheared: H = [1 kx; 0 1], kx=0.8 -->
+  <!-- (0,0)→(660,250), (1,0)→(735,250) -->
+  <!-- (0,1)→(660+0.8*75, 175)=(720,175), (1,1)→(735+60,175)=(795,175) — clip at panel edge -->
+  <!-- use kx=0.7 for visual clarity: kx*75=52.5 -->
+  <!-- (0,1)→(660+52.5,175)=(712.5,175), (1,1)→(735+52.5,175)=(787.5,175) -->
+  <polygon points="660,250 735,250 787.5,175 712.5,175" fill="#e67e22" fill-opacity="0.22" stroke="#e67e22" stroke-width="2"/>
+
+  <!-- Shear displacement arrow at top edge -->
+  <line x1="660" y1="162" x2="712.5" y2="162" stroke="#e67e22" stroke-width="1.5" marker-end="url(#mt-arr-orange)"/>
+  <text x="686" y="156" text-anchor="middle" font-family="Arial" font-size="10" fill="#e67e22">kx·y</text>
+
+  <!-- vertical reference dashed line -->
+  <line x1="660" y1="175" x2="660" y2="250" stroke="#4a90d9" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <line x1="712.5" y1="175" x2="660" y2="175" stroke="#4a90d9" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <text x="690" y="240" font-family="Arial" font-size="10" fill="#4a90d9">original</text>
+
+  <!-- Matrix label -->
+  <rect x="596" y="338" width="128" height="36" rx="4" fill="#fff3e8" stroke="#e67e22" stroke-width="1"/>
+  <text x="660" y="353" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">H = [1  kx]</text>
+  <text x="660" y="368" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">    [0   1]</text>
+
+  <!-- ================================================================ -->
+  <!-- FOOTER CAPTION -->
+  <!-- ================================================================ -->
+  <text x="400" y="393" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Each matrix encodes a different geometric effect on space — dashed = before, solid = after</text>
+</svg>

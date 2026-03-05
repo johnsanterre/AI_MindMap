@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Matrix Completion: Filling in the Gaps</text>
+
+  <!-- ===== LEFT: Partially Observed Matrix ===== -->
+  <text x="140" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2C5F8A">Observed (sparse)</text>
+
+  <!-- Grid background -->
+  <rect x="40" y="82" width="200" height="240" rx="6" fill="#EEF4FB" stroke="#2C5F8A" stroke-width="2"/>
+
+  <!-- Column lines -->
+  <line x1="90"  y1="82" x2="90"  y2="322" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="140" y1="82" x2="140" y2="322" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="190" y1="82" x2="190" y2="322" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- Row lines -->
+  <line x1="40" y1="122" x2="240" y2="122" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="40" y1="162" x2="240" y2="162" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="40" y1="202" x2="240" y2="202" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="40" y1="242" x2="240" y2="242" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="40" y1="282" x2="240" y2="282" stroke="#2C5F8A" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- Row / col labels -->
+  <text x="65"  y="76" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">m1</text>
+  <text x="115" y="76" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">m2</text>
+  <text x="165" y="76" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">m3</text>
+  <text x="215" y="76" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">m4</text>
+  <text x="32"  y="106" text-anchor="end" font-family="Arial" font-size="10" fill="#666">u1</text>
+  <text x="32"  y="146" text-anchor="end" font-family="Arial" font-size="10" fill="#666">u2</text>
+  <text x="32"  y="186" text-anchor="end" font-family="Arial" font-size="10" fill="#666">u3</text>
+  <text x="32"  y="226" text-anchor="end" font-family="Arial" font-size="10" fill="#666">u4</text>
+  <text x="32"  y="266" text-anchor="end" font-family="Arial" font-size="10" fill="#666">u5</text>
+  <text x="32"  y="306" text-anchor="end" font-family="Arial" font-size="10" fill="#666">u6</text>
+
+  <!-- Known entries (blue, solid) -->
+  <text x="65"  y="107" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">5</text>
+  <text x="165" y="107" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">3</text>
+  <text x="115" y="147" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">4</text>
+  <text x="215" y="147" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">2</text>
+  <text x="65"  y="187" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">1</text>
+  <text x="165" y="187" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">5</text>
+  <text x="115" y="227" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">3</text>
+  <text x="215" y="267" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">4</text>
+  <text x="65"  y="307" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">2</text>
+  <text x="165" y="307" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2C5F8A">5</text>
+
+  <!-- Missing entries (grey, question marks) -->
+  <text x="115" y="107" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="215" y="107" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="65"  y="147" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="165" y="147" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="115" y="187" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="215" y="187" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="65"  y="227" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="165" y="227" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="215" y="227" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="65"  y="267" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="115" y="267" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="165" y="267" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="115" y="307" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+  <text x="215" y="307" text-anchor="middle" font-family="Arial" font-size="15" fill="#BBBBBB">?</text>
+
+  <!-- ===== ARROW ===== -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C0392B"/>
+    </marker>
+  </defs>
+  <line x1="270" y1="200" x2="340" y2="200" stroke="#C0392B" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <text x="305" y="192" text-anchor="middle" font-family="Arial" font-size="10" fill="#C0392B">low-rank</text>
+  <text x="305" y="204" text-anchor="middle" font-family="Arial" font-size="10" fill="#C0392B">completion</text>
+
+  <!-- ===== RIGHT: Completed Low-Rank Matrix ===== -->
+  <text x="520" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4A7C59">Completed (dense, low-rank)</text>
+
+  <rect x="360" y="82" width="200" height="240" rx="6" fill="#EDF7EF" stroke="#4A7C59" stroke-width="2"/>
+
+  <!-- Column lines -->
+  <line x1="410" y1="82" x2="410" y2="322" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="460" y1="82" x2="460" y2="322" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="510" y1="82" x2="510" y2="322" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- Row lines -->
+  <line x1="360" y1="122" x2="560" y2="122" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="360" y1="162" x2="560" y2="162" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="360" y1="202" x2="560" y2="202" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="360" y1="242" x2="560" y2="242" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="360" y1="282" x2="560" y2="282" stroke="#4A7C59" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- All entries filled in (green) -->
+  <!-- Row 1 -->
+  <text x="385" y="107" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">5</text>
+  <text x="435" y="107" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">4</text>
+  <text x="485" y="107" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">3</text>
+  <text x="535" y="107" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">2</text>
+  <!-- Row 2 -->
+  <text x="385" y="147" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">3</text>
+  <text x="435" y="147" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">4</text>
+  <text x="485" y="147" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">3</text>
+  <text x="535" y="147" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">2</text>
+  <!-- Row 3 -->
+  <text x="385" y="187" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">1</text>
+  <text x="435" y="187" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">2</text>
+  <text x="485" y="187" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">5</text>
+  <text x="535" y="187" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">4</text>
+  <!-- Row 4 -->
+  <text x="385" y="227" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">4</text>
+  <text x="435" y="227" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">3</text>
+  <text x="485" y="227" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">2</text>
+  <text x="535" y="227" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">4</text>
+  <!-- Row 5 -->
+  <text x="385" y="267" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">2</text>
+  <text x="435" y="267" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">1</text>
+  <text x="485" y="267" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">3</text>
+  <text x="535" y="267" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">4</text>
+  <!-- Row 6 -->
+  <text x="385" y="307" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">2</text>
+  <text x="435" y="307" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">3</text>
+  <text x="485" y="307" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59">5</text>
+  <text x="535" y="307" text-anchor="middle" font-family="Arial" font-size="13" fill="#4A7C59" font-style="italic">1</text>
+
+  <!-- Legend for italics = predicted -->
+  <text x="520" y="355" text-anchor="middle" font-family="Arial" font-size="10" fill="#888" font-style="italic">italic = predicted entries</text>
+
+  <!-- ===== RIGHT PANEL: Low-rank decomposition sketch ===== -->
+  <rect x="600" y="110" width="170" height="190" rx="8" fill="#FDF6EC" stroke="#E07B39" stroke-width="1.5"/>
+  <text x="685" y="132" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#E07B39">Low-rank structure</text>
+  <text x="685" y="152" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">M  ≈  U · Vᵀ</text>
+  <!-- U block -->
+  <rect x="616" y="164" width="28" height="80" rx="4" fill="#E07B39" fill-opacity="0.2" stroke="#E07B39" stroke-width="1.2"/>
+  <text x="630" y="208" text-anchor="middle" font-family="Arial" font-size="11" fill="#E07B39">U</text>
+  <!-- times -->
+  <text x="658" y="208" text-anchor="middle" font-family="Arial" font-size="14" fill="#666">×</text>
+  <!-- Vt block -->
+  <rect x="668" y="178" width="90" height="28" rx="4" fill="#4A7C59" fill-opacity="0.2" stroke="#4A7C59" stroke-width="1.2"/>
+  <text x="713" y="197" text-anchor="middle" font-family="Arial" font-size="11" fill="#4A7C59">Vᵀ</text>
+  <!-- rank label -->
+  <text x="685" y="275" text-anchor="middle" font-family="Arial" font-size="10" fill="#888">rank k ≪ min(m, n)</text>
+  <text x="685" y="291" text-anchor="middle" font-family="Arial" font-size="10" fill="#888">captures latent</text>
+  <text x="685" y="307" text-anchor="middle" font-family="Arial" font-size="10" fill="#888">structure only</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="380" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Observed ratings constrain a low-rank factorization that predicts all missing entries</text>
+</svg>

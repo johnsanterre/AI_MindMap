@@ -1,0 +1,79 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <defs>
+    <marker id="arr-uc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-uc-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" fill="#1C1713" font-size="17" font-weight="bold">Universality Classes: Different Systems, Same Critical Exponents</text>
+
+  <!-- ── LEFT COLUMN: three distinct physical systems ── -->
+
+  <!-- System 1: Ising Model -->
+  <rect x="30" y="55" width="170" height="80" rx="8" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="115" y="78" text-anchor="middle" fill="#2C5F8A" font-size="13" font-weight="bold">Ising Model</text>
+  <text x="115" y="96" text-anchor="middle" fill="#555" font-size="11">lattice of ↑↓ spins</text>
+  <text x="115" y="112" text-anchor="middle" fill="#555" font-size="11">ferromagnetic transition</text>
+  <text x="115" y="128" text-anchor="middle" fill="#888" font-size="10" font-style="italic">T_c ≈ 2.27 J/k_B</text>
+
+  <!-- System 2: Liquid–Gas -->
+  <rect x="30" y="165" width="170" height="80" rx="8" fill="#F0F8F0" stroke="#4A7C59" stroke-width="2"/>
+  <text x="115" y="188" text-anchor="middle" fill="#4A7C59" font-size="13" font-weight="bold">Liquid–Gas</text>
+  <text x="115" y="206" text-anchor="middle" fill="#555" font-size="11">density fluctuations</text>
+  <text x="115" y="222" text-anchor="middle" fill="#555" font-size="11">near critical point</text>
+  <text x="115" y="238" text-anchor="middle" fill="#888" font-size="10" font-style="italic">H₂O: T_c = 647 K</text>
+
+  <!-- System 3: Ferromagnet (3D Heisenberg) -->
+  <rect x="30" y="275" width="170" height="80" rx="8" fill="#FEF3EC" stroke="#E07B39" stroke-width="2"/>
+  <text x="115" y="298" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">Ferromagnet (3D)</text>
+  <text x="115" y="316" text-anchor="middle" fill="#555" font-size="11">continuous spin vectors</text>
+  <text x="115" y="332" text-anchor="middle" fill="#555" font-size="11">Heisenberg model</text>
+  <text x="115" y="348" text-anchor="middle" fill="#888" font-size="10" font-style="italic">Fe: T_c = 1043 K</text>
+
+  <!-- annotation: different microscopic details -->
+  <text x="115" y="378" text-anchor="middle" fill="#7C2530" font-size="10" font-weight="bold" font-style="italic">different microscopic details</text>
+
+  <!-- ── FUNNEL / CONVERGENCE ARROWS ── -->
+  <!-- from Ising -->
+  <line x1="200" y1="95" x2="370" y2="185" stroke="#2C5F8A" stroke-width="2.5" marker-end="url(#arr-uc)"/>
+  <!-- from Liquid-Gas -->
+  <line x1="200" y1="205" x2="370" y2="205" stroke="#4A7C59" stroke-width="2.5" marker-end="url(#arr-uc)"/>
+  <!-- from Ferromagnet -->
+  <line x1="200" y1="315" x2="370" y2="225" stroke="#E07B39" stroke-width="2.5" marker-end="url(#arr-uc)"/>
+
+  <!-- ── CENTER: Universality Class box ── -->
+  <rect x="370" y="150" width="195" height="110" rx="10" fill="#FDEDEC" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="467" y="175" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">Universality Class</text>
+  <text x="467" y="194" text-anchor="middle" fill="#555" font-size="11">(3D Ising class)</text>
+  <line x1="390" y1="202" x2="545" y2="202" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="467" y="220" text-anchor="middle" fill="#1C1713" font-size="12" font-style="italic">β = 0.326</text>
+  <text x="467" y="238" text-anchor="middle" fill="#1C1713" font-size="12" font-style="italic">γ = 1.237</text>
+  <text x="467" y="256" text-anchor="middle" fill="#1C1713" font-size="12" font-style="italic">ν = 0.630</text>
+
+  <!-- arrow out to right: same macroscopic behavior -->
+  <line x1="565" y1="205" x2="660" y2="205" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arr-uc)"/>
+
+  <!-- ── RIGHT: outcome box ── -->
+  <rect x="660" y="155" width="120" height="100" rx="10" fill="#EDE5D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="720" y="180" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Same</text>
+  <text x="720" y="198" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Macroscopic</text>
+  <text x="720" y="216" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Behavior</text>
+  <text x="720" y="238" text-anchor="middle" fill="#888" font-size="10" font-style="italic">near criticality</text>
+
+  <!-- annotation: critical exponent beta -->
+  <text x="467" y="290" text-anchor="middle" fill="#7C2530" font-size="10" font-weight="bold">critical exponent β governs</text>
+  <text x="467" y="304" text-anchor="middle" fill="#7C2530" font-size="10" font-weight="bold">order parameter growth: m ~ |T−T_c|^β</text>
+
+  <!-- RG flow label -->
+  <text x="467" y="340" text-anchor="middle" fill="#888" font-size="10" font-style="italic">Renormalization group flow → same fixed point</text>
+  <text x="467" y="356" text-anchor="middle" fill="#888" font-size="10" font-style="italic">regardless of microscopic Hamiltonian</text>
+
+  <!-- bottom rule -->
+  <line x1="30" y1="375" x2="770" y2="375" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="400" y="392" text-anchor="middle" fill="#6B5D4F" font-size="9.5">Only symmetry group and spatial dimension d determine the universality class — not atomic-scale details</text>
+</svg>

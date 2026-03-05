@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="pa-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="pa-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="pa-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="20" x2="400" y2="385" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ══ LEFT PANEL: PARAMETRIC ══ -->
+  <text x="200" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1.5">PARAMETRIC</text>
+
+  <!-- Axes left panel -->
+  <line x1="40" y1="310" x2="375" y2="310" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#pa-axis)"/>
+  <line x1="40" y1="310" x2="40" y2="45" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#pa-axis)"/>
+  <text x="372" y="325" font-size="10" fill="#6B5D4F" text-anchor="middle">x</text>
+  <text x="28" y="43" font-size="10" fill="#6B5D4F" text-anchor="middle">y</text>
+
+  <!-- Fixed line: y = θ₁·x + θ₂ — same line regardless of data count -->
+  <line x1="50" y1="285" x2="355" y2="72" stroke="#7C2530" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Line label -->
+  <text x="250" y="88" font-size="10" fill="#7C2530" font-style="italic" transform="rotate(-35,250,88)">ŷ = θ₁·x + θ₂</text>
+
+  <!-- Data points (small dataset) -->
+  <circle cx="70"  cy="268" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="105" cy="242" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="140" cy="213" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="178" cy="190" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="215" cy="168" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="252" cy="145" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="285" cy="124" r="5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="318" cy="102" r="5" fill="#8B6B4A" opacity="0.85"/>
+
+  <!-- Large dataset indicator (ghost points — same line fits) -->
+  <circle cx="88"  cy="254" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="122" cy="228" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="157" cy="202" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="196" cy="178" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="232" cy="157" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="270" cy="133" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="303" cy="113" r="4" fill="#8B6B4A" opacity="0.30"/>
+  <circle cx="338" cy="90"  r="4" fill="#8B6B4A" opacity="0.30"/>
+
+  <!-- Parameter box -->
+  <rect x="46" y="48" width="130" height="44" fill="#F2EAD8" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="111" y="65" text-anchor="middle" font-size="9.5" fill="#6B5D4F">Fixed parameter count</text>
+  <text x="111" y="81" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">θ = {θ₁, θ₂}</text>
+
+  <!-- Arrow from box to line -->
+  <line x1="143" y1="92" x2="220" y2="115" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#pa-arr-red)"/>
+
+  <!-- Caption: parameter count stays fixed -->
+  <text x="200" y="345" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">2 parameters regardless of n</text>
+  <text x="200" y="360" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">More data → better estimates of θ</text>
+
+  <!-- Data size annotation -->
+  <text x="200" y="378" text-anchor="middle" font-size="8.5" fill="#7C2530">compact · fast · assumes functional form</text>
+
+  <!-- ══ RIGHT PANEL: NON-PARAMETRIC ══ -->
+  <text x="600" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1.5">NON-PARAMETRIC</text>
+
+  <!-- Axes right panel -->
+  <line x1="425" y1="310" x2="770" y2="310" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#pa-axis)"/>
+  <line x1="425" y1="310" x2="425" y2="45" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#pa-axis)"/>
+  <text x="766" y="325" font-size="10" fill="#6B5D4F" text-anchor="middle">x</text>
+  <text x="414" y="43" font-size="10" fill="#6B5D4F" text-anchor="middle">y</text>
+
+  <!-- Flexible curve fitting through data (kernel/knn style) -->
+  <path d="M 435,278 C 455,262 475,248 500,238 C 520,230 535,220 555,200 C 570,184 580,162 598,148 C 618,132 640,126 660,118 C 678,110 695,100 718,90 C 735,82 750,76 762,72"
+        fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- SMALL dataset — just 4 points, rough curve -->
+  <text x="600" y="60" text-anchor="middle" font-size="9" fill="#2D5A8E" font-style="italic">n = small</text>
+  <circle cx="450" cy="274" r="5" fill="#8B6B4A" opacity="0.9"/>
+  <circle cx="510" cy="232" r="5" fill="#8B6B4A" opacity="0.9"/>
+  <circle cx="572" cy="188" r="5" fill="#8B6B4A" opacity="0.9"/>
+  <circle cx="635" cy="150" r="5" fill="#8B6B4A" opacity="0.9"/>
+  <circle cx="698" cy="116" r="5" fill="#8B6B4A" opacity="0.9"/>
+  <circle cx="748" cy="88"  r="5" fill="#8B6B4A" opacity="0.9"/>
+
+  <!-- LARGE dataset — many more lighter points, more refined curve -->
+  <circle cx="437" cy="276" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="460" cy="264" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="478" cy="253" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="495" cy="244" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="520" cy="230" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="540" cy="218" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="558" cy="204" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="575" cy="192" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="590" cy="179" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="610" cy="164" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="628" cy="152" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="648" cy="140" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="668" cy="128" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="686" cy="118" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="706" cy="108" r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="724" cy="98"  r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="742" cy="89"  r="3.5" fill="#8B6B4A" opacity="0.40"/>
+  <circle cx="758" cy="80"  r="3.5" fill="#8B6B4A" opacity="0.40"/>
+
+  <!-- Growing parameter/memory annotation: box that grows -->
+  <!-- Small box -->
+  <rect x="430" y="48" width="54" height="26" fill="#D8E8F8" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="457" y="65" text-anchor="middle" font-size="8.5" fill="#2D5A8E">n = 6</text>
+  <!-- Medium box -->
+  <rect x="494" y="40" width="72" height="34" fill="#C0D8F2" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="530" y="61" text-anchor="middle" font-size="8.5" fill="#2D5A8E">n = 18</text>
+  <!-- Large box -->
+  <rect x="576" y="30" width="96" height="44" fill="#A8C8EC" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="624" y="57" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">n = 100+</text>
+  <!-- Arrow showing growth -->
+  <line x1="484" y1="62" x2="493" y2="62" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#pa-arr-blue)"/>
+  <line x1="567" y1="56" x2="574" y2="54" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#pa-arr-blue)"/>
+  <text x="440" y="90" font-size="8.5" fill="#2D5A8E" font-style="italic">model size ∝ n</text>
+
+  <!-- Caption: parameter count grows -->
+  <text x="600" y="345" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">Complexity grows with n</text>
+  <text x="600" y="360" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">More data → more expressive model</text>
+
+  <text x="600" y="378" text-anchor="middle" font-size="8.5" fill="#2D5A8E">flexible · memory-heavy · fewer assumptions</text>
+</svg>

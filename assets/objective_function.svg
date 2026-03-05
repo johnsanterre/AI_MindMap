@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="arr-path" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-grad" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <!-- Shading gradient for the loss surface -->
+    <linearGradient id="surfaceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#E9DEC5" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#DCCFA8" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ══ PANEL 1: 2-D cross-section of loss surface ══ -->
+  <text x="208" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">LOSS SURFACE (CROSS-SECTION)</text>
+
+  <!-- Axes -->
+  <line x1="50"  y1="310" x2="370" y2="310" stroke="#C4A87A" stroke-width="1.6" marker-end="url(#arr-axis)"/>
+  <line x1="50"  y1="310" x2="50"  y2="40"  stroke="#C4A87A" stroke-width="1.6" marker-end="url(#arr-axis)"/>
+
+  <!-- Axis labels -->
+  <text x="370" y="325" text-anchor="middle" font-size="11" fill="#6B5D4F">Model parameters (θ)</text>
+  <text x="30"  y="175" font-size="11" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,30,175)">Objective J(θ)</text>
+
+  <!-- Area fill under the convex loss curve -->
+  <polygon
+    points="55,80 88,208 121,280 154,308 187,295 220,262 253,218 286,180 319,158 352,152 352,310 55,310"
+    fill="url(#surfaceGrad)" opacity="0.55"/>
+
+  <!-- Main loss curve (bowl-shaped, global min near θ≈6) -->
+  <path d="M55,80 C75,160 100,265 154,308 C187,325 215,278 253,218 C285,168 315,152 355,148"
+        fill="none" stroke="#6B5D4F" stroke-width="2.5"/>
+
+  <!-- Shaded region "flat gradient" label -->
+  <text x="86"  y="170" font-size="9" fill="#6B5D4F" font-style="italic">steep</text>
+  <text x="310" y="168" font-size="9" fill="#6B5D4F" font-style="italic">flat</text>
+
+  <!-- Global minimum marker -->
+  <line x1="154" y1="308" x2="154" y2="310" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <circle cx="154" cy="308" r="6" fill="#7C2530"/>
+  <text x="154" y="335" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">θ*</text>
+  <text x="154" y="348" text-anchor="middle" font-size="9"  fill="#7C2530">global minimum</text>
+  <text x="98"  y="308" font-size="9" fill="#7C2530" font-style="italic">J*</text>
+  <line x1="50" y1="308" x2="148" y2="308" stroke="#7C2530" stroke-width="0.9" stroke-dasharray="3,2" opacity="0.45"/>
+
+  <!-- Gradient descent path dots -->
+  <circle cx="82"  cy="230" r="5"   fill="#2D5A8E"/>
+  <circle cx="108" cy="287" r="4.5" fill="#2D5A8E" opacity="0.88"/>
+  <circle cx="132" cy="305" r="4"   fill="#2D5A8E" opacity="0.78"/>
+  <circle cx="148" cy="309" r="3.5" fill="#2D5A8E" opacity="0.68"/>
+  <circle cx="154" cy="308" r="3"   fill="#2D5A8E" opacity="0.55"/>
+
+  <!-- Path arrows -->
+  <line x1="82"  y1="230" x2="104"  y2="283" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arr-grad)"/>
+  <line x1="108" y1="287" x2="129"  y2="303" stroke="#2D5A8E" stroke-width="1.6" marker-end="url(#arr-grad)"/>
+  <line x1="132" y1="305" x2="145"  y2="308" stroke="#2D5A8E" stroke-width="1.4" marker-end="url(#arr-grad)"/>
+
+  <!-- Start label -->
+  <text x="66" y="226" font-size="9" fill="#2D5A8E" font-weight="bold">start</text>
+
+  <!-- Step label -->
+  <text x="88" y="255" font-size="8.5" fill="#2D5A8E" font-style="italic">−η∇J</text>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="28" x2="400" y2="382" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ PANEL 2: Regularized vs unregularized objective ══ -->
+  <text x="600" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">REGULARIZATION EFFECT</text>
+
+  <!-- Axes -->
+  <line x1="430" y1="310" x2="770" y2="310" stroke="#C4A87A" stroke-width="1.6" marker-end="url(#arr-axis)"/>
+  <line x1="430" y1="310" x2="430" y2="40"  stroke="#C4A87A" stroke-width="1.6" marker-end="url(#arr-axis)"/>
+
+  <!-- Axis labels -->
+  <text x="595" y="328" text-anchor="middle" font-size="11" fill="#6B5D4F">Model parameters (θ)</text>
+  <text x="414" y="175" font-size="11" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,414,175)">J(θ)</text>
+
+  <!-- Unregularized loss (shallower, minimum at right) -->
+  <path d="M440,295 C470,310 510,310 560,296 C600,282 640,258 720,200"
+        fill="none" stroke="#B09050" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="725" y="196" font-size="9" fill="#B09050" font-style="italic">loss only</text>
+
+  <!-- Regularization penalty (bowl rising from origin) -->
+  <path d="M440,310 C480,296 530,268 590,232 C640,202 690,174 745,145"
+        fill="none" stroke="#6B5D4F" stroke-width="1.6" stroke-dasharray="3,3" opacity="0.6"/>
+  <text x="748" y="141" font-size="9" fill="#6B5D4F" font-style="italic" opacity="0.7">penalty</text>
+
+  <!-- Regularized total objective (combined, minimum shifted left) -->
+  <path d="M440,220 C460,270 490,298 530,298 C565,296 600,276 645,240 C685,208 720,180 758,158"
+        fill="none" stroke="#7C2530" stroke-width="2.6"/>
+  <text x="760" y="154" font-size="9" fill="#7C2530" font-style="italic">J = loss + λΩ</text>
+
+  <!-- Minimum of regularized (θ_reg) -->
+  <circle cx="530" cy="298" r="6" fill="#7C2530"/>
+  <line x1="530" y1="298" x2="530" y2="310" stroke="#7C2530" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="530" y="325" text-anchor="middle" font-size="9.5" fill="#7C2530" font-weight="bold">θ*_reg</text>
+
+  <!-- Minimum of unregularized (θ_erm, further right) -->
+  <circle cx="565" cy="287" r="5" fill="#B09050"/>
+  <line x1="565" y1="287" x2="565" y2="310" stroke="#B09050" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="565" y="325" text-anchor="middle" font-size="9.5" fill="#B09050" font-weight="bold">θ*_loss</text>
+
+  <!-- Annotation arrow showing shift -->
+  <line x1="562" y1="348" x2="533" y2="348" stroke="#555" stroke-width="1.2" marker-end="url(#arr-path)"/>
+  <text x="547" y="362" text-anchor="middle" font-size="8.5" fill="#555">penalty pulls toward 0</text>
+
+  <!-- Bottom caption spanning full width -->
+  <text x="400" y="390" text-anchor="middle" font-size="10" fill="#6B5D4F">
+    Objective: J(θ) = loss(θ) + λΩ(θ)  ·  gradient descent follows −∇J until J reaches its minimum
+  </text>
+</svg>

@@ -1,0 +1,25 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Axes -->
+  <line x1="80" y1="320" x2="680" y2="320" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="320" x2="80" y2="40" stroke="#333" stroke-width="2"/>
+  <text x="380" y="370" text-anchor="middle" font-size="14" fill="#333">False Positive Rate</text>
+  <text x="30" y="180" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,30,180)">True Positive Rate</text>
+  <!-- Random classifier diagonal -->
+  <line x1="80" y1="320" x2="680" y2="40" stroke="#aaa" stroke-width="1.5" stroke-dasharray="8,4"/>
+  <text x="450" y="230" font-size="12" fill="#aaa">Random (AUC=0.5)</text>
+  <!-- Good classifier curve -->
+  <path d="M80,320 C150,310 200,200 280,120 C360,50 480,42 680,40" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <!-- Shaded area -->
+  <path d="M80,320 C150,310 200,200 280,120 C360,50 480,42 680,40 L680,320 Z" fill="#2196F3" fill-opacity="0.15"/>
+  <text x="350" y="250" text-anchor="middle" font-size="18" fill="#2196F3" font-weight="bold">AUC ≈ 0.85</text>
+  <!-- Perfect classifier -->
+  <path d="M80,320 L80,40 L680,40" fill="none" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="200" y="55" font-size="12" fill="#4CAF50">Perfect (AUC=1.0)</text>
+  <!-- Labels -->
+  <text x="80" y="338" text-anchor="middle" font-size="12" fill="#666">0</text>
+  <text x="680" y="338" text-anchor="middle" font-size="12" fill="#666">1</text>
+  <text x="65" y="325" text-anchor="end" font-size="12" fill="#666">0</text>
+  <text x="65" y="45" text-anchor="end" font-size="12" fill="#666">1</text>
+  <text x="400" y="30" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">ROC Curve and AUC</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Curse of Dimensionality: Data Gets Sparse</text>
+  <!-- 1D -->
+  <rect x="60" y="100" width="180" height="40" rx="4" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <circle cx="90" cy="120" r="7" fill="#2C5F8A"/>
+  <circle cx="130" cy="120" r="7" fill="#2C5F8A"/>
+  <circle cx="170" cy="120" r="7" fill="#2C5F8A"/>
+  <circle cx="210" cy="120" r="7" fill="#2C5F8A"/>
+  <circle cx="110" cy="120" r="7" fill="#2C5F8A"/>
+  <circle cx="150" cy="120" r="7" fill="#2C5F8A"/>
+  <circle cx="190" cy="120" r="7" fill="#2C5F8A"/>
+  <text x="150" y="165" text-anchor="middle" fill="#2C5F8A" font-size="13" font-weight="bold">1D: dense</text>
+  <text x="150" y="185" text-anchor="middle" fill="#555" font-size="12">10 points cover line</text>
+  <!-- 2D -->
+  <rect x="310" y="80" width="180" height="180" rx="4" fill="#F0F8F0" stroke="#4A7C59" stroke-width="2"/>
+  <circle cx="340" cy="100" r="6" fill="#4A7C59"/>
+  <circle cx="420" cy="145" r="6" fill="#4A7C59"/>
+  <circle cx="370" cy="220" r="6" fill="#4A7C59"/>
+  <circle cx="460" cy="180" r="6" fill="#4A7C59"/>
+  <circle cx="390" cy="110" r="6" fill="#4A7C59"/>
+  <circle cx="445" cy="240" r="6" fill="#4A7C59"/>
+  <circle cx="325" cy="200" r="6" fill="#4A7C59"/>
+  <text x="400" y="285" text-anchor="middle" fill="#4A7C59" font-size="13" font-weight="bold">2D: sparser</text>
+  <text x="400" y="305" text-anchor="middle" fill="#555" font-size="12">100 pts needed to</text>
+  <text x="400" y="322" text-anchor="middle" fill="#555" font-size="12">cover same density</text>
+  <!-- 3D (cube) -->
+  <rect x="575" y="80" width="120" height="120" rx="4" fill="#FEF3EC" stroke="#E07B39" stroke-width="2"/>
+  <rect x="610" y="55" width="120" height="120" rx="4" fill="#FEF3EC" stroke="#E07B39" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="575" y1="80" x2="610" y2="55" stroke="#E07B39" stroke-width="1.5"/>
+  <line x1="695" y1="80" x2="730" y2="55" stroke="#E07B39" stroke-width="1.5"/>
+  <line x1="575" y1="200" x2="610" y2="175" stroke="#E07B39" stroke-width="1.5"/>
+  <line x1="695" y1="200" x2="730" y2="175" stroke="#E07B39" stroke-width="1.5"/>
+  <circle cx="620" cy="140" r="5" fill="#E07B39"/>
+  <circle cx="680" cy="100" r="5" fill="#E07B39"/>
+  <circle cx="650" cy="170" r="5" fill="#E07B39"/>
+  <text x="648" y="235" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">3D: very sparse</text>
+  <text x="648" y="255" text-anchor="middle" fill="#555" font-size="12">1000 pts needed</text>
+  <text x="400" y="345" text-anchor="middle" fill="#555" font-size="13">Volume grows as 10ᵈ → nearest neighbors become meaningless</text>
+</svg>

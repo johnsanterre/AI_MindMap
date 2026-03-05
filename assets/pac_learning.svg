@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E" letter-spacing="1">PAC LEARNING — Probably Approximately Correct</text>
+
+  <!-- Panel 1: The Setup -->
+  <rect x="18" y="42" width="175" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="105" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">The Setup</text>
+
+  <!-- Unknown distribution D over X -->
+  <ellipse cx="105" cy="110" rx="65" ry="40" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="105" y="105" text-anchor="middle" font-size="9" fill="#2D5A8E">Unknown distribution</text>
+  <text x="105" y="120" text-anchor="middle" font-size="11" fill="#2D5A8E">D over X</text>
+
+  <!-- Arrow down -->
+  <line x1="105" y1="152" x2="105" y2="175" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr1)"/>
+  <defs>
+    <marker id="arr1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <text x="105" y="170" text-anchor="middle" font-size="8" fill="#5C3D1E">sample m examples</text>
+
+  <!-- Training sample box -->
+  <rect x="42" y="178" width="126" height="50" fill="#EDE8DE" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="105" y="196" text-anchor="middle" font-size="9" fill="#7C2530">Training sample S</text>
+  <text x="105" y="212" text-anchor="middle" font-size="9" fill="#5C3D1E">(x₁,y₁)…(xₘ,yₘ)</text>
+
+  <!-- Arrow to learner -->
+  <line x1="105" y1="230" x2="105" y2="252" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Learner -->
+  <rect x="42" y="253" width="126" height="35" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="105" y="267" text-anchor="middle" font-size="9" fill="#FDFAF4">Algorithm A</text>
+  <text x="105" y="280" text-anchor="middle" font-size="9" fill="#FDFAF4">outputs h ∈ H</text>
+
+  <text x="105" y="325" text-anchor="middle" font-size="8" fill="#6B5D4F">Goal: find h with</text>
+  <text x="105" y="338" text-anchor="middle" font-size="8" fill="#7C2530">low true error</text>
+
+  <!-- Panel 2: The Guarantee -->
+  <rect x="208" y="42" width="185" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="300" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">The PAC Guarantee</text>
+
+  <!-- Two tolerances: epsilon and delta -->
+  <rect x="220" y="72" width="160" height="60" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="300" y="90" text-anchor="middle" font-size="10" fill="#2D5A8E">With probability ≥ 1−δ</text>
+  <text x="300" y="108" text-anchor="middle" font-size="10" fill="#5C3D1E">error(h) ≤ ε</text>
+  <text x="300" y="122" text-anchor="middle" font-size="8" fill="#6B5D4F">over random draw of S</text>
+
+  <line x1="225" y1="145" x2="375" y2="145" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <!-- epsilon explanation -->
+  <text x="225" y="162" font-size="9" fill="#5C3D1E">ε (epsilon) — accuracy:</text>
+  <text x="225" y="177" font-size="9" fill="#5C3D1E">how wrong you allow h</text>
+  <text x="225" y="192" font-size="9" fill="#6B5D4F">e.g. ε=0.05 → max 5%</text>
+  <text x="225" y="207" font-size="9" fill="#6B5D4F">true error allowed</text>
+
+  <line x1="225" y1="220" x2="375" y2="220" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <!-- delta explanation -->
+  <text x="225" y="237" font-size="9" fill="#5C3D1E">δ (delta) — confidence:</text>
+  <text x="225" y="252" font-size="9" fill="#5C3D1E">probability of failure</text>
+  <text x="225" y="267" font-size="9" fill="#6B5D4F">e.g. δ=0.01 → succeed</text>
+  <text x="225" y="282" font-size="9" fill="#6B5D4F">99% of the time</text>
+
+  <line x1="225" y1="295" x2="375" y2="295" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="300" y="312" text-anchor="middle" font-size="9" fill="#7C2530">''Probably'' = 1−δ</text>
+  <text x="300" y="328" text-anchor="middle" font-size="9" fill="#7C2530">''Approximately'' = ε</text>
+  <text x="300" y="344" text-anchor="middle" font-size="9" fill="#5C3D1E">''Correct'' = low error</text>
+
+  <!-- Panel 3: Sample complexity -->
+  <rect x="408" y="42" width="185" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="500" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Sample Complexity</text>
+
+  <text x="500" y="82" text-anchor="middle" font-size="9" fill="#5C3D1E">How many examples needed?</text>
+
+  <rect x="420" y="90" width="165" height="45" fill="#EDE8DE" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="502" y="108" text-anchor="middle" font-size="10" fill="#7C2530">m ≥ 1/ε (ln|H| + ln 1/δ)</text>
+  <text x="502" y="126" text-anchor="middle" font-size="8" fill="#6B5D4F">finite hypothesis class H</text>
+
+  <line x1="420" y1="148" x2="585" y2="148" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <!-- Bar chart style illustration of tradeoffs -->
+  <text x="500" y="165" text-anchor="middle" font-size="9" fill="#5C3D1E">More data needed when:</text>
+
+  <!-- smaller epsilon -->
+  <rect x="425" y="175" width="90" height="12" fill="#2D5A8E" rx="1"/>
+  <rect x="425" y="175" width="150" height="12" fill="none" stroke="#C4A87A" stroke-width="0.5" rx="1"/>
+  <text x="420" y="186" text-anchor="end" font-size="8" fill="#6B5D4F">ε ↓</text>
+  <text x="580" y="186" font-size="8" fill="#6B5D4F">finer accuracy</text>
+
+  <!-- smaller delta -->
+  <rect x="425" y="195" width="110" height="12" fill="#7C2530" rx="1"/>
+  <rect x="425" y="195" width="150" height="12" fill="none" stroke="#C4A87A" stroke-width="0.5" rx="1"/>
+  <text x="420" y="206" text-anchor="end" font-size="8" fill="#6B5D4F">δ ↓</text>
+  <text x="580" y="206" font-size="8" fill="#6B5D4F">more confidence</text>
+
+  <!-- larger H -->
+  <rect x="425" y="215" width="130" height="12" fill="#C4A87A" rx="1"/>
+  <rect x="425" y="215" width="150" height="12" fill="none" stroke="#C4A87A" stroke-width="0.5" rx="1"/>
+  <text x="420" y="226" text-anchor="end" font-size="8" fill="#6B5D4F">|H| ↑</text>
+  <text x="580" y="226" font-size="8" fill="#6B5D4F">richer class</text>
+
+  <line x1="420" y1="240" x2="585" y2="240" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="500" y="258" text-anchor="middle" font-size="9" fill="#5C3D1E">Infinite H → use VC dim d:</text>
+  <rect x="430" y="265" width="145" height="30" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="502" y="280" text-anchor="middle" font-size="9.5" fill="#2D5A8E">m ≥ O(d/ε + log(1/δ)/ε)</text>
+
+  <text x="500" y="320" text-anchor="middle" font-size="9" fill="#6B5D4F">d = VC dimension</text>
+  <text x="500" y="335" text-anchor="middle" font-size="8" fill="#6B5D4F">([[VC Dimension|VC Dimension]])</text>
+
+  <!-- Panel 4: Learnability -->
+  <rect x="608" y="42" width="175" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="695" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Learnability</text>
+
+  <!-- Tick: PAC learnable -->
+  <rect x="618" y="72" width="155" height="55" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="695" y="90" text-anchor="middle" font-size="20" fill="#2D5A8E">✓</text>
+  <text x="695" y="110" text-anchor="middle" font-size="9" fill="#5C3D1E">PAC-learnable</text>
+  <text x="695" y="123" text-anchor="middle" font-size="8" fill="#6B5D4F">m poly in 1/ε, 1/δ, size</text>
+
+  <!-- Cross: not learnable -->
+  <rect x="618" y="138" width="155" height="55" fill="#EDE8DE" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="695" y="156" text-anchor="middle" font-size="20" fill="#7C2530">✗</text>
+  <text x="695" y="176" text-anchor="middle" font-size="9" fill="#7C2530">Not PAC-learnable</text>
+  <text x="695" y="189" text-anchor="middle" font-size="8" fill="#6B5D4F">needs super-poly data</text>
+
+  <line x1="622" y1="205" x2="778" y2="205" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="695" y="222" text-anchor="middle" font-size="9" fill="#5C3D1E">Examples:</text>
+  <text x="695" y="240" text-anchor="middle" font-size="9" fill="#2D5A8E">✓ Linear classifiers</text>
+  <text x="695" y="256" text-anchor="middle" font-size="9" fill="#2D5A8E">✓ Decision stumps</text>
+  <text x="695" y="272" text-anchor="middle" font-size="9" fill="#2D5A8E">✓ Finite H always</text>
+  <text x="695" y="292" text-anchor="middle" font-size="9" fill="#7C2530">✗ Cryptographic</text>
+  <text x="695" y="308" text-anchor="middle" font-size="9" fill="#7C2530">  pseudorandom fns</text>
+
+  <line x1="622" y1="322" x2="778" y2="322" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="695" y="340" text-anchor="middle" font-size="8" fill="#6B5D4F">Fundamental theorem:</text>
+  <text x="695" y="355" text-anchor="middle" font-size="8" fill="#5C3D1E">PAC ↔ finite VC dim</text>
+
+  <!-- Footer label -->
+  <text x="400" y="388" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">PAC Learning — a formal guarantee that learning is possible from finite data</text>
+</svg>

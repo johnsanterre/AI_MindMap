@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="gmm-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="gmm-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="gmm-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="gmm-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ LEFT PANEL: MIXTURE MODEL ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">MIXTURE MODEL</text>
+
+  <!-- Cluster 1 (red-tinted, top-left area, center ~75,100) -->
+  <ellipse cx="75" cy="100" rx="48" ry="34" fill="#F5DDE0" stroke="#7C2530" stroke-width="1.2" opacity="0.55"/>
+  <!-- Cluster 2 (blue-tinted, top-right area, center ~175,95) -->
+  <ellipse cx="188" cy="100" rx="50" ry="34" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.2" opacity="0.55"/>
+  <!-- Cluster 3 (tan-tinted, bottom-center, center ~128,188) -->
+  <ellipse cx="128" cy="188" rx="52" ry="34" fill="#F0E8CE" stroke="#C4A87A" stroke-width="1.2" opacity="0.55"/>
+
+  <!-- Cluster 1 data points (red-tinted) -->
+  <circle cx="52"  cy="92"  r="3.5" fill="#C08090"/>
+  <circle cx="62"  cy="110" r="3.5" fill="#C08090"/>
+  <circle cx="78"  cy="86"  r="3.5" fill="#C08090"/>
+  <circle cx="88"  cy="105" r="3.5" fill="#C08090"/>
+  <circle cx="70"  cy="116" r="3.5" fill="#C08090"/>
+  <circle cx="58"  cy="100" r="3.5" fill="#C08090"/>
+  <circle cx="84"  cy="93"  r="3.5" fill="#C08090"/>
+  <circle cx="96"  cy="108" r="3.5" fill="#C08090"/>
+
+  <!-- Cluster 2 data points (blue-tinted) -->
+  <circle cx="165" cy="88"  r="3.5" fill="#8090C0"/>
+  <circle cx="180" cy="78"  r="3.5" fill="#8090C0"/>
+  <circle cx="195" cy="92"  r="3.5" fill="#8090C0"/>
+  <circle cx="205" cy="105" r="3.5" fill="#8090C0"/>
+  <circle cx="175" cy="108" r="3.5" fill="#8090C0"/>
+  <circle cx="192" cy="112" r="3.5" fill="#8090C0"/>
+  <circle cx="210" cy="92"  r="3.5" fill="#8090C0"/>
+  <circle cx="158" cy="102" r="3.5" fill="#8090C0"/>
+
+  <!-- Cluster 3 data points (tan-tinted) -->
+  <circle cx="108" cy="182" r="3.5" fill="#B8A070"/>
+  <circle cx="122" cy="172" r="3.5" fill="#B8A070"/>
+  <circle cx="136" cy="185" r="3.5" fill="#B8A070"/>
+  <circle cx="148" cy="196" r="3.5" fill="#B8A070"/>
+  <circle cx="118" cy="200" r="3.5" fill="#B8A070"/>
+  <circle cx="132" cy="210" r="3.5" fill="#B8A070"/>
+  <circle cx="152" cy="178" r="3.5" fill="#B8A070"/>
+  <circle cx="110" cy="168" r="3.5" fill="#B8A070"/>
+
+  <!-- Cluster center dots (bold) with labels -->
+  <circle cx="75"  cy="100" r="5" fill="#7C2530"/>
+  <text x="65"  y="90" font-size="9" fill="#7C2530" font-style="italic">μ₁</text>
+  <circle cx="188" cy="100" r="5" fill="#2D5A8E"/>
+  <text x="192" y="90" font-size="9" fill="#2D5A8E" font-style="italic">μ₂</text>
+  <circle cx="128" cy="188" r="5" fill="#8A7038"/>
+  <text x="132" y="200" font-size="9" fill="#8A7038" font-style="italic">μ₃</text>
+
+  <!-- Highlighted overlap point with soft assignment arrows -->
+  <!-- Point at overlap of cluster1 and cluster2, ~128,103 -->
+  <circle cx="128" cy="103" r="5" fill="#F0D040" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Arrow to cluster1 center -->
+  <line x1="122" y1="100" x2="82"  y2="100" stroke="#7C2530" stroke-width="1.3" marker-end="url(#gmm-arr-red)"/>
+  <text x="96" y="96" font-size="7" fill="#7C2530">soft</text>
+  <!-- Arrow to cluster2 center -->
+  <line x1="134" y1="100" x2="182" y2="100" stroke="#2D5A8E" stroke-width="1.3" marker-end="url(#gmm-arr-blue)"/>
+  <text x="152" y="96" font-size="7" fill="#2D5A8E">soft</text>
+  <text x="128" y="120" text-anchor="middle" font-size="7.5" fill="#5C3D1E">soft assignment</text>
+
+  <!-- K=3 label -->
+  <text x="145" y="248" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">K=3 components</text>
+
+  <!-- ══ RIGHT PANEL: EM ALGORITHM ══ -->
+  <text x="443" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">EM ALGORITHM</text>
+
+  <!-- Step 1: E-step box (top-left of cycle) -->
+  <rect x="308" y="36" width="120" height="44" fill="#DDEEFF" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="368" y="55" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-weight="bold">E-step</text>
+  <text x="368" y="67" text-anchor="middle" font-size="7.5" fill="#2D5A8E">compute responsibilities</text>
+  <text x="368" y="77" text-anchor="middle" font-size="7.5" fill="#2D5A8E" font-style="italic">rᵢₖ = P(k|xᵢ)</text>
+
+  <!-- Step 2: M-step box (top-right of cycle) -->
+  <rect x="450" y="36" width="130" height="44" fill="#F5DDE0" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="515" y="55" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">M-step</text>
+  <text x="515" y="67" text-anchor="middle" font-size="7.5" fill="#7C2530">update parameters</text>
+  <text x="515" y="77" text-anchor="middle" font-size="7.5" fill="#7C2530" font-style="italic">μₖ, Σₖ, πₖ</text>
+
+  <!-- Arrow: E -> M -->
+  <line x1="428" y1="58" x2="448" y2="58" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gmm-arr)"/>
+
+  <!-- Step 3: Evaluate log-likelihood box (bottom center) -->
+  <rect x="374" y="128" width="130" height="44" fill="#F0E8CE" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="439" y="147" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-weight="bold">Evaluate</text>
+  <text x="439" y="159" text-anchor="middle" font-size="7.5" fill="#5C3D1E">log-likelihood</text>
+  <text x="439" y="169" text-anchor="middle" font-size="7.5" fill="#6B5D4F" font-style="italic">ℓ(θ) = Σᵢ log p(xᵢ)</text>
+
+  <!-- Arrow: M -> Evaluate (down-right curve) -->
+  <path d="M515,80 Q515,112 504,128" fill="none" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gmm-arr)"/>
+
+  <!-- Arrow: Evaluate -> E (up-left curve) -->
+  <path d="M374,150 Q344,150 344,100 Q344,80 368,80" fill="none" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gmm-arr)"/>
+
+  <!-- "repeat until convergence" label -->
+  <text x="443" y="198" text-anchor="middle" font-size="8" fill="#6B5D4F">repeat until convergence</text>
+
+  <!-- Log-likelihood curve (guaranteed to increase) -->
+  <text x="443" y="215" text-anchor="middle" font-size="8" fill="#5C3D1E" font-style="italic">guaranteed to increase:</text>
+
+  <!-- Mini axes for LL curve -->
+  <line x1="312" y1="280" x2="572" y2="280" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#gmm-axis)"/>
+  <line x1="312" y1="280" x2="312" y2="222" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#gmm-axis)"/>
+  <text x="443" y="294" text-anchor="middle" font-size="7.5" fill="#6B5D4F">iterations</text>
+  <text x="306" y="252" font-size="7.5" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,306,252)">log ℓ</text>
+
+  <!-- LL curve: monotonically increasing, leveling off -->
+  <polyline
+    points="312,275 335,264 358,253 381,243 404,235 427,229 450,225 473,222 500,221 530,220.5 565,220"
+    fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="450" y="218" font-size="7.5" fill="#6B5D4F" font-style="italic">converges</text>
+</svg>

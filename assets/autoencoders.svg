@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Autoencoder Architecture</text>
+
+  <!-- Panel 1: Encoder -->
+  <rect x="20" y="50" width="200" height="300" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="120" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">ENCODER</text>
+
+  <!-- Input layer nodes -->
+  <circle cx="60" cy="110" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="60" cy="145" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="60" cy="180" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="60" cy="215" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="60" cy="250" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <text x="60" y="278" text-anchor="middle" font-size="9" fill="#6B5D4F">Input x</text>
+
+  <!-- Hidden layer (encoder) -->
+  <circle cx="130" cy="130" r="10" fill="#7C2530" opacity="0.8"/>
+  <circle cx="130" cy="165" r="10" fill="#7C2530" opacity="0.8"/>
+  <circle cx="130" cy="200" r="10" fill="#7C2530" opacity="0.8"/>
+  <circle cx="130" cy="235" r="10" fill="#7C2530" opacity="0.8"/>
+  <text x="130" y="262" text-anchor="middle" font-size="9" fill="#6B5D4F">Hidden</text>
+
+  <!-- Connections input->hidden (sample lines) -->
+  <line x1="70" y1="110" x2="120" y2="130" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="70" y1="145" x2="120" y2="130" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="70" y1="180" x2="120" y2="165" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="70" y1="215" x2="120" y2="200" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="70" y1="250" x2="120" y2="235" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="70" y1="110" x2="120" y2="165" stroke="#2D5A8E" stroke-width="0.6" opacity="0.3"/>
+  <line x1="70" y1="145" x2="120" y2="200" stroke="#2D5A8E" stroke-width="0.6" opacity="0.3"/>
+  <line x1="70" y1="250" x2="120" y2="165" stroke="#2D5A8E" stroke-width="0.6" opacity="0.3"/>
+
+  <!-- Arrow encoder -> bottleneck -->
+  <line x1="140" y1="182" x2="188" y2="182" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="188,178 196,182 188,186" fill="#C4A87A"/>
+
+  <!-- Panel 2: Bottleneck -->
+  <rect x="225" y="50" width="140" height="300" fill="#FFF8EE" stroke="#7C2530" stroke-width="1.8" rx="4"/>
+  <text x="295" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">BOTTLENECK</text>
+
+  <!-- Latent nodes (small) -->
+  <circle cx="295" cy="155" r="13" fill="#7C2530" opacity="0.9"/>
+  <circle cx="295" cy="200" r="13" fill="#7C2530" opacity="0.9"/>
+  <circle cx="295" cy="245" r="13" fill="#7C2530" opacity="0.9"/>
+  <text x="295" y="285" text-anchor="middle" font-size="9" fill="#7C2530">Latent z</text>
+  <text x="295" y="298" text-anchor="middle" font-size="8" fill="#6B5D4F">(compressed)</text>
+
+  <!-- Compression label -->
+  <text x="295" y="120" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">bottleneck</text>
+  <text x="295" y="133" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">forces compression</text>
+
+  <!-- Arrow bottleneck -> decoder -->
+  <line x1="365" y1="200" x2="400" y2="200" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="400,196 408,200 400,204" fill="#C4A87A"/>
+
+  <!-- Panel 3: Decoder -->
+  <rect x="410" y="50" width="200" height="300" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="510" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">DECODER</text>
+
+  <!-- Hidden layer (decoder) -->
+  <circle cx="470" cy="130" r="10" fill="#7C2530" opacity="0.8"/>
+  <circle cx="470" cy="165" r="10" fill="#7C2530" opacity="0.8"/>
+  <circle cx="470" cy="200" r="10" fill="#7C2530" opacity="0.8"/>
+  <circle cx="470" cy="235" r="10" fill="#7C2530" opacity="0.8"/>
+  <text x="470" y="262" text-anchor="middle" font-size="9" fill="#6B5D4F">Hidden</text>
+
+  <!-- Output layer nodes -->
+  <circle cx="550" cy="110" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="550" cy="145" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="550" cy="180" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="550" cy="215" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="550" cy="250" r="10" fill="#2D5A8E" opacity="0.85"/>
+  <text x="550" y="278" text-anchor="middle" font-size="9" fill="#6B5D4F">Output x̂</text>
+
+  <!-- Connections hidden->output -->
+  <line x1="480" y1="130" x2="540" y2="110" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="480" y1="165" x2="540" y2="145" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="480" y1="200" x2="540" y2="180" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="480" y1="235" x2="540" y2="215" stroke="#2D5A8E" stroke-width="0.6" opacity="0.4"/>
+  <line x1="480" y1="165" x2="540" y2="110" stroke="#2D5A8E" stroke-width="0.6" opacity="0.3"/>
+  <line x1="480" y1="200" x2="540" y2="250" stroke="#2D5A8E" stroke-width="0.6" opacity="0.3"/>
+  <line x1="480" y1="130" x2="540" y2="215" stroke="#2D5A8E" stroke-width="0.6" opacity="0.3"/>
+
+  <!-- Panel 4: Loss -->
+  <rect x="625" y="50" width="155" height="300" fill="#F0EBE1" stroke="#D4C5A9" stroke-width="1.2" rx="4"/>
+  <text x="702" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">LOSS</text>
+
+  <!-- Loss equation -->
+  <text x="702" y="105" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">Reconstruction</text>
+  <text x="702" y="122" text-anchor="middle" font-size="11" fill="#5C3D1E">L(x, x̂)</text>
+  <line x1="645" y1="135" x2="760" y2="135" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <text x="702" y="158" text-anchor="middle" font-size="10" fill="#2D5A8E">MSE:</text>
+  <text x="702" y="175" text-anchor="middle" font-size="9" fill="#5C3D1E">‖x − x̂‖²</text>
+
+  <text x="702" y="205" text-anchor="middle" font-size="10" fill="#2D5A8E">Binary CE:</text>
+  <text x="702" y="222" text-anchor="middle" font-size="9" fill="#5C3D1E">−Σ xᵢ log x̂ᵢ</text>
+
+  <line x1="645" y1="238" x2="760" y2="238" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="702" y="260" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">Backprop trains</text>
+  <text x="702" y="275" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">encoder + decoder</text>
+  <text x="702" y="290" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">jointly</text>
+
+  <!-- Loss arrow from output -->
+  <line x1="562" y1="180" x2="622" y2="180" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <polygon points="622,176 630,180 622,184" fill="#C4A87A"/>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="9" fill="#6B5D4F">Encoder maps x → z  ·  Decoder maps z → x̂  ·  Train to minimize reconstruction error</text>
+</svg>

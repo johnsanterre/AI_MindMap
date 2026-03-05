@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel label -->
+  <text x="400" y="24" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">MEMIT — MASS-EDITING MEMORY IN TRANSFORMERS</text>
+
+  <!-- Transformer stack, left side -->
+  <text x="100" y="50" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">TRANSFORMER LAYERS</text>
+
+  <!-- Layers drawn as stacked rects -->
+  <rect x="30" y="60" width="140" height="36" rx="4" fill="#F7F2E8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="100" y="83" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#6B5D4F">Layer 1 (FFN)</text>
+  <rect x="30" y="102" width="140" height="36" rx="4" fill="#F7F2E8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="100" y="125" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#6B5D4F">Layer 2 (FFN)</text>
+  <!-- Highlighted layers (edit targets) -->
+  <rect x="30" y="144" width="140" height="36" rx="4" fill="#2D5A8E" opacity="0.85"/>
+  <text x="100" y="167" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="white">Layer 3 ← edit</text>
+  <rect x="30" y="186" width="140" height="36" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="100" y="209" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="white">Layer 4 ← edit</text>
+  <rect x="30" y="228" width="140" height="36" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="100" y="251" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="white">Layer 5 ← edit</text>
+  <rect x="30" y="270" width="140" height="36" rx="4" fill="#F7F2E8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="100" y="293" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#6B5D4F">Layer 6 (FFN)</text>
+  <rect x="30" y="312" width="140" height="36" rx="4" fill="#F7F2E8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="100" y="335" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#6B5D4F">Layer 7 (FFN)</text>
+
+  <!-- Arrow to weight update formula -->
+  <line x1="170" y1="215" x2="240" y2="215" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="238,211 246,215 238,219" fill="#5C3D1E"/>
+
+  <!-- Middle panel: update formula -->
+  <text x="430" y="50" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">WEIGHT UPDATE</text>
+
+  <rect x="245" y="60" width="365" height="295" fill="#F7F2E8" rx="4" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="430" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Target: W stores N facts simultaneously</text>
+
+  <!-- Equation boxes -->
+  <rect x="265" y="105" width="325" height="44" rx="3" fill="white" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="430" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">New W* = W + ΔW</text>
+  <text x="430" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#6B5D4F">closed-form least-squares solution</text>
+
+  <rect x="265" y="160" width="325" height="50" rx="3" fill="white" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="430" y="181" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">ΔW = (R − W·K) · K^T · (C + K·K^T)⁻¹</text>
+  <text x="430" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#6B5D4F">R = targets, K = subject hidden states</text>
+
+  <text x="430" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">N edits computed in one pass</text>
+  <text x="430" y="257" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#6B5D4F">vs. ROME: one edit per forward pass</text>
+
+  <!-- Before / After -->
+  <rect x="265" y="278" width="150" height="58" rx="3" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="340" y="297" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-variant="small-caps">Before</text>
+  <text x="340" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">"Eiffel Tower is</text>
+  <text x="340" y="329" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">in Paris" ✓</text>
+
+  <rect x="440" y="278" width="150" height="58" rx="3" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="515" y="297" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-variant="small-caps">After Edit</text>
+  <text x="515" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">"Eiffel Tower is</text>
+  <text x="515" y="329" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">in Berlin" ✓</text>
+
+  <!-- bottom label -->
+  <text x="430" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">DISTRIBUTES EDITS ACROSS CRITICAL LAYERS</text>
+</svg>

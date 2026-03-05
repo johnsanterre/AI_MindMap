@@ -1,0 +1,47 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="17" fill="#333" font-weight="bold">Matrix Inverse: A · A⁻¹ = I</text>
+
+  <!-- A matrix -->
+  <text x="130" y="78" text-anchor="middle" font-size="20" fill="#2196F3" font-weight="bold">A</text>
+  <rect x="60" y="90" width="140" height="140" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <text x="95"  y="130" font-size="15" fill="#1a237e">a  b</text>
+  <text x="95"  y="163" font-size="15" fill="#1a237e">c  d</text>
+  <text x="130" y="255" text-anchor="middle" font-size="12" fill="#2196F3">original matrix</text>
+
+  <!-- · dot -->
+  <text x="230" y="168" text-anchor="middle" font-size="30" fill="#555">·</text>
+
+  <!-- A⁻¹ matrix -->
+  <text x="340" y="78" text-anchor="middle" font-size="20" fill="#E91E63" font-weight="bold">A⁻¹</text>
+  <rect x="270" y="90" width="140" height="140" rx="5" fill="#FCE4EC" stroke="#E91E63" stroke-width="2"/>
+  <text x="282" y="128" font-size="13" fill="#880e4f"> d/det  −b/det</text>
+  <text x="282" y="162" font-size="13" fill="#880e4f">−c/det   a/det</text>
+  <text x="340" y="255" text-anchor="middle" font-size="12" fill="#E91E63">inverse matrix</text>
+
+  <!-- = sign -->
+  <text x="442" y="168" text-anchor="middle" font-size="30" fill="#555">=</text>
+
+  <!-- I identity matrix -->
+  <text x="560" y="78" text-anchor="middle" font-size="20" fill="#4CAF50" font-weight="bold">I</text>
+  <rect x="490" y="90" width="140" height="140" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+  <text x="525" y="130" font-size="15" fill="#1b5e20">1   0</text>
+  <text x="525" y="163" font-size="15" fill="#1b5e20">0   1</text>
+  <text x="560" y="255" text-anchor="middle" font-size="12" fill="#4CAF50">identity matrix</text>
+
+  <!-- det(A) callout box -->
+  <rect x="660" y="82" width="122" height="160" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
+  <text x="721" y="107" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Key quantity</text>
+  <text x="721" y="133" text-anchor="middle" font-size="12" fill="#E91E63">det(A) = ad − bc</text>
+  <line x1="670" y1="145" x2="772" y2="145" stroke="#ddd" stroke-width="1"/>
+  <text x="721" y="166" text-anchor="middle" font-size="11" fill="#555">det ≠ 0</text>
+  <text x="721" y="184" text-anchor="middle" font-size="11" fill="#4CAF50">→ invertible</text>
+  <text x="721" y="205" text-anchor="middle" font-size="11" fill="#555">det = 0</text>
+  <text x="721" y="223" text-anchor="middle" font-size="11" fill="#E91E63">→ singular</text>
+
+  <!-- Subtitle / caption -->
+  <text x="400" y="310" text-anchor="middle" font-size="12" fill="#666">Multiplying a matrix by its inverse cancels the transformation — giving back the identity.</text>
+  <text x="400" y="330" text-anchor="middle" font-size="12" fill="#888">For a 2×2 matrix: A⁻¹ = (1/det) · [d, −b; −c, a]</text>
+</svg>

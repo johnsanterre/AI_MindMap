@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ══ PANEL 1: THE THREE CURVES ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">THE THREE CURVES</text>
+
+  <!-- Axes -->
+  <line x1="30" y1="260" x2="272" y2="260" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <line x1="30" y1="260" x2="30"  y2="30"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+
+  <!-- Axis labels -->
+  <text x="152" y="277" text-anchor="middle" font-size="9" fill="#6B5D4F">model complexity</text>
+  <text x="14" y="150" font-size="9" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,14,150)">error</text>
+
+  <!-- Irreducible error (gray dashed, flat at y=80) -->
+  <line x1="35" y1="80" x2="265" y2="80" stroke="#9B8877" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="230" y="76" font-size="8" fill="#9B8877">irreducible error</text>
+
+  <!-- Training error (dark brown dashed, monotone down) -->
+  <polyline points="35,180 75,155 115,130 155,108 195,88 235,72 265,60"
+            fill="none" stroke="#5C3D1E" stroke-width="1.8" stroke-dasharray="5,3"/>
+  <text x="262" y="56" font-size="8" fill="#5C3D1E" text-anchor="end">train error</text>
+
+  <!-- Test error (red solid, U-shape) -->
+  <polyline points="35,230 75,175 115,130 155,105 195,120 235,158 265,210"
+            fill="none" stroke="#7C2530" stroke-width="2.2"/>
+  <text x="255" y="207" font-size="8" fill="#7C2530">test error</text>
+
+  <!-- Optimal complexity vertical dashed line -->
+  <line x1="155" y1="35" x2="155" y2="260" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="155" y="32" text-anchor="middle" font-size="8" fill="#2D5A8E">sweet spot</text>
+
+  <!-- Region labels -->
+  <text x="75"  y="215" text-anchor="middle" font-size="8.5" fill="#6B5D4F">High Bias</text>
+  <text x="75"  y="226" text-anchor="middle" font-size="8.5" fill="#6B5D4F">(underfitting)</text>
+  <text x="220" y="215" text-anchor="middle" font-size="8.5" fill="#6B5D4F">High Variance</text>
+  <text x="220" y="226" text-anchor="middle" font-size="8.5" fill="#6B5D4F">(overfitting)</text>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ PANEL 2: BIAS vs VARIANCE targets ══ -->
+  <text x="445" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">BIAS vs VARIANCE</text>
+
+  <!-- Quadrant grid lines -->
+  <line x1="430" y1="35"  x2="430" y2="280" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="300" y1="158" x2="580" y2="158" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Quadrant axis labels -->
+  <text x="365" y="50" text-anchor="middle" font-size="8" fill="#6B5D4F">High Bias</text>
+  <text x="510" y="50" text-anchor="middle" font-size="8" fill="#6B5D4F">Low Bias</text>
+  <text x="305" y="100" font-size="8" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,305,100)">High Variance</text>
+  <text x="305" y="225" font-size="8" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,305,225)">Low Variance</text>
+
+  <!-- Top-left target: High Bias + High Variance (scattered, far from center) -->
+  <circle cx="365" cy="100" r="28" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="365" cy="100" r="18" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="365" cy="100" r="8"  fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- scattered dots far from center -->
+  <circle cx="342" cy="78"  r="2.5" fill="#7C2530"/>
+  <circle cx="388" cy="85"  r="2.5" fill="#7C2530"/>
+  <circle cx="352" cy="118" r="2.5" fill="#7C2530"/>
+  <circle cx="381" cy="115" r="2.5" fill="#7C2530"/>
+  <circle cx="340" cy="100" r="2.5" fill="#7C2530"/>
+  <circle cx="376" cy="76"  r="2.5" fill="#7C2530"/>
+  <text x="365" y="143" text-anchor="middle" font-size="8" fill="#6B5D4F">scattered + off-target</text>
+
+  <!-- Top-right target: Low Bias + High Variance (scattered around center) -->
+  <circle cx="510" cy="100" r="28" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="510" cy="100" r="18" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="510" cy="100" r="8"  fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- scattered around center -->
+  <circle cx="495" cy="82"  r="2.5" fill="#7C2530"/>
+  <circle cx="528" cy="88"  r="2.5" fill="#7C2530"/>
+  <circle cx="492" cy="112" r="2.5" fill="#7C2530"/>
+  <circle cx="524" cy="116" r="2.5" fill="#7C2530"/>
+  <circle cx="488" cy="100" r="2.5" fill="#7C2530"/>
+  <circle cx="518" cy="78"  r="2.5" fill="#7C2530"/>
+  <text x="510" y="143" text-anchor="middle" font-size="8" fill="#6B5D4F">scattered, near target</text>
+
+  <!-- Bottom-left target: High Bias + Low Variance (tight cluster, off-center) -->
+  <circle cx="365" cy="220" r="28" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="365" cy="220" r="18" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="365" cy="220" r="8"  fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- tight cluster, off-center upper-left -->
+  <circle cx="348" cy="207" r="2.5" fill="#7C2530"/>
+  <circle cx="354" cy="213" r="2.5" fill="#7C2530"/>
+  <circle cx="351" cy="203" r="2.5" fill="#7C2530"/>
+  <circle cx="345" cy="211" r="2.5" fill="#7C2530"/>
+  <circle cx="357" cy="208" r="2.5" fill="#7C2530"/>
+  <circle cx="349" cy="218" r="2.5" fill="#7C2530"/>
+  <text x="365" y="262" text-anchor="middle" font-size="8" fill="#6B5D4F">tight cluster, off-target</text>
+
+  <!-- Bottom-right target: Low Bias + Low Variance (tight cluster at center) — IDEAL -->
+  <circle cx="510" cy="220" r="28" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="510" cy="220" r="18" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="510" cy="220" r="8"  fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- tight cluster at center -->
+  <circle cx="508" cy="218" r="2.5" fill="#7C2530"/>
+  <circle cx="513" cy="222" r="2.5" fill="#7C2530"/>
+  <circle cx="507" cy="223" r="2.5" fill="#7C2530"/>
+  <circle cx="512" cy="217" r="2.5" fill="#7C2530"/>
+  <circle cx="510" cy="220" r="2.5" fill="#7C2530"/>
+  <circle cx="506" cy="215" r="2.5" fill="#7C2530"/>
+  <text x="510" y="262" text-anchor="middle" font-size="8" fill="#2D5A8E">ideal ✓</text>
+
+  <!-- Bottom caption -->
+  <text x="300" y="302" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    The goal: low bias AND low variance — a model that is both accurate and consistent
+  </text>
+</svg>

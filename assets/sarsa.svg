@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">SARSA vs Q-Learning</text>
+  <!-- SARSA tuple -->
+  <rect x="40" y="80" width="340" height="220" rx="10" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="210" y="108" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#4a90d9">SARSA (On-Policy)</text>
+  <text x="210" y="135" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">( S, A, R, S', A' )</text>
+  <text x="210" y="165" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Q(s,a) ← Q(s,a) + α[r + γQ(s',a') − Q(s,a)]</text>
+  <text x="210" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Uses actual next action a'</text>
+  <text x="210" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">from the current policy</text>
+  <text x="210" y="245" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Conservative — learns safe policies</text>
+  <text x="210" y="265" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">e.g. avoids cliff edge</text>
+  <!-- Q-Learning -->
+  <rect x="420" y="80" width="340" height="220" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+  <text x="590" y="108" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">Q-Learning (Off-Policy)</text>
+  <text x="590" y="135" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">( S, A, R, S' )</text>
+  <text x="590" y="165" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Q(s,a) ← Q(s,a) + α[r + γ max Q(s',·) − Q(s,a)]</text>
+  <text x="590" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Uses greedy max over next actions</text>
+  <text x="590" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">regardless of policy used</text>
+  <text x="590" y="245" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Aggressive — learns optimal policy</text>
+  <text x="590" y="265" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">faster but riskier</text>
+  <text x="400" y="360" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Key difference: SARSA evaluates the policy being followed; Q-Learning evaluates the greedy policy</text>
+</svg>

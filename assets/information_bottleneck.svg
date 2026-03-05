@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E" letter-spacing="1">INFORMATION BOTTLENECK — Compression and Relevance</text>
+
+  <!-- Panel 1: The squeeze metaphor -->
+  <rect x="18" y="42" width="180" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="108" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">The Squeeze</text>
+
+  <!-- X blob (wide) -->
+  <ellipse cx="108" cy="105" rx="72" ry="28" fill="#2D5A8E" opacity="0.25" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="108" y="100" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">X</text>
+  <text x="108" y="116" text-anchor="middle" font-size="8" fill="#5C3D1E">input (e.g. pixels)</text>
+
+  <!-- Funnel -->
+  <polygon points="60,138 156,138 130,200 86,200" fill="#C4A87A" opacity="0.4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="108" y="175" text-anchor="middle" font-size="8" fill="#5C3D1E">compress</text>
+
+  <!-- T blob (narrow) -->
+  <ellipse cx="108" cy="218" rx="30" ry="18" fill="#7C2530" opacity="0.3" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="108" y="214" text-anchor="middle" font-size="11" fill="#7C2530" font-style="italic">T</text>
+  <text x="108" y="228" text-anchor="middle" font-size="8" fill="#5C3D1E">compressed rep.</text>
+
+  <!-- Expand again -->
+  <polygon points="86,240 130,240 156,298 60,298" fill="#C4A87A" opacity="0.2" stroke="#C4A87A" stroke-width="1"/>
+  <text x="108" y="275" text-anchor="middle" font-size="8" fill="#5C3D1E">predict</text>
+
+  <!-- Y blob -->
+  <ellipse cx="108" cy="316" rx="55" ry="20" fill="#2D5A8E" opacity="0.2" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="108" y="312" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">Y</text>
+  <text x="108" y="325" text-anchor="middle" font-size="8" fill="#5C3D1E">label (relevant info)</text>
+
+  <text x="108" y="345" text-anchor="middle" font-size="8" fill="#6B5D4F">Keep info about Y,</text>
+  <text x="108" y="358" text-anchor="middle" font-size="8" fill="#7C2530">forget noise in X</text>
+
+  <!-- Panel 2: Tradeoff curve -->
+  <rect x="210" y="42" width="200" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="310" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">The IB Tradeoff Curve</text>
+
+  <!-- Axes -->
+  <line x1="240" y1="290" x2="240" y2="80" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr3)"/>
+  <line x1="240" y1="290" x2="395" y2="290" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr4)"/>
+  <defs>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr4" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Axis labels -->
+  <text x="232" y="76" text-anchor="end" font-size="9" fill="#5C3D1E">I(T;Y)</text>
+  <text x="233" y="89" text-anchor="end" font-size="8" fill="#6B5D4F">relevance</text>
+  <text x="395" y="302" text-anchor="middle" font-size="9" fill="#5C3D1E">I(T;X)</text>
+  <text x="396" y="315" text-anchor="middle" font-size="8" fill="#6B5D4F">complexity</text>
+
+  <!-- IB curve -->
+  <path d="M245,285 Q260,260 285,220 Q310,175 340,145 Q360,125 388,110" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Points on curve -->
+  <circle cx="252" cy="278" r="5" fill="#2D5A8E"/>
+  <text x="265" y="278" font-size="8" fill="#2D5A8E">fully compressed</text>
+  <text x="265" y="289" font-size="8" fill="#6B5D4F">(T = const)</text>
+
+  <circle cx="340" cy="145" r="5" fill="#7C2530"/>
+  <text x="348" y="140" font-size="8" fill="#7C2530">sweet spot</text>
+
+  <circle cx="388" cy="110" r="5" fill="#5C3D1E"/>
+  <text x="350" y="107" font-size="8" fill="#5C3D1E">T = X</text>
+  <text x="350" y="118" font-size="8" fill="#6B5D4F">(no compression)</text>
+
+  <!-- Beta annotation -->
+  <text x="310" y="330" text-anchor="middle" font-size="9" fill="#5C3D1E">β controls tradeoff:</text>
+  <text x="310" y="344" text-anchor="middle" font-size="9" fill="#2D5A8E">β→0: max compress</text>
+  <text x="310" y="358" text-anchor="middle" font-size="9" fill="#7C2530">β→∞: keep all X</text>
+
+  <!-- Panel 3: The objective -->
+  <rect x="424" y="42" width="185" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="516" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">The Objective</text>
+
+  <!-- Objective box -->
+  <rect x="432" y="70" width="170" height="50" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="517" y="90" text-anchor="middle" font-size="10" fill="#2D5A8E">min I(T;X) − β·I(T;Y)</text>
+  <text x="517" y="108" text-anchor="middle" font-size="8" fill="#6B5D4F">over encoder p(t|x)</text>
+
+  <line x1="432" y1="133" x2="600" y2="133" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <!-- Three terms explained -->
+  <text x="436" y="150" font-size="9" fill="#7C2530">I(T;X) — complexity:</text>
+  <text x="436" y="165" font-size="9" fill="#5C3D1E">mutual info between T</text>
+  <text x="436" y="180" font-size="9" fill="#5C3D1E">and original input X</text>
+  <text x="436" y="195" font-size="8" fill="#6B5D4F">(minimize = compress)</text>
+
+  <line x1="432" y1="208" x2="600" y2="208" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="436" y="225" font-size="9" fill="#2D5A8E">I(T;Y) — relevance:</text>
+  <text x="436" y="240" font-size="9" fill="#5C3D1E">mutual info between T</text>
+  <text x="436" y="255" font-size="9" fill="#5C3D1E">and label Y</text>
+  <text x="436" y="270" font-size="8" fill="#6B5D4F">(maximize = useful)</text>
+
+  <line x1="432" y1="283" x2="600" y2="283" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="436" y="300" font-size="9" fill="#5C3D1E">β — Lagrange mult.:</text>
+  <text x="436" y="315" font-size="9" fill="#5C3D1E">rate-distortion dial</text>
+  <text x="436" y="330" font-size="8" fill="#6B5D4F">β=1: balanced</text>
+  <text x="436" y="345" font-size="8" fill="#6B5D4F">β large: keep relevance</text>
+
+  <!-- Panel 4: DNN connection -->
+  <rect x="622" y="42" width="163" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="703" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Deep Networks</text>
+
+  <!-- Layers as boxes getting smaller then larger -->
+  <rect x="638" y="76" width="130" height="22" fill="#2D5A8E" opacity="0.7" rx="2"/>
+  <text x="703" y="91" text-anchor="middle" font-size="9" fill="#FDFAF4">Input layer (X)</text>
+
+  <rect x="648" y="106" width="110" height="18" fill="#2D5A8E" opacity="0.55" rx="2"/>
+  <text x="703" y="119" text-anchor="middle" font-size="8" fill="#FDFAF4">Hidden 1</text>
+
+  <rect x="660" y="131" width="86" height="18" fill="#7C2530" opacity="0.7" rx="2"/>
+  <text x="703" y="144" text-anchor="middle" font-size="8" fill="#FDFAF4">Bottleneck T</text>
+
+  <rect x="648" y="156" width="110" height="18" fill="#2D5A8E" opacity="0.55" rx="2"/>
+  <text x="703" y="169" text-anchor="middle" font-size="8" fill="#FDFAF4">Hidden 3</text>
+
+  <rect x="638" y="181" width="130" height="22" fill="#5C3D1E" opacity="0.7" rx="2"/>
+  <text x="703" y="196" text-anchor="middle" font-size="9" fill="#FDFAF4">Output layer (Y)</text>
+
+  <line x1="638" y1="215" x2="778" y2="215" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="703" y="233" text-anchor="middle" font-size="9" fill="#5C3D1E">Tishby (2017):</text>
+  <text x="703" y="248" text-anchor="middle" font-size="9" fill="#5C3D1E">training has two phases</text>
+
+  <text x="703" y="268" text-anchor="middle" font-size="9" fill="#2D5A8E">1. Fitting:</text>
+  <text x="703" y="282" text-anchor="middle" font-size="8" fill="#6B5D4F">I(T;Y) increases</text>
+
+  <text x="703" y="300" text-anchor="middle" font-size="9" fill="#7C2530">2. Compression:</text>
+  <text x="703" y="314" text-anchor="middle" font-size="8" fill="#6B5D4F">I(T;X) decreases</text>
+
+  <text x="703" y="334" text-anchor="middle" font-size="8" fill="#6B5D4F">(debated in literature)</text>
+  <text x="703" y="348" text-anchor="middle" font-size="8" fill="#5C3D1E">→ generalization</text>
+
+  <!-- Footer -->
+  <text x="400" y="388" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">Information Bottleneck — balance compression of X with preservation of relevance for Y</text>
+</svg>

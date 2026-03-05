@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">From High-Dimensional Input to Low-Dimensional Representation</text>
+
+  <!-- === HIGH-DIM INPUT BOX === -->
+  <rect x="30" y="60" width="190" height="280" rx="8" fill="#e8f4fb" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="125" y="82" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#2C5F8A">high-dim input</text>
+
+  <!-- Many axes as short horizontal tick marks -->
+  <!-- axis 1 -->
+  <line x1="55"  y1="108" x2="195" y2="108" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="130" cy="108" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 2 -->
+  <line x1="55"  y1="133" x2="195" y2="133" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="88"  cy="133" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 3 -->
+  <line x1="55"  y1="158" x2="195" y2="158" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="162" cy="158" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 4 -->
+  <line x1="55"  y1="183" x2="195" y2="183" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="105" cy="183" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 5 -->
+  <line x1="55"  y1="208" x2="195" y2="208" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="150" cy="208" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 6 -->
+  <line x1="55"  y1="233" x2="195" y2="233" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="75"  cy="233" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 7 -->
+  <line x1="55"  y1="258" x2="195" y2="258" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="140" cy="258" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 8 -->
+  <line x1="55"  y1="283" x2="195" y2="283" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="100" cy="283" r="5" fill="#2C5F8A" opacity="0.85"/>
+  <!-- axis 9 -->
+  <line x1="55"  y1="308" x2="195" y2="308" stroke="#2C5F8A" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <circle cx="170" cy="308" r="5" fill="#2C5F8A" opacity="0.85"/>
+
+  <text x="125" y="358" text-anchor="middle" font-family="Arial" font-size="11" fill="#2C5F8A">d = 9 (or 9000)</text>
+  <text x="125" y="374" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">features per sample</text>
+
+  <!-- === ARROW 1: input → encoder === -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+  </defs>
+  <line x1="228" y1="200" x2="282" y2="200" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- === ENCODER BOX === -->
+  <rect x="288" y="130" width="130" height="140" rx="8" fill="#f0f8ec" stroke="#4A7C59" stroke-width="2"/>
+  <text x="353" y="154" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#4A7C59">encoder</text>
+  <!-- Funnel / stacked lines narrowing -->
+  <line x1="308" y1="174" x2="408" y2="174" stroke="#4A7C59" stroke-width="1.5" opacity="0.5"/>
+  <line x1="318" y1="191" x2="398" y2="191" stroke="#4A7C59" stroke-width="1.5" opacity="0.55"/>
+  <line x1="328" y1="208" x2="388" y2="208" stroke="#4A7C59" stroke-width="1.5" opacity="0.6"/>
+  <line x1="338" y1="225" x2="378" y2="225" stroke="#4A7C59" stroke-width="2"   opacity="0.65"/>
+  <line x1="343" y1="242" x2="373" y2="242" stroke="#4A7C59" stroke-width="2"   opacity="0.7"/>
+  <text x="353" y="262" text-anchor="middle" font-family="Arial" font-size="10" fill="#4A7C59">compresses info</text>
+
+  <!-- === ARROW 2: encoder → low-dim === -->
+  <line x1="426" y1="200" x2="480" y2="200" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- === LOW-DIM REPRESENTATION === -->
+  <!-- Manifold / embedding scatter -->
+  <rect x="488" y="60" width="285" height="280" rx="8" fill="#fef3ec" stroke="#E07B39" stroke-width="2"/>
+  <text x="630" y="82" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#E07B39">low-dim representation</text>
+
+  <!-- Axes z1, z2 -->
+  <line x1="510" y1="310" x2="760" y2="310" stroke="#E07B39" stroke-width="1.5"/>
+  <text x="763" y="314" font-family="Arial" font-size="11" fill="#E07B39">z₁</text>
+  <line x1="510" y1="310" x2="510" y2="95"  stroke="#E07B39" stroke-width="1.5"/>
+  <text x="504" y="91"  font-family="Arial" font-size="11" fill="#E07B39" text-anchor="end">z₂</text>
+
+  <!-- Manifold curve -->
+  <path d="M530,290 C570,250 600,230 640,200 S710,155 750,120"
+        stroke="#E07B39" stroke-width="2" fill="none" stroke-dasharray="5,3" opacity="0.6"/>
+
+  <!-- Scattered points near manifold -->
+  <circle cx="538" cy="284" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="558" cy="268" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="580" cy="252" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="608" cy="232" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="632" cy="215" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="656" cy="196" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="682" cy="178" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="710" cy="158" r="6" fill="#E07B39" opacity="0.9"/>
+  <circle cx="736" cy="138" r="6" fill="#E07B39" opacity="0.9"/>
+
+  <text x="630" y="358" text-anchor="middle" font-family="Arial" font-size="11" fill="#E07B39">k = 2 latent dimensions</text>
+  <text x="630" y="374" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">structure preserved on manifold</text>
+</svg>

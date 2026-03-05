@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">Instrumental Variables: Breaking Endogeneity</text>
+
+  <!-- Defs for arrows -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowDash" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Panel 1: Causal DAG -->
+  <rect x="15" y="50" width="340" height="175" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="185" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">CAUSAL STRUCTURE</text>
+
+  <!-- Instrument Z -->
+  <rect x="30" y="90" width="80" height="38" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="70" y="108" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Z</text>
+  <text x="70" y="122" text-anchor="middle" font-size="9" fill="#5C3D1E">Instrument</text>
+
+  <!-- Treatment X -->
+  <rect x="155" y="90" width="80" height="38" fill="#D8E5F0" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="195" y="108" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">X</text>
+  <text x="195" y="122" text-anchor="middle" font-size="9" fill="#2D5A8E">Treatment</text>
+
+  <!-- Outcome Y -->
+  <rect x="280" y="90" width="60" height="38" fill="#EDE5D8" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="310" y="108" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Y</text>
+  <text x="310" y="122" text-anchor="middle" font-size="9" fill="#2D5A8E">Outcome</text>
+
+  <!-- Confounder U -->
+  <ellipse cx="253" cy="175" rx="40" ry="22" fill="#F5E8E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="253" y="179" text-anchor="middle" font-size="10" fill="#7C2530">U (hidden)</text>
+
+  <!-- Arrows -->
+  <line x1="110" y1="109" x2="153" y2="109" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <line x1="235" y1="109" x2="278" y2="109" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- U to X -->
+  <line x1="224" y1="155" x2="207" y2="130" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <!-- U to Y -->
+  <line x1="270" y1="155" x2="315" y2="130" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <!-- Z does NOT connect to U -->
+  <text x="70" y="165" text-anchor="middle" font-size="9" fill="#5C3D1E">No path</text>
+  <text x="70" y="178" text-anchor="middle" font-size="9" fill="#5C3D1E">Z → U</text>
+  <text x="70" y="192" text-anchor="middle" font-size="9" fill="#5C3D1E">(exclusion)</text>
+
+  <!-- Panel 2: Three conditions -->
+  <rect x="15" y="238" width="340" height="145" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="185" y="258" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">THREE IV CONDITIONS</text>
+
+  <rect x="25" y="266" width="320" height="30" fill="#D8E5F0" stroke="#2D5A8E" stroke-width="0.8" rx="3"/>
+  <text x="35" y="280" font-size="10" font-weight="bold" fill="#2D5A8E">1. Relevance:</text>
+  <text x="130" y="280" font-size="10" fill="#2D2D2D">Z is correlated with X  (Z → X)</text>
+  <text x="35" y="293" font-size="9" fill="#5C3D1E">Testable: run first-stage regression, F-stat &gt; 10</text>
+
+  <rect x="25" y="300" width="320" height="30" fill="#EDE5D8" stroke="#C4A87A" stroke-width="0.8" rx="3"/>
+  <text x="35" y="314" font-size="10" font-weight="bold" fill="#5C3D1E">2. Exclusion:</text>
+  <text x="118" y="314" font-size="10" fill="#2D2D2D">Z affects Y //only// through X</text>
+  <text x="35" y="327" font-size="9" fill="#5C3D1E">Untestable — requires domain argument</text>
+
+  <rect x="25" y="334" width="320" height="30" fill="#F5E8E8" stroke="#7C2530" stroke-width="0.8" rx="3"/>
+  <text x="35" y="348" font-size="10" font-weight="bold" fill="#7C2530">3. Independence:</text>
+  <text x="145" y="348" font-size="10" fill="#2D2D2D">Z ⊥ U (no confounders of Z)</text>
+  <text x="35" y="361" font-size="9" fill="#5C3D1E">Randomized or "as-good-as-random" instrument</text>
+
+  <!-- Panel 3: 2SLS and examples -->
+  <rect x="370" y="50" width="415" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="577" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">2SLS PROCEDURE &amp; EXAMPLES</text>
+
+  <!-- 2SLS steps -->
+  <rect x="382" y="80" width="390" height="88" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="577" y="97" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Two-Stage Least Squares (2SLS)</text>
+  <text x="390" y="115" font-size="9.5" fill="#2D2D2D">Stage 1:  Regress X on Z  →  get predicted X̂</text>
+  <text x="410" y="130" font-size="9" fill="#5C3D1E">(extracts only the variation in X caused by Z)</text>
+  <text x="390" y="148" font-size="9.5" fill="#2D2D2D">Stage 2:  Regress Y on X̂  →  get causal β̂</text>
+  <text x="410" y="163" font-size="9" fill="#5C3D1E">(X̂ is orthogonal to U by construction)</text>
+
+  <!-- Examples -->
+  <text x="577" y="190" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">CLASSIC INSTRUMENTS</text>
+
+  <rect x="382" y="198" width="186" height="72" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="475" y="214" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Draft Lottery</text>
+  <text x="390" y="230" font-size="9" fill="#2D2D2D">Z: lottery number</text>
+  <text x="390" y="245" font-size="9" fill="#2D2D2D">X: Vietnam service</text>
+  <text x="390" y="260" font-size="9" fill="#2D2D2D">Y: lifetime earnings</text>
+
+  <rect x="576" y="198" width="186" height="72" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="669" y="214" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Mendelian Rand.</text>
+  <text x="584" y="230" font-size="9" fill="#2D2D2D">Z: genetic variant</text>
+  <text x="584" y="245" font-size="9" fill="#2D2D2D">X: LDL cholesterol</text>
+  <text x="584" y="260" font-size="9" fill="#2D2D2D">Y: heart disease risk</text>
+
+  <!-- LATE note -->
+  <rect x="382" y="280" width="390" height="78" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="577" y="298" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">LATE vs ATE</text>
+  <text x="390" y="316" font-size="9.5" fill="#2D2D2D">IV estimates LATE: Local Average Treatment Effect</text>
+  <text x="390" y="332" font-size="9.5" fill="#2D2D2D">= effect on //compliers// (those moved by Z)</text>
+  <text x="390" y="348" font-size="9.5" fill="#7C2530">Not necessarily the same as ATE for all units</text>
+</svg>

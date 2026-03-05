@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="mdp-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="mdp-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <!-- Arrowhead for grid policy arrows -->
+    <marker id="mdp-policy" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ LEFT PANEL: MDP COMPONENTS ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">MDP COMPONENTS</text>
+
+  <!-- State nodes arranged in a square pattern -->
+  <!-- S0: top-left ~(75, 88) -->
+  <!-- S1: top-right ~(210, 88) -->
+  <!-- S2: bottom-right ~(210, 198) — goal, dark red -->
+  <!-- S3: bottom-left ~(75, 198) — terminal, dashed -->
+
+  <!-- S0 -->
+  <circle cx="75"  cy="88"  r="28" fill="#E9DEC5" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="75"  y="84"  text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">S₀</text>
+  <text x="75"  y="98"  text-anchor="middle" font-size="8"  fill="#6B5D4F">start</text>
+
+  <!-- S1 -->
+  <circle cx="212" cy="88"  r="28" fill="#E9DEC5" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="212" y="84"  text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">S₁</text>
+  <text x="212" y="98"  text-anchor="middle" font-size="8"  fill="#6B5D4F">state 1</text>
+
+  <!-- S2 (goal state, dark red) -->
+  <circle cx="212" cy="198" r="28" fill="#F5DDE0" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="212" y="194" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">S₂</text>
+  <text x="212" y="208" text-anchor="middle" font-size="8"  fill="#7C2530">goal</text>
+
+  <!-- S3 (terminal, dashed border) -->
+  <circle cx="75"  cy="198" r="28" fill="#F2EAD8" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="75"  y="194" text-anchor="middle" font-size="11" fill="#6B5D4F" font-weight="bold">S₃</text>
+  <text x="75"  y="208" text-anchor="middle" font-size="8"  fill="#6B5D4F">terminal</text>
+
+  <!-- Transitions from S0 -->
+  <!-- S0 -> S1, action a₀, reward r=+1 -->
+  <line x1="103" y1="78" x2="184" y2="78" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mdp-arr)"/>
+  <text x="143" y="72" text-anchor="middle" font-size="8" fill="#5C3D1E">a₀</text>
+  <text x="143" y="63" text-anchor="middle" font-size="7.5" fill="#2D5A8E">r=+1</text>
+  <!-- P(s'|s,a) label on this transition -->
+  <text x="143" y="86" text-anchor="middle" font-size="7" fill="#C4A87A" font-style="italic">P(s′|s,a)</text>
+
+  <!-- S0 -> S2, action a₁, reward r=0 -->
+  <line x1="97"  y1="110" x2="187" y2="175" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mdp-arr)"/>
+  <text x="138" y="148" font-size="8" fill="#5C3D1E">a₁</text>
+  <text x="150" y="140" font-size="7.5" fill="#2D5A8E">r=0</text>
+
+  <!-- S1 -> S2, action a₀, reward r=+1 -->
+  <line x1="212" y1="116" x2="212" y2="170" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mdp-arr)"/>
+  <text x="218" y="148" font-size="8" fill="#5C3D1E">a₀</text>
+  <text x="228" y="140" font-size="7.5" fill="#2D5A8E">r=+1</text>
+
+  <!-- S1 -> S3, action a₁, reward r=-1 -->
+  <line x1="185" y1="99" x2="103" y2="180" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mdp-arr)"/>
+  <text x="136" y="148" font-size="8" fill="#5C3D1E">  a₁</text>
+  <text x="120" y="155" font-size="7.5" fill="#C04040">r=-1</text>
+
+  <!-- S3 -> S0 self/loop, action a₀, reward r=0 -->
+  <path d="M58,174 Q30,155 47,112 Q60,90 47,88" fill="none" stroke="#5C3D1E" stroke-width="1.3" stroke-dasharray="3,2" marker-end="url(#mdp-arr)"/>
+  <text x="22" y="140" font-size="7.5" fill="#6B5D4F">a₀</text>
+  <text x="16" y="150" font-size="7" fill="#2D5A8E">r=0</text>
+
+  <!-- gamma label -->
+  <text x="145" y="248" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">γ = 0.9   discount factor</text>
+
+  <!-- ══ RIGHT PANEL: VALUE FUNCTION ══ -->
+  <text x="443" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">VALUE FUNCTION</text>
+
+  <!-- 4x4 grid world -->
+  <!-- Grid origin: x=305, y=34; cell size=50x50 -->
+  <!-- Columns: 305,355,405,455; Rows: 34,84,134,184 -->
+
+  <!-- Value colors: V=10 (goal) darkest red, V=8 dark, V=5 medium, V=2 light, V=0 cream -->
+  <!-- Row 0 (top): V~1, V~2, V~4, V~7 -->
+  <!-- Row 1: V~2, V~4, V~6, V~8 -->
+  <!-- Row 2: V~1, obstacle, V~7, V~9 -->
+  <!-- Row 3 (bottom): V~1, V~2, V~5, V=10 (goal) -->
+
+  <!-- Cell fill values via color -->
+  <!-- Row 0 -->
+  <rect x="305" y="34"  width="50" height="50" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="355" y="34"  width="50" height="50" fill="#EEE0C8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="405" y="34"  width="50" height="50" fill="#E0C8A8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="455" y="34"  width="50" height="50" fill="#CC9898" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Row 1 -->
+  <rect x="305" y="84"  width="50" height="50" fill="#EEE0C8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="355" y="84"  width="50" height="50" fill="#E0C8A8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="405" y="84"  width="50" height="50" fill="#CC9898" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="455" y="84"  width="50" height="50" fill="#B87070" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Row 2 -->
+  <rect x="305" y="134" width="50" height="50" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Obstacle cell -->
+  <rect x="355" y="134" width="50" height="50" fill="#666666" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="380" y="163" text-anchor="middle" font-size="8" fill="#FFFFFF">block</text>
+  <rect x="405" y="134" width="50" height="50" fill="#CC9898" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="455" y="134" width="50" height="50" fill="#A04848" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Row 3 (bottom) -->
+  <rect x="305" y="184" width="50" height="50" fill="#EEE0C8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="355" y="184" width="50" height="50" fill="#E0C8A8" stroke="#D4C5A9" stroke-width="0.8"/>
+  <rect x="405" y="184" width="50" height="50" fill="#B87070" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Goal cell (darkest red) -->
+  <rect x="455" y="184" width="50" height="50" fill="#7C2530" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="480" y="208" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="bold">V=10</text>
+
+  <!-- Value labels in cells (small) -->
+  <text x="330" y="56"  text-anchor="middle" font-size="8" fill="#5C3D1E">V=1</text>
+  <text x="380" y="56"  text-anchor="middle" font-size="8" fill="#5C3D1E">V=2</text>
+  <text x="430" y="56"  text-anchor="middle" font-size="8" fill="#5C3D1E">V=4</text>
+  <text x="480" y="56"  text-anchor="middle" font-size="8" fill="#5C3D1E">V=7</text>
+  <text x="330" y="106" text-anchor="middle" font-size="8" fill="#5C3D1E">V=2</text>
+  <text x="380" y="106" text-anchor="middle" font-size="8" fill="#5C3D1E">V=4</text>
+  <text x="430" y="106" text-anchor="middle" font-size="8" fill="#5C3D1E">V=6</text>
+  <text x="480" y="106" text-anchor="middle" font-size="8" fill="#FFFFFF">V=8</text>
+  <text x="330" y="156" text-anchor="middle" font-size="8" fill="#5C3D1E">V=1</text>
+  <text x="430" y="156" text-anchor="middle" font-size="8" fill="#5C3D1E">V=7</text>
+  <text x="480" y="156" text-anchor="middle" font-size="8" fill="#FFFFFF">V=9</text>
+  <text x="330" y="206" text-anchor="middle" font-size="8" fill="#5C3D1E">V=1</text>
+  <text x="380" y="206" text-anchor="middle" font-size="8" fill="#5C3D1E">V=2</text>
+  <text x="430" y="206" text-anchor="middle" font-size="8" fill="#FFFFFF">V=5</text>
+
+  <!-- Policy arrows in each non-obstacle, non-goal cell -->
+  <!-- Row 0: right, right, right, down -->
+  <!-- (330,59): right -->
+  <line x1="326" y1="66" x2="338" y2="66" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <!-- (380,59): right -->
+  <line x1="376" y1="66" x2="388" y2="66" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <!-- (430,59): right -->
+  <line x1="426" y1="66" x2="438" y2="66" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <!-- (480,59): down -->
+  <line x1="480" y1="62" x2="480" y2="74" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+
+  <!-- Row 1: right, right, right, down -->
+  <line x1="326" y1="116" x2="338" y2="116" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="376" y1="116" x2="388" y2="116" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="426" y1="116" x2="438" y2="116" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="480" y1="112" x2="480" y2="124" stroke="#FFFFFF" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+
+  <!-- Row 2: down, (obstacle), right, down -->
+  <line x1="330" y1="152" x2="330" y2="164" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="426" y1="152" x2="438" y2="152" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="480" y1="152" x2="480" y2="164" stroke="#FFFFFF" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+
+  <!-- Row 3: right, right, right (goal cell has no arrow) -->
+  <line x1="326" y1="216" x2="338" y2="216" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="376" y1="216" x2="388" y2="216" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+  <line x1="426" y1="216" x2="438" y2="216" stroke="#FFFFFF" stroke-width="1.2" marker-end="url(#mdp-policy)"/>
+
+  <!-- Legend below grid -->
+  <text x="443" y="252" text-anchor="middle" font-size="8.5" fill="#5C3D1E">V*(s) = optimal value function</text>
+  <text x="443" y="266" text-anchor="middle" font-size="8.5" fill="#5C3D1E">π*(s) = optimal policy arrows</text>
+  <!-- Color scale hint -->
+  <rect x="310" y="274" width="14" height="8" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="324" y="274" width="14" height="8" fill="#CC9898" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="338" y="274" width="14" height="8" fill="#A04848" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="352" y="274" width="14" height="8" fill="#7C2530" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="310" y="291" font-size="7" fill="#6B5D4F">low V</text>
+  <text x="358" y="291" font-size="7" fill="#6B5D4F">high V</text>
+</svg>

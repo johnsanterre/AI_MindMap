@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#7C2530" text-anchor="middle">Continual Learning: The Catastrophic Forgetting Problem</text>
+
+  <!-- Timeline arrow -->
+  <line x1="60" y1="200" x2="740" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowbrown)"/>
+  <text x="760" y="204" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">time</text>
+
+  <!-- Task 1 block -->
+  <rect x="80" y="130" width="140" height="60" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="150" y="156" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task 1</text>
+  <text x="150" y="174" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Digits 0–4</text>
+  <line x1="150" y1="190" x2="150" y2="200" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- Task 2 block -->
+  <rect x="310" y="130" width="140" height="60" rx="8" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="380" y="156" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task 2</text>
+  <text x="380" y="174" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Digits 5–9</text>
+  <line x1="380" y1="190" x2="380" y2="200" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Task 3 block -->
+  <rect x="540" y="130" width="140" height="60" rx="8" fill="#5C3D1E" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="610" y="156" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task 3</text>
+  <text x="610" y="174" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Fashion items</text>
+  <line x1="610" y1="190" x2="610" y2="200" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Accuracy bars below timeline -->
+  <!-- Task 1 accuracy after each stage -->
+  <text x="150" y="230" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Task 1 acc.</text>
+  <rect x="110" y="240" width="80" height="16" rx="3" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1"/>
+  <rect x="110" y="240" width="80" height="16" rx="3" fill="#2D5A8E"/>
+  <text x="150" y="252" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">98%</text>
+
+  <rect x="340" y="240" width="80" height="16" rx="3" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1"/>
+  <rect x="340" y="240" width="56" height="16" rx="3" fill="#2D5A8E" opacity="0.5"/>
+  <text x="380" y="252" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">70%</text>
+
+  <rect x="570" y="240" width="80" height="16" rx="3" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1"/>
+  <rect x="570" y="240" width="20" height="16" rx="3" fill="#7C2530"/>
+  <text x="610" y="252" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">25% !</text>
+
+  <text x="400" y="278" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#7C2530" text-anchor="middle">Catastrophic Forgetting: new training overwrites old weights</text>
+
+  <!-- Solutions row -->
+  <text x="400" y="308" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Mitigation strategies:</text>
+
+  <rect x="60" y="318" width="170" height="34" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="145" y="333" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Elastic Weight</text>
+  <text x="145" y="347" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Consolidation (EWC)</text>
+
+  <rect x="315" y="318" width="170" height="34" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="400" y="333" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Progressive</text>
+  <text x="400" y="347" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Neural Networks</text>
+
+  <rect x="570" y="318" width="170" height="34" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="655" y="333" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Experience</text>
+  <text x="655" y="347" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Replay</text>
+
+  <defs>
+    <marker id="arrowbrown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

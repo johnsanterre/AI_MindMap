@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <!-- Standard basis arrow marker (blue) -->
+    <marker id="arr-blue" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4a90d9"/>
+    </marker>
+    <!-- Rotated basis arrow marker (orange) -->
+    <marker id="arr-orange" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#e67e22"/>
+    </marker>
+    <!-- Vector arrow marker (purple) -->
+    <marker id="arr-purple" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7b2d8b"/>
+    </marker>
+    <!-- Grid axis marker (gray) -->
+    <marker id="arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#aaa"/>
+    </marker>
+    <!-- Rotated basis arrow marker (teal) -->
+    <marker id="arr-teal" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2a9d8f"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="400" fill="#fafafa"/>
+
+  <!-- ===== TITLE ===== -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#222">Change of Basis: One Vector, Two Descriptions</text>
+
+  <!-- ================================================================ -->
+  <!-- LEFT PANEL: Standard Basis -->
+  <!-- ================================================================ -->
+  <text x="185" y="62" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Standard Basis  {e₁, e₂}</text>
+
+  <!-- Grid lines (light) -->
+  <g stroke="#ddd" stroke-width="1">
+    <!-- horizontal grid -->
+    <line x1="55" y1="110" x2="315" y2="110"/>
+    <line x1="55" y1="150" x2="315" y2="150"/>
+    <line x1="55" y1="190" x2="315" y2="190"/>
+    <line x1="55" y1="270" x2="315" y2="270"/>
+    <line x1="55" y1="310" x2="315" y2="310"/>
+    <!-- vertical grid -->
+    <line x1="95"  y1="75" x2="95"  y2="345"/>
+    <line x1="135" y1="75" x2="135" y2="345"/>
+    <line x1="215" y1="75" x2="215" y2="345"/>
+    <line x1="255" y1="75" x2="255" y2="345"/>
+    <line x1="295" y1="75" x2="295" y2="345"/>
+  </g>
+
+  <!-- Origin for left panel -->
+  <!-- cx=175, cy=230 -->
+
+  <!-- Axes -->
+  <line x1="55" y1="230" x2="315" y2="230" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+  <line x1="175" y1="345" x2="175" y2="75" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+  <text x="318" y="234" font-family="Arial" font-size="12" fill="#888">x</text>
+  <text x="178" y="72" font-family="Arial" font-size="12" fill="#888">y</text>
+
+  <!-- Standard basis vectors e1, e2 -->
+  <!-- e1: right 40px = 1 unit -->
+  <line x1="175" y1="230" x2="213" y2="230" stroke="#4a90d9" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <text x="216" y="244" font-family="Arial" font-size="12" fill="#4a90d9" font-style="italic">e₁</text>
+  <!-- e2: up 40px = 1 unit -->
+  <line x1="175" y1="230" x2="175" y2="192" stroke="#4a90d9" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <text x="179" y="188" font-family="Arial" font-size="12" fill="#4a90d9" font-style="italic">e₂</text>
+
+  <!-- The vector v: coordinates (2, 2) in standard basis → 80px right, 80px up -->
+  <!-- end point: (175+80, 230-80) = (255, 150) -->
+  <line x1="175" y1="230" x2="252" y2="153" stroke="#7b2d8b" stroke-width="3" marker-end="url(#arr-purple)"/>
+  <text x="258" y="148" font-family="Arial" font-size="13" font-weight="bold" fill="#7b2d8b" font-style="italic">v</text>
+
+  <!-- Dashed projection lines for standard coords -->
+  <line x1="255" y1="150" x2="255" y2="230" stroke="#7b2d8b" stroke-width="1.2" stroke-dasharray="5,4" opacity="0.5"/>
+  <line x1="175" y1="150" x2="255" y2="150" stroke="#7b2d8b" stroke-width="1.2" stroke-dasharray="5,4" opacity="0.5"/>
+
+  <!-- Coordinate labels -->
+  <text x="215" y="246" font-family="Arial" font-size="11" fill="#7b2d8b">2</text>
+  <text x="158" y="192" font-family="Arial" font-size="11" fill="#7b2d8b">2</text>
+
+  <!-- Coordinates box -->
+  <rect x="60" y="340" width="135" height="22" rx="4" fill="#ede9f8" stroke="#7b2d8b" stroke-width="1"/>
+  <text x="127" y="355" text-anchor="middle" font-family="Arial" font-size="12" fill="#7b2d8b">[v]_e = (2, 2)</text>
+
+  <!-- ================================================================ -->
+  <!-- CENTER: Transformation arrow + matrix P -->
+  <!-- ================================================================ -->
+  <text x="400" y="185" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">change of basis</text>
+  <!-- Arrow right -->
+  <line x1="345" y1="200" x2="455" y2="200" stroke="#555" stroke-width="1.8" marker-end="url(#arr-gray)"/>
+  <!-- Arrow left -->
+  <line x1="455" y1="218" x2="345" y2="218" stroke="#555" stroke-width="1.8" marker-end="url(#arr-gray)"/>
+  <text x="400" y="238" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">P⁻¹</text>
+
+  <!-- Matrix P display -->
+  <text x="400" y="162" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">P</text>
+  <!-- Matrix bracket lines -->
+  <line x1="355" y1="268" x2="350" y2="268" stroke="#333" stroke-width="1.5"/>
+  <line x1="350" y1="268" x2="350" y2="318" stroke="#333" stroke-width="1.5"/>
+  <line x1="350" y1="318" x2="355" y2="318" stroke="#333" stroke-width="1.5"/>
+  <line x1="445" y1="268" x2="450" y2="268" stroke="#333" stroke-width="1.5"/>
+  <line x1="450" y1="268" x2="450" y2="318" stroke="#333" stroke-width="1.5"/>
+  <line x1="450" y1="318" x2="445" y2="318" stroke="#333" stroke-width="1.5"/>
+  <!-- Matrix entries: columns are basis vectors b1=(cos45,sin45), b2=(-sin45,cos45) -->
+  <!-- cos45 ≈ 0.71, sin45 ≈ 0.71 -->
+  <text x="375" y="288" text-anchor="middle" font-family="Arial" font-size="12" fill="#2a9d8f">0.71</text>
+  <text x="425" y="288" text-anchor="middle" font-family="Arial" font-size="12" fill="#2a9d8f">−0.71</text>
+  <text x="375" y="308" text-anchor="middle" font-family="Arial" font-size="12" fill="#2a9d8f">0.71</text>
+  <text x="425" y="308" text-anchor="middle" font-family="Arial" font-size="12" fill="#2a9d8f">0.71</text>
+  <text x="400" y="258" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">(columns = new basis vectors)</text>
+  <text x="400" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">45° rotation</text>
+
+  <!-- ================================================================ -->
+  <!-- RIGHT PANEL: Rotated Basis -->
+  <!-- ================================================================ -->
+  <text x="615" y="62" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Rotated Basis  {b₁, b₂}</text>
+
+  <!-- Origin for right panel: cx=615, cy=230 -->
+
+  <!-- Rotated grid lines at 45°: draw faint rotated grid -->
+  <g stroke="#dde" stroke-width="1" opacity="0.7">
+    <!-- Lines parallel to b1 (45° direction) -->
+    <line x1="487" y1="174" x2="715" y2="174" transform="rotate(45 615 230)"/>
+    <line x1="487" y1="214" x2="715" y2="214" transform="rotate(45 615 230)"/>
+    <line x1="487" y1="246" x2="715" y2="246" transform="rotate(45 615 230)"/>
+    <line x1="487" y1="286" x2="715" y2="286" transform="rotate(45 615 230)"/>
+    <!-- Lines parallel to b2 (135° direction) -->
+    <line x1="575" y1="90" x2="575" y2="350" transform="rotate(45 615 230)"/>
+    <line x1="615" y1="90" x2="615" y2="350" transform="rotate(45 615 230)"/>
+    <line x1="655" y1="90" x2="655" y2="350" transform="rotate(45 615 230)"/>
+  </g>
+
+  <!-- Standard axes (light gray reference) -->
+  <line x1="485" y1="230" x2="745" y2="230" stroke="#ccc" stroke-width="1"/>
+  <line x1="615" y1="345" x2="615" y2="75" stroke="#ccc" stroke-width="1"/>
+
+  <!-- Rotated basis vectors b1, b2 at 45° -->
+  <!-- b1: 45° direction, length 40px → (+28.3, -28.3) -->
+  <line x1="615" y1="230" x2="652" y2="193" stroke="#2a9d8f" stroke-width="2.5" marker-end="url(#arr-teal)"/>
+  <text x="657" y="190" font-family="Arial" font-size="12" fill="#2a9d8f" font-style="italic">b₁</text>
+  <!-- b2: 135° direction, length 40px → (-28.3, -28.3) -->
+  <line x1="615" y1="230" x2="578" y2="193" stroke="#2a9d8f" stroke-width="2.5" marker-end="url(#arr-teal)"/>
+  <text x="558" y="190" font-family="Arial" font-size="12" fill="#2a9d8f" font-style="italic">b₂</text>
+
+  <!-- The same vector v in rotated basis coordinates -->
+  <!-- v = (2,2) in standard. In rotated basis (45° rotation), the new coords are:
+       [v]_b = P⁻¹ [v]_e = P^T [v]_e (since P is orthogonal)
+       P^T * (2,2) = (0.71*2 + 0.71*2, -0.71*2 + 0.71*2) = (2.83, 0)
+       So v = 2.83 * b1 + 0 * b2
+       In SVG: b1 direction is (1/√2, -1/√2) per unit.
+       2.83 units along b1 at 40px/unit → 2.83*40 = 113px along (1/√2,-1/√2)
+       → endpoint: (615 + 113/√2, 230 - 113/√2) = (615+80, 230-80) = (695, 150)
+  -->
+  <line x1="615" y1="230" x2="692" y2="153" stroke="#7b2d8b" stroke-width="3" marker-end="url(#arr-purple)"/>
+  <text x="697" y="148" font-family="Arial" font-size="13" font-weight="bold" fill="#7b2d8b" font-style="italic">v</text>
+
+  <!-- Dashed projection onto b1 axis (along 45° direction) -->
+  <!-- The projection foot is the endpoint itself since b2 coord = 0 -->
+  <!-- Show the b1 component along rotated axis -->
+  <line x1="615" y1="230" x2="692" y2="153" stroke="#7b2d8b" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.4"/>
+
+  <!-- Coord label along b1 -->
+  <text x="660" y="205" font-family="Arial" font-size="11" fill="#7b2d8b" transform="rotate(-45 650 205)">2.83</text>
+  <!-- b2 component label: 0 -->
+  <text x="593" y="215" font-family="Arial" font-size="11" fill="#7b2d8b">0</text>
+
+  <!-- Origin dot, both panels -->
+  <circle cx="175" cy="230" r="4" fill="#555"/>
+  <circle cx="615" cy="230" r="4" fill="#555"/>
+
+  <!-- Coordinates box right -->
+  <rect x="490" y="340" width="155" height="22" rx="4" fill="#e0f5f3" stroke="#2a9d8f" stroke-width="1"/>
+  <text x="567" y="355" text-anchor="middle" font-family="Arial" font-size="12" fill="#2a9d8f">[v]_b = (2.83, 0)</text>
+
+  <!-- Caption -->
+  <text x="400" y="390" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Same vector v — different numbers depending on which basis you use to describe it</text>
+</svg>

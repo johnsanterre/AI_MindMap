@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Spectral Normalization</text>
+  <!-- Singular values diagram -->
+  <text x="200" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Weight Matrix Singular Values</text>
+  <rect x="40" y="90" width="320" height="220" rx="8" fill="#f8f8f8" stroke="#ccc" stroke-width="1.5"/>
+  <!-- Bars for singular values before -->
+  <text x="90" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#e74c3c">Before SN</text>
+  <rect x="60" y="130" width="30" height="150" rx="3" fill="#e74c3c" opacity="0.7"/>
+  <rect x="100" y="190" width="30" height="90" rx="3" fill="#e74c3c" opacity="0.7"/>
+  <rect x="140" y="240" width="30" height="40" rx="3" fill="#e74c3c" opacity="0.7"/>
+  <rect x="180" y="260" width="30" height="20" rx="3" fill="#e74c3c" opacity="0.7"/>
+  <text x="75" y="126" font-family="Arial" font-size="10" fill="#e74c3c">σ₁=8</text>
+  <!-- After SN bars -->
+  <text x="290" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#27ae60">After SN</text>
+  <rect x="260" y="205" width="30" height="75" rx="3" fill="#27ae60" opacity="0.7"/>
+  <rect x="300" y="235" width="30" height="45" rx="3" fill="#27ae60" opacity="0.7"/>
+  <rect x="260" y="200" width="30" height="3" fill="#27ae60"/>
+  <text x="275" y="197" font-family="Arial" font-size="10" fill="#27ae60">σ₁=1</text>
+  <!-- Formula box -->
+  <rect x="400" y="90" width="360" height="220" rx="10" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
+  <text x="580" y="118" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Spectral Normalization</text>
+  <text x="580" y="150" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">W̄ = W / σ(W)</text>
+  <text x="580" y="175" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">σ(W) = largest singular value</text>
+  <line x1="410" y1="190" x2="750" y2="190" stroke="#ddd" stroke-width="1"/>
+  <text x="580" y="215" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Constrains Lipschitz constant ≤ 1</text>
+  <text x="580" y="238" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Stabilizes GAN discriminator training</text>
+  <text x="580" y="261" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Prevents gradient explosion</text>
+  <text x="580" y="285" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Power iteration approximates σ(W) cheaply</text>
+  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Used in GANs, normalizing flows — controls how much a layer can amplify inputs</text>
+</svg>

@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" font-family="Georgia,serif">
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- LEFT PANEL: Bootstrap Sampling -->
+  <text x="145" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">BOOTSTRAP SAMPLING</text>
+
+  <!-- Full Dataset box -->
+  <rect x="95" y="38" width="110" height="35" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="150" y="53" font-size="9" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Dataset</text>
+  <text x="150" y="65" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">(n samples)</text>
+
+  <!-- Arrows from dataset to 3 bootstrap samples -->
+  <line x1="118" y1="73" x2="68" y2="108" stroke="#C4A87A" stroke-width="1.2"/>
+  <polygon points="66,102 65,110 72,106" fill="#C4A87A"/>
+  <line x1="150" y1="73" x2="150" y2="108" stroke="#C4A87A" stroke-width="1.2"/>
+  <polygon points="147,106 150,113 153,106" fill="#C4A87A"/>
+  <line x1="182" y1="73" x2="232" y2="108" stroke="#C4A87A" stroke-width="1.2"/>
+  <polygon points="228,102 235,106 229,110" fill="#C4A87A"/>
+
+  <!-- ~63% note -->
+  <text x="150" y="95" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">~63% unique</text>
+
+  <!-- Bootstrap Sample boxes -->
+  <rect x="33" y="110" width="72" height="28" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="69" y="128" font-size="8.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">Sample 1*</text>
+
+  <rect x="115" y="110" width="72" height="28" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="151" y="128" font-size="8.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">Sample 2*</text>
+
+  <rect x="197" y="110" width="72" height="28" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="233" y="128" font-size="8.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">Sample 3*</text>
+
+  <!-- Arrows from samples to trees -->
+  <line x1="69" y1="138" x2="69" y2="178" stroke="#C4A87A" stroke-width="1.2"/>
+  <polygon points="66,176 69,183 72,176" fill="#C4A87A"/>
+  <line x1="151" y1="138" x2="151" y2="178" stroke="#C4A87A" stroke-width="1.2"/>
+  <polygon points="148,176 151,183 154,176" fill="#C4A87A"/>
+  <line x1="233" y1="138" x2="233" y2="178" stroke="#C4A87A" stroke-width="1.2"/>
+  <polygon points="230,176 233,183 236,176" fill="#C4A87A"/>
+
+  <!-- Tree boxes -->
+  <rect x="40" y="183" width="60" height="35" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="70" y="198" font-size="9" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Tree 1</text>
+  <text x="70" y="211" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">depth d</text>
+
+  <rect x="121" y="183" width="60" height="35" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="151" y="198" font-size="9" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Tree 2</text>
+  <text x="151" y="211" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">depth d</text>
+
+  <rect x="203" y="183" width="60" height="35" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="233" y="198" font-size="9" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Tree 3</text>
+  <text x="233" y="211" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">depth d</text>
+
+  <!-- Arrows from trees to aggregate -->
+  <line x1="70" y1="218" x2="130" y2="246" stroke="#7C2530" stroke-width="1.2"/>
+  <polygon points="127,241 132,248 125,248" fill="#7C2530"/>
+  <line x1="151" y1="218" x2="151" y2="246" stroke="#7C2530" stroke-width="1.2"/>
+  <polygon points="148,244 151,251 154,244" fill="#7C2530"/>
+  <line x1="233" y1="218" x2="172" y2="246" stroke="#7C2530" stroke-width="1.2"/>
+  <polygon points="175,241 169,248 176,248" fill="#7C2530"/>
+
+  <!-- Aggregate box -->
+  <rect x="91" y="251" width="120" height="30" fill="#7C2530" stroke="#5C3D1E" stroke-width="1" rx="4"/>
+  <text x="151" y="270" font-size="10" fill="white" text-anchor="middle" font-family="Georgia,serif">Aggregate</text>
+
+  <!-- RIGHT PANEL: Feature Randomness -->
+  <text x="446" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">FEATURE RANDOMNESS</text>
+
+  <!-- Root node -->
+  <circle cx="446" cy="62" r="26" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="446" y="58" font-size="7.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">best of</text>
+  <text x="446" y="70" font-size="7.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">m features</text>
+
+  <!-- Lines root to children -->
+  <line x1="425" y1="83" x2="382" y2="120" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="467" y1="83" x2="510" y2="120" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Child nodes -->
+  <circle cx="374" cy="135" r="20" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="374" y="132" font-size="7" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">pick m</text>
+  <text x="374" y="142" font-size="7" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">of p</text>
+
+  <circle cx="518" cy="135" r="20" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="518" y="132" font-size="7" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">pick m</text>
+  <text x="518" y="142" font-size="7" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">of p</text>
+
+  <!-- Lines children to leaves -->
+  <line x1="360" y1="152" x2="335" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="388" y1="152" x2="413" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="504" y1="152" x2="479" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="532" y1="152" x2="557" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Leaf nodes -->
+  <circle cx="328" cy="200" r="14" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="328" y="204" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">leaf</text>
+
+  <circle cx="420" cy="200" r="14" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="420" y="204" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">leaf</text>
+
+  <circle cx="476" cy="200" r="14" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="476" y="204" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">leaf</text>
+
+  <circle cx="564" cy="200" r="14" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="564" y="204" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">leaf</text>
+
+  <!-- Feature pool box -->
+  <rect x="310" y="33" width="58" height="22" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1" rx="3"/>
+  <text x="339" y="44" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">f₁ f₂ ~~f₃~~ fₚ</text>
+  <text x="339" y="55" font-size="7" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">all p features</text>
+
+  <!-- Dashed arrow from feature pool to root -->
+  <line x1="368" y1="44" x2="418" y2="55" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <polygon points="416,51 421,57 414,58" fill="#C4A87A"/>
+
+  <!-- Bottom label -->
+  <text x="446" y="235" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">At each split: consider only m = √p random features</text>
+
+  <!-- Caption -->
+  <text x="300" y="302" font-size="9.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Two sources of randomness — bootstrap samples + random feature subsets — give uncorrelated trees that combine into a powerful ensemble</text>
+</svg>

@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#444"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#27ae60"/>
+    </marker>
+    <clipPath id="lp-clip">
+      <rect x="48" y="18" width="360" height="290"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#f8f9fa" rx="8"/>
+
+  <!-- ── LEFT PANEL: LP Feasible Region ── -->
+  <rect x="30" y="10" width="390" height="310" fill="#fff" stroke="#ddd" stroke-width="1" rx="6"/>
+  <text x="225" y="32" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#333">Linear Programming</text>
+
+  <!-- Plot area -->
+  <rect x="48" y="40" width="360" height="270" fill="#fff" stroke="#e0e0e0" stroke-width="1" clip-path="url(#lp-clip)"/>
+
+  <!-- Feasible region polygon
+       Scale: 40px per unit, origin at (48, 310)
+       Constraints: x1+2x2<=8, 3x1+2x2<=12, x1>=0, x2>=0
+       Vertices: (0,0)->(48,310)  (4,0)->(208,310)  (2,3)->(128,190)  (0,4)->(48,150)
+  -->
+  <polygon points="48,310 208,310 128,190 48,150"
+           fill="#4a90d9" fill-opacity="0.20"
+           stroke="none" clip-path="url(#lp-clip)"/>
+
+  <!-- Constraint 1: x1+2x2=8  (0,4)->(48,150) to (8,0)->(368,310) -->
+  <line x1="48" y1="150" x2="368" y2="310"
+        stroke="#2176ae" stroke-width="2" stroke-dasharray="6,3" clip-path="url(#lp-clip)"/>
+
+  <!-- Constraint 2: 3x1+2x2=12  clipped: near (0,6) above top, through (4,0)->(208,310) -->
+  <line x1="48" y1="38" x2="248" y2="310"
+        stroke="#c0392b" stroke-width="2" stroke-dasharray="6,3" clip-path="url(#lp-clip)"/>
+
+  <!-- Axes -->
+  <line x1="48" y1="310" x2="415" y2="310" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="48" y1="310" x2="48" y2="30"   stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="418" y="315" font-family="Georgia,serif" font-size="13" fill="#444">x₁</text>
+  <text x="36"  y="28"  font-family="Georgia,serif" font-size="13" fill="#444">x₂</text>
+
+  <!-- Tick marks x -->
+  <g font-family="Georgia,serif" font-size="11" fill="#666" text-anchor="middle">
+    <line x1="88"  y1="307" x2="88"  y2="313" stroke="#888" stroke-width="1.2"/>
+    <text x="88"  y="325">1</text>
+    <line x1="128" y1="307" x2="128" y2="313" stroke="#888" stroke-width="1.2"/>
+    <text x="128" y="325">2</text>
+    <line x1="168" y1="307" x2="168" y2="313" stroke="#888" stroke-width="1.2"/>
+    <text x="168" y="325">3</text>
+    <line x1="208" y1="307" x2="208" y2="313" stroke="#888" stroke-width="1.2"/>
+    <text x="208" y="325">4</text>
+    <line x1="248" y1="307" x2="248" y2="313" stroke="#888" stroke-width="1.2"/>
+    <text x="248" y="325">5</text>
+  </g>
+  <!-- Tick marks y -->
+  <g font-family="Georgia,serif" font-size="11" fill="#666" text-anchor="end">
+    <line x1="45" y1="270" x2="51" y2="270" stroke="#888" stroke-width="1.2"/>
+    <text x="41" y="274">1</text>
+    <line x1="45" y1="230" x2="51" y2="230" stroke="#888" stroke-width="1.2"/>
+    <text x="41" y="234">2</text>
+    <line x1="45" y1="190" x2="51" y2="190" stroke="#888" stroke-width="1.2"/>
+    <text x="41" y="194">3</text>
+    <line x1="45" y1="150" x2="51" y2="150" stroke="#888" stroke-width="1.2"/>
+    <text x="41" y="154">4</text>
+  </g>
+
+  <!-- Objective contour lines: Z=5x1+4x2
+       Z=12: (0,3)->px(48,190), (2.4,0)->px(144,310)
+       Z=18: (0,4.5)->px(48,130), (3.6,0)->px(192,310)
+       Z=22 optimal: (0,5.5)->px(48,90), (4.4,0)->px(224,310)
+  -->
+  <line x1="48" y1="190" x2="144" y2="310"
+        stroke="#27ae60" stroke-width="1.2" opacity="0.55" clip-path="url(#lp-clip)"/>
+  <line x1="48" y1="130" x2="192" y2="310"
+        stroke="#27ae60" stroke-width="1.4" opacity="0.75" clip-path="url(#lp-clip)"/>
+  <!-- Z=22 optimal contour (dashed) -->
+  <line x1="48" y1="90"  x2="224" y2="310"
+        stroke="#27ae60" stroke-width="2" stroke-dasharray="4,4" opacity="1" clip-path="url(#lp-clip)"/>
+
+  <!-- Objective direction arrow -->
+  <line x1="290" y1="245" x2="318" y2="205"
+        stroke="#27ae60" stroke-width="2" marker-end="url(#arr-green)"/>
+  <text x="320" y="200" font-family="Georgia,serif" font-size="10" fill="#27ae60" font-weight="bold">increase Z</text>
+
+  <!-- Optimal vertex (2,3) -> px(128,190) -->
+  <circle cx="128" cy="190" r="7" fill="#e63946" stroke="#fff" stroke-width="2.5"/>
+  <circle cx="128" cy="190" r="11" fill="none" stroke="#e63946" stroke-width="1.3" opacity="0.5"/>
+
+  <!-- Labels inside diagram -->
+  <text x="90"  y="260" font-family="Georgia,serif" font-size="11" fill="#2176ae" font-weight="bold" text-anchor="middle">feasible</text>
+  <text x="90"  y="274" font-family="Georgia,serif" font-size="11" fill="#2176ae" font-weight="bold" text-anchor="middle">region</text>
+
+  <!-- Constraint labels -->
+  <rect x="230" y="202" width="108" height="17" rx="3" fill="#fff" fill-opacity="0.85"/>
+  <text x="284" y="215" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#2176ae" font-weight="bold">x₁+2x₂ ≤ 8</text>
+  <rect x="196" y="136" width="118" height="17" rx="3" fill="#fff" fill-opacity="0.85"/>
+  <text x="255" y="149" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#c0392b" font-weight="bold">3x₁+2x₂ ≤ 12</text>
+
+  <!-- Optimal label -->
+  <rect x="136" y="167" width="108" height="18" rx="3" fill="#fff" fill-opacity="0.9" stroke="#e63946" stroke-width="0.8"/>
+  <text x="190" y="180" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#e63946" font-weight="bold">optimal solution</text>
+  <text x="190" y="193" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#e63946">at vertex (2, 3)</text>
+
+  <!-- Z label -->
+  <text x="68" y="116" font-family="Georgia,serif" font-size="10" fill="#27ae60" font-weight="bold">Z=22</text>
+  <text x="68" y="158" font-family="Georgia,serif" font-size="10" fill="#27ae60">Z=18</text>
+  <text x="68" y="198" font-family="Georgia,serif" font-size="10" fill="#27ae60">Z=12</text>
+  <text x="170" y="350" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#27ae60" font-weight="bold">objective function contours</text>
+
+  <!-- ── RIGHT PANEL: Branch-and-Bound / OR Taxonomy ── -->
+  <rect x="435" y="10" width="348" height="310" fill="#fff" stroke="#ddd" stroke-width="1" rx="6"/>
+  <text x="609" y="32" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#333">OR Problem Hierarchy</text>
+
+  <!-- Root: LP Relaxation -->
+  <rect x="524" y="44" width="170" height="34" rx="5" fill="#4a90d9" fill-opacity="0.18" stroke="#2176ae" stroke-width="1.5"/>
+  <text x="609" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2176ae">LP Relaxation</text>
+  <text x="609" y="72" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#2176ae">Z* = 22.0  (x₁=2.0, x₂=3.0)</text>
+
+  <!-- Branch: x1 <= 1 and x1 >= 2 -->
+  <line x1="563" y1="78" x2="510" y2="110" stroke="#888" stroke-width="1.5"/>
+  <line x1="655" y1="78" x2="706" y2="110" stroke="#888" stroke-width="1.5"/>
+  <text x="530"  y="100" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#555">x₁ ≤ 1</text>
+  <text x="688"  y="100" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#555">x₁ ≥ 3</text>
+
+  <!-- Left child -->
+  <rect x="447" y="110" width="126" height="32" rx="5" fill="#4a90d9" fill-opacity="0.12" stroke="#2176ae" stroke-width="1.2"/>
+  <text x="510" y="124" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" font-weight="bold" fill="#2176ae">Sub-LP (x₁≤1)</text>
+  <text x="510" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#444">Z=20.5  (x₁=1, x₂=3.5)</text>
+
+  <!-- Right child — infeasible / pruned -->
+  <rect x="641" y="110" width="130" height="32" rx="5" fill="#e74c3c" fill-opacity="0.12" stroke="#c0392b" stroke-width="1.2"/>
+  <text x="706" y="124" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" font-weight="bold" fill="#c0392b">Sub-LP (x₁≥3)</text>
+  <text x="706" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#c0392b">Z=18  pruned (bound ≤ best)</text>
+
+  <!-- Branch left child further: x2<=3 and x2>=4 -->
+  <line x1="479" y1="142" x2="461" y2="172" stroke="#888" stroke-width="1.3"/>
+  <line x1="541" y1="142" x2="558" y2="172" stroke="#888" stroke-width="1.3"/>
+  <text x="454" y="164" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#555">x₂≤3</text>
+  <text x="567" y="164" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#555">x₂≥4</text>
+
+  <!-- Left-left: integer feasible — optimal -->
+  <rect x="433" y="172" width="110" height="36" rx="5" fill="#27ae60" fill-opacity="0.18" stroke="#27ae60" stroke-width="1.8"/>
+  <text x="488" y="186" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" font-weight="bold" fill="#27ae60">Integer feasible</text>
+  <text x="488" y="198" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#27ae60">Z=19  (x₁=1, x₂=3)</text>
+  <text x="488" y="210" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#27ae60" font-weight="bold">← incumbent</text>
+
+  <!-- Left-right: pruned -->
+  <rect x="553" y="172" width="110" height="36" rx="5" fill="#e74c3c" fill-opacity="0.10" stroke="#c0392b" stroke-width="1.2"/>
+  <text x="608" y="186" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" font-weight="bold" fill="#c0392b">Sub-LP (x₂≥4)</text>
+  <text x="608" y="198" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#c0392b">Infeasible — pruned</text>
+
+  <!-- Legend box -->
+  <rect x="447" y="224" width="310" height="80" rx="5" fill="#f8f9fa" stroke="#ccc" stroke-width="1"/>
+  <text x="602" y="240" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#333">Branch &amp; Bound</text>
+
+  <rect x="458" y="250" width="12" height="10" fill="#4a90d9" fill-opacity="0.3" stroke="#2176ae" stroke-width="1"/>
+  <text x="477" y="260" font-family="Georgia,serif" font-size="10" fill="#444">LP relaxation node</text>
+  <rect x="458" y="268" width="12" height="10" fill="#27ae60" fill-opacity="0.3" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="477" y="278" font-family="Georgia,serif" font-size="10" fill="#444">Integer feasible (incumbent)</text>
+  <rect x="605" y="250" width="12" height="10" fill="#e74c3c" fill-opacity="0.2" stroke="#c0392b" stroke-width="1"/>
+  <text x="624" y="260" font-family="Georgia,serif" font-size="10" fill="#444">Pruned node</text>
+  <text x="605" y="278" font-family="Georgia,serif" font-size="10" fill="#555">constraints: x₁,x₂ ∈ ℤ≥0</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="372" text-anchor="middle" font-family="Georgia,serif" font-size="12.5" font-weight="bold" fill="#333">
+    Operations Research: optimize under constraints — LP finds the vertex; B&amp;B enforces integrality
+  </text>
+  <text x="400" y="390" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#666">
+    Maximize Z = 5x₁ + 4x₂    subject to linear constraints    with integer variables
+  </text>
+</svg>

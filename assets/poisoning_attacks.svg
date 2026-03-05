@@ -1,0 +1,120 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" fill="#333" font-size="17" font-weight="bold">Poisoning Attacks: Corrupting the Training Set</text>
+
+  <!-- === LEFT PANEL: Clean Training Data === -->
+  <rect x="30" y="55" width="230" height="300" rx="10" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1.5"/>
+  <text x="145" y="78" text-anchor="middle" fill="#2C5F8A" font-size="13" font-weight="bold">Clean Training Data</text>
+
+  <!-- Class A dots (circles, blue) -->
+  <circle cx="75"  cy="115" r="7" fill="#2C5F8A"/>
+  <circle cx="100" cy="100" r="7" fill="#2C5F8A"/>
+  <circle cx="120" cy="130" r="7" fill="#2C5F8A"/>
+  <circle cx="90"  cy="148" r="7" fill="#2C5F8A"/>
+  <circle cx="140" cy="110" r="7" fill="#2C5F8A"/>
+  <circle cx="160" cy="135" r="7" fill="#2C5F8A"/>
+  <circle cx="115" cy="160" r="7" fill="#2C5F8A"/>
+  <circle cx="145" cy="155" r="7" fill="#2C5F8A"/>
+
+  <!-- Class B dots (squares, teal) -->
+  <rect x="68"  y="192" width="14" height="14" fill="#4A7C59"/>
+  <rect x="100" y="205" width="14" height="14" fill="#4A7C59"/>
+  <rect x="130" y="195" width="14" height="14" fill="#4A7C59"/>
+  <rect x="85"  cy="222" width="14" height="14" fill="#4A7C59"/>
+  <rect x="158" y="210" width="14" height="14" fill="#4A7C59"/>
+  <rect x="115" y="228" width="14" height="14" fill="#4A7C59"/>
+  <rect x="145" y="240" width="14" height="14" fill="#4A7C59"/>
+  <rect x="90"  y="245" width="14" height="14" fill="#4A7C59"/>
+
+  <!-- Clean decision boundary -->
+  <line x1="50" y1="183" x2="215" y2="183" stroke="#2C5F8A" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="145" y="278" text-anchor="middle" fill="#2C5F8A" font-size="11">Clean boundary</text>
+
+  <!-- Legend -->
+  <circle cx="65" cy="300" r="6" fill="#2C5F8A"/>
+  <text x="78" y="304" fill="#555" font-size="11">Class A</text>
+  <rect x="115" y="294" width="12" height="12" fill="#4A7C59"/>
+  <text x="133" y="304" fill="#555" font-size="11">Class B</text>
+
+  <!-- === MIDDLE: Inject arrow === -->
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#C0392B"/>
+    </marker>
+    <marker id="arrb" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Poison injection arrow -->
+  <line x1="265" y1="200" x2="330" y2="200" stroke="#C0392B" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="297" y="190" text-anchor="middle" fill="#C0392B" font-size="12" font-weight="bold">inject</text>
+  <text x="297" y="218" text-anchor="middle" fill="#C0392B" font-size="11">poisoned</text>
+  <text x="297" y="232" text-anchor="middle" fill="#C0392B" font-size="11">samples</text>
+
+  <!-- === CENTER PANEL: Poisoned Training Data === -->
+  <rect x="335" y="55" width="230" height="300" rx="10" fill="#FDF3F0" stroke="#C0392B" stroke-width="1.5"/>
+  <text x="450" y="78" text-anchor="middle" fill="#C0392B" font-size="13" font-weight="bold">Poisoned Training Data</text>
+
+  <!-- Class A dots (blue) — same as before -->
+  <circle cx="375" cy="115" r="7" fill="#2C5F8A"/>
+  <circle cx="400" cy="100" r="7" fill="#2C5F8A"/>
+  <circle cx="420" cy="130" r="7" fill="#2C5F8A"/>
+  <circle cx="390" cy="148" r="7" fill="#2C5F8A"/>
+  <circle cx="440" cy="110" r="7" fill="#2C5F8A"/>
+  <circle cx="460" cy="135" r="7" fill="#2C5F8A"/>
+  <circle cx="415" cy="160" r="7" fill="#2C5F8A"/>
+  <circle cx="445" cy="155" r="7" fill="#2C5F8A"/>
+
+  <!-- Class B dots (teal) — same as before -->
+  <rect x="368" y="192" width="14" height="14" fill="#4A7C59"/>
+  <rect x="400" y="205" width="14" height="14" fill="#4A7C59"/>
+  <rect x="430" y="195" width="14" height="14" fill="#4A7C59"/>
+  <rect x="385" y="222" width="14" height="14" fill="#4A7C59"/>
+  <rect x="458" y="210" width="14" height="14" fill="#4A7C59"/>
+  <rect x="415" y="228" width="14" height="14" fill="#4A7C59"/>
+  <rect x="445" y="240" width="14" height="14" fill="#4A7C59"/>
+  <rect x="390" y="245" width="14" height="14" fill="#4A7C59"/>
+
+  <!-- Poisoned samples (X marks, red) -->
+  <!-- Mislabeled Class-A points placed low to confuse the boundary -->
+  <line x1="363" y1="213" x2="377" y2="227" stroke="#C0392B" stroke-width="2.5"/>
+  <line x1="377" y1="213" x2="363" y2="227" stroke="#C0392B" stroke-width="2.5"/>
+
+  <line x1="425" y1="235" x2="439" y2="249" stroke="#C0392B" stroke-width="2.5"/>
+  <line x1="439" y1="235" x2="425" y2="249" stroke="#C0392B" stroke-width="2.5"/>
+
+  <line x1="395" y1="256" x2="409" y2="270" stroke="#C0392B" stroke-width="2.5"/>
+  <line x1="409" y1="256" x2="395" y2="270" stroke="#C0392B" stroke-width="2.5"/>
+
+  <line x1="453" y1="262" x2="467" y2="276" stroke="#C0392B" stroke-width="2.5"/>
+  <line x1="467" y1="262" x2="453" y2="276" stroke="#C0392B" stroke-width="2.5"/>
+
+  <!-- Corrupted decision boundary — shifted down and tilted -->
+  <line x1="350" y1="280" x2="555" y2="215" stroke="#C0392B" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="450" y="305" text-anchor="middle" fill="#C0392B" font-size="11">Corrupted boundary</text>
+
+  <!-- Legend -->
+  <circle cx="365" cy="330" r="6" fill="#2C5F8A"/>
+  <text x="378" y="334" fill="#555" font-size="11">Class A</text>
+  <rect x="415" y="324" width="12" height="12" fill="#4A7C59"/>
+  <text x="433" y="334" fill="#555" font-size="11">Class B</text>
+  <line x1="472" y1="323" x2="484" y2="335" stroke="#C0392B" stroke-width="2"/>
+  <line x1="484" y1="323" x2="472" y2="335" stroke="#C0392B" stroke-width="2"/>
+  <text x="492" y="334" fill="#C0392B" font-size="11">Poison</text>
+
+  <!-- === RIGHT: Train arrow and corrupted model === -->
+  <line x1="570" y1="200" x2="630" y2="200" stroke="#555" stroke-width="2" marker-end="url(#arrb)"/>
+  <text x="600" y="190" text-anchor="middle" fill="#555" font-size="12">train</text>
+
+  <!-- Corrupted model box -->
+  <rect x="635" y="120" width="145" height="160" rx="10" fill="#FDEDEC" stroke="#C0392B" stroke-width="1.5"/>
+  <text x="707" y="148" text-anchor="middle" fill="#C0392B" font-size="13" font-weight="bold">Corrupted</text>
+  <text x="707" y="166" text-anchor="middle" fill="#C0392B" font-size="13" font-weight="bold">Model</text>
+  <text x="707" y="196" text-anchor="middle" fill="#555" font-size="11">Attacker controls</text>
+  <text x="707" y="212" text-anchor="middle" fill="#555" font-size="11">predictions on</text>
+  <text x="707" y="228" text-anchor="middle" fill="#555" font-size="11">targeted inputs</text>
+  <text x="707" y="255" text-anchor="middle" fill="#C0392B" font-size="20">⚠</text>
+</svg>

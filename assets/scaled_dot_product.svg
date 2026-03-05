@@ -1,0 +1,84 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Scaled Dot-Product Attention</text>
+
+  <!-- ── Input matrices row ── -->
+
+  <!-- Q box -->
+  <rect x="60" y="60" width="100" height="70" rx="8" fill="#EDE5D0" stroke="#7C2530" stroke-width="2"/>
+  <text x="110" y="92" text-anchor="middle" font-size="22" font-weight="bold" fill="#7C2530">Q</text>
+  <text x="110" y="112" text-anchor="middle" font-size="11" fill="#5C3D1E">Queries</text>
+  <text x="110" y="126" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">n × d_k</text>
+
+  <!-- K box -->
+  <rect x="230" y="60" width="100" height="70" rx="8" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="280" y="92" text-anchor="middle" font-size="22" font-weight="bold" fill="#2D5A8E">K</text>
+  <text x="280" y="112" text-anchor="middle" font-size="11" fill="#5C3D1E">Keys</text>
+  <text x="280" y="126" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">m × d_k</text>
+
+  <!-- V box -->
+  <rect x="400" y="60" width="100" height="70" rx="8" fill="#EDE5D0" stroke="#4A7C59" stroke-width="2"/>
+  <text x="450" y="92" text-anchor="middle" font-size="22" font-weight="bold" fill="#4A7C59">V</text>
+  <text x="450" y="112" text-anchor="middle" font-size="11" fill="#5C3D1E">Values</text>
+  <text x="450" y="126" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">m × d_v</text>
+
+  <!-- ── Dot Product box ── -->
+  <rect x="120" y="200" width="140" height="60" rx="8" fill="#F5EDE0" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="190" y="224" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Dot Product</text>
+  <text x="190" y="244" text-anchor="middle" font-size="11" fill="#7C2530" font-style="italic">QKᵀ</text>
+
+  <!-- Arrow Q → Dot Product -->
+  <line x1="110" y1="130" x2="160" y2="198" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <!-- Arrow K → Dot Product -->
+  <line x1="280" y1="130" x2="222" y2="198" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+  <!-- ── Scale box ── -->
+  <rect x="320" y="200" width="140" height="60" rx="8" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="390" y="224" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Scale</text>
+  <text x="390" y="244" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">÷ √d_k</text>
+
+  <!-- Arrow Dot Product → Scale -->
+  <line x1="260" y1="230" x2="318" y2="230" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ── Softmax box ── -->
+  <rect x="520" y="200" width="140" height="60" rx="8" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="590" y="224" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Softmax</text>
+  <text x="590" y="244" text-anchor="middle" font-size="10" fill="#6B5D4F" font-style="italic">attention weights</text>
+
+  <!-- Arrow Scale → Softmax -->
+  <line x1="460" y1="230" x2="518" y2="230" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ── Weighted Sum box ── -->
+  <rect x="580" y="320" width="160" height="60" rx="8" fill="#EDE5D0" stroke="#4A7C59" stroke-width="2.2"/>
+  <text x="660" y="344" text-anchor="middle" font-size="13" font-weight="bold" fill="#4A7C59">Weighted Sum</text>
+  <text x="660" y="362" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">Output = Attn · V</text>
+
+  <!-- Arrow Softmax → Weighted Sum -->
+  <line x1="590" y1="260" x2="640" y2="318" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Arrow V → Weighted Sum -->
+  <line x1="450" y1="130" x2="660" y2="318" stroke="#4A7C59" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Step labels below boxes -->
+  <text x="190" y="278" text-anchor="middle" font-size="9" fill="#6B5D4F">① raw scores</text>
+  <text x="390" y="278" text-anchor="middle" font-size="9" fill="#6B5D4F">② prevent large magnitudes</text>
+  <text x="590" y="278" text-anchor="middle" font-size="9" fill="#6B5D4F">③ normalize to probabilities</text>
+  <text x="660" y="392" text-anchor="middle" font-size="9" fill="#6B5D4F">④ blend values by weight</text>
+
+  <!-- Formula strip at bottom -->
+  <rect x="40" y="350" width="490" height="36" rx="6" fill="#F0EBE0" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="285" y="371" text-anchor="middle" font-size="12" fill="#5C3D1E">Attention(Q, K, V)  =  softmax( QKᵀ / √d_k ) · V</text>
+</svg>

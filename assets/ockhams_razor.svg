@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ══ LEFT PANEL: SIMPLE MODEL ══ -->
+  <text x="200" y="22" text-anchor="middle" font-size="11" fill="#2D5A8E" letter-spacing="1">SIMPLER (PREFERRED)</text>
+
+  <!-- Axes -->
+  <line x1="45" y1="320" x2="365" y2="320" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <line x1="45" y1="320" x2="45"  y2="40"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <text x="205" y="346" text-anchor="middle" font-size="10" fill="#6B5D4F">x</text>
+  <text x="24"  y="185" font-size="10" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,24,185)">y</text>
+
+  <!-- Simple model: smooth line (low-degree polynomial / linear) -->
+  <polyline points="55,280 100,245 150,215 200,190 250,170 300,155 350,142"
+            fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Data points (scattered around the smooth line) -->
+  <circle cx="65"  cy="265" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="90"  cy="258" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="115" cy="228" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="140" cy="222" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="165" cy="200" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="190" cy="195" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="215" cy="182" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="240" cy="175" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="265" cy="162" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="290" cy="168" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="315" cy="150" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="340" cy="145" r="5" fill="#7C2530" opacity="0.85"/>
+
+  <!-- Label: parameter count -->
+  <text x="200" y="360" text-anchor="middle" font-size="10" fill="#2D5A8E">2 parameters</text>
+  <text x="200" y="376" text-anchor="middle" font-size="10" fill="#2D5A8E">captures the trend</text>
+
+  <!-- Check mark badge -->
+  <rect x="148" y="30" width="104" height="22" rx="4" fill="#2D5A8E" opacity="0.12"/>
+  <text x="200" y="45" text-anchor="middle" font-size="11" fill="#2D5A8E">preferred ✓</text>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="26" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ══ RIGHT PANEL: COMPLEX MODEL ══ -->
+  <text x="600" y="22" text-anchor="middle" font-size="11" fill="#9B8877" letter-spacing="1">MORE COMPLEX</text>
+
+  <!-- Axes -->
+  <line x1="435" y1="320" x2="765" y2="320" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <line x1="435" y1="320" x2="435" y2="40"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <text x="600" y="346" text-anchor="middle" font-size="10" fill="#6B5D4F">x</text>
+  <text x="414" y="185" font-size="10" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,414,185)">y</text>
+
+  <!-- Complex model: wiggly high-degree polynomial that passes through every point -->
+  <path d="M 445,265 C 460,230 475,280 490,258 S 520,195 535,228 S 565,170 580,195
+           S 610,155 625,182 S 650,158 665,175 S 690,135 705,150 S 730,110 745,142"
+        fill="none" stroke="#9B8877" stroke-width="2.5"/>
+
+  <!-- Same data points as left panel (same positions relative to axes) -->
+  <circle cx="455"  cy="265" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="480"  cy="258" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="505" cy="228" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="530" cy="222" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="555" cy="200" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="580" cy="195" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="605" cy="182" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="630" cy="175" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="655" cy="162" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="680" cy="168" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="705" cy="150" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="730" cy="145" r="5" fill="#7C2530" opacity="0.85"/>
+
+  <!-- Label: parameter count -->
+  <text x="600" y="360" text-anchor="middle" font-size="10" fill="#9B8877">12 parameters</text>
+  <text x="600" y="376" text-anchor="middle" font-size="10" fill="#9B8877">memorizes noise</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="396" text-anchor="middle" font-size="10" fill="#6B5D4F">
+    Both models fit the training data — the simpler one generalizes better to new points
+  </text>
+</svg>

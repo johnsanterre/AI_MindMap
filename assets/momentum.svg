@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E">Momentum in Gradient Descent</text>
+
+  <!-- Left panel: SGD without momentum (zigzag) -->
+  <rect x="30" y="55" width="230" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="145" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Vanilla SGD</text>
+  <text x="145" y="93" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">(no momentum)</text>
+
+  <!-- Loss landscape ellipse -->
+  <ellipse cx="145" cy="210" rx="95" ry="55" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <ellipse cx="145" cy="210" rx="65" ry="35" fill="none" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <ellipse cx="145" cy="210" rx="30" ry="15" fill="#EDE4D3" stroke="#C4A87A" stroke-width="1"/>
+  <text x="145" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530">minimum</text>
+
+  <!-- Zigzag path -->
+  <polyline points="60,160 100,240 80,180 120,250 100,195 130,245 140,210" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="60" cy="160" r="4" fill="#7C2530"/>
+  <text x="48" y="155" font-family="Georgia, serif" font-size="9" fill="#7C2530">start</text>
+  <circle cx="140" cy="210" r="4" fill="#2D5A8E"/>
+
+  <text x="145" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">oscillates in ravines</text>
+  <text x="145" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">slow convergence</text>
+
+  <!-- Center panel: SGD with momentum (smooth) -->
+  <rect x="280" y="55" width="240" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">SGD + Momentum</text>
+  <text x="400" y="93" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">(β = 0.9)</text>
+
+  <!-- Loss landscape ellipse -->
+  <ellipse cx="400" cy="210" rx="95" ry="55" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <ellipse cx="400" cy="210" rx="65" ry="35" fill="none" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <ellipse cx="400" cy="210" rx="30" ry="15" fill="#EDE4D3" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530">minimum</text>
+
+  <!-- Smooth curved path -->
+  <path d="M315,160 Q340,185 370,200 Q390,208 400,210" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="315" cy="160" r="4" fill="#7C2530"/>
+  <text x="303" y="155" font-family="Georgia, serif" font-size="9" fill="#7C2530">start</text>
+  <circle cx="400" cy="210" r="4" fill="#2D5A8E"/>
+
+  <!-- Velocity arrow -->
+  <line x1="350" y1="195" x2="378" y2="203" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="378,203 368,199 370,208" fill="#C4A87A"/>
+  <text x="348" y="188" font-family="Georgia, serif" font-size="9" fill="#C4A87A">velocity v</text>
+
+  <text x="400" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">smooth trajectory</text>
+  <text x="400" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">faster convergence</text>
+
+  <!-- Right panel: Math & intuition -->
+  <rect x="540" y="55" width="230" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="655" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">How It Works</text>
+
+  <text x="555" y="103" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Update rule:</text>
+  <text x="555" y="120" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">v = β·v − α·∇L</text>
+  <text x="555" y="137" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">θ = θ + v</text>
+
+  <line x1="550" y1="150" x2="760" y2="150" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="555" y="170" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Analogy:</text>
+  <text x="555" y="185" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Ball rolling downhill —</text>
+  <text x="555" y="199" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">builds speed on slopes,</text>
+  <text x="555" y="213" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">dampens oscillations.</text>
+
+  <line x1="550" y1="225" x2="760" y2="225" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="555" y="245" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">β controls memory:</text>
+  <text x="555" y="260" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">β = 0.9 → ~10 steps</text>
+  <text x="555" y="275" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">β = 0.99 → ~100 steps</text>
+  <text x="555" y="290" font-family="Georgia, serif" font-size="10" fill="#7C2530">β = 0 → vanilla SGD</text>
+
+  <line x1="550" y1="302" x2="760" y2="302" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="555" y="322" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Variants:</text>
+  <text x="555" y="337" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Nesterov: look-ahead</text>
+  <text x="555" y="351" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">gradient at future pos.</text>
+  <text x="555" y="365" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Often slightly better.</text>
+</svg>

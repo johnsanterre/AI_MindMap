@@ -1,0 +1,30 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="380" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Overfitting: Training vs. Validation Error</text>
+  <!-- Axes -->
+  <line x1="80" y1="300" x2="700" y2="300" stroke="#555" stroke-width="2"/>
+  <line x1="80" y1="70" x2="80" y2="300" stroke="#555" stroke-width="2"/>
+  <text x="720" y="305" fill="#555" font-size="13">Model Complexity →</text>
+  <text x="30" y="190" fill="#555" font-size="13" transform="rotate(-90,45,190)">Error</text>
+  <!-- Training error curve (decreasing) -->
+  <path d="M 100,250 C 180,220 250,190 350,150 C 450,110 550,85 680,70" fill="none" stroke="#4A7C59" stroke-width="3"/>
+  <!-- Validation error curve (U-shape) -->
+  <path d="M 100,250 C 180,210 250,170 350,160 C 430,155 480,165 550,200 C 600,225 640,260 680,290" fill="none" stroke="#C0392B" stroke-width="3"/>
+  <!-- Sweet spot -->
+  <line x1="360" y1="70" x2="360" y2="300" stroke="#E07B39" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="360" y="60" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">Sweet spot</text>
+  <!-- Regions -->
+  <text x="200" y="340" text-anchor="middle" fill="#2C5F8A" font-size="13">Underfitting</text>
+  <text x="550" y="340" text-anchor="middle" fill="#C0392B" font-size="13">Overfitting</text>
+  <!-- Legend -->
+  <line x1="480" y1="80" x2="520" y2="80" stroke="#4A7C59" stroke-width="3"/>
+  <text x="530" y="85" fill="#4A7C59" font-size="13">Training error</text>
+  <line x1="480" y1="105" x2="520" y2="105" stroke="#C0392B" stroke-width="3"/>
+  <text x="530" y="110" fill="#C0392B" font-size="13">Validation error</text>
+  <!-- Gap annotation -->
+  <line x1="600" y1="85" x2="600" y2="240" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="595" y1="85" x2="605" y2="85" stroke="#888" stroke-width="1.5"/>
+  <line x1="595" y1="240" x2="605" y2="240" stroke="#888" stroke-width="1.5"/>
+  <text x="650" y="165" fill="#888" font-size="12">Generalization</text>
+  <text x="650" y="180" fill="#888" font-size="12">gap</text>
+</svg>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Dropout: Regularization via Random Neuron Silencing</text>
+
+  <!-- Panel 1: Full network -->
+  <rect x="20" y="50" width="185" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="112" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">FULL NETWORK</text>
+
+  <!-- Layer circles - no dropout -->
+  <!-- Input layer -->
+  <circle cx="55" cy="120" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <circle cx="55" cy="160" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <circle cx="55" cy="200" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <circle cx="55" cy="240" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+
+  <!-- Hidden layer -->
+  <circle cx="112" cy="135" r="12" fill="#5C3D1E" stroke="#3a2610" stroke-width="1"/>
+  <circle cx="112" cy="175" r="12" fill="#5C3D1E" stroke="#3a2610" stroke-width="1"/>
+  <circle cx="112" cy="215" r="12" fill="#5C3D1E" stroke="#3a2610" stroke-width="1"/>
+
+  <!-- Output layer -->
+  <circle cx="168" cy="160" r="12" fill="#7C2530" stroke="#5a1a22" stroke-width="1"/>
+  <circle cx="168" cy="210" r="12" fill="#7C2530" stroke="#5a1a22" stroke-width="1"/>
+
+  <!-- Connections (thin, grey) -->
+  <line x1="67" y1="120" x2="100" y2="135" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="120" x2="100" y2="175" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="120" x2="100" y2="215" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="160" x2="100" y2="135" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="160" x2="100" y2="175" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="160" x2="100" y2="215" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="200" x2="100" y2="135" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="200" x2="100" y2="175" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="200" x2="100" y2="215" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="240" x2="100" y2="135" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="240" x2="100" y2="175" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="67" y1="240" x2="100" y2="215" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="124" y1="135" x2="156" y2="160" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="124" y1="135" x2="156" y2="210" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="124" y1="175" x2="156" y2="160" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="124" y1="175" x2="156" y2="210" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="124" y1="215" x2="156" y2="160" stroke="#C4A87A" stroke-width="0.8"/>
+  <line x1="124" y1="215" x2="156" y2="210" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="112" y="275" text-anchor="middle" font-size="9" fill="#5C3D1E">All neurons active</text>
+  <text x="112" y="289" text-anchor="middle" font-size="9" fill="#6B5D4F">Risk: co-adaptation</text>
+
+  <!-- Layer labels -->
+  <text x="55" y="265" text-anchor="middle" font-size="8" fill="#6B5D4F">Input</text>
+  <text x="112" y="238" text-anchor="middle" font-size="8" fill="#6B5D4F">Hidden</text>
+  <text x="168" y="235" text-anchor="middle" font-size="8" fill="#6B5D4F">Output</text>
+
+  <!-- Panel 2: With dropout -->
+  <rect x="218" y="50" width="195" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="315" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">WITH DROPOUT (p=0.5)</text>
+
+  <!-- Input layer -->
+  <circle cx="255" cy="120" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <circle cx="255" cy="160" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <circle cx="255" cy="200" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <circle cx="255" cy="240" r="12" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+
+  <!-- Hidden - one dropped -->
+  <circle cx="315" cy="135" r="12" fill="#5C3D1E" stroke="#3a2610" stroke-width="1"/>
+  <!-- DROPPED -->
+  <circle cx="315" cy="175" r="12" fill="#E8E0D4" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="307" y1="167" x2="323" y2="183" stroke="#7C2530" stroke-width="2"/>
+  <line x1="307" y1="183" x2="323" y2="167" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="315" cy="215" r="12" fill="#5C3D1E" stroke="#3a2610" stroke-width="1"/>
+
+  <!-- Output layer -->
+  <circle cx="375" cy="160" r="12" fill="#7C2530" stroke="#5a1a22" stroke-width="1"/>
+  <circle cx="375" cy="210" r="12" fill="#7C2530" stroke="#5a1a22" stroke-width="1"/>
+
+  <!-- Active connections only (skip dropped) -->
+  <line x1="267" y1="120" x2="303" y2="135" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="120" x2="303" y2="215" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="160" x2="303" y2="135" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="160" x2="303" y2="215" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="200" x2="303" y2="135" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="200" x2="303" y2="215" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="240" x2="303" y2="135" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="267" y1="240" x2="303" y2="215" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="327" y1="135" x2="363" y2="160" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="327" y1="135" x2="363" y2="210" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="327" y1="215" x2="363" y2="160" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="327" y1="215" x2="363" y2="210" stroke="#5C3D1E" stroke-width="1"/>
+
+  <text x="315" y="270" text-anchor="middle" font-size="9" fill="#5C3D1E">Each step: random mask</text>
+  <text x="315" y="284" text-anchor="middle" font-size="9" fill="#6B5D4F">Forces redundant paths</text>
+  <text x="315" y="298" text-anchor="middle" font-size="9" fill="#7C2530">X marks = zeroed out</text>
+
+  <!-- Panel 3: Inverted scaling -->
+  <rect x="428" y="50" width="175" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="515" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">INVERTED DROPOUT</text>
+
+  <rect x="442" y="80" width="148" height="80" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="516" y="97" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Training</text>
+  <text x="516" y="113" text-anchor="middle" font-size="9" fill="#5C3D1E">mask ~ Bernoulli(1−p)</text>
+  <text x="516" y="127" text-anchor="middle" font-size="9" fill="#5C3D1E">output = (x × mask) / (1−p)</text>
+  <text x="516" y="141" text-anchor="middle" font-size="9" fill="#6B5D4F">Scale UP by 1/(1−p)</text>
+  <text x="516" y="155" text-anchor="middle" font-size="8" fill="#7C2530">Keeps expected value same</text>
+
+  <rect x="442" y="172" width="148" height="60" fill="white" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="516" y="189" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Inference</text>
+  <text x="516" y="205" text-anchor="middle" font-size="9" fill="#5C3D1E">No dropout applied</text>
+  <text x="516" y="219" text-anchor="middle" font-size="9" fill="#5C3D1E">Use full network</text>
+  <text x="516" y="228" text-anchor="middle" font-size="8" fill="#6B5D4F">No rescaling needed</text>
+
+  <!-- Why it works -->
+  <rect x="442" y="244" width="148" height="96" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="516" y="261" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Why It Works</text>
+  <text x="516" y="277" text-anchor="middle" font-size="9" fill="#6B5D4F">Training ≈ ensemble of</text>
+  <text x="516" y="291" text-anchor="middle" font-size="9" fill="#6B5D4F">2ⁿ sub-networks</text>
+  <text x="516" y="307" text-anchor="middle" font-size="9" fill="#6B5D4F">Inference ≈ geometric</text>
+  <text x="516" y="321" text-anchor="middle" font-size="9" fill="#6B5D4F">mean of ensemble</text>
+  <text x="516" y="335" text-anchor="middle" font-size="8" fill="#2D5A8E">Weight sharing across all</text>
+
+  <!-- Panel 4: Rates and tradeoffs -->
+  <rect x="618" y="50" width="165" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="700" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">RATES &amp; TRADEOFFS</text>
+
+  <!-- Rate table -->
+  <rect x="630" y="78" width="141" height="160" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="700" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Dropout Rate p</text>
+  <line x1="630" y1="102" x2="771" y2="102" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="645" y="118" font-size="9" fill="#2D5A8E">p = 0.0</text>
+  <text x="700" y="118" font-size="9" fill="#6B5D4F">No regularization</text>
+
+  <text x="645" y="138" font-size="9" fill="#2D5A8E">p = 0.2</text>
+  <text x="700" y="138" font-size="9" fill="#6B5D4F">Light (CNN input)</text>
+
+  <text x="645" y="158" font-size="9" fill="#2D5A8E">p = 0.5</text>
+  <text x="700" y="158" font-size="9" fill="#5C3D1E">Classic default</text>
+
+  <text x="645" y="178" font-size="9" fill="#2D5A8E">p = 0.7</text>
+  <text x="700" y="178" font-size="9" fill="#7C2530">Heavy — risky</text>
+
+  <text x="645" y="198" font-size="9" fill="#2D5A8E">p = 1.0</text>
+  <text x="700" y="198" font-size="9" fill="#7C2530">Network dies</text>
+
+  <text x="700" y="226" text-anchor="middle" font-size="9" fill="#5C3D1E">Hidden layers: 0.3–0.5</text>
+  <text x="700" y="240" text-anchor="middle" font-size="9" fill="#5C3D1E">Input layer: 0.1–0.2</text>
+
+  <!-- Conflicts -->
+  <rect x="630" y="252" width="141" height="100" fill="#FCEAEA" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="700" y="268" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Conflicts</text>
+  <text x="636" y="284" font-size="9" fill="#5C3D1E">• Batch Norm +</text>
+  <text x="636" y="298" font-size="9" fill="#5C3D1E">  Dropout clash</text>
+  <text x="636" y="312" font-size="9" fill="#5C3D1E">• Tiny datasets:</text>
+  <text x="636" y="326" font-size="9" fill="#5C3D1E">  use L2 instead</text>
+  <text x="636" y="340" font-size="9" fill="#5C3D1E">• Recurrent layers:</text>
+  <text x="636" y="354" font-size="9" fill="#5C3D1E">  use variational dropout</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">Dropout acts as a cheap, powerful ensemble method — 2ⁿ models trained with shared weights</text>
+</svg>

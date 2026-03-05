@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">RLHF: THREE-STAGE PIPELINE</text>
+
+  <!-- Stage 1: SFT -->
+  <rect x="30" y="50" width="200" height="130" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.8" rx="6"/>
+  <text x="130" y="74" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#7C2530" font-variant="small-caps">STAGE 1</text>
+  <text x="130" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Supervised</text>
+  <text x="130" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Fine-Tuning</text>
+  <text x="130" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Human-written</text>
+  <text x="130" y="149" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">demonstrations</text>
+  <text x="130" y="164" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">→ base policy π_SFT</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="232" y1="115" x2="288" y2="115" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- Stage 2: Reward Model -->
+  <rect x="292" y="50" width="216" height="130" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.8" rx="6"/>
+  <text x="400" y="74" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#2D5A8E" font-variant="small-caps">STAGE 2</text>
+  <text x="400" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Reward Model</text>
+  <text x="400" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Training</text>
+  <text x="400" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Humans rank pairs:</text>
+  <text x="400" y="149" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">response A ≻ response B</text>
+  <text x="400" y="164" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">→ r_θ(prompt, response)</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="510" y1="115" x2="556" y2="115" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- Stage 3: RL/PPO -->
+  <rect x="560" y="50" width="210" height="130" fill="#5C3D1E" fill-opacity="0.08" stroke="#5C3D1E" stroke-width="1.8" rx="6"/>
+  <text x="665" y="74" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#5C3D1E" font-variant="small-caps">STAGE 3</text>
+  <text x="665" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">RL with PPO</text>
+  <text x="665" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Maximize reward r_θ</text>
+  <text x="665" y="127" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">+ KL penalty vs π_SFT</text>
+  <text x="665" y="142" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">to prevent hacking</text>
+  <text x="665" y="164" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">→ aligned policy π_RL</text>
+
+  <!-- Bradley-Terry box -->
+  <rect x="30" y="215" width="340" height="75" fill="#C4A87A" fill-opacity="0.15" stroke="#C4A87A" stroke-width="1.5" rx="5"/>
+  <text x="200" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">BRADLEY-TERRY PREFERENCE MODEL</text>
+  <text x="200" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">P(A ≻ B) = σ(r(A) − r(B))</text>
+  <text x="200" y="273" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#6B5D4F">Human preference probability from scalar reward difference</text>
+
+  <!-- Reward Hacking box -->
+  <rect x="390" y="215" width="380" height="75" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.5" rx="5"/>
+  <text x="580" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#7C2530" font-variant="small-caps">REWARD HACKING</text>
+  <text x="580" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">r_θ ↑ but true quality ↓</text>
+  <text x="580" y="273" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#6B5D4F">Model exploits proxy reward — KL penalty keeps policy close to π_SFT</text>
+
+  <!-- DPO alternative -->
+  <rect x="30" y="320" width="740" height="60" fill="#2D5A8E" fill-opacity="0.07" stroke="#2D5A8E" stroke-width="1" rx="5"/>
+  <text x="400" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#2D5A8E" font-variant="small-caps">DPO ALTERNATIVE (NO SEPARATE RL STEP)</text>
+  <text x="400" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Direct Preference Optimization reformulates RLHF as a supervised loss:</text>
+  <text x="400" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">ℒ_DPO = −𝔼[ log σ( β log(π_θ(y_w)/π_ref(y_w)) − β log(π_θ(y_l)/π_ref(y_l)) ) ]</text>
+</svg>

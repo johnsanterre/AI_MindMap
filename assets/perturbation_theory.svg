@@ -1,0 +1,107 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">Perturbation Theory: Expanding Around a Known Solution</text>
+
+  <!-- Defs: arrowheads -->
+  <defs>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2196F3"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#FF9800"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4CAF50"/>
+    </marker>
+    <marker id="arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#999"/>
+    </marker>
+  </defs>
+
+  <!-- LEFT PANEL: curve with exact vs perturbed solution -->
+  <!-- Axes -->
+  <line x1="55" y1="330" x2="340" y2="330" stroke="#bbb" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+  <line x1="65" y1="340" x2="65" y2="80" stroke="#bbb" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+  <text x="345" y="334" font-size="12" fill="#888">x</text>
+  <text x="52" y="75" font-size="12" fill="#888">f</text>
+
+  <!-- Known exact solution curve (ε=0, parabola shape) -->
+  <path d="M75,290 Q130,80 200,110 Q260,135 320,320" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <text x="230" y="105" font-size="12" fill="#2196F3">exact solution</text>
+  <text x="230" y="119" font-size="12" fill="#2196F3">(ε = 0)</text>
+
+  <!-- Perturbed solution curve (shifted slightly) -->
+  <path d="M75,300 Q130,95 207,118 Q268,143 320,330" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="80" y="310" font-size="11" fill="#FF9800">perturbed</text>
+  <text x="80" y="323" font-size="11" fill="#FF9800">(ε &gt; 0)</text>
+
+  <!-- Mark x₀, the expansion point -->
+  <circle cx="200" cy="110" r="5" fill="#2196F3"/>
+  <circle cx="207" cy="118" r="5" fill="#FF9800"/>
+  <!-- Vertical distance line (correction) -->
+  <line x1="205" y1="110" x2="205" y2="118" stroke="#4CAF50" stroke-width="2" marker-end="url(#arr-green)"/>
+  <text x="212" y="117" font-size="11" fill="#4CAF50">ε·x₁</text>
+
+  <!-- x₀ label -->
+  <line x1="200" y1="330" x2="200" y2="112" stroke="#bbb" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="196" y="344" font-size="12" fill="#555">x₀</text>
+
+  <!-- LEFT panel label -->
+  <text x="195" y="370" text-anchor="middle" font-size="12" fill="#555">Small ε shifts the solution continuously</text>
+
+  <!-- DIVIDER -->
+  <line x1="380" y1="55" x2="380" y2="375" stroke="#e0e0e0" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- RIGHT PANEL: series expansion breakdown -->
+  <text x="590" y="68" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Series Expansion</text>
+
+  <!-- Main equation box -->
+  <rect x="415" y="82" width="350" height="52" rx="7" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="590" y="103" text-anchor="middle" font-size="14" fill="#2196F3" font-weight="bold">x(ε) = x₀ + ε·x₁ + ε²·x₂ + …</text>
+  <text x="590" y="124" text-anchor="middle" font-size="11" fill="#555">exact but hard to solve → expand in powers of ε</text>
+
+  <!-- Term 1: x₀ -->
+  <rect x="415" y="153" width="100" height="46" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="465" y="172" text-anchor="middle" font-size="15" fill="#2196F3" font-weight="bold">x₀</text>
+  <text x="465" y="190" text-anchor="middle" font-size="10" fill="#2196F3">known solution</text>
+
+  <!-- Plus sign -->
+  <text x="528" y="183" text-anchor="middle" font-size="18" fill="#999">+</text>
+
+  <!-- Term 2: ε·x₁ -->
+  <rect x="543" y="153" width="100" height="46" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="593" y="172" text-anchor="middle" font-size="15" fill="#FF9800" font-weight="bold">ε·x₁</text>
+  <text x="593" y="190" text-anchor="middle" font-size="10" fill="#FF9800">1st correction</text>
+
+  <!-- Plus sign -->
+  <text x="656" y="183" text-anchor="middle" font-size="18" fill="#999">+</text>
+
+  <!-- Term 3: ε²·x₂ -->
+  <rect x="668" y="153" width="100" height="46" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="718" y="172" text-anchor="middle" font-size="15" fill="#4CAF50" font-weight="bold">ε²·x₂</text>
+  <text x="718" y="190" text-anchor="middle" font-size="10" fill="#4CAF50">2nd correction</text>
+
+  <!-- Arrows from equation down to boxes -->
+  <line x1="465" y1="134" x2="465" y2="153" stroke="#2196F3" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <line x1="590" y1="134" x2="590" y2="153" stroke="#FF9800" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+  <line x1="718" y1="134" x2="718" y2="153" stroke="#4CAF50" stroke-width="1.5" marker-end="url(#arr-green)"/>
+
+  <!-- Convergence note -->
+  <rect x="415" y="218" width="352" height="36" rx="6" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="591" y="234" text-anchor="middle" font-size="11" fill="#555">Each order is smaller if ε ≪ 1 → series converges fast</text>
+  <text x="591" y="248" text-anchor="middle" font-size="11" fill="#555">Solve for x₀, then x₁, then x₂ … one layer at a time</text>
+
+  <!-- Size comparison bar -->
+  <text x="415" y="280" font-size="11" fill="#333" font-weight="bold">Relative magnitude (ε = 0.1):</text>
+  <rect x="415" y="288" width="200" height="14" rx="3" fill="#2196F3"/>
+  <text x="620" y="300" font-size="11" fill="#2196F3">x₀  (order 1)</text>
+  <rect x="415" y="308" width="20" height="14" rx="3" fill="#FF9800"/>
+  <text x="440" y="320" font-size="11" fill="#FF9800">ε·x₁  (order 0.1)</text>
+  <rect x="415" y="328" width="2" height="14" rx="2" fill="#4CAF50"/>
+  <text x="422" y="340" font-size="11" fill="#4CAF50">ε²·x₂  (order 0.01)</text>
+
+  <!-- Bottom caption -->
+  <text x="590" y="375" text-anchor="middle" font-size="12" fill="#555">Higher-order terms shrink rapidly — truncation is controlled</text>
+</svg>

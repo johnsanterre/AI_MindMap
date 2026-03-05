@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel dividers -->
+  <line x1="205" y1="26" x2="205" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="420" y1="26" x2="420" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="615" y1="26" x2="615" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ PANEL 1: TALL & SKINNY (A) ══ -->
+  <text x="103" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">TALL &amp; SKINNY  (n ≫ p)</text>
+
+  <!-- Matrix A: many rows, few columns -->
+  <rect x="55" y="35" width="40" height="290" fill="#FDFAF4" stroke="#7C2530" stroke-width="2" rx="3"/>
+  <!-- Row lines inside A -->
+  <line x1="56" y1="58"  x2="94" y2="58"  stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="81"  x2="94" y2="81"  stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="104" x2="94" y2="104" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="127" x2="94" y2="127" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="150" x2="94" y2="150" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="173" x2="94" y2="173" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="196" x2="94" y2="196" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="219" x2="94" y2="219" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="242" x2="94" y2="242" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="265" x2="94" y2="265" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="56" y1="288" x2="94" y2="288" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <!-- Column line inside A -->
+  <line x1="75" y1="36" x2="75" y2="324" stroke="#C4A87A" stroke-width="0.8" opacity="0.8"/>
+  <!-- Dimension labels -->
+  <text x="75" y="350" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">A</text>
+  <text x="75" y="364" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">n × p</text>
+  <!-- Arrows showing dimensions -->
+  <text x="30" y="185" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">n</text>
+  <line x1="38" y1="35" x2="38" y2="325" stroke="#7C2530" stroke-width="1" marker-end="url(#arr-red)"/>
+  <text x="75" y="15" text-anchor="middle" font-size="9" fill="#2D5A8E" font-style="italic">p</text>
+  <line x1="56" y1="30" x2="94" y2="30" stroke="#2D5A8E" stroke-width="1" marker-end="url(#arr-blue)"/>
+  <text x="130" y="190" text-anchor="middle" font-size="9" fill="#5C3D1E">rows = data</text>
+  <text x="130" y="204" text-anchor="middle" font-size="9" fill="#5C3D1E">points</text>
+  <text x="130" y="220" text-anchor="middle" font-size="9" fill="#5C3D1E">(n ≫ p)</text>
+
+  <!-- ══ PANEL 2: SYSTEM Ax = b ══ -->
+  <text x="313" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">OVERDETERMINED SYSTEM</text>
+
+  <!-- Matrix A -->
+  <rect x="222" y="80" width="40" height="200" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.8" rx="3"/>
+  <line x1="222" y1="107" x2="261" y2="107" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="222" y1="134" x2="261" y2="134" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="222" y1="161" x2="261" y2="161" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="222" y1="188" x2="261" y2="188" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="222" y1="215" x2="261" y2="215" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="242" y1="81" x2="242" y2="279" stroke="#C4A87A" stroke-width="0.8" opacity="0.8"/>
+  <text x="242" y="298" text-anchor="middle" font-size="10" fill="#7C2530">A</text>
+
+  <!-- "x" vector (small) -->
+  <rect x="268" y="150" width="22" height="60" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.8" rx="3"/>
+  <text x="279" y="186" text-anchor="middle" font-size="10" fill="#2D5A8E">x</text>
+  <text x="279" y="222" text-anchor="middle" font-size="9" fill="#6B5D4F">p×1</text>
+
+  <!-- "=" sign -->
+  <text x="303" y="185" text-anchor="middle" font-size="16" fill="#5C3D1E">=</text>
+
+  <!-- "b" vector (tall) -->
+  <rect x="315" y="80" width="22" height="200" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.8" rx="3"/>
+  <text x="326" y="186" text-anchor="middle" font-size="10" fill="#5C3D1E">b</text>
+  <text x="326" y="298" text-anchor="middle" font-size="9" fill="#6B5D4F">n×1</text>
+
+  <!-- "no exact solution" annotation -->
+  <text x="313" y="330" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">more equations than unknowns</text>
+  <text x="313" y="344" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">→ no exact solution in general</text>
+  <text x="313" y="360" text-anchor="middle" font-size="8.5" fill="#6B5D4F">minimize ‖Ax − b‖²</text>
+
+  <!-- ══ PANEL 3: NORMAL EQUATIONS ══ -->
+  <text x="518" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">NORMAL EQUATIONS</text>
+
+  <!-- AᵀA block (square, small) -->
+  <rect x="432" y="100" width="55" height="55" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.8" rx="3"/>
+  <text x="459" y="132" text-anchor="middle" font-size="10" fill="#2D5A8E">AᵀA</text>
+  <text x="459" y="172" text-anchor="middle" font-size="9" fill="#6B5D4F">p × p</text>
+
+  <!-- "x̂" -->
+  <rect x="494" y="115" width="22" height="55" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.8" rx="3"/>
+  <text x="505" y="146" text-anchor="middle" font-size="10" fill="#7C2530">x̂</text>
+
+  <!-- "=" -->
+  <text x="530" y="148" text-anchor="middle" font-size="16" fill="#5C3D1E">=</text>
+
+  <!-- "Aᵀb" -->
+  <rect x="543" y="100" width="40" height="55" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.8" rx="3"/>
+  <text x="563" y="132" text-anchor="middle" font-size="10" fill="#5C3D1E">Aᵀb</text>
+  <text x="563" y="172" text-anchor="middle" font-size="9" fill="#6B5D4F">p × 1</text>
+
+  <!-- Arrow showing collapse -->
+  <line x1="459" y1="230" x2="459" y2="260" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <text x="459" y="245" text-anchor="start" font-size="8.5" fill="#2D5A8E" dx="6">AᵀA collapses</text>
+  <text x="459" y="280" text-anchor="middle" font-size="8.5" fill="#5C3D1E">n × p → p × p</text>
+  <text x="459" y="296" text-anchor="middle" font-size="8.5" fill="#5C3D1E">now square, solvable</text>
+
+  <text x="518" y="340" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">x̂ = (AᵀA)⁻¹Aᵀb</text>
+  <text x="518" y="356" text-anchor="middle" font-size="9" fill="#6B5D4F">least-squares solution</text>
+
+  <!-- ══ PANEL 4: DEEP LEARNING FLIP ══ -->
+  <text x="708" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">DEEP LEARNING FLIP</text>
+
+  <!-- Wide weight matrix W -->
+  <rect x="630" y="150" width="140" height="30" fill="#FDFAF4" stroke="#7C2530" stroke-width="2" rx="3"/>
+  <line x1="665" y1="151" x2="665" y2="179" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="700" y1="151" x2="700" y2="179" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <line x1="735" y1="151" x2="735" y2="179" stroke="#C4A87A" stroke-width="0.6" opacity="0.7"/>
+  <text x="700" y="200" text-anchor="middle" font-size="10" fill="#7C2530">W</text>
+  <text x="700" y="215" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">d_out × d_in</text>
+  <text x="700" y="232" text-anchor="middle" font-size="9" fill="#6B5D4F">(wide, p ≫ n)</text>
+
+  <text x="700" y="270" text-anchor="middle" font-size="8.5" fill="#5C3D1E">parameters outnumber</text>
+  <text x="700" y="285" text-anchor="middle" font-size="8.5" fill="#5C3D1E">training examples</text>
+  <text x="700" y="310" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">→ overdetermined → underdetermined</text>
+  <text x="700" y="330" text-anchor="middle" font-size="8.5" fill="#6B5D4F">regularization essential</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="386" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Classic ML: tall &amp; skinny (n ≫ p) → least squares.  Deep learning: wide matrices (p ≫ n) → requires regularization.
+  </text>
+</svg>

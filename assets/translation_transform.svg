@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="tr-arr-muted" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+    <marker id="tr-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="tr-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="tr-arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="tr-arr-teal" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a9d8f"/>
+    </marker>
+  </defs>
+
+  <!-- Cream background with border -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ════════════════════════════════════════════════════
+       PANEL 1 (left): Before / After Translation
+       Origin at (170, 260) — grid unit = 55px
+       Triangle before: vertices at (0,0),(2,0),(1,2) → scaled
+       ════════════════════════════════════════════════════ -->
+
+  <!-- Panel 1 title -->
+  <text x="185" y="24" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">GEOMETRIC VIEW</text>
+
+  <!-- Coordinate axes -->
+  <line x1="80"  y1="262" x2="320" y2="262" stroke="#D4C5A9" stroke-width="1.3" marker-end="url(#tr-arr-muted)"/>
+  <line x1="170" y1="340" x2="170" y2="48"  stroke="#D4C5A9" stroke-width="1.3" marker-end="url(#tr-arr-muted)"/>
+  <text x="322" y="266" font-size="10" fill="#9B8877">x</text>
+  <text x="165" y="44"  font-size="10" fill="#9B8877">y</text>
+
+  <!-- Origin dot -->
+  <circle cx="170" cy="262" r="3" fill="#1C1713"/>
+  <text x="155" y="277" font-size="9" fill="#6B5D4F">O</text>
+
+  <!-- "Before" triangle: vertices at grid (0,0),(2,0),(1,2) → px: (170,262),(280,262),(225,152) -->
+  <polygon points="170,262 280,262 225,152"
+           fill="rgba(92,61,30,0.10)" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="226" y="232" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">before</text>
+
+  <!-- "After" triangle: translate by t=(1,1) → grid (+55,−55 px) → (225,207),(335,207),(280,97) -->
+  <polygon points="225,207 335,207 280,97"
+           fill="rgba(124,37,48,0.13)" stroke="#7C2530" stroke-width="2"/>
+  <text x="296" y="168" text-anchor="middle" font-size="10" fill="#7C2530" font-style="italic">after</text>
+
+  <!-- Displacement vector t: from centroid of before (225,212) to centroid of after (280,157) -->
+  <!-- before centroid: ((170+280+225)/3, (262+262+152)/3) = (225, 225.3) -->
+  <!-- after centroid:  ((225+335+280)/3, (207+207+97)/3)  = (280, 170.3) -->
+  <line x1="225" y1="225" x2="272" y2="178"
+        stroke="#2D5A8E" stroke-width="2.2" marker-end="url(#tr-arr-blue)"/>
+  <text x="258" y="215" font-size="12" fill="#2D5A8E" font-weight="bold" font-style="italic">t</text>
+
+  <!-- Note: origin NOT fixed -->
+  <text x="170" y="294" text-anchor="middle" font-size="9" fill="#7C2530">origin moves ⟹ not linear</text>
+  <line x1="170" y1="262" x2="225" y2="207" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="3,3" opacity="0.6"/>
+
+  <!-- t vector component labels -->
+  <!-- horizontal component arrow -->
+  <line x1="225" y1="265" x2="280" y2="265" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+  <text x="252" y="278" text-anchor="middle" font-size="8.5" fill="#2D5A8E">tx</text>
+  <!-- vertical component arrow -->
+  <line x1="283" y1="225" x2="283" y2="178" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+  <text x="293" y="203" font-size="8.5" fill="#2D5A8E">ty</text>
+
+  <!-- Panel 1 caption -->
+  <text x="185" y="362" text-anchor="middle" font-size="9.5" fill="#6B5D4F">x → x + t   (affine, not linear)</text>
+
+  <!-- Vertical divider -->
+  <line x1="370" y1="28" x2="370" y2="378" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ════════════════════════════════════════════════════
+       PANEL 2 (centre): "NOT Linear" stamp
+       Why T(0) ≠ 0 breaks linearity
+       ════════════════════════════════════════════════════ -->
+
+  <text x="528" y="24" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">HOMOGENEOUS COORDINATES</text>
+
+  <!-- "Not Linear" box -->
+  <rect x="385" y="38" width="170" height="68" rx="4" fill="rgba(124,37,48,0.06)" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="470" y="59"  text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">NOT Linear</text>
+  <text x="470" y="77"  text-anchor="middle" font-size="9.5" fill="#1C1713">T(0) = 0 + t = t ≠ 0</text>
+  <text x="470" y="94"  text-anchor="middle" font-size="9.5" fill="#1C1713">T(x+y) ≠ T(x) + T(y)</text>
+
+  <!-- Arrow down to "but IS Affine" -->
+  <line x1="470" y1="110" x2="470" y2="128" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#tr-arr-brown)"/>
+
+  <!-- "IS Affine" box -->
+  <rect x="385" y="130" width="170" height="50" rx="4" fill="rgba(45,90,142,0.07)" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="470" y="151" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">IS Affine</text>
+  <text x="470" y="169" text-anchor="middle" font-size="9.5" fill="#1C1713">x ↦ Ax + t</text>
+
+  <!-- Divider line -->
+  <line x1="385" y1="198" x2="590" y2="198" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Homogeneous coordinate matrix diagram -->
+  <text x="487" y="218" text-anchor="middle" font-size="10.5" fill="#1C1713" font-weight="bold">Lift to (n+1)D to linearize:</text>
+
+  <!-- Matrix bracket group -->
+  <!-- Big matrix box -->
+  <rect x="390" y="232" width="200" height="110" rx="3" fill="rgba(92,61,30,0.04)" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Matrix contents: [A | t; 0...0 | 1] -->
+  <!-- Row labels and content -->
+  <text x="405" y="252" font-size="10" fill="#6B5D4F" font-style="italic">⎡</text>
+  <text x="405" y="292" font-size="10" fill="#6B5D4F" font-style="italic">⎣</text>
+
+  <!-- A block -->
+  <text x="435" y="259" text-anchor="middle" font-size="13" fill="#2D5A8E" font-weight="bold" font-style="italic">A</text>
+  <text x="435" y="289" text-anchor="middle" font-size="9.5" fill="#6B5D4F">(n×n)</text>
+
+  <!-- Vertical divider inside matrix -->
+  <line x1="470" y1="236" x2="470" y2="338" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- t column -->
+  <text x="500" y="259" text-anchor="middle" font-size="13" fill="#7C2530" font-weight="bold" font-style="italic">t</text>
+  <text x="500" y="280" text-anchor="middle" font-size="9" fill="#6B5D4F">(n×1)</text>
+
+  <!-- Horizontal divider inside matrix -->
+  <line x1="394" y1="302" x2="586" y2="302" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Bottom row: 0 ... 0 | 1 -->
+  <text x="435" y="323" text-anchor="middle" font-size="12" fill="#6B5D4F">0 ··· 0</text>
+  <text x="500" y="323" text-anchor="middle" font-size="12" fill="#7C2530">1</text>
+
+  <!-- Right bracket -->
+  <text x="578" y="252" font-size="10" fill="#6B5D4F" font-style="italic">⎤</text>
+  <text x="578" y="292" font-size="10" fill="#6B5D4F" font-style="italic">⎦</text>
+
+  <!-- Times x_tilde and equals -->
+  <text x="605" y="285" font-size="13" fill="#1C1713">·</text>
+
+  <!-- x̃ vector column -->
+  <rect x="615" y="232" width="42" height="110" rx="3" fill="rgba(92,61,30,0.04)" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="636" y="268" text-anchor="middle" font-size="13" fill="#2D5A8E" font-style="italic">x</text>
+  <line x1="619" y1="282" x2="653" y2="282" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="636" y="302" text-anchor="middle" font-size="12" fill="#7C2530">1</text>
+
+  <!-- "= Ax + t" result label below -->
+  <text x="390" y="355" font-size="9.5" fill="#1C1713">  ⟹  result: </text>
+  <text x="475" y="355" font-size="9.5" fill="#2D5A8E" font-style="italic">Ax + t</text>
+  <text x="510" y="355" font-size="9.5" fill="#1C1713">  (standard coords)</text>
+
+  <!-- Caption -->
+  <text x="490" y="380" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">Augment x with a 1 → translation becomes matrix multiply</text>
+
+  <!-- Bottom global caption -->
+  <text x="400" y="395" text-anchor="middle" font-size="9" fill="#9B8877">dashed = before shape  ·  solid = after shape  ·  blue arrow = displacement t</text>
+</svg>

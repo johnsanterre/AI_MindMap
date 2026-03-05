@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="sh-arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#aaa"/>
+    </marker>
+    <marker id="sh-arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4a90d9"/>
+    </marker>
+    <marker id="sh-arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c0622a"/>
+    </marker>
+    <marker id="sh-arr-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2a9d8f"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#1C1713">Shear Transformation: Before and After</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 1 (LEFT): Before shear — unit square, origin at (130,280)  -->
+  <!-- unit = 90px                                                        -->
+  <!-- ================================================================ -->
+
+  <text x="130" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#333">Before</text>
+  <text x="130" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#555">unit square</text>
+
+  <!-- Axes -->
+  <line x1="50" y1="280" x2="230" y2="280" stroke="#bbb" stroke-width="1.2" marker-end="url(#sh-arr-gray)"/>
+  <line x1="130" y1="350" x2="130" y2="120" stroke="#bbb" stroke-width="1.2" marker-end="url(#sh-arr-gray)"/>
+  <text x="234" y="284" font-family="Georgia, serif" font-size="11" fill="#888">x</text>
+  <text x="126" y="116" font-family="Georgia, serif" font-size="11" fill="#888">y</text>
+
+  <!-- Unit square: corners (0,0),(1,0),(1,1),(0,1) → px: (130,280),(220,280),(220,190),(130,190) -->
+  <polygon points="130,280 220,280 220,190 130,190"
+           fill="#4a90d9" fill-opacity="0.15"
+           stroke="#4a90d9" stroke-width="2"
+           stroke-dasharray="6,3"/>
+
+  <!-- Corner labels -->
+  <text x="125" y="296" font-family="Georgia, serif" font-size="11" fill="#4a90d9">(0,0)</text>
+  <text x="222" y="296" font-family="Georgia, serif" font-size="11" fill="#4a90d9">(1,0)</text>
+  <text x="222" y="188" font-family="Georgia, serif" font-size="11" fill="#4a90d9">(1,1)</text>
+  <text x="95"  y="188" font-family="Georgia, serif" font-size="11" fill="#4a90d9">(0,1)</text>
+
+  <!-- "Area = 1" label inside -->
+  <text x="175" y="243" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#4a90d9" font-style="italic">area = 1</text>
+
+  <!-- ================================================================ -->
+  <!-- ARROW between panels -->
+  <!-- ================================================================ -->
+  <line x1="268" y1="240" x2="318" y2="240" stroke="#888" stroke-width="1.8" marker-end="url(#sh-arr-gray)"/>
+  <text x="293" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#888">H·x</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 2 (CENTER): Horizontal shear k=0.8 — origin at (430,280)  -->
+  <!-- unit = 90px, k=0.8 → top edge shifts right by k*90=72px         -->
+  <!-- (0,0)→(430,280) (1,0)→(520,280) (1,1)→(592,190) (0,1)→(502,190) -->
+  <!-- ================================================================ -->
+
+  <text x="490" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#333">Horizontal Shear</text>
+  <text x="490" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#555">k = 0.8</text>
+
+  <!-- Axes -->
+  <line x1="350" y1="280" x2="620" y2="280" stroke="#bbb" stroke-width="1.2" marker-end="url(#sh-arr-gray)"/>
+  <line x1="430" y1="350" x2="430" y2="120" stroke="#bbb" stroke-width="1.2" marker-end="url(#sh-arr-gray)"/>
+  <text x="624" y="284" font-family="Georgia, serif" font-size="11" fill="#888">x</text>
+  <text x="426" y="116" font-family="Georgia, serif" font-size="11" fill="#888">y</text>
+
+  <!-- Ghost of original unit square (dashed, faint) -->
+  <polygon points="430,280 520,280 520,190 430,190"
+           fill="none"
+           stroke="#4a90d9" stroke-width="1.2"
+           stroke-dasharray="5,4" opacity="0.45"/>
+
+  <!-- Sheared parallelogram: H=[1 k; 0 1], k=0.8 -->
+  <!-- (x',y') = (x + k*y, y) -->
+  <!-- (0,0)→(430,280) (1,0)→(520,280) (1,1)→(592,190) (0,1)→(502,190) -->
+  <polygon points="430,280 520,280 592,190 502,190"
+           fill="#c0622a" fill-opacity="0.18"
+           stroke="#c0622a" stroke-width="2.2"/>
+
+  <!-- Shear displacement arrow at top edge: from (0,1) ghost to (0,1) sheared -->
+  <!-- ghost top-left = (430,190), sheared top-left = (502,190) -->
+  <line x1="430" y1="175" x2="502" y2="175"
+        stroke="#c0622a" stroke-width="1.8" marker-end="url(#sh-arr-orange)"/>
+  <text x="466" y="169" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#c0622a">k · y = 0.8</text>
+
+  <!-- vertical reference dashed line from top-left ghost to axis -->
+  <line x1="430" y1="190" x2="430" y2="280" stroke="#4a90d9" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+
+  <!-- Area preserved label -->
+  <text x="500" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#c0622a" font-style="italic">area = 1</text>
+
+  <!-- Corner label for sheared top-left -->
+  <text x="495" y="186" font-family="Georgia, serif" font-size="11" fill="#c0622a">(k,1)</text>
+
+  <!-- Matrix box -->
+  <rect x="354" y="308" width="152" height="50" rx="4" fill="#fff3ec" stroke="#c0622a" stroke-width="1.2"/>
+  <text x="430" y="326" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">H = [1  k]</text>
+  <text x="430" y="344" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">    [0  1]</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 3 (RIGHT): Vertical shear — origin at (700,280) -->
+  <!-- unit = 70px, k=0.7 → right edge shifts up by k*70=49px          -->
+  <!-- (0,0)→(700,280) (1,0)→(770,231) (1,1)→(770,161) (0,1)→(700,210) -->
+  <!-- ================================================================ -->
+
+  <text x="718" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#333">Vertical Shear</text>
+  <text x="718" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#555">k = 0.7</text>
+
+  <!-- Axes -->
+  <line x1="645" y1="280" x2="790" y2="280" stroke="#bbb" stroke-width="1.2" marker-end="url(#sh-arr-gray)"/>
+  <line x1="700" y1="350" x2="700" y2="120" stroke="#bbb" stroke-width="1.2" marker-end="url(#sh-arr-gray)"/>
+  <text x="793" y="284" font-family="Georgia, serif" font-size="11" fill="#888">x</text>
+  <text x="696" y="116" font-family="Georgia, serif" font-size="11" fill="#888">y</text>
+
+  <!-- Ghost unit square, 70px -->
+  <polygon points="700,280 770,280 770,210 700,210"
+           fill="none"
+           stroke="#4a90d9" stroke-width="1.2"
+           stroke-dasharray="5,4" opacity="0.45"/>
+
+  <!-- V = [1 0; k 1]: (x',y') = (x, y + k*x) -->
+  <!-- (0,0)→(700,280) (1,0)→(770,280-49)=(770,231) (1,1)→(770,161) (0,1)→(700,210) -->
+  <polygon points="700,280 770,231 770,161 700,210"
+           fill="#2a9d8f" fill-opacity="0.20"
+           stroke="#2a9d8f" stroke-width="2.2"/>
+
+  <!-- Shear displacement arrow on right edge: (1,0) ghost = (770,280), sheared = (770,231) -->
+  <line x1="783" y1="280" x2="783" y2="231"
+        stroke="#2a9d8f" stroke-width="1.8" marker-end="url(#sh-arr-teal)"/>
+  <text x="795" y="256" font-family="Georgia, serif" font-size="11" fill="#2a9d8f">k·x</text>
+
+  <!-- Matrix box -->
+  <rect x="642" y="308" width="152" height="50" rx="4" fill="#e0f5f3" stroke="#2a9d8f" stroke-width="1.2"/>
+  <text x="718" y="326" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">V = [1  0]</text>
+  <text x="718" y="344" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">    [k  1]</text>
+
+  <!-- ================================================================ -->
+  <!-- FOOTER CAPTION -->
+  <!-- ================================================================ -->
+  <text x="400" y="393" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#888">Shear slides rows or columns — the parallelogram has the same area as the original square (det = 1)</text>
+</svg>

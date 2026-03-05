@@ -1,0 +1,98 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- ── LEFT PANEL: 1D parabola ───────────────────────────────────── -->
+  <text x="200" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#2E1F14">1D Quadratic: f(x) = ax² + bx + c</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="320" x2="360" y2="320" stroke="#888" stroke-width="1.5"/>
+  <line x1="200" y1="60" x2="200" y2="330" stroke="#888" stroke-width="1.5"/>
+  <!-- Axis labels -->
+  <text x="365" y="324" font-size="12" fill="#555">x</text>
+  <text x="204" y="57" font-size="12" fill="#555">f(x)</text>
+
+  <!-- Parabola: vertex at (200,130), opens upward, roots at x≈90 and x≈310 -->
+  <path d="M 88,318 Q 200,50 312,318" fill="none" stroke="#7C2530" stroke-width="2.8"/>
+
+  <!-- Vertex dot and label -->
+  <circle cx="200" cy="129" r="5" fill="#7C2530"/>
+  <text x="213" y="127" font-size="12" fill="#7C2530" font-weight="bold">vertex (minimum)</text>
+
+  <!-- Axis of symmetry -->
+  <line x1="200" y1="70" x2="200" y2="320" stroke="#5C3D1E" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <text x="202" y="342" font-size="11" fill="#5C3D1E">axis of symmetry</text>
+
+  <!-- Root markers -->
+  <circle cx="88" cy="320" r="4" fill="#27ae60"/>
+  <text x="68" y="338" font-size="11" fill="#27ae60">root x₁</text>
+  <circle cx="312" cy="320" r="4" fill="#27ae60"/>
+  <text x="293" y="338" font-size="11" fill="#27ae60">root x₂</text>
+
+  <!-- Bracket showing distance from vertex to root -->
+  <line x1="88" y1="355" x2="200" y2="355" stroke="#888" stroke-width="1" marker-end="url(#arr-right)" marker-start="url(#arr-left)"/>
+  <text x="144" y="370" text-anchor="middle" font-size="10" fill="#888">b/2a</text>
+
+  <!-- Curvature annotation -->
+  <text x="90" y="180" font-size="11" fill="#2196F3">curvature = 2a</text>
+
+  <!-- ── RIGHT PANEL: 2D quadratic forms ───────────────────────────── -->
+  <text x="590" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#2E1F14">2D Quadratic Forms: xᵀAx</text>
+
+  <!-- Bowl (positive definite) — left sub-panel -->
+  <text x="490" y="52" text-anchor="middle" font-size="12" fill="#27ae60" font-weight="bold">positive definite (bowl)</text>
+
+  <!-- Outer ellipses simulating bowl contours -->
+  <ellipse cx="490" cy="195" rx="90" ry="45" fill="none" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
+  <ellipse cx="490" cy="195" rx="65" ry="32" fill="none" stroke="#27ae60" stroke-width="1.2" opacity="0.6"/>
+  <ellipse cx="490" cy="195" rx="40" ry="20" fill="none" stroke="#27ae60" stroke-width="1.5" opacity="0.8"/>
+  <ellipse cx="490" cy="195" rx="18" ry="9"  fill="none" stroke="#27ae60" stroke-width="1.8"/>
+
+  <!-- "Bowl" 3D-suggestive arc -->
+  <path d="M 405,210 Q 490,115 575,210" fill="none" stroke="#27ae60" stroke-width="2.5"/>
+  <path d="M 415,230 Q 490,150 565,230" fill="none" stroke="#27ae60" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Minimum marker -->
+  <circle cx="490" cy="162" r="5" fill="#27ae60"/>
+  <text x="502" y="160" font-size="11" fill="#27ae60">global min</text>
+
+  <!-- Hessian label for bowl -->
+  <text x="490" y="270" text-anchor="middle" font-size="11" fill="#555">H all eigenvalues &gt; 0</text>
+
+  <!-- Saddle (indefinite) — right sub-panel -->
+  <text x="695" y="52" text-anchor="middle" font-size="12" fill="#e67e22" font-weight="bold">indefinite (saddle)</text>
+
+  <!-- Saddle surface: hyperbolic contours -->
+  <!-- descending direction (concave) -->
+  <path d="M 610,130 Q 695,195 780,130" fill="none" stroke="#e67e22" stroke-width="2.5"/>
+  <path d="M 615,150 Q 695,205 775,150" fill="none" stroke="#e67e22" stroke-width="1.5" opacity="0.5"/>
+  <!-- ascending direction (convex) -->
+  <path d="M 640,240 Q 695,160 750,240" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <path d="M 645,255 Q 695,175 745,255" fill="none" stroke="#7C2530" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Saddle point marker -->
+  <circle cx="695" cy="195" r="5" fill="#e67e22"/>
+  <text x="707" y="193" font-size="11" fill="#e67e22">saddle point</text>
+
+  <!-- Direction labels -->
+  <text x="695" y="120" text-anchor="middle" font-size="10" fill="#e67e22">↑ concave (λ &lt; 0)</text>
+  <text x="695" y="275" text-anchor="middle" font-size="10" fill="#7C2530">↓ convex (λ &gt; 0)</text>
+
+  <!-- Hessian label for saddle -->
+  <text x="695" y="298" text-anchor="middle" font-size="11" fill="#555">H mixed ±eigenvalues</text>
+
+  <!-- Shared Hessian annotation at bottom -->
+  <rect x="30" y="378" width="740" height="18" rx="3" fill="#EDE5D0"/>
+  <text x="400" y="391" text-anchor="middle" font-size="11" fill="#5C3D1E">Hessian H = ∇²f determines curvature type · positive definite → min · negative definite → max · indefinite → saddle</text>
+
+  <!-- Divider between panels -->
+  <line x1="395" y1="40" x2="395" y2="375" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <defs>
+    <marker id="arr-right" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#888"/>
+    </marker>
+    <marker id="arr-left" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L0,6 L6,3 z" fill="#888"/>
+    </marker>
+  </defs>
+</svg>

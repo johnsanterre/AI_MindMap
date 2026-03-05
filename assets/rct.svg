@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="rct-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6B5D4F"/>
+    </marker>
+    <marker id="rct-arr-grn" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D6A4F"/>
+    </marker>
+    <marker id="rct-arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="rct-arr-blu" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel label -->
+  <text x="400" y="20" text-anchor="middle" font-size="10.5" fill="#6B5D4F" letter-spacing="1">RANDOMIZED CONTROLLED TRIAL — DESIGN AND ESTIMATION</text>
+
+  <!-- ══ POPULATION BOX ══ -->
+  <rect x="290" y="34" width="220" height="44" rx="6" fill="#F2EAD8" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="400" y="53" text-anchor="middle" font-size="13" font-weight="bold" fill="#6B5D4F">Study Population</text>
+  <text x="400" y="70" text-anchor="middle" font-size="10.5" fill="#9B8877" font-style="italic">n eligible units</text>
+
+  <!-- Arrow population → randomization -->
+  <line x1="400" y1="78" x2="400" y2="106" stroke="#6B5D4F" stroke-width="1.8" marker-end="url(#rct-arr)"/>
+
+  <!-- ══ RANDOMIZATION BOX ══ -->
+  <rect x="290" y="108" width="220" height="44" rx="6" fill="#EAF0FB" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="127" text-anchor="middle" font-size="13" font-weight="bold" fill="#2D5A8E">Random Assignment</text>
+  <text x="400" y="143" text-anchor="middle" font-size="10" fill="#2D5A8E" font-style="italic">coin flip · lottery · block · cluster</text>
+
+  <!-- Annotation: randomization breaks confounding -->
+  <rect x="545" y="108" width="218" height="30" rx="4" fill="#EAF0FB" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="654" y="124" text-anchor="middle" font-size="10" fill="#2D5A8E" font-style="italic">randomization breaks confounding</text>
+  <line x1="545" y1="123" x2="510" y2="130" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Arrows from randomization → two groups -->
+  <line x1="340" y1="152" x2="200" y2="192" stroke="#7C2530" stroke-width="1.8" marker-end="url(#rct-arr-red)"/>
+  <text x="248" y="180" text-anchor="middle" font-size="10" fill="#7C2530">50%</text>
+  <line x1="460" y1="152" x2="600" y2="192" stroke="#2D6A4F" stroke-width="1.8" marker-end="url(#rct-arr-grn)"/>
+  <text x="548" y="180" text-anchor="middle" font-size="10" fill="#2D6A4F">50%</text>
+
+  <!-- ══ TREATMENT GROUP ══ -->
+  <rect x="60" y="196" width="240" height="72" rx="6" fill="#FCEAEA" stroke="#7C2530" stroke-width="2"/>
+  <text x="180" y="218" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">Treatment Group</text>
+  <text x="180" y="235" text-anchor="middle" font-size="11" fill="#7C2530">receives intervention</text>
+  <text x="180" y="253" text-anchor="middle" font-size="10.5" fill="#6B5D4F">Y(1) = potential outcome</text>
+  <text x="180" y="268" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">D = 1</text>
+
+  <!-- ══ CONTROL GROUP ══ -->
+  <rect x="500" y="196" width="240" height="72" rx="6" fill="#EAF5EE" stroke="#2D6A4F" stroke-width="2"/>
+  <text x="620" y="218" text-anchor="middle" font-size="13" font-weight="bold" fill="#2D6A4F">Control Group</text>
+  <text x="620" y="235" text-anchor="middle" font-size="11" fill="#2D6A4F">no intervention (or placebo)</text>
+  <text x="620" y="253" text-anchor="middle" font-size="10.5" fill="#6B5D4F">Y(0) = potential outcome</text>
+  <text x="620" y="268" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">D = 0</text>
+
+  <!-- Counterfactual annotation -->
+  <rect x="285" y="218" width="230" height="28" rx="4" fill="#F2EAD8" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="233" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">counterfactual: Y(1) unseen for control,</text>
+  <text x="400" y="244" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">Y(0) unseen for treated</text>
+
+  <!-- Arrows to outcomes -->
+  <line x1="180" y1="268" x2="180" y2="310" stroke="#7C2530" stroke-width="1.8" marker-end="url(#rct-arr-red)"/>
+  <line x1="620" y1="268" x2="620" y2="310" stroke="#2D6A4F" stroke-width="1.8" marker-end="url(#rct-arr-grn)"/>
+
+  <!-- ══ OUTCOME BOXES ══ -->
+  <rect x="80" y="312" width="200" height="36" rx="5" fill="#FCEAEA" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="180" y="330" text-anchor="middle" font-size="12" fill="#7C2530" font-weight="bold">Outcome: Ȳ₁</text>
+  <text x="180" y="344" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">observed mean, treated</text>
+
+  <rect x="520" y="312" width="200" height="36" rx="5" fill="#EAF5EE" stroke="#2D6A4F" stroke-width="1.5"/>
+  <text x="620" y="330" text-anchor="middle" font-size="12" fill="#2D6A4F" font-weight="bold">Outcome: Ȳ₀</text>
+  <text x="620" y="344" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">observed mean, control</text>
+
+  <!-- Arrows to comparison box -->
+  <line x1="280" y1="330" x2="344" y2="360" stroke="#7C2530" stroke-width="1.6" marker-end="url(#rct-arr-red)"/>
+  <line x1="520" y1="330" x2="456" y2="360" stroke="#2D6A4F" stroke-width="1.6" marker-end="url(#rct-arr-grn)"/>
+
+  <!-- ══ ATE BOX ══ -->
+  <rect x="280" y="360" width="240" height="32" rx="5" fill="#F2EAD8" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="374" text-anchor="middle" font-size="11" font-weight="bold" fill="#6B5D4F">ATE = E[Y(1)] − E[Y(0)]</text>
+  <text x="400" y="387" text-anchor="middle" font-size="10" fill="#9B8877" font-style="italic">≈ Ȳ₁ − Ȳ₀  (Neyman estimator)</text>
+</svg>

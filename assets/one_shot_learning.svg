@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Support set: 1 example per class -->
+  <rect x="30" y="80" width="200" height="240" rx="10" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
+  <text x="130" y="65" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Support Set (1-shot)</text>
+  <rect x="50" y="100" width="60" height="60" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="80" y="135" text-anchor="middle" font-family="Arial" font-size="22" fill="#4a90d9">🐱</text>
+  <text x="80" y="165" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Cat (1 ex)</text>
+  <rect x="50" y="185" width="60" height="60" rx="6" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+  <text x="80" y="220" text-anchor="middle" font-family="Arial" font-size="22" fill="#e67e22">🐶</text>
+  <text x="80" y="250" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Dog (1 ex)</text>
+  <rect x="50" y="270" width="60" height="60" rx="6" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
+  <text x="80" y="305" text-anchor="middle" font-family="Arial" font-size="22" fill="#27ae60">🐦</text>
+  <text x="80" y="335" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Bird (1 ex)</text>
+  <!-- Query -->
+  <rect x="310" y="150" width="100" height="100" rx="10" fill="#fef9e7" stroke="#f39c12" stroke-width="2.5"/>
+  <text x="360" y="195" text-anchor="middle" font-family="Arial" font-size="30">🐱</text>
+  <text x="360" y="255" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Query image</text>
+  <!-- Arrow -->
+  <line x1="240" y1="200" x2="305" y2="200" stroke="#888" stroke-width="2" marker-end="url(#arrnmf)"/>
+  <!-- Similarity comparison -->
+  <rect x="460" y="120" width="160" height="160" rx="10" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
+  <text x="540" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#8e44ad">Similarity</text>
+  <text x="540" y="160" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Cat: 0.92 ✓</text>
+  <text x="540" y="185" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Dog: 0.21</text>
+  <text x="540" y="210" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Bird: 0.15</text>
+  <text x="540" y="240" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">→ Cat!</text>
+  <line x1="415" y1="200" x2="455" y2="200" stroke="#888" stroke-width="2" marker-end="url(#arrnmf)"/>
+  <defs><marker id="arrnmf" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker></defs>
+  <text x="680" y="200" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Embedding</text>
+  <text x="680" y="218" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">space</text>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">One-Shot Learning</text>
+  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Learn to compare, not memorize — generalize from a single example</text>
+</svg>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-main" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-red" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="6"/>
+
+  <!-- ══ TITLE ══ -->
+  <text x="400" y="28" text-anchor="middle" font-size="13" fill="#3D2B1A" letter-spacing="1.5" font-weight="bold">BAYES' THEOREM</text>
+  <text x="400" y="43" text-anchor="middle" font-size="9.5" fill="#6B5D4F" font-style="italic">Posterior  ∝  Likelihood  ×  Prior</text>
+
+  <!-- Dividing line under title -->
+  <line x1="50" y1="52" x2="750" y2="52" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- ══ THREE COMPONENT BOXES ══ -->
+
+  <!-- BOX 1: Prior P(H) — left -->
+  <rect x="48" y="68" width="190" height="130" rx="6" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="143" y="87" text-anchor="middle" font-size="10" fill="#2D5A8E" letter-spacing="1">PRIOR</text>
+  <text x="143" y="105" text-anchor="middle" font-size="22" fill="#2D5A8E" font-weight="bold">P(H)</text>
+  <text x="143" y="125" text-anchor="middle" font-size="8.5" fill="#3A5275" font-style="italic">Your belief before</text>
+  <text x="143" y="138" text-anchor="middle" font-size="8.5" fill="#3A5275" font-style="italic">seeing any evidence</text>
+  <!-- Mini distribution curve -->
+  <path d="M 68,185 C 80,183 95,175 110,162 C 120,152 130,140 143,132 C 156,140 165,152 176,162 C 191,175 206,183 218,185"
+        fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="143" y="196" text-anchor="middle" font-size="7.5" fill="#2D5A8E">broad / uncertain</text>
+
+  <!-- BOX 2: Likelihood P(E|H) — center -->
+  <rect x="305" y="68" width="190" height="130" rx="6" fill="#FDF3E0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="87" text-anchor="middle" font-size="10" fill="#7A5230" letter-spacing="1">LIKELIHOOD</text>
+  <text x="400" y="105" text-anchor="middle" font-size="22" fill="#7A5230" font-weight="bold">P(E|H)</text>
+  <text x="400" y="125" text-anchor="middle" font-size="8.5" fill="#7A5230" font-style="italic">How well the hypothesis</text>
+  <text x="400" y="138" text-anchor="middle" font-size="8.5" fill="#7A5230" font-style="italic">predicts the evidence</text>
+  <!-- Mini bar chart suggesting evidence fit -->
+  <rect x="335" y="162" width="16" height="24" rx="2" fill="#C4A87A" fill-opacity="0.5"/>
+  <rect x="358" y="152" width="16" height="34" rx="2" fill="#C4A87A" fill-opacity="0.7"/>
+  <rect x="381" y="158" width="16" height="28" rx="2" fill="#C4A87A" fill-opacity="0.5"/>
+  <rect x="404" y="145" width="16" height="41" rx="2" fill="#C4A87A" fill-opacity="0.9"/>
+  <rect x="427" y="160" width="16" height="26" rx="2" fill="#C4A87A" fill-opacity="0.5"/>
+  <text x="400" y="196" text-anchor="middle" font-size="7.5" fill="#7A5230">strength of evidence</text>
+
+  <!-- BOX 3: Posterior P(H|E) — right -->
+  <rect x="562" y="68" width="190" height="130" rx="6" fill="#F8EAEA" stroke="#7C2530" stroke-width="2"/>
+  <text x="657" y="87" text-anchor="middle" font-size="10" fill="#7C2530" letter-spacing="1">POSTERIOR</text>
+  <text x="657" y="105" text-anchor="middle" font-size="22" fill="#7C2530" font-weight="bold">P(H|E)</text>
+  <text x="657" y="125" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">Updated belief after</text>
+  <text x="657" y="138" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">seeing the evidence</text>
+  <!-- Mini distribution curve — narrower/sharper -->
+  <path d="M 582,186 C 600,185 620,179 635,168 C 645,160 651,149 657,138 C 663,149 669,160 679,168 C 694,179 714,185 732,186"
+        fill="#7C2530" fill-opacity="0.14" stroke="#7C2530" stroke-width="2"/>
+  <text x="657" y="196" text-anchor="middle" font-size="7.5" fill="#7C2530">sharper / more certain</text>
+
+  <!-- ══ ARROWS BETWEEN BOXES ══ -->
+  <!-- Prior → Posterior (top arc label: × Likelihood) -->
+  <line x1="238" y1="133" x2="305" y2="133" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr-main)"/>
+  <text x="272" y="124" text-anchor="middle" font-size="8" fill="#5C3D1E">×</text>
+
+  <line x1="495" y1="133" x2="562" y2="133" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr-main)"/>
+  <text x="529" y="124" text-anchor="middle" font-size="8" fill="#5C3D1E">÷ P(E)</text>
+
+  <!-- ══ FULL FORMULA BAR ══ -->
+  <rect x="48" y="220" width="704" height="58" rx="6" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="240" text-anchor="middle" font-size="10" fill="#5C3D1E" letter-spacing="1">THE FORMULA</text>
+
+  <!-- Formula rendered as text -->
+  <text x="400" y="265" text-anchor="middle" font-size="17" fill="#3D2B1A" font-weight="bold">P(H | E)  =</text>
+  <text x="560" y="258" text-anchor="middle" font-size="14" fill="#2D5A8E" font-weight="bold">P(E | H)</text>
+  <text x="560" y="264" text-anchor="middle" font-size="10" fill="#3D2B1A"> · </text>
+  <text x="609" y="258" text-anchor="middle" font-size="14" fill="#7C2530" font-weight="bold">P(H)</text>
+  <line x1="520" y1="266" x2="660" y2="266" stroke="#3D2B1A" stroke-width="1.5"/>
+  <text x="590" y="278" text-anchor="middle" font-size="14" fill="#5C3D1E">P(E)</text>
+
+  <!-- color key under formula -->
+  <circle cx="526" cy="257" r="5" fill="#2D5A8E" fill-opacity="0.7"/>
+  <circle cx="620" cy="257" r="5" fill="#7C2530" fill-opacity="0.7"/>
+
+  <!-- ══ BOTTOM: NARRATIVE FLOW ══ -->
+  <!-- Three annotation blocks -->
+  <rect x="48" y="295" width="190" height="88" rx="5" fill="#EAF0F8" fill-opacity="0.5" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="143" y="313" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-weight="bold">① Start here</text>
+  <text x="143" y="328" text-anchor="middle" font-size="8" fill="#3A5275">"I think there's a 1%</text>
+  <text x="143" y="341" text-anchor="middle" font-size="8" fill="#3A5275">chance of disease."</text>
+  <text x="143" y="357" text-anchor="middle" font-size="8" fill="#3A5275" font-style="italic">Prior = 0.01</text>
+  <text x="143" y="374" text-anchor="middle" font-size="7.5" fill="#3A5275">(before test results)</text>
+
+  <rect x="305" y="295" width="190" height="88" rx="5" fill="#FDF3E0" fill-opacity="0.5" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="313" text-anchor="middle" font-size="8.5" fill="#7A5230" font-weight="bold">② Observe evidence</text>
+  <text x="400" y="328" text-anchor="middle" font-size="8" fill="#7A5230">"Test is positive. It hits</text>
+  <text x="400" y="341" text-anchor="middle" font-size="8" fill="#7A5230">90% of true cases."</text>
+  <text x="400" y="357" text-anchor="middle" font-size="8" fill="#7A5230" font-style="italic">Likelihood = 0.90</text>
+  <text x="400" y="374" text-anchor="middle" font-size="7.5" fill="#7A5230">(how diagnostic is this?)</text>
+
+  <rect x="562" y="295" width="190" height="88" rx="5" fill="#F8EAEA" fill-opacity="0.5" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="657" y="313" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">③ Updated belief</text>
+  <text x="657" y="328" text-anchor="middle" font-size="8" fill="#7C2530">"Now I estimate ~8%</text>
+  <text x="657" y="341" text-anchor="middle" font-size="8" fill="#7C2530">chance of disease."</text>
+  <text x="657" y="357" text-anchor="middle" font-size="8" fill="#7C2530" font-style="italic">Posterior ≈ 0.083</text>
+  <text x="657" y="374" text-anchor="middle" font-size="7.5" fill="#7C2530">(rare disease stays rare)</text>
+
+  <!-- Flow arrows between bottom boxes -->
+  <line x1="238" y1="340" x2="305" y2="340" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arr-main)"/>
+  <line x1="495" y1="340" x2="562" y2="340" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arr-main)"/>
+</svg>

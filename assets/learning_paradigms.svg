@@ -1,0 +1,143 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <defs>
+    <marker id="arr-lp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+    <marker id="arr-lp-grn" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4A7C59"/>
+    </marker>
+    <marker id="arr-lp-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2C5F8A"/>
+    </marker>
+    <marker id="arr-lp-org" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#E07B39"/>
+    </marker>
+    <marker id="arr-lp-pur" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7B5EA7"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" fill="#333" font-size="15" font-weight="bold">Learning Paradigms</text>
+
+  <!-- Dividers -->
+  <line x1="400" y1="44" x2="400" y2="390" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="20" y1="218" x2="780" y2="218" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ═══ QUADRANT 1: Supervised (top-left) ═══ -->
+  <rect x="20" y="44" width="370" height="168" rx="10" fill="#EBF4EE" stroke="#4A7C59" stroke-width="1.5"/>
+  <text x="205" y="66" text-anchor="middle" fill="#4A7C59" font-size="13" font-weight="bold">Supervised Learning</text>
+
+  <!-- Labeled data points -->
+  <circle cx="70" cy="108" r="9" fill="#4A7C59"/>
+  <text x="70" y="112" text-anchor="middle" fill="white" font-size="9" font-weight="bold">+</text>
+  <circle cx="70" cy="136" r="9" fill="#C0392B"/>
+  <text x="70" y="140" text-anchor="middle" fill="white" font-size="9" font-weight="bold">−</text>
+  <circle cx="70" cy="164" r="9" fill="#4A7C59"/>
+  <text x="70" y="168" text-anchor="middle" fill="white" font-size="9" font-weight="bold">+</text>
+  <text x="70" y="192" text-anchor="middle" fill="#555" font-size="10">labeled data</text>
+
+  <!-- Arrow to model -->
+  <line x1="92" y1="140" x2="148" y2="140" stroke="#4A7C59" stroke-width="2" marker-end="url(#arr-lp-grn)"/>
+
+  <!-- Model box -->
+  <rect x="152" y="118" width="80" height="44" rx="6" fill="#4A7C59"/>
+  <text x="192" y="138" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Model</text>
+  <text x="192" y="153" text-anchor="middle" fill="#d4edda" font-size="10">f(x) → ŷ</text>
+
+  <!-- Arrow to prediction -->
+  <line x1="232" y1="140" x2="280" y2="140" stroke="#4A7C59" stroke-width="2" marker-end="url(#arr-lp-grn)"/>
+
+  <!-- Prediction output -->
+  <rect x="283" y="122" width="90" height="36" rx="6" fill="white" stroke="#4A7C59" stroke-width="1.5"/>
+  <text x="328" y="137" text-anchor="middle" fill="#4A7C59" font-size="11">Prediction</text>
+  <text x="328" y="151" text-anchor="middle" fill="#555" font-size="10">loss: ŷ vs y</text>
+
+  <!-- Loss feedback arrow back -->
+  <path d="M328,158 Q328,185 192,185 Q80,185 70,192" fill="none" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-lp)"/>
+  <text x="200" y="200" text-anchor="middle" fill="#C0392B" font-size="9">error signal → update weights</text>
+
+  <!-- ═══ QUADRANT 2: Unsupervised (top-right) ═══ -->
+  <rect x="410" y="44" width="370" height="168" rx="10" fill="#EBF0F8" stroke="#2C5F8A" stroke-width="1.5"/>
+  <text x="595" y="66" text-anchor="middle" fill="#2C5F8A" font-size="13" font-weight="bold">Unsupervised Learning</text>
+
+  <!-- Unlabeled scatter -->
+  <circle cx="460" cy="100" r="6" fill="#2C5F8A" fill-opacity="0.6"/>
+  <circle cx="475" cy="118" r="6" fill="#2C5F8A" fill-opacity="0.6"/>
+  <circle cx="462" cy="134" r="6" fill="#2C5F8A" fill-opacity="0.6"/>
+  <circle cx="510" cy="96" r="6" fill="#2C5F8A" fill-opacity="0.6"/>
+  <circle cx="522" cy="112" r="6" fill="#2C5F8A" fill-opacity="0.6"/>
+  <circle cx="505" cy="128" r="6" fill="#2C5F8A" fill-opacity="0.6"/>
+  <text x="490" y="158" text-anchor="middle" fill="#555" font-size="10">no labels</text>
+
+  <!-- Arrow -->
+  <line x1="542" y1="118" x2="578" y2="118" stroke="#2C5F8A" stroke-width="2" marker-end="url(#arr-lp-blue)"/>
+
+  <!-- Structure box -->
+  <rect x="582" y="96" width="80" height="44" rx="6" fill="#2C5F8A"/>
+  <text x="622" y="116" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Find</text>
+  <text x="622" y="131" text-anchor="middle" fill="#cce0f5" font-size="10">Structure</text>
+
+  <!-- Arrow to output -->
+  <line x1="662" y1="118" x2="698" y2="118" stroke="#2C5F8A" stroke-width="2" marker-end="url(#arr-lp-blue)"/>
+
+  <!-- Clusters output -->
+  <circle cx="718" cy="106" r="8" fill="#2C5F8A"/>
+  <circle cx="730" cy="120" r="8" fill="#E07B39"/>
+  <circle cx="718" cy="134" r="8" fill="#4A7C59"/>
+  <text x="724" y="158" text-anchor="middle" fill="#555" font-size="10">clusters / dims</text>
+
+  <text x="595" y="190" text-anchor="middle" fill="#2C5F8A" font-size="10">Goal: discover patterns, clusters, representations</text>
+
+  <!-- ═══ QUADRANT 3: Reinforcement Learning (bottom-left) ═══ -->
+  <rect x="20" y="228" width="370" height="162" rx="10" fill="#FEF3EC" stroke="#E07B39" stroke-width="1.5"/>
+  <text x="205" y="250" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">Reinforcement Learning</text>
+
+  <!-- Agent -->
+  <rect x="50" y="266" width="90" height="48" rx="8" fill="#E07B39"/>
+  <text x="95" y="287" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Agent</text>
+  <text x="95" y="303" text-anchor="middle" fill="#fde8d5" font-size="10">π(a|s)</text>
+
+  <!-- Environment -->
+  <rect x="240" y="266" width="120" height="48" rx="8" fill="#2C5F8A"/>
+  <text x="300" y="287" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Environment</text>
+  <text x="300" y="303" text-anchor="middle" fill="#cce0f5" font-size="10">dynamics</text>
+
+  <!-- Action arrow (top, left→right) -->
+  <line x1="140" y1="277" x2="240" y2="277" stroke="#E07B39" stroke-width="2" marker-end="url(#arr-lp-org)"/>
+  <text x="190" y="270" text-anchor="middle" fill="#E07B39" font-size="10" font-weight="bold">action aₜ</text>
+
+  <!-- State+reward arrow (bottom, right→left) -->
+  <line x1="240" y1="303" x2="140" y2="303" stroke="#2C5F8A" stroke-width="2" marker-end="url(#arr-lp-blue)"/>
+  <text x="190" y="320" text-anchor="middle" fill="#2C5F8A" font-size="10" font-weight="bold">state sₜ₊₁, reward rₜ</text>
+
+  <text x="205" y="370" text-anchor="middle" fill="#E07B39" font-size="10">Goal: maximize G = r₀ + γr₁ + γ²r₂ + ···</text>
+  <text x="205" y="384" text-anchor="middle" fill="#555" font-size="9">no labeled data — only a reward signal</text>
+
+  <!-- ═══ QUADRANT 4: Self-Supervised (bottom-right) ═══ -->
+  <rect x="410" y="228" width="370" height="162" rx="10" fill="#F3EFF8" stroke="#7B5EA7" stroke-width="1.5"/>
+  <text x="595" y="250" text-anchor="middle" fill="#7B5EA7" font-size="13" font-weight="bold">Self-Supervised Learning</text>
+
+  <!-- Raw data block -->
+  <rect x="430" y="265" width="100" height="44" rx="6" fill="#7B5EA7"/>
+  <text x="480" y="284" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Raw Data</text>
+  <text x="480" y="299" text-anchor="middle" fill="#e0d8f0" font-size="10">unlabeled</text>
+
+  <!-- Self-label arrow loop -->
+  <path d="M480,309 Q480,335 530,342 Q580,349 580,309" fill="none" stroke="#7B5EA7" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arr-lp-pur)"/>
+  <text x="533" y="356" text-anchor="middle" fill="#7B5EA7" font-size="10">data creates labels</text>
+
+  <!-- Arrow to model -->
+  <line x1="530" y1="287" x2="576" y2="287" stroke="#7B5EA7" stroke-width="2" marker-end="url(#arr-lp-pur)"/>
+
+  <!-- Pretext task box -->
+  <rect x="580" y="265" width="110" height="44" rx="6" fill="white" stroke="#7B5EA7" stroke-width="1.5"/>
+  <text x="635" y="283" text-anchor="middle" fill="#7B5EA7" font-size="11" font-weight="bold">Pretext Task</text>
+  <text x="635" y="297" text-anchor="middle" fill="#555" font-size="10">mask / predict / contrast</text>
+
+  <text x="595" y="370" text-anchor="middle" fill="#7B5EA7" font-size="10">Goal: rich representations → fine-tune downstream</text>
+  <text x="595" y="384" text-anchor="middle" fill="#555" font-size="9">e.g. BERT masked tokens, SimCLR contrastive pairs</text>
+</svg>

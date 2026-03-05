@@ -1,0 +1,26 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Axes -->
+  <line x1="100" y1="320" x2="700" y2="320" stroke="#333" stroke-width="2"/>
+  <line x1="100" y1="320" x2="100" y2="40" stroke="#333" stroke-width="2"/>
+  <text x="400" y="370" text-anchor="middle" font-size="14" fill="#333">Predicted probability p̂</text>
+  <text x="40" y="185" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,40,185)">Loss</text>
+  <!-- Tick marks -->
+  <text x="100" y="338" text-anchor="middle" font-size="12" fill="#666">0</text>
+  <text x="700" y="338" text-anchor="middle" font-size="12" fill="#666">1</text>
+  <!-- y=1 curve: -log(p) -->
+  <path d="M680,60 C600,80 500,130 400,185 C300,240 200,295 120,340" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <!-- y=0 curve: -log(1-p) -->
+  <path d="M120,60 C200,80 300,130 400,185 C500,240 600,295 680,340" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <!-- Labels -->
+  <text x="650" y="75" font-size="13" fill="#2196F3">y=1: −log(p̂)</text>
+  <text x="110" y="75" font-size="13" fill="#E91E63">y=0: −log(1−p̂)</text>
+  <!-- Correct prediction regions -->
+  <text x="620" y="310" font-size="12" fill="#2196F3">low loss</text>
+  <text x="120" y="310" font-size="12" fill="#E91E63">low loss</text>
+  <!-- Formula -->
+  <rect x="220" y="160" width="360" height="42" rx="6" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="400" y="178" text-anchor="middle" font-size="12" fill="#555">Log Loss = −[y log(p̂) + (1−y) log(1−p̂)]</text>
+  <text x="400" y="196" text-anchor="middle" font-size="11" fill="#888">penalizes confident wrong predictions heavily</text>
+  <text x="400" y="25" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Log Loss (Binary Cross-Entropy)</text>
+</svg>

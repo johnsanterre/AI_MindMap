@@ -1,0 +1,169 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="4"/>
+
+  <!-- Panel divider -->
+  <line x1="450" y1="20" x2="450" y2="385" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LEFT PANEL: THREE POLYNOMIAL FITS
+       ══════════════════════════════════════════════════════════ -->
+
+  <text x="218" y="22" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">POLYNOMIAL FITS</text>
+
+  <!-- Axes -->
+  <line x1="38" y1="330" x2="430" y2="330" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="38" y1="330" x2="38"  y2="42"  stroke="#C4A87A" stroke-width="1.5"/>
+  <!-- Arrowheads -->
+  <polygon points="430,327 436,330 430,333" fill="#C4A87A"/>
+  <polygon points="35,42 38,36 41,42" fill="#C4A87A"/>
+  <text x="438" y="334" font-size="10" fill="#6B5D4F">x</text>
+  <text x="28"  y="38"  font-size="10" fill="#6B5D4F" text-anchor="middle">y</text>
+
+  <!-- ── Scattered data points (quadratic-ish true relationship with noise) ── -->
+  <!-- True curve roughly: y ≈ -0.006*(x-220)^2 + 285, data points scatter ±20 -->
+  <!-- x_svg in [55,415], mapping x_data in [0,10] -->
+  <!-- Points: (55,300),(75,270),(100,245),(120,220),(145,200),(165,185),(190,178),(215,175),(235,178),(260,190),(285,200),(308,218),(330,240),(355,265),(380,292),(405,318) -->
+  <circle cx="55"  cy="298" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="75"  cy="268" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="100" cy="252" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="118" cy="215" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="145" cy="205" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="163" cy="180" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="190" cy="172" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="213" cy="168" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="238" cy="175" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="260" cy="188" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="283" cy="204" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="308" cy="228" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="330" cy="248" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="355" cy="278" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="378" cy="300" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+  <circle cx="405" cy="322" r="4.5" fill="#8B6B4A" opacity="0.85"/>
+
+  <!-- ── Degree-1 fit (straight line — underfits) ── -->
+  <!-- A nearly flat line from (55,255) to (405,255), slight slope -->
+  <line x1="55" y1="260" x2="405" y2="230" stroke="#2C5F8A" stroke-width="2" stroke-dasharray="8,4"/>
+  <!-- Label -->
+  <text x="62" y="248" font-size="10" fill="#2C5F8A" font-weight="bold">degree 1</text>
+  <text x="62" y="260" font-size="9" fill="#2C5F8A" font-style="italic">(underfitting)</text>
+
+  <!-- ── Degree-3 fit (smooth parabola-like — good fit) ── -->
+  <!-- Path following the data: starts high, dips to minimum near x=213, rises again -->
+  <path d="M55,296 C90,248 140,198 213,168 C285,138 345,188 405,318"
+        fill="none" stroke="#4A7C59" stroke-width="2.5"/>
+  <!-- Label -->
+  <text x="170" y="148" font-size="10" fill="#4A7C59" font-weight="bold">degree 3</text>
+  <text x="170" y="160" font-size="9" fill="#4A7C59" font-style="italic">(good fit)</text>
+
+  <!-- ── Degree-10 fit (oscillates wildly — overfits) ── -->
+  <!-- Wiggly path that hits near each point but oscillates in between -->
+  <path d="M55,296 C60,240 66,310 75,268 C85,222 96,285 100,252
+           C107,210 113,240 118,215 C126,178 136,232 145,205
+           C153,168 160,200 163,180 C170,148 180,200 190,172
+           C198,140 207,195 213,168 C220,135 230,192 238,175
+           C246,148 252,198 260,188 C268,165 275,215 283,204
+           C294,178 300,240 308,228 C318,208 322,260 330,248
+           C340,230 347,278 355,278 C364,278 372,315 378,300
+           C390,282 398,340 405,318"
+        fill="none" stroke="#7C2530" stroke-width="1.8"/>
+  <!-- Label -->
+  <text x="290" y="155" font-size="10" fill="#7C2530" font-weight="bold">degree 10</text>
+  <text x="290" y="167" font-size="9"  fill="#7C2530" font-style="italic">(overfitting)</text>
+
+  <!-- Bottom label -->
+  <text x="218" y="360" text-anchor="middle" font-size="9" fill="#6B5D4F">same 16 training points — three polynomial degrees</text>
+
+  <!-- ══════════════════════════════════════════════════════════
+       RIGHT PANEL: FEATURE EXPANSION TABLE
+       ══════════════════════════════════════════════════════════ -->
+
+  <text x="624" y="22" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">FEATURE EXPANSION</text>
+
+  <!-- Table header row -->
+  <rect x="465" y="36" width="320" height="28" fill="#C4A87A" rx="3"/>
+  <text x="530" y="55" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">raw input x</text>
+  <line x1="595" y1="36" x2="595" y2="64" stroke="#FDFAF4" stroke-width="1"/>
+  <text x="693" y="55" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">expanded features φ(x)</text>
+
+  <!-- Row shading alternating -->
+  <rect x="465" y="64"  width="320" height="30" fill="#F2EAD8" rx="0"/>
+  <rect x="465" y="94"  width="320" height="30" fill="#E9DEC5" rx="0"/>
+  <rect x="465" y="124" width="320" height="30" fill="#F2EAD8" rx="0"/>
+  <rect x="465" y="154" width="320" height="30" fill="#E9DEC5" rx="0"/>
+  <rect x="465" y="184" width="320" height="30" fill="#F2EAD8" rx="0"/>
+
+  <!-- Vertical divider in table -->
+  <line x1="595" y1="64" x2="595" y2="214" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Table outline -->
+  <rect x="465" y="36" width="320" height="178" fill="none" stroke="#C4A87A" stroke-width="1.5" rx="3"/>
+
+  <!-- Row data -->
+  <text x="530" y="83"  text-anchor="middle" font-size="12" fill="#3D2B1F" font-style="italic">x = 2</text>
+  <text x="693" y="83"  text-anchor="middle" font-size="12" fill="#3D2B1F">[1, 2, 4, 8]</text>
+
+  <text x="530" y="113" text-anchor="middle" font-size="12" fill="#3D2B1F" font-style="italic">x = 3</text>
+  <text x="693" y="113" text-anchor="middle" font-size="12" fill="#3D2B1F">[1, 3, 9, 27]</text>
+
+  <text x="530" y="143" text-anchor="middle" font-size="12" fill="#3D2B1F" font-style="italic">x = −1</text>
+  <text x="693" y="143" text-anchor="middle" font-size="12" fill="#3D2B1F">[1, −1, 1, −1]</text>
+
+  <text x="530" y="173" text-anchor="middle" font-size="12" fill="#3D2B1F" font-style="italic">x = 0.5</text>
+  <text x="693" y="173" text-anchor="middle" font-size="12" fill="#3D2B1F">[1, 0.5, 0.25, 0.125]</text>
+
+  <text x="530" y="203" text-anchor="middle" font-size="12" fill="#3D2B1F" font-style="italic">x</text>
+  <text x="693" y="203" text-anchor="middle" font-size="13" fill="#4A7C59" font-weight="bold">[1, x, x², x³]</text>
+
+  <!-- Degree label under table -->
+  <text x="625" y="232" text-anchor="middle" font-size="10" fill="#6B5D4F" font-style="italic">degree d = 3  →  4 features per sample</text>
+
+  <!-- ── Vandermonde illustration ── -->
+  <!-- Matrix bracket left -->
+  <text x="468" y="310" font-size="28" fill="#8B6B4A" font-weight="lighter">⎡</text>
+  <text x="468" y="335" font-size="28" fill="#8B6B4A" font-weight="lighter">⎢</text>
+  <text x="468" y="352" font-size="28" fill="#8B6B4A" font-weight="lighter">⎣</text>
+  <!-- Matrix content -->
+  <text x="492" y="300" font-size="10" fill="#3D2B1F">1</text>
+  <text x="508" y="300" font-size="10" fill="#3D2B1F">x₁</text>
+  <text x="530" y="300" font-size="10" fill="#3D2B1F">x₁²</text>
+  <text x="556" y="300" font-size="10" fill="#3D2B1F">x₁³</text>
+
+  <text x="492" y="320" font-size="10" fill="#3D2B1F">1</text>
+  <text x="508" y="320" font-size="10" fill="#3D2B1F">x₂</text>
+  <text x="530" y="320" font-size="10" fill="#3D2B1F">x₂²</text>
+  <text x="556" y="320" font-size="10" fill="#3D2B1F">x₂³</text>
+
+  <text x="492" y="340" font-size="10" fill="#3D2B1F">⋮</text>
+  <text x="510" y="340" font-size="10" fill="#3D2B1F">⋮</text>
+  <text x="532" y="340" font-size="10" fill="#3D2B1F">⋮</text>
+  <text x="558" y="340" font-size="10" fill="#3D2B1F">⋮</text>
+
+  <text x="492" y="358" font-size="10" fill="#3D2B1F">1</text>
+  <text x="508" y="358" font-size="10" fill="#3D2B1F">xₙ</text>
+  <text x="530" y="358" font-size="10" fill="#3D2B1F">xₙ²</text>
+  <text x="556" y="358" font-size="10" fill="#3D2B1F">xₙ³</text>
+
+  <!-- Matrix bracket right -->
+  <text x="574" y="310" font-size="28" fill="#8B6B4A" font-weight="lighter">⎤</text>
+  <text x="574" y="335" font-size="28" fill="#8B6B4A" font-weight="lighter">⎥</text>
+  <text x="574" y="352" font-size="28" fill="#8B6B4A" font-weight="lighter">⎦</text>
+
+  <!-- Vandermonde label -->
+  <text x="625" y="305" font-size="10" fill="#6B5D4F" font-weight="bold">Vandermonde</text>
+  <text x="625" y="318" font-size="10" fill="#6B5D4F" font-weight="bold">matrix</text>
+  <text x="625" y="333" font-size="9"  fill="#6B5D4F">n rows × (d+1) cols</text>
+  <!-- Arrow from matrix label to matrix -->
+  <line x1="612" y1="320" x2="588" y2="330" stroke="#6B5D4F" stroke-width="1" marker-end="url(#poly-arr)"/>
+
+  <defs>
+    <marker id="poly-arr" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#6B5D4F"/>
+    </marker>
+  </defs>
+
+  <!-- Bottom note -->
+  <text x="624" y="380" text-anchor="middle" font-size="9" fill="#6B5D4F">linear model on φ(x) = nonlinear model on x</text>
+
+</svg>

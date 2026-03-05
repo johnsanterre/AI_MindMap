@@ -1,0 +1,29 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Left: function mapping -->
+  <text x="190" y="35" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Mapping f: ℝⁿ → ℝᵐ</text>
+  <ellipse cx="120" cy="200" rx="60" ry="120" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <text x="120" y="100" text-anchor="middle" font-size="13" fill="#2196F3">Input</text>
+  <text x="120" y="180" text-anchor="middle" font-size="13" fill="#2196F3">x₁</text>
+  <text x="120" y="205" text-anchor="middle" font-size="13" fill="#2196F3">x₂</text>
+  <text x="120" y="230" text-anchor="middle" font-size="13" fill="#2196F3">x₃</text>
+  <ellipse cx="290" cy="200" rx="50" ry="80" fill="#FCE4EC" stroke="#E91E63" stroke-width="2"/>
+  <text x="290" y="130" text-anchor="middle" font-size="13" fill="#E91E63">Output</text>
+  <text x="290" y="188" text-anchor="middle" font-size="13" fill="#E91E63">f₁</text>
+  <text x="290" y="213" text-anchor="middle" font-size="13" fill="#E91E63">f₂</text>
+  <line x1="180" y1="175" x2="240" y2="185" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="180" y1="200" x2="240" y2="198" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="180" y1="225" x2="240" y2="212" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
+  <!-- Right: Jacobian matrix -->
+  <text x="590" y="35" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Jacobian Matrix J</text>
+  <rect x="390" y="60" width="380" height="260" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="580" y="95" text-anchor="middle" font-size="14" fill="#555">J = [∂fᵢ/∂xⱼ]</text>
+  <text x="435" y="130" text-anchor="middle" font-size="13" fill="#333">⎡ ∂f₁/∂x₁  ∂f₁/∂x₂  ∂f₁/∂x₃ ⎤</text>
+  <text x="435" y="160" text-anchor="middle" font-size="13" fill="#333">⎢                               ⎥</text>
+  <text x="435" y="190" text-anchor="middle" font-size="13" fill="#333">⎣ ∂f₂/∂x₁  ∂f₂/∂x₂  ∂f₂/∂x₃ ⎦</text>
+  <text x="580" y="240" text-anchor="middle" font-size="12" fill="#888">Shape: m × n (outputs × inputs)</text>
+  <text x="580" y="265" text-anchor="middle" font-size="12" fill="#2196F3">Best linear approx near a point</text>
+  <text x="580" y="290" text-anchor="middle" font-size="12" fill="#E91E63">Used in backprop chain rule</text>
+  <text x="400" y="20" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">The Jacobian Matrix</text>
+</svg>

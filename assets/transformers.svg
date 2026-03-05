@@ -1,0 +1,38 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Transformer Architecture</text>
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <!-- Encoder -->
+  <rect x="60" y="60" width="280" height="300" rx="12" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="200" y="85" text-anchor="middle" fill="#2C5F8A" font-size="15" font-weight="bold">Encoder</text>
+  <rect x="80" y="100" width="240" height="50" rx="8" fill="#2C5F8A"/>
+  <text x="200" y="130" text-anchor="middle" fill="white" font-size="13">Multi-Head Self-Attention</text>
+  <rect x="80" y="165" width="240" height="40" rx="8" fill="#4A7C59"/>
+  <text x="200" y="190" text-anchor="middle" fill="white" font-size="13">Add &amp; Norm</text>
+  <rect x="80" y="220" width="240" height="40" rx="8" fill="#2C5F8A"/>
+  <text x="200" y="245" text-anchor="middle" fill="white" font-size="13">Feed-Forward Network</text>
+  <rect x="80" y="275" width="240" height="40" rx="8" fill="#4A7C59"/>
+  <text x="200" y="300" text-anchor="middle" fill="white" font-size="13">Add &amp; Norm</text>
+  <text x="200" y="345" text-anchor="middle" fill="#2C5F8A" font-size="12">× N layers</text>
+  <!-- Decoder -->
+  <rect x="460" y="60" width="280" height="300" rx="12" fill="#FEF3EC" stroke="#E07B39" stroke-width="2"/>
+  <text x="600" y="85" text-anchor="middle" fill="#E07B39" font-size="15" font-weight="bold">Decoder</text>
+  <rect x="480" y="100" width="240" height="40" rx="8" fill="#E07B39"/>
+  <text x="600" y="125" text-anchor="middle" fill="white" font-size="13">Masked Self-Attention</text>
+  <rect x="480" y="155" width="240" height="40" rx="8" fill="#4A7C59"/>
+  <text x="600" y="180" text-anchor="middle" fill="white" font-size="13">Add &amp; Norm</text>
+  <rect x="480" y="210" width="240" height="40" rx="8" fill="#E07B39"/>
+  <text x="600" y="235" text-anchor="middle" fill="white" font-size="13">Cross-Attention</text>
+  <rect x="480" y="265" width="240" height="40" rx="8" fill="#4A7C59"/>
+  <text x="600" y="290" text-anchor="middle" fill="white" font-size="13">Add &amp; Norm</text>
+  <text x="600" y="345" text-anchor="middle" fill="#E07B39" font-size="12">× N layers</text>
+  <!-- Cross-attention arrow -->
+  <line x1="340" y1="225" x2="478" y2="230" stroke="#C0392B" stroke-width="2.5" marker-end="url(#arr2)" stroke-dasharray="6,3"/>
+  <!-- Input/output labels -->
+  <text x="200" y="380" text-anchor="middle" fill="#555" font-size="13">Input sequence</text>
+  <text x="600" y="380" text-anchor="middle" fill="#555" font-size="13">Output sequence</text>
+</svg>

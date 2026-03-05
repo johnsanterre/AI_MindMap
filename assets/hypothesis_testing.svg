@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Null vs Alternative -->
+  <rect x="20" y="30" width="180" height="340" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="110" y="52" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Hypotheses</text>
+  <!-- H0 box -->
+  <rect x="36" y="62" width="148" height="58" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="110" y="82" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-weight="bold">H₀</text>
+  <text x="110" y="98" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">Null Hypothesis</text>
+  <text x="110" y="113" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">μ = μ₀  (no effect)</text>
+  <!-- H1 box -->
+  <rect x="36" y="132" width="148" height="58" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="110" y="152" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle" font-weight="bold">H₁</text>
+  <text x="110" y="168" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" text-anchor="middle">Alternative Hypothesis</text>
+  <text x="110" y="183" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">μ ≠ μ₀  (there is an effect)</text>
+  <!-- Decision arrow -->
+  <line x1="110" y1="192" x2="110" y2="216" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="110" y="234" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Run the test</text>
+  <text x="110" y="250" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Compare p to α</text>
+  <!-- Reject / Fail to reject -->
+  <rect x="36" y="262" width="62" height="36" fill="#7C2530" rx="3"/>
+  <text x="67" y="277" font-family="Georgia, serif" font-size="8.5" fill="white" text-anchor="middle">Reject H₀</text>
+  <text x="67" y="291" font-family="Georgia, serif" font-size="8" fill="white" text-anchor="middle">p &lt; α</text>
+  <rect x="106" y="262" width="62" height="36" fill="#2D5A8E" rx="3"/>
+  <text x="137" y="277" font-family="Georgia, serif" font-size="8.5" fill="white" text-anchor="middle">Fail to</text>
+  <text x="137" y="291" font-family="Georgia, serif" font-size="7.5" fill="white" text-anchor="middle">Reject H₀  p≥α</text>
+
+  <!-- Panel 2: Error Types -->
+  <rect x="214" y="30" width="210" height="340" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="319" y="52" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Decision Errors</text>
+  <!-- Table header -->
+  <text x="319" y="72" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Reality →</text>
+  <text x="276" y="90" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">H₀ True</text>
+  <text x="363" y="90" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle">H₀ False</text>
+  <!-- Row labels -->
+  <text x="222" y="132" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Reject</text>
+  <text x="222" y="143" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">H₀</text>
+  <text x="222" y="210" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Keep</text>
+  <text x="222" y="221" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">H₀</text>
+  <!-- Cell: Type I -->
+  <rect x="237" y="100" width="78" height="70" fill="#FAEAEA" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="276" y="122" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Type I</text>
+  <text x="276" y="138" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle">False Positive</text>
+  <text x="276" y="153" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Prob = α</text>
+  <text x="276" y="165" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">(sig. level)</text>
+  <!-- Cell: Correct (power) -->
+  <rect x="323" y="100" width="78" height="70" fill="#EAF2EA" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="362" y="122" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Power</text>
+  <text x="362" y="138" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">Correct Reject</text>
+  <text x="362" y="153" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Prob = 1−β</text>
+  <!-- Cell: Correct keep -->
+  <rect x="237" y="178" width="78" height="70" fill="#EAF2EA" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="276" y="199" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Correct</text>
+  <text x="276" y="215" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">True Negative</text>
+  <text x="276" y="230" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Prob = 1−α</text>
+  <!-- Cell: Type II -->
+  <rect x="323" y="178" width="78" height="70" fill="#FAEAEA" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="362" y="199" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Type II</text>
+  <text x="362" y="215" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle">False Negative</text>
+  <text x="362" y="230" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Prob = β</text>
+  <!-- Tradeoff note -->
+  <text x="319" y="272" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">Reducing α raises β.</text>
+  <text x="319" y="285" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">More data reduces both.</text>
+
+  <!-- Panel 3: p-value & distribution -->
+  <rect x="438" y="30" width="200" height="200" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="538" y="52" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">P-value Visualized</text>
+  <!-- Normal curve approximation via polyline -->
+  <polyline points="448,185 458,183 468,178 478,168 488,152 498,132 508,112 518,98 528,88 538,86 548,88 558,98 568,112 578,132 588,152 598,168 608,178 618,183 628,185" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Shade rejection region right tail -->
+  <polygon points="598,168 608,178 618,183 628,185 628,185 628,188 598,188" fill="#7C2530" opacity="0.25"/>
+  <polygon points="588,152 598,168 628,188 598,188 588,188" fill="#7C2530" opacity="0.15"/>
+  <!-- Observed stat line -->
+  <line x1="590" y1="86" x2="590" y2="188" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="592" y="80" font-family="Georgia, serif" font-size="8.5" fill="#7C2530">t_obs</text>
+  <!-- Alpha line -->
+  <line x1="600" y1="86" x2="600" y2="188" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="603" y="174" font-family="Georgia, serif" font-size="8" fill="#C4A87A">α</text>
+  <!-- p-value label -->
+  <text x="614" y="200" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle">p-value</text>
+  <text x="538" y="210" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">p = P(data this extreme | H₀ true)</text>
+  <!-- x-axis -->
+  <line x1="448" y1="188" x2="628" y2="188" stroke="#6B5D4F" stroke-width="1"/>
+
+  <!-- Panel 4: Common Tests -->
+  <rect x="438" y="240" width="200" height="130" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="538" y="260" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Common Tests</text>
+  <text x="448" y="278" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">t-test</text>
+  <text x="520" y="278" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">compare means (1 or 2 groups)</text>
+  <text x="448" y="296" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">χ² test</text>
+  <text x="520" y="296" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">categorical independence</text>
+  <text x="448" y="314" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">ANOVA</text>
+  <text x="520" y="314" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">compare means (3+ groups)</text>
+  <text x="448" y="332" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">z-test</text>
+  <text x="520" y="332" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">proportions, large n</text>
+  <text x="448" y="350" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">F-test</text>
+  <text x="520" y="350" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">compare variances</text>
+
+  <!-- Arrow marker def -->
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#6B5D4F"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="648" y="200" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(90,648,200)">Hypothesis Testing</text>
+</svg>

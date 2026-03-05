@@ -1,0 +1,86 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <text x="400" y="30" text-anchor="middle" fill="#333" font-size="17" font-weight="bold">Floating-Point Underflow: The Number Line</text>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#C0392B"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2C5F8A"/>
+    </marker>
+  </defs>
+
+  <!-- Main number line -->
+  <line x1="60" y1="200" x2="740" y2="200" stroke="#555" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- Zero marker -->
+  <line x1="400" y1="190" x2="400" y2="210" stroke="#333" stroke-width="2"/>
+  <text x="400" y="228" text-anchor="middle" fill="#333" font-size="13">0</text>
+
+  <!-- Overflow cliff on the right -->
+  <rect x="680" y="170" width="52" height="60" rx="4" fill="#C0392B" fill-opacity="0.18"/>
+  <line x1="680" y1="162" x2="680" y2="245" stroke="#C0392B" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="706" y="158" text-anchor="middle" fill="#C0392B" font-size="11" font-weight="bold">overflow</text>
+  <text x="706" y="171" text-anchor="middle" fill="#C0392B" font-size="10">→ ±Inf</text>
+
+  <!-- Normal float region (positive side) -->
+  <rect x="490" y="178" width="188" height="24" rx="3" fill="#2C5F8A" fill-opacity="0.22"/>
+  <text x="584" y="172" text-anchor="middle" fill="#2C5F8A" font-size="11" font-weight="bold">normal floats</text>
+
+  <!-- Normal float region (negative side) -->
+  <rect x="122" y="178" width="188" height="24" rx="3" fill="#2C5F8A" fill-opacity="0.22"/>
+  <text x="216" y="172" text-anchor="middle" fill="#2C5F8A" font-size="11" font-weight="bold">normal floats</text>
+
+  <!-- Subnormal region (positive side, near zero) -->
+  <rect x="406" y="178" width="80" height="24" rx="3" fill="#E07B39" fill-opacity="0.30"/>
+  <text x="446" y="163" text-anchor="middle" fill="#E07B39" font-size="11" font-weight="bold">subnormals</text>
+
+  <!-- Subnormal region (negative side, near zero) -->
+  <rect x="314" y="178" width="80" height="24" rx="3" fill="#E07B39" fill-opacity="0.30"/>
+  <text x="354" y="163" text-anchor="middle" fill="#E07B39" font-size="11" font-weight="bold">subnormals</text>
+
+  <!-- Underflow-to-zero cliff annotation (positive side) -->
+  <line x1="406" y1="155" x2="406" y2="245" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="406" y="253" text-anchor="middle" fill="#888" font-size="10">min normal</text>
+
+  <!-- Underflow-to-zero cliff annotation (negative side) -->
+  <line x1="394" y1="155" x2="394" y2="245" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="394" y="253" text-anchor="middle" fill="#888" font-size="10">-min normal</text>
+
+  <!-- Underflow-to-zero arrow -->
+  <line x1="380" y1="130" x2="402" y2="195" stroke="#C0392B" stroke-width="2" marker-end="url(#arr-red)"/>
+  <text x="330" y="125" text-anchor="middle" fill="#C0392B" font-size="12" font-weight="bold">underflow → 0</text>
+  <text x="330" y="139" text-anchor="middle" fill="#C0392B" font-size="10">values vanish here</text>
+
+  <!-- Tick marks for scale -->
+  <line x1="120" y1="196" x2="120" y2="205" stroke="#555" stroke-width="1.5"/>
+  <text x="120" y="225" text-anchor="middle" fill="#555" font-size="10">−MAX</text>
+  <line x1="680" y1="196" x2="680" y2="205" stroke="#555" stroke-width="1.5"/>
+  <text x="680" y="225" text-anchor="middle" fill="#555" font-size="10">+MAX</text>
+
+  <!-- Divider line -->
+  <line x1="60" y1="280" x2="740" y2="280" stroke="#ddd" stroke-width="1"/>
+
+  <!-- ML example panel: log probabilities -->
+  <text x="400" y="300" text-anchor="middle" fill="#555" font-size="13" font-weight="bold">ML fix: work in log-space</text>
+
+  <!-- Raw probability underflows to 0 -->
+  <rect x="80" y="312" width="280" height="64" rx="6" fill="#C0392B" fill-opacity="0.09" stroke="#C0392B" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="220" y="330" text-anchor="middle" fill="#C0392B" font-size="11" font-weight="bold">Raw probability (underflows)</text>
+  <text x="220" y="348" text-anchor="middle" fill="#444" font-size="11">p(w₁)·p(w₂)·…·p(w₅₀)</text>
+  <text x="220" y="366" text-anchor="middle" fill="#C0392B" font-size="11">= 10⁻⁷⁰ → rounds to 0</text>
+
+  <!-- Log probability stays representable -->
+  <rect x="440" y="312" width="280" height="64" rx="6" fill="#2C5F8A" fill-opacity="0.09" stroke="#2C5F8A" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="580" y="330" text-anchor="middle" fill="#2C5F8A" font-size="11" font-weight="bold">Log probability (safe)</text>
+  <text x="580" y="348" text-anchor="middle" fill="#444" font-size="11">log p(w₁)+…+log p(w₅₀)</text>
+  <text x="580" y="366" text-anchor="middle" fill="#2C5F8A" font-size="11">= −161  (representable)</text>
+
+  <!-- Arrow between panels -->
+  <line x1="365" y1="344" x2="435" y2="344" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="400" y="338" text-anchor="middle" fill="#555" font-size="10">use log</text>
+</svg>

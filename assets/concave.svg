@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#fdfdf8"/>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">Concave vs Convex Functions</text>
+
+  <!-- ─── LEFT PANEL: Concave (hill) ─── -->
+  <text x="195" y="60" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#27ae60">Concave (hill shape)</text>
+
+  <!-- axes -->
+  <line x1="40"  y1="310" x2="355" y2="310" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="40"  y1="80"  x2="40"  y2="315" stroke="#ccc" stroke-width="1.5"/>
+
+  <!-- concave curve: inverted parabola (hill) -->
+  <!-- y = -a(x-cx)^2 + peak: peak at x=195, comes down to ~285 at edges -->
+  <path d="M55,285 C95,180 145,108 195,96 C245,108 295,180 340,285"
+        fill="none" stroke="#27ae60" stroke-width="3.5"/>
+
+  <!-- x and y endpoint dots on the hill curve -->
+  <circle cx="55"  cy="285" r="5" fill="#27ae60"/>
+  <circle cx="340" cy="285" r="5" fill="#27ae60"/>
+
+  <!-- chord from (x, f(x)) to (y, f(y)) — lies BELOW the curve -->
+  <line x1="55" y1="285" x2="340" y2="285" stroke="#e74c3c" stroke-width="2" stroke-dasharray="7,4"/>
+
+  <!-- midpoint on chord (flat at y=285) vs midpoint on curve (at peak ~96) -->
+  <!-- midpoint x = 197.5 -->
+  <circle cx="197" cy="285" r="4" fill="#e74c3c"/>
+  <text x="197" y="300" text-anchor="middle" font-family="Arial" font-size="10" fill="#e74c3c">chord midpoint</text>
+
+  <!-- midpoint on curve at peak -->
+  <circle cx="195" cy="96" r="5" fill="#27ae60"/>
+  <text x="195" y="86" text-anchor="middle" font-family="Arial" font-size="10" fill="#27ae60">curve midpoint</text>
+
+  <!-- vertical gap arrow showing curve > chord -->
+  <defs>
+    <marker id="arrowG" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#555"/>
+    </marker>
+    <marker id="arrowU" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#555"/>
+    </marker>
+  </defs>
+  <line x1="230" y1="280" x2="230" y2="148" stroke="#555" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrowU)"/>
+  <line x1="230" y1="155" x2="230" y2="280" stroke="none"/>
+  <text x="248" y="215" font-family="Arial" font-size="10" fill="#555">curve</text>
+  <text x="248" y="228" font-family="Arial" font-size="10" fill="#555">above</text>
+  <text x="248" y="241" font-family="Arial" font-size="10" fill="#555">chord</text>
+
+  <!-- label x and y on x-axis -->
+  <text x="55"  y="326" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">x</text>
+  <text x="340" y="326" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">y</text>
+
+  <!-- global max dot -->
+  <circle cx="195" cy="96" r="7" fill="none" stroke="#27ae60" stroke-width="2.5"/>
+  <text x="195" y="74" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">global max</text>
+
+  <!-- annotation box top-left -->
+  <text x="42" y="108" font-family="Arial" font-size="11" fill="#27ae60">local max</text>
+  <text x="42" y="122" font-family="Arial" font-size="11" fill="#27ae60">= global max</text>
+
+  <!-- chord label -->
+  <text x="197" y="272" text-anchor="middle" font-family="Arial" font-size="10" fill="#e74c3c">chord lies below curve</text>
+
+  <!-- divider -->
+  <line x1="390" y1="50" x2="390" y2="350" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- ─── RIGHT PANEL: Convex (bowl) ─── -->
+  <text x="605" y="60" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2980b9">Convex (bowl shape)</text>
+
+  <!-- axes -->
+  <line x1="415" y1="310" x2="770" y2="310" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="415" y1="80"  x2="415" y2="315" stroke="#ccc" stroke-width="1.5"/>
+
+  <!-- convex curve: parabola (bowl), minimum at center -->
+  <path d="M430,285 C470,330 530,330 605,310 C680,290 730,230 760,200"
+        fill="none" stroke="#2980b9" stroke-width="3.5"/>
+
+  <!-- endpoint dots -->
+  <circle cx="430" cy="285" r="5" fill="#2980b9"/>
+  <circle cx="760" cy="200" r="5" fill="#2980b9"/>
+
+  <!-- chord from endpoint to endpoint — lies ABOVE curve -->
+  <line x1="430" y1="285" x2="760" y2="200" stroke="#e67e22" stroke-width="2" stroke-dasharray="7,4"/>
+  <text x="596" y="222" text-anchor="middle" font-family="Arial" font-size="10" fill="#e67e22">chord lies above curve</text>
+
+  <!-- global min dot -->
+  <circle cx="600" cy="311" r="7" fill="#2980b9"/>
+  <text x="600" y="330" text-anchor="middle" font-family="Arial" font-size="11" fill="#2980b9">global min</text>
+
+  <!-- label x and y -->
+  <text x="430" y="326" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">x</text>
+  <text x="760" y="220" font-family="Arial" font-size="11" fill="#555">y</text>
+
+  <!-- annotation -->
+  <text x="418" y="108" font-family="Arial" font-size="11" fill="#2980b9">local min</text>
+  <text x="418" y="122" font-family="Arial" font-size="11" fill="#2980b9">= global min</text>
+
+  <!-- ─── Footer formulas ─── -->
+  <text x="400" y="366" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">Concave: f(λx+(1−λ)y) ≥ λf(x)+(1−λ)f(y)   |   local max = global max</text>
+  <text x="400" y="384" text-anchor="middle" font-family="Arial" font-size="11" fill="#2980b9">Convex: f(λx+(1−λ)y) ≤ λf(x)+(1−λ)f(y)   |   local min = global min</text>
+</svg>

@@ -1,0 +1,28 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">The Chain Rule</text>
+  <!-- Composition chain -->
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#555">Composite function: y = f(g(x))</text>
+  <defs><marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
+  <circle cx="140" cy="170" r="40" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <text x="140" y="168" text-anchor="middle" font-size="15" fill="#2196F3">x</text>
+  <line x1="182" y1="170" x2="258" y2="170" stroke="#555" stroke-width="2" marker-end="url(#a10)"/>
+  <text x="220" y="158" text-anchor="middle" font-size="13" fill="#555">g(·)</text>
+  <circle cx="300" cy="170" r="40" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+  <text x="300" y="168" text-anchor="middle" font-size="15" fill="#FF9800">u</text>
+  <line x1="342" y1="170" x2="418" y2="170" stroke="#555" stroke-width="2" marker-end="url(#a10)"/>
+  <text x="380" y="158" text-anchor="middle" font-size="13" fill="#555">f(·)</text>
+  <circle cx="460" cy="170" r="40" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+  <text x="460" y="168" text-anchor="middle" font-size="15" fill="#4CAF50">y</text>
+  <!-- Chain rule formula -->
+  <rect x="100" y="250" width="600" height="110" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="400" y="278" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">dy/dx = (dy/du) · (du/dx)</text>
+  <text x="400" y="305" text-anchor="middle" font-size="13" fill="#2196F3">= f′(g(x)) · g′(x)</text>
+  <text x="400" y="330" text-anchor="middle" font-size="12" fill="#555">General: ∂L/∂xᵢ = Σⱼ (∂L/∂uⱼ)(∂uⱼ/∂xᵢ)</text>
+  <text x="400" y="348" text-anchor="middle" font-size="11" fill="#888">This is exactly what backpropagation computes layer by layer</text>
+  <!-- Backprop arrows (reverse) -->
+  <line x1="418" y1="185" x2="342" y2="185" stroke="#E91E63" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#a10)"/>
+  <line x1="258" y1="185" x2="182" y2="185" stroke="#E91E63" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#a10)"/>
+  <text x="220" y="202" text-anchor="middle" font-size="11" fill="#E91E63">backprop</text>
+  <text x="380" y="202" text-anchor="middle" font-size="11" fill="#E91E63">backprop</text>
+</svg>

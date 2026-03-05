@@ -1,0 +1,43 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Few-Shot Learning: N-way K-shot Episode</text>
+  <defs>
+    <marker id="arrfs" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <!-- Support set -->
+  <rect x="40" y="70" width="260" height="240" rx="12" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="170" y="98" text-anchor="middle" fill="#2C5F8A" font-size="14" font-weight="bold">Support Set (K=1 per class)</text>
+  <rect x="60" y="115" width="60" height="55" rx="6" fill="#4A7C59" fill-opacity="0.3" stroke="#4A7C59"/>
+  <text x="90" y="148" text-anchor="middle" fill="#4A7C59" font-size="11">Cat</text>
+  <rect x="140" y="115" width="60" height="55" rx="6" fill="#2C5F8A" fill-opacity="0.3" stroke="#2C5F8A"/>
+  <text x="170" y="148" text-anchor="middle" fill="#2C5F8A" font-size="11">Dog</text>
+  <rect x="220" y="115" width="60" height="55" rx="6" fill="#E07B39" fill-opacity="0.3" stroke="#E07B39"/>
+  <text x="250" y="148" text-anchor="middle" fill="#E07B39" font-size="11">Bird</text>
+  <text x="170" y="198" text-anchor="middle" fill="#555" font-size="12">3-way, 1-shot</text>
+  <text x="170" y="218" text-anchor="middle" fill="#555" font-size="12">(3 classes, 1 example each)</text>
+  <!-- Prototypes -->
+  <circle cx="90" cy="265" r="14" fill="#4A7C59"/>
+  <circle cx="170" cy="265" r="14" fill="#2C5F8A"/>
+  <circle cx="250" cy="265" r="14" fill="#E07B39"/>
+  <text x="170" y="300" text-anchor="middle" fill="#555" font-size="12">Class prototypes</text>
+  <!-- Arrow to comparison -->
+  <line x1="302" y1="200" x2="368" y2="200" stroke="#555" stroke-width="2.5" marker-end="url(#arrfs)"/>
+  <text x="335" y="188" text-anchor="middle" fill="#555" font-size="12">compare</text>
+  <!-- Query -->
+  <rect x="370" y="150" width="110" height="100" rx="12" fill="#FEF3EC" stroke="#E07B39" stroke-width="2"/>
+  <text x="425" y="185" text-anchor="middle" fill="#E07B39" font-size="14" font-weight="bold">Query</text>
+  <text x="425" y="210" text-anchor="middle" fill="#555" font-size="12">New image</text>
+  <text x="425" y="230" text-anchor="middle" fill="#888" font-size="12">(classify me!)</text>
+  <!-- Distance arrows -->
+  <line x1="480" y1="200" x2="550" y2="200" stroke="#555" stroke-width="2" marker-end="url(#arrfs)"/>
+  <text x="515" y="190" text-anchor="middle" fill="#555" font-size="11">d(·,·)</text>
+  <!-- Distances -->
+  <rect x="555" y="100" width="200" height="160" rx="10" fill="white" stroke="#555" stroke-width="1.5"/>
+  <text x="655" y="130" text-anchor="middle" fill="#555" font-size="13" font-weight="bold">Distances</text>
+  <text x="655" y="158" text-anchor="middle" fill="#4A7C59" font-size="13">Cat:  0.82</text>
+  <text x="655" y="183" text-anchor="middle" fill="#2C5F8A" font-size="13">Dog:  0.31</text>
+  <text x="655" y="208" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">Bird: 0.12 ← ✓</text>
+  <text x="655" y="310" text-anchor="middle" fill="#555" font-size="13">Predict: Bird</text>
+</svg>

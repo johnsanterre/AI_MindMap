@@ -1,0 +1,34 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Gram-Schmidt Orthogonalization</text>
+  <!-- Step 1: original vectors -->
+  <text x="140" y="60" text-anchor="middle" font-size="13" fill="#333">Original: v₁, v₂</text>
+  <line x1="80" y1="200" x2="200" y2="130" stroke="#9E9E9E" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="80" y1="200" x2="220" y2="170" stroke="#9E9E9E" stroke-width="2" marker-end="url(#a5)"/>
+  <text x="205" y="125" font-size="12" fill="#9E9E9E">v₁</text>
+  <text x="225" y="168" font-size="12" fill="#9E9E9E">v₂</text>
+  <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
+  <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2196F3"/></marker></defs>
+  <defs><marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E91E63"/></marker></defs>
+  <!-- Step 2: e1 = normalize v1 -->
+  <text x="420" y="60" text-anchor="middle" font-size="13" fill="#2196F3">Step 1: e₁ = v₁ / ‖v₁‖</text>
+  <line x1="380" y1="200" x2="500" y2="130" stroke="#2196F3" stroke-width="3" marker-end="url(#a6)"/>
+  <text x="505" y="125" font-size="12" fill="#2196F3">e₁</text>
+  <!-- Step 3: project v2 onto e1, subtract -->
+  <text x="420" y="85" text-anchor="middle" font-size="12" fill="#E91E63">Step 2: e₂ = (v₂ − proj) / ‖…‖</text>
+  <!-- Projection dashed -->
+  <line x1="380" y1="200" x2="490" y2="170" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="445" y="193" font-size="11" fill="#FF9800">proj</text>
+  <!-- Orthogonal e2 -->
+  <line x1="380" y1="200" x2="370" y2="110" stroke="#E91E63" stroke-width="3" marker-end="url(#a7)"/>
+  <text x="352" y="108" font-size="12" fill="#E91E63">e₂</text>
+  <!-- Right angle mark -->
+  <rect x="378" y="174" width="12" height="12" fill="none" stroke="#E91E63" stroke-width="1.5"/>
+  <!-- Result annotation -->
+  <rect x="530" y="120" width="240" height="120" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="650" y="145" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Result: ONB</text>
+  <text x="650" y="170" text-anchor="middle" font-size="12" fill="#2196F3">e₁ · e₂ = 0 (orthogonal)</text>
+  <text x="650" y="193" text-anchor="middle" font-size="12" fill="#555">‖e₁‖ = ‖e₂‖ = 1 (normal)</text>
+  <text x="650" y="218" text-anchor="middle" font-size="11" fill="#888">span{e₁,e₂} = span{v₁,v₂}</text>
+  <text x="400" y="360" text-anchor="middle" font-size="12" fill="#555">Foundation for QR decomposition and orthogonal projections</text>
+</svg>

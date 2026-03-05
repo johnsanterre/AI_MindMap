@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">Effect Size: Statistical vs Practical Significance</text>
+
+  <!-- Panel 1: Overlapping distributions - small effect -->
+  <rect x="15" y="50" width="235" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="132" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">SMALL EFFECT (d = 0.2)</text>
+
+  <!-- Group A bell curve -->
+  <path d="M25,280 Q50,280 65,230 Q80,180 100,130 Q115,95 132,85 Q149,95 165,130 Q185,180 200,230 Q215,280 240,280" fill="#2D5A8E" fill-opacity="0.3" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Group B bell curve (slightly shifted) -->
+  <path d="M45,280 Q70,280 85,230 Q100,180 120,130 Q135,95 152,85 Q169,95 185,130 Q205,180 220,230 Q235,280 245,280" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="1.5"/>
+
+  <text x="90" y="200" font-size="9" fill="#2D5A8E">Group A</text>
+  <text x="170" y="200" font-size="9" fill="#7C2530">Group B</text>
+  <text x="132" y="305" text-anchor="middle" font-size="9" fill="#5C3D1E">Large overlap — hard to tell</text>
+  <text x="132" y="320" text-anchor="middle" font-size="9" fill="#5C3D1E">groups apart in practice</text>
+
+  <!-- Cohen's d arrow -->
+  <line x1="100" x2="152" y1="340" y2="340" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr2)"/>
+  <text x="126" y="358" text-anchor="middle" font-size="9" font-style="italic" fill="#5C3D1E">d = Δμ / σ_pooled</text>
+
+  <!-- Panel 2: Large effect -->
+  <rect x="265" y="50" width="235" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="382" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">LARGE EFFECT (d = 0.8)</text>
+
+  <!-- Group A bell curve -->
+  <path d="M275,280 Q295,280 305,240 Q315,195 325,150 Q333,115 343,100 Q352,115 362,150 Q372,195 382,240 Q392,280 410,280" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Group B bell curve (well separated) -->
+  <path d="M370,280 Q388,280 398,240 Q408,195 418,150 Q426,115 436,100 Q445,115 455,150 Q465,195 475,240 Q485,280 490,280" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <text x="320" y="200" font-size="9" fill="#2D5A8E">Group A</text>
+  <text x="430" y="200" font-size="9" fill="#7C2530">Group B</text>
+  <text x="382" y="305" text-anchor="middle" font-size="9" fill="#5C3D1E">Little overlap — clearly</text>
+  <text x="382" y="320" text-anchor="middle" font-size="9" fill="#5C3D1E">different in practice</text>
+  <text x="382" y="358" text-anchor="middle" font-size="9" font-style="italic" fill="#5C3D1E">Same p-value possible with large N</text>
+
+  <!-- Panel 3: Benchmarks and metrics -->
+  <rect x="515" y="50" width="270" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="650" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">COHEN'S BENCHMARKS</text>
+
+  <!-- Cohen's d table -->
+  <rect x="528" y="80" width="244" height="100" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="650" y="98" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Cohen's d</text>
+  <line x1="528" y1="105" x2="772" y2="105" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="560" y="120" font-size="10" fill="#2D2D2D">Small</text>   <text x="700" y="120" font-size="10" fill="#2D5A8E">d ≈ 0.2</text>
+  <text x="560" y="138" font-size="10" fill="#2D2D2D">Medium</text>  <text x="700" y="138" font-size="10" fill="#C4A87A">d ≈ 0.5</text>
+  <text x="560" y="156" font-size="10" fill="#2D2D2D">Large</text>   <text x="700" y="156" font-size="10" fill="#7C2530">d ≈ 0.8</text>
+  <text x="650" y="174" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6B5D4F">(domain-dependent — use judgment)</text>
+
+  <!-- Other metrics -->
+  <rect x="528" y="192" width="244" height="120" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="650" y="210" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Other Measures</text>
+  <line x1="528" y1="217" x2="772" y2="217" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="535" y="233" font-size="9.5" fill="#2D2D2D">Pearson r</text>        <text x="660" y="233" font-size="9.5" fill="#5C3D1E">correlation (−1 to 1)</text>
+  <text x="535" y="251" font-size="9.5" fill="#2D2D2D">r² (R²)</text>           <text x="660" y="251" font-size="9.5" fill="#5C3D1E">variance explained</text>
+  <text x="535" y="269" font-size="9.5" fill="#2D2D2D">Odds ratio</text>        <text x="660" y="269" font-size="9.5" fill="#5C3D1E">binary outcomes</text>
+  <text x="535" y="287" font-size="9.5" fill="#2D2D2D">η² (eta²)</text>         <text x="660" y="287" font-size="9.5" fill="#5C3D1E">ANOVA / groups</text>
+  <text x="535" y="305" font-size="9.5" fill="#2D2D2D">Hedge's g</text>         <text x="660" y="305" font-size="9.5" fill="#5C3D1E">small sample correction</text>
+
+  <!-- Big N warning -->
+  <rect x="528" y="324" width="244" height="38" fill="#F5E8E8" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="650" y="340" text-anchor="middle" font-size="9.5" fill="#7C2530" font-weight="bold">Large N trap: with N=100,000</text>
+  <text x="650" y="355" text-anchor="middle" font-size="9.5" fill="#7C2530">even d=0.01 becomes p&lt;0.001</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

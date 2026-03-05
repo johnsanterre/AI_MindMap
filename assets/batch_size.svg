@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E">Batch Size in Training</text>
+
+  <!-- Left panel: Batch size spectrum -->
+  <rect x="30" y="55" width="200" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="130" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">The Spectrum</text>
+
+  <!-- Online (batch=1) -->
+  <rect x="50" y="92" width="160" height="48" rx="5" fill="#EDE4D3" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="130" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">Online (B=1)</text>
+  <text x="130" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">noisy, slow, low mem</text>
+
+  <!-- Mini-batch -->
+  <rect x="50" y="152" width="160" height="48" rx="5" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="130" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">Mini-batch (32–256)</text>
+  <text x="130" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">sweet spot ✓ typical</text>
+
+  <!-- Full batch -->
+  <rect x="50" y="212" width="160" height="48" rx="5" fill="#EDE4D3" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="130" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Full Batch (B=N)</text>
+  <text x="130" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">exact grad, high mem</text>
+
+  <!-- Arrow: tradeoff -->
+  <line x1="130" y1="268" x2="130" y2="340" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="130,340 124,328 136,328" fill="#C4A87A"/>
+  <text x="130" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#C4A87A">noise vs. memory</text>
+
+  <!-- Center panel: Noisy loss curves -->
+  <rect x="250" y="55" width="290" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="395" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Loss Curves by Batch Size</text>
+
+  <!-- Axes -->
+  <line x1="280" y1="310" x2="520" y2="310" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="280" y1="100" x2="280" y2="310" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Epoch →</text>
+  <text x="265" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" transform="rotate(-90,265,205)">Loss</text>
+
+  <!-- Small batch: noisy but good final -->
+  <path d="M280,250 Q295,220 305,230 Q315,205 325,215 Q335,195 345,200 Q360,185 375,190 Q390,178 405,182 Q420,175 435,178 Q450,172 465,174 Q480,170 495,171 Q508,169 520,170" fill="none" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="522" y="170" font-family="Georgia, serif" font-size="9" fill="#7C2530">B=32</text>
+
+  <!-- Medium batch: moderate -->
+  <path d="M280,250 Q300,215 320,210 Q340,200 360,195 Q380,188 400,185 Q430,180 460,178 Q490,177 520,176" fill="none" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="522" y="176" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">B=128</text>
+
+  <!-- Large batch: smooth but worse final -->
+  <path d="M280,250 Q310,220 340,210 Q375,200 410,196 Q445,193 480,192 Q505,191 520,191" fill="none" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="522" y="191" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">B=1024</text>
+
+  <!-- Legend note -->
+  <text x="395" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">small B → more noise → often better generalization</text>
+
+  <!-- Right panel: Tradeoffs table -->
+  <rect x="560" y="55" width="210" height="320" rx="8" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="665" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Tradeoffs</text>
+
+  <!-- Header row -->
+  <rect x="565" y="88" width="200" height="22" rx="3" fill="#D4C5A9"/>
+  <text x="605" y="103" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">Small B</text>
+  <text x="725" y="103" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">Large B</text>
+
+  <text x="575" y="126" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Generalization</text>
+  <text x="598" y="126" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">✓ better</text>
+  <text x="725" y="126" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">✗ worse</text>
+
+  <text x="575" y="148" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">GPU util.</text>
+  <text x="598" y="148" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">✗ poor</text>
+  <text x="725" y="148" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">✓ high</text>
+
+  <text x="575" y="170" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Speed/epoch</text>
+  <text x="598" y="170" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">✗ slow</text>
+  <text x="725" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">✓ fast</text>
+
+  <text x="575" y="192" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Memory</text>
+  <text x="598" y="192" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">✓ low</text>
+  <text x="725" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">✗ high</text>
+
+  <text x="575" y="214" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Grad noise</text>
+  <text x="598" y="214" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">high</text>
+  <text x="725" y="214" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#C4A87A">low</text>
+
+  <line x1="565" y1="226" x2="760" y2="226" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="575" y="246" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">Linear scaling rule:</text>
+  <text x="575" y="261" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">if B×k, multiply lr×k</text>
+  <text x="575" y="276" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">with warmup to match</text>
+  <text x="575" y="291" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">small-batch training.</text>
+
+  <line x1="565" y1="303" x2="760" y2="303" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="575" y="323" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">Typical defaults:</text>
+  <text x="575" y="338" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">32 (NLP), 128–256</text>
+  <text x="575" y="353" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">(vision), 512–2048</text>
+  <text x="575" y="368" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">(LLMs w/ accumulation)</text>
+</svg>

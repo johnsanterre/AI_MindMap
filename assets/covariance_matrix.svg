@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Covariance Matrix</text>
+  <!-- Scatter plot -->
+  <line x1="60" y1="280" x2="300" y2="280" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="60" y1="280" x2="60" y2="80" stroke="#ccc" stroke-width="1.5"/>
+  <text x="180" y="310" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">X₁</text>
+  <text x="35" y="180" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">X₂</text>
+  <!-- Correlated data points -->
+  <circle cx="90" cy="260" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="110" cy="240" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="130" cy="225" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="150" cy="210" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="170" cy="190" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="190" cy="175" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="210" cy="158" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="230" cy="140" r="4" fill="#4a90d9" opacity="0.7"/>
+  <circle cx="255" cy="125" r="4" fill="#4a90d9" opacity="0.7"/>
+  <text x="180" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">High positive covariance</text>
+  <!-- Matrix display -->
+  <rect x="330" y="80" width="200" height="160" rx="6" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
+  <text x="430" y="108" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">Σ (Covariance)</text>
+  <text x="380" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">σ₁²</text>
+  <text x="480" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">σ₁₂</text>
+  <text x="380" y="180" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">σ₂₁</text>
+  <text x="480" y="180" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">σ₂²</text>
+  <text x="430" y="220" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">diagonal = variances</text>
+  <!-- Properties -->
+  <rect x="560" y="80" width="210" height="200" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
+  <text x="665" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Properties</text>
+  <text x="665" y="135" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Symmetric: Σ = Σᵀ</text>
+  <text x="665" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">PSD: xᵀΣx ≥ 0</text>
+  <text x="665" y="181" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Diag: uncorrelated</text>
+  <text x="665" y="204" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Used in PCA, GMM</text>
+  <text x="665" y="227" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Mahalanobis dist.</text>
+  <text x="430" y="320" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Cov(X,Y) = E[(X−μx)(Y−μy)]</text>
+</svg>

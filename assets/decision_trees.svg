@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Decision Tree: Recursive Binary Splitting</text>
+
+  <!-- Panel 1: Root node -->
+  <rect x="30" y="55" width="170" height="310" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="115" y="74" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">STRUCTURE</text>
+
+  <!-- Root node -->
+  <rect x="60" y="86" width="110" height="38" fill="#2D5A8E" rx="4"/>
+  <text x="115" y="103" text-anchor="middle" font-size="11" fill="white">Age &lt; 35?</text>
+  <text x="115" y="117" text-anchor="middle" font-size="9" fill="#C8DCF0">root node</text>
+
+  <!-- Lines to children -->
+  <line x1="90" y1="124" x2="70" y2="152" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="140" y1="124" x2="160" y2="152" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="67" y="147" text-anchor="middle" font-size="9" fill="#7C2530">Yes</text>
+  <text x="163" y="147" text-anchor="middle" font-size="9" fill="#7C2530">No</text>
+
+  <!-- Left child -->
+  <rect x="42" y="154" width="88" height="34" fill="#5C3D1E" rx="4"/>
+  <text x="86" y="169" text-anchor="middle" font-size="10" fill="white">Income &lt; 50k?</text>
+  <text x="86" y="181" text-anchor="middle" font-size="8" fill="#D4B896">branch node</text>
+
+  <!-- Right child -->
+  <rect x="136" y="154" width="48" height="34" fill="#7C2530" rx="4"/>
+  <text x="160" y="169" text-anchor="middle" font-size="10" fill="white">Deny</text>
+  <text x="160" y="181" text-anchor="middle" font-size="8" fill="#F0C0C0">leaf</text>
+
+  <!-- Left-left leaf -->
+  <line x1="70" y1="188" x2="60" y2="210" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="100" y1="188" x2="112" y2="210" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="36" y="212" width="46" height="28" fill="#C4A87A" rx="3"/>
+  <text x="59" y="224" text-anchor="middle" font-size="9" fill="white">Approve</text>
+  <text x="59" y="235" text-anchor="middle" font-size="7" fill="#FFF8EE">leaf</text>
+  <rect x="88" y="212" width="46" height="28" fill="#7C2530" rx="3"/>
+  <text x="111" y="224" text-anchor="middle" font-size="9" fill="white">Deny</text>
+  <text x="111" y="235" text-anchor="middle" font-size="7" fill="#F0C0C0">leaf</text>
+
+  <!-- Depth label -->
+  <text x="115" y="265" text-anchor="middle" font-size="9" fill="#6B5D4F">depth = 2</text>
+  <line x1="40" y1="270" x2="190" y2="270" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+  <!-- Key -->
+  <rect x="42" y="278" width="12" height="10" fill="#2D5A8E" rx="1"/>
+  <text x="58" y="287" font-size="9" fill="#5C3D1E">Split node</text>
+  <rect x="42" y="294" width="12" height="10" fill="#C4A87A" rx="1"/>
+  <text x="58" y="303" font-size="9" fill="#5C3D1E">Leaf (predict)</text>
+  <rect x="42" y="310" width="12" height="10" fill="#7C2530" rx="1"/>
+  <text x="58" y="319" font-size="9" fill="#5C3D1E">Leaf (deny)</text>
+
+  <!-- Panel 2: Impurity measures -->
+  <rect x="220" y="55" width="175" height="310" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="307" y="74" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">SPLIT CRITERIA</text>
+
+  <!-- Gini box -->
+  <rect x="234" y="84" width="147" height="78" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="307" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Gini Impurity</text>
+  <text x="307" y="116" text-anchor="middle" font-size="10" fill="#5C3D1E">G = 1 − Σ pᵢ²</text>
+  <text x="307" y="132" text-anchor="middle" font-size="9" fill="#6B5D4F">Pure node → G = 0</text>
+  <text x="307" y="146" text-anchor="middle" font-size="9" fill="#6B5D4F">50/50 split → G = 0.5</text>
+  <text x="307" y="158" text-anchor="middle" font-size="9" fill="#7C2530">Lower is better</text>
+
+  <!-- Entropy box -->
+  <rect x="234" y="172" width="147" height="78" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="307" y="188" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Information Gain</text>
+  <text x="307" y="204" text-anchor="middle" font-size="10" fill="#5C3D1E">H = −Σ pᵢ log₂(pᵢ)</text>
+  <text x="307" y="220" text-anchor="middle" font-size="9" fill="#6B5D4F">IG = H(parent)</text>
+  <text x="307" y="234" text-anchor="middle" font-size="9" fill="#6B5D4F">  − Σ wₖ H(childₖ)</text>
+  <text x="307" y="248" text-anchor="middle" font-size="9" fill="#7C2530">Higher is better</text>
+
+  <!-- Variance box -->
+  <rect x="234" y="260" width="147" height="62" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="307" y="276" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Variance Reduction</text>
+  <text x="307" y="292" text-anchor="middle" font-size="10" fill="#5C3D1E">For regression trees</text>
+  <text x="307" y="308" text-anchor="middle" font-size="9" fill="#6B5D4F">Split minimizes MSE</text>
+  <text x="307" y="320" text-anchor="middle" font-size="9" fill="#6B5D4F">of child nodes</text>
+
+  <!-- Panel 3: Overfitting vs pruning -->
+  <rect x="415" y="55" width="175" height="310" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="502" y="74" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">DEPTH &amp; OVERFITTING</text>
+
+  <!-- Deep tree (overfit) -->
+  <text x="502" y="92" text-anchor="middle" font-size="10" fill="#7C2530">Unpruned (depth=5)</text>
+  <!-- Wavy overfit boundary visualization -->
+  <rect x="432" y="100" width="140" height="80" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <path d="M 432 140 C 452 100 462 180 480 120 C 498 60 512 190 530 130 C 548 70 555 175 572 140" stroke="#7C2530" stroke-width="2" fill="none"/>
+  <text x="502" y="193" text-anchor="middle" font-size="9" fill="#7C2530">Memorizes noise</text>
+
+  <line x1="430" y1="205" x2="587" y2="205" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+  <!-- Pruned tree -->
+  <text x="502" y="220" text-anchor="middle" font-size="10" fill="#2D5A8E">Pruned (depth=2)</text>
+  <rect x="432" y="228" width="140" height="80" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <line x1="502" y1="228" x2="502" y2="308" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="502" y="321" text-anchor="middle" font-size="9" fill="#2D5A8E">Generalizes well</text>
+
+  <!-- Dots in panels -->
+  <circle cx="455" cy="118" r="3" fill="#2D5A8E"/>
+  <circle cx="470" cy="130" r="3" fill="#2D5A8E"/>
+  <circle cx="490" cy="115" r="3" fill="#2D5A8E"/>
+  <circle cx="510" cy="125" r="3" fill="#2D5A8E"/>
+  <circle cx="545" cy="120" r="3" fill="#2D5A8E"/>
+  <circle cx="560" cy="108" r="3" fill="#2D5A8E"/>
+  <circle cx="455" cy="160" r="3" fill="#7C2530"/>
+  <circle cx="478" cy="170" r="3" fill="#7C2530"/>
+  <circle cx="505" cy="158" r="3" fill="#7C2530"/>
+  <circle cx="530" cy="165" r="3" fill="#7C2530"/>
+  <circle cx="558" cy="155" r="3" fill="#7C2530"/>
+
+  <circle cx="455" cy="248" r="3" fill="#2D5A8E"/>
+  <circle cx="470" cy="260" r="3" fill="#2D5A8E"/>
+  <circle cx="490" cy="245" r="3" fill="#2D5A8E"/>
+  <circle cx="510" cy="255" r="3" fill="#2D5A8E"/>
+  <circle cx="545" cy="250" r="3" fill="#2D5A8E"/>
+  <circle cx="560" cy="238" r="3" fill="#2D5A8E"/>
+  <circle cx="455" cy="290" r="3" fill="#7C2530"/>
+  <circle cx="478" cy="300" r="3" fill="#7C2530"/>
+  <circle cx="525" cy="285" r="3" fill="#7C2530"/>
+  <circle cx="555" cy="295" r="3" fill="#7C2530"/>
+
+  <!-- Panel 4: Ensembles -->
+  <rect x="610" y="55" width="172" height="310" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="696" y="74" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">ENSEMBLE METHODS</text>
+
+  <!-- Random Forest -->
+  <rect x="624" y="84" width="144" height="90" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="696" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Random Forest</text>
+  <!-- mini trees -->
+  <line x1="645" y1="115" x2="645" y2="132" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="645" y1="115" x2="638" y2="128" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="645" y1="115" x2="652" y2="128" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="672" y1="115" x2="672" y2="132" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="672" y1="115" x2="665" y2="128" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="672" y1="115" x2="679" y2="128" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="700" y1="115" x2="700" y2="132" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="700" y1="115" x2="693" y2="128" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="700" y1="115" x2="707" y2="128" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="696" y="150" text-anchor="middle" font-size="9" fill="#6B5D4F">Bagging + random features</text>
+  <text x="696" y="163" text-anchor="middle" font-size="9" fill="#6B5D4F">Majority vote / average</text>
+  <text x="696" y="170" text-anchor="middle" font-size="8" fill="#7C2530">Reduces variance</text>
+
+  <!-- Gradient Boosting -->
+  <rect x="624" y="186" width="144" height="90" fill="white" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="696" y="202" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Gradient Boosting</text>
+  <!-- sequential arrows -->
+  <rect x="634" y="213" width="24" height="16" fill="#C4A87A" rx="2"/>
+  <text x="646" y="224" text-anchor="middle" font-size="8" fill="white">T₁</text>
+  <line x1="658" y1="221" x2="666" y2="221" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="667" y="213" width="24" height="16" fill="#C4A87A" rx="2"/>
+  <text x="679" y="224" text-anchor="middle" font-size="8" fill="white">T₂</text>
+  <line x1="691" y1="221" x2="699" y2="221" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="700" y="213" width="24" height="16" fill="#C4A87A" rx="2"/>
+  <text x="712" y="224" text-anchor="middle" font-size="8" fill="white">T₃</text>
+  <text x="696" y="248" text-anchor="middle" font-size="9" fill="#6B5D4F">Each tree fits residuals</text>
+  <text x="696" y="261" text-anchor="middle" font-size="9" fill="#6B5D4F">of previous trees</text>
+  <text x="696" y="272" text-anchor="middle" font-size="8" fill="#7C2530">Reduces bias</text>
+
+  <!-- Note -->
+  <rect x="624" y="288" width="144" height="52" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="696" y="304" text-anchor="middle" font-size="9" fill="#5C3D1E">Single tree: interpretable</text>
+  <text x="696" y="318" text-anchor="middle" font-size="9" fill="#5C3D1E">but high variance</text>
+  <text x="696" y="332" text-anchor="middle" font-size="9" fill="#2D5A8E">Ensembles: accurate</text>
+  <text x="696" y="346" text-anchor="middle" font-size="9" fill="#2D5A8E">but less interpretable</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">Decision trees split data greedily at each node to minimize impurity</text>
+</svg>

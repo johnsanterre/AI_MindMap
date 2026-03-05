@@ -1,0 +1,205 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <defs>
+    <!-- Arrow for original graph edges -->
+    <marker id="tc-arr-orig" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#2C5F8A"/>
+    </marker>
+    <!-- Arrow for closure edges (dashed) -->
+    <marker id="tc-arr-closure" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#B05A2F"/>
+    </marker>
+  </defs>
+
+  <!-- ── Title ── -->
+  <text x="400" y="26" text-anchor="middle" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="#1C1713">Transitive Closure</text>
+
+  <!-- ══════════════════════════════
+       LEFT PANEL: Original Graph
+  ══════════════════════════════ -->
+
+  <text x="110" y="52" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#6B5D4F">Original graph</text>
+
+  <!-- Node A  cx=60  cy=130 -->
+  <circle cx="60"  cy="130" r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="60"  y="135" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">A</text>
+
+  <!-- Node B  cx=160 cy=85 -->
+  <circle cx="160" cy="85"  r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="160" y="90"  text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">B</text>
+
+  <!-- Node C  cx=160 cy=175 -->
+  <circle cx="160" cy="175" r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="160" y="180" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">C</text>
+
+  <!-- Node D  cx=260 cy=130 -->
+  <circle cx="260" cy="130" r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="260" y="135" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">D</text>
+
+  <!-- Original edges (solid blue) -->
+  <!-- A → B -->
+  <line x1="79"  y1="118" x2="139" y2="96"  stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+  <!-- A → C -->
+  <line x1="79"  y1="142" x2="139" y2="164" stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+  <!-- B → D -->
+  <line x1="181" y1="92"  x2="239" y2="118" stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+  <!-- C → D -->
+  <line x1="181" y1="168" x2="239" y2="142" stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+
+  <!-- Edge labels -->
+  <text x="107" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#2C5F8A">A→B</text>
+  <text x="107" y="162" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#2C5F8A">A→C</text>
+  <text x="216" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#2C5F8A">B→D</text>
+  <text x="216" y="162" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#2C5F8A">C→D</text>
+
+  <!-- ── Left adjacency matrix ── -->
+  <text x="110" y="225" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-style="italic" fill="#6B5D4F">Adjacency matrix M</text>
+
+  <!-- Column headers -->
+  <text x="62"  y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">A</text>
+  <text x="95"  y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">B</text>
+  <text x="128" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">C</text>
+  <text x="161" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">D</text>
+
+  <!-- Row labels -->
+  <text x="36" y="270" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">A</text>
+  <text x="36" y="293" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">B</text>
+  <text x="36" y="316" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">C</text>
+  <text x="36" y="339" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">D</text>
+
+  <!-- Matrix cells background -->
+  <rect x="46" y="255" width="130" height="96" rx="3" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1"/>
+  <!-- Internal grid lines -->
+  <line x1="79"  y1="255" x2="79"  y2="351" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="112" y1="255" x2="112" y2="351" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="145" y1="255" x2="145" y2="351" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="46"  y1="279" x2="176" y2="279" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="46"  y1="303" x2="176" y2="303" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="46"  y1="327" x2="176" y2="327" stroke="#2C5F8A" stroke-width="0.7"/>
+
+  <!-- Matrix values: row A: 0 1 1 0 -->
+  <text x="62"  y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="95"  y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <text x="128" y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <text x="161" y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <!-- row B: 0 0 0 1 -->
+  <text x="62"  y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="95"  y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="128" y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="161" y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <!-- row C: 0 0 0 1 -->
+  <text x="62"  y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="95"  y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="128" y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="161" y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <!-- row D: 0 0 0 0 -->
+  <text x="62"  y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="95"  y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="128" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="161" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+
+  <!-- Divider line -->
+  <line x1="390" y1="42" x2="390" y2="375" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- ══════════════════════════════
+       RIGHT PANEL: After closure
+  ══════════════════════════════ -->
+
+  <text x="590" y="52" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#6B5D4F">After transitive closure</text>
+
+  <!-- Node A  cx=460 cy=130 -->
+  <circle cx="460" cy="130" r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="460" cy="130" y="135" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">A</text>
+
+  <!-- Node B  cx=560 cy=85 -->
+  <circle cx="560" cy="85"  r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="560" y="90"  text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">B</text>
+
+  <!-- Node C  cx=560 cy=175 -->
+  <circle cx="560" cy="175" r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="560" y="180" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">C</text>
+
+  <!-- Node D  cx=660 cy=130 -->
+  <circle cx="660" cy="130" r="22" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2.2"/>
+  <text x="660" y="135" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#2C5F8A">D</text>
+
+  <!-- Original edges kept (solid blue) -->
+  <!-- A → B -->
+  <line x1="479" y1="118" x2="539" y2="96"  stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+  <!-- A → C -->
+  <line x1="479" y1="142" x2="539" y2="164" stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+  <!-- B → D -->
+  <line x1="581" y1="92"  x2="639" y2="118" stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+  <!-- C → D -->
+  <line x1="581" y1="168" x2="639" y2="142" stroke="#2C5F8A" stroke-width="2" marker-end="url(#tc-arr-orig)"/>
+
+  <!-- Closure edges (dashed orange) -->
+  <!-- A → D  (inferred: A→B→D and A→C→D) -->
+  <path d="M479,116 Q568,68 640,116" fill="none" stroke="#B05A2F" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#tc-arr-closure)"/>
+
+  <!-- Annotation callout -->
+  <rect x="413" y="56" width="210" height="26" rx="4" fill="#FEF3EA" stroke="#B05A2F" stroke-width="1"/>
+  <text x="518" y="73" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#7A3A10">if A→B and B→D  then  A→D in closure</text>
+
+  <!-- Arrow from annotation to dashed edge -->
+  <line x1="518" y1="82" x2="540" y2="95" stroke="#B05A2F" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ── Right closure matrix ── -->
+  <text x="590" y="225" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-style="italic" fill="#6B5D4F">Closure matrix M*</text>
+
+  <!-- Column headers -->
+  <text x="442" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">A</text>
+  <text x="475" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">B</text>
+  <text x="508" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">C</text>
+  <text x="541" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">D</text>
+
+  <!-- Row labels -->
+  <text x="416" y="270" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">A</text>
+  <text x="416" y="293" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">B</text>
+  <text x="416" y="316" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">C</text>
+  <text x="416" y="339" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C5F8A">D</text>
+
+  <!-- Matrix cells background -->
+  <rect x="426" y="255" width="130" height="96" rx="3" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="1"/>
+  <!-- Internal grid lines -->
+  <line x1="459" y1="255" x2="459" y2="351" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="492" y1="255" x2="492" y2="351" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="525" y1="255" x2="525" y2="351" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="426" y1="279" x2="556" y2="279" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="426" y1="303" x2="556" y2="303" stroke="#2C5F8A" stroke-width="0.7"/>
+  <line x1="426" y1="327" x2="556" y2="327" stroke="#2C5F8A" stroke-width="0.7"/>
+
+  <!-- Highlight newly inferred cell A→D with warm tint -->
+  <rect x="525" y="255" width="31" height="24" rx="0" fill="#FEE8D4"/>
+
+  <!-- Matrix values closure: row A: 0 1 1 1 -->
+  <text x="442" y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="475" y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <text x="508" y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <text x="541" y="272" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#B05A2F">1</text>
+  <!-- row B: 0 0 0 1 -->
+  <text x="442" y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="475" y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="508" y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="541" y="295" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <!-- row C: 0 0 0 1 -->
+  <text x="442" y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="475" y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="508" y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="541" y="318" text-anchor="middle" font-family="Georgia,serif" font-size="12" font-weight="bold" fill="#2C5F8A">1</text>
+  <!-- row D: 0 0 0 0 -->
+  <text x="442" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="475" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="508" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+  <text x="541" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#888">0</text>
+
+  <!-- Legend -->
+  <line x1="420" y1="370" x2="450" y2="370" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="455" y="374" font-family="Georgia,serif" font-size="10" fill="#2C5F8A">direct edge</text>
+  <line x1="530" y1="370" x2="560" y2="370" stroke="#B05A2F" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="565" y="374" font-family="Georgia,serif" font-size="10" fill="#B05A2F">inferred by closure</text>
+
+  <!-- Bottom note left panel -->
+  <text x="110" y="375" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" font-style="italic" fill="#888">only direct reachability shown</text>
+</svg>

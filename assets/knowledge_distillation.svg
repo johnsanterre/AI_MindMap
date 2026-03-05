@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="kd-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="kd-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="kd-arr-tan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">KNOWLEDGE DISTILLATION: TEACHER → STUDENT</text>
+
+  <!-- ── TEACHER MODEL ── -->
+  <rect x="40" y="45" width="200" height="200" rx="8" fill="#F5EFE4" stroke="#7C2530" stroke-width="2"/>
+  <text x="140" y="68" text-anchor="middle" font-size="12" fill="#7C2530" font-weight="bold">Teacher Model</text>
+  <text x="140" y="83" text-anchor="middle" font-size="9" fill="#6B5D4F">(large, accurate, slow)</text>
+
+  <!-- Teacher layers (big stack) -->
+  <rect x="65" y="98" width="150" height="16" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="65" y="120" width="150" height="16" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="65" y="142" width="150" height="16" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="65" y="164" width="150" height="16" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="65" y="186" width="150" height="16" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="140" y="110" text-anchor="middle" font-size="8" fill="#5C3D1E">Layer 1</text>
+  <text x="140" y="132" text-anchor="middle" font-size="8" fill="#5C3D1E">Layer 2</text>
+  <text x="140" y="154" text-anchor="middle" font-size="8" fill="#5C3D1E">Layer 3</text>
+  <text x="140" y="176" text-anchor="middle" font-size="8" fill="#5C3D1E">Layer 4</text>
+  <text x="140" y="198" text-anchor="middle" font-size="8" fill="#5C3D1E">Layer 5</text>
+
+  <!-- Teacher soft labels output -->
+  <rect x="65" y="215" width="150" height="22" rx="3" fill="#F0E8D8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="140" y="230" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">Soft Labels (T&gt;1)</text>
+
+  <!-- teacher → loss arrow -->
+  <line x1="240" y1="226" x2="368" y2="290" stroke="#7C2530" stroke-width="2" marker-end="url(#kd-arr)"/>
+  <text x="295" y="255" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">soft targets</text>
+
+  <!-- ── STUDENT MODEL ── -->
+  <rect x="420" y="100" width="160" height="155" rx="8" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="500" y="122" text-anchor="middle" font-size="12" fill="#2D5A8E" font-weight="bold">Student Model</text>
+  <text x="500" y="136" text-anchor="middle" font-size="9" fill="#6B5D4F">(small, fast, efficient)</text>
+
+  <!-- Student layers (small stack) -->
+  <rect x="445" y="148" width="110" height="15" rx="3" fill="#D8E6F5" stroke="#2D5A8E" stroke-width="1"/>
+  <rect x="445" y="170" width="110" height="15" rx="3" fill="#D8E6F5" stroke="#2D5A8E" stroke-width="1"/>
+  <rect x="445" y="192" width="110" height="15" rx="3" fill="#D8E6F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="500" y="160" text-anchor="middle" font-size="8" fill="#2D5A8E">Layer 1</text>
+  <text x="500" y="182" text-anchor="middle" font-size="8" fill="#2D5A8E">Layer 2</text>
+  <text x="500" y="204" text-anchor="middle" font-size="8" fill="#2D5A8E">Layer 3</text>
+
+  <!-- Student soft output -->
+  <rect x="445" y="215" width="110" height="22" rx="3" fill="#D8E6F5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="500" y="230" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">Student logits</text>
+
+  <!-- ── LOSS BOX ── -->
+  <rect x="330" y="275" width="180" height="70" rx="6" fill="#F0E8D8" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="420" y="295" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">Distillation Loss</text>
+  <text x="420" y="312" text-anchor="middle" font-size="8.5" fill="#5C3D1E">α · L_CE(student, hard labels)</text>
+  <text x="420" y="327" text-anchor="middle" font-size="8.5" fill="#5C3D1E">+ (1−α) · T² · KL(soft teacher ∥ student)</text>
+
+  <!-- student → loss arrow -->
+  <line x1="500" y1="255" x2="460" y2="275" stroke="#2D5A8E" stroke-width="2" marker-end="url(#kd-arr-blue)"/>
+  <text x="495" y="268" text-anchor="middle" font-size="9" fill="#2D5A8E" font-style="italic">student preds</text>
+
+  <!-- Ground truth arrow -->
+  <line x1="250" y1="355" x2="330" y2="330" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#kd-arr-tan)"/>
+  <text x="215" y="362" font-size="9" fill="#5C3D1E" font-style="italic">hard labels (y)</text>
+
+  <!-- ── TEMPERATURE annotation ── -->
+  <rect x="620" y="45" width="155" height="80" rx="5" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="697" y="64" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">Temperature T</text>
+  <text x="697" y="80" text-anchor="middle" font-size="8.5" fill="#5C3D1E">T = 1 → sharp peaks</text>
+  <text x="697" y="95" text-anchor="middle" font-size="8.5" fill="#5C3D1E">T &gt; 1 → softer probs</text>
+  <text x="697" y="110" text-anchor="middle" font-size="8.5" fill="#5C3D1E">σ(z/T) reveals dark knowledge</text>
+
+  <!-- Size comparison -->
+  <rect x="620" y="145" width="155" height="80" rx="5" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="697" y="163" text-anchor="middle" font-size="10" fill="#2D5A8E" font-weight="bold">Size Reduction</text>
+  <text x="697" y="179" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Teacher: billions of params</text>
+  <text x="697" y="194" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Student: millions of params</text>
+  <text x="697" y="209" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Goal: ≈ same accuracy</text>
+
+  <!-- Input data block -->
+  <rect x="40" y="290" width="120" height="32" rx="4" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="100" y="310" text-anchor="middle" font-size="9" fill="#5C3D1E">Training Data  x</text>
+
+  <!-- data → teacher -->
+  <line x1="100" y1="290" x2="100" y2="246" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#kd-arr-tan)"/>
+
+  <!-- data → student -->
+  <line x1="160" y1="306" x2="420" y2="200" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#kd-arr-tan)"/>
+
+  <!-- Bottom caption -->
+  <text x="400" y="390" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    The student learns both correct answers (hard labels) and teacher uncertainty (soft labels)
+  </text>
+</svg>

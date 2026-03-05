@@ -1,0 +1,115 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#3A3028" letter-spacing="0.5">Self-Organized Criticality: Sandpile Model</text>
+
+  <!-- ══ DIVIDER ══ -->
+  <line x1="400" y1="48" x2="400" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ LEFT PANEL: Stable sandpile, grain being added ══ -->
+  <text x="200" y="60" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" letter-spacing="1">ADDING GRAINS → CRITICAL STATE</text>
+
+  <!-- Ground line -->
+  <line x1="60" y1="310" x2="340" y2="310" stroke="#8A7A6A" stroke-width="2"/>
+
+  <!-- Sandpile: stable cone, built from stacked layers -->
+  <!-- Base layer -->
+  <polygon points="80,310 320,310 310,290 90,290" fill="#C4A96E" stroke="#A8894E" stroke-width="1"/>
+  <!-- Layer 2 -->
+  <polygon points="100,290 300,290 288,270 112,270" fill="#D5B97E" stroke="#B89A5E" stroke-width="1"/>
+  <!-- Layer 3 -->
+  <polygon points="120,270 280,270 266,250 134,250" fill="#DFCA92" stroke="#C0AA72" stroke-width="1"/>
+  <!-- Layer 4 -->
+  <polygon points="140,250 260,250 244,230 156,230" fill="#E6D4A2" stroke="#C8B480" stroke-width="1"/>
+  <!-- Layer 5 -->
+  <polygon points="160,230 240,230 222,210 178,210" fill="#EBDAAE" stroke="#CCBA8A" stroke-width="1"/>
+  <!-- Layer 6 — near-peak -->
+  <polygon points="178,210 222,210 204,192 196,192" fill="#EFDFB8" stroke="#D0BF96" stroke-width="1"/>
+  <!-- Peak dot -->
+  <circle cx="200" cy="188" r="5" fill="#8A6820" stroke="#6A5010" stroke-width="1"/>
+
+  <!-- Grain falling from above -->
+  <circle cx="200" cy="155" r="5" fill="#8A6820" stroke="#6A5010" stroke-width="1"/>
+  <!-- Dashed fall path -->
+  <line x1="200" y1="161" x2="200" y2="184" stroke="#8A6820" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <!-- Arrow tip -->
+  <polygon points="196,182 204,182 200,188" fill="#8A6820"/>
+
+  <!-- Label: critical state -->
+  <rect x="130" y="155" width="88" height="18" rx="4" fill="#FFF8EC" stroke="#C0A860" stroke-width="1"/>
+  <text x="174" y="168" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#8A6820" font-weight="bold">critical state</text>
+
+  <!-- Slope angle annotation -->
+  <line x1="200" y1="188" x2="320" y2="310" stroke="#999" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <text x="285" y="295" font-family="Arial,sans-serif" font-size="9" fill="#8A7A6A">slope = θ_c</text>
+
+  <!-- Panel label -->
+  <text x="200" y="338" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#5A4A3A">One grain → avalanche of any size</text>
+
+  <!-- ══ RIGHT PANEL: Avalanche cascade ══ -->
+  <text x="600" y="60" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" letter-spacing="1">AVALANCHE CASCADE</text>
+
+  <!-- Ground line -->
+  <line x1="420" y1="310" x2="760" y2="310" stroke="#8A7A6A" stroke-width="2"/>
+
+  <!-- Collapsed pile: flatter, grains spread out -->
+  <polygon points="440,310 750,310 730,300 460,300" fill="#C4A96E" stroke="#A8894E" stroke-width="1"/>
+  <polygon points="460,300 730,300 710,285 480,285" fill="#D5B97E" stroke="#B89A5E" stroke-width="1"/>
+  <polygon points="480,285 710,285 686,268 504,268" fill="#DFCA92" stroke="#C0AA72" stroke-width="1"/>
+  <polygon points="504,268 686,268 660,252 530,252" fill="#E6D4A2" stroke="#C8B480" stroke-width="1"/>
+
+  <!-- Cascading grains: several grains rolling/flying off -->
+  <defs>
+    <marker id="arr-grain" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#C05020"/>
+    </marker>
+  </defs>
+  <!-- Grain cascade lines -->
+  <circle cx="590" cy="248" r="4" fill="#C05020"/>
+  <line x1="594" y1="250" x2="618" y2="263" stroke="#C05020" stroke-width="1.5" marker-end="url(#arr-grain)"/>
+  <circle cx="622" cy="265" r="4" fill="#C05020"/>
+  <line x1="626" y1="267" x2="650" y2="279" stroke="#C05020" stroke-width="1.5" marker-end="url(#arr-grain)"/>
+  <circle cx="654" cy="281" r="4" fill="#C05020"/>
+  <line x1="658" y1="282" x2="688" y2="295" stroke="#C05020" stroke-width="1.5" marker-end="url(#arr-grain)"/>
+  <circle cx="692" cy="297" r="4" fill="#C05020"/>
+  <line x1="696" y1="298" x2="728" y2="308" stroke="#C05020" stroke-width="1.5" marker-end="url(#arr-grain)"/>
+
+  <!-- Branching secondary cascade (left branch) -->
+  <line x1="622" y1="265" x2="600" y2="279" stroke="#C05020" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arr-grain)"/>
+  <circle cx="597" cy="281" r="3.5" fill="#C05020" opacity="0.7"/>
+  <line x1="594" y1="282" x2="572" y2="293" stroke="#C05020" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arr-grain)"/>
+  <circle cx="569" cy="295" r="3" fill="#C05020" opacity="0.6"/>
+
+  <!-- Annotation: power law -->
+  <rect x="426" y="148" width="80" height="18" rx="4" fill="#FFF8EC" stroke="#C05020" stroke-width="1"/>
+  <text x="466" y="161" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#C05020" font-weight="bold">power law</text>
+
+  <!-- Annotation: 1/f noise -->
+  <rect x="664" y="148" width="68" height="18" rx="4" fill="#FFF8EC" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="698" y="161" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#2D5A8E" font-weight="bold">1/f noise</text>
+
+  <!-- ══ INSET: Power-law log-log plot ══ -->
+  <rect x="428" y="172" width="140" height="110" rx="6" fill="white" stroke="#C8B480" stroke-width="1.5"/>
+  <text x="498" y="188" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#5A4A3A" font-weight="bold">Avalanche size distribution</text>
+
+  <!-- Axes -->
+  <line x1="448" y1="265" x2="448" y2="198" stroke="#888" stroke-width="1.2"/>
+  <line x1="448" y1="265" x2="558" y2="265" stroke="#888" stroke-width="1.2"/>
+  <text x="503" y="278" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#7A6A5A">log(size)</text>
+  <text x="436" y="232" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#7A6A5A" transform="rotate(-90,436,232)">log(freq)</text>
+
+  <!-- Straight line on log-log = power law -->
+  <line x1="452" y1="202" x2="554" y2="261" stroke="#C05020" stroke-width="2.2"/>
+
+  <!-- Tick marks -->
+  <line x1="448" y1="265" x2="448" y2="267" stroke="#888" stroke-width="1"/>
+  <line x1="490" y1="265" x2="490" y2="267" stroke="#888" stroke-width="1"/>
+  <line x1="532" y1="265" x2="532" y2="267" stroke="#888" stroke-width="1"/>
+
+  <!-- Slope label -->
+  <text x="520" y="240" font-family="Arial,sans-serif" font-size="9" fill="#C05020" font-style="italic">slope = −τ</text>
+
+  <!-- Panel label -->
+  <text x="590" y="338" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#5A4A3A">Cascades of all sizes — no characteristic scale</text>
+</svg>

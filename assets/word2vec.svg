@@ -1,0 +1,42 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Word2Vec: Words as Vectors in Semantic Space</text>
+  <!-- Axes -->
+  <line x1="100" y1="300" x2="720" y2="300" stroke="#555" stroke-width="1.5"/>
+  <line x1="100" y1="60" x2="100" y2="300" stroke="#555" stroke-width="1.5"/>
+  <text x="730" y="305" fill="#555" font-size="12">dim 1</text>
+  <text x="65" y="70" fill="#555" font-size="12">dim 2</text>
+  <!-- Word clusters -->
+  <!-- Royalty cluster -->
+  <circle cx="580" cy="120" r="8" fill="#C0392B"/>
+  <text x="598" y="116" fill="#C0392B" font-size="13" font-weight="bold">king</text>
+  <circle cx="640" cy="155" r="8" fill="#C0392B"/>
+  <text x="658" y="151" fill="#C0392B" font-size="13" font-weight="bold">queen</text>
+  <circle cx="600" cy="175" r="8" fill="#C0392B"/>
+  <text x="618" y="171" fill="#C0392B" font-size="13">prince</text>
+  <!-- Animal cluster -->
+  <circle cx="220" cy="200" r="8" fill="#4A7C59"/>
+  <text x="238" y="196" fill="#4A7C59" font-size="13" font-weight="bold">dog</text>
+  <circle cx="200" cy="230" r="8" fill="#4A7C59"/>
+  <text x="218" y="226" fill="#4A7C59" font-size="13" font-weight="bold">cat</text>
+  <circle cx="250" cy="218" r="8" fill="#4A7C59"/>
+  <text x="268" y="214" fill="#4A7C59" font-size="13">wolf</text>
+  <!-- Country cluster -->
+  <circle cx="430" cy="250" r="8" fill="#2C5F8A"/>
+  <text x="448" y="246" fill="#2C5F8A" font-size="13" font-weight="bold">Paris</text>
+  <circle cx="480" cy="265" r="8" fill="#2C5F8A"/>
+  <text x="498" y="261" fill="#2C5F8A" font-size="13" font-weight="bold">Rome</text>
+  <circle cx="390" cy="260" r="8" fill="#2C5F8A"/>
+  <text x="408" y="256" fill="#2C5F8A" font-size="13">Berlin</text>
+  <!-- Analogy arrow -->
+  <line x1="580" y1="120" x2="220" y2="200" stroke="#E07B39" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="390" y="148" fill="#E07B39" font-size="12">king − man + woman ≈ queen</text>
+  <!-- Legend -->
+  <circle cx="120" cy="330" r="6" fill="#C0392B"/>
+  <text x="135" y="335" fill="#555" font-size="12">royalty</text>
+  <circle cx="220" cy="330" r="6" fill="#4A7C59"/>
+  <text x="235" y="335" fill="#555" font-size="12">animals</text>
+  <circle cx="320" cy="330" r="6" fill="#2C5F8A"/>
+  <text x="335" y="335" fill="#555" font-size="12">cities</text>
+  <text x="550" y="335" fill="#888" font-size="12">Similar words cluster together</text>
+</svg>

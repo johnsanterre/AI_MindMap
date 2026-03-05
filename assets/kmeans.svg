@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7A5230"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ PANEL 1: ASSIGN STEP ══ -->
+  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">ASSIGN STEP</text>
+
+  <!-- Axes -->
+  <line x1="20" y1="268" x2="278" y2="268" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arr-axis)"/>
+  <line x1="20" y1="272" x2="20"  y2="32"  stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arr-axis)"/>
+
+  <!-- Centroid 1: RED — upper right region, X at (210, 80) -->
+  <!-- Centroid 2: BLUE — lower left region, X at (65, 200) -->
+  <!-- Centroid 3: BROWN — middle right, X at (195, 185) -->
+
+  <!-- Cluster 1 points (red tint) - upper right -->
+  <circle cx="190" cy="60"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="220" cy="55"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="240" cy="78"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="205" cy="95"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="228" cy="100" r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="255" cy="65"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+
+  <!-- Cluster 2 points (blue tint) - lower left -->
+  <circle cx="42"  cy="200" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="68"  cy="220" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="55"  cy="175" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="85"  cy="235" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="40"  cy="240" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="78"  cy="190" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+
+  <!-- Cluster 3 points (tan/brown tint) - middle -->
+  <circle cx="135" cy="140" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="160" cy="155" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="148" cy="120" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="172" cy="138" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="140" cy="165" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="120" cy="128" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+
+  <!-- Thin assignment lines from points to centroids -->
+  <line x1="190" y1="60"  x2="210" y2="80"  stroke="#7C2530" stroke-width="0.7" opacity="0.5"/>
+  <line x1="240" y1="78"  x2="210" y2="80"  stroke="#7C2530" stroke-width="0.7" opacity="0.5"/>
+  <line x1="228" y1="100" x2="210" y2="80"  stroke="#7C2530" stroke-width="0.7" opacity="0.5"/>
+
+  <line x1="42"  y1="200" x2="65" y2="200"  stroke="#2D5A8E" stroke-width="0.7" opacity="0.5"/>
+  <line x1="68"  y1="220" x2="65" y2="200"  stroke="#2D5A8E" stroke-width="0.7" opacity="0.5"/>
+  <line x1="85"  y1="235" x2="65" y2="200"  stroke="#2D5A8E" stroke-width="0.7" opacity="0.5"/>
+
+  <line x1="135" y1="140" x2="152" y2="141" stroke="#7A5230" stroke-width="0.7" opacity="0.5"/>
+  <line x1="172" y1="138" x2="152" y2="141" stroke="#7A5230" stroke-width="0.7" opacity="0.5"/>
+  <line x1="140" y1="165" x2="152" y2="141" stroke="#7A5230" stroke-width="0.7" opacity="0.5"/>
+
+  <!-- Centroids as X marks -->
+  <!-- Red centroid at (210, 80) -->
+  <line x1="204" y1="74" x2="216" y2="86" stroke="#7C2530" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="216" y1="74" x2="204" y2="86" stroke="#7C2530" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- Blue centroid at (65, 200) -->
+  <line x1="59" y1="194" x2="71" y2="206" stroke="#2D5A8E" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="71" y1="194" x2="59" y2="206" stroke="#2D5A8E" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- Brown centroid at (152, 141) -->
+  <line x1="146" y1="135" x2="158" y2="147" stroke="#7A5230" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="158" y1="135" x2="146" y2="147" stroke="#7A5230" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- Labels -->
+  <text x="145" y="283" text-anchor="middle" font-size="7.5" fill="#5C3D1E">assign each point to nearest centroid</text>
+  <text x="145" y="293" text-anchor="middle" font-size="7" fill="#6B5D4F" font-style="italic">argmin_k ‖xᵢ − μₖ‖²</text>
+
+  <!-- ══ PANEL 2: UPDATE STEP ══ -->
+  <text x="443" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">UPDATE STEP</text>
+
+  <!-- Axes -->
+  <line x1="308" y1="268" x2="578" y2="268" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arr-axis)"/>
+  <line x1="308" y1="272" x2="308" y2="32"  stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arr-axis)"/>
+
+  <!-- Same cluster points, same colors as left panel (shifted +288) -->
+
+  <!-- Cluster 1 points (red) -->
+  <circle cx="478" cy="60"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="508" cy="55"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="528" cy="78"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="493" cy="95"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="516" cy="100" r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+  <circle cx="543" cy="65"  r="5" fill="#7C2530" fill-opacity="0.4" stroke="#7C2530" stroke-width="0.8"/>
+
+  <!-- Cluster 2 points (blue) -->
+  <circle cx="330" cy="200" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="356" cy="220" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="343" cy="175" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="373" cy="235" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="328" cy="240" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+  <circle cx="366" cy="190" r="5" fill="#2D5A8E" fill-opacity="0.4" stroke="#2D5A8E" stroke-width="0.8"/>
+
+  <!-- Cluster 3 points (tan/brown) -->
+  <circle cx="423" cy="140" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="448" cy="155" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="436" cy="120" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="460" cy="138" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="428" cy="165" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+  <circle cx="408" cy="128" r="5" fill="#A07840" fill-opacity="0.45" stroke="#7A5230" stroke-width="0.8"/>
+
+  <!-- Old centroid positions (faded, small X) -->
+  <!-- Old red centroid at (210+288=498, 80) -->
+  <line x1="494" y1="76" x2="502" y2="84" stroke="#7C2530" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="502" y1="76" x2="494" y2="84" stroke="#7C2530" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- Old blue centroid at (65+288=353, 200) -->
+  <line x1="349" y1="196" x2="357" y2="204" stroke="#2D5A8E" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="357" y1="196" x2="349" y2="204" stroke="#2D5A8E" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- Old brown centroid at (152+288=440, 141) -->
+  <line x1="436" y1="137" x2="444" y2="145" stroke="#7A5230" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="444" y1="137" x2="436" y2="145" stroke="#7A5230" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- New centroid positions (computed as cluster mean, bold X) -->
+  <!-- New red centroid: mean of (478,60),(508,55),(528,78),(493,95),(516,100),(543,65) → ~(511,75) -->
+  <!-- Arrow from old (498,80) to new (511,75) -->
+  <line x1="498" y1="80" x2="509" y2="75" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr-red)" opacity="0.8"/>
+  <line x1="505" y1="69" x2="517" y2="81" stroke="#7C2530" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="517" y1="69" x2="505" y2="81" stroke="#7C2530" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- New blue centroid: mean of (330,200),(356,220),(343,175),(373,235),(328,240),(366,190) → ~(349,210) -->
+  <!-- Arrow from old (353,200) to new (349,210) -->
+  <line x1="353" y1="200" x2="350" y2="208" stroke="#2D5A8E" stroke-width="1.2" marker-end="url(#arr-blue)" opacity="0.8"/>
+  <line x1="343" y1="204" x2="355" y2="216" stroke="#2D5A8E" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="355" y1="204" x2="343" y2="216" stroke="#2D5A8E" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- New brown centroid: mean of (423,140),(448,155),(436,120),(460,138),(428,165),(408,128) → ~(434,141) -->
+  <!-- Arrow from old (440,141) to new (434,141) -->
+  <line x1="440" y1="141" x2="436" y2="141" stroke="#7A5230" stroke-width="1.2" marker-end="url(#arr-brown)" opacity="0.8"/>
+  <line x1="428" y1="135" x2="440" y2="147" stroke="#7A5230" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="440" y1="135" x2="428" y2="147" stroke="#7A5230" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- Labels -->
+  <text x="443" y="276" text-anchor="middle" font-size="7.5" fill="#5C3D1E">recompute centroids as cluster means</text>
+  <text x="443" y="286" text-anchor="middle" font-size="7" fill="#6B5D4F" font-style="italic">μₖ = (1/|Cₖ|) Σ xᵢ</text>
+
+  <!-- Bottom caption -->
+  <text x="300" y="302" text-anchor="middle" font-size="9" fill="#6B5D4F">
+    repeat until convergence — alternating assign and update steps minimizes within-cluster variance
+  </text>
+</svg>

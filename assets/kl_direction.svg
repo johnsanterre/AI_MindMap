@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: True distribution p (bimodal) -->
+  <rect x="25" y="35" width="230" height="240" rx="6" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="140" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">TRUE DISTRIBUTION p</text>
+  <!-- Two bumps -->
+  <ellipse cx="95" cy="155" rx="38" ry="55" fill="#2D5A8E" opacity="0.35"/>
+  <ellipse cx="185" cy="155" rx="38" ry="55" fill="#2D5A8E" opacity="0.35"/>
+  <line x1="40" y1="210" x2="225" y2="210" stroke="#5C3D1E" stroke-width="1" opacity="0.5"/>
+  <text x="95" y="118" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">mode 1</text>
+  <text x="185" y="118" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">mode 2</text>
+  <text x="140" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">bimodal: two separate clusters</text>
+
+  <!-- Panel 2: KL(q||p) — mean-seeking -->
+  <rect x="285" y="35" width="230" height="240" rx="6" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">KL(MODEL ‖ TRUTH)</text>
+  <!-- True p faint -->
+  <ellipse cx="345" cy="155" rx="38" ry="55" fill="#2D5A8E" opacity="0.15"/>
+  <ellipse cx="435" cy="155" rx="38" ry="55" fill="#2D5A8E" opacity="0.15"/>
+  <!-- q broad, centered between modes -->
+  <ellipse cx="390" cy="155" rx="72" ry="48" fill="#C4A87A" opacity="0.55"/>
+  <line x1="300" y1="210" x2="505" y2="210" stroke="#5C3D1E" stroke-width="1" opacity="0.5"/>
+  <text x="400" y="138" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">q</text>
+  <text x="400" y="233" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">mean-seeking: covers the gap</text>
+  <text x="400" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530">(hallucination risk)</text>
+
+  <!-- Panel 3: KL(p||q) — mode-seeking -->
+  <rect x="545" y="35" width="230" height="240" rx="6" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="660" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">KL(TRUTH ‖ MODEL)</text>
+  <!-- True p faint -->
+  <ellipse cx="605" cy="155" rx="38" ry="55" fill="#2D5A8E" opacity="0.15"/>
+  <ellipse cx="715" cy="155" rx="38" ry="55" fill="#2D5A8E" opacity="0.15"/>
+  <!-- q narrow, on one mode -->
+  <ellipse cx="605" cy="155" rx="32" ry="50" fill="#7C2530" opacity="0.55"/>
+  <line x1="560" y1="210" x2="765" y2="210" stroke="#5C3D1E" stroke-width="1" opacity="0.5"/>
+  <text x="605" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">q</text>
+  <text x="660" y="233" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">mode-seeking: picks one mode</text>
+  <text x="660" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">(ignores the other)</text>
+
+  <!-- Formula row -->
+  <text x="140" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">KL(P ‖ Q) = Σ p(x) log p(x)/q(x)</text>
+  <text x="400" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Used in: VAEs (ELBO)</text>
+  <text x="660" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Used in: EM, moment-matching</text>
+
+  <!-- Direction labels -->
+  <text x="400" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">Asymmetry: KL(p‖q) ≠ KL(q‖p)</text>
+  <text x="400" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#6B5D4F">Direction determines behavior — mean-seeking vs. mode-seeking</text>
+</svg>

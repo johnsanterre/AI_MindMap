@@ -1,0 +1,135 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">A Taxonomy of Key Probability Distributions</text>
+
+  <!-- ── Panel dividers ── -->
+  <line x1="0" y1="40" x2="800" y2="40" stroke="#ddd" stroke-width="1"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Panel 1: Gaussian  (x 20–175)
+  ════════════════════════════════════════════════════════════ -->
+  <text x="97" y="60" text-anchor="middle" font-size="12" font-weight="bold" fill="#2C5F8A">Gaussian</text>
+  <text x="97" y="73" text-anchor="middle" font-size="9" fill="#666">continuous</text>
+  <!-- axes -->
+  <line x1="25" y1="290" x2="170" y2="290" stroke="#888" stroke-width="1.2"/>
+  <line x1="25" y1="290" x2="25"  y2="90"  stroke="#888" stroke-width="1.2"/>
+  <!-- bell curve -->
+  <path d="M 28,288 C 45,287 60,280 75,255 C 85,235 90,195 97,150 C 100,130 100,120 97,110 C 94,100 97,110 97,105 C 97,98 100,110 104,120 C 110,140 115,170 125,210 C 133,240 145,268 162,287 L 165,288 Z"
+        fill="#2C5F8A" fill-opacity="0.18" stroke="#2C5F8A" stroke-width="2" fill-rule="nonzero"/>
+  <!-- re-draw the clean bell with a path that is actually symmetric -->
+  <path d="M 28,288
+           C 40,287 55,280 68,260
+           C 78,242 84,210 90,175
+           C 93,155 95,130 97,108
+           C 99,130 101,155 104,175
+           C 110,210 116,242 126,260
+           C 139,280 154,287 166,288"
+        fill="none" stroke="#2C5F8A" stroke-width="2.5"/>
+  <path d="M 84,175 C 87,155 92,130 97,108 C 102,130 107,155 110,175 L 110,290 L 84,290 Z"
+        fill="#2C5F8A" fill-opacity="0.18"/>
+  <line x1="97" y1="108" x2="97" y2="290" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="97" y="302" text-anchor="middle" font-size="10" fill="#C0392B">μ</text>
+  <text x="103" y="180" font-size="9" fill="#2C5F8A">68%</text>
+  <text x="97" y="350" text-anchor="middle" font-size="10" fill="#444">μ, σ²</text>
+  <text x="97" y="362" text-anchor="middle" font-size="9" fill="#888">Bell-shaped, symmetric</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Panel 2: Bernoulli  (x 185–330)
+  ════════════════════════════════════════════════════════════ -->
+  <text x="258" y="60" text-anchor="middle" font-size="12" font-weight="bold" fill="#2C5F8A">Bernoulli</text>
+  <text x="258" y="73" text-anchor="middle" font-size="9" fill="#666">discrete · 2 outcomes</text>
+  <!-- axes -->
+  <line x1="195" y1="290" x2="325" y2="290" stroke="#888" stroke-width="1.2"/>
+  <line x1="195" y1="290" x2="195" y2="90"  stroke="#888" stroke-width="1.2"/>
+  <!-- bars -->
+  <rect x="215" y="180" width="38" height="110" fill="#2C5F8A" fill-opacity="0.75" rx="2"/>
+  <text x="234" y="175" text-anchor="middle" font-size="10" fill="#2C5F8A" font-weight="bold">1−p</text>
+  <text x="234" y="305" text-anchor="middle" font-size="10" fill="#555">0</text>
+  <rect x="275" y="218" width="38" height="72"  fill="#E07B39" fill-opacity="0.85" rx="2"/>
+  <text x="294" y="213" text-anchor="middle" font-size="10" fill="#E07B39" font-weight="bold">p</text>
+  <text x="294" y="305" text-anchor="middle" font-size="10" fill="#555">1</text>
+  <text x="258" y="350" text-anchor="middle" font-size="10" fill="#444">p ∈ (0,1)</text>
+  <text x="258" y="362" text-anchor="middle" font-size="9" fill="#888">Coin flip, single trial</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Panel 3: Poisson  (x 345–490)
+  ════════════════════════════════════════════════════════════ -->
+  <text x="418" y="60" text-anchor="middle" font-size="12" font-weight="bold" fill="#2C5F8A">Poisson</text>
+  <text x="418" y="73" text-anchor="middle" font-size="9" fill="#666">discrete · count data</text>
+  <!-- axes -->
+  <line x1="355" y1="290" x2="485" y2="290" stroke="#888" stroke-width="1.2"/>
+  <line x1="355" y1="290" x2="355" y2="90"  stroke="#888" stroke-width="1.2"/>
+  <!-- bars: k=0,1,2,3,4,5 for λ=3 (heights proportional to PMF) -->
+  <!-- PMF(k,3): 0.050, 0.149, 0.224, 0.224, 0.168, 0.101 → scale ×800 to max ~179 -->
+  <rect x="361" y="250" width="14" height="40"  fill="#2C5F8A" fill-opacity="0.80" rx="1"/>
+  <rect x="378" y="171" width="14" height="119" fill="#2C5F8A" fill-opacity="0.80" rx="1"/>
+  <rect x="395" y="111" width="14" height="179" fill="#2C5F8A" fill-opacity="0.80" rx="1"/>
+  <rect x="412" y="111" width="14" height="179" fill="#2C5F8A" fill-opacity="0.80" rx="1"/>
+  <rect x="429" y="156" width="14" height="134" fill="#2C5F8A" fill-opacity="0.65" rx="1"/>
+  <rect x="446" y="209" width="14" height="81"  fill="#2C5F8A" fill-opacity="0.50" rx="1"/>
+  <!-- k labels -->
+  <text x="368" y="302" text-anchor="middle" font-size="8" fill="#666">0</text>
+  <text x="385" y="302" text-anchor="middle" font-size="8" fill="#666">1</text>
+  <text x="402" y="302" text-anchor="middle" font-size="8" fill="#666">2</text>
+  <text x="419" y="302" text-anchor="middle" font-size="8" fill="#666">3</text>
+  <text x="436" y="302" text-anchor="middle" font-size="8" fill="#666">4</text>
+  <text x="453" y="302" text-anchor="middle" font-size="8" fill="#666">5</text>
+  <text x="418" y="350" text-anchor="middle" font-size="10" fill="#444">λ=3  (mean=var=λ)</text>
+  <text x="418" y="362" text-anchor="middle" font-size="9" fill="#888">Events in fixed interval</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Panel 4: Exponential  (x 505–650)
+  ════════════════════════════════════════════════════════════ -->
+  <text x="577" y="60" text-anchor="middle" font-size="12" font-weight="bold" fill="#2C5F8A">Exponential</text>
+  <text x="577" y="73" text-anchor="middle" font-size="9" fill="#666">continuous · wait times</text>
+  <!-- axes -->
+  <line x1="515" y1="290" x2="645" y2="290" stroke="#888" stroke-width="1.2"/>
+  <line x1="515" y1="290" x2="515" y2="90"  stroke="#888" stroke-width="1.2"/>
+  <!-- decay curve: f(x)=λe^{-λx}, λ=1, scaled so f(0)→y=108 (height 182) -->
+  <path d="M 515,108
+           C 525,118 533,134 542,155
+           C 551,176 558,200 568,225
+           C 576,244 586,260 598,272
+           C 610,281 625,286 640,289"
+        fill="none" stroke="#C0392B" stroke-width="2.5"/>
+  <path d="M 515,108
+           C 525,118 533,134 542,155
+           C 551,176 558,200 568,225
+           C 576,244 586,260 598,272
+           C 610,281 625,286 640,289
+           L 640,290 L 515,290 Z"
+        fill="#C0392B" fill-opacity="0.12"/>
+  <text x="525" y="103" font-size="9" fill="#C0392B">λe^{-λx}</text>
+  <text x="577" y="350" text-anchor="middle" font-size="10" fill="#444">mean=1/λ, memoryless</text>
+  <text x="577" y="362" text-anchor="middle" font-size="9" fill="#888">Decay curve</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Panel 5: Uniform  (x 665–780)
+  ════════════════════════════════════════════════════════════ -->
+  <text x="723" y="60" text-anchor="middle" font-size="12" font-weight="bold" fill="#2C5F8A">Uniform</text>
+  <text x="723" y="73" text-anchor="middle" font-size="9" fill="#666">continuous · flat</text>
+  <!-- axes -->
+  <line x1="673" y1="290" x2="778" y2="290" stroke="#888" stroke-width="1.2"/>
+  <line x1="673" y1="290" x2="673" y2="90"  stroke="#888" stroke-width="1.2"/>
+  <!-- flat line with drop-down sides -->
+  <polyline points="673,290 690,290 690,190 758,190 758,290 773,290"
+            fill="none" stroke="#2C7A2C" stroke-width="2.5"/>
+  <rect x="690" y="190" width="68" height="100" fill="#2C7A2C" fill-opacity="0.15"/>
+  <line x1="673" y1="190" x2="690" y2="190" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="660" y="193" text-anchor="end" font-size="9" fill="#888">1/(b−a)</text>
+  <text x="690" y="305" text-anchor="middle" font-size="9" fill="#666">a</text>
+  <text x="758" y="305" text-anchor="middle" font-size="9" fill="#666">b</text>
+  <text x="723" y="350" text-anchor="middle" font-size="10" fill="#444">a, b  (equal density)</text>
+  <text x="723" y="362" text-anchor="middle" font-size="9" fill="#888">Max-entropy on [a,b]</text>
+
+  <!-- ── bottom legend ── -->
+  <line x1="20" y1="375" x2="780" y2="375" stroke="#ddd" stroke-width="1"/>
+  <rect x="200" y="383" width="10" height="10" fill="#2C5F8A" fill-opacity="0.75"/>
+  <text x="215" y="392" font-size="10" fill="#555">Discrete (PMF)</text>
+  <rect x="340" y="383" width="10" height="10" fill="#C0392B" fill-opacity="0.75"/>
+  <text x="355" y="392" font-size="10" fill="#555">Continuous (PDF)</text>
+  <rect x="490" y="383" width="10" height="10" fill="#2C7A2C" fill-opacity="0.75"/>
+  <text x="505" y="392" font-size="10" fill="#555">Uniform (PDF)</text>
+</svg>

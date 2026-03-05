@@ -1,0 +1,22 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">The P-Value</text>
+  <!-- Null distribution bell curve -->
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#555">Null distribution H₀</text>
+  <path d="M60,310 C100,308 150,290 200,240 C240,200 280,130 320,90 C360,55 400,50 440,55 C480,60 510,90 540,130 C580,190 620,250 660,290 C700,310 730,313 740,313" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <!-- Fill right tail -->
+  <path d="M600,310 C620,280 640,220 660,165 C680,120 700,90 720,75 C730,68 740,65 740,313 Z" fill="#E91E63" fill-opacity="0.35"/>
+  <!-- Observed statistic line -->
+  <line x1="600" y1="60" x2="600" y2="320" stroke="#E91E63" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <text x="602" y="55" font-size="13" fill="#E91E63">t_obs</text>
+  <!-- p-value annotation -->
+  <text x="680" y="200" text-anchor="middle" font-size="13" fill="#E91E63" font-weight="bold">p-value</text>
+  <line x1="665" y1="205" x2="650" y2="230" stroke="#E91E63" stroke-width="1.5" marker-end="url(#a4)"/>
+  <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E91E63"/></marker></defs>
+  <!-- Axes -->
+  <line x1="60" y1="313" x2="740" y2="313" stroke="#333" stroke-width="1.5"/>
+  <!-- Decision rule -->
+  <rect x="80" y="335" width="640" height="50" rx="6" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="400" y="353" text-anchor="middle" font-size="13" fill="#555">p-value = P(data this extreme | H₀ is true)</text>
+  <text x="400" y="374" text-anchor="middle" font-size="13" fill="#E91E63">If p &lt; α (e.g. 0.05): reject H₀    |   If p ≥ α: fail to reject H₀</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Exploding Gradients</text>
+  <!-- Left: gradient magnitude over layers -->
+  <text x="200" y="58" text-anchor="middle" font-size="13" fill="#333">Gradient Magnitude by Layer</text>
+  <line x1="60" y1="300" x2="360" y2="300" stroke="#333" stroke-width="2"/>
+  <line x1="60" y1="300" x2="60" y2="60" stroke="#333" stroke-width="2"/>
+  <text x="210" y="325" text-anchor="middle" font-size="12" fill="#666">Layer (output → input)</text>
+  <text x="35" y="185" text-anchor="middle" font-size="12" fill="#666" transform="rotate(-90,35,185)">‖∇‖</text>
+  <!-- Normal -->
+  <path d="M80,290 C130,285 180,280 270,275 C300,273 330,272 350,272" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <text x="355" y="276" font-size="11" fill="#4CAF50">stable</text>
+  <!-- Vanishing -->
+  <path d="M80,290 C130,295 180,298 270,299 C310,299 340,300 350,300" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <text x="355" y="303" font-size="11" fill="#2196F3">vanishing</text>
+  <!-- Exploding -->
+  <path d="M80,290 C100,270 130,230 160,170 C190,100 220,60 240,65" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <text x="245" y="62" font-size="11" fill="#E91E63">exploding!</text>
+  <!-- Right: weight update illustration -->
+  <text x="600" y="58" text-anchor="middle" font-size="13" fill="#333">Gradient Clipping Fix</text>
+  <rect x="420" y="80" width="340" height="240" rx="8" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="590" y="115" text-anchor="middle" font-size="12" fill="#E91E63" font-weight="bold">Problem: ‖g‖ → ∞</text>
+  <text x="590" y="140" text-anchor="middle" font-size="12" fill="#333">Weight updates diverge</text>
+  <text x="590" y="160" text-anchor="middle" font-size="12" fill="#333">Loss becomes NaN</text>
+  <line x1="500" y1="175" x2="680" y2="175" stroke="#aaa" stroke-width="1"/>
+  <text x="590" y="200" text-anchor="middle" font-size="12" fill="#4CAF50" font-weight="bold">Fix: Gradient Clipping</text>
+  <text x="590" y="225" text-anchor="middle" font-size="12" fill="#333">if ‖g‖ &gt; threshold:</text>
+  <text x="590" y="248" text-anchor="middle" font-size="13" fill="#2196F3">g ← g · threshold / ‖g‖</text>
+  <text x="590" y="278" text-anchor="middle" font-size="11" fill="#888">Also: careful init, smaller lr,</text>
+  <text x="590" y="296" text-anchor="middle" font-size="11" fill="#888">gradient checkpointing</text>
+  <text x="400" y="370" text-anchor="middle" font-size="12" fill="#555">Contrast with vanishing gradients — too large vs. too small</text>
+</svg>

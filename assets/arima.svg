@@ -1,0 +1,29 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">ARIMA: AutoRegressive Integrated Moving Average</text>
+  <!-- Axes -->
+  <line x1="60" y1="280" x2="740" y2="280" stroke="#555" stroke-width="2"/>
+  <line x1="60" y1="80" x2="60" y2="280" stroke="#555" stroke-width="2"/>
+  <text x="750" y="285" fill="#555" font-size="13">time</text>
+  <text x="35" y="90" fill="#555" font-size="13">yₜ</text>
+  <!-- Time series with trend -->
+  <path d="M 80,240 C 130,230 160,220 200,200 C 230,185 260,195 290,180 C 330,162 350,150 390,135 C 430,120 450,130 490,115 C 520,105 555,95 590,90" fill="none" stroke="#2C5F8A" stroke-width="2.5"/>
+  <!-- Forecast -->
+  <path d="M 590,90 C 620,85 650,80 680,78 C 700,76 720,77 740,79" fill="none" stroke="#C0392B" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <!-- Confidence band -->
+  <path d="M 590,90 C 620,80 650,70 680,60 C 700,53 720,50 740,47 L 740,112 C 720,105 700,102 680,98 C 650,93 620,100 590,90 Z" fill="#C0392B" fill-opacity="0.1"/>
+  <!-- Components labels -->
+  <text x="150" y="310" text-anchor="middle" fill="#4A7C59" font-size="13" font-weight="bold">AR(p)</text>
+  <text x="150" y="330" text-anchor="middle" fill="#555" font-size="11">past values</text>
+  <text x="400" y="310" text-anchor="middle" fill="#2C5F8A" font-size="13" font-weight="bold">I(d)</text>
+  <text x="400" y="330" text-anchor="middle" fill="#555" font-size="11">differencing</text>
+  <text x="600" y="310" text-anchor="middle" fill="#E07B39" font-size="13" font-weight="bold">MA(q)</text>
+  <text x="600" y="330" text-anchor="middle" fill="#555" font-size="11">past errors</text>
+  <!-- Forecast label -->
+  <text x="665" y="65" text-anchor="middle" fill="#C0392B" font-size="13">Forecast</text>
+  <!-- Vertical line separating observed/forecast -->
+  <line x1="590" y1="70" x2="590" y2="280" stroke="#888" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="590" y="65" text-anchor="middle" fill="#888" font-size="11">now</text>
+  <!-- Formula -->
+  <text x="400" y="60" text-anchor="middle" fill="#555" font-size="13">Φ(B)(1-B)ᵈyₜ = θ(B)εₜ</text>
+</svg>

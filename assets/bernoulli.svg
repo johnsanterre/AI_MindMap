@@ -1,0 +1,27 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Bar chart -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Bernoulli Distribution</text>
+  <!-- Axes -->
+  <line x1="150" y1="320" x2="650" y2="320" stroke="#333" stroke-width="2"/>
+  <line x1="150" y1="320" x2="150" y2="60" stroke="#333" stroke-width="2"/>
+  <text x="400" y="360" text-anchor="middle" font-size="14" fill="#333">Outcome</text>
+  <text x="60" y="190" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,60,190)">P(X = x)</text>
+  <!-- Bar 0 -->
+  <rect x="220" y="140" width="120" height="180" fill="#2196F3" fill-opacity="0.7" stroke="#2196F3" stroke-width="1"/>
+  <text x="280" y="135" text-anchor="middle" font-size="14" fill="#2196F3" font-weight="bold">1−p</text>
+  <text x="280" y="345" text-anchor="middle" font-size="14" fill="#333">X = 0 (fail)</text>
+  <!-- Bar 1 -->
+  <rect x="460" y="200" width="120" height="120" fill="#E91E63" fill-opacity="0.7" stroke="#E91E63" stroke-width="1"/>
+  <text x="520" y="195" text-anchor="middle" font-size="14" fill="#E91E63" font-weight="bold">p</text>
+  <text x="520" y="345" text-anchor="middle" font-size="14" fill="#333">X = 1 (success)</text>
+  <!-- Annotations -->
+  <text x="100" y="145" text-anchor="end" font-size="12" fill="#666">1−p</text>
+  <line x1="110" y1="140" x2="150" y2="140" stroke="#666" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="100" y="205" text-anchor="end" font-size="12" fill="#666">p</text>
+  <line x1="110" y1="200" x2="150" y2="200" stroke="#666" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Formula box -->
+  <rect x="280" y="50" width="240" height="50" rx="6" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="400" y="68" text-anchor="middle" font-size="13" fill="#555">P(X=1) = p,  P(X=0) = 1−p</text>
+  <text x="400" y="88" text-anchor="middle" font-size="12" fill="#888">Mean = p  |  Var = p(1−p)</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">AutoML: Automated Algorithm Selection and Tuning</text>
+  <defs>
+    <marker id="arram" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <!-- Search space -->
+  <rect x="40" y="80" width="160" height="200" rx="10" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="120" y="108" text-anchor="middle" fill="#2C5F8A" font-size="13" font-weight="bold">Search Space</text>
+  <text x="120" y="135" text-anchor="middle" fill="#555" font-size="12">Algorithms</text>
+  <text x="120" y="155" text-anchor="middle" fill="#888" font-size="11">SVM, RF, XGB,</text>
+  <text x="120" y="170" text-anchor="middle" fill="#888" font-size="11">Neural nets…</text>
+  <text x="120" y="200" text-anchor="middle" fill="#555" font-size="12">Hyperparameters</text>
+  <text x="120" y="220" text-anchor="middle" fill="#888" font-size="11">LR, depth, layers,</text>
+  <text x="120" y="235" text-anchor="middle" fill="#888" font-size="11">dropout…</text>
+  <text x="120" y="265" text-anchor="middle" fill="#555" font-size="12">Pipelines</text>
+  <!-- Optimizer box -->
+  <rect x="280" y="130" width="180" height="100" rx="10" fill="#F0F8F0" stroke="#4A7C59" stroke-width="2"/>
+  <text x="370" y="163" text-anchor="middle" fill="#4A7C59" font-size="14" font-weight="bold">Bayesian Optimizer</text>
+  <text x="370" y="185" text-anchor="middle" fill="#555" font-size="12">Builds surrogate model</text>
+  <text x="370" y="205" text-anchor="middle" fill="#555" font-size="12">Picks next config to try</text>
+  <!-- Evaluation -->
+  <rect x="540" y="130" width="180" height="100" rx="10" fill="#FEF3EC" stroke="#E07B39" stroke-width="2"/>
+  <text x="630" y="163" text-anchor="middle" fill="#E07B39" font-size="14" font-weight="bold">Evaluate</text>
+  <text x="630" y="185" text-anchor="middle" fill="#555" font-size="12">Train + cross-validate</text>
+  <text x="630" y="205" text-anchor="middle" fill="#555" font-size="12">Return score</text>
+  <!-- Arrows -->
+  <line x1="200" y1="180" x2="278" y2="180" stroke="#555" stroke-width="2.5" marker-end="url(#arram)"/>
+  <line x1="460" y1="180" x2="538" y2="180" stroke="#555" stroke-width="2.5" marker-end="url(#arram)"/>
+  <!-- Feedback arrow -->
+  <path d="M 630,232 Q 630,300 370,300 Q 280,300 280,232" fill="none" stroke="#C0392B" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arram)"/>
+  <text x="450" y="325" text-anchor="middle" fill="#C0392B" font-size="13">Score feedback updates surrogate model</text>
+  <!-- Budget label -->
+  <text x="400" y="70" text-anchor="middle" fill="#888" font-size="13">Repeat within compute budget → return best pipeline</text>
+</svg>

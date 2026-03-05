@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="26" x2="400" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ PANEL 1: KAPLAN-MEIER CURVE ══ -->
+  <text x="200" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">KAPLAN-MEIER SURVIVAL CURVE</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="310" x2="375" y2="310" stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+  <line x1="40" y1="314" x2="40"  y2="38"  stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+
+  <!-- Axis labels -->
+  <text x="210" y="332" text-anchor="middle" font-size="10" fill="#5C3D1E">Time</text>
+  <text x="18" y="180" text-anchor="middle" font-size="10" fill="#5C3D1E" transform="rotate(-90,18,180)">S(t)</text>
+
+  <!-- Y axis ticks -->
+  <text x="34" y="313" text-anchor="end" font-size="8" fill="#6B5D4F">0</text>
+  <text x="34" y="246" text-anchor="end" font-size="8" fill="#6B5D4F">0.25</text>
+  <text x="34" y="178" text-anchor="end" font-size="8" fill="#6B5D4F">0.50</text>
+  <text x="34" y="111" text-anchor="end" font-size="8" fill="#6B5D4F">0.75</text>
+  <text x="34" y="45"  text-anchor="end" font-size="8" fill="#6B5D4F">1.00</text>
+  <line x1="40" y1="42"  x2="44" y2="42"  stroke="#C4A87A" stroke-width="1"/>
+  <line x1="40" y1="108" x2="44" y2="108" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="40" y1="175" x2="44" y2="175" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="40" y1="242" x2="44" y2="242" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- KM step function: treatment group (deep red) -->
+  <!-- Start at S=1.0 (y=42), step down -->
+  <polyline points="40,42 90,42 90,80 145,80 145,112 185,112 185,155 235,155 235,195 280,195 280,242 335,242 335,275 370,275"
+    fill="none" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- KM step function: control group (navy) -->
+  <polyline points="40,42 75,42 75,90 120,90 120,135 160,135 160,180 205,180 205,235 250,235 250,280 295,280 295,310 370,310"
+    fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="6,3"/>
+
+  <!-- Censoring tick marks (treatment) -->
+  <line x1="110" y1="78"  x2="110" y2="88"  stroke="#7C2530" stroke-width="1.8"/>
+  <line x1="165" y1="110" x2="165" y2="120" stroke="#7C2530" stroke-width="1.8"/>
+  <line x1="215" y1="153" x2="215" y2="163" stroke="#7C2530" stroke-width="1.8"/>
+  <line x1="260" y1="193" x2="260" y2="203" stroke="#7C2530" stroke-width="1.8"/>
+
+  <!-- Censoring tick marks (control) -->
+  <line x1="100" y1="88"  x2="100" y2="98"  stroke="#2D5A8E" stroke-width="1.8"/>
+  <line x1="140" y1="133" x2="140" y2="143" stroke="#2D5A8E" stroke-width="1.8"/>
+  <line x1="180" y1="178" x2="180" y2="188" stroke="#2D5A8E" stroke-width="1.8"/>
+
+  <!-- Legend -->
+  <line x1="55" y1="345" x2="80" y2="345" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="85" y="349" font-size="9" fill="#7C2530">Treatment</text>
+  <line x1="155" y1="345" x2="180" y2="345" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="185" y="349" font-size="9" fill="#2D5A8E">Control</text>
+  <text x="250" y="349" font-size="8" fill="#6B5D4F">| = censored</text>
+
+  <!-- ══ PANEL 2: HAZARD + CENSORING ══ -->
+  <text x="600" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">CENSORING &amp; HAZARD</text>
+
+  <!-- Subject timeline panel -->
+  <!-- Each row: one subject, bar = observed time, X = event, O = censored -->
+  <text x="420" y="52" font-size="9" fill="#6B5D4F">Subject</text>
+  <text x="580" y="52" text-anchor="middle" font-size="9" fill="#6B5D4F">Time →</text>
+
+  <!-- Subjects rows -->
+  <!-- Subject 1: event at t=8 -->
+  <text x="438" y="78" text-anchor="end" font-size="9" fill="#5C3D1E">1</text>
+  <line x1="442" y1="73" x2="630" y2="73" stroke="#7C2530" stroke-width="2"/>
+  <text x="638" y="78" font-size="12" fill="#7C2530">✕</text>
+
+  <!-- Subject 2: censored at t=5 -->
+  <text x="438" y="103" text-anchor="end" font-size="9" fill="#5C3D1E">2</text>
+  <line x1="442" y1="98" x2="520" y2="98" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="523" cy="98" r="4" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- Subject 3: event at t=6 -->
+  <text x="438" y="128" text-anchor="end" font-size="9" fill="#5C3D1E">3</text>
+  <line x1="442" y1="123" x2="555" y2="123" stroke="#7C2530" stroke-width="2"/>
+  <text x="563" y="128" font-size="12" fill="#7C2530">✕</text>
+
+  <!-- Subject 4: censored at t=10 -->
+  <text x="438" y="153" text-anchor="end" font-size="9" fill="#5C3D1E">4</text>
+  <line x1="442" y1="148" x2="700" y2="148" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="703" cy="148" r="4" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- Subject 5: event at t=3 -->
+  <text x="438" y="178" text-anchor="end" font-size="9" fill="#5C3D1E">5</text>
+  <line x1="442" y1="173" x2="480" y2="173" stroke="#7C2530" stroke-width="2"/>
+  <text x="488" y="178" font-size="12" fill="#7C2530">✕</text>
+
+  <!-- Subject 6: censored at t=7 -->
+  <text x="438" y="203" text-anchor="end" font-size="9" fill="#5C3D1E">6</text>
+  <line x1="442" y1="198" x2="590" y2="198" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="593" cy="198" r="4" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- Time axis for panel 2 -->
+  <line x1="442" y1="218" x2="760" y2="218" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arr-axis)"/>
+  <text x="442" y="230" font-size="8" fill="#6B5D4F">0</text>
+  <text x="520" y="230" font-size="8" fill="#6B5D4F">5</text>
+  <text x="598" y="230" font-size="8" fill="#6B5D4F">7</text>
+  <text x="640" y="230" font-size="8" fill="#6B5D4F">8</text>
+  <text x="745" y="230" font-size="8" fill="#6B5D4F">t</text>
+
+  <!-- Legend panel 2 -->
+  <line x1="430" y1="252" x2="455" y2="252" stroke="#7C2530" stroke-width="2"/>
+  <text x="462" y="256" font-size="9" fill="#7C2530">✕ event observed</text>
+  <line x1="430" y1="270" x2="455" y2="270" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="458" cy="270" r="4" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="468" y="274" font-size="9" fill="#2D5A8E">○ censored (lost/study ended)</text>
+
+  <!-- Hazard formula -->
+  <rect x="430" y="295" width="340" height="55" fill="#EDE5D0" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="600" y="315" text-anchor="middle" font-size="10" fill="#5C3D1E">Hazard rate:  h(t) = lim  P(t ≤ T &lt; t+Δt | T ≥ t) / Δt</text>
+  <text x="600" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">Δt→0</text>
+  <text x="600" y="352" text-anchor="middle" font-size="9" fill="#5C3D1E">S(t) = exp(−∫₀ᵗ h(u) du)   (survival function)</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="386" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Survival analysis handles censored observations — subjects who haven't experienced the event yet when data collection ends.
+  </text>
+</svg>

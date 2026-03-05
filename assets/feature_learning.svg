@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Feature Learning / Representation Learning</text>
+  <!-- Raw input -->
+  <rect x="30" y="80" width="120" height="240" rx="8" fill="#f0f0f0" stroke="#999" stroke-width="2"/>
+  <text x="90" y="108" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#555">Raw Input</text>
+  <!-- Pixel grid hint -->
+  <rect x="45" y="120" width="90" height="90" rx="2" fill="#ccc"/>
+  <text x="90" y="250" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">pixels / words</text>
+  <text x="90" y="268" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">/ sensor data</text>
+  <!-- Arrow -->
+  <line x1="150" y1="200" x2="200" y2="200" stroke="#888" stroke-width="2.5" marker-end="url(#afl)"/>
+  <!-- Layers -->
+  <rect x="210" y="100" width="80" height="200" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="250" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Layer 1</text>
+  <text x="250" y="213" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">edges</text>
+  <line x1="290" y1="200" x2="310" y2="200" stroke="#888" stroke-width="2" marker-end="url(#afl)"/>
+  <rect x="320" y="115" width="80" height="170" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="360" y="198" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Layer 2</text>
+  <text x="360" y="216" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">shapes</text>
+  <line x1="400" y1="200" x2="420" y2="200" stroke="#888" stroke-width="2" marker-end="url(#afl)"/>
+  <rect x="430" y="130" width="80" height="140" rx="6" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+  <text x="470" y="198" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Layer 3</text>
+  <text x="470" y="216" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">parts</text>
+  <line x1="510" y1="200" x2="530" y2="200" stroke="#888" stroke-width="2" marker-end="url(#afl)"/>
+  <!-- Learned features -->
+  <rect x="540" y="80" width="130" height="240" rx="8" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
+  <text x="605" y="108" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#27ae60">Learned</text>
+  <text x="605" y="126" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#27ae60">Features</text>
+  <text x="605" y="160" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Compact</text>
+  <text x="605" y="180" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Transferable</text>
+  <text x="605" y="200" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Task-relevant</text>
+  <text x="605" y="220" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Hierarchical</text>
+  <defs><marker id="afl" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker></defs>
+  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">End-to-end learning: features discovered automatically, not hand-crafted</text>
+</svg>

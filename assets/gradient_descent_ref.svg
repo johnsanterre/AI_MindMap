@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-traj" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-grad" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-step" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#5A8040"/>
+    </marker>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="4"/>
+
+  <!-- ══ LEFT PANEL: Contour plot (0–430) ══ -->
+  <text x="215" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1.2">LOSS LANDSCAPE (CONTOURS)</text>
+
+  <!-- Contour ellipses — outer (high loss) to inner (low loss) -->
+  <!-- Center of minimum: cx=230, cy=205 -->
+  <ellipse cx="230" cy="205" rx="160" ry="95"  fill="#EDE5D0" stroke="#D4C5A9" stroke-width="1"/>
+  <ellipse cx="230" cy="205" rx="128" ry="75"  fill="#E4D9BF" stroke="#CBBFA0" stroke-width="1"/>
+  <ellipse cx="230" cy="205" rx="96"  ry="56"  fill="#D7C8A5" stroke="#BEA87C" stroke-width="1"/>
+  <ellipse cx="230" cy="205" rx="64"  ry="37"  fill="#C5B282" stroke="#A89058" stroke-width="1"/>
+  <ellipse cx="230" cy="205" rx="32"  ry="19"  fill="#B09050" stroke="#8A7038" stroke-width="1"/>
+  <ellipse cx="230" cy="205" rx="10"  ry="6"   fill="#8A6020" stroke="#6A4810" stroke-width="1"/>
+
+  <!-- Minimum marker -->
+  <circle cx="230" cy="205" r="5" fill="#7C2530"/>
+  <text x="237" y="197" font-size="10" fill="#7C2530" font-weight="bold">minimum</text>
+
+  <!-- Descent trajectory dots and path -->
+  <!-- Starting point θ₀ at (60, 110) -->
+  <polyline
+    points="60,110 155,143 194,168 215,184 224,194 228,200 230,204"
+    fill="none" stroke="#7C2530" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+    marker-end="url(#arr-traj)"/>
+
+  <!-- Step dots along trajectory -->
+  <circle cx="60"  cy="110" r="5"   fill="#7C2530"/>
+  <circle cx="155" cy="143" r="4.5" fill="#7C2530" opacity="0.88"/>
+  <circle cx="194" cy="168" r="4"   fill="#7C2530" opacity="0.78"/>
+  <circle cx="215" cy="184" r="3.5" fill="#7C2530" opacity="0.68"/>
+  <circle cx="224" cy="194" r="3"   fill="#7C2530" opacity="0.58"/>
+  <circle cx="228" cy="200" r="2.5" fill="#7C2530" opacity="0.48"/>
+
+  <!-- Starting point label -->
+  <text x="44" y="105" font-size="10" fill="#5C3D1E" font-weight="bold">θ₀</text>
+
+  <!-- ── At θ₀: gradient vector (uphill = away from min) ── -->
+  <!-- gradient direction from (60,110) pointing AWAY from min roughly: dx=-50, dy=-30 -->
+  <line x1="60" y1="110" x2="24" y2="88"
+        stroke="#2D5A8E" stroke-width="2.2" marker-end="url(#arr-grad)"/>
+  <text x="5" y="82" font-size="9.5" fill="#2D5A8E" font-style="italic">∇L (gradient)</text>
+
+  <!-- ── Negative gradient step arrow: θ ← θ − η∇L ── -->
+  <!-- step from (60,110) toward (155,143), show as dashed guide first then solid -->
+  <line x1="60" y1="110" x2="130" y2="133"
+        stroke="#5A8040" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr-step)"/>
+  <text x="80" y="126" font-size="9" fill="#5A8040" font-style="italic">−η∇L (step)</text>
+
+  <!-- Learning rate brace annotation -->
+  <!-- Horizontal brace from x=60 to x=130 at y=148 -->
+  <line x1="60" y1="148" x2="130" y2="148" stroke="#5A8040" stroke-width="1" stroke-dasharray="2,2" opacity="0.7"/>
+  <line x1="60" y1="145" x2="60"  y2="152" stroke="#5A8040" stroke-width="1" opacity="0.7"/>
+  <line x1="130" y1="145" x2="130" y2="152" stroke="#5A8040" stroke-width="1" opacity="0.7"/>
+  <text x="95" y="163" text-anchor="middle" font-size="9" fill="#5A8040">learning rate η</text>
+
+  <!-- Update rule box -->
+  <rect x="56" y="295" width="310" height="26" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="211" y="313" text-anchor="middle" font-size="10.5" fill="#5C3D1E" font-style="italic">θ ← θ − η∇L(θ)  ·  step in negative gradient direction</text>
+
+  <!-- Axis labels -->
+  <text x="218" y="380" text-anchor="middle" font-size="10" fill="#6B5D4F">θ₁  (parameter 1)</text>
+  <text x="20"  y="205" font-size="10" fill="#6B5D4F" text-anchor="middle"
+        transform="rotate(-90,20,205)">θ₂  (parameter 2)</text>
+
+  <!-- Panel divider -->
+  <line x1="437" y1="18" x2="437" y2="388" stroke="#D4C5A9" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+  <!-- ══ RIGHT PANEL: Loss vs iterations curve (437–800) ══ -->
+  <text x="618" y="20" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1.2">LOSS vs ITERATIONS</text>
+
+  <!-- Axes -->
+  <line x1="472" y1="340" x2="780" y2="340" stroke="#C4A87A" stroke-width="1.6" marker-end="url(#arr-axis)"/>
+  <line x1="472" y1="340" x2="472" y2="40"  stroke="#C4A87A" stroke-width="1.6" marker-end="url(#arr-axis)"/>
+  <text x="628" y="362" text-anchor="middle" font-size="10" fill="#6B5D4F">iterations  t</text>
+  <text x="450" y="192" font-size="10" fill="#6B5D4F" text-anchor="middle"
+        transform="rotate(-90,450,192)">L(θ)</text>
+
+  <!-- Area fill under curve -->
+  <polygon
+    points="472,55 500,80 528,108 556,138 584,166 612,193 640,218 668,238 696,255 724,268 752,278 772,285 772,340 472,340"
+    fill="#7C2530" opacity="0.07"/>
+
+  <!-- Loss curve — sharply decreasing then leveling -->
+  <polyline
+    points="472,55 500,80 528,108 556,138 584,166 612,193 640,218 668,238 696,255 724,268 752,278 772,285"
+    fill="none" stroke="#7C2530" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Convergence dashed line -->
+  <line x1="710" y1="265" x2="710" y2="340" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="714" y="330" font-size="8.5" fill="#6B5D4F">converging</text>
+
+  <!-- "high η oscillates" annotation — show a wiggly overlay for large lr -->
+  <!-- small jagged path above main curve to illustrate oscillation -->
+  <polyline
+    points="472,55 490,35 508,75 526,42 544,85 562,55 580,92 598,68 616,100 634,82"
+    fill="none" stroke="#C4A87A" stroke-width="1.4" stroke-dasharray="5,3" opacity="0.7"/>
+  <text x="556" y="30" text-anchor="middle" font-size="8.5" fill="#A08040" font-style="italic">η too large → oscillates</text>
+
+  <!-- Legend -->
+  <line x1="478" y1="310" x2="502" y2="310" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="506" y="314" font-size="9" fill="#5C3D1E">good learning rate</text>
+  <line x1="478" y1="326" x2="502" y2="326" stroke="#C4A87A" stroke-width="1.4" stroke-dasharray="5,3"/>
+  <text x="506" y="330" font-size="9" fill="#5C3D1E">overshooting</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="394" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    gradient descent iteratively moves θ downhill — the gradient points uphill, so subtract it
+  </text>
+</svg>

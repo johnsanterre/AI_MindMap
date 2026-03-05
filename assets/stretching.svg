@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="st-arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#aaa"/>
+    </marker>
+    <marker id="st-arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4a90d9"/>
+    </marker>
+    <marker id="st-arr-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2a9d8f"/>
+    </marker>
+    <marker id="st-arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/>
+    </marker>
+  </defs>
+
+  <!-- Cream background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#222">Scaling and Stretching Transformations</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 1: UNIFORM SCALING — circle → larger circle -->
+  <!-- Center at (133, 210) -->
+  <!-- ================================================================ -->
+  <text x="133" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#333">Uniform Scaling</text>
+  <text x="133" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#555">sx = sy = 2</text>
+
+  <!-- Axes -->
+  <line x1="53" y1="210" x2="213" y2="210" stroke="#ccc" stroke-width="1.2" marker-end="url(#st-arr-gray)"/>
+  <line x1="133" y1="290" x2="133" y2="110" stroke="#ccc" stroke-width="1.2" marker-end="url(#st-arr-gray)"/>
+
+  <!-- Original unit circle (radius 30px, dashed blue) -->
+  <circle cx="133" cy="210" r="30" fill="#4a90d9" fill-opacity="0.12" stroke="#4a90d9" stroke-width="1.8" stroke-dasharray="5,3"/>
+
+  <!-- Scaled circle (radius 60px, solid teal) -->
+  <circle cx="133" cy="210" r="60" fill="#2a9d8f" fill-opacity="0.15" stroke="#2a9d8f" stroke-width="2.2"/>
+
+  <!-- Radius annotations -->
+  <line x1="133" y1="210" x2="163" y2="210" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="149" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#4a90d9">r=1</text>
+  <line x1="133" y1="210" x2="133" y2="150" stroke="#2a9d8f" stroke-width="1.5"/>
+  <text x="120" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2a9d8f">r=2</text>
+
+  <!-- Matrix label box -->
+  <rect x="56" y="296" width="154" height="48" rx="4" fill="#e8f4f0" stroke="#2a9d8f" stroke-width="1"/>
+  <text x="133" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#444">S = diag(2, 2)</text>
+  <text x="133" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#444">λ₁ = λ₂ = 2</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 2: NON-UNIFORM SCALING — circle → ellipse -->
+  <!-- Center at (400, 210) -->
+  <!-- ================================================================ -->
+  <text x="400" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#333">Non-Uniform Scaling</text>
+  <text x="400" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#555">sx = 2.2, sy = 0.6</text>
+
+  <!-- Axes -->
+  <line x1="300" y1="210" x2="510" y2="210" stroke="#ccc" stroke-width="1.2" marker-end="url(#st-arr-gray)"/>
+  <line x1="400" y1="295" x2="400" y2="110" stroke="#ccc" stroke-width="1.2" marker-end="url(#st-arr-gray)"/>
+
+  <!-- Original unit circle (radius 40px, dashed blue) -->
+  <circle cx="400" cy="210" r="40" fill="#4a90d9" fill-opacity="0.12" stroke="#4a90d9" stroke-width="1.8" stroke-dasharray="5,3"/>
+
+  <!-- Scaled ellipse: rx=40*2.2=88, ry=40*0.6=24 (teal solid) -->
+  <ellipse cx="400" cy="210" rx="88" ry="24" fill="#e67e22" fill-opacity="0.15" stroke="#e67e22" stroke-width="2.2"/>
+
+  <!-- Semi-axis annotations -->
+  <line x1="400" y1="210" x2="488" y2="210" stroke="#e67e22" stroke-width="1.5"/>
+  <text x="448" y="224" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#e67e22">sx·r = 2.2</text>
+  <line x1="400" y1="210" x2="400" y2="186" stroke="#e67e22" stroke-width="1.5"/>
+  <text x="368" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#e67e22">sy·r = 0.6</text>
+
+  <!-- Reference circle label -->
+  <text x="364" y="175" font-family="Georgia, serif" font-size="10" fill="#4a90d9">original</text>
+
+  <!-- Matrix label box -->
+  <rect x="310" y="296" width="180" height="48" rx="4" fill="#fff3e8" stroke="#e67e22" stroke-width="1"/>
+  <text x="400" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#444">S = diag(2.2, 0.6)</text>
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#444">λ₁ = 2.2, λ₂ = 0.6</text>
+
+  <!-- ================================================================ -->
+  <!-- PANEL 3: REFLECTION — negative scale factor -->
+  <!-- Center at (665, 210) -->
+  <!-- ================================================================ -->
+  <text x="665" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#333">Reflection</text>
+  <text x="665" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#555">sx = −1, sy = 1</text>
+
+  <!-- Axes -->
+  <line x1="570" y1="210" x2="762" y2="210" stroke="#ccc" stroke-width="1.2" marker-end="url(#st-arr-gray)"/>
+  <line x1="665" y1="295" x2="665" y2="110" stroke="#ccc" stroke-width="1.2" marker-end="url(#st-arr-gray)"/>
+
+  <!-- Original shape: arrow/triangle pointing right, dashed blue -->
+  <!-- Arrow body: rect from (665,203) to (705,217) plus triangle head -->
+  <polygon points="665,200 705,200 705,192 725,210 705,228 705,220 665,220"
+           fill="#4a90d9" fill-opacity="0.18" stroke="#4a90d9" stroke-width="1.8" stroke-dasharray="5,3"/>
+
+  <!-- Reflected shape: mirrored left, solid teal -->
+  <!-- sx=-1 flips x: x → 2*665 - x = 1330 - x -->
+  <!-- original points: 665,200 → 665,200; 705,200 → 625,200; 705,192 → 625,192; 725,210 → 605,210; 705,228 → 625,228; 705,220 → 625,220; 665,220 → 665,220 -->
+  <polygon points="665,200 625,200 625,192 605,210 625,228 625,220 665,220"
+           fill="#2a9d8f" fill-opacity="0.22" stroke="#2a9d8f" stroke-width="2.2"/>
+
+  <!-- Mirror axis line -->
+  <line x1="665" y1="180" x2="665" y2="240" stroke="#888" stroke-width="1.2" stroke-dasharray="6,3"/>
+
+  <!-- Labels -->
+  <text x="700" y="193" font-family="Georgia, serif" font-size="10" fill="#4a90d9">original</text>
+  <text x="590" y="193" text-anchor="end" font-family="Georgia, serif" font-size="10" fill="#2a9d8f">reflected</text>
+
+  <!-- Matrix label box -->
+  <rect x="574" y="296" width="182" height="48" rx="4" fill="#e8f4f0" stroke="#2a9d8f" stroke-width="1"/>
+  <text x="665" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#444">S = diag(−1, 1)</text>
+  <text x="665" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#444">λ₁ = −1, λ₂ = 1</text>
+
+  <!-- ================================================================ -->
+  <!-- FOOTER -->
+  <!-- ================================================================ -->
+  <text x="400" y="391" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#888">Diagonal matrix S = diag(sx, sy) — eigenvalues are the scale factors; |det S| = |sx · sy| = volume change</text>
+</svg>

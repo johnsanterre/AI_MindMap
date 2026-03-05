@@ -1,0 +1,104 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">The T-Test: Comparing Two Group Means</text>
+
+  <!-- Axis -->
+  <line x1="60" y1="300" x2="740" y2="300" stroke="#555" stroke-width="1.5"/>
+
+  <!-- Group A bell curve (left, teal) -->
+  <!-- mean at x=260 -->
+  <path d="M80,299
+    C100,298 130,294 160,280
+    C185,268 205,245 220,220
+    C232,198 242,175 252,155
+    C258,143 262,135 266,128
+    C270,122 274,118 278,118
+    C282,118 286,122 290,128
+    C298,143 308,165 320,190
+    C335,220 352,250 375,272
+    C395,288 420,297 450,299"
+    fill="none" stroke="#00897B" stroke-width="2.5"/>
+  <path d="M80,300
+    C100,299 130,295 160,281
+    C185,269 205,246 220,221
+    C232,199 242,176 252,156
+    C258,144 262,136 266,129
+    C270,123 274,119 278,119
+    C282,119 286,123 290,129
+    C298,144 308,166 320,191
+    C335,221 352,251 375,273
+    C395,289 420,298 450,300 Z"
+    fill="#00897B" fill-opacity="0.18"/>
+
+  <!-- Group B bell curve (right, coral) -->
+  <!-- mean at x=490 -->
+  <path d="M350,299
+    C380,298 405,293 425,280
+    C442,268 458,248 470,225
+    C480,206 488,185 494,165
+    C498,152 500,142 502,133
+    C504,124 506,119 508,118
+    C510,118 512,122 514,128
+    C518,140 524,158 532,180
+    C542,207 555,238 572,262
+    C592,286 615,297 650,299
+    C680,300 710,300 730,300"
+    fill="none" stroke="#E53935" stroke-width="2.5"/>
+  <path d="M350,300
+    C380,299 405,294 425,281
+    C442,269 458,249 470,226
+    C480,207 488,186 494,166
+    C498,153 500,143 502,134
+    C504,125 506,120 508,119
+    C510,119 512,123 514,129
+    C518,141 524,159 532,181
+    C542,208 555,239 572,263
+    C592,287 615,298 650,300
+    C680,301 710,301 730,300 Z"
+    fill="#E53935" fill-opacity="0.18"/>
+
+  <!-- Mean lines -->
+  <!-- Group A mean at x=278 -->
+  <line x1="278" y1="115" x2="278" y2="305" stroke="#00897B" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="278" y="110" text-anchor="middle" font-size="12" fill="#00897B" font-weight="bold">x̄_A</text>
+
+  <!-- Group B mean at x=508 -->
+  <line x1="508" y1="115" x2="508" y2="305" stroke="#E53935" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="508" y="110" text-anchor="middle" font-size="12" fill="#E53935" font-weight="bold">x̄_B</text>
+
+  <!-- Double arrow showing difference of means -->
+  <defs>
+    <marker id="arr-teal" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+    <marker id="arr-left" markerWidth="8" markerHeight="8" refX="1" refY="3" orient="auto">
+      <path d="M8,0 L8,6 L0,3 z" fill="#555"/>
+    </marker>
+  </defs>
+  <line x1="285" y1="75" x2="500" y2="75" stroke="#555" stroke-width="1.5"
+    marker-end="url(#arr-teal)" marker-start="url(#arr-left)"/>
+  <text x="393" y="68" text-anchor="middle" font-size="12" fill="#555" font-weight="bold">x̄_B − x̄_A (signal)</text>
+
+  <!-- Spread annotation for A -->
+  <line x1="220" y1="335" x2="338" y2="335" stroke="#00897B" stroke-width="1.5"
+    marker-end="url(#arr-teal)" marker-start="url(#arr-left)"/>
+  <text x="279" y="350" text-anchor="middle" font-size="11" fill="#00897B">spread_A</text>
+
+  <!-- Spread annotation for B -->
+  <line x1="450" y1="335" x2="568" y2="335" stroke="#E53935" stroke-width="1.5"
+    marker-end="url(#arr-teal)" marker-start="url(#arr-left)"/>
+  <text x="509" y="350" text-anchor="middle" font-size="11" fill="#E53935">spread_B</text>
+
+  <!-- Legend -->
+  <rect x="60" y="370" width="14" height="14" fill="#00897B" fill-opacity="0.55" rx="2"/>
+  <text x="80" y="382" font-size="12" fill="#00897B">Group A</text>
+  <rect x="160" y="370" width="14" height="14" fill="#E53935" fill-opacity="0.55" rx="2"/>
+  <text x="180" y="382" font-size="12" fill="#E53935">Group B</text>
+
+  <!-- t-statistic formula box -->
+  <rect x="530" y="355" width="240" height="38" rx="5" fill="#F5F5F5" stroke="#ccc"/>
+  <text x="650" y="370" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">t  =  (x̄_B − x̄_A) / SE</text>
+  <text x="650" y="386" text-anchor="middle" font-size="11" fill="#888">signal ÷ noise</text>
+</svg>

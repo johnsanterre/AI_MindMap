@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E" letter-spacing="1">GENERALIZATION BOUNDS — Worst-Case Guarantees on Test Error</text>
+
+  <!-- Panel 1: train/test gap -->
+  <rect x="18" y="42" width="182" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="109" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">The Gap</text>
+
+  <!-- Training error bar -->
+  <text x="75" y="85" text-anchor="middle" font-size="9" fill="#5C3D1E">Train error</text>
+  <rect x="30" y="90" width="92" height="30" fill="#2D5A8E" opacity="0.7" rx="2"/>
+  <text x="75" y="110" text-anchor="middle" font-size="10" fill="#FDFAF4">R̂(h) = 0.05</text>
+
+  <!-- Gap brace -->
+  <text x="130" y="100" font-size="8" fill="#7C2530">⎫</text>
+  <text x="130" y="120" font-size="8" fill="#7C2530">⎪</text>
+  <text x="130" y="140" font-size="8" fill="#7C2530">⎬ gap</text>
+  <text x="130" y="160" font-size="8" fill="#7C2530">⎪</text>
+  <text x="130" y="177" font-size="8" fill="#7C2530">⎭</text>
+
+  <!-- True error bar -->
+  <text x="75" y="152" text-anchor="middle" font-size="9" fill="#5C3D1E">True error</text>
+  <rect x="30" y="158" width="92" height="30" fill="#7C2530" opacity="0.7" rx="2"/>
+  <text x="75" y="178" text-anchor="middle" font-size="10" fill="#FDFAF4">R(h) = ?</text>
+
+  <!-- Bound line -->
+  <rect x="30" y="198" width="92" height="30" fill="#7C2530" opacity="0.25" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,2" rx="2"/>
+  <text x="75" y="214" text-anchor="middle" font-size="9" fill="#7C2530">Bound: 0.18</text>
+  <text x="75" y="228" text-anchor="middle" font-size="8" fill="#6B5D4F">(with 99% conf.)</text>
+
+  <line x1="25" y1="245" x2="190" y2="245" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="109" y="262" text-anchor="middle" font-size="9" fill="#5C3D1E">Bound says:</text>
+  <text x="109" y="278" text-anchor="middle" font-size="9" fill="#2D5A8E">R(h) ≤ R̂(h) + ε</text>
+  <text x="109" y="294" text-anchor="middle" font-size="9" fill="#5C3D1E">with probability ≥ 1−δ</text>
+
+  <text x="109" y="318" text-anchor="middle" font-size="8" fill="#6B5D4F">ε depends on:</text>
+  <text x="109" y="332" text-anchor="middle" font-size="8" fill="#5C3D1E">complexity of H</text>
+  <text x="109" y="346" text-anchor="middle" font-size="8" fill="#5C3D1E">number of samples n</text>
+
+  <!-- Panel 2: VC bound -->
+  <rect x="212" y="42" width="185" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="304" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">VC-Based Bound</text>
+
+  <rect x="220" y="70" width="170" height="52" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="305" y="90" text-anchor="middle" font-size="9" fill="#2D5A8E">R(h) ≤ R̂(h) +</text>
+  <text x="305" y="108" text-anchor="middle" font-size="9" fill="#2D5A8E">√( (d·ln(2n/d)+ln(4/δ)) / n )</text>
+
+  <line x1="220" y1="135" x2="390" y2="135" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="224" y="153" font-size="9" fill="#5C3D1E">d = VC dimension of H</text>
+  <text x="224" y="169" font-size="9" fill="#5C3D1E">n = training set size</text>
+  <text x="224" y="185" font-size="9" fill="#5C3D1E">δ = confidence parameter</text>
+
+  <line x1="220" y1="198" x2="390" y2="198" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <!-- Complexity vs samples curve -->
+  <text x="305" y="216" text-anchor="middle" font-size="9" fill="#7C2530">Bound tightens as n grows:</text>
+
+  <!-- Axes for mini chart -->
+  <line x1="228" y1="300" x2="228" y2="228" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="228" y1="300" x2="385" y2="300" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="220" y="228" text-anchor="end" font-size="7" fill="#6B5D4F">ε</text>
+  <text x="388" y="303" font-size="7" fill="#6B5D4F">n</text>
+
+  <!-- Decreasing curve -->
+  <path d="M232,235 Q265,250 295,268 Q330,282 380,293" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="305" y="316" text-anchor="middle" font-size="8" fill="#2D5A8E">ε ~ O(√(d/n))</text>
+  <text x="305" y="330" text-anchor="middle" font-size="8" fill="#6B5D4F">bound shrinks like 1/√n</text>
+
+  <!-- Panel 3: Rademacher complexity -->
+  <rect x="410" y="42" width="185" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="502" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Rademacher Bound</text>
+
+  <rect x="418" y="70" width="170" height="42" fill="#EDE8DE" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="503" y="90" text-anchor="middle" font-size="9" fill="#7C2530">R(h) ≤ R̂(h) + 2R̂ₙ(H)</text>
+  <text x="503" y="107" text-anchor="middle" font-size="8" fill="#6B5D4F">+ √(ln(1/δ)/2n)</text>
+
+  <line x1="418" y1="125" x2="588" y2="125" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="422" y="143" font-size="9" fill="#5C3D1E">R̂ₙ(H) — empirical</text>
+  <text x="422" y="158" font-size="9" fill="#5C3D1E">Rademacher complexity:</text>
+  <text x="422" y="176" font-size="9" fill="#6B5D4F">how well H correlates</text>
+  <text x="422" y="191" font-size="9" fill="#6B5D4F">with random ±1 labels</text>
+
+  <line x1="418" y1="206" x2="588" y2="206" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <!-- Rademacher illustration -->
+  <text x="503" y="224" text-anchor="middle" font-size="9" fill="#5C3D1E">Data-dependent:</text>
+  <text x="503" y="240" text-anchor="middle" font-size="9" fill="#5C3D1E">computed from your sample</text>
+  <text x="503" y="256" text-anchor="middle" font-size="9" fill="#2D5A8E">(tighter than VC)</text>
+
+  <!-- Random labels illustration -->
+  <circle cx="435" cy="282" r="7" fill="#7C2530"/>
+  <circle cx="460" cy="275" r="7" fill="#2D5A8E"/>
+  <circle cx="485" cy="288" r="7" fill="#7C2530"/>
+  <circle cx="510" cy="270" r="7" fill="#2D5A8E"/>
+  <circle cx="535" cy="285" r="7" fill="#7C2530"/>
+  <circle cx="560" cy="278" r="7" fill="#2D5A8E"/>
+  <text x="435" y="286" text-anchor="middle" font-size="7" fill="#FDFAF4">+</text>
+  <text x="460" y="279" text-anchor="middle" font-size="7" fill="#FDFAF4">−</text>
+  <text x="485" y="292" text-anchor="middle" font-size="7" fill="#FDFAF4">+</text>
+  <text x="510" y="274" text-anchor="middle" font-size="7" fill="#FDFAF4">−</text>
+  <text x="535" y="289" text-anchor="middle" font-size="7" fill="#FDFAF4">+</text>
+  <text x="560" y="282" text-anchor="middle" font-size="7" fill="#FDFAF4">−</text>
+
+  <text x="503" y="310" text-anchor="middle" font-size="8" fill="#6B5D4F">random σᵢ ∈ {±1} labels</text>
+  <text x="503" y="328" text-anchor="middle" font-size="8" fill="#5C3D1E">High R̂ₙ = H fits noise</text>
+  <text x="503" y="343" text-anchor="middle" font-size="8" fill="#7C2530">= loose generalization</text>
+
+  <!-- Panel 4: PAC Bayes -->
+  <rect x="608" y="42" width="175" height="310" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="695" y="62" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">PAC-Bayes Bound</text>
+
+  <rect x="616" y="70" width="160" height="60" fill="#EDE8DE" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="696" y="90" text-anchor="middle" font-size="9" fill="#2D5A8E">Eₕ∼Q[R(h)] ≤</text>
+  <text x="696" y="106" text-anchor="middle" font-size="9" fill="#2D5A8E">Eₕ∼Q[R̂(h)] +</text>
+  <text x="696" y="122" text-anchor="middle" font-size="9" fill="#2D5A8E">√( (KL(Q‖P)+ln(n/δ)) / 2n )</text>
+
+  <line x1="616" y1="143" x2="776" y2="143" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="620" y="160" font-size="9" fill="#5C3D1E">Q — posterior over h</text>
+  <text x="620" y="176" font-size="9" fill="#5C3D1E">P — prior (before data)</text>
+  <text x="620" y="192" font-size="9" fill="#5C3D1E">KL — how far Q moved</text>
+  <text x="620" y="208" font-size="9" fill="#6B5D4F">from prior after training</text>
+
+  <line x1="616" y1="222" x2="776" y2="222" stroke="#C4A87A" stroke-width="0.8"/>
+
+  <text x="695" y="240" text-anchor="middle" font-size="9" fill="#7C2530">Key insight:</text>
+  <text x="695" y="256" text-anchor="middle" font-size="9" fill="#5C3D1E">explains why large NNs</text>
+  <text x="695" y="272" text-anchor="middle" font-size="9" fill="#5C3D1E">can still generalize:</text>
+  <text x="695" y="290" text-anchor="middle" font-size="9" fill="#2D5A8E">if KL(Q‖P) is small</text>
+  <text x="695" y="306" text-anchor="middle" font-size="9" fill="#2D5A8E">(weights barely moved)</text>
+  <text x="695" y="322" text-anchor="middle" font-size="9" fill="#2D5A8E">bound stays tight</text>
+
+  <line x1="616" y1="335" x2="776" y2="335" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="695" y="352" text-anchor="middle" font-size="8" fill="#6B5D4F">→ implicit regularization</text>
+
+  <!-- Footer -->
+  <text x="400" y="388" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">Generalization Bounds — proven upper limits on how much error can grow from train to test</text>
+</svg>

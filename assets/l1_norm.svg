@@ -1,0 +1,104 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- ─── LEFT PANEL: Geometry ─── -->
+
+  <!-- Panel label -->
+  <text x="200" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1" font-family="Georgia,serif">CONSTRAINT REGIONS &amp; LOSS CONTOURS</text>
+
+  <!-- Axes -->
+  <line x1="50" y1="330" x2="350" y2="330" stroke="#1C1713" stroke-width="1.5"/>
+  <line x1="200" y1="55"  x2="200" y2="340" stroke="#1C1713" stroke-width="1.5"/>
+  <!-- Axis arrows -->
+  <polygon points="350,327 357,330 350,333" fill="#1C1713"/>
+  <polygon points="197,55 200,48 203,55" fill="#1C1713"/>
+  <!-- Axis labels -->
+  <text x="360" y="334" font-size="13" fill="#333" font-family="Georgia,serif" font-style="italic">w₁</text>
+  <text x="205" y="46"  font-size="13" fill="#333" font-family="Georgia,serif" font-style="italic">w₂</text>
+  <!-- Origin tick -->
+  <text x="187" y="343" font-size="11" fill="#666" font-family="Georgia,serif">0</text>
+
+  <!-- Loss function contours (ellipses centered off-axis at ~(275,125)) -->
+  <ellipse cx="275" cy="125" rx="38"  ry="28"  fill="none" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <ellipse cx="275" cy="125" rx="80"  ry="58"  fill="none" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <ellipse cx="275" cy="125" rx="128" ry="94"  fill="none" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <ellipse cx="275" cy="125" rx="180" ry="135" fill="none" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <!-- Loss minimum dot -->
+  <circle cx="275" cy="125" r="5" fill="#C0392B"/>
+  <text x="283" y="120" font-size="10" fill="#C0392B" font-family="Georgia,serif">loss min</text>
+
+  <!-- L2 ball (circle), radius ~68, centered at origin (200,330) -->
+  <circle cx="200" cy="330" r="100" fill="none" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+  <!-- L2 label -->
+  <text x="307" y="248" font-size="11" fill="#2D5A8E" font-family="Georgia,serif">L2 ball</text>
+  <text x="302" y="261" font-size="11" fill="#2D5A8E" font-family="Georgia,serif">(circle)</text>
+  <!-- L2 solution: where outermost contour touches circle (smooth point, off-axis) -->
+  <circle cx="263" cy="232" r="5" fill="#2D5A8E"/>
+
+  <!-- L1 ball (diamond), half-width = 100, centered at (200,330) -->
+  <!-- Points: top=(200,230), right=(300,330), bottom=(200,430 clipped), left=(100,330) -->
+  <polygon points="200,230 300,330 200,430 100,330"
+           fill="#E67E22" fill-opacity="0.18" stroke="#E67E22" stroke-width="2.2"/>
+  <!-- L1 ball label -->
+  <text x="67"  y="295" font-size="11" fill="#E67E22" font-family="Georgia,serif">L1 ball</text>
+  <text x="60"  y="308" font-size="11" fill="#E67E22" font-family="Georgia,serif">(diamond)</text>
+
+  <!-- Sparse solution: loss contour touches diamond at TOP corner (200,230) — w₁=0 axis -->
+  <circle cx="200" cy="230" r="7" fill="#E67E22" stroke="#7D3C00" stroke-width="1.5"/>
+  <!-- Arrow + label for sparse solution -->
+  <line x1="200" y1="230" x2="165" y2="195" stroke="#7D3C00" stroke-width="1.5"/>
+  <text x="90"  y="192" font-size="11" fill="#7D3C00" font-family="Georgia,serif" font-weight="bold">sparse solution</text>
+  <text x="102" y="206" font-size="11" fill="#7D3C00" font-family="Georgia,serif">at corner (w₁=0)</text>
+
+  <!-- Vertical divider -->
+  <line x1="400" y1="30" x2="400" y2="375" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ─── RIGHT PANEL: Coefficient paths ─── -->
+
+  <text x="590" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1" font-family="Georgia,serif">COEFFICIENT PATHS AS λ INCREASES</text>
+
+  <!-- Axes -->
+  <line x1="430" y1="340" x2="760" y2="340" stroke="#1C1713" stroke-width="1.5"/>
+  <line x1="430" y1="60"  x2="430" y2="350" stroke="#1C1713" stroke-width="1.5"/>
+  <!-- Axis arrows -->
+  <polygon points="760,337 767,340 760,343" fill="#1C1713"/>
+  <polygon points="427,60 430,53 433,60" fill="#1C1713"/>
+  <!-- Axis labels -->
+  <text x="770" y="344" font-size="12" fill="#333" font-family="Georgia,serif" font-style="italic">λ</text>
+  <text x="407" y="52"  font-size="12" fill="#333" font-family="Georgia,serif" font-style="italic">wⱼ</text>
+  <!-- Zero line -->
+  <line x1="430" y1="200" x2="760" y2="200" stroke="#999" stroke-width="0.8" stroke-dasharray="3,3"/>
+  <text x="415" y="204" font-size="10" fill="#999" font-family="Georgia,serif">0</text>
+
+  <!-- Coefficient paths: L1 reaches exact zero, then stays there (soft thresholding) -->
+  <!-- w1: positive, goes to zero at moderate lambda -->
+  <path d="M440,100 C480,115 530,160 590,200 L760,200"
+        fill="none" stroke="#E67E22" stroke-width="2.5"/>
+  <!-- w2: negative, goes to zero earlier -->
+  <path d="M440,275 C470,268 505,248 545,220 C560,210 575,203 600,200 L760,200"
+        fill="none" stroke="#27AE60" stroke-width="2.5"/>
+  <!-- w3: large positive, goes to zero later -->
+  <path d="M440,75 C490,82 550,110 620,160 C660,185 700,198 730,200 L760,200"
+        fill="none" stroke="#8E44AD" stroke-width="2.5"/>
+
+  <!-- Zero-touch markers -->
+  <circle cx="590" cy="200" r="4" fill="#E67E22"/>
+  <circle cx="600" cy="200" r="4" fill="#27AE60"/>
+  <circle cx="730" cy="200" r="4" fill="#8E44AD"/>
+
+  <!-- Legend -->
+  <rect x="620" y="68" width="130" height="68" fill="white" stroke="#D4C5A9" stroke-width="1" rx="3"/>
+  <line x1="630" y1="84"  x2="650" y2="84"  stroke="#E67E22" stroke-width="2.5"/>
+  <text x="656" y="88"  font-size="10" fill="#E67E22" font-family="Georgia,serif">w₁ (zeroed early)</text>
+  <line x1="630" y1="100" x2="650" y2="100" stroke="#27AE60" stroke-width="2.5"/>
+  <text x="656" y="104" font-size="10" fill="#27AE60" font-family="Georgia,serif">w₂ (zeroed mid)</text>
+  <line x1="630" y1="116" x2="650" y2="116" stroke="#8E44AD" stroke-width="2.5"/>
+  <text x="656" y="120" font-size="10" fill="#8E44AD" font-family="Georgia,serif">w₃ (zeroed late)</text>
+  <text x="656" y="130" font-size="9" fill="#666" font-family="Georgia,serif">L1: drops to exact 0</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="392" font-size="9.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">
+    L1 ball corners lie on axes — loss contours hit corners first, driving weights to exactly zero
+  </text>
+</svg>

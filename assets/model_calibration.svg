@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Reliability Diagram -->
+  <rect x="16" y="30" width="220" height="340" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="126" y="52" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Reliability Diagram</text>
+
+  <!-- Axes -->
+  <line x1="45" y1="290" x2="215" y2="290" stroke="#888" stroke-width="1"/>
+  <line x1="45" y1="290" x2="45" y2="72" stroke="#888" stroke-width="1"/>
+  <text x="130" y="308" text-anchor="middle" font-size="9" fill="#6B5D4F">Mean Predicted Probability</text>
+  <text x="20" y="180" font-size="9" fill="#6B5D4F" transform="rotate(-90,20,180)">Fraction Positive</text>
+
+  <!-- Perfect calibration line -->
+  <line x1="45" y1="290" x2="215" y2="72" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="196" y="68" font-size="8" fill="#C4A87A">Perfect</text>
+
+  <!-- Overconfident curve (neural net) -->
+  <polyline points="45,290 79,268 113,240 147,200 181,152 215,118"
+            fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="220" y="114" font-size="8.5" fill="#7C2530">Neural net</text>
+  <text x="220" y="126" font-size="8.5" fill="#7C2530">(overconf.)</text>
+
+  <!-- Underconfident curve -->
+  <polyline points="45,270 79,256 113,246 147,230 181,198 215,155"
+            fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="218" y="152" font-size="8.5" fill="#2D5A8E">Calibrated</text>
+  <text x="218" y="164" font-size="8.5" fill="#2D5A8E">after Platt</text>
+
+  <!-- Axis ticks -->
+  <text x="40" y="294" text-anchor="end" font-size="8" fill="#888">0</text>
+  <text x="40" y="181" text-anchor="end" font-size="8" fill="#888">.5</text>
+  <text x="40" y="76" text-anchor="end" font-size="8" fill="#888">1</text>
+  <text x="45" y="304" font-size="8" fill="#888">0</text>
+  <text x="123" y="304" font-size="8" fill="#888">.5</text>
+  <text x="208" y="304" font-size="8" fill="#888">1</text>
+
+  <!-- ECE label -->
+  <text x="126" y="330" text-anchor="middle" font-size="9" fill="#5C3D1E">ECE = avg gap from diagonal</text>
+  <text x="126" y="344" text-anchor="middle" font-size="9" fill="#5C3D1E">Lower is better calibrated</text>
+
+  <!-- Panel 2: Calibration Methods -->
+  <rect x="250" y="30" width="275" height="340" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="387" y="52" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">Calibration Methods</text>
+
+  <!-- Platt Scaling -->
+  <rect x="265" y="60" width="245" height="82" fill="#2D5A8E" opacity="0.07" rx="3" stroke="#2D5A8E" stroke-width="0.8"/>
+  <text x="387" y="78" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#2D5A8E">Platt Scaling</text>
+  <text x="275" y="94" font-size="9" fill="#444">Fit logistic regression on raw model</text>
+  <text x="275" y="107" font-size="9" fill="#444">scores: P(y=1) = σ(A·f(x) + B)</text>
+  <text x="275" y="120" font-size="9" fill="#444">A, B learned on held-out calibration set.</text>
+  <text x="275" y="133" font-size="9" fill="#5C3D1E">Works well for SVMs and small data.</text>
+
+  <!-- Isotonic Regression -->
+  <rect x="265" y="152" width="245" height="82" fill="#7C2530" opacity="0.07" rx="3" stroke="#7C2530" stroke-width="0.8"/>
+  <text x="387" y="170" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#7C2530">Isotonic Regression</text>
+  <text x="275" y="186" font-size="9" fill="#444">Non-parametric step function fitted to</text>
+  <text x="275" y="199" font-size="9" fill="#444">map scores → true probabilities.</text>
+  <text x="275" y="212" font-size="9" fill="#444">More flexible than Platt but needs</text>
+  <text x="275" y="225" font-size="9" fill="#5C3D1E">more calibration data (&gt;1000 samples).</text>
+
+  <!-- Temperature Scaling -->
+  <rect x="265" y="244" width="245" height="100" fill="#5C3D1E" opacity="0.07" rx="3" stroke="#5C3D1E" stroke-width="0.8"/>
+  <text x="387" y="262" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#5C3D1E">Temperature Scaling</text>
+  <text x="275" y="278" font-size="9" fill="#444">Divide logits by scalar T before</text>
+  <text x="275" y="291" font-size="9" fill="#444">softmax: σ(z/T). T&gt;1 softens,</text>
+  <text x="275" y="304" font-size="9" fill="#444">T&lt;1 sharpens predictions.</text>
+  <text x="275" y="317" font-size="9" fill="#444">Single parameter: fast, no accuracy</text>
+  <text x="275" y="330" font-size="9" fill="#5C3D1E">change. Standard for deep networks.</text>
+
+  <!-- Panel 3: When it matters -->
+  <rect x="540" y="30" width="240" height="340" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="660" y="52" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">When Calibration Matters</text>
+
+  <!-- Medical -->
+  <rect x="556" y="64" width="208" height="64" fill="#7C2530" opacity="0.09" rx="3"/>
+  <text x="660" y="82" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Medical Diagnosis</text>
+  <text x="660" y="96" text-anchor="middle" font-size="9" fill="#444">"72% cancer risk" drives</text>
+  <text x="660" y="109" text-anchor="middle" font-size="9" fill="#444">real treatment decisions.</text>
+  <text x="660" y="122" text-anchor="middle" font-size="9" fill="#7C2530">Confidence must be truthful.</text>
+
+  <!-- Finance -->
+  <rect x="556" y="138" width="208" height="64" fill="#2D5A8E" opacity="0.09" rx="3"/>
+  <text x="660" y="156" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Credit / Insurance</text>
+  <text x="660" y="170" text-anchor="middle" font-size="9" fill="#444">Expected loss pricing requires</text>
+  <text x="660" y="183" text-anchor="middle" font-size="9" fill="#444">calibrated default probabilities.</text>
+  <text x="660" y="196" text-anchor="middle" font-size="9" fill="#2D5A8E">Miscalibration = mispriced risk.</text>
+
+  <!-- When it does NOT matter -->
+  <rect x="556" y="212" width="208" height="64" fill="#C4A87A" opacity="0.15" rx="3"/>
+  <text x="660" y="230" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Ranking Only</text>
+  <text x="660" y="244" text-anchor="middle" font-size="9" fill="#444">If you only need to rank items</text>
+  <text x="660" y="257" text-anchor="middle" font-size="9" fill="#444">(e.g. top-k recommendations),</text>
+  <text x="660" y="270" text-anchor="middle" font-size="9" fill="#5C3D1E">calibration is unnecessary.</text>
+
+  <!-- Why NN over-confident -->
+  <rect x="556" y="286" width="208" height="68" fill="#5C3D1E" opacity="0.07" rx="3"/>
+  <text x="660" y="304" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Why NNs Are Overconfident</text>
+  <text x="660" y="318" text-anchor="middle" font-size="9" fill="#444">Large models fit training labels</text>
+  <text x="660" y="331" text-anchor="middle" font-size="9" fill="#444">to near-zero loss, pushing logits</text>
+  <text x="660" y="344" text-anchor="middle" font-size="9" fill="#444">toward ±∞ and softmax toward 0/1.</text>
+</svg>

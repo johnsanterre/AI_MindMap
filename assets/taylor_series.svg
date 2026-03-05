@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: True function vs approximations -->
+  <rect x="20" y="30" width="230" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="135" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">APPROXIMATION</text>
+
+  <!-- Axes -->
+  <line x1="45" y1="300" x2="235" y2="300" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="130" y1="60" x2="130" y2="305" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="238" y="304" font-size="10" fill="#5C3D1E">x</text>
+  <text x="133" y="58" font-size="10" fill="#5C3D1E">f</text>
+
+  <!-- True curve (sin-like) -->
+  <path d="M55,220 C75,180 95,130 130,120 C165,110 185,150 215,200" stroke="#7C2530" stroke-width="2" fill="none"/>
+  <text x="218" y="198" font-size="9" fill="#7C2530">f(x)</text>
+
+  <!-- 1st order tangent -->
+  <line x1="60" y1="200" x2="210" y2="130" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="148" y="128" font-size="9" fill="#2D5A8E">1st order</text>
+
+  <!-- 2nd order parabola -->
+  <path d="M65,230 C95,150 115,118 130,115 C145,118 165,145 205,195" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="3,3" fill="none"/>
+  <text x="148" y="200" font-size="9" fill="#8B6914">2nd order</text>
+
+  <!-- expansion point -->
+  <circle cx="130" cy="120" r="4" fill="#7C2530"/>
+  <text x="118" y="112" font-size="9" fill="#7C2530">a</text>
+
+  <!-- Panel 2: Formula building -->
+  <rect x="270" y="30" width="240" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="390" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">TERM BY TERM</text>
+
+  <text x="285" y="82" font-size="12" fill="#5C3D1E">f(x) ≈</text>
+  <text x="285" y="108" font-size="11" fill="#2D5A8E">f(a)</text>
+  <text x="330" y="108" font-size="10" fill="#6B5D4F">  ← value at a</text>
+  <text x="285" y="134" font-size="11" fill="#2D5A8E">+ f′(a)(x−a)</text>
+  <text x="285" y="155" font-size="10" fill="#6B5D4F">  ← slope × distance</text>
+  <text x="285" y="181" font-size="11" fill="#2D5A8E">+ f″(a)(x−a)²/2!</text>
+  <text x="285" y="202" font-size="10" fill="#6B5D4F">  ← curvature term</text>
+  <text x="285" y="228" font-size="11" fill="#2D5A8E">+ f‴(a)(x−a)³/3!</text>
+  <text x="285" y="249" font-size="10" fill="#6B5D4F">  ← bending term</text>
+  <text x="285" y="275" font-size="11" fill="#5C3D1E">+ ···</text>
+  <line x1="285" y1="295" x2="490" y2="295" stroke="#C4A87A" stroke-width="1"/>
+  <text x="285" y="315" font-size="10" fill="#6B5D4F">Each term refines the fit</text>
+  <text x="285" y="332" font-size="10" fill="#6B5D4F">near the expansion point a</text>
+
+  <!-- Panel 3: ML uses -->
+  <rect x="530" y="30" width="250" height="340" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="655" y="50" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">ML APPLICATIONS</text>
+
+  <!-- Gradient descent box -->
+  <rect x="545" y="62" width="220" height="68" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1" rx="2"/>
+  <text x="655" y="80" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">Gradient Descent</text>
+  <text x="555" y="97" font-size="9.5" fill="#5C3D1E">Loss expanded around θ:</text>
+  <text x="555" y="113" font-size="9.5" fill="#2D5A8E">L(θ+Δ) ≈ L(θ) + ∇L·Δ</text>
+  <text x="555" y="122" font-size="9" fill="#6B5D4F">(1st-order Taylor step)</text>
+
+  <!-- Newton's method box -->
+  <rect x="545" y="145" width="220" height="68" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1" rx="2"/>
+  <text x="655" y="163" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">Newton's Method</text>
+  <text x="555" y="180" font-size="9.5" fill="#5C3D1E">2nd-order expansion:</text>
+  <text x="555" y="196" font-size="9.5" fill="#2D5A8E">L + ∇L·Δ + ½ΔᵀHΔ</text>
+  <text x="555" y="206" font-size="9" fill="#6B5D4F">(H = Hessian matrix)</text>
+
+  <!-- Softmax / activation box -->
+  <rect x="545" y="228" width="220" height="68" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1" rx="2"/>
+  <text x="655" y="246" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">Activation Functions</text>
+  <text x="555" y="263" font-size="9.5" fill="#5C3D1E">ReLU ≈ max(0,x);</text>
+  <text x="555" y="279" font-size="9.5" fill="#5C3D1E">softplus smooths via</text>
+  <text x="555" y="289" font-size="9" fill="#6B5D4F">Taylor-inspired expansion</text>
+
+  <!-- bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">Taylor Series — local polynomial approximation of any smooth function</text>
+</svg>

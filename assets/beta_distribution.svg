@@ -1,0 +1,27 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Beta Distribution — Beta(α, β)</text>
+  <!-- Axes -->
+  <line x1="80" y1="330" x2="720" y2="330" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="330" x2="80" y2="50" stroke="#333" stroke-width="2"/>
+  <text x="400" y="370" text-anchor="middle" font-size="14" fill="#333">p (probability, 0 to 1)</text>
+  <text x="30" y="190" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,30,190)">Density</text>
+  <text x="80" y="348" text-anchor="middle" font-size="12" fill="#666">0</text>
+  <text x="720" y="348" text-anchor="middle" font-size="12" fill="#666">1</text>
+  <!-- Uniform Beta(1,1) -->
+  <line x1="80" y1="230" x2="720" y2="230" stroke="#9E9E9E" stroke-width="2"/>
+  <text x="730" y="234" font-size="11" fill="#9E9E9E">α=β=1</text>
+  <!-- Bell Beta(5,5) -->
+  <path d="M80,330 C200,325 280,120 400,80 C520,120 600,325 720,330" fill="none" stroke="#2196F3" stroke-width="2.5"/>
+  <text x="730" y="95" font-size="11" fill="#2196F3">α=β=5</text>
+  <!-- Skewed Beta(2,8) -->
+  <path d="M80,330 C130,180 200,90 280,110 C360,130 480,290 720,330" fill="none" stroke="#E91E63" stroke-width="2.5"/>
+  <text x="730" y="155" font-size="11" fill="#E91E63">α=2,β=8</text>
+  <!-- U-shaped Beta(0.5,0.5) -->
+  <path d="M82,60 C140,280 260,330 400,330 C540,330 660,280 718,60" fill="none" stroke="#FF9800" stroke-width="2.5"/>
+  <text x="730" y="65" font-size="11" fill="#FF9800">α=β=0.5</text>
+  <!-- Formula -->
+  <rect x="130" y="55" width="310" height="38" rx="5" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="285" y="72" text-anchor="middle" font-size="12" fill="#555">f(p) = pᵅ⁻¹(1−p)ᵝ⁻¹ / B(α,β)</text>
+  <text x="285" y="88" text-anchor="middle" font-size="11" fill="#888">conjugate prior for Bernoulli/Binomial</text>
+</svg>

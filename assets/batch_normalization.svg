@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Batch Normalization: Stabilizing Activations</text>
+
+  <!-- Panel 1: Before/After activations -->
+  <rect x="20" y="50" width="185" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="112" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">WITHOUT BATCH NORM</text>
+
+  <!-- Before distribution - wide spread -->
+  <text x="112" y="86" text-anchor="middle" font-size="10" fill="#7C2530">Activations: Layer 3</text>
+  <rect x="34" y="92" width="157" height="90" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <!-- Bell curve - wide -->
+  <path d="M 40 175 C 50 175 55 140 65 120 C 75 100 85 92 112 92 C 140 92 150 100 160 120 C 170 140 175 175 185 175" stroke="#7C2530" stroke-width="2" fill="#FCEAEA" fill-opacity="0.6"/>
+  <line x1="40" y1="175" x2="185" y2="175" stroke="#C4A87A" stroke-width="1"/>
+  <text x="112" y="190" text-anchor="middle" font-size="9" fill="#6B5D4F">Wide, drifting distribution</text>
+  <text x="112" y="202" text-anchor="middle" font-size="9" fill="#7C2530">σ ≈ 8.3, mean ≈ −2.1</text>
+
+  <line x1="25" y1="215" x2="200" y2="215" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="3,3"/>
+  <text x="112" y="230" text-anchor="middle" font-size="10" fill="#2D5A8E">After Batch Norm</text>
+  <rect x="34" y="237" width="157" height="90" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <!-- Bell curve - tight -->
+  <path d="M 40 320 C 60 320 80 320 90 280 C 100 250 105 237 112 237 C 120 237 125 250 135 280 C 145 320 165 320 185 320" stroke="#2D5A8E" stroke-width="2" fill="#E8F0F9" fill-opacity="0.7"/>
+  <line x1="40" y1="320" x2="185" y2="320" stroke="#C4A87A" stroke-width="1"/>
+  <text x="112" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F">Tight, stable distribution</text>
+  <text x="112" y="348" text-anchor="middle" font-size="9" fill="#2D5A8E">σ = 1, mean = 0</text>
+
+  <!-- Panel 2: The formula steps -->
+  <rect x="220" y="50" width="200" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="320" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">THE ALGORITHM</text>
+
+  <!-- Step boxes -->
+  <rect x="234" y="80" width="172" height="44" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="320" y="97" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Step 1: Batch Mean</text>
+  <text x="320" y="113" text-anchor="middle" font-size="11" fill="#5C3D1E">μ_B = (1/m) Σ xᵢ</text>
+
+  <line x1="320" y1="124" x2="320" y2="134" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="234" y="136" width="172" height="44" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="320" y="153" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Step 2: Batch Variance</text>
+  <text x="320" y="169" text-anchor="middle" font-size="11" fill="#5C3D1E">σ²_B = (1/m) Σ (xᵢ−μ_B)²</text>
+
+  <line x1="320" y1="180" x2="320" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <rect x="234" y="192" width="172" height="44" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="320" y="209" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Step 3: Normalize</text>
+  <text x="320" y="225" text-anchor="middle" font-size="11" fill="#5C3D1E">x̂ᵢ = (xᵢ−μ_B) / √(σ²_B+ε)</text>
+
+  <line x1="320" y1="236" x2="320" y2="246" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <rect x="234" y="248" width="172" height="50" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="2" rx="3"/>
+  <text x="320" y="265" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Step 4: Scale + Shift</text>
+  <text x="320" y="281" text-anchor="middle" font-size="11" fill="#5C3D1E">yᵢ = γ x̂ᵢ + β</text>
+  <text x="320" y="294" text-anchor="middle" font-size="9" fill="#6B5D4F">γ, β learned by backprop</text>
+
+  <!-- Note -->
+  <rect x="234" y="310" width="172" height="46" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="320" y="326" text-anchor="middle" font-size="9" fill="#5C3D1E">ε ≈ 1e-5 prevents</text>
+  <text x="320" y="340" text-anchor="middle" font-size="9" fill="#5C3D1E">division by zero</text>
+  <text x="320" y="354" text-anchor="middle" font-size="9" fill="#6B5D4F">m = mini-batch size</text>
+
+  <!-- Panel 3: Train vs Inference -->
+  <rect x="435" y="50" width="170" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="520" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">TRAIN VS INFERENCE</text>
+
+  <rect x="448" y="80" width="144" height="120" fill="white" stroke="#5C3D1E" stroke-width="1.5" rx="3"/>
+  <text x="520" y="97" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Training</text>
+  <text x="520" y="113" text-anchor="middle" font-size="9" fill="#6B5D4F">Use batch statistics:</text>
+  <text x="520" y="127" text-anchor="middle" font-size="10" fill="#2D5A8E">μ_B, σ²_B from current</text>
+  <text x="520" y="141" text-anchor="middle" font-size="10" fill="#2D5A8E">mini-batch</text>
+  <text x="520" y="157" text-anchor="middle" font-size="9" fill="#6B5D4F">Running averages</text>
+  <text x="520" y="170" text-anchor="middle" font-size="9" fill="#6B5D4F">tracked for inference</text>
+  <text x="520" y="195" text-anchor="middle" font-size="9" fill="#7C2530">Stochastic — varies</text>
+
+  <line x1="440" y1="213" x2="600" y2="213" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+  <rect x="448" y="222" width="144" height="120" fill="white" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="520" y="239" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Inference</text>
+  <text x="520" y="255" text-anchor="middle" font-size="9" fill="#6B5D4F">Use population statistics:</text>
+  <text x="520" y="269" text-anchor="middle" font-size="10" fill="#7C2530">μ_pop, σ²_pop from</text>
+  <text x="520" y="283" text-anchor="middle" font-size="10" fill="#7C2530">training running avg</text>
+  <text x="520" y="299" text-anchor="middle" font-size="9" fill="#6B5D4F">Deterministic —</text>
+  <text x="520" y="313" text-anchor="middle" font-size="9" fill="#6B5D4F">same output each time</text>
+  <text x="520" y="332" text-anchor="middle" font-size="9" fill="#2D5A8E">Batch size = 1 OK</text>
+
+  <!-- Warning box -->
+  <rect x="448" y="352" width="144" height="10" fill="#FCEAEA" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="520" y="361" text-anchor="middle" font-size="8" fill="#7C2530">Forgetting to switch = bugs!</text>
+
+  <!-- Panel 4: BN vs LN -->
+  <rect x="620" y="50" width="162" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="701" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">BN vs LAYER NORM</text>
+
+  <!-- BN diagram -->
+  <rect x="632" y="80" width="138" height="110" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="701" y="97" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Batch Norm</text>
+  <text x="701" y="111" text-anchor="middle" font-size="9" fill="#6B5D4F">Normalizes across</text>
+  <text x="701" y="124" text-anchor="middle" font-size="9" fill="#6B5D4F">the batch dimension</text>
+  <!-- Grid: rows=samples, cols=features, shade by column -->
+  <rect x="645" y="132" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="667" y="132" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="689" y="132" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="711" y="132" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="645" y="148" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="667" y="148" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="689" y="148" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="711" y="148" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="645" y="164" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="667" y="164" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <rect x="689" y="164" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="711" y="164" width="20" height="14" fill="#BDD4EE" rx="1"/>
+  <text x="701" y="185" text-anchor="middle" font-size="8" fill="#2D5A8E">Same feature, all samples</text>
+
+  <!-- LN diagram -->
+  <rect x="632" y="202" width="138" height="110" fill="white" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="701" y="219" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Layer Norm</text>
+  <text x="701" y="233" text-anchor="middle" font-size="9" fill="#6B5D4F">Normalizes across</text>
+  <text x="701" y="246" text-anchor="middle" font-size="9" fill="#6B5D4F">the feature dimension</text>
+  <!-- Grid: shade by row -->
+  <rect x="645" y="254" width="20" height="14" fill="#F9DADA" rx="1"/>
+  <rect x="667" y="254" width="20" height="14" fill="#F9DADA" rx="1"/>
+  <rect x="689" y="254" width="20" height="14" fill="#F9DADA" rx="1"/>
+  <rect x="711" y="254" width="20" height="14" fill="#F9DADA" rx="1"/>
+  <rect x="645" y="270" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="667" y="270" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="689" y="270" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="711" y="270" width="20" height="14" fill="#FCEAEA" rx="1"/>
+  <rect x="645" y="286" width="20" height="14" fill="#F0C0C0" rx="1"/>
+  <rect x="667" y="286" width="20" height="14" fill="#F0C0C0" rx="1"/>
+  <rect x="689" y="286" width="20" height="14" fill="#F0C0C0" rx="1"/>
+  <rect x="711" y="286" width="20" height="14" fill="#F0C0C0" rx="1"/>
+  <text x="701" y="307" text-anchor="middle" font-size="8" fill="#7C2530">Same sample, all features</text>
+
+  <!-- LN use case -->
+  <rect x="632" y="324" width="138" height="36" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="701" y="340" text-anchor="middle" font-size="9" fill="#5C3D1E">LN preferred for</text>
+  <text x="701" y="354" text-anchor="middle" font-size="9" fill="#5C3D1E">RNNs &amp; Transformers</text>
+
+  <!-- Bottom -->
+  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">γ and β let the network undo normalization if needed — full expressiveness preserved</text>
+</svg>

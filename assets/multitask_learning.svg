@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#7C2530" text-anchor="middle">Multi-task Learning: Shared Representations</text>
+
+  <!-- Shared trunk -->
+  <rect x="310" y="120" width="180" height="110" rx="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="164" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Shared</text>
+  <text x="400" y="182" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Backbone</text>
+  <text x="400" y="204" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">(shared layers)</text>
+
+  <!-- Input -->
+  <rect x="330" y="40" width="140" height="50" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Input Data</text>
+  <text x="400" y="80" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">(e.g., raw text)</text>
+  <line x1="400" y1="90" x2="400" y2="120" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowtan)"/>
+
+  <!-- Task head 1 -->
+  <rect x="60" y="280" width="140" height="64" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="130" y="306" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task A Head</text>
+  <text x="130" y="322" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Sentiment</text>
+  <text x="130" y="338" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">classification</text>
+
+  <!-- Task head 2 -->
+  <rect x="330" y="280" width="140" height="64" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="306" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task B Head</text>
+  <text x="400" y="322" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Named Entity</text>
+  <text x="400" y="338" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">recognition</text>
+
+  <!-- Task head 3 -->
+  <rect x="600" y="280" width="140" height="64" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="670" y="306" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task C Head</text>
+  <text x="670" y="322" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Language</text>
+  <text x="670" y="338" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">translation</text>
+
+  <!-- Lines from shared backbone to heads -->
+  <line x1="340" y1="230" x2="180" y2="280" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrowtan)"/>
+  <line x1="400" y1="230" x2="400" y2="280" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrowtan)"/>
+  <line x1="460" y1="230" x2="620" y2="280" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrowtan)"/>
+
+  <!-- Loss labels -->
+  <text x="130" y="360" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Loss_A</text>
+  <text x="400" y="360" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Loss_B</text>
+  <text x="670" y="360" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Loss_C</text>
+
+  <!-- Combined loss label -->
+  <text x="400" y="388" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E" text-anchor="middle">Total Loss = λ₁·Loss_A + λ₂·Loss_B + λ₃·Loss_C  (backpropagates through shared layers)</text>
+
+  <defs>
+    <marker id="arrowtan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

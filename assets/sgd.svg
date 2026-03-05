@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#3A3028" letter-spacing="0.5">Batch GD vs Stochastic Gradient Descent</text>
+
+  <!-- ══ LEFT PANEL: Contour map ══ -->
+  <text x="200" y="58" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" letter-spacing="1">LOSS SURFACE (CONTOURS)</text>
+
+  <!-- Contour fills outer → inner -->
+  <ellipse cx="200" cy="230" rx="148" ry="112" fill="#EDE4CF" stroke="#D8CEBA" stroke-width="1"/>
+  <ellipse cx="200" cy="230" rx="116" ry="87"  fill="#E3D5B4" stroke="#CCBF9A" stroke-width="1"/>
+  <ellipse cx="200" cy="230" rx="86"  ry="64"  fill="#D5C294" stroke="#BCA870" stroke-width="1"/>
+  <ellipse cx="200" cy="230" rx="58"  ry="42"  fill="#C4A96E" stroke="#A8894E" stroke-width="1"/>
+  <ellipse cx="200" cy="230" rx="32"  ry="22"  fill="#AA8844" stroke="#8A6C2A" stroke-width="1"/>
+  <ellipse cx="200" cy="230" rx="13"  ry="9"   fill="#8A6820" stroke="#6A5010" stroke-width="1"/>
+
+  <!-- Minimum marker -->
+  <circle cx="200" cy="230" r="5" fill="#7C2530"/>
+  <text x="208" y="222" font-family="Georgia,serif" font-size="10" fill="#7C2530" font-style="italic">min</text>
+
+  <!-- ── Batch GD path: smooth, direct ── -->
+  <!-- defs for markers -->
+  <defs>
+    <marker id="arr-batch" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-sgd" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C05020"/>
+    </marker>
+  </defs>
+
+  <!-- Batch GD: smooth, gently curving path to minimum -->
+  <path d="M 88,108 C 110,130 130,155 148,175 C 163,193 178,208 192,220 C 196,224 198,227 200,230"
+        fill="none" stroke="#2D5A8E" stroke-width="2.8" stroke-linejoin="round"
+        marker-end="url(#arr-batch)"/>
+
+  <!-- Batch GD dots -->
+  <circle cx="88"  cy="108" r="4.5" fill="#2D5A8E"/>
+  <circle cx="110" cy="131" r="3.5" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="134" cy="157" r="3"   fill="#2D5A8E" opacity="0.75"/>
+  <circle cx="155" cy="179" r="3"   fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="174" cy="202" r="2.5" fill="#2D5A8E" opacity="0.65"/>
+  <circle cx="189" cy="218" r="2.5" fill="#2D5A8E" opacity="0.6"/>
+
+  <!-- SGD path: zigzag/noisy, same start, converges to minimum -->
+  <polyline
+    points="88,108 70,126 118,144 74,162 126,176 82,192 130,204 92,214 142,222 110,228 164,232 136,230 178,231 196,230 200,230"
+    fill="none" stroke="#C05020" stroke-width="2" stroke-linejoin="round"
+    stroke-dasharray="none"
+    marker-end="url(#arr-sgd)"/>
+
+  <!-- SGD dots at every other vertex -->
+  <circle cx="88"  cy="108" r="4.5" fill="#C05020"/>
+  <circle cx="70"  cy="126" r="3"   fill="#C05020" opacity="0.75"/>
+  <circle cx="118" cy="144" r="3"   fill="#C05020" opacity="0.75"/>
+  <circle cx="74"  cy="162" r="3"   fill="#C05020" opacity="0.75"/>
+  <circle cx="126" cy="176" r="3"   fill="#C05020" opacity="0.75"/>
+  <circle cx="82"  cy="192" r="3"   fill="#C05020" opacity="0.75"/>
+  <circle cx="130" cy="204" r="3"   fill="#C05020" opacity="0.75"/>
+  <circle cx="92"  cy="214" r="2.5" fill="#C05020" opacity="0.7"/>
+  <circle cx="142" cy="222" r="2.5" fill="#C05020" opacity="0.7"/>
+  <circle cx="110" cy="228" r="2.5" fill="#C05020" opacity="0.7"/>
+  <circle cx="164" cy="232" r="2.5" fill="#C05020" opacity="0.65"/>
+
+  <!-- Legend left panel -->
+  <line x1="46" y1="340" x2="78" y2="340" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="50" cy="340" r="3.5" fill="#2D5A8E"/>
+  <text x="84" y="344" font-family="Arial,sans-serif" font-size="11" fill="#2D5A8E" font-weight="bold">Batch GD</text>
+
+  <polyline points="160,340 172,334 184,346 196,338 208,340" fill="none" stroke="#C05020" stroke-width="2"/>
+  <circle cx="164" cy="340" r="3.5" fill="#C05020"/>
+  <text x="214" y="344" font-family="Arial,sans-serif" font-size="11" fill="#C05020" font-weight="bold">SGD</text>
+
+  <!-- Axis labels -->
+  <text x="200" y="380" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#8A7A6A">θ₁</text>
+  <text x="26"  y="230" font-family="Arial,sans-serif" font-size="10" fill="#8A7A6A" text-anchor="middle"
+        transform="rotate(-90,26,230)">θ₂</text>
+
+  <!-- ══ DIVIDER ══ -->
+  <line x1="400" y1="50" x2="400" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ RIGHT PANEL: Loss vs iterations ══ -->
+  <text x="600" y="58" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" letter-spacing="1">LOSS vs ITERATIONS</text>
+
+  <!-- Axes -->
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#B8A880"/>
+    </marker>
+  </defs>
+  <line x1="440" y1="340" x2="770" y2="340" stroke="#B8A880" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <line x1="440" y1="340" x2="440" y2="70"  stroke="#B8A880" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <text x="610" y="362" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A">iterations</text>
+  <text x="422" y="205" font-family="Arial,sans-serif" font-size="10" fill="#7A6A5A" text-anchor="middle"
+        transform="rotate(-90,422,205)">loss</text>
+
+  <!-- Batch GD curve: smooth, monotonically decreasing -->
+  <path d="M 440,295 C 480,260 510,220 540,192 C 560,174 580,162 610,154 C 635,148 660,144 700,142 C 730,141 750,141 760,141"
+        fill="none" stroke="#2D5A8E" stroke-width="2.8"/>
+
+  <!-- SGD curve: noisy, overall decreasing, slightly above Batch GD at convergence -->
+  <path d="M 440,295
+           C 445,280 448,290 455,272
+           C 460,258 463,270 470,255
+           C 475,242 478,252 485,238
+           C 490,226 493,236 500,222
+           C 505,212 508,220 515,208
+           C 520,198 523,207 530,196
+           C 535,188 538,196 545,185
+           C 550,178 553,186 560,176
+           C 565,170 567,177 574,168
+           C 579,162 581,169 588,162
+           C 594,157 596,163 603,157
+           C 609,152 611,158 618,154
+           C 624,150 626,155 633,152
+           C 639,149 641,153 648,150
+           C 654,147 656,151 663,149
+           C 668,147 700,148 760,148"
+        fill="none" stroke="#C05020" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Convergence band annotation -->
+  <rect x="685" y="138" width="75" height="16" fill="none" stroke="#8A8A7A" stroke-width="0.8" stroke-dasharray="3,2" rx="2"/>
+  <text x="722" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#7A6A5A">noise floor</text>
+
+  <!-- Right panel legend -->
+  <line x1="446" y1="84" x2="476" y2="84" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="482" y="88" font-family="Arial,sans-serif" font-size="11" fill="#2D5A8E" font-weight="bold">Batch GD — smooth</text>
+  <polyline points="446,104 454,98 462,110 470,102 478,104" fill="none" stroke="#C05020" stroke-width="2"/>
+  <text x="482" y="108" font-family="Arial,sans-serif" font-size="11" fill="#C05020" font-weight="bold">SGD — noisy</text>
+</svg>

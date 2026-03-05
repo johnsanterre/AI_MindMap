@@ -1,0 +1,40 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">The Vanishing Gradient Problem</text>
+  <defs>
+    <marker id="arrv" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <!-- Layers -->
+  <rect x="60" y="140" width="80" height="80" rx="8" fill="#2C5F8A"/>
+  <text x="100" y="185" text-anchor="middle" fill="white" font-size="12">Layer 1</text>
+  <rect x="200" y="155" width="80" height="65" rx="8" fill="#2C5F8A"/>
+  <text x="240" y="192" text-anchor="middle" fill="white" font-size="12">Layer 2</text>
+  <rect x="340" y="168" width="80" height="50" rx="8" fill="#2C5F8A"/>
+  <text x="380" y="197" text-anchor="middle" fill="white" font-size="12">Layer 3</text>
+  <rect x="480" y="175" width="80" height="38" rx="8" fill="#2C5F8A"/>
+  <text x="520" y="198" text-anchor="middle" fill="white" font-size="11">Layer 4</text>
+  <rect x="620" y="178" width="80" height="30" rx="8" fill="#E07B39"/>
+  <text x="660" y="197" text-anchor="middle" fill="white" font-size="11">Output</text>
+  <!-- Gradient bars (getting smaller going left) -->
+  <rect x="620" y="250" width="80" height="60" rx="4" fill="#C0392B" fill-opacity="0.85"/>
+  <text x="660" y="290" text-anchor="middle" fill="white" font-size="11">∇ large</text>
+  <rect x="480" y="265" width="80" height="45" rx="4" fill="#C0392B" fill-opacity="0.65"/>
+  <text x="520" y="295" text-anchor="middle" fill="white" font-size="11">∇ medium</text>
+  <rect x="340" y="275" width="80" height="35" rx="4" fill="#C0392B" fill-opacity="0.4"/>
+  <text x="380" y="298" text-anchor="middle" fill="#555" font-size="11">∇ small</text>
+  <rect x="200" y="282" width="80" height="18" rx="4" fill="#C0392B" fill-opacity="0.2"/>
+  <text x="240" y="296" text-anchor="middle" fill="#888" font-size="10">∇ tiny</text>
+  <rect x="60" y="287" width="80" height="8" rx="4" fill="#C0392B" fill-opacity="0.1"/>
+  <text x="100" y="308" text-anchor="middle" fill="#aaa" font-size="10">∇ ≈ 0</text>
+  <!-- Backprop arrow -->
+  <line x1="600" y1="260" x2="160" y2="260" stroke="#C0392B" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrv)"/>
+  <text x="380" y="240" text-anchor="middle" fill="#C0392B" font-size="13">Gradient flows backward ←</text>
+  <!-- Forward arrow -->
+  <line x1="140" y1="180" x2="198" y2="180" stroke="#555" stroke-width="2" marker-end="url(#arrv)"/>
+  <line x1="280" y1="183" x2="338" y2="185" stroke="#555" stroke-width="2" marker-end="url(#arrv)"/>
+  <line x1="420" y1="188" x2="478" y2="190" stroke="#555" stroke-width="2" marker-end="url(#arrv)"/>
+  <line x1="560" y1="192" x2="618" y2="193" stroke="#555" stroke-width="2" marker-end="url(#arrv)"/>
+  <text x="400" y="340" text-anchor="middle" fill="#555" font-size="13">Fix: ReLU activations · residual connections · batch normalization</text>
+</svg>

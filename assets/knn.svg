@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">k-Nearest Neighbors</text>
+
+  <!-- Panel 1: Decision space with k=3 -->
+  <rect x="18" y="50" width="320" height="305" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="178" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">DECISION SPACE  (k = 3)</text>
+
+  <!-- Scatter: Class A (circles, navy) -->
+  <circle cx="80"  cy="130" r="8" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="110" cy="105" r="8" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="70"  cy="165" r="8" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="130" cy="140" r="8" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="95"  cy="195" r="8" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="145" cy="175" r="8" fill="#2D5A8E" opacity="0.8"/>
+  <circle cx="60"  cy="230" r="8" fill="#2D5A8E" opacity="0.8"/>
+
+  <!-- Scatter: Class B (squares, red) -->
+  <rect x="238" y="97"  width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="265" cy="88" x="265" y="125" width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="220" y="140" width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="260" y="160" width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="240" y="200" width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="285" y="220" width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="215" y="230" width="16" height="16" rx="2" fill="#7C2530" opacity="0.8"/>
+
+  <!-- Query point -->
+  <circle cx="178" cy="168" r="10" fill="#C4A87A" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="178" y="150" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Query</text>
+
+  <!-- Radius circle (k=3 neighbors) -->
+  <circle cx="178" cy="168" r="60" fill="none" stroke="#5C3D1E" stroke-width="1.2" stroke-dasharray="5,4" opacity="0.6"/>
+
+  <!-- Lines to 3 nearest neighbors -->
+  <line x1="178" y1="168" x2="145" y2="175" stroke="#5C3D1E" stroke-width="1.4" opacity="0.7"/>
+  <line x1="178" y1="168" x2="130" y2="140" stroke="#5C3D1E" stroke-width="1.4" opacity="0.7"/>
+  <line x1="178" y1="168" x2="220" y2="148" stroke="#5C3D1E" stroke-width="1.4" opacity="0.7"/>
+
+  <!-- Labels -->
+  <text x="178" y="255" text-anchor="middle" font-size="9" fill="#2D5A8E">● Class A</text>
+  <text x="178" y="270" text-anchor="middle" font-size="9" fill="#7C2530">■ Class B</text>
+  <text x="178" y="287" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">2 of 3 neighbors = Class A → predict A</text>
+  <text x="178" y="300" text-anchor="middle" font-size="8" fill="#6B5D4F">dashed circle = search radius</text>
+  <text x="178" y="315" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">majority vote among k neighbors</text>
+
+  <!-- Panel 2: Bias-variance and k -->
+  <rect x="352" y="50" width="200" height="145" fill="#FFF8EE" stroke="#7C2530" stroke-width="1.4" rx="4"/>
+  <text x="452" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">CHOOSING  k</text>
+
+  <text x="368" y="95"  text-anchor="start" font-size="9" fill="#7C2530" font-weight="bold">Small k</text>
+  <text x="368" y="110" text-anchor="start" font-size="9" fill="#5C3D1E">Low bias, high variance</text>
+  <text x="368" y="124" text-anchor="start" font-size="9" fill="#5C3D1E">Jagged decision boundary</text>
+  <text x="368" y="138" text-anchor="start" font-size="9" fill="#5C3D1E">Overfits to noise</text>
+
+  <line x1="362" y1="148" x2="542" y2="148" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <text x="368" y="165" text-anchor="start" font-size="9" fill="#2D5A8E" font-weight="bold">Large k</text>
+  <text x="368" y="180" text-anchor="start" font-size="9" fill="#5C3D1E">High bias, low variance</text>
+  <text x="368" y="194" text-anchor="start" font-size="9" fill="#5C3D1E">Smooth boundary, underfits</text>
+
+  <!-- Panel 3: Distance metrics -->
+  <rect x="352" y="207" width="200" height="148" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1.2" rx="4"/>
+  <text x="452" y="229" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">DISTANCE METRICS</text>
+
+  <text x="368" y="252" text-anchor="start" font-size="9" fill="#7C2530" font-weight="bold">Euclidean</text>
+  <text x="368" y="266" text-anchor="start" font-size="9" fill="#5C3D1E">√Σ(xᵢ − yᵢ)²</text>
+
+  <text x="368" y="284" text-anchor="start" font-size="9" fill="#7C2530" font-weight="bold">Manhattan</text>
+  <text x="368" y="298" text-anchor="start" font-size="9" fill="#5C3D1E">Σ|xᵢ − yᵢ|</text>
+
+  <text x="368" y="316" text-anchor="start" font-size="9" fill="#7C2530" font-weight="bold">Cosine</text>
+  <text x="368" y="330" text-anchor="start" font-size="9" fill="#5C3D1E">1 − (x·y)/(‖x‖‖y‖)</text>
+  <text x="368" y="347" text-anchor="start" font-size="8" fill="#6B5D4F" font-style="italic">scale inputs first!</text>
+
+  <!-- Panel 4: KD-Tree -->
+  <rect x="564" y="50" width="218" height="305" fill="#F0EBE1" stroke="#D4C5A9" stroke-width="1.2" rx="4"/>
+  <text x="673" y="72" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">KD-TREE STRUCTURE</text>
+
+  <!-- Simple KD-tree diagram -->
+  <!-- Root split -->
+  <line x1="580" y1="115" x2="765" y2="115" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="673" y="110" text-anchor="middle" font-size="9" fill="#7C2530">split on x₁</text>
+
+  <!-- Left subtree region -->
+  <rect x="575" y="120" width="90" height="70" fill="none" stroke="#2D5A8E" stroke-width="0.8" opacity="0.5"/>
+  <text x="620" y="160" text-anchor="middle" font-size="8" fill="#2D5A8E">left</text>
+
+  <!-- Right subtree region -->
+  <rect x="670" y="120" width="90" height="70" fill="none" stroke="#7C2530" stroke-width="0.8" opacity="0.5"/>
+  <!-- Horizontal split inside right -->
+  <line x1="670" y1="155" x2="760" y2="155" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="715" y="143" text-anchor="middle" font-size="8" fill="#7C2530">split x₂</text>
+  <text x="715" y="170" text-anchor="middle" font-size="8" fill="#7C2530">split x₂</text>
+
+  <line x1="580" y1="200" x2="765" y2="200" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <text x="673" y="222" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Complexity</text>
+  <text x="580" y="242" text-anchor="start" font-size="9" fill="#5C3D1E">Build:  O(n log n)</text>
+  <text x="580" y="258" text-anchor="start" font-size="9" fill="#5C3D1E">Query: O(log n) avg</text>
+  <text x="580" y="274" text-anchor="start" font-size="9" fill="#5C3D1E">Brute: O(nd) per query</text>
+
+  <line x1="580" y1="285" x2="765" y2="285" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <text x="673" y="305" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">KD-tree degrades in</text>
+  <text x="673" y="320" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">high dimensions</text>
+  <text x="673" y="335" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">(curse of dim.)</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-size="9" fill="#6B5D4F">No training phase · Predictions require scanning all training points · Normalize features before use</text>
+</svg>

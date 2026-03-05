@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Vector Norms</text>
+  <!-- Unit balls -->
+  <text x="130" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e74c3c">L1 norm ‖x‖₁</text>
+  <line x1="30" y1="220" x2="230" y2="220" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="130" y1="300" x2="130" y2="120" stroke="#ccc" stroke-width="1.5"/>
+  <polygon points="130,140 200,220 130,300 60,220" fill="#e74c3c" fill-opacity="0.15" stroke="#e74c3c" stroke-width="2.5"/>
+  <text x="130" y="345" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">|x₁| + |x₂| = 1</text>
+  <text x="130" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Manhattan distance</text>
+  <text x="400" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">L2 norm ‖x‖₂</text>
+  <line x1="300" y1="220" x2="500" y2="220" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="400" y1="300" x2="400" y2="120" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="400" cy="220" r="80" fill="#4a90d9" fill-opacity="0.15" stroke="#4a90d9" stroke-width="2.5"/>
+  <text x="400" y="345" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">x₁² + x₂² = 1</text>
+  <text x="400" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Euclidean distance</text>
+  <text x="670" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">L∞ norm ‖x‖∞</text>
+  <line x1="570" y1="220" x2="770" y2="220" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="670" y1="300" x2="670" y2="120" stroke="#ccc" stroke-width="1.5"/>
+  <rect x="590" y="140" width="160" height="160" fill="#27ae60" fill-opacity="0.15" stroke="#27ae60" stroke-width="2.5"/>
+  <text x="670" y="345" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">max(|x₁|,|x₂|) = 1</text>
+  <text x="670" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Chebyshev distance</text>
+</svg>

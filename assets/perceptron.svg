@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Inputs -->
+  <circle cx="120" cy="120" r="28" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="120" y="125" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">x₁</text>
+  <circle cx="120" cy="200" r="28" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="120" y="205" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">x₂</text>
+  <circle cx="120" cy="280" r="28" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="120" y="285" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">x₃</text>
+  <!-- Weights labels -->
+  <text x="230" y="148" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">w₁</text>
+  <text x="230" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">w₂</text>
+  <text x="230" y="258" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">w₃</text>
+  <!-- Lines from inputs to neuron -->
+  <line x1="148" y1="120" x2="330" y2="200" stroke="#4a90d9" stroke-width="2"/>
+  <line x1="148" y1="200" x2="330" y2="200" stroke="#4a90d9" stroke-width="2"/>
+  <line x1="148" y1="280" x2="330" y2="200" stroke="#4a90d9" stroke-width="2"/>
+  <!-- Neuron -->
+  <circle cx="370" cy="200" r="40" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/>
+  <text x="370" y="196" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Σ</text>
+  <text x="370" y="214" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">+ bias</text>
+  <!-- Step function box -->
+  <rect x="460" y="175" width="100" height="50" rx="8" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
+  <text x="510" y="196" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">Step</text>
+  <text x="510" y="212" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">Function</text>
+  <line x1="410" y1="200" x2="460" y2="200" stroke="#e67e22" stroke-width="2.5"/>
+  <!-- Output -->
+  <circle cx="650" cy="200" r="28" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
+  <text x="650" y="197" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">ŷ</text>
+  <text x="650" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">0 or 1</text>
+  <line x1="560" y1="200" x2="622" y2="200" stroke="#27ae60" stroke-width="2.5" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#27ae60"/></marker></defs>
+  <!-- Labels -->
+  <text x="80" y="340" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Inputs</text>
+  <text x="370" y="270" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Weighted Sum</text>
+  <text x="510" y="245" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Activation</text>
+  <text x="650" y="245" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Output</text>
+  <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">The Perceptron</text>
+</svg>

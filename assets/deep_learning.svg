@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-tan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">HIERARCHICAL REPRESENTATION LEARNING</text>
+
+  <!-- ── LAYER BAND BACKGROUNDS ── -->
+  <!-- Input band -->
+  <rect x="50" y="35" width="90" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="0.8" rx="4"/>
+  <!-- Hidden 1 band -->
+  <rect x="170" y="35" width="90" height="320" fill="#EDE5D0" stroke="#D4C5A9" stroke-width="0.8" rx="4"/>
+  <!-- Hidden 2 band -->
+  <rect x="290" y="35" width="90" height="320" fill="#E5DBc7" stroke="#D4C5A9" stroke-width="0.8" rx="4"/>
+  <!-- Hidden 3 band -->
+  <rect x="410" y="35" width="90" height="320" fill="#DDD1BE" stroke="#D4C5A9" stroke-width="0.8" rx="4"/>
+  <!-- Hidden 4 band -->
+  <rect x="530" y="35" width="90" height="320" fill="#D5C8B5" stroke="#D4C5A9" stroke-width="0.8" rx="4"/>
+  <!-- Output band -->
+  <rect x="650" y="35" width="100" height="320" fill="#EDE5D0" stroke="#7C2530" stroke-width="0.8" rx="4"/>
+
+  <!-- ── CONNECTIONS: Input → H1 ── -->
+  <line x1="95" y1="100" x2="170" y2="85"  stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="100" x2="170" y2="140" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="100" x2="170" y2="195" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="100" x2="170" y2="250" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="100" x2="170" y2="305" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="165" x2="170" y2="85"  stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="165" x2="170" y2="140" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="165" x2="170" y2="195" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="165" x2="170" y2="250" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="165" x2="170" y2="305" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="230" x2="170" y2="85"  stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="230" x2="170" y2="140" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="230" x2="170" y2="195" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="230" x2="170" y2="250" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="230" x2="170" y2="305" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="295" x2="170" y2="85"  stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="295" x2="170" y2="140" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="295" x2="170" y2="195" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="295" x2="170" y2="250" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="95" y1="295" x2="170" y2="305" stroke="#C4A87A" stroke-width="0.6" opacity="0.35"/>
+
+  <!-- ── CONNECTIONS: H1 → H2 ── -->
+  <line x1="215" y1="85"  x2="290" y2="95"  stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="85"  x2="290" y2="155" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="85"  x2="290" y2="215" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="85"  x2="290" y2="275" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="140" x2="290" y2="95"  stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="140" x2="290" y2="155" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="140" x2="290" y2="215" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="140" x2="290" y2="275" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="195" x2="290" y2="95"  stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="195" x2="290" y2="155" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="195" x2="290" y2="215" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="195" x2="290" y2="275" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="250" x2="290" y2="95"  stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="250" x2="290" y2="155" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="250" x2="290" y2="215" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="250" x2="290" y2="275" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="305" x2="290" y2="95"  stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="305" x2="290" y2="155" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="305" x2="290" y2="215" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+  <line x1="215" y1="305" x2="290" y2="275" stroke="#C4A87A" stroke-width="0.6" opacity="0.3"/>
+
+  <!-- ── CONNECTIONS: H2 → H3 ── -->
+  <line x1="335" y1="95"  x2="410" y2="115" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="95"  x2="410" y2="185" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="95"  x2="410" y2="255" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="155" x2="410" y2="115" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="155" x2="410" y2="185" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="155" x2="410" y2="255" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="215" x2="410" y2="115" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="215" x2="410" y2="185" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="215" x2="410" y2="255" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="275" x2="410" y2="115" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="275" x2="410" y2="185" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="335" y1="275" x2="410" y2="255" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+
+  <!-- ── CONNECTIONS: H3 → H4 ── -->
+  <line x1="455" y1="115" x2="530" y2="145" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="455" y1="115" x2="530" y2="225" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="455" y1="185" x2="530" y2="145" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="455" y1="185" x2="530" y2="225" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="455" y1="255" x2="530" y2="145" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+  <line x1="455" y1="255" x2="530" y2="225" stroke="#C4A87A" stroke-width="0.6" opacity="0.25"/>
+
+  <!-- ── CONNECTIONS: H4 → Output ── -->
+  <line x1="575" y1="145" x2="650" y2="185" stroke="#7C2530" stroke-width="1.2" opacity="0.6" marker-end="url(#arr)"/>
+  <line x1="575" y1="225" x2="650" y2="185" stroke="#7C2530" stroke-width="1.2" opacity="0.6" marker-end="url(#arr)"/>
+
+  <!-- ── INPUT LAYER NODES (4 nodes) ── -->
+  <circle cx="95" cy="100" r="13" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="95" cy="165" r="13" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="95" cy="230" r="13" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="95" cy="295" r="13" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- ── HIDDEN LAYER 1 NODES (5 nodes) ── -->
+  <circle cx="215" cy="85"  r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="215" cy="140" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="215" cy="195" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="215" cy="250" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="215" cy="305" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- ── HIDDEN LAYER 2 NODES (4 nodes) ── -->
+  <circle cx="335" cy="95"  r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="335" cy="155" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="335" cy="215" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="335" cy="275" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- ── HIDDEN LAYER 3 NODES (3 nodes) ── -->
+  <circle cx="455" cy="115" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="455" cy="185" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="455" cy="255" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- ── HIDDEN LAYER 4 NODES (2 nodes) ── -->
+  <circle cx="575" cy="145" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="575" cy="225" r="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- ── OUTPUT NODE (1 node) ── -->
+  <circle cx="700" cy="185" r="15" fill="#EDE5D0" stroke="#7C2530" stroke-width="2"/>
+  <text x="700" y="190" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">ŷ</text>
+
+  <!-- ── LAYER LABELS ── -->
+  <text x="95"  y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">Input</text>
+  <text x="215" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">H1</text>
+  <text x="335" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">H2</text>
+  <text x="455" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">H3</text>
+  <text x="575" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">H4</text>
+  <text x="700" y="336" text-anchor="middle" font-size="9" fill="#6B5D4F" font-weight="bold">Output</text>
+
+  <!-- ── ANNOTATION LABELS (above bands) ── -->
+  <text x="95"  y="54" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">raw input</text>
+  <text x="215" y="54" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">edges &amp;</text>
+  <text x="215" y="64" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">textures</text>
+  <text x="335" y="54" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">low-level</text>
+  <text x="335" y="64" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">features</text>
+  <text x="455" y="54" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">mid-level</text>
+  <text x="455" y="64" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">features</text>
+  <text x="575" y="54" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">high-level</text>
+  <text x="575" y="64" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">features</text>
+  <text x="700" y="54" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">output</text>
+
+  <!-- ── DEPTH ARROW ── -->
+  <line x1="55" y1="375" x2="745" y2="375" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-tan)"/>
+  <text x="400" y="392" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">increasing abstraction — each layer builds on the last</text>
+
+  <!-- ── DEPTH BRACE LABEL ── -->
+  <text x="400" y="365" text-anchor="middle" font-size="8.5" fill="#6B5D4F" letter-spacing="0.5">← shallow ···················································· deep →</text>
+</svg>

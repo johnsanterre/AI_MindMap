@@ -1,0 +1,71 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#E91E63"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">Matrix Trace: Sum of Diagonal Elements</text>
+
+  <!-- Matrix bracket left -->
+  <text x="105" y="95" font-size="42" fill="#555" font-weight="200">[</text>
+  <text x="105" y="185" font-size="42" fill="#555" font-weight="200"> </text>
+  <text x="105" y="275" font-size="42" fill="#555" font-weight="200">[</text>
+  <!-- Draw full bracket with path instead -->
+  <path d="M125,62 L112,62 L112,302 L125,302" fill="none" stroke="#555" stroke-width="2.5"/>
+  <path d="M305,62 L318,62 L318,302 L305,302" fill="none" stroke="#555" stroke-width="2.5"/>
+
+  <!-- Matrix grid lines (faint) -->
+  <line x1="125" y1="142" x2="318" y2="142" stroke="#ddd" stroke-width="1"/>
+  <line x1="125" y1="222" x2="318" y2="222" stroke="#ddd" stroke-width="1"/>
+  <line x1="189" y1="62" x2="189" y2="302" stroke="#ddd" stroke-width="1"/>
+  <line x1="253" y1="62" x2="253" y2="302" stroke="#ddd" stroke-width="1"/>
+
+  <!-- Diagonal highlight cells -->
+  <rect x="126" y="63" width="63" height="79" rx="4" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <rect x="190" y="143" width="63" height="79" rx="4" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <rect x="254" y="223" width="63" height="79" rx="4" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+
+  <!-- Row 1 -->
+  <text x="158" y="110" text-anchor="middle" font-size="20" font-weight="bold" fill="#1565C0">a₁₁</text>
+  <text x="221" y="110" text-anchor="middle" font-size="20" fill="#888">a₁₂</text>
+  <text x="285" y="110" text-anchor="middle" font-size="20" fill="#888">a₁₃</text>
+
+  <!-- Row 2 -->
+  <text x="158" y="190" text-anchor="middle" font-size="20" fill="#888">a₂₁</text>
+  <text x="221" y="190" text-anchor="middle" font-size="20" font-weight="bold" fill="#1565C0">a₂₂</text>
+  <text x="285" y="190" text-anchor="middle" font-size="20" fill="#888">a₂₃</text>
+
+  <!-- Row 3 -->
+  <text x="158" y="270" text-anchor="middle" font-size="20" fill="#888">a₃₁</text>
+  <text x="221" y="270" text-anchor="middle" font-size="20" fill="#888">a₃₂</text>
+  <text x="285" y="270" text-anchor="middle" font-size="20" font-weight="bold" fill="#1565C0">a₃₃</text>
+
+  <!-- Diagonal arrow connecting the three highlighted cells -->
+  <line x1="158" y1="125" x2="218" y2="147" stroke="#E91E63" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <line x1="221" y1="205" x2="281" y2="227" stroke="#E91E63" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+
+  <!-- Arrows from each diagonal to sum on right -->
+  <line x1="320" y1="102" x2="430" y2="182" stroke="#E91E63" stroke-width="1.8" marker-end="url(#arr)"/>
+  <line x1="320" y1="182" x2="430" y2="200" stroke="#E91E63" stroke-width="1.8" marker-end="url(#arr)"/>
+  <line x1="320" y1="262" x2="430" y2="218" stroke="#E91E63" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- Sum box -->
+  <rect x="430" y="148" width="310" height="110" rx="10" fill="#FFF3E0" stroke="#FF9800" stroke-width="2.5"/>
+
+  <!-- tr(A) = ... label -->
+  <text x="585" y="192" text-anchor="middle" font-size="22" font-weight="bold" fill="#E65100">tr(A) = a₁₁ + a₂₂ + a₃₃</text>
+  <text x="585" y="230" text-anchor="middle" font-size="14" fill="#555">sum of diagonal entries = scalar</text>
+
+  <!-- Legend -->
+  <rect x="126" y="322" width="16" height="16" rx="3" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="148" y="335" font-size="13" fill="#555">diagonal element (contributes to trace)</text>
+  <rect x="450" y="322" width="16" height="16" rx="3" fill="#f5f5f5" stroke="#aaa" stroke-width="1.5"/>
+  <text x="472" y="335" font-size="13" fill="#555">off-diagonal element (ignored)</text>
+
+  <!-- Caption -->
+  <text x="400" y="380" text-anchor="middle" font-size="12" fill="#888">The trace discards all off-diagonal information — only the main diagonal matters</text>
+</svg>

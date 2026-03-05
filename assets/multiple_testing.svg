@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">Multiple Testing Problem</text>
+
+  <!-- Panel 1: 20 tests illustration -->
+  <rect x="20" y="50" width="220" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="130" y="72" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">20 TESTS AT α=0.05</text>
+  <!-- p-value bars -->
+  <line x1="50" x2="210" y1="85" y2="85" stroke="#D4C5A9" stroke-width="0.5"/>
+  <text x="215" y="89" font-size="8" fill="#7C2530">α=0.05</text>
+  <!-- tests as horizontal bars -->
+  <rect x="50" y="92" width="120" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="107" width="95" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="122" width="145" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="137" width="80" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="152" width="110" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="167" width="130" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="182" width="90" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="197" width="155" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="212" width="70" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="227" width="125" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="242" width="100" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="257" width="85" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="272" width="140" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="287" width="105" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="302" width="75" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="317" width="115" height="11" fill="#2D5A8E" rx="2"/>
+  <rect x="50" y="332" width="160" height="11" fill="#7C2530" rx="2"/>
+  <text x="215" y="341" font-size="8" fill="#7C2530">✗ false+</text>
+  <rect x="50" y="347" width="88" height="11" fill="#2D5A8E" rx="2"/>
+  <!-- threshold line -->
+  <line x1="50" x2="210" y1="85" y2="85" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="130" y="372" text-anchor="middle" font-size="9" fill="#5C3D1E">~1 false positive expected</text>
+
+  <!-- Panel 2: Bonferroni vs BH -->
+  <rect x="260" y="50" width="240" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="380" y="72" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">CORRECTIONS COMPARED</text>
+
+  <!-- Bonferroni box -->
+  <rect x="275" y="82" width="210" height="115" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="380" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Bonferroni</text>
+  <text x="380" y="118" text-anchor="middle" font-size="10" fill="#5C3D1E">Controls FWER</text>
+  <text x="285" y="138" font-size="9.5" fill="#2D2D2D">(Family-Wise Error Rate)</text>
+  <text x="285" y="156" font-size="9.5" fill="#2D2D2D">New threshold:</text>
+  <text x="380" y="178" text-anchor="middle" font-size="12" font-style="italic" fill="#7C2530">α* = α / m</text>
+  <text x="380" y="194" text-anchor="middle" font-size="9" fill="#5C3D1E">Very conservative — loses power</text>
+
+  <!-- BH box -->
+  <rect x="275" y="210" width="210" height="130" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="380" y="228" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Benjamini-Hochberg</text>
+  <text x="380" y="246" text-anchor="middle" font-size="10" fill="#5C3D1E">Controls FDR</text>
+  <text x="285" y="264" font-size="9.5" fill="#2D2D2D">(False Discovery Rate)</text>
+  <text x="285" y="282" font-size="9.5" fill="#2D2D2D">Sort p-values; find largest k where:</text>
+  <text x="380" y="302" text-anchor="middle" font-size="12" font-style="italic" fill="#2D5A8E">p(k) ≤ (k/m)·q</text>
+  <text x="380" y="320" text-anchor="middle" font-size="9" fill="#5C3D1E">Balances discoveries vs false positives</text>
+  <text x="380" y="362" text-anchor="middle" font-size="9" fill="#5C3D1E">Prefer BH for exploratory research</text>
+
+  <!-- Panel 3: P-hacking consequence -->
+  <rect x="520" y="50" width="260" height="320" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="650" y="72" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">P-HACKING &amp; HARKING</text>
+
+  <!-- Funnel of researcher decisions -->
+  <polygon points="590,90 710,90 680,170 620,170" fill="#C4A87A" fill-opacity="0.4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="650" y="108" text-anchor="middle" font-size="9" fill="#5C3D1E">All possible analyses</text>
+  <text x="650" y="122" text-anchor="middle" font-size="9" fill="#5C3D1E">researcher could run</text>
+
+  <polygon points="620,175 680,175 665,240 635,240" fill="#C4A87A" fill-opacity="0.6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="650" y="198" text-anchor="middle" font-size="9" fill="#5C3D1E">Analyses actually</text>
+  <text x="650" y="212" text-anchor="middle" font-size="9" fill="#5C3D1E">attempted</text>
+
+  <rect x="630" y="248" width="40" height="30" fill="#7C2530" fill-opacity="0.7" rx="2"/>
+  <text x="650" y="268" text-anchor="middle" font-size="9" fill="white">p&lt;.05</text>
+
+  <text x="650" y="300" text-anchor="middle" font-size="9" font-style="italic" fill="#7C2530">Only this gets published</text>
+
+  <!-- HARKing note -->
+  <rect x="535" y="310" width="230" height="50" fill="#EDE5D8" stroke="#D4C5A9" stroke-width="1" rx="3"/>
+  <text x="650" y="328" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">HARKing</text>
+  <text x="650" y="344" text-anchor="middle" font-size="9" fill="#5C3D1E">Hypothesizing After Results Known</text>
+  <text x="650" y="358" text-anchor="middle" font-size="9" fill="#5C3D1E">→ drives the replication crisis</text>
+</svg>

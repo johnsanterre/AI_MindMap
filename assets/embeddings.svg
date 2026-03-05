@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" font-family="Georgia,serif">
+  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- LEFT PANEL: Vector Space -->
+  <text x="145" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">VECTOR SPACE</text>
+
+  <!-- Axes -->
+  <line x1="35" y1="260" x2="272" y2="260" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="35" y1="260" x2="35" y2="32" stroke="#D4C5A9" stroke-width="1"/>
+  <polygon points="272,257 278,260 272,263" fill="#D4C5A9"/>
+  <polygon points="32,32 35,26 38,32" fill="#D4C5A9"/>
+
+  <!-- Origin point -->
+  <circle cx="150" cy="175" r="2" fill="#6B5D4F"/>
+
+  <!-- Vector lines from origin to each word -->
+  <line x1="150" y1="175" x2="215" y2="75" stroke="#7C2530" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="193" y2="90" stroke="#7C2530" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="220" y2="120" stroke="#5C3D1E" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="200" y2="135" stroke="#5C3D1E" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="85" y2="85" stroke="#2D5A8E" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="95" y2="100" stroke="#2D5A8E" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="80" y2="190" stroke="#C47B35" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="100" y2="200" stroke="#C47B35" stroke-width="0.75" opacity="0.5"/>
+  <line x1="150" y1="175" x2="65" y2="175" stroke="#C47B35" stroke-width="0.75" opacity="0.5"/>
+
+  <!-- Group ellipses -->
+  <!-- Royalty group (king, queen, man, woman) -->
+  <ellipse cx="208" cy="105" rx="30" ry="42" fill="none" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" transform="rotate(-15,208,105)"/>
+  <!-- Animal group (dog, cat) -->
+  <ellipse cx="90" cy="93" rx="16" ry="20" fill="none" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <!-- Place group (paris, france, london) -->
+  <ellipse cx="82" cy="188" rx="24" ry="18" fill="none" stroke="#C47B35" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <!-- Royalty analogy arrows -->
+  <!-- man → king arrow (dashed, showing "royalty" direction) -->
+  <line x1="220" y1="120" x2="215" y2="77" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrow1)"/>
+  <!-- woman → queen arrow (parallel) -->
+  <line x1="200" y1="135" x2="195" y2="92" stroke="#6B5D4F" stroke-width="1" stroke-dasharray="3,2"/>
+  <polygon points="192,96 194,89 198,94" fill="#6B5D4F"/>
+  <polygon points="212,81 214,74 218,79" fill="#6B5D4F"/>
+  <text x="233" y="96" font-size="7.5" fill="#6B5D4F" font-family="Georgia,serif" font-style="italic">royalty</text>
+
+  <!-- Word dots and labels -->
+  <!-- Royalty cluster: red -->
+  <circle cx="215" cy="75" r="4" fill="#7C2530"/>
+  <text x="220" y="72" font-size="8.5" fill="#7C2530" font-family="Georgia,serif">king</text>
+
+  <circle cx="193" cy="90" r="4" fill="#7C2530"/>
+  <text x="170" y="87" font-size="8.5" fill="#7C2530" font-family="Georgia,serif">queen</text>
+
+  <circle cx="220" cy="120" r="4" fill="#5C3D1E"/>
+  <text x="225" y="118" font-size="8.5" fill="#5C3D1E" font-family="Georgia,serif">man</text>
+
+  <circle cx="200" cy="135" r="4" fill="#5C3D1E"/>
+  <text x="175" y="133" font-size="8.5" fill="#5C3D1E" font-family="Georgia,serif">woman</text>
+
+  <!-- Animal cluster: blue -->
+  <circle cx="85" cy="85" r="4" fill="#2D5A8E"/>
+  <text x="55" y="83" font-size="8.5" fill="#2D5A8E" font-family="Georgia,serif">dog</text>
+
+  <circle cx="95" cy="100" r="4" fill="#2D5A8E"/>
+  <text x="64" y="98" font-size="8.5" fill="#2D5A8E" font-family="Georgia,serif">cat</text>
+
+  <!-- Place cluster: tan -->
+  <circle cx="80" cy="190" r="4" fill="#C47B35"/>
+  <text x="55" y="188" font-size="8.5" fill="#C47B35" font-family="Georgia,serif">paris</text>
+
+  <circle cx="100" cy="200" r="4" fill="#C47B35"/>
+  <text x="105" y="200" font-size="8.5" fill="#C47B35" font-family="Georgia,serif">france</text>
+
+  <circle cx="65" cy="175" r="4" fill="#C47B35"/>
+  <text x="38" y="173" font-size="8.5" fill="#C47B35" font-family="Georgia,serif">london</text>
+
+  <!-- RIGHT PANEL: Vector Arithmetic -->
+  <text x="446" y="18" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">KING − MAN + WOMAN ≈ QUEEN</text>
+
+  <!-- Origin -->
+  <circle cx="355" cy="215" r="3" fill="#6B5D4F"/>
+  <text x="348" y="228" font-size="8" fill="#6B5D4F" font-family="Georgia,serif">origin</text>
+
+  <!-- king vector: origin(355,215) → (510,80) -->
+  <line x1="355" y1="215" x2="508" y2="82" stroke="#7C2530" stroke-width="2"/>
+  <polygon points="505,88 511,80 513,88" fill="#7C2530"/>
+  <text x="515" y="78" font-size="9" fill="#7C2530" font-family="Georgia,serif">king</text>
+
+  <!-- man vector: origin → (495,105) -->
+  <line x1="355" y1="215" x2="493" y2="107" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="490,113 496,105 499,113" fill="#5C3D1E"/>
+  <text x="500" y="103" font-size="9" fill="#5C3D1E" font-family="Georgia,serif">man</text>
+
+  <!-- woman vector: origin → (475,125) -->
+  <line x1="355" y1="215" x2="473" y2="127" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="470,133 476,125 479,133" fill="#5C3D1E"/>
+  <text x="452" y="123" font-size="9" fill="#5C3D1E" font-family="Georgia,serif">woman</text>
+
+  <!-- queen result: origin → (492,90), dashed red -->
+  <line x1="355" y1="215" x2="490" y2="92" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="487,98 493,90 496,98" fill="#7C2530"/>
+  <text x="497" y="90" font-size="9" fill="#7C2530" font-family="Georgia,serif" font-style="italic">≈ queen</text>
+
+  <!-- Parallelogram hint lines (showing vector addition) -->
+  <!-- king - man = difference vector shown as thin line -->
+  <line x1="493" y1="107" x2="490" y2="92" stroke="#7C2530" stroke-width="0.75" stroke-dasharray="2,2" opacity="0.6"/>
+  <line x1="473" y1="127" x2="490" y2="92" stroke="#7C2530" stroke-width="0.75" stroke-dasharray="2,2" opacity="0.6"/>
+
+  <!-- Arithmetic annotation -->
+  <text x="446" y="248" font-size="9" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">v(king) − v(man) + v(woman) ≈ v(queen)</text>
+
+  <!-- Dimension note -->
+  <text x="446" y="263" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">each word = 300-dim vector</text>
+  <text x="446" y="276" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">(shown as 2D projection)</text>
+
+  <!-- Caption -->
+  <text x="300" y="302" font-size="9.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Embeddings map discrete tokens into continuous vector space where geometry encodes semantic relationships</text>
+</svg>

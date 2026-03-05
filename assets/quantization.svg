@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="q-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="q-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">QUANTIZATION: REDUCING NUMERICAL PRECISION</text>
+
+  <!-- ══ LEFT PANEL: FP32 ══ -->
+  <text x="160" y="42" text-anchor="middle" font-size="10.5" fill="#7C2530" font-weight="bold">FP32 (float32)</text>
+  <text x="160" y="56" text-anchor="middle" font-size="8.5" fill="#6B5D4F">32 bits per weight</text>
+
+  <!-- FP32 bit layout -->
+  <!-- sign -->
+  <rect x="30" y="65" width="20" height="24" rx="2" fill="#7C2530"/>
+  <text x="40" y="81" text-anchor="middle" font-size="8" fill="white" font-weight="bold">S</text>
+  <!-- exponent -->
+  <rect x="52" y="65" width="64" height="24" rx="2" fill="#5C3D1E"/>
+  <text x="84" y="81" text-anchor="middle" font-size="8" fill="white">exponent (8b)</text>
+  <!-- mantissa -->
+  <rect x="118" y="65" width="152" height="24" rx="2" fill="#C4A87A"/>
+  <text x="194" y="81" text-anchor="middle" font-size="8" fill="#3B2A14">mantissa (23b)</text>
+
+  <text x="160" y="108" text-anchor="middle" font-size="8.5" fill="#6B5D4F">e.g.  0.12345679 → stored as exact float</text>
+
+  <!-- FP32 number line -->
+  <line x1="30" y1="135" x2="290" y2="135" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="160" y="128" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">continuous high-precision values</text>
+  <!-- many tick marks -->
+  <line x1="40"  y1="130" x2="40"  y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="55"  y1="130" x2="55"  y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="70"  y1="130" x2="70"  y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="85"  y1="130" x2="85"  y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="100" y1="130" x2="100" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="115" y1="130" x2="115" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="130" y1="130" x2="130" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="145" y1="130" x2="145" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="160" y1="125" x2="160" y2="145" stroke="#7C2530" stroke-width="2"/>
+  <line x1="175" y1="130" x2="175" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="190" y1="130" x2="190" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="205" y1="130" x2="205" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="220" y1="130" x2="220" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="235" y1="130" x2="235" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="250" y1="130" x2="250" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="265" y1="130" x2="265" y2="140" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="280" y1="130" x2="280" y2="140" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- Memory indicator -->
+  <rect x="30" y="158" width="260" height="18" rx="3" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="160" y="171" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Memory: 4 bytes × N params</text>
+
+  <!-- ══ QUANTIZE ARROW (center) ══ -->
+  <text x="370" y="95" text-anchor="middle" font-size="13" fill="#7C2530">→</text>
+  <text x="370" y="110" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">Quantize</text>
+  <text x="370" y="123" text-anchor="middle" font-size="8.5" fill="#6B5D4F">scale + round</text>
+  <!-- formula -->
+  <rect x="315" y="138" width="110" height="28" rx="4" fill="#F0E8D8" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="370" y="150" text-anchor="middle" font-size="8" fill="#7C2530">q = round(x / S) + Z</text>
+  <text x="370" y="161" text-anchor="middle" font-size="8" fill="#5C3D1E">S = scale,  Z = zero-pt</text>
+
+  <!-- ── DEQUANTIZE ARROW ── -->
+  <text x="370" y="210" text-anchor="middle" font-size="10" fill="#2D5A8E" font-style="italic">dequantize:</text>
+  <text x="370" y="223" text-anchor="middle" font-size="8.5" fill="#2D5A8E">x̂ = S · (q − Z)</text>
+
+  <!-- ══ RIGHT PANEL: INT8 ══ -->
+  <text x="605" y="42" text-anchor="middle" font-size="10.5" fill="#2D5A8E" font-weight="bold">INT8 (int8)</text>
+  <text x="605" y="56" text-anchor="middle" font-size="8.5" fill="#6B5D4F">8 bits per weight</text>
+
+  <!-- INT8 bit layout -->
+  <rect x="470" y="65" width="20" height="24" rx="2" fill="#2D5A8E"/>
+  <text x="480" y="81" text-anchor="middle" font-size="8" fill="white">S</text>
+  <rect x="492" y="65" width="238" height="24" rx="2" fill="#3A7AC4" opacity="0.7"/>
+  <text x="611" y="81" text-anchor="middle" font-size="8" fill="white">7-bit integer value</text>
+
+  <!-- INT8 number line -->
+  <line x1="470" y1="135" x2="730" y2="135" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="605" y="128" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-style="italic">256 discrete levels only</text>
+  <!-- coarse tick marks -->
+  <line x1="486" y1="126" x2="486" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="519" y1="126" x2="519" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="552" y1="126" x2="552" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="585" y1="126" x2="585" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="618" y1="126" x2="618" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="651" y1="126" x2="651" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="684" y1="126" x2="684" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="717" y1="126" x2="717" y2="144" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- quantization error bracket -->
+  <line x1="585" y1="148" x2="618" y2="148" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="585" y1="144" x2="585" y2="152" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="618" y1="144" x2="618" y2="152" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="601" y="163" text-anchor="middle" font-size="8" fill="#7C2530">quant. error</text>
+
+  <!-- Memory indicator -->
+  <rect x="470" y="172" width="260" height="18" rx="3" fill="#D8E6F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="605" y="185" text-anchor="middle" font-size="8.5" fill="#2D5A8E">Memory: 1 byte × N params  (4× smaller)</text>
+
+  <!-- ══ LOWER PANEL: COMPARISON TABLE ══ -->
+  <rect x="30" y="220" width="740" height="130" rx="6" fill="#F5EFE4" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="400" y="240" text-anchor="middle" font-size="10.5" fill="#5C3D1E" font-weight="bold">Quantization Schemes Comparison</text>
+
+  <!-- headers -->
+  <text x="95"  y="260" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Scheme</text>
+  <text x="220" y="260" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">When calibrated</text>
+  <text x="370" y="260" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Accuracy</text>
+  <text x="520" y="260" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Speed</text>
+  <text x="680" y="260" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Notes</text>
+  <line x1="40" y1="264" x2="760" y2="264" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- row 1 PTQ -->
+  <text x="95"  y="280" text-anchor="middle" font-size="8.5" fill="#7C2530">Post-Training (PTQ)</text>
+  <text x="220" y="280" text-anchor="middle" font-size="8.5" fill="#5C3D1E">after training</text>
+  <text x="370" y="280" text-anchor="middle" font-size="8.5" fill="#5C3D1E">small drop</text>
+  <text x="520" y="280" text-anchor="middle" font-size="8.5" fill="#5C3D1E">fast deploy</text>
+  <text x="680" y="280" text-anchor="middle" font-size="8.5" fill="#5C3D1E">no retraining needed</text>
+
+  <!-- row 2 QAT -->
+  <text x="95"  y="298" text-anchor="middle" font-size="8.5" fill="#2D5A8E">Quantization-Aware (QAT)</text>
+  <text x="220" y="298" text-anchor="middle" font-size="8.5" fill="#5C3D1E">during training</text>
+  <text x="370" y="298" text-anchor="middle" font-size="8.5" fill="#5C3D1E">best accuracy</text>
+  <text x="520" y="298" text-anchor="middle" font-size="8.5" fill="#5C3D1E">fast deploy</text>
+  <text x="680" y="298" text-anchor="middle" font-size="8.5" fill="#5C3D1E">fake quant ops in graph</text>
+
+  <!-- row 3 dynamic -->
+  <text x="95"  y="316" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Dynamic Quant.</text>
+  <text x="220" y="316" text-anchor="middle" font-size="8.5" fill="#5C3D1E">at inference</text>
+  <text x="370" y="316" text-anchor="middle" font-size="8.5" fill="#5C3D1E">moderate</text>
+  <text x="520" y="316" text-anchor="middle" font-size="8.5" fill="#5C3D1E">flexible</text>
+  <text x="680" y="316" text-anchor="middle" font-size="8.5" fill="#5C3D1E">weights FP32, acts INT8</text>
+
+  <!-- row 4 binarize -->
+  <text x="95"  y="334" text-anchor="middle" font-size="8.5" fill="#C4A87A">Binary / Ternary</text>
+  <text x="220" y="334" text-anchor="middle" font-size="8.5" fill="#5C3D1E">during training</text>
+  <text x="370" y="334" text-anchor="middle" font-size="8.5" fill="#5C3D1E">notable drop</text>
+  <text x="520" y="334" text-anchor="middle" font-size="8.5" fill="#5C3D1E">extreme speed</text>
+  <text x="680" y="334" text-anchor="middle" font-size="8.5" fill="#5C3D1E">XNOR-Net, 1-bit weights</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="390" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Quantization trades a small accuracy loss for large memory and latency gains — critical for edge deployment
+  </text>
+</svg>

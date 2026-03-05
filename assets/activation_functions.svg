@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" letter-spacing="0.5">ACTIVATION FUNCTIONS</text>
+
+  <!-- Panel 1: Sigmoid -->
+  <text x="100" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">SIGMOID</text>
+  <line x1="30" y1="230" x2="175" y2="230" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="102" y1="310" x2="102" y2="80" stroke="#D4C5A9" stroke-width="1"/>
+  <path d="M30,295 C50,292 70,275 90,245 C102,225 108,205 120,185 C140,155 158,138 175,132" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="100" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">σ(x) = 1/(1+e⁻ˣ)</text>
+  <text x="155" y="118" font-family="Georgia, serif" font-size="9" fill="#7C2530">→ 1</text>
+  <text x="155" y="245" font-family="Georgia, serif" font-size="9" fill="#7C2530">→ 0</text>
+
+  <!-- Panel 2: Tanh -->
+  <text x="300" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">TANH</text>
+  <line x1="225" y1="198" x2="375" y2="198" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="300" y1="310" x2="300" y2="80" stroke="#D4C5A9" stroke-width="1"/>
+  <path d="M225,280 C245,275 265,255 285,225 C298,205 302,192 315,170 C335,138 355,115 375,110" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="300" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">tanh(x) ∈ (−1, 1)</text>
+  <text x="355" y="98" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">→ +1</text>
+  <text x="355" y="215" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">→ −1</text>
+
+  <!-- Panel 3: ReLU -->
+  <text x="500" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">RELU</text>
+  <line x1="425" y1="265" x2="575" y2="265" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="500" y1="310" x2="500" y2="80" stroke="#D4C5A9" stroke-width="1"/>
+  <polyline points="425,265 500,265 575,100" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <!-- dead zone shading -->
+  <rect x="425" y="100" width="75" height="165" fill="#5C3D1E" fill-opacity="0.07"/>
+  <text x="463" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">dead</text>
+  <text x="500" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">max(0, x)</text>
+
+  <!-- Panel 4: GELU / modern -->
+  <text x="695" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" font-variant="small-caps">GELU / SWISH</text>
+  <line x1="620" y1="255" x2="770" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="695" y1="310" x2="695" y2="80" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- GELU-like smooth curve with slight negative dip -->
+  <path d="M620,280 C630,278 645,272 658,262 C668,256 672,252 678,246 C684,238 688,225 695,205 C703,182 715,148 730,120 C742,100 755,90 770,88" fill="none" stroke="#C4A87A" stroke-width="2.5"/>
+  <!-- small dip below axis -->
+  <path d="M620,280 C630,278 645,272 655,266 C662,261 668,257 672,254 C673,253 673,253 673,254" fill="none" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="695" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">x · Φ(x)</text>
+  <text x="748" y="76" font-family="Georgia, serif" font-size="9" fill="#C4A87A">smooth</text>
+
+  <!-- Dividers -->
+  <line x1="200" y1="55" x2="200" y2="345" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <line x1="400" y1="55" x2="400" y2="345" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <line x1="600" y1="55" x2="600" y2="345" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,4"/>
+
+  <!-- Bottom note -->
+  <text x="400" y="375" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#6B5D4F">Nonlinearity allows networks to learn curved decision boundaries — without it, all layers collapse to one linear map.</text>
+</svg>

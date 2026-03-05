@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="vit-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="vit-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="vit-arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="26" text-anchor="middle" font-size="13" fill="#5C3D1E" letter-spacing="1.5">VISION TRANSFORMER (ViT) PIPELINE</text>
+
+  <!-- ══ STEP 1: IMAGE TO PATCHES ══ -->
+  <text x="70" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">1. PATCH SPLIT</text>
+  <!-- Image grid 6×6 patches -->
+  <rect x="20" y="54" width="100" height="100" rx="2" fill="#D8CDB8" stroke="#C4A87A" stroke-width="1.2"/>
+  <!-- Patch grid lines -->
+  <line x1="53" y1="54"  x2="53"  y2="154" stroke="#5C3D1E" stroke-width="0.8"/>
+  <line x1="86" y1="54"  x2="86"  y2="154" stroke="#5C3D1E" stroke-width="0.8"/>
+  <line x1="119" y1="54" x2="119" y2="154" stroke="#5C3D1E" stroke-width="0.8"/>
+  <line x1="20" y1="87"  x2="120" y2="87"  stroke="#5C3D1E" stroke-width="0.8"/>
+  <line x1="20" y1="120" x2="120" y2="120" stroke="#5C3D1E" stroke-width="0.8"/>
+  <!-- highlight one patch -->
+  <rect x="53" y="87" width="33" height="33" fill="#7C2530" opacity="0.35" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="70" y="162" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">16×16 patches</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="123" y1="104" x2="148" y2="104" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#vit-arr-brown)"/>
+
+  <!-- ══ STEP 2: LINEAR PROJECTION ══ -->
+  <text x="200" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">2. PROJECTION</text>
+  <rect x="150" y="54" width="100" height="100" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+  <!-- patch tokens as small squares -->
+  <rect x="162" y="66" width="18" height="18" rx="2" fill="#C4A87A" stroke="#5C3D1E" stroke-width="0.8"/>
+  <rect x="184" y="66" width="18" height="18" rx="2" fill="#C4A87A" stroke="#5C3D1E" stroke-width="0.8"/>
+  <rect x="206" y="66" width="18" height="18" rx="2" fill="#C4A87A" stroke="#5C3D1E" stroke-width="0.8"/>
+  <rect x="228" y="66" width="18" height="18" rx="2" fill="#C4A87A" stroke="#5C3D1E" stroke-width="0.8"/>
+  <!-- [CLS] token highlight -->
+  <rect x="162" y="90" width="18" height="18" rx="2" fill="#7C2530" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="171" y="103" text-anchor="middle" font-size="7" fill="#FDFAF4" font-weight="bold">CLS</text>
+  <text x="162" y="120" font-size="7" fill="#6B5D4F">[CLS] + patch</text>
+  <text x="162" y="130" font-size="7" fill="#6B5D4F">embeddings</text>
+  <text x="162" y="143" font-size="7" fill="#6B5D4F">+ pos. encoding</text>
+  <text x="200" y="162" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">D-dim vectors</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="253" y1="104" x2="278" y2="104" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#vit-arr-brown)"/>
+
+  <!-- ══ STEP 3: TRANSFORMER ENCODER ══ -->
+  <text x="380" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">3. TRANSFORMER ENCODER (×L blocks)</text>
+  <rect x="280" y="54" width="200" height="140" rx="4" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.8"/>
+  <!-- LN1 -->
+  <rect x="296" y="66" width="168" height="20" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="380" y="80" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Layer Norm</text>
+  <!-- MSA -->
+  <rect x="296" y="91" width="168" height="28" rx="3" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="380" y="106" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">Multi-Head Self-Attention</text>
+  <text x="380" y="116" text-anchor="middle" font-size="7.5" fill="#5C3D1E">Q, K, V from same sequence</text>
+  <!-- residual label -->
+  <text x="470" y="108" font-size="7.5" fill="#7C2530" font-style="italic">+ residual</text>
+  <!-- LN2 -->
+  <rect x="296" y="125" width="168" height="20" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="380" y="139" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Layer Norm</text>
+  <!-- MLP -->
+  <rect x="296" y="150" width="168" height="28" rx="3" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="380" y="165" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">MLP (FFN)</text>
+  <text x="380" y="175" text-anchor="middle" font-size="7.5" fill="#6B5D4F">Linear → GELU → Linear</text>
+  <text x="470" y="168" font-size="7.5" fill="#7C2530" font-style="italic">+ residual</text>
+  <text x="380" y="204" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">L = 12 blocks (ViT-B)</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="483" y1="124" x2="508" y2="124" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#vit-arr-brown)"/>
+
+  <!-- ══ STEP 4: MLP HEAD ══ -->
+  <text x="600" y="48" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="1">4. CLASSIFICATION HEAD</text>
+  <rect x="512" y="54" width="155" height="140" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+  <!-- CLS token extraction -->
+  <rect x="525" y="66" width="129" height="26" rx="3" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="589" y="79" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">Extract [CLS] token</text>
+  <text x="589" y="89" text-anchor="middle" font-size="7.5" fill="#5C3D1E">global image repr.</text>
+  <!-- MLP layers -->
+  <rect x="525" y="98" width="129" height="22" rx="3" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="589" y="113" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Linear (D → num_classes)</text>
+  <!-- softmax -->
+  <rect x="525" y="126" width="129" height="22" rx="3" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="589" y="141" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Softmax</text>
+  <!-- output probs -->
+  <rect x="525" y="155" width="129" height="30" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="589" y="168" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">Class Probabilities</text>
+  <text x="589" y="179" text-anchor="middle" font-size="7.5" fill="#6B5D4F">cat 0.87, dog 0.10 …</text>
+  <text x="589" y="204" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">1000 ImageNet classes</text>
+
+  <!-- Arrow 4→output -->
+  <line x1="669" y1="170" x2="700" y2="170" stroke="#7C2530" stroke-width="1.5" marker-end="url(#vit-arr)"/>
+  <rect x="700" y="155" width="84" height="30" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="742" y="168" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">Prediction</text>
+  <text x="742" y="179" text-anchor="middle" font-size="7.5" fill="#5C3D1E">"tabby cat"</text>
+
+  <!-- ══ BOTTOM: ViT VARIANTS TABLE ══ -->
+  <line x1="20" y1="225" x2="778" y2="225" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="243" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold" letter-spacing="1">ViT SCALE VARIANTS</text>
+
+  <!-- Table header -->
+  <rect x="60" y="250" width="680" height="20" rx="2" fill="#C4A87A" opacity="0.35"/>
+  <text x="150" y="264" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Model</text>
+  <text x="290" y="264" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Layers (L)</text>
+  <text x="410" y="264" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Hidden dim (D)</text>
+  <text x="540" y="264" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Heads</text>
+  <text x="670" y="264" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Params</text>
+
+  <!-- Row 1 -->
+  <text x="150" y="284" text-anchor="middle" font-size="8.5" fill="#2D5A8E">ViT-Base/16</text>
+  <text x="290" y="284" text-anchor="middle" font-size="8.5" fill="#5C3D1E">12</text>
+  <text x="410" y="284" text-anchor="middle" font-size="8.5" fill="#5C3D1E">768</text>
+  <text x="540" y="284" text-anchor="middle" font-size="8.5" fill="#5C3D1E">12</text>
+  <text x="670" y="284" text-anchor="middle" font-size="8.5" fill="#5C3D1E">86 M</text>
+
+  <!-- Row 2 -->
+  <rect x="60" y="290" width="680" height="20" fill="#F5EDE0" opacity="0.6"/>
+  <text x="150" y="304" text-anchor="middle" font-size="8.5" fill="#2D5A8E">ViT-Large/16</text>
+  <text x="290" y="304" text-anchor="middle" font-size="8.5" fill="#5C3D1E">24</text>
+  <text x="410" y="304" text-anchor="middle" font-size="8.5" fill="#5C3D1E">1024</text>
+  <text x="540" y="304" text-anchor="middle" font-size="8.5" fill="#5C3D1E">16</text>
+  <text x="670" y="304" text-anchor="middle" font-size="8.5" fill="#5C3D1E">307 M</text>
+
+  <!-- Row 3 -->
+  <text x="150" y="324" text-anchor="middle" font-size="8.5" fill="#2D5A8E">ViT-Huge/14</text>
+  <text x="290" y="324" text-anchor="middle" font-size="8.5" fill="#5C3D1E">32</text>
+  <text x="410" y="324" text-anchor="middle" font-size="8.5" fill="#5C3D1E">1280</text>
+  <text x="540" y="324" text-anchor="middle" font-size="8.5" fill="#5C3D1E">16</text>
+  <text x="670" y="324" text-anchor="middle" font-size="8.5" fill="#5C3D1E">632 M</text>
+
+  <!-- Caption -->
+  <text x="400" y="358" text-anchor="middle" font-size="8.5" fill="#6B5D4F" font-style="italic">Patch size /P means each patch is P×P pixels. Smaller patches → more tokens → higher cost but finer detail.</text>
+  <text x="400" y="374" text-anchor="middle" font-size="8.5" fill="#6B5D4F">Self-attention cost scales as O(N²·D) where N = number of patches. ViT-B/16 on 224×224 → N = 196 tokens.</text>
+</svg>

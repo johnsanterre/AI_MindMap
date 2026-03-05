@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel 1: Prior (distribution over functions) -->
+  <text x="170" y="26" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">GP PRIOR: MANY POSSIBLE FUNCTIONS</text>
+  <rect x="20" y="34" width="300" height="170" rx="5" fill="#2D5A8E" opacity="0.06" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Sample functions from prior -->
+  <path d="M30,110 Q80,80 130,120 Q180,160 230,100 Q270,60 310,130" stroke="#2D5A8E" stroke-width="1.5" fill="none" opacity="0.35"/>
+  <path d="M30,130 Q80,150 130,105 Q180,70 230,140 Q270,170 310,110" stroke="#2D5A8E" stroke-width="1.5" fill="none" opacity="0.35"/>
+  <path d="M30,90 Q80,110 130,80 Q180,50 230,90 Q270,120 310,80" stroke="#2D5A8E" stroke-width="1.5" fill="none" opacity="0.35"/>
+  <path d="M30,145 Q80,130 130,160 Q180,185 230,150 Q270,125 310,170" stroke="#2D5A8E" stroke-width="1" fill="none" opacity="0.25"/>
+  <path d="M30,75 Q80,60 130,90 Q180,110 230,70 Q270,45 310,60" stroke="#2D5A8E" stroke-width="1" fill="none" opacity="0.20"/>
+  <!-- prior mean -->
+  <path d="M30,120 Q170,120 310,120" stroke="#5C3D1E" stroke-width="1.5" fill="none" stroke-dasharray="6,3"/>
+  <text x="170" y="195" font-family="Georgia,serif" font-size="10" fill="#6B5D4F" text-anchor="middle" font-style="italic">prior: m(x)=0, kernel k(x,x')</text>
+
+  <!-- Panel 2: Posterior (conditioned on data) -->
+  <text x="520" y="26" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">GP POSTERIOR: AFTER OBSERVING DATA</text>
+  <rect x="360" y="34" width="420" height="170" rx="5" fill="#7C2530" opacity="0.06" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Uncertainty band -->
+  <path d="M370,80 Q430,60 490,95 Q540,125 600,85 Q650,55 770,90 L770,150 Q650,120 600,150 Q540,185 490,145 Q430,110 370,130 Z" fill="#7C2530" opacity="0.12"/>
+  <!-- Posterior mean -->
+  <path d="M370,105 Q430,85 490,120 Q540,155 600,117 Q650,88 770,120" stroke="#7C2530" stroke-width="2.2" fill="none"/>
+  <!-- Observation points -->
+  <circle cx="430" cy="86" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="520" cy="130" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="630" cy="95" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Prediction point with wide uncertainty -->
+  <line x1="700" y1="60" x2="700" y2="150" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="700" cy="108" r="4" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="700" y="55" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">predict here</text>
+  <text x="700" y="165" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">+ uncertainty</text>
+  <!-- Labels -->
+  <text x="447" y="80" font-family="Georgia,serif" font-size="9" fill="#5C3D1E">observed</text>
+  <text x="520" y="205" font-family="Georgia,serif" font-size="10" fill="#6B5D4F" text-anchor="middle" font-style="italic">posterior mean ± 2σ  (shaded = 95% CI)</text>
+
+  <!-- Panel 3: Kernels -->
+  <text x="200" y="240" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">KERNEL FUNCTIONS k(x, x')</text>
+  <rect x="20" y="248" width="370" height="135" rx="5" fill="#5C3D1E" opacity="0.06" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- RBF kernel decay curve -->
+  <text x="100" y="268" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">RBF (Squared Exponential)</text>
+  <path d="M30,320 Q50,280 70,270 Q90,262 110,270 Q130,280 150,320" stroke="#5C3D1E" stroke-width="2" fill="none"/>
+  <text x="90" y="340" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">k(x,x')=exp(−r²/2ℓ²)</text>
+  <text x="90" y="356" font-family="Georgia,serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">smooth, infinitely differentiable</text>
+  <text x="90" y="374" font-family="Georgia,serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">ℓ = length scale</text>
+
+  <!-- Matern kernel -->
+  <text x="280" y="268" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Matérn 5/2</text>
+  <path d="M175,320 Q195,282 215,272 Q230,268 245,272 Q265,282 285,320" stroke="#2D5A8E" stroke-width="2" fill="none"/>
+  <text x="240" y="340" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle">less smooth, more realistic</text>
+  <text x="240" y="356" font-family="Georgia,serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">for physical processes</text>
+  <text x="240" y="374" font-family="Georgia,serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">ν=5/2: twice differentiable</text>
+
+  <!-- Panel 4: Cost and sparse GPs -->
+  <text x="590" y="240" font-family="Georgia,serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">COST AND BAYESIAN OPTIMIZATION</text>
+  <rect x="410" y="248" width="370" height="135" rx="5" fill="#C4A87A" opacity="0.10" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <text x="595" y="272" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Computational cost: O(n³)</text>
+  <text x="595" y="290" font-family="Georgia,serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">Cholesky factorization of n×n kernel matrix</text>
+  <text x="595" y="308" font-family="Georgia,serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">Sparse GPs: m inducing points → O(nm²)</text>
+
+  <line x1="420" y1="318" x2="770" y2="318" stroke="#C4A87A" stroke-width="1" opacity="0.5"/>
+
+  <text x="595" y="336" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Bayesian Optimization</text>
+  <text x="595" y="354" font-family="Georgia,serif" font-size="10.5" fill="#7C2530" text-anchor="middle">GP models unknown objective f(x)</text>
+  <text x="595" y="370" font-family="Georgia,serif" font-size="10.5" fill="#7C2530" text-anchor="middle">Acquisition fn. trades exploration/exploit</text>
+  <text x="595" y="385" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">(EI, UCB, Thompson sampling)</text>
+</svg>

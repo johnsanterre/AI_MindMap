@@ -1,0 +1,23 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <!-- Axes -->
+  <line x1="100" y1="320" x2="700" y2="320" stroke="#333" stroke-width="2"/>
+  <line x1="100" y1="320" x2="100" y2="40" stroke="#333" stroke-width="2"/>
+  <text x="400" y="370" text-anchor="middle" font-size="14" fill="#333">Margin: y · f(x)</text>
+  <text x="40" y="185" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,40,185)">Loss</text>
+  <!-- Zero line at margin=1 -->
+  <line x1="400" y1="60" x2="400" y2="330" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+  <text x="402" y="340" font-size="12" fill="#aaa">margin=1</text>
+  <!-- Hinge loss curve -->
+  <path d="M100,320 L400,50 L700,50" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <!-- Hinge fill -->
+  <path d="M100,320 L400,50 L400,320 Z" fill="#E91E63" fill-opacity="0.1"/>
+  <!-- Zero loss region annotation -->
+  <text x="560" y="42" font-size="13" fill="#4CAF50" font-weight="bold">Loss = 0 (correct &amp; confident)</text>
+  <!-- Hinge annotation -->
+  <text x="120" y="230" font-size="13" fill="#E91E63">Loss = max(0, 1 - y·f(x))</text>
+  <!-- Compare MSE -->
+  <path d="M100,320 Q250,320 400,200 Q500,130 700,60" fill="none" stroke="#2196F3" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="580" y="100" font-size="12" fill="#2196F3">MSE (for comparison)</text>
+  <text x="400" y="25" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Hinge Loss</text>
+</svg>

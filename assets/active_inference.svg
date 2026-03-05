@@ -1,0 +1,42 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="360" fill="#FDFAF4"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Active Inference: Free Energy Minimization</text>
+  <defs>
+    <marker id="arrai" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#555"/>
+    </marker>
+    <marker id="arraic" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#C0392B"/>
+    </marker>
+  </defs>
+  <!-- Generative model box -->
+  <rect x="270" y="80" width="260" height="100" rx="12" fill="#EAF4FB" stroke="#2C5F8A" stroke-width="2"/>
+  <text x="400" y="112" text-anchor="middle" fill="#2C5F8A" font-size="15" font-weight="bold">Generative Model</text>
+  <text x="400" y="138" text-anchor="middle" fill="#555" font-size="12">P(o, s) = P(o|s) P(s)</text>
+  <text x="400" y="160" text-anchor="middle" fill="#888" font-size="12">beliefs about world + preferences</text>
+  <!-- Environment -->
+  <rect x="580" y="155" width="160" height="70" rx="10" fill="#F0F8F0" stroke="#4A7C59" stroke-width="2"/>
+  <text x="660" y="188" text-anchor="middle" fill="#4A7C59" font-size="14" font-weight="bold">World</text>
+  <text x="660" y="210" text-anchor="middle" fill="#555" font-size="12">true state s*</text>
+  <!-- Agent -->
+  <rect x="60" y="155" width="160" height="70" rx="10" fill="#FEF3EC" stroke="#E07B39" stroke-width="2"/>
+  <text x="140" y="185" text-anchor="middle" fill="#E07B39" font-size="14" font-weight="bold">Agent</text>
+  <text x="140" y="208" text-anchor="middle" fill="#555" font-size="12">min F (free energy)</text>
+  <!-- Free energy box -->
+  <rect x="270" y="250" width="260" height="70" rx="10" fill="#FDEDEC" stroke="#C0392B" stroke-width="2"/>
+  <text x="400" y="278" text-anchor="middle" fill="#C0392B" font-size="14" font-weight="bold">Free Energy F</text>
+  <text x="400" y="300" text-anchor="middle" fill="#555" font-size="12">= Complexity − Accuracy</text>
+  <text x="400" y="318" text-anchor="middle" fill="#888" font-size="11">≥ Surprise (upper bound)</text>
+  <!-- Arrows: observations -->
+  <line x1="578" y1="180" x2="402" y2="165" stroke="#4A7C59" stroke-width="2.5" marker-end="url(#arrai)"/>
+  <text x="495" y="160" fill="#4A7C59" font-size="12">observations o</text>
+  <!-- Arrows: actions -->
+  <line x1="220" y1="200" x2="578" y2="200" stroke="#E07B39" stroke-width="2.5" stroke-dasharray="0" marker-end="url(#arrai)"/>
+  <text x="395" y="215" fill="#E07B39" font-size="12">actions a</text>
+  <!-- Inference arrow down -->
+  <line x1="350" y1="182" x2="350" y2="248" stroke="#C0392B" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arraic)"/>
+  <line x1="450" y1="182" x2="450" y2="248" stroke="#C0392B" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arraic)"/>
+  <text x="490" y="225" fill="#C0392B" font-size="11">minimize F</text>
+  <!-- Generative model to agent -->
+  <line x1="270" y1="170" x2="222" y2="180" stroke="#2C5F8A" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrai)"/>
+</svg>

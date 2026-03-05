@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="gand-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="gand-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="gand-arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="gand-arr-red-back" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto">
+      <polygon points="8 0, 0 3, 8 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="26" text-anchor="middle" font-size="13" fill="#5C3D1E" letter-spacing="1.5">GENERATIVE ADVERSARIAL NETWORKS</text>
+
+  <!-- ══ NOISE INPUT ══ -->
+  <rect x="16" y="54" width="100" height="80" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="66" y="72" text-anchor="middle" font-size="9" fill="#6B5D4F" letter-spacing="0.5">NOISE INPUT</text>
+  <!-- Wavy noise lines -->
+  <path d="M26 88 Q36 80 46 88 Q56 96 66 88 Q76 80 86 88 Q96 96 106 88" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <path d="M26 100 Q36 92 46 100 Q56 108 66 100 Q76 92 86 100 Q96 108 106 100" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <path d="M26 112 Q36 104 46 112 Q56 120 66 112 Q76 104 86 112 Q96 120 106 112" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="66" y="143" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">z ~ N(0,1)</text>
+  <text x="66" y="155" text-anchor="middle" font-size="7.5" fill="#6B5D4F">latent dim 100</text>
+
+  <!-- Arrow noise → G -->
+  <line x1="118" y1="94" x2="148" y2="94" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#gand-arr-brown)"/>
+
+  <!-- ══ GENERATOR ══ -->
+  <rect x="150" y="42" width="170" height="160" rx="4" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="235" y="60" text-anchor="middle" font-size="12" fill="#2D5A8E" font-weight="bold" letter-spacing="1">GENERATOR</text>
+  <text x="235" y="74" text-anchor="middle" font-size="8" fill="#6B5D4F">G(z; θ_G)</text>
+  <!-- Upsampling layers -->
+  <rect x="162" y="80" width="146" height="20" rx="2" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="235" y="94" text-anchor="middle" font-size="8" fill="#2D5A8E">Linear: 100 → 512×4×4</text>
+  <rect x="168" y="105" width="134" height="20" rx="2" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="235" y="119" text-anchor="middle" font-size="8" fill="#2D5A8E">TransposeConv 512→256, 8×8</text>
+  <rect x="174" y="130" width="122" height="20" rx="2" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="235" y="144" text-anchor="middle" font-size="8" fill="#2D5A8E">TransposeConv 256→128, 16×16</text>
+  <rect x="180" y="155" width="110" height="20" rx="2" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="235" y="169" text-anchor="middle" font-size="8" fill="#2D5A8E">TransposeConv 128→3, 64×64</text>
+  <text x="235" y="193" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-style="italic">BatchNorm + ReLU (tanh final)</text>
+
+  <!-- Arrow G → fake image -->
+  <line x1="322" y1="122" x2="352" y2="122" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#gand-arr-blue)"/>
+
+  <!-- ══ FAKE IMAGE ══ -->
+  <rect x="354" y="80" width="90" height="84" rx="3" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="399" y="96" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-weight="bold">Fake Image</text>
+  <!-- fake face placeholder -->
+  <ellipse cx="399" cy="136" rx="28" ry="22" fill="#E8D5B0" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="391" cy="131" r="3" fill="#5C3D1E"/>
+  <circle cx="407" cy="131" r="3" fill="#5C3D1E"/>
+  <path d="M392 142 Q399 148 406 142" fill="none" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="399" y="172" text-anchor="middle" font-size="7.5" fill="#6B5D4F" font-style="italic">G(z)</text>
+
+  <!-- ══ REAL IMAGE ══ -->
+  <rect x="354" y="220" width="90" height="84" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="399" y="236" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">Real Image</text>
+  <!-- real face placeholder -->
+  <ellipse cx="399" cy="276" rx="28" ry="22" fill="#C4A87A" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="391" cy="271" r="3" fill="#5C3D1E"/>
+  <circle cx="407" cy="271" r="3" fill="#5C3D1E"/>
+  <path d="M392 282 Q399 288 406 282" fill="none" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="399" y="310" text-anchor="middle" font-size="7.5" fill="#6B5D4F" font-style="italic">x ~ p_data</text>
+
+  <!-- Arrows into D -->
+  <line x1="446" y1="122" x2="484" y2="170" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#gand-arr-blue)"/>
+  <line x1="446" y1="262" x2="484" y2="220" stroke="#7C2530" stroke-width="1.5" marker-end="url(#gand-arr)"/>
+
+  <!-- ══ DISCRIMINATOR ══ -->
+  <rect x="486" y="92" width="170" height="200" rx="4" fill="#EDE5D0" stroke="#7C2530" stroke-width="2"/>
+  <text x="571" y="112" text-anchor="middle" font-size="12" fill="#7C2530" font-weight="bold" letter-spacing="1">DISCRIMINATOR</text>
+  <text x="571" y="126" text-anchor="middle" font-size="8" fill="#6B5D4F">D(x; θ_D)</text>
+  <!-- Conv layers -->
+  <rect x="498" y="132" width="146" height="20" rx="2" fill="#F5EAEA" stroke="#7C2530" stroke-width="1"/>
+  <text x="571" y="146" text-anchor="middle" font-size="8" fill="#7C2530">Conv 3→64, 32×32 (stride 2)</text>
+  <rect x="504" y="157" width="134" height="20" rx="2" fill="#F5EAEA" stroke="#7C2530" stroke-width="1"/>
+  <text x="571" y="171" text-anchor="middle" font-size="8" fill="#7C2530">Conv 64→128, 16×16</text>
+  <rect x="510" y="182" width="122" height="20" rx="2" fill="#F5EAEA" stroke="#7C2530" stroke-width="1"/>
+  <text x="571" y="196" text-anchor="middle" font-size="8" fill="#7C2530">Conv 128→256, 8×8</text>
+  <rect x="516" y="207" width="110" height="20" rx="2" fill="#F5EAEA" stroke="#7C2530" stroke-width="1"/>
+  <text x="571" y="221" text-anchor="middle" font-size="8" fill="#7C2530">Linear → 1 (scalar)</text>
+  <text x="571" y="240" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">LeakyReLU, no BatchNorm</text>
+  <!-- Output -->
+  <rect x="520" y="252" width="102" height="28" rx="3" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="571" y="264" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">Real or Fake?</text>
+  <text x="571" y="276" text-anchor="middle" font-size="8" fill="#F5EAEA">sigmoid → [0, 1]</text>
+
+  <!-- Arrow D → verdict -->
+  <line x1="658" y1="192" x2="692" y2="192" stroke="#7C2530" stroke-width="1.5" marker-end="url(#gand-arr)"/>
+  <rect x="694" y="174" width="88" height="36" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="738" y="189" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">D(x) ≈ 1</text>
+  <text x="738" y="202" text-anchor="middle" font-size="8" fill="#5C3D1E">real → 1</text>
+  <text x="738" y="212" text-anchor="middle" font-size="8" fill="#5C3D1E">fake → 0</text>
+
+  <!-- Gradient feedback arrows -->
+  <path d="M 571 280 Q 571 340 400 360 Q 235 380 235 205" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#gand-arr)"/>
+  <text x="400" y="355" text-anchor="middle" font-size="8.5" fill="#7C2530" font-style="italic">∇θ_G loss — generator tries to fool D</text>
+  <path d="M 571 280 Q 600 320 680 300 Q 750 284 750 240 Q 750 216 682 200" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#gand-arr-blue)"/>
+  <text x="700" y="332" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-style="italic">∇θ_D loss — discriminator updates</text>
+
+  <!-- ══ MINIMAX OBJECTIVE ══ -->
+  <rect x="16" y="320" width="325" height="62" rx="4" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="178" y="337" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Minimax Objective</text>
+  <text x="178" y="353" text-anchor="middle" font-size="8.5" fill="#5C3D1E">min_G max_D V(D,G) =</text>
+  <text x="178" y="367" text-anchor="middle" font-size="8.5" fill="#5C3D1E">𝔼[log D(x)] + 𝔼[log(1 − D(G(z)))]</text>
+  <text x="178" y="378" text-anchor="middle" font-size="7.5" fill="#6B5D4F" font-style="italic">D maximizes; G minimizes (adversarial)</text>
+</svg>

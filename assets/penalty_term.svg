@@ -1,0 +1,87 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- ── LEFT PANEL: L1 diamond ── -->
+  <text x="200" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">L1 PENALTY (LASSO)</text>
+
+  <!-- Loss contours centered at (310, 130) -->
+  <ellipse cx="310" cy="130" rx="170" ry="110" fill="none" stroke="#C47B35" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="130" rx="120" ry="77"  fill="none" stroke="#C47B35" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="130" rx="70"  cy="130" ry="44"  fill="none" stroke="#C47B35" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="130" rx="28"  ry="18"  fill="none" stroke="#C47B35" stroke-width="1.6" stroke-dasharray="5,3"/>
+
+  <!-- OLS unconstrained minimum -->
+  <circle cx="310" cy="130" r="5" fill="#C47B35"/>
+  <text x="318" y="125" font-size="10" fill="#C47B35">OLS min</text>
+
+  <!-- L1 constraint diamond -->
+  <polygon points="200,90 270,165 200,240 130,165" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="200" y="272" text-anchor="middle" font-size="10" fill="#2D5A8E">L1 ball  |w₁|+|w₂| ≤ t</text>
+
+  <!-- Axes through diamond -->
+  <line x1="80" y1="165" x2="320" y2="165" stroke="#aaa" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="200" y1="50"  x2="200" y2="280" stroke="#aaa" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="322" y="169" font-size="10" fill="#888">w₁</text>
+  <text x="196" y="44"  font-size="10" fill="#888">w₂</text>
+
+  <!-- Solution at corner — sparsity -->
+  <circle cx="200" cy="90" r="6" fill="#7C2530"/>
+  <text x="208" y="83" font-size="10" fill="#7C2530" font-weight="bold">solution</text>
+  <text x="208" y="95" font-size="9"  fill="#7C2530">(corner → sparse!)</text>
+
+  <!-- Arrow from OLS min toward corner -->
+  <line x1="310" y1="130" x2="208" y2="97" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+  <!-- ── RIGHT PANEL: L2 circle ── -->
+  <text x="590" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1">L2 PENALTY (RIDGE)</text>
+
+  <!-- Loss contours centered at (700, 130) -->
+  <ellipse cx="700" cy="130" rx="150" ry="100" fill="none" stroke="#C47B35" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <ellipse cx="700" cy="130" rx="105" ry="70"  fill="none" stroke="#C47B35" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <ellipse cx="700" cy="130" rx="60"  ry="40"  fill="none" stroke="#C47B35" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <ellipse cx="700" cy="130" rx="25"  ry="17"  fill="none" stroke="#C47B35" stroke-width="1.6" stroke-dasharray="5,3"/>
+
+  <!-- OLS unconstrained minimum -->
+  <circle cx="700" cy="130" r="5" fill="#C47B35"/>
+  <text x="708" y="125" font-size="10" fill="#C47B35">OLS min</text>
+
+  <!-- L2 constraint circle -->
+  <circle cx="590" cy="165" r="75" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="590" y="272" text-anchor="middle" font-size="10" fill="#2D5A8E">L2 ball  w₁²+w₂² ≤ t</text>
+
+  <!-- Axes -->
+  <line x1="465" y1="165" x2="720" y2="165" stroke="#aaa" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="590" y1="50"  x2="590" y2="280" stroke="#aaa" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="722" y="169" font-size="10" fill="#888">w₁</text>
+  <text x="586" y="44"  font-size="10" fill="#888">w₂</text>
+
+  <!-- L2 solution on curved boundary — no corner, not exactly sparse -->
+  <circle cx="630" cy="97" r="6" fill="#7C2530"/>
+  <text x="638" y="91" font-size="10" fill="#7C2530" font-weight="bold">solution</text>
+  <text x="638" y="103" font-size="9"  fill="#7C2530">(smooth — not sparse)</text>
+
+  <!-- Arrow from OLS min toward L2 solution -->
+  <line x1="700" y1="130" x2="638" y2="101" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+  <!-- ── BOTTOM BANNER ── -->
+  <rect x="0" y="310" width="800" height="90" fill="#F8F4EE"/>
+  <line x1="0" y1="310" x2="800" y2="310" stroke="#D4C5A9" stroke-width="1.2"/>
+
+  <!-- Loss equation -->
+  <text x="400" y="338" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Total Loss  =  Data Fit  +  λ · Penalty</text>
+  <text x="200" y="362" text-anchor="middle" font-size="11" fill="#2D5A8E">L1:  λ Σ|wᵢ|  →  sparse weights</text>
+  <text x="590" y="362" text-anchor="middle" font-size="11" fill="#2D5A8E">L2:  λ Σwᵢ²   →  small weights</text>
+
+  <!-- Loss-contour legend -->
+  <line x1="310" y1="385" x2="345" y2="385" stroke="#C47B35" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="350" y="389" font-size="10" fill="#C47B35">loss contours</text>
+  <rect x="430" y="380" width="14" height="9" fill="#2D5A8E" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="449" y="389" font-size="10" fill="#2D5A8E">constraint region</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

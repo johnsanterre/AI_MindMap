@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#7C2530" text-anchor="middle">Meta-Learning: Learning to Learn</text>
+
+  <!-- Central node: Meta-Learner -->
+  <ellipse cx="400" cy="200" rx="80" ry="44" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="196" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Meta-Learner</text>
+  <text x="400" y="212" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">(learns strategy)</text>
+
+  <!-- Task 1 -->
+  <rect x="60" y="80" width="130" height="64" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="125" y="106" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task 1</text>
+  <text x="125" y="122" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">e.g. dog vs. cat</text>
+  <text x="125" y="136" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">5 examples</text>
+
+  <!-- Task 2 -->
+  <rect x="60" y="180" width="130" height="64" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="125" y="206" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task 2</text>
+  <text x="125" y="222" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">e.g. chair vs. table</text>
+  <text x="125" y="236" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">5 examples</text>
+
+  <!-- Task 3 -->
+  <rect x="60" y="280" width="130" height="64" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="125" y="306" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Task 3</text>
+  <text x="125" y="322" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">e.g. rose vs. tulip</text>
+  <text x="125" y="336" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">5 examples</text>
+
+  <!-- Arrows from tasks to meta-learner -->
+  <line x1="190" y1="112" x2="322" y2="180" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="190" y1="212" x2="320" y2="200" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="190" y1="312" x2="322" y2="222" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- New task box -->
+  <rect x="590" y="160" width="160" height="80" rx="8" fill="#5C3D1E" stroke="#C4A87A" stroke-width="2"/>
+  <text x="670" y="192" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">New Task</text>
+  <text x="670" y="210" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">e.g. orchid vs. iris</text>
+  <text x="670" y="226" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">adapts in ~5 steps</text>
+
+  <!-- Arrow from meta-learner to new task -->
+  <line x1="480" y1="200" x2="588" y2="200" stroke="#7C2530" stroke-width="2.2" marker-end="url(#arrowred)"/>
+  <text x="534" y="190" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">fast adapt</text>
+
+  <!-- Inner loop / outer loop labels -->
+  <text x="125" y="66" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E" text-anchor="middle">Inner Loop (task-specific)</text>
+  <text x="400" y="370" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E" text-anchor="middle">Outer Loop — meta-objective optimizes initialization across all tasks</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

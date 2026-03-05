@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">ELU vs ReLU Activation Functions</text>
+
+  <!-- Grid lines (light) -->
+  <!-- Vertical grid -->
+  <line x1="160" y1="60" x2="160" y2="340" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="240" y1="60" x2="240" y2="340" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="320" y1="60" x2="320" y2="340" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="480" y1="60" x2="480" y2="340" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="560" y1="60" x2="560" y2="340" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="640" y1="60" x2="640" y2="340" stroke="#e0e0e0" stroke-width="1"/>
+  <!-- Horizontal grid -->
+  <line x1="80" y1="120" x2="720" y2="120" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="80" y1="200" x2="720" y2="200" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="80" y1="280" x2="720" y2="280" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Axes -->
+  <line x1="80" y1="200" x2="720" y2="200" stroke="#555" stroke-width="1.5"/>
+  <line x1="400" y1="60" x2="400" y2="340" stroke="#555" stroke-width="1.5"/>
+
+  <!-- Axis arrows -->
+  <polygon points="720,200 710,195 710,205" fill="#555"/>
+  <polygon points="400,60 395,70 405,70" fill="#555"/>
+
+  <!-- Axis labels -->
+  <text x="730" y="204" font-family="Arial" font-size="15" fill="#444" font-style="italic">x</text>
+  <text x="408" y="58" font-family="Arial" font-size="15" fill="#444" font-style="italic">f(x)</text>
+
+  <!-- Tick labels on x-axis -->
+  <text x="160" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#777">-3</text>
+  <text x="240" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#777">-2</text>
+  <text x="320" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#777">-1</text>
+  <text x="480" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#777">1</text>
+  <text x="560" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#777">2</text>
+  <text x="640" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#777">3</text>
+
+  <!-- Tick labels on y-axis -->
+  <text x="388" y="124" text-anchor="end" font-family="Arial" font-size="11" fill="#777">2</text>
+  <text x="388" y="204" text-anchor="end" font-family="Arial" font-size="11" fill="#777">0</text>
+  <text x="388" y="284" text-anchor="end" font-family="Arial" font-size="11" fill="#777">-1</text>
+
+  <!-- Tick marks -->
+  <line x1="160" y1="197" x2="160" y2="203" stroke="#555" stroke-width="1.5"/>
+  <line x1="240" y1="197" x2="240" y2="203" stroke="#555" stroke-width="1.5"/>
+  <line x1="320" y1="197" x2="320" y2="203" stroke="#555" stroke-width="1.5"/>
+  <line x1="480" y1="197" x2="480" y2="203" stroke="#555" stroke-width="1.5"/>
+  <line x1="560" y1="197" x2="560" y2="203" stroke="#555" stroke-width="1.5"/>
+  <line x1="640" y1="197" x2="640" y2="203" stroke="#555" stroke-width="1.5"/>
+  <line x1="397" y1="120" x2="403" y2="120" stroke="#555" stroke-width="1.5"/>
+  <line x1="397" y1="280" x2="403" y2="280" stroke="#555" stroke-width="1.5"/>
+
+  <!-- α asymptote line (dashed, for ELU) -->
+  <!-- y = -1 is at pixel y = 200 + 80 = 280 -->
+  <line x1="90" y1="280" x2="400" y2="280" stroke="#e0a020" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <text x="92" y="274" font-family="Arial" font-size="11" fill="#b07800">α = 1 asymptote</text>
+
+  <!-- ReLU curve: flat at y=200 for x<0 (left of x=0=pixel 400), then linear up for x>0 -->
+  <!-- x range: pixel 80 to 720, x=0 at pixel 400, scale: 80px per unit -->
+  <!-- For x<0: f(x)=0 → pixel y=200 -->
+  <!-- For x>0: f(x)=x → at x=3 (pixel 640), f=3, pixel y=200-3*80=200-240=-40 (clip to 60) -->
+  <!-- line from (80,200) to (400,200) then up: at x=3 pixel 640, y=200-240=-40, clip at y=60 -->
+  <!-- x at y=60: f=1.75, pixel x = 400+1.75*80 = 540 -->
+  <polyline
+    points="80,200 400,200 540,60"
+    fill="none"
+    stroke="#4a90d9"
+    stroke-width="3"
+    stroke-linejoin="round"/>
+
+  <!-- ELU curve: for x>0 same as ReLU (linear); for x<0: f(x) = α(e^x - 1), α=1 -->
+  <!-- Curve data points (pixel coords): -->
+  <!-- x=-3 (px=160): f=e^-3-1 ≈ -0.950, py=200+0.950*80=276 -->
+  <!-- x=-2.5 (px=200): f=e^-2.5-1 ≈ -0.918, py=200+0.918*80=273 -->
+  <!-- x=-2 (px=240): f=e^-2-1 ≈ -0.865, py=200+0.865*80=269 -->
+  <!-- x=-1.5 (px=280): f=e^-1.5-1 ≈ -0.777, py=200+0.777*80=262 -->
+  <!-- x=-1 (px=320): f=e^-1-1 ≈ -0.632, py=200+0.632*80=251 -->
+  <!-- x=-0.5 (px=360): f=e^-0.5-1 ≈ -0.393, py=200+0.393*80=231 -->
+  <!-- x=0 (px=400): f=0, py=200 -->
+  <!-- x=0.5 (px=440): f=0.5, py=200-40=160 -->
+  <!-- x=1 (px=480): f=1, py=200-80=120 -->
+  <!-- x=1.75 (px=540): f=1.75, py=200-140=60 -->
+  <polyline
+    points="160,276 200,273 240,269 280,262 320,251 360,231 400,200 440,160 480,120 540,60"
+    fill="none"
+    stroke="#e05c2a"
+    stroke-width="3"
+    stroke-linejoin="round"/>
+
+  <!-- Legend box -->
+  <rect x="468" y="290" width="224" height="68" rx="6" fill="white" stroke="#ccc" stroke-width="1"/>
+  <!-- ReLU legend -->
+  <line x1="480" y1="311" x2="510" y2="311" stroke="#4a90d9" stroke-width="3"/>
+  <text x="518" y="315" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">ReLU</text>
+  <text x="567" y="315" font-family="Arial" font-size="12" fill="#555">  max(0, x)</text>
+  <!-- ELU legend -->
+  <line x1="480" y1="339" x2="510" y2="339" stroke="#e05c2a" stroke-width="3"/>
+  <text x="518" y="343" font-family="Arial" font-size="13" font-weight="bold" fill="#e05c2a">ELU</text>
+  <text x="556" y="343" font-family="Arial" font-size="12" fill="#555">  α(eˣ−1) if x&lt;0</text>
+
+  <!-- Annotation: negative saturation region -->
+  <text x="108" y="300" font-family="Arial" font-size="11" fill="#e05c2a">smooth</text>
+  <text x="100" y="313" font-family="Arial" font-size="11" fill="#e05c2a">negative</text>
+  <text x="101" y="326" font-family="Arial" font-size="11" fill="#e05c2a">region</text>
+
+  <!-- Annotation: dead zone -->
+  <text x="210" y="185" font-family="Arial" font-size="11" fill="#4a90d9">dead zone</text>
+  <text x="216" y="198" font-family="Arial" font-size="11" fill="#4a90d9">(ReLU flat)</text>
+  <line x1="265" y1="193" x2="310" y2="200" stroke="#4a90d9" stroke-width="1" stroke-dasharray="3,3"/>
+</svg>

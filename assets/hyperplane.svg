@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="arr-normal" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-normal3d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel divider -->
+  <line x1="400" y1="22" x2="400" y2="378" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ══ PANEL 1: 2D CASE ══ -->
+  <text x="200" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">2D — LINE DIVIDES PLANE</text>
+
+  <!-- Axes -->
+  <line x1="28" y1="340" x2="375" y2="340" stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+  <line x1="28" y1="344" x2="28"  y2="32"  stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+  <text x="370" y="355" font-size="9" fill="#6B5D4F">x₁</text>
+  <text x="18"  y="30"  font-size="9" fill="#6B5D4F">x₂</text>
+
+  <!-- Shaded half-planes -->
+  <!-- Hyperplane: roughly from (40,320) to (360,60) -->
+  <!-- Above/left region (blue) -->
+  <polygon points="28,32 28,320 40,320 360,60 360,32" fill="#2D5A8E" fill-opacity="0.07"/>
+  <!-- Below/right region (red) -->
+  <polygon points="40,320 360,60 360,340 28,340 28,320" fill="#7C2530" fill-opacity="0.07"/>
+
+  <!-- Hyperplane line -->
+  <line x1="40" y1="320" x2="360" y2="60" stroke="#5C3D1E" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="362" y="57" font-size="9" fill="#5C3D1E" font-style="italic">w·x + b = 0</text>
+
+  <!-- Normal vector -->
+  <!-- Midpoint of line ≈ (200, 190); normal direction perp to (320,-260) is (260,320), normalized -->
+  <!-- Unit normal ≈ (0.63, 0.77), scale by 60 → (38, 46) -->
+  <line x1="200" y1="190" x2="238" y2="144" stroke="#7C2530" stroke-width="2"
+        marker-end="url(#arr-normal)"/>
+  <text x="243" y="140" font-size="9" fill="#7C2530" font-weight="bold">w</text>
+  <text x="220" y="136" font-size="8" fill="#7C2530">(normal)</text>
+
+  <!-- Class A points (blue circles — upper-left side) -->
+  <circle cx="80"  cy="120" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="110" cy="80"  r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="60"  cy="200" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="130" cy="140" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="90"  cy="60"  r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="50"  cy="155" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Class B points (red circles — lower-right side) -->
+  <circle cx="290" cy="260" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="320" cy="300" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="260" cy="290" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="340" cy="240" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="300" cy="320" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="350" cy="295" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+
+  <!-- Class labels -->
+  <text x="68"  y="248" font-size="9" fill="#2D5A8E">Class A</text>
+  <text x="265" y="208" font-size="9" fill="#7C2530">Class B</text>
+
+  <!-- ══ PANEL 2: 3D CASE ══ -->
+  <text x="600" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">3D — PLANE DIVIDES SPACE</text>
+
+  <!-- 3D axes (isometric-ish) -->
+  <!-- Origin at (500, 300) -->
+  <!-- x-axis going right -->
+  <line x1="500" y1="300" x2="720" y2="300" stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+  <text x="724" y="304" font-size="9" fill="#6B5D4F">x₁</text>
+  <!-- y-axis going up -->
+  <line x1="500" y1="300" x2="500" y2="60"  stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+  <text x="491" y="56"  font-size="9" fill="#6B5D4F">x₂</text>
+  <!-- z-axis going lower-left (depth) -->
+  <line x1="500" y1="300" x2="425" y2="355" stroke="#C4A87A" stroke-width="1.3" marker-end="url(#arr-axis)"/>
+  <text x="414" y="368" font-size="9" fill="#6B5D4F">x₃</text>
+
+  <!-- Hyperplane as a parallelogram in 3D perspective -->
+  <!-- Four corners of the tilted plane, visible as a quadrilateral -->
+  <!-- Tilted plane: tilt forward and slightly left -->
+  <polygon points="510,200 700,160 680,310 490,350"
+           fill="#C4A87A" fill-opacity="0.18" stroke="#5C3D1E" stroke-width="1.8"/>
+
+  <!-- Plane label -->
+  <text x="605" y="222" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">w·x + b = 0</text>
+
+  <!-- Normal vector to 3D plane -->
+  <!-- Attach at center of plane ≈ (595, 255) -->
+  <!-- Normal pointing upper-right out of plane -->
+  <line x1="595" y1="255" x2="648" y2="185" stroke="#7C2530" stroke-width="2"
+        marker-end="url(#arr-normal3d)"/>
+  <text x="653" y="182" font-size="9" fill="#7C2530" font-weight="bold">w</text>
+  <text x="625" y="175" font-size="8" fill="#7C2530">(normal)</text>
+
+  <!-- Points above the plane (blue) -->
+  <circle cx="540" cy="130" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="580" cy="105" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="520" cy="160" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="615" cy="120" r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="560" cy="80"  r="6" fill="#2D5A8E" fill-opacity="0.75" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Points below the plane (red) -->
+  <circle cx="660" cy="330" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="700" cy="350" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="630" cy="355" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="680" cy="375" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="715" cy="310" r="6" fill="#7C2530" fill-opacity="0.75" stroke="#7C2530" stroke-width="1"/>
+
+  <!-- Class labels 3D panel -->
+  <text x="510" y="92" font-size="9" fill="#2D5A8E">Class A</text>
+  <text x="700" y="375" font-size="9" fill="#7C2530">Class B</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="393" text-anchor="middle" font-size="9" fill="#6B5D4F">
+    In n dimensions a hyperplane has dimension n−1 — a line in 2D, a plane in 3D, a flat subspace beyond that
+  </text>
+</svg>

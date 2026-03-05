@@ -1,0 +1,29 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Emergent Behaviors in Large Models</text>
+  <!-- X axis: model scale (log) -->
+  <line x1="80" y1="320" x2="720" y2="320" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="320" x2="80" y2="50" stroke="#333" stroke-width="2"/>
+  <text x="400" y="360" text-anchor="middle" font-size="13" fill="#333">Model Scale (parameters, log scale)</text>
+  <text x="30" y="185" text-anchor="middle" font-size="13" fill="#333" transform="rotate(-90,30,185)">Capability</text>
+  <!-- Flat region -->
+  <line x1="80" y1="310" x2="380" y2="308" stroke="#aaa" stroke-width="2"/>
+  <text x="230" y="300" text-anchor="middle" font-size="12" fill="#888">random performance</text>
+  <!-- Sharp emergence point -->
+  <line x1="380" y1="308" x2="390" y2="180" stroke="#E91E63" stroke-width="3"/>
+  <line x1="390" y1="180" x2="720" y2="100" stroke="#E91E63" stroke-width="3"/>
+  <circle cx="385" cy="244" r="7" fill="#E91E63"/>
+  <text x="395" y="240" font-size="12" fill="#E91E63" font-weight="bold">emergence threshold</text>
+  <!-- Second capability -->
+  <line x1="80" y1="315" x2="510" y2="312" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="510" y1="312" x2="520" y2="200" stroke="#2196F3" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <line x1="520" y1="200" x2="720" y2="140" stroke="#2196F3" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <circle cx="515" cy="256" r="6" fill="#2196F3"/>
+  <!-- Labels -->
+  <text x="600" y="95" font-size="12" fill="#E91E63">few-shot reasoning</text>
+  <text x="600" y="135" font-size="12" fill="#2196F3">chain-of-thought</text>
+  <!-- Annotation -->
+  <rect x="80" y="50" width="280" height="55" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="220" y="72" text-anchor="middle" font-size="12" fill="#FF9800" font-weight="bold">Emergence: unpredictable</text>
+  <text x="220" y="92" text-anchor="middle" font-size="12" fill="#555">capability from scale alone</text>
+</svg>

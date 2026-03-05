@@ -1,0 +1,109 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" fill="#333" font-size="17" font-weight="bold">Evaluation Metrics: From Confusion Matrix to Key Scores</text>
+
+  <!-- === LEFT: Confusion Matrix === -->
+  <!-- Outer border -->
+  <rect x="40" y="55" width="280" height="280" rx="8" fill="white" stroke="#555" stroke-width="2"/>
+
+  <!-- Column header row background -->
+  <rect x="40" y="55" width="280" height="45" rx="8" fill="#E8EEF4"/>
+  <rect x="40" y="80" width="280" height="20" fill="#E8EEF4"/>
+
+  <!-- Row header col background -->
+  <rect x="40" y="55" width="60" height="280" rx="8" fill="#F4EEE8"/>
+  <rect x="60" y="55" width="40" height="280" fill="#F4EEE8"/>
+
+  <!-- Grid lines -->
+  <line x1="180" y1="55" x2="180" y2="335" stroke="#888" stroke-width="1.5"/>
+  <line x1="40" y1="195" x2="320" y2="195" stroke="#888" stroke-width="1.5"/>
+
+  <!-- Column headers -->
+  <text x="180" y="72" text-anchor="middle" fill="#444" font-size="13" font-weight="bold">Predicted</text>
+  <text x="110" y="90" text-anchor="middle" fill="#2C5F8A" font-size="12" font-weight="bold">Positive</text>
+  <text x="250" y="90" text-anchor="middle" fill="#8B2222" font-size="12" font-weight="bold">Negative</text>
+
+  <!-- Row headers (rotated) -->
+  <text x="62" y="195" text-anchor="middle" fill="#444" font-size="13" font-weight="bold" transform="rotate(-90,62,195)">Actual</text>
+  <text x="82" y="155" text-anchor="middle" fill="#2C5F8A" font-size="11" font-weight="bold" transform="rotate(-90,82,155)">Positive</text>
+  <text x="82" y="272" text-anchor="middle" fill="#8B2222" font-size="11" font-weight="bold" transform="rotate(-90,82,272)">Negative</text>
+
+  <!-- TP cell -->
+  <rect x="100" y="100" width="80" height="90" fill="#D4EDDA"/>
+  <text x="140" y="145" text-anchor="middle" fill="#2C5F8A" font-size="22" font-weight="bold">TP</text>
+  <text x="140" y="165" text-anchor="middle" fill="#555" font-size="10">True Positive</text>
+
+  <!-- FP cell -->
+  <rect x="180" y="100" width="140" height="90" fill="#FAD7D7"/>
+  <text x="250" y="145" text-anchor="middle" fill="#8B2222" font-size="22" font-weight="bold">FP</text>
+  <text x="250" y="165" text-anchor="middle" fill="#555" font-size="10">False Positive</text>
+
+  <!-- FN cell -->
+  <rect x="100" y="195" width="80" height="90" fill="#FAD7D7"/>
+  <text x="140" y="240" text-anchor="middle" fill="#8B2222" font-size="22" font-weight="bold">FN</text>
+  <text x="140" y="260" text-anchor="middle" fill="#555" font-size="10">False Negative</text>
+
+  <!-- TN cell -->
+  <rect x="180" y="195" width="140" height="90" fill="#F0F0F0"/>
+  <text x="250" y="240" text-anchor="middle" fill="#555" font-size="22" font-weight="bold">TN</text>
+  <text x="250" y="260" text-anchor="middle" fill="#555" font-size="10">True Negative</text>
+
+  <!-- Small label underneath -->
+  <text x="180" y="350" text-anchor="middle" fill="#888" font-size="11">Confusion Matrix</text>
+
+  <!-- === ARROWS === -->
+  <!-- Arrow to Precision (from TP and FP) -->
+  <line x1="320" y1="145" x2="380" y2="120" stroke="#2C5F8A" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
+  <!-- Arrow to Recall (from TP and FN) -->
+  <line x1="140" y1="335" x2="380" y2="220" stroke="#4A7C59" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
+  <!-- Arrow to Accuracy (from all four) -->
+  <line x1="320" y1="290" x2="380" y2="310" stroke="#777" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGray)"/>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2C5F8A"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4A7C59"/>
+    </marker>
+    <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#777"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C06010"/>
+    </marker>
+  </defs>
+
+  <!-- === RIGHT: Metric boxes === -->
+
+  <!-- Precision box -->
+  <rect x="380" y="60" width="390" height="68" rx="6" fill="#EAF0FA" stroke="#2C5F8A" stroke-width="1.5"/>
+  <text x="400" y="82" fill="#2C5F8A" font-size="14" font-weight="bold">Precision</text>
+  <text x="400" y="100" fill="#333" font-size="13">= TP / (TP + FP)</text>
+  <text x="400" y="118" fill="#666" font-size="11">Of all predicted positives, how many are actually positive?</text>
+
+  <!-- Recall box -->
+  <rect x="380" y="145" width="390" height="68" rx="6" fill="#E8F4EC" stroke="#4A7C59" stroke-width="1.5"/>
+  <text x="400" y="167" fill="#4A7C59" font-size="14" font-weight="bold">Recall  (Sensitivity / TPR)</text>
+  <text x="400" y="185" fill="#333" font-size="13">= TP / (TP + FN)</text>
+  <text x="400" y="203" fill="#666" font-size="11">Of all actual positives, how many did we catch?</text>
+
+  <!-- F1 box -->
+  <rect x="380" y="230" width="390" height="68" rx="6" fill="#FDF3E7" stroke="#C06010" stroke-width="1.5"/>
+  <text x="400" y="252" fill="#C06010" font-size="14" font-weight="bold">F1 Score</text>
+  <text x="400" y="270" fill="#333" font-size="13">= 2 · Precision · Recall / (Precision + Recall)</text>
+  <text x="400" y="288" fill="#666" font-size="11">Harmonic mean — penalizes extreme imbalance between P and R</text>
+
+  <!-- Arrow from precision+recall to F1 -->
+  <line x1="575" y1="213" x2="575" y2="228" stroke="#C06010" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+
+  <!-- Accuracy box -->
+  <rect x="380" y="315" width="390" height="55" rx="6" fill="#F5F5F5" stroke="#888" stroke-width="1.5"/>
+  <text x="400" y="337" fill="#555" font-size="14" font-weight="bold">Accuracy</text>
+  <text x="400" y="355" fill="#333" font-size="13">= (TP + TN) / (TP + FP + FN + TN)</text>
+  <text x="400" y="370" fill="#888" font-size="10">Misleading when classes are imbalanced</text>
+</svg>

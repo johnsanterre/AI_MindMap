@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Arial,sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">The Mean as a Minimizer: L2 vs L1 Loss</text>
+
+  <!-- ===== LEFT PANEL: L2 / Parabola minimized by the mean ===== -->
+  <text x="190" y="58" text-anchor="middle" font-size="13" font-weight="bold" fill="#2563EB">L2 Loss — Minimized by the Mean</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="340" x2="360" y2="340" stroke="#555" stroke-width="1.5"/>
+  <line x1="40" y1="340" x2="40" y2="75" stroke="#555" stroke-width="1.5"/>
+  <!-- Arrowheads -->
+  <polygon points="360,337 366,340 360,343" fill="#555"/>
+  <polygon points="37,75 40,69 43,75" fill="#555"/>
+
+  <!-- Axis labels -->
+  <text x="363" y="344" font-size="12" fill="#555">c</text>
+  <text x="28" y="68" font-size="11" fill="#555" text-anchor="middle">L(c)</text>
+
+  <!-- Data points on x-axis: x=1,3,5,7,9  → mapped to [60..340] with scale ~28px/unit -->
+  <!-- mean = 5 → x-pixel = 60 + (5-1)*28 = 172 -->
+  <!-- Parabola: L(c) = sum((xi-c)^2) for xi in {1,3,5,7,9}, baseline at c=5, L_min = sum of squared deviations from mean -->
+  <!-- L(c) = 5c^2 - 50c + 165  →  vertex at c=5, L(5)=165-125=40 -->
+  <!-- We map c from 1..9 to x-pixel 60..308, and L from 0..300 to y 340..90 -->
+  <!-- Scale x: px = 60 + (c-1)*31   Scale y: py = 340 - L*(250/300) -->
+  <!-- L(1)=5-50+165=120  L(3)=45-150+165=60  L(5)=125-250+165=40  L(7)=245-350+165=60  L(9)=405-450+165=120 -->
+  <!-- py: L=120→140  L=60→190  L=40→207 -->
+  <!-- Parabola via cubic bezier: leftmost(60,140) → vertex(172,207) → right(308,140) -->
+  <path d="M60,140 C100,210 140,217 172,217 C204,217 244,210 308,140"
+        fill="none" stroke="#2563EB" stroke-width="3"/>
+
+  <!-- Vertex dot (minimum at mean) -->
+  <circle cx="172" cy="217" r="6" fill="#2563EB"/>
+  <!-- Vertical dashed line at mean -->
+  <line x1="172" y1="217" x2="172" y2="340" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="172" y="357" text-anchor="middle" font-size="11" fill="#2563EB">mean = 5</text>
+
+  <!-- Data points projected on x-axis -->
+  <circle cx="60"  cy="338" r="5" fill="#E11D48"/>
+  <circle cx="122" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="172" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="234" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="296" cy="338" r="5" fill="#E11D48"/>
+  <text x="60"  y="332" text-anchor="middle" font-size="9" fill="#E11D48">1</text>
+  <text x="122" y="332" text-anchor="middle" font-size="9" fill="#E11D48">3</text>
+  <text x="172" y="332" text-anchor="middle" font-size="9" fill="#E11D48">5</text>
+  <text x="234" y="332" text-anchor="middle" font-size="9" fill="#E11D48">7</text>
+  <text x="296" y="332" text-anchor="middle" font-size="9" fill="#E11D48">9</text>
+
+  <!-- Annotation: loss formula -->
+  <rect x="44" y="78" width="195" height="32" rx="5" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="141" y="90" text-anchor="middle" font-size="11" fill="#1D4ED8">L₂(c) = Σ(xᵢ − c)²</text>
+  <text x="141" y="104" text-anchor="middle" font-size="10" fill="#555">smooth parabola, unique minimum</text>
+
+  <!-- Min annotation -->
+  <text x="190" y="213" font-size="10" fill="#2563EB">minimum</text>
+
+  <!-- ===== RIGHT PANEL: L1 / V-shape minimized by the median ===== -->
+  <text x="600" y="58" text-anchor="middle" font-size="13" font-weight="bold" fill="#16A34A">L1 Loss — Minimized by the Median</text>
+
+  <!-- Axes -->
+  <line x1="440" y1="340" x2="760" y2="340" stroke="#555" stroke-width="1.5"/>
+  <line x1="440" y1="340" x2="440" y2="75" stroke="#555" stroke-width="1.5"/>
+  <polygon points="760,337 766,340 760,343" fill="#555"/>
+  <polygon points="437,75 440,69 443,75" fill="#555"/>
+  <text x="763" y="344" font-size="12" fill="#555">c</text>
+  <text x="428" y="68" font-size="11" fill="#555" text-anchor="middle">L(c)</text>
+
+  <!-- Data points on x-axis: same {1,3,5,7,9} → median=5 -->
+  <!-- L1(c) = sum|xi-c|. At c=1: 0+2+4+6+8=20. At c=5: 4+2+0+2+4=12. At c=9: 8+6+4+2+0=20 -->
+  <!-- Map c 1..9 to x-pixel 460..748  (scale 36px/unit) -->
+  <!-- px = 460 + (c-1)*36 -->
+  <!-- Map L: max=20 → py=100, min=12 → py=217. Scale: (340-py)=L*(240/20)=12L -->
+  <!-- c=1 px=460 py=340-20*12=100 -->
+  <!-- c=3 px=532 py=340-14*12=172 -->
+  <!-- c=5 px=604 py=340-12*12=196 -->
+  <!-- c=7 px=676 py=340-14*12=172 -->
+  <!-- c=9 px=748 py=100 -->
+
+  <!-- V-shape with flat bottom between median-adjacent points (actually for odd n it's a true point) -->
+  <path d="M460,100 L532,172 L604,196 L676,172 L748,100"
+        fill="none" stroke="#16A34A" stroke-width="3"/>
+
+  <!-- Vertex dot at median -->
+  <circle cx="604" cy="196" r="6" fill="#16A34A"/>
+  <line x1="604" y1="196" x2="604" y2="340" stroke="#16A34A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="604" y="357" text-anchor="middle" font-size="11" fill="#16A34A">median = 5</text>
+
+  <!-- Data points projected on x-axis -->
+  <circle cx="460" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="532" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="604" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="676" cy="338" r="5" fill="#E11D48"/>
+  <circle cx="748" cy="338" r="5" fill="#E11D48"/>
+  <text x="460" y="332" text-anchor="middle" font-size="9" fill="#E11D48">1</text>
+  <text x="532" y="332" text-anchor="middle" font-size="9" fill="#E11D48">3</text>
+  <text x="604" y="332" text-anchor="middle" font-size="9" fill="#E11D48">5</text>
+  <text x="676" y="332" text-anchor="middle" font-size="9" fill="#E11D48">7</text>
+  <text x="748" y="332" text-anchor="middle" font-size="9" fill="#E11D48">9</text>
+
+  <!-- Annotation: loss formula -->
+  <rect x="444" y="78" width="195" height="32" rx="5" fill="#F0FDF4" stroke="#BBF7D0"/>
+  <text x="541" y="90" text-anchor="middle" font-size="11" fill="#15803D">L₁(c) = Σ|xᵢ − c|</text>
+  <text x="541" y="104" text-anchor="middle" font-size="10" fill="#555">piecewise linear, kink at median</text>
+
+  <!-- Min annotation -->
+  <text x="624" y="193" font-size="10" fill="#16A34A">minimum</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="387" text-anchor="middle" font-size="11" fill="#666">Data: {1, 3, 5, 7, 9}  |  Red dots mark the data points  |  The optimal constant c minimizes total loss</text>
+</svg>

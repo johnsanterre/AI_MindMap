@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">MCMC: Sampling from Intractable Posteriors</text>
+
+  <!-- Defs -->
+  <defs>
+    <marker id="mcmcArrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="mcmcArrowR" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Panel 1: The sampling problem -->
+  <rect x="15" y="50" width="200" height="325" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="115" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">THE PROBLEM</text>
+
+  <!-- Posterior mountain -->
+  <path d="M30,250 Q60,248 80,210 Q95,175 115,120 Q130,85 115,120 Q100,155 115,200 Q130,230 160,248 Q180,252 200,250" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <path d="M30,250 Q55,248 80,195 Q100,148 115,105 Q130,148 145,195 Q165,240 200,250" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="115" y="145" text-anchor="middle" font-size="9" fill="#5C3D1E">p(θ|data)</text>
+  <text x="115" y="158" text-anchor="middle" font-size="9" fill="#5C3D1E">posterior</text>
+  <text x="115" y="270" text-anchor="middle" font-size="9" fill="#5C3D1E">θ (parameters)</text>
+
+  <!-- Integral problem -->
+  <rect x="25" y="285" width="180" height="80" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="115" y="302" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#7C2530">Can't compute:</text>
+  <text x="115" y="320" text-anchor="middle" font-size="11" font-style="italic" fill="#7C2530">∫ p(θ|x) dθ</text>
+  <text x="115" y="338" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Normalizing constant</text>
+  <text x="115" y="352" text-anchor="middle" font-size="8.5" fill="#5C3D1E">is often intractable</text>
+
+  <!-- Panel 2: Metropolis-Hastings walk -->
+  <rect x="228" y="50" width="230" height="325" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="343" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">METROPOLIS-HASTINGS</text>
+
+  <!-- Landscape -->
+  <path d="M240,240 Q265,238 285,195 Q305,152 330,118 Q352,90 343,118 Q334,148 355,175 Q368,198 390,230 Q405,245 440,242" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Random walk path -->
+  <circle cx="258" cy="232" r="5" fill="#C4A87A"/>
+  <line x1="258" y1="232" x2="280" y2="215" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mcmcArrow)"/>
+  <circle cx="280" cy="215" r="5" fill="#5C3D1E"/>
+  <line x1="280" y1="215" x2="305" y2="190" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mcmcArrow)"/>
+  <circle cx="305" cy="190" r="5" fill="#5C3D1E"/>
+  <!-- Rejected proposal -->
+  <line x1="305" y1="190" x2="340" y2="220" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#mcmcArrowR)"/>
+  <circle cx="340" cy="220" r="5" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="355" y="218" font-size="8" fill="#7C2530">rejected</text>
+  <!-- Accepted step -->
+  <line x1="305" y1="190" x2="328" y2="158" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mcmcArrow)"/>
+  <circle cx="328" cy="158" r="5" fill="#5C3D1E"/>
+  <line x1="328" y1="158" x2="343" y2="132" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#mcmcArrow)"/>
+  <circle cx="343" cy="132" r="5" fill="#2D5A8E"/>
+
+  <!-- Accept/reject rule -->
+  <rect x="238" y="262" width="210" height="100" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="343" y="280" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Accept if:</text>
+  <text x="343" y="300" text-anchor="middle" font-size="11" font-style="italic" fill="#2D5A8E">r = p(θ*) / p(θ_t) ≥ u</text>
+  <text x="248" y="318" font-size="9" fill="#2D2D2D">u ~ Uniform(0,1)</text>
+  <text x="248" y="334" font-size="9" fill="#5C3D1E">Uphill always accepted;</text>
+  <text x="248" y="348" font-size="9" fill="#5C3D1E">downhill accepted with prob r</text>
+
+  <!-- Panel 3: Diagnostics and variants -->
+  <rect x="472" y="50" width="313" height="325" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="628" y="70" text-anchor="middle" font-size="10" font-variant="small-caps" letter-spacing="1" fill="#6B5D4F">VARIANTS &amp; DIAGNOSTICS</text>
+
+  <!-- Trace plot good -->
+  <rect x="482" y="78" width="290" height="80" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="627" y="94" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Trace Plot (convergence check)</text>
+  <!-- Good trace: mixing well -->
+  <polyline points="490,140 497,128 504,135 511,122 518,130 525,118 532,128 539,119 546,132 553,124 560,133 567,120 574,129 581,121 588,134 595,122 602,131 609,120 616,129 623,118 630,127 637,121 638,140" fill="none" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="490" y="152" font-size="8.5" fill="#2D5A8E">Good: stationary, well-mixed</text>
+  <!-- R-hat -->
+  <text x="627" y="170" text-anchor="middle" font-size="9" fill="#5C3D1E">R̂ ≈ 1.00 → converged  |  R̂ &gt; 1.1 → not converged</text>
+
+  <!-- Variants table -->
+  <rect x="482" y="178" width="290" height="118" fill="#EDE5D8" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="627" y="196" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Algorithm Variants</text>
+  <line x1="482" y1="202" x2="772" y2="202" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="490" y="218" font-size="9.5" font-weight="bold" fill="#2D5A8E">Metropolis-Hastings</text>
+  <text x="490" y="232" font-size="9" fill="#5C3D1E">  general; slow with correlated params</text>
+  <text x="490" y="248" font-size="9.5" font-weight="bold" fill="#2D5A8E">Gibbs Sampling</text>
+  <text x="490" y="262" font-size="9" fill="#5C3D1E">  sample each param given others; needs conditionals</text>
+  <text x="490" y="278" font-size="9.5" font-weight="bold" fill="#2D5A8E">HMC / NUTS</text>
+  <text x="490" y="292" font-size="9" fill="#5C3D1E">  uses gradient info; Stan, PyMC; much faster</text>
+
+  <!-- MCMC vs VI -->
+  <rect x="482" y="305" width="290" height="62" fill="#F5E8E8" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="627" y="322" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">MCMC vs Variational Inference</text>
+  <text x="490" y="340" font-size="9" fill="#2D2D2D">MCMC: exact (asymptotically), slow, scales poorly</text>
+  <text x="490" y="356" font-size="9" fill="#2D2D2D">VI: approximate, fast, scales to big data</text>
+</svg>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="seg-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="seg-arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="seg-arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="26" text-anchor="middle" font-size="13" fill="#5C3D1E" letter-spacing="1.5">SEMANTIC SEGMENTATION — U-NET ARCHITECTURE</text>
+
+  <!-- ══ ENCODER (LEFT) ══ -->
+  <text x="130" y="46" text-anchor="middle" font-size="9" fill="#7C2530" letter-spacing="1">ENCODER (contracting)</text>
+
+  <!-- Input image block -->
+  <rect x="20" y="52" width="220" height="36" rx="3" fill="#D8CDB8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="130" y="66" text-anchor="middle" font-size="9" fill="#5C3D1E">Input Image</text>
+  <text x="130" y="79" text-anchor="middle" font-size="8" fill="#6B5D4F">3 × 572 × 572</text>
+
+  <!-- Down arrow -->
+  <line x1="130" y1="88" x2="130" y2="102" stroke="#7C2530" stroke-width="1.5" marker-end="url(#seg-arr)"/>
+
+  <!-- Enc block 1 -->
+  <rect x="20" y="103" width="220" height="28" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="130" y="122" text-anchor="middle" font-size="8.5" fill="#7C2530">Conv×2 + ReLU → 64ch, 568×568</text>
+  <line x1="130" y1="131" x2="130" y2="145" stroke="#7C2530" stroke-width="1.5" marker-end="url(#seg-arr)"/>
+
+  <!-- Enc block 2 -->
+  <rect x="30" y="146" width="200" height="28" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="130" y="165" text-anchor="middle" font-size="8.5" fill="#7C2530">MaxPool → Conv×2 → 128ch, 280×280</text>
+  <line x1="130" y1="174" x2="130" y2="188" stroke="#7C2530" stroke-width="1.5" marker-end="url(#seg-arr)"/>
+
+  <!-- Enc block 3 -->
+  <rect x="40" y="189" width="180" height="28" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="130" y="208" text-anchor="middle" font-size="8.5" fill="#7C2530">MaxPool → Conv×2 → 256ch, 136×136</text>
+  <line x1="130" y1="217" x2="130" y2="231" stroke="#7C2530" stroke-width="1.5" marker-end="url(#seg-arr)"/>
+
+  <!-- Enc block 4 -->
+  <rect x="50" y="232" width="160" height="28" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="130" y="251" text-anchor="middle" font-size="8.5" fill="#7C2530">MaxPool → Conv×2 → 512ch, 64×64</text>
+  <line x1="130" y1="260" x2="130" y2="274" stroke="#7C2530" stroke-width="1.5" marker-end="url(#seg-arr)"/>
+
+  <!-- Bottleneck -->
+  <rect x="60" y="275" width="140" height="30" rx="3" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="130" y="286" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">Bottleneck</text>
+  <text x="130" y="298" text-anchor="middle" font-size="8" fill="#F5EAEA">1024ch, 28×28</text>
+
+  <!-- ══ SKIP CONNECTIONS ══ -->
+  <line x1="240" y1="117" x2="560" y2="117" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="230" y1="160" x2="560" y2="200" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="220" y1="203" x2="560" y2="246" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="210" y1="246" x2="560" y2="290" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="400" y="110" text-anchor="middle" font-size="8.5" fill="#C4A87A" font-style="italic">skip connections (copy &amp; crop)</text>
+
+  <!-- ══ DECODER (RIGHT) ══ -->
+  <text x="660" y="46" text-anchor="middle" font-size="9" fill="#2D5A8E" letter-spacing="1">DECODER (expanding)</text>
+
+  <!-- Dec block 4 -->
+  <rect x="560" y="275" width="220" height="30" rx="3" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="670" y="289" text-anchor="middle" font-size="8.5" fill="#2D5A8E">UpConv → concat skip → Conv×2, 512ch</text>
+  <text x="670" y="300" text-anchor="middle" font-size="7.5" fill="#5C3D1E">64×64</text>
+  <line x1="670" y1="260" x2="670" y2="274" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#seg-arr-blue)"/>
+
+  <!-- Dec block 3 -->
+  <rect x="560" y="232" width="220" height="28" rx="3" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="670" y="246" text-anchor="middle" font-size="8.5" fill="#2D5A8E">UpConv → concat skip → Conv×2, 256ch</text>
+  <text x="670" y="257" text-anchor="middle" font-size="7.5" fill="#5C3D1E">136×136</text>
+  <line x1="670" y1="217" x2="670" y2="231" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#seg-arr-blue)"/>
+
+  <!-- Dec block 2 -->
+  <rect x="560" y="189" width="220" height="28" rx="3" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="670" y="203" text-anchor="middle" font-size="8.5" fill="#2D5A8E">UpConv → concat skip → Conv×2, 128ch</text>
+  <text x="670" y="214" text-anchor="middle" font-size="7.5" fill="#5C3D1E">280×280</text>
+  <line x1="670" y1="174" x2="670" y2="188" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#seg-arr-blue)"/>
+
+  <!-- Dec block 1 -->
+  <rect x="560" y="146" width="220" height="28" rx="3" fill="#D8E8F5" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="670" y="160" text-anchor="middle" font-size="8.5" fill="#2D5A8E">UpConv → concat skip → Conv×2, 64ch</text>
+  <text x="670" y="171" text-anchor="middle" font-size="7.5" fill="#5C3D1E">568×568</text>
+  <line x1="670" y1="131" x2="670" y2="145" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#seg-arr-blue)"/>
+
+  <!-- Output -->
+  <rect x="560" y="52" width="220" height="36" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="670" y="66" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">1×1 Conv → Segmentation Map</text>
+  <text x="670" y="79" text-anchor="middle" font-size="8" fill="#5C3D1E">C × 388 × 388 (C = num classes)</text>
+
+  <!-- Bottleneck arrow to decoder -->
+  <line x1="200" y1="290" x2="558" y2="290" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#seg-arr-brown)"/>
+
+  <!-- ══ BOTTOM: PIXEL GRID EXAMPLE ══ -->
+  <line x1="20" y1="328" x2="778" y2="328" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="180" y="346" text-anchor="middle" font-size="9.5" fill="#5C3D1E" font-weight="bold">PER-PIXEL CLASS PREDICTION</text>
+
+  <!-- Pixel grid - input -->
+  <text x="70" y="361" text-anchor="middle" font-size="8" fill="#6B5D4F">input pixels</text>
+  <rect x="26" y="365" width="16" height="16" fill="#7B9E6A"/>
+  <rect x="42" y="365" width="16" height="16" fill="#7B9E6A"/>
+  <rect x="58" y="365" width="16" height="16" fill="#9CB87E"/>
+  <rect x="74" y="365" width="16" height="16" fill="#4A7EC4"/>
+  <rect x="90" y="365" width="16" height="16" fill="#4A7EC4"/>
+  <rect x="106" y="365" width="16" height="16" fill="#4A7EC4"/>
+  <rect x="26" y="381" width="16" height="16" fill="#8FAD78"/>
+  <rect x="42" y="381" width="16" height="16" fill="#C8B89A"/>
+  <rect x="58" y="381" width="16" height="16" fill="#E8D5B0"/>
+  <rect x="74" y="381" width="16" height="16" fill="#4A7EC4"/>
+  <rect x="90" y="381" width="16" height="16" fill="#5088C8"/>
+  <rect x="106" y="381" width="16" height="16" fill="#3A6EB4"/>
+
+  <line x1="148" y1="380" x2="170" y2="380" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#seg-arr-brown)"/>
+  <text x="200" y="361" text-anchor="middle" font-size="8" fill="#6B5D4F">model</text>
+  <rect x="170" y="365" width="60" height="32" rx="3" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="200" y="381" text-anchor="middle" font-size="8.5" fill="#5C3D1E">U-Net</text>
+  <text x="200" y="393" text-anchor="middle" font-size="7.5" fill="#6B5D4F">per-pixel</text>
+  <line x1="232" y1="380" x2="254" y2="380" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#seg-arr-brown)"/>
+
+  <!-- Class legend colors -->
+  <text x="310" y="348" text-anchor="middle" font-size="8" fill="#6B5D4F">output class mask</text>
+  <rect x="258" y="355" width="12" height="12" fill="#7B9E6A" stroke="#5C3D1E" stroke-width="0.5"/>
+  <text x="273" y="365" font-size="7.5" fill="#5C3D1E">vegetation</text>
+  <rect x="258" y="371" width="12" height="12" fill="#4A7EC4" stroke="#5C3D1E" stroke-width="0.5"/>
+  <text x="273" y="381" font-size="7.5" fill="#5C3D1E">sky</text>
+  <rect x="258" y="387" width="12" height="12" fill="#C8B89A" stroke="#5C3D1E" stroke-width="0.5"/>
+  <text x="273" y="397" font-size="7.5" fill="#5C3D1E">road</text>
+
+  <!-- Segmentation output grid -->
+  <rect x="330" y="365" width="16" height="16" fill="#7B9E6A" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="346" y="365" width="16" height="16" fill="#7B9E6A" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="362" y="365" width="16" height="16" fill="#7B9E6A" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="378" y="365" width="16" height="16" fill="#4A7EC4" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="394" y="365" width="16" height="16" fill="#4A7EC4" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="410" y="365" width="16" height="16" fill="#4A7EC4" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="330" y="381" width="16" height="16" fill="#7B9E6A" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="346" y="381" width="16" height="16" fill="#C8B89A" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="362" y="381" width="16" height="16" fill="#C8B89A" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="378" y="381" width="16" height="16" fill="#4A7EC4" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="394" y="381" width="16" height="16" fill="#4A7EC4" stroke="#FDFAF4" stroke-width="0.5"/>
+  <rect x="410" y="381" width="16" height="16" fill="#4A7EC4" stroke="#FDFAF4" stroke-width="0.5"/>
+
+  <!-- IoU explanation -->
+  <rect x="460" y="340" width="320" height="52" rx="3" fill="#F5EDE0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="620" y="355" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Evaluation: Intersection over Union (IoU)</text>
+  <text x="620" y="370" text-anchor="middle" font-size="8.5" fill="#5C3D1E">IoU = |Pred ∩ GT| / |Pred ∪ GT|   for each class</text>
+  <text x="620" y="384" text-anchor="middle" font-size="8.5" fill="#5C3D1E">mean IoU (mIoU) = average over all classes</text>
+</svg>

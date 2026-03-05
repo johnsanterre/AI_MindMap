@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="chol-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Top label -->
+  <text x="400" y="22" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">CHOLESKY DECOMPOSITION: A = LL&#7488;</text>
+
+  <!-- ══ PANEL 1: Matrix A ══ -->
+  <text x="105" y="48" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">SYMMETRIC PD MATRIX A</text>
+
+  <!-- Matrix A grid (4x4) -->
+  <rect x="35" y="58" width="140" height="140" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1.5" rx="3"/>
+  <!-- Grid lines -->
+  <line x1="70" y1="58" x2="70" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="105" y1="58" x2="105" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="140" y1="58" x2="140" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="35" y1="93" x2="175" y2="93" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="35" y1="128" x2="175" y2="128" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="35" y1="163" x2="175" y2="163" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Values (symmetric, all positive) -->
+  <!-- Row 1 -->
+  <text x="52" y="80" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">4</text>
+  <text x="87" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E">2</text>
+  <text x="122" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E">2</text>
+  <text x="157" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E">0</text>
+  <!-- Row 2 -->
+  <text x="52" y="115" text-anchor="middle" font-size="11" fill="#2D5A8E">2</text>
+  <text x="87" y="115" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">5</text>
+  <text x="122" y="115" text-anchor="middle" font-size="11" fill="#2D5A8E">1</text>
+  <text x="157" y="115" text-anchor="middle" font-size="11" fill="#2D5A8E">1</text>
+  <!-- Row 3 -->
+  <text x="52" y="150" text-anchor="middle" font-size="11" fill="#2D5A8E">2</text>
+  <text x="87" y="150" text-anchor="middle" font-size="11" fill="#2D5A8E">1</text>
+  <text x="122" y="150" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">6</text>
+  <text x="157" y="150" text-anchor="middle" font-size="11" fill="#2D5A8E">2</text>
+  <!-- Row 4 -->
+  <text x="52" y="185" text-anchor="middle" font-size="11" fill="#2D5A8E">0</text>
+  <text x="87" y="185" text-anchor="middle" font-size="11" fill="#2D5A8E">1</text>
+  <text x="122" y="185" text-anchor="middle" font-size="11" fill="#2D5A8E">2</text>
+  <text x="157" y="185" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">7</text>
+  <!-- Label -->
+  <text x="105" y="215" text-anchor="middle" font-size="13" fill="#5C3D1E" font-style="italic">A</text>
+  <!-- Symmetry annotation -->
+  <text x="105" y="232" text-anchor="middle" font-size="8.5" fill="#6B5D4F">symmetric + positive definite</text>
+
+  <!-- ══ Arrow = ══ -->
+  <text x="220" y="132" text-anchor="middle" font-size="24" fill="#C4A87A">=</text>
+
+  <!-- ══ PANEL 2: L (lower triangular) ══ -->
+  <text x="330" y="48" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">LOWER TRIANGULAR L</text>
+
+  <rect x="255" y="58" width="150" height="140" fill="#FDFAF4" stroke="#7C2530" stroke-width="2" rx="3"/>
+  <!-- Grid lines -->
+  <line x1="293" y1="58" x2="293" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="330" y1="58" x2="330" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="368" y1="58" x2="368" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="255" y1="93" x2="405" y2="93" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="255" y1="128" x2="405" y2="128" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="255" y1="163" x2="405" y2="163" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Lower triangle values (red) -->
+  <text x="274" y="80" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">2</text>
+  <text x="274" y="115" text-anchor="middle" font-size="11" fill="#7C2530">1</text>
+  <text x="311" y="115" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">2</text>
+  <text x="274" y="150" text-anchor="middle" font-size="11" fill="#7C2530">1</text>
+  <text x="311" y="150" text-anchor="middle" font-size="11" fill="#7C2530">0</text>
+  <text x="349" y="150" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">√5</text>
+  <text x="274" y="185" text-anchor="middle" font-size="11" fill="#7C2530">0</text>
+  <text x="311" y="185" text-anchor="middle" font-size="11" fill="#7C2530">½</text>
+  <text x="349" y="185" text-anchor="middle" font-size="11" fill="#7C2530">·</text>
+  <text x="386" y="185" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">·</text>
+  <!-- Upper triangle zeros (gray) -->
+  <text x="311" y="80" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="349" y="80" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="386" y="80" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="349" y="115" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="386" y="115" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="386" y="150" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <!-- Label -->
+  <text x="330" y="215" text-anchor="middle" font-size="13" fill="#7C2530" font-style="italic">L</text>
+  <text x="330" y="232" text-anchor="middle" font-size="8.5" fill="#6B5D4F">zeros above diagonal</text>
+
+  <!-- ══ dot ══ -->
+  <text x="432" y="132" text-anchor="middle" font-size="24" fill="#C4A87A">·</text>
+
+  <!-- ══ PANEL 3: L^T (upper triangular) ══ -->
+  <text x="560" y="48" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">TRANSPOSE L&#7488;</text>
+
+  <rect x="455" y="58" width="150" height="140" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2" rx="3"/>
+  <line x1="493" y1="58" x2="493" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="530" y1="58" x2="530" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="568" y1="58" x2="568" y2="198" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="455" y1="93" x2="605" y2="93" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="455" y1="128" x2="605" y2="128" stroke="#D4C5A9" stroke-width="0.8"/>
+  <line x1="455" y1="163" x2="605" y2="163" stroke="#D4C5A9" stroke-width="0.8"/>
+  <!-- Upper triangle values (blue) -->
+  <text x="474" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">2</text>
+  <text x="511" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E">1</text>
+  <text x="549" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E">1</text>
+  <text x="586" y="80" text-anchor="middle" font-size="11" fill="#2D5A8E">0</text>
+  <text x="511" y="115" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">2</text>
+  <text x="549" y="115" text-anchor="middle" font-size="11" fill="#2D5A8E">0</text>
+  <text x="586" y="115" text-anchor="middle" font-size="11" fill="#2D5A8E">½</text>
+  <text x="549" y="150" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">√5</text>
+  <text x="586" y="150" text-anchor="middle" font-size="11" fill="#2D5A8E">·</text>
+  <text x="586" y="185" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">·</text>
+  <!-- Lower zeros -->
+  <text x="474" y="115" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="474" y="150" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="511" y="150" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="474" y="185" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="511" y="185" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <text x="549" y="185" text-anchor="middle" font-size="11" fill="#CCCCCC">0</text>
+  <!-- Label -->
+  <text x="530" y="215" text-anchor="middle" font-size="13" fill="#2D5A8E" font-style="italic">L&#7488;</text>
+  <text x="530" y="232" text-anchor="middle" font-size="8.5" fill="#6B5D4F">zeros below diagonal</text>
+
+  <!-- ══ Applications panel ══ -->
+  <rect x="640" y="58" width="148" height="170" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="714" y="76" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold" letter-spacing="1">USES</text>
+  <text x="714" y="96" text-anchor="middle" font-size="9" fill="#6B5D4F">• Solve Ax = b</text>
+  <text x="714" y="114" text-anchor="middle" font-size="9" fill="#6B5D4F">  (2× faster than LU)</text>
+  <text x="714" y="132" text-anchor="middle" font-size="9" fill="#6B5D4F">• Sample from</text>
+  <text x="714" y="148" text-anchor="middle" font-size="9" fill="#6B5D4F">  multivariate normal</text>
+  <text x="714" y="166" text-anchor="middle" font-size="9" fill="#6B5D4F">• Gaussian Process</text>
+  <text x="714" y="182" text-anchor="middle" font-size="9" fill="#6B5D4F">  computations</text>
+  <text x="714" y="200" text-anchor="middle" font-size="9" fill="#6B5D4F">• Kalman filters</text>
+  <text x="714" y="218" text-anchor="middle" font-size="9" fill="#6B5D4F">• O(n³) → O(n³/3)</text>
+
+  <!-- Diagonal formula -->
+  <rect x="35" y="255" width="600" height="50" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="335" y="274" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">Diagonal entries:</text>
+  <text x="335" y="293" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">L[j,j] = √( A[j,j] − Σ_{k&lt;j} L[j,k]² )     Off-diagonal:  L[i,j] = (A[i,j] − Σ_{k&lt;j} L[i,k]·L[j,k]) / L[j,j]</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="380" text-anchor="middle" font-size="9" fill="#6B5D4F">
+    Every positive definite matrix has a unique Cholesky factor — the matrix "square root"
+  </text>
+</svg>

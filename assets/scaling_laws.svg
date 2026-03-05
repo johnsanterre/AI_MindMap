@@ -1,0 +1,27 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Scaling Laws in Deep Learning</text>
+  <!-- Log-log axes -->
+  <line x1="80" y1="330" x2="720" y2="330" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="330" x2="80" y2="50" stroke="#333" stroke-width="2"/>
+  <text x="400" y="370" text-anchor="middle" font-size="13" fill="#333">Scale (params / compute / data) — log scale</text>
+  <text x="28" y="190" text-anchor="middle" font-size="13" fill="#333" transform="rotate(-90,28,190)">Loss — log scale</text>
+  <!-- Power law lines (straight on log-log) -->
+  <line x1="80" y1="70" x2="720" y2="295" stroke="#2196F3" stroke-width="3"/>
+  <text x="725" y="298" font-size="12" fill="#2196F3">L(N)</text>
+  <line x1="80" y1="90" x2="720" y2="310" stroke="#E91E63" stroke-width="3" stroke-dasharray="8,4"/>
+  <text x="725" y="313" font-size="12" fill="#E91E63">L(C)</text>
+  <line x1="80" y1="110" x2="720" y2="325" stroke="#4CAF50" stroke-width="3" stroke-dasharray="4,4"/>
+  <text x="725" y="325" font-size="12" fill="#4CAF50">L(D)</text>
+  <!-- Power law annotation -->
+  <rect x="120" y="165" width="260" height="75" rx="6" fill="#f9f9f9" stroke="#ddd"/>
+  <text x="250" y="188" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Power Law: L ∝ X⁻ᵅ</text>
+  <text x="250" y="210" text-anchor="middle" font-size="12" fill="#2196F3">N = parameters</text>
+  <text x="250" y="228" text-anchor="middle" font-size="12" fill="#E91E63">C = compute (FLOPs)</text>
+  <!-- Chinchilla box -->
+  <rect x="440" y="90" width="260" height="110" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="570" y="115" text-anchor="middle" font-size="13" fill="#FF9800" font-weight="bold">Chinchilla Scaling</text>
+  <text x="570" y="138" text-anchor="middle" font-size="12" fill="#333">Optimal: N ∝ C^0.5</text>
+  <text x="570" y="158" text-anchor="middle" font-size="12" fill="#333">~20 tokens per parameter</text>
+  <text x="570" y="178" text-anchor="middle" font-size="11" fill="#888">Hoffmann et al. 2022</text>
+</svg>

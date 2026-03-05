@@ -1,0 +1,159 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <rect width="800" height="400" fill="white"/>
+
+  <!-- Title -->
+  <text x="400" y="26" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Complex Systems: Local Rules → Global Behavior</text>
+
+  <!-- ===== LEFT PANEL: Local Rules ===== -->
+  <rect x="30" y="44" width="300" height="310" rx="10" fill="#E8F4FD" stroke="#2196F3" stroke-width="1.8"/>
+  <text x="180" y="68" text-anchor="middle" font-size="13" fill="#1565C0" font-weight="bold">Local Rules</text>
+
+  <!-- Agents (small circles) arranged in loose cluster -->
+  <!-- Agent A -->
+  <circle cx="100" cy="130" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="100" cy="130" text-anchor="middle" font-size="10" fill="white" dy="4">a</text>
+  <text x="100" y="130" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">a</text>
+
+  <!-- Agent B -->
+  <circle cx="180" cy="110" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="180" y="110" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">b</text>
+
+  <!-- Agent C -->
+  <circle cx="250" cy="140" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="250" y="140" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">c</text>
+
+  <!-- Agent D -->
+  <circle cx="140" cy="195" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="140" y="195" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">d</text>
+
+  <!-- Agent E -->
+  <circle cx="215" cy="200" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="215" y="200" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">e</text>
+
+  <!-- Agent F -->
+  <circle cx="90" cy="240" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="90" y="240" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">f</text>
+
+  <!-- Agent G -->
+  <circle cx="270" cy="230" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="270" y="230" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">g</text>
+
+  <!-- Agent H -->
+  <circle cx="175" cy="285" r="14" fill="#2196F3" opacity="0.85"/>
+  <text x="175" y="285" text-anchor="middle" font-size="10" fill="white" dominant-baseline="middle">h</text>
+
+  <!-- Agent I (extra, outer) -->
+  <circle cx="115" cy="320" r="11" fill="#64B5F6" opacity="0.75"/>
+  <circle cx="235" cy="310" r="11" fill="#64B5F6" opacity="0.75"/>
+  <circle cx="295" cy="175" r="11" fill="#64B5F6" opacity="0.75"/>
+  <circle cx="62" cy="185" r="11" fill="#64B5F6" opacity="0.75"/>
+  <circle cx="160" cy="330" r="9" fill="#90CAF9" opacity="0.6"/>
+
+  <!-- Local interaction arrows (short, between nearby agents) -->
+  <!-- a→b -->
+  <line x1="114" y1="126" x2="165" y2="113" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- b→c -->
+  <line x1="194" y1="113" x2="235" y2="132" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- b→d -->
+  <line x1="176" y1="124" x2="152" y2="181" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- d→e -->
+  <line x1="154" y1="195" x2="200" y2="199" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- c→e -->
+  <line x1="245" y1="154" x2="223" y2="187" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- e→g -->
+  <line x1="228" y1="211" x2="258" y2="221" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- d→f -->
+  <line x1="128" y1="205" x2="102" y2="227" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- f→h -->
+  <line x1="101" y1="251" x2="161" y2="277" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- g→h -->
+  <line x1="258" y1="241" x2="189" y2="278" stroke="#1565C0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- a→f -->
+  <line x1="96" y1="144" x2="90" y2="225" stroke="#42A5F5" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+
+  <!-- Rule labels -->
+  <rect x="40" y="348" width="282" height="14" rx="3" fill="none"/>
+  <text x="180" y="360" text-anchor="middle" font-size="11" fill="#1565C0">align · separate · cohere (3 simple rules)</text>
+
+  <!-- ===== ARROW: Local → Global ===== -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1565C0"/>
+    </marker>
+    <marker id="arr2" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L7,2.5 z" fill="#42A5F5"/>
+    </marker>
+    <marker id="arr-emerge" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L10,4 z" fill="#FF6F00"/>
+    </marker>
+    <marker id="arr-fb" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L9,3.5 z" fill="#4CAF50"/>
+    </marker>
+  </defs>
+
+  <!-- Big central arrow -->
+  <line x1="342" y1="200" x2="418" y2="200" stroke="#FF6F00" stroke-width="3" marker-end="url(#arr-emerge)"/>
+  <text x="380" y="190" text-anchor="middle" font-size="11" fill="#FF6F00" font-weight="bold">emergence</text>
+
+  <!-- ===== RIGHT PANEL: Global Behavior ===== -->
+  <rect x="430" y="44" width="340" height="310" rx="10" fill="#FFF8E1" stroke="#FF9800" stroke-width="1.8"/>
+  <text x="600" y="68" text-anchor="middle" font-size="13" fill="#E65100" font-weight="bold">Global Behavior</text>
+
+  <!-- Murmuration / flock shape — sweeping curved path of many small circles -->
+  <!-- Wing of the flock, tapering curve (upper arc) -->
+  <path d="M470,110 Q530,75 600,80 Q670,85 720,105 Q740,115 730,130 Q710,115 660,110 Q590,108 520,118 Q488,125 470,110Z"
+        fill="#FF9800" opacity="0.18" stroke="#FF9800" stroke-width="1"/>
+
+  <!-- Flock birds (small filled circles along a sweeping arc) -->
+  <circle cx="478" cy="112" r="5" fill="#E65100" opacity="0.9"/>
+  <circle cx="498" cy="102" r="4" fill="#E65100" opacity="0.85"/>
+  <circle cx="520" cy="93" r="5" fill="#FF9800" opacity="0.9"/>
+  <circle cx="545" cy="87" r="4" fill="#E65100" opacity="0.8"/>
+  <circle cx="568" cy="83" r="5" fill="#FF9800" opacity="0.9"/>
+  <circle cx="592" cy="81" r="4" fill="#E65100" opacity="0.85"/>
+  <circle cx="617" cy="83" r="5" fill="#FF9800" opacity="0.8"/>
+  <circle cx="641" cy="88" r="4" fill="#E65100" opacity="0.85"/>
+  <circle cx="663" cy="96" r="5" fill="#FF9800" opacity="0.9"/>
+  <circle cx="682" cy="106" r="4" fill="#E65100" opacity="0.8"/>
+  <circle cx="698" cy="116" r="5" fill="#FF9800" opacity="0.85"/>
+  <circle cx="713" cy="123" r="4" fill="#E65100" opacity="0.8"/>
+  <!-- Inner arc (tighter, trailing) -->
+  <circle cx="490" cy="118" r="4" fill="#FFB300" opacity="0.7"/>
+  <circle cx="512" cy="108" r="3" fill="#FFB300" opacity="0.65"/>
+  <circle cx="537" cy="100" r="4" fill="#FFB300" opacity="0.7"/>
+  <circle cx="562" cy="95" r="3" fill="#FFB300" opacity="0.65"/>
+  <circle cx="586" cy="93" r="4" fill="#FFB300" opacity="0.7"/>
+  <circle cx="610" cy="94" r="3" fill="#FFB300" opacity="0.65"/>
+  <circle cx="634" cy="99" r="4" fill="#FFB300" opacity="0.7"/>
+  <circle cx="654" cy="108" r="3" fill="#FFB300" opacity="0.65"/>
+  <circle cx="672" cy="117" r="4" fill="#FFB300" opacity="0.7"/>
+  <!-- Outer stragglers -->
+  <circle cx="505" cy="128" r="3" fill="#FFCC80" opacity="0.6"/>
+  <circle cx="555" cy="76" r="3" fill="#FFCC80" opacity="0.6"/>
+  <circle cx="700" cy="130" r="3" fill="#FFCC80" opacity="0.6"/>
+  <circle cx="725" cy="112" r="3" fill="#FFCC80" opacity="0.55"/>
+
+  <!-- Label: flock label -->
+  <text x="600" y="150" text-anchor="middle" font-size="11" fill="#E65100" font-style="italic">murmuration pattern</text>
+
+  <!-- Emergent property box -->
+  <rect x="448" y="168" width="304" height="60" rx="7" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="600" y="188" text-anchor="middle" font-size="12" fill="#BF360C" font-weight="bold">Emergent Global Pattern</text>
+  <text x="600" y="206" text-anchor="middle" font-size="11" fill="#555">No agent "knows" the shape.</text>
+  <text x="600" y="220" text-anchor="middle" font-size="11" fill="#555">Order arises from interaction.</text>
+
+  <!-- Phase transition arrow + label -->
+  <line x1="600" y1="234" x2="600" y2="268" stroke="#4CAF50" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arr-fb)"/>
+  <rect x="450" y="270" width="300" height="42" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="600" y="289" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="bold">Feedback Loop</text>
+  <text x="600" y="306" text-anchor="middle" font-size="11" fill="#555">Global state shapes local decisions</text>
+
+  <!-- Feedback arc back to left (curved arrow over top) -->
+  <path d="M448,290 Q390,380 340,320 Q320,290 342,215" stroke="#4CAF50" stroke-width="2" fill="none" stroke-dasharray="6,3" marker-end="url(#arr-fb)"/>
+  <text x="370" y="368" text-anchor="middle" font-size="10" fill="#2E7D32">feedback</text>
+
+  <!-- Self-organization label bottom -->
+  <text x="600" y="338" text-anchor="middle" font-size="11" fill="#E65100" font-weight="bold">Self-organization</text>
+  <text x="600" y="354" text-anchor="middle" font-size="11" fill="#777">no central controller needed</text>
+
+</svg>
