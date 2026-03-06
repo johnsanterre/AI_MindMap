@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="22" text-anchor="middle" font-size="13" fill="#5C3D1E" font-weight="bold" letter-spacing="1">BRANCHES OF MATHEMATICS → ML / AI</text>
+
+  <!-- ============================================================ -->
+  <!-- SPOKE LINES (drawn before nodes so nodes sit on top)         -->
+  <!-- ============================================================ -->
+
+  <!-- Linear Algebra  (upper-left, ~315°) -->
+  <line x1="400" y1="200" x2="148" y2="108" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr-navy)"/>
+
+  <!-- Calculus & Analysis (upper-right, ~45°) -->
+  <line x1="400" y1="200" x2="620" y2="90" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- Probability & Statistics (right, ~0°) -->
+  <line x1="400" y1="200" x2="680" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr-brown)"/>
+
+  <!-- Discrete Math / Combinatorics (lower-right, ~135°) -->
+  <line x1="400" y1="200" x2="620" y2="318" stroke="#C4A87A" stroke-width="2" marker-end="url(#arr-tan)"/>
+
+  <!-- Optimization (lower, ~180°) -->
+  <line x1="400" y1="200" x2="400" y2="345" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr-navy)"/>
+
+  <!-- Information Theory (lower-left, ~225°) -->
+  <line x1="400" y1="200" x2="182" y2="318" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- Topology / Geometry (left, ~270°) -->
+  <line x1="400" y1="200" x2="118" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr-brown)"/>
+
+  <!-- ============================================================ -->
+  <!-- ARROWHEAD MARKERS                                            -->
+  <!-- ============================================================ -->
+  <defs>
+    <marker id="arr-navy" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-tan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- ============================================================ -->
+  <!-- CENTER NODE — ML / AI                                        -->
+  <!-- ============================================================ -->
+  <ellipse cx="400" cy="200" rx="58" ry="34" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="2"/>
+  <text x="400" y="196" text-anchor="middle" font-size="14" fill="#FDFAF4" font-weight="bold">ML / AI</text>
+  <text x="400" y="212" text-anchor="middle" font-size="9" fill="#c8d8ec">all branches converge</text>
+
+  <!-- ============================================================ -->
+  <!-- BRANCH NODES                                                 -->
+  <!-- ============================================================ -->
+
+  <!-- 1. Linear Algebra — upper-left -->
+  <rect x="30" y="68" width="148" height="70" rx="6" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="104" y="86" text-anchor="middle" font-size="11.5" fill="#FDFAF4" font-weight="bold">Linear Algebra</text>
+  <line x1="40" y1="93" x2="168" y2="93" stroke="#FDFAF4" stroke-width="0.5" opacity="0.4"/>
+  <text x="104" y="105" text-anchor="middle" font-size="9" fill="#c8d8ec">vectors · matrices</text>
+  <text x="104" y="118" text-anchor="middle" font-size="9" fill="#c8d8ec">eigenvalues · SVD</text>
+  <text x="104" y="131" text-anchor="middle" font-size="8.5" fill="#FDFAF4" opacity="0.75">→ Neural Nets, PCA, Embeddings</text>
+
+  <!-- 2. Calculus & Analysis — upper-right -->
+  <rect x="572" y="48" width="160" height="70" rx="6" fill="#7C2530" stroke="#4f151e" stroke-width="1.5"/>
+  <text x="652" y="67" text-anchor="middle" font-size="11.5" fill="#FDFAF4" font-weight="bold">Calculus &amp; Analysis</text>
+  <line x1="582" y1="74" x2="722" y2="74" stroke="#FDFAF4" stroke-width="0.5" opacity="0.4"/>
+  <text x="652" y="86" text-anchor="middle" font-size="9" fill="#f0b0b8">derivatives · integrals</text>
+  <text x="652" y="99" text-anchor="middle" font-size="9" fill="#f0b0b8">gradients · limits</text>
+  <text x="652" y="112" text-anchor="middle" font-size="8.5" fill="#FDFAF4" opacity="0.75">→ Backprop, Gradient Descent</text>
+
+  <!-- 3. Probability & Statistics — right -->
+  <rect x="696" y="162" width="88" height="76" rx="6" fill="#5C3D1E" stroke="#3a2510" stroke-width="1.5"/>
+  <text x="740" y="180" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">Probability</text>
+  <text x="740" y="193" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">&amp; Statistics</text>
+  <line x1="706" y1="199" x2="774" y2="199" stroke="#FDFAF4" stroke-width="0.5" opacity="0.4"/>
+  <text x="740" y="211" text-anchor="middle" font-size="8.5" fill="#d4b896">distributions · Bayes</text>
+  <text x="740" y="224" text-anchor="middle" font-size="8.5" fill="#d4b896">inference · sampling</text>
+  <text x="740" y="234" text-anchor="middle" font-size="7.5" fill="#FDFAF4" opacity="0.75">→ Bayesian ML, MLE</text>
+
+  <!-- 4. Discrete Math / Combinatorics — lower-right -->
+  <rect x="560" y="288" width="152" height="68" rx="6" fill="#C4A87A" stroke="#8a6f40" stroke-width="1.5"/>
+  <text x="636" y="306" text-anchor="middle" font-size="11" fill="#3a2510" font-weight="bold">Discrete Math</text>
+  <line x1="570" y1="312" x2="702" y2="312" stroke="#3a2510" stroke-width="0.5" opacity="0.4"/>
+  <text x="636" y="325" text-anchor="middle" font-size="9" fill="#3a2510">graphs · sets · logic</text>
+  <text x="636" y="338" text-anchor="middle" font-size="9" fill="#3a2510">combinatorics · trees</text>
+  <text x="636" y="350" text-anchor="middle" font-size="8" fill="#3a2510" opacity="0.85">→ GNNs, Dynamic Programming</text>
+
+  <!-- 5. Optimization — bottom-center -->
+  <rect x="316" y="358" width="168" height="34" rx="6" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="400" y="371" text-anchor="middle" font-size="10.5" fill="#FDFAF4" font-weight="bold">Optimization</text>
+  <text x="400" y="385" text-anchor="middle" font-size="8.5" fill="#c8d8ec">convex · LP · DP → Training, Ops Research</text>
+
+  <!-- 6. Information Theory — lower-left -->
+  <rect x="30" y="288" width="152" height="68" rx="6" fill="#7C2530" stroke="#4f151e" stroke-width="1.5"/>
+  <text x="106" y="306" text-anchor="middle" font-size="11.5" fill="#FDFAF4" font-weight="bold">Information Theory</text>
+  <line x1="40" y1="312" x2="172" y2="312" stroke="#FDFAF4" stroke-width="0.5" opacity="0.4"/>
+  <text x="106" y="325" text-anchor="middle" font-size="9" fill="#f0b0b8">entropy · KL divergence</text>
+  <text x="106" y="338" text-anchor="middle" font-size="9" fill="#f0b0b8">mutual information</text>
+  <text x="106" y="350" text-anchor="middle" font-size="8" fill="#FDFAF4" opacity="0.75">→ Loss Functions, Compression</text>
+
+  <!-- 7. Topology / Geometry — left -->
+  <rect x="16" y="162" width="100" height="76" rx="6" fill="#5C3D1E" stroke="#3a2510" stroke-width="1.5"/>
+  <text x="66" y="180" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">Topology</text>
+  <text x="66" y="193" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">&amp; Geometry</text>
+  <line x1="26" y1="199" x2="106" y2="199" stroke="#FDFAF4" stroke-width="0.5" opacity="0.4"/>
+  <text x="66" y="211" text-anchor="middle" font-size="8.5" fill="#d4b896">manifolds · distance</text>
+  <text x="66" y="224" text-anchor="middle" font-size="8.5" fill="#d4b896">curvature · TDA</text>
+  <text x="66" y="234" text-anchor="middle" font-size="7.5" fill="#FDFAF4" opacity="0.75">→ Manifold Learning</text>
+
+</svg>
