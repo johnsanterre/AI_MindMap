@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="42" font-family="Georgia,serif" font-size="17" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Short and Fat: When Features Outnumber Observations</text>
+
+  <!-- Left: short-fat X matrix (3 rows, many cols) -->
+  <text x="195" y="72" font-family="Georgia,serif" font-size="13" fill="#7C2530" text-anchor="middle" font-weight="bold">X  (short and fat:  n=3, p=8)</text>
+
+  <path d="M45,82 L35,82 L35,155 L45,155" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <path d="M345,82 L355,82 L355,155 L345,155" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Column headers -->
+  <text x="75"  y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₁</text>
+  <text x="110" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₂</text>
+  <text x="145" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₃</text>
+  <text x="180" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₄</text>
+  <text x="215" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₅</text>
+  <text x="250" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₆</text>
+  <text x="285" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₇</text>
+  <text x="320" y="96" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">x₈</text>
+
+  <!-- 3 data rows -->
+  <text x="75"  y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">2</text>
+  <text x="110" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">5</text>
+  <text x="145" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">1</text>
+  <text x="180" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">9</text>
+  <text x="215" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="250" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">7</text>
+  <text x="285" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">3</text>
+  <text x="320" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">6</text>
+
+  <text x="75"  y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">8</text>
+  <text x="110" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">2</text>
+  <text x="145" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">7</text>
+  <text x="180" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">1</text>
+  <text x="215" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">6</text>
+  <text x="250" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">3</text>
+  <text x="285" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">9</text>
+  <text x="320" y="134" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">4</text>
+
+  <text x="75"  y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">5</text>
+  <text x="110" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">9</text>
+  <text x="145" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="180" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">2</text>
+  <text x="215" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">8</text>
+  <text x="250" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">1</text>
+  <text x="285" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">5</text>
+  <text x="320" y="152" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">7</text>
+
+  <!-- Arrow down -->
+  <line x1="197" y1="165" x2="197" y2="188" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="192,185 197,195 202,185" fill="#5C3D1E"/>
+  <text x="197" y="183" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="start">  XᵀX is 8×8 but rank ≤ 3  →  singular!</text>
+
+  <!-- Ridge vs LASSO panel -->
+  <rect x="30" y="205" width="340" height="155" fill="#F5EFE4" rx="6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="200" y="225" font-family="Georgia,serif" font-size="12" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Regularisation breaks the degeneracy</text>
+
+  <text x="45" y="248" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" font-weight="bold">Ridge  (ℓ₂)</text>
+  <text x="45" y="265" font-family="Georgia,serif" font-size="11" fill="#2D5A8E">β̂ = (XᵀX + λI)⁻¹Xᵀy</text>
+  <text x="45" y="281" font-family="Georgia,serif" font-size="11" fill="#5C3D1E">→ all coefficients shrunk, none zero</text>
+  <text x="45" y="296" font-family="Georgia,serif" font-size="11" fill="#5C3D1E">→ good for dense signal</text>
+
+  <line x1="200" y1="240" x2="200" y2="340" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <text x="215" y="248" font-family="Georgia,serif" font-size="12" fill="#7C2530" font-weight="bold">LASSO  (ℓ₁)</text>
+  <text x="215" y="265" font-family="Georgia,serif" font-size="11" fill="#7C2530">min ‖y−Xβ‖² + λ‖β‖₁</text>
+  <text x="215" y="281" font-family="Georgia,serif" font-size="11" fill="#5C3D1E">→ many coefficients = 0</text>
+  <text x="215" y="296" font-family="Georgia,serif" font-size="11" fill="#5C3D1E">→ automatic feature selection</text>
+
+  <text x="200" y="345" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle" font-style="italic">λ controls bias ↔ variance tradeoff; chosen by cross-validation</text>
+
+  <!-- Right: progression diagram -->
+  <rect x="395" y="65" width="375" height="305" fill="none" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="582" y="87" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle" font-weight="bold">The progression of data shapes</text>
+
+  <!-- Three boxes stacked -->
+  <rect x="415" y="100" width="335" height="68" fill="#EAF0F8" rx="4" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="582" y="120" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Short but Skinny  (n ≫ p)</text>
+  <text x="582" y="138" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Unique OLS solution · p-values valid</text>
+  <text x="582" y="155" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Classical statistics</text>
+
+  <line x1="582" y1="168" x2="582" y2="188" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="578,185 582,193 586,185" fill="#5C3D1E"/>
+  <text x="600" y="182" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">p grows</text>
+
+  <rect x="415" y="193" width="335" height="68" fill="#FAF0EE" rx="4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="582" y="213" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Short and Fat  (p ≥ n)</text>
+  <text x="582" y="231" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Infinite OLS solutions · regularise</text>
+  <text x="582" y="248" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Statistical machine learning</text>
+
+  <line x1="582" y1="262" x2="582" y2="282" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="578,279 582,287 586,279" fill="#5C3D1E"/>
+  <text x="600" y="276" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">nonlinear</text>
+
+  <rect x="415" y="287" width="335" height="68" fill="#F0F4F0" rx="4" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="582" y="307" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Deep Learning  (p ≫ n, nonlinear)</text>
+  <text x="582" y="325" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Gradient descent · implicit regularisation</text>
+  <text x="582" y="342" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Learned representations</text>
+
+  <!-- Bottom -->
+  <text x="400" y="385" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Each regime inherits the vocabulary of the last — and adds new tools for what breaks.</text>
+</svg>
