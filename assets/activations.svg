@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" font-weight="bold"
+        fill="#5C3D1E" text-anchor="middle">Neural Network Activation Functions</text>
+
+  <!-- ============================================================ -->
+  <!-- PANEL 1: ReLU — x: 30–200, y: 60–280 -->
+  <!-- ============================================================ -->
+  <g transform="translate(30, 60)">
+    <!-- Panel background -->
+    <rect width="170" height="220" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+
+    <!-- Axis origin at (85, 130) within panel; range ±3 mapped to ±60px -->
+    <!-- x-axis -->
+    <line x1="20" y1="130" x2="155" y2="130" stroke="#C4A87A" stroke-width="1"/>
+    <!-- y-axis -->
+    <line x1="85" y1="50" x2="85" y2="195" stroke="#C4A87A" stroke-width="1"/>
+    <!-- Axis arrows -->
+    <polygon points="155,127 162,130 155,133" fill="#C4A87A"/>
+    <polygon points="82,50 85,43 88,50" fill="#C4A87A"/>
+    <!-- Tick labels -->
+    <text x="83" y="140" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">0</text>
+
+    <!-- ReLU curve: f(x)=max(0,x). For x in [-3,0]: y=0 (flat); for x in [0,3]: y=x -->
+    <!-- x=-3 => px=85-60=25, y=0 => py=130 -->
+    <!-- x=0  => px=85,       y=0 => py=130 -->
+    <!-- x=3  => px=85+60=145,y=3 => py=130-60=70 -->
+    <path d="M 25,130 L 85,130 L 145,70" stroke="#7C2530" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+
+    <!-- Labels -->
+    <text x="85" y="215" font-family="Georgia, serif" font-size="13" font-weight="bold"
+          fill="#7C2530" text-anchor="middle">ReLU</text>
+    <text x="85" y="230" font-family="Georgia, serif" font-size="10"
+          fill="#5C3D1E" text-anchor="middle">f(x) = max(0, x)</text>
+    <text x="85" y="245" font-family="Georgia, serif" font-size="9" font-style="italic"
+          fill="#2D5A8E" text-anchor="middle">sparse activations</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PANEL 2: Sigmoid — x: 210–380, y: 60–280 -->
+  <!-- ============================================================ -->
+  <g transform="translate(210, 60)">
+    <rect width="170" height="220" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+
+    <!-- Axis: origin at (85, 130); x range [-3,3]->60px, y range [0,1]->[-60,60] mapped as y=0.5 at 130 -->
+    <!-- x-axis at y=0.5 -> py=130 -->
+    <line x1="20" y1="130" x2="155" y2="130" stroke="#C4A87A" stroke-width="1"/>
+    <line x1="85" y1="55" x2="85" y2="200" stroke="#C4A87A" stroke-width="1"/>
+    <polygon points="155,127 162,130 155,133" fill="#C4A87A"/>
+    <polygon points="82,55 85,48 88,55" fill="#C4A87A"/>
+    <text x="83" y="140" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">0</text>
+    <!-- y=1 label -->
+    <text x="78" y="72" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="end">1</text>
+    <line x1="81" y1="70" x2="89" y2="70" stroke="#C4A87A" stroke-width="0.8"/>
+
+    <!-- Sigmoid: sigma(x)=1/(1+e^-x). Scale: y_px = 130 - (f(x)-0.5)*120 -->
+    <!-- x=-3: f≈0.0474, py=130-(−0.4526)*120=130+54.3=184.3 -->
+    <!-- x=-2: f≈0.119,  py=130-(−0.381)*120=130+45.7=175.7  -->
+    <!-- x=-1: f≈0.269,  py=130-(−0.231)*120=130+27.7=157.7  -->
+    <!-- x=0:  f=0.5,    py=130                               -->
+    <!-- x=1:  f≈0.731,  py=130-0.231*120=102.3              -->
+    <!-- x=2:  f≈0.881,  py=130-0.381*120=84.3               -->
+    <!-- x=3:  f≈0.953,  py=130-0.453*120=75.7               -->
+    <!-- px = 85 + x*20 -->
+    <path d="M 25,184 C 35,182 45,175 65,158 S 105,102 145,76"
+          stroke="#2D5A8E" stroke-width="2.5" fill="none"/>
+
+    <text x="85" y="215" font-family="Georgia, serif" font-size="13" font-weight="bold"
+          fill="#2D5A8E" text-anchor="middle">Sigmoid</text>
+    <text x="85" y="230" font-family="Georgia, serif" font-size="10"
+          fill="#5C3D1E" text-anchor="middle">&#963;(x) = 1/(1+e&#8315;&#739;)</text>
+    <text x="85" y="245" font-family="Georgia, serif" font-size="9" font-style="italic"
+          fill="#2D5A8E" text-anchor="middle">smooth, [0,1] output</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PANEL 3: Tanh — x: 390–560, y: 60–280 -->
+  <!-- ============================================================ -->
+  <g transform="translate(390, 60)">
+    <rect width="170" height="220" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+
+    <!-- Axis: origin at (85, 130); y range [-1,1] -> 60px -->
+    <line x1="20" y1="130" x2="155" y2="130" stroke="#C4A87A" stroke-width="1"/>
+    <line x1="85" y1="50" x2="85" y2="200" stroke="#C4A87A" stroke-width="1"/>
+    <polygon points="155,127 162,130 155,133" fill="#C4A87A"/>
+    <polygon points="82,50 85,43 88,50" fill="#C4A87A"/>
+    <text x="83" y="140" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">0</text>
+    <text x="78" y="73" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="end">1</text>
+    <line x1="81" y1="70" x2="89" y2="70" stroke="#C4A87A" stroke-width="0.8"/>
+    <text x="78" y="193" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="end">-1</text>
+    <line x1="81" y1="190" x2="89" y2="190" stroke="#C4A87A" stroke-width="0.8"/>
+
+    <!-- Tanh: f(x)=tanh(x). y_px = 130 - tanh(x)*60 -->
+    <!-- x=-3: tanh≈-0.995, py=130+59.7=189.7 -->
+    <!-- x=-2: tanh≈-0.964, py=130+57.8=187.8 -->
+    <!-- x=-1: tanh≈-0.762, py=130+45.7=175.7 -->
+    <!-- x=0:  tanh=0,      py=130           -->
+    <!-- x=1:  tanh≈0.762,  py=130-45.7=84.3 -->
+    <!-- x=2:  tanh≈0.964,  py=130-57.8=72.2 -->
+    <!-- x=3:  tanh≈0.995,  py=130-59.7=70.3 -->
+    <!-- px = 85 + x*20 -->
+    <path d="M 25,190 C 35,188 45,182 65,158 S 105,82 125,72 L 145,70"
+          stroke="#5C3D1E" stroke-width="2.5" fill="none"/>
+
+    <text x="85" y="215" font-family="Georgia, serif" font-size="13" font-weight="bold"
+          fill="#5C3D1E" text-anchor="middle">Tanh</text>
+    <text x="85" y="230" font-family="Georgia, serif" font-size="10"
+          fill="#5C3D1E" text-anchor="middle">f(x) = tanh(x)</text>
+    <text x="85" y="245" font-family="Georgia, serif" font-size="9" font-style="italic"
+          fill="#2D5A8E" text-anchor="middle">zero-centered, [&#8722;1,1]</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PANEL 4: GELU — x: 570–740, y: 60–280 -->
+  <!-- ============================================================ -->
+  <g transform="translate(570, 60)">
+    <rect width="170" height="220" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+
+    <!-- Axis: origin at (85, 150); x range [-3,3]->60px, y range [-0.2, 3] -->
+    <!-- y_px = 150 - f(x)*50  (so y=1 -> py=100, y=-0.2 -> py=160) -->
+    <line x1="20" y1="150" x2="155" y2="150" stroke="#C4A87A" stroke-width="1"/>
+    <line x1="85" y1="50" x2="85" y2="195" stroke="#C4A87A" stroke-width="1"/>
+    <polygon points="155,147 162,150 155,153" fill="#C4A87A"/>
+    <polygon points="82,50 85,43 88,50" fill="#C4A87A"/>
+    <text x="83" y="160" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">0</text>
+
+    <!-- GELU approx: f(x) ≈ 0.5x(1 + tanh(sqrt(2/π)(x + 0.044715x³))) -->
+    <!-- Key points (x, f(x), px=85+x*20, py=150-f(x)*50):           -->
+    <!-- x=-3: f≈-0.004, py≈150.2  -->
+    <!-- x=-2: f≈-0.045, py≈152.3  -->
+    <!-- x=-1.5: f≈-0.100, py≈155  -->
+    <!-- x=-1: f≈-0.159, py≈158   -->
+    <!-- x=-0.5: f≈-0.154, py≈157.7 -->
+    <!-- x=0: f=0,  py=150         -->
+    <!-- x=0.5: f≈0.345, py≈132.8  -->
+    <!-- x=1: f≈0.841, py≈107.9    -->
+    <!-- x=1.5: f≈1.399, py≈80.1   -->
+    <!-- x=2: f≈1.954, py≈52.3     -->
+    <!-- x=2.5: f≈2.487, py≈25.7   -->
+    <!-- x=3: f≈2.996, py≈0.2      Clamp to ~55 to stay visible -->
+    <!-- px = 85 + x*20 -->
+    <path d="M 25,150 C 35,150 43,152 55,158
+             C 62,161 68,161 75,158
+             C 80,156 83,153 85,150
+             C 88,147 93,137 95,133
+             C 103,116 113,94 125,70
+             L 135,55 L 145,50"
+          stroke="#7C2530" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+
+    <!-- Leaky ReLU dashed for reference -->
+    <!-- Leaky ReLU: f(x)=x for x>0, 0.1x for x<0 -->
+    <!-- x=-3: f=-0.3, py=150+15=165; x=0: py=150; x=3: f=3, py=150-150=0 -> clamp py=55 -->
+    <path d="M 25,165 L 85,150 L 145,50"
+          stroke="#2D5A8E" stroke-width="1.5" fill="none"
+          stroke-dasharray="5,3" opacity="0.7"/>
+
+    <!-- Legend dots -->
+    <circle cx="28" cy="175" r="4" fill="#7C2530"/>
+    <text x="35" y="178" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">GELU</text>
+    <line x1="60" y1="175" x2="72" y2="175" stroke="#2D5A8E" stroke-width="1.5"
+          stroke-dasharray="4,2"/>
+    <text x="75" y="178" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">LeakyReLU</text>
+
+    <text x="85" y="215" font-family="Georgia, serif" font-size="13" font-weight="bold"
+          fill="#7C2530" text-anchor="middle">GELU</text>
+    <text x="85" y="230" font-family="Georgia, serif" font-size="9"
+          fill="#5C3D1E" text-anchor="middle">x&#183;&#934;(x) vs. max(0.1x,x)</text>
+    <text x="85" y="245" font-family="Georgia, serif" font-size="9" font-style="italic"
+          fill="#2D5A8E" text-anchor="middle">smooth, used in Transformers</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- Bottom summary bar -->
+  <!-- ============================================================ -->
+  <rect x="30" y="300" width="740" height="72" fill="none" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+
+  <text x="400" y="318" font-family="Georgia, serif" font-size="11" font-weight="bold"
+        fill="#5C3D1E" text-anchor="middle">Key Properties at a Glance</text>
+
+  <!-- Column headers / property rows -->
+  <text x="90"  y="337" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">ReLU</text>
+  <text x="270" y="337" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Sigmoid</text>
+  <text x="450" y="337" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Tanh</text>
+  <text x="650" y="337" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">GELU / Leaky ReLU</text>
+
+  <text x="90"  y="353" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Range: [0, &#8734;)</text>
+  <text x="270" y="353" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Range: (0, 1)</text>
+  <text x="450" y="353" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Range: (&#8722;1, 1)</text>
+  <text x="650" y="353" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Range: (&#8722;&#8734;, &#8734;)</text>
+
+  <text x="90"  y="367" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Dying neuron risk</text>
+  <text x="270" y="367" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Vanishing gradient</text>
+  <text x="450" y="367" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Vanishing gradient</text>
+  <text x="650" y="367" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Smooth / no dying neurons</text>
+
+</svg>
