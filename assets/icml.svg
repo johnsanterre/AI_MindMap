@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="270" y1="16" x2="270" y2="384" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="540" y1="16" x2="540" y2="384" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LEFT PANEL -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <!-- ICML large title -->
+  <text x="135" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="42" font-weight="bold" fill="#7C2530">ICML</text>
+
+  <!-- Subtitle -->
+  <text x="135" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">International Conference on</text>
+  <text x="135" y="93" text-anchor="middle" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">Machine Learning</text>
+
+  <!-- Thin rule -->
+  <line x1="24" y1="104" x2="248" y2="104" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- Key facts -->
+  <text x="135" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">Key Facts</text>
+
+  <text x="30" y="140" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Founded</text>
+  <text x="248" y="140" text-anchor="end" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">1980</text>
+
+  <text x="30" y="157" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Organizer</text>
+  <text x="248" y="157" text-anchor="end" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">IMLS</text>
+
+  <text x="30" y="174" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Timing</text>
+  <text x="248" y="174" text-anchor="end" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">July</text>
+
+  <text x="30" y="191" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Location</text>
+  <text x="248" y="191" text-anchor="end" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">Varies</text>
+
+  <text x="30" y="208" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Proceedings</text>
+  <text x="248" y="208" text-anchor="end" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">PMLR</text>
+
+  <!-- Thin rule -->
+  <line x1="24" y1="218" x2="248" y2="218" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Scale stats -->
+  <text x="135" y="234" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">Scale (2023)</text>
+
+  <!-- Funnel: submissions -->
+  <rect x="50" y="243" width="170" height="22" rx="3" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="135" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">~9,000 submissions</text>
+
+  <!-- Arrow down -->
+  <line x1="135" y1="265" x2="135" y2="276" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Accepted box -->
+  <rect x="60" y="277" width="150" height="22" rx="3" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1"/>
+  <text x="135" y="292" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">~1,800 accepted</text>
+
+  <!-- Acceptance rate -->
+  <text x="135" y="316" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">~26% acceptance</text>
+
+  <!-- Identity label -->
+  <rect x="24" y="334" width="224" height="36" rx="4" fill="#5C3D1E" opacity="0.08" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="136" y="349" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">"Most theory-heavy of the big-3"</text>
+  <text x="136" y="363" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">ICML · NeurIPS · ICLR</text>
+
+  <!-- Arrow marker def -->
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- CENTER PANEL — Topic Emphasis bar chart -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <text x="405" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">Topic Emphasis</text>
+  <text x="405" y="50" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" font-style="italic">(relative share of accepted papers)</text>
+
+  <!-- Baseline -->
+  <line x1="284" y1="300" x2="528" y2="300" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Bar definitions: x, bar-width=32, height, label, label-y -->
+  <!-- Theory / Optimization -->
+  <rect x="292" y="136" width="32" height="164" rx="2" fill="#7C2530" opacity="0.85"/>
+  <text x="308" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#7C2530" font-weight="bold">Theory /</text>
+  <text x="308" y="137" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#7C2530" font-weight="bold">Optim.</text>
+
+  <!-- Deep Learning -->
+  <rect x="334" y="148" width="32" height="152" rx="2" fill="#2D5A8E" opacity="0.85"/>
+  <text x="350" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" font-weight="bold">Deep</text>
+  <text x="350" y="149" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" font-weight="bold">Learning</text>
+
+  <!-- Probabilistic Methods -->
+  <rect x="376" y="188" width="32" height="112" rx="2" fill="#5C3D1E" opacity="0.75"/>
+  <text x="392" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" font-weight="bold">Prob.</text>
+  <text x="392" y="189" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" font-weight="bold">Methods</text>
+
+  <!-- RL -->
+  <rect x="418" y="200" width="32" height="100" rx="2" fill="#7C2530" opacity="0.55"/>
+  <text x="434" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#7C2530" font-weight="bold">RL</text>
+  <text x="434" y="201" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#7C2530" font-weight="bold">Theory</text>
+
+  <!-- Applications -->
+  <rect x="460" y="212" width="32" height="88" rx="2" fill="#2D5A8E" opacity="0.45"/>
+  <text x="476" y="204" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" font-weight="bold">Applic-</text>
+  <text x="476" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" font-weight="bold">ations</text>
+
+  <!-- Systems -->
+  <rect x="502" y="242" width="24" height="58" rx="2" fill="#C4A87A" opacity="0.85"/>
+  <text x="514" y="234" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" font-weight="bold">Sys-</text>
+  <text x="514" y="243" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" font-weight="bold">tems</text>
+
+  <!-- x-axis tick labels -->
+  <text x="308" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">Th/Opt</text>
+  <text x="350" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">DL</text>
+  <text x="392" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">Prob</text>
+  <text x="434" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">RL</text>
+  <text x="476" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">App</text>
+  <text x="514" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">Sys</text>
+
+  <!-- Note box -->
+  <rect x="280" y="326" width="248" height="44" rx="4" fill="#7C2530" opacity="0.07" stroke="#7C2530" stroke-width="0.75"/>
+  <text x="404" y="341" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Theory + Optimization dominate.</text>
+  <text x="404" y="354" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Empirical papers need strong</text>
+  <text x="404" y="366" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">mathematical justification.</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- RIGHT PANEL — Landmark Papers -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <text x="670" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">Landmark Papers</text>
+
+  <!-- Timeline line -->
+  <line x1="570" y1="55" x2="570" y2="360" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Helper macro: dot + text pairs -->
+  <!-- 2001 -->
+  <circle cx="570" cy="72" r="5" fill="#7C2530"/>
+  <text x="560" y="68" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2001</text>
+  <text x="582" y="69" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530">Random Forests</text>
+  <text x="582" y="80" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Breiman — ensemble trees</text>
+
+  <!-- 2002 -->
+  <circle cx="570" cy="102" r="4" fill="#2D5A8E"/>
+  <text x="560" y="98" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2002</text>
+  <text x="582" y="99" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#2D5A8E">Kernel SVM theory</text>
+  <text x="582" y="110" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Margin bounds, VC analysis</text>
+
+  <!-- 2011 -->
+  <circle cx="570" cy="135" r="4" fill="#5C3D1E"/>
+  <text x="560" y="131" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2011</text>
+  <text x="582" y="132" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#5C3D1E">Hogwild! (parallel SGD)</text>
+  <text x="582" y="143" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Recht et al — async SGD</text>
+
+  <!-- 2014 -->
+  <circle cx="570" cy="168" r="4" fill="#2D5A8E"/>
+  <text x="560" y="164" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2014</text>
+  <text x="582" y="165" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#2D5A8E">LSTM language models</text>
+  <text x="582" y="176" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Scaling sequence models</text>
+
+  <!-- 2016 -->
+  <circle cx="570" cy="202" r="5" fill="#7C2530"/>
+  <text x="560" y="198" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2016</text>
+  <text x="582" y="199" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530">XGBoost</text>
+  <text x="582" y="210" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Chen &amp; Guestrin — GBDT</text>
+
+  <!-- 2018 -->
+  <circle cx="570" cy="236" r="5" fill="#7C2530"/>
+  <text x="560" y="232" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2018</text>
+  <text x="582" y="233" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530">Neural Tangent Kernel</text>
+  <text x="582" y="244" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Jacot et al — infinite-width NNs</text>
+
+  <!-- 2019 -->
+  <circle cx="570" cy="268" r="4" fill="#2D5A8E"/>
+  <text x="560" y="264" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2019</text>
+  <text x="582" y="265" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#2D5A8E">Double Descent</text>
+  <text x="582" y="276" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Belkin et al — bias-variance rethink</text>
+
+  <!-- 2022 -->
+  <circle cx="570" cy="302" r="4" fill="#5C3D1E"/>
+  <text x="560" y="298" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">2022</text>
+  <text x="582" y="299" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#5C3D1E">Grokking phenomenon</text>
+  <text x="582" y="310" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Delayed generalization in NNs</text>
+
+  <!-- Footer note -->
+  <rect x="556" y="326" width="230" height="44" rx="4" fill="#2D5A8E" opacity="0.07" stroke="#2D5A8E" stroke-width="0.75"/>
+  <text x="671" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">All proceedings free at</text>
+  <text x="671" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" font-weight="bold">proceedings.mlr.press</text>
+  <text x="671" y="366" text-anchor="middle" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">(PMLR — open access since 2010)</text>
+</svg>

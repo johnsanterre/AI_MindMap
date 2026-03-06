@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="233" y1="20" x2="233" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="533" y1="20" x2="533" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===== LEFT PANEL ===== -->
+  <!-- AAAI Title -->
+  <text x="116" y="62" font-family="Georgia, serif" font-size="44" font-weight="bold" fill="#7C2530" text-anchor="middle">AAAI</text>
+
+  <!-- Full name split to two lines -->
+  <text x="116" y="84" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Association for the Advancement</text>
+  <text x="116" y="97" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">of Artificial Intelligence</text>
+
+  <!-- Divider under title -->
+  <line x1="30" y1="108" x2="202" y2="108" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- Facts block -->
+  <text x="116" y="130" font-family="Georgia, serif" font-size="10.5" fill="#2D5A8E" text-anchor="middle" font-style="italic">— Quick Facts —</text>
+
+  <!-- Founded -->
+  <text x="42" y="152" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">Founded:</text>
+  <text x="100" y="152" font-family="Georgia, serif" font-size="10" fill="#333">1980</text>
+
+  <!-- Timing -->
+  <text x="42" y="169" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">Timing:</text>
+  <text x="92" y="169" font-family="Georgia, serif" font-size="10" fill="#333">February</text>
+
+  <!-- Location -->
+  <text x="42" y="186" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">Location:</text>
+  <text x="98" y="186" font-family="Georgia, serif" font-size="10" fill="#333">Varies (US cities)</text>
+
+  <!-- Scale heading -->
+  <line x1="30" y1="198" x2="202" y2="198" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="116" y="215" font-family="Georgia, serif" font-size="10.5" fill="#2D5A8E" text-anchor="middle" font-style="italic">— Scale —</text>
+
+  <!-- Scale stats as mini bar chart -->
+  <!-- Accepted papers bar -->
+  <text x="42" y="234" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">Accepted papers</text>
+  <rect x="42" y="238" width="80" height="10" fill="#2D5A8E" opacity="0.25" rx="2"/>
+  <rect x="42" y="238" width="80" height="10" fill="none" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="127" y="247" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">~3,000</text>
+
+  <!-- Attendees bar -->
+  <text x="42" y="264" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">Attendees</text>
+  <rect x="42" y="268" width="120" height="10" fill="#7C2530" opacity="0.2" rx="2"/>
+  <rect x="42" y="268" width="120" height="10" fill="none" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="167" y="277" font-family="Georgia, serif" font-size="9" fill="#7C2530">~8,000</text>
+
+  <!-- Acceptance rate -->
+  <text x="42" y="296" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">Acceptance rate</text>
+  <rect x="42" y="300" width="46" height="10" fill="#5C3D1E" opacity="0.25" rx="2"/>
+  <rect x="42" y="300" width="46" height="10" fill="none" stroke="#5C3D1E" stroke-width="1" rx="2"/>
+  <text x="93" y="309" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">~23%</text>
+
+  <!-- Oldest major AI conference note -->
+  <line x1="30" y1="325" x2="202" y2="325" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="116" y="344" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">Oldest major AI conference</text>
+  <text x="116" y="358" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">— broader than ML alone</text>
+
+  <!-- ===== CENTER PANEL ===== -->
+  <text x="383" y="40" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Scope: Broader than ML</text>
+
+  <!-- Large outer circle: AAAI scope -->
+  <circle cx="383" cy="210" r="150" fill="#FDFAF4" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="383" y="62" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="middle" font-style="italic">AAAI scope</text>
+
+  <!-- Inner ML-conference region (dashed navy) -->
+  <ellipse cx="370" cy="190" rx="80" ry="70" fill="#2D5A8E" fill-opacity="0.06" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="370" y="130" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">ML conferences</text>
+  <text x="370" y="141" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">(NeurIPS / ICML)</text>
+
+  <!-- Navy bubbles: ML topics inside shared region -->
+  <!-- Statistical ML -->
+  <circle cx="340" cy="175" r="24" fill="#2D5A8E" fill-opacity="0.18" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="340" y="172" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" text-anchor="middle">Statistical</text>
+  <text x="340" y="182" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" text-anchor="middle">ML</text>
+
+  <!-- Deep Learning -->
+  <circle cx="400" cy="195" r="22" fill="#2D5A8E" fill-opacity="0.18" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="400" y="192" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" text-anchor="middle">Deep</text>
+  <text x="400" y="202" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" text-anchor="middle">Learning</text>
+
+  <!-- NLP — partly shared -->
+  <circle cx="355" cy="225" r="20" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="355" y="228" font-family="Georgia, serif" font-size="7.5" fill="#2D5A8E" text-anchor="middle">NLP</text>
+
+  <!-- Brown bubbles: AAAI-specific topics in outer ring -->
+  <!-- Knowledge Representation -->
+  <circle cx="460" cy="160" r="28" fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="1.4"/>
+  <text x="460" y="157" font-family="Georgia, serif" font-size="7" fill="#5C3D1E" text-anchor="middle">Knowledge</text>
+  <text x="460" y="167" font-family="Georgia, serif" font-size="7" fill="#5C3D1E" text-anchor="middle">Representation</text>
+
+  <!-- Planning & Scheduling -->
+  <circle cx="455" cy="240" r="26" fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="1.4"/>
+  <text x="455" y="237" font-family="Georgia, serif" font-size="7" fill="#5C3D1E" text-anchor="middle">Planning &amp;</text>
+  <text x="455" y="247" font-family="Georgia, serif" font-size="7" fill="#5C3D1E" text-anchor="middle">Scheduling</text>
+
+  <!-- Multi-Agent Systems -->
+  <circle cx="310" cy="270" r="24" fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="1.4"/>
+  <text x="310" y="267" font-family="Georgia, serif" font-size="7" fill="#5C3D1E" text-anchor="middle">Multi-Agent</text>
+  <text x="310" y="277" font-family="Georgia, serif" font-size="7" fill="#5C3D1E" text-anchor="middle">Systems</text>
+
+  <!-- Robotics -->
+  <circle cx="390" cy="285" r="21" fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="1.4"/>
+  <text x="390" y="288" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" text-anchor="middle">Robotics</text>
+
+  <!-- AI Ethics — red, outer ring -->
+  <circle cx="315" cy="150" r="26" fill="#7C2530" fill-opacity="0.14" stroke="#7C2530" stroke-width="1.4"/>
+  <text x="315" y="147" font-family="Georgia, serif" font-size="7" fill="#7C2530" text-anchor="middle">AI Ethics</text>
+  <text x="315" y="157" font-family="Georgia, serif" font-size="7" fill="#7C2530" text-anchor="middle">&amp; Fairness</text>
+
+  <!-- Legend at bottom -->
+  <rect x="248" y="358" width="10" height="10" fill="#2D5A8E" fill-opacity="0.4" rx="2"/>
+  <text x="262" y="368" font-family="Georgia, serif" font-size="8" fill="#2D5A8E">Shared with ML conferences</text>
+  <rect x="388" y="358" width="10" height="10" fill="#5C3D1E" fill-opacity="0.4" rx="2"/>
+  <text x="402" y="368" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">AAAI-distinctive areas</text>
+
+  <!-- ===== RIGHT PANEL ===== -->
+  <!-- Classic Award box -->
+  <rect x="550" y="28" width="230" height="72" fill="#7C2530" fill-opacity="0.07" stroke="#7C2530" stroke-width="1.2" rx="4"/>
+  <text x="665" y="47" font-family="Georgia, serif" font-size="10.5" font-weight="bold" fill="#7C2530" text-anchor="middle">AAAI Classic Paper Award</text>
+  <text x="665" y="61" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Papers 25+ years old,</text>
+  <text x="665" y="73" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">recognized for lasting impact</text>
+  <text x="665" y="88" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle" font-style="italic">Foundational ideas that shaped AI</text>
+
+  <!-- AI Magazine box -->
+  <rect x="550" y="112" width="230" height="58" fill="#2D5A8E" fill-opacity="0.07" stroke="#2D5A8E" stroke-width="1.2" rx="4"/>
+  <text x="665" y="130" font-family="Georgia, serif" font-size="10.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">AI Magazine</text>
+  <text x="665" y="145" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Publishing since 1980 — popular</text>
+  <text x="665" y="158" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">science AI for broad audiences</text>
+
+  <!-- Historically significant papers -->
+  <line x1="550" y1="184" x2="780" y2="184" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="665" y="200" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Historically Significant Papers</text>
+
+  <!-- Paper 1 -->
+  <circle cx="562" cy="220" r="4" fill="#7C2530"/>
+  <text x="572" y="216" font-family="Georgia, serif" font-size="8.5" fill="#333" font-weight="bold">Hart, Nilsson &amp; Raphael (1968)</text>
+  <text x="572" y="227" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" font-style="italic">A* search algorithm</text>
+
+  <!-- Paper 2 -->
+  <circle cx="562" cy="248" r="4" fill="#7C2530"/>
+  <text x="572" y="244" font-family="Georgia, serif" font-size="8.5" fill="#333" font-weight="bold">Pearl (1985)</text>
+  <text x="572" y="255" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" font-style="italic">Bayesian networks (early work)</text>
+
+  <!-- Paper 3 -->
+  <circle cx="562" cy="276" r="4" fill="#7C2530"/>
+  <text x="572" y="272" font-family="Georgia, serif" font-size="8.5" fill="#333" font-weight="bold">Fikes &amp; Nilsson (1971)</text>
+  <text x="572" y="283" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" font-style="italic">STRIPS planning system</text>
+
+  <!-- Paper 4 -->
+  <circle cx="562" cy="304" r="4" fill="#7C2530"/>
+  <text x="572" y="300" font-family="Georgia, serif" font-size="8.5" fill="#333" font-weight="bold">Davis &amp; Putnam (1960)</text>
+  <text x="572" y="311" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" font-style="italic">SAT solving (DP procedure)</text>
+
+  <!-- footer note right panel -->
+  <line x1="550" y1="328" x2="780" y2="328" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="665" y="346" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle" font-style="italic">KR &amp; Planning: AAAI strengths</text>
+  <text x="665" y="358" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle" font-style="italic">largely absent from ML-only venues</text>
+  <text x="665" y="374" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">~3,000 papers · est. 1980 · AAAI.org</text>
+</svg>

@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="280" y1="15" x2="280" y2="385" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="550" y1="15" x2="550" y2="385" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===================== LEFT PANEL ===================== -->
+  <!-- NeurIPS title -->
+  <text x="145" y="52" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#7C2530" text-anchor="middle">NeurIPS</text>
+  <!-- Subtitle -->
+  <text x="145" y="72" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Neural Information Processing Systems</text>
+
+  <!-- Decorative underline -->
+  <line x1="30" y1="80" x2="260" y2="80" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Key Facts heading -->
+  <text x="145" y="100" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Key Facts</text>
+
+  <!-- Facts box -->
+  <rect x="20" y="108" width="250" height="130" rx="4" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <text x="35" y="128" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">
+    <tspan font-weight="bold">Founded:</tspan><tspan> 1987</tspan>
+  </text>
+  <text x="35" y="148" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">
+    <tspan font-weight="bold">Timing:</tspan><tspan> December (annual)</tspan>
+  </text>
+  <text x="35" y="168" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">
+    <tspan font-weight="bold">Location:</tspan><tspan> Varies</tspan>
+  </text>
+  <text x="35" y="183" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">  (Vancouver, New Orleans, ...)</text>
+
+  <line x1="30" y1="192" x2="265" y2="192" stroke="#D4C5A9" stroke-width="0.8"/>
+
+  <!-- Scale stats -->
+  <text x="145" y="212" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">2023 Scale</text>
+  <text x="35" y="228" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">
+    <tspan font-weight="bold">Submissions:</tspan><tspan> ~12,000</tspan>
+  </text>
+  <text x="35" y="244" font-family="Georgia, serif" font-size="11" fill="#7C2530">
+    <tspan font-weight="bold">Accepted:</tspan><tspan> ~3,500  (~29%)</tspan>
+  </text>
+
+  <!-- Attendees badge -->
+  <rect x="20" y="258" width="250" height="36" rx="4" fill="#2D5A8E"/>
+  <text x="145" y="272" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">~16,000 Attendees</text>
+  <text x="145" y="287" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">largest ML conference</text>
+
+  <!-- Small note -->
+  <text x="145" y="320" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">One of the "Big 3" ML venues</text>
+  <text x="145" y="335" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">alongside ICML and ICLR</text>
+
+  <!-- ===================== CENTER PANEL ===================== -->
+  <text x="415" y="35" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Timeline of NeurIPS Milestones</text>
+  <line x1="295" y1="42" x2="543" y2="42" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Vertical timeline spine -->
+  <line x1="340" y1="55" x2="340" y2="375" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Timeline entries: year dot + label -->
+  <!-- 1987 -->
+  <circle cx="340" cy="68" r="5" fill="#7C2530"/>
+  <text x="328" y="72" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="end" font-weight="bold">1987</text>
+  <text x="352" y="66" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Founded — neuroscience</text>
+  <text x="352" y="78" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">&amp; computation focus</text>
+
+  <!-- 1998 -->
+  <circle cx="340" cy="112" r="5" fill="#2D5A8E"/>
+  <text x="328" y="116" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="end" font-weight="bold">1998</text>
+  <text x="352" y="110" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Renamed from NIPS,</text>
+  <text x="352" y="122" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">growing ML presence</text>
+
+  <!-- 2012 -->
+  <circle cx="340" cy="156" r="6" fill="#7C2530"/>
+  <text x="328" y="160" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="end" font-weight="bold">2012</text>
+  <text x="352" y="154" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">AlexNet — deep learning</text>
+  <text x="352" y="166" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">inflection point</text>
+
+  <!-- 2014 -->
+  <circle cx="340" cy="200" r="5" fill="#2D5A8E"/>
+  <text x="328" y="204" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="end" font-weight="bold">2014</text>
+  <text x="352" y="198" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">GANs — Goodfellow et al</text>
+  <text x="352" y="210" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">generative models born</text>
+
+  <!-- 2017 -->
+  <circle cx="340" cy="244" r="6" fill="#7C2530"/>
+  <text x="328" y="248" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="end" font-weight="bold">2017</text>
+  <text x="352" y="242" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Transformer — "Attention</text>
+  <text x="352" y="254" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Is All You Need"</text>
+
+  <!-- 2020 -->
+  <circle cx="340" cy="288" r="5" fill="#2D5A8E"/>
+  <text x="328" y="292" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="end" font-weight="bold">2020</text>
+  <text x="352" y="286" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Fully virtual — COVID,</text>
+  <text x="352" y="298" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">~22,000 registered</text>
+
+  <!-- 2023 -->
+  <circle cx="340" cy="332" r="6" fill="#7C2530"/>
+  <text x="328" y="336" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="end" font-weight="bold">2023</text>
+  <text x="352" y="330" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Record ~12,000 subs,</text>
+  <text x="352" y="342" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">LLM era in full swing</text>
+
+  <!-- ===================== RIGHT PANEL ===================== -->
+  <text x="670" y="35" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Paper Acceptance Tiers</text>
+  <line x1="558" y1="42" x2="788" y2="42" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Oral box (tiny, darkest) -->
+  <rect x="565" y="55" width="220" height="38" rx="3" fill="#7C2530"/>
+  <text x="675" y="70" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Oral</text>
+  <text x="675" y="85" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">~100 papers/yr  ·  top ~1%</text>
+
+  <!-- Spotlight box (medium) -->
+  <rect x="565" y="103" width="220" height="55" rx="3" fill="#2D5A8E"/>
+  <text x="675" y="120" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Spotlight</text>
+  <text x="675" y="136" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">~500 papers/yr  ·  top ~4%</text>
+  <text x="675" y="150" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">short talk + poster</text>
+
+  <!-- Poster box (large, lightest) -->
+  <rect x="565" y="168" width="220" height="80" rx="3" fill="#5C3D1E"/>
+  <text x="675" y="190" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Poster</text>
+  <text x="675" y="207" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">~2,900 papers/yr</text>
+  <text x="675" y="222" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">the bulk — still prestigious</text>
+  <text x="675" y="237" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">accepted ~29% overall</text>
+
+  <!-- Additional tracks -->
+  <line x1="565" y1="262" x2="785" y2="262" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="675" y="280" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Additional Tracks</text>
+
+  <rect x="565" y="288" width="220" height="26" rx="3" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="675" y="305" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Datasets &amp; Benchmarks Track</text>
+
+  <rect x="565" y="320" width="220" height="26" rx="3" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="675" y="337" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Competition Track</text>
+
+  <rect x="565" y="352" width="220" height="26" rx="3" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="675" y="369" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Workshops (last 2 days)</text>
+</svg>
