@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="42" font-family="Georgia,serif" font-size="17" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Short but Skinny: The Classic Tabular Dataset</text>
+
+  <!-- X matrix label -->
+  <text x="175" y="80" font-family="Georgia,serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">X  (design matrix)</text>
+  <text x="175" y="97" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle">n = 6 rows · p = 2 features</text>
+
+  <!-- X matrix bracket left -->
+  <path d="M110,108 L100,108 L100,288 L110,288" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- X matrix bracket right -->
+  <path d="M240,108 L250,108 L250,288 L240,288" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- X matrix column headers -->
+  <text x="152" y="122" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-style="italic">x₁</text>
+  <text x="210" y="122" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-style="italic">x₂</text>
+
+  <!-- X matrix rows -->
+  <text x="152" y="144" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">10</text><text x="210" y="144" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">20</text>
+  <text x="152" y="168" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">11</text><text x="210" y="168" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">10</text>
+  <text x="152" y="192" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">12</text><text x="210" y="192" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">11</text>
+  <text x="152" y="216" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">10</text><text x="210" y="216" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">10</text>
+  <text x="152" y="240" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">9</text><text x="210" y="240" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">10</text>
+  <text x="152" y="264" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">8</text><text x="210" y="264" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">10</text>
+
+  <!-- = sign -->
+  <text x="290" y="200" font-family="Georgia,serif" font-size="22" fill="#5C3D1E" text-anchor="middle">β</text>
+  <text x="320" y="200" font-family="Georgia,serif" font-size="22" fill="#5C3D1E" text-anchor="middle">+</text>
+  <text x="350" y="200" font-family="Georgia,serif" font-size="22" fill="#5C3D1E" text-anchor="middle">ε</text>
+  <text x="265" y="200" font-family="Georgia,serif" font-size="22" fill="#5C3D1E" text-anchor="middle">≈</text>
+
+  <!-- y vector label -->
+  <text x="420" y="80" font-family="Georgia,serif" font-size="15" fill="#7C2530" text-anchor="middle" font-weight="bold">y  (target)</text>
+  <text x="420" y="97" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle">n = 6 · 1 output</text>
+
+  <!-- y vector brackets -->
+  <path d="M393,108 L383,108 L383,288 L393,288" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <path d="M447,108 L457,108 L457,288 L447,288" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- y vector values -->
+  <text x="420" y="122" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">y</text>
+  <text x="420" y="144" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="420" y="168" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="420" y="192" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="420" y="216" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="420" y="240" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">4</text>
+  <text x="420" y="264" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">4</text>
+
+  <!-- Right panel: key facts -->
+  <rect x="490" y="68" width="280" height="240" fill="#F5EFE4" rx="6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="630" y="92" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle" font-weight="bold">What makes it "short but skinny"</text>
+
+  <text x="505" y="118" font-family="Georgia,serif" font-size="12" fill="#2D5A8E">● n = 6 observations  (short)</text>
+  <text x="505" y="140" font-family="Georgia,serif" font-size="12" fill="#2D5A8E">● p = 2 features  (skinny)</text>
+  <text x="505" y="162" font-family="Georgia,serif" font-size="12" fill="#5C3D1E">● n ≫ p  →  overdetermined</text>
+  <text x="505" y="184" font-family="Georgia,serif" font-size="12" fill="#5C3D1E">● unique least-squares solution</text>
+
+  <line x1="505" y1="198" x2="755" y2="198" stroke="#C4A87A" stroke-width="1"/>
+
+  <text x="505" y="218" font-family="Georgia,serif" font-size="12" fill="#7C2530">residual df  =  n − p  =  3</text>
+  <text x="505" y="238" font-family="Georgia,serif" font-size="12" fill="#7C2530">β̂ = (XᵀX)⁻¹Xᵀy</text>
+  <text x="505" y="258" font-family="Georgia,serif" font-size="12" fill="#7C2530">XᵀX is 2 × 2  (trivially small)</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="330" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">More observations than parameters = the overdetermined regime.</text>
+  <text x="400" y="350" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">Redundancy averages out noise and makes estimates trustworthy.</text>
+  <text x="400" y="375" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Every supervised learning problem reduces to this structure at heart.</text>
+</svg>
