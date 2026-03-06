@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">The AI Winters: Hype, Collapse, and Revival</text>
+
+  <!-- Timeline spine -->
+  <line x1="40" y1="200" x2="760" y2="200" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="757,196 766,200 757,204" fill="#C4A87A"/>
+
+  <!-- Hype curve (rough sinusoidal) -->
+  <!-- First hype: 1956-1969 (high) -->
+  <path d="M40,200 C80,200 100,120 140,110 C160,105 180,120 200,200" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- First winter: 1969-1979 (dip) -->
+  <path d="M200,200 C230,200 250,250 280,265 C300,272 320,250 360,200" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <!-- Second hype: 1980-1987 (rise) -->
+  <path d="M360,200 C390,200 400,130 420,118 C435,110 450,125 470,200" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Second winter: 1987-1993 (dip) -->
+  <path d="M470,200 C495,200 510,255 530,268 C545,275 560,252 590,200" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <!-- Statistical thaw + rise: 1993-present -->
+  <path d="M590,200 C610,200 620,170 640,150 C660,130 680,100 740,60" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+
+  <!-- Shade winter zones -->
+  <rect x="200" y="150" width="160" height="120" fill="#7C2530" opacity="0.08" rx="2"/>
+  <rect x="470" y="150" width="120" height="120" fill="#7C2530" opacity="0.08" rx="2"/>
+
+  <!-- Key events — top labels -->
+  <line x1="140" y1="110" x2="140" y2="60" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="140" y="55" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">1956</text>
+  <text x="140" y="45" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Dartmouth</text>
+  <text x="140" y="35" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Conference</text>
+
+  <line x1="280" y1="265" x2="280" y2="300" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="280" y="312" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">1973</text>
+  <text x="280" y="322" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">Lighthill</text>
+  <text x="280" y="332" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">Report</text>
+
+  <line x1="420" y1="118" x2="420" y2="60" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="420" y="55" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">1980s</text>
+  <text x="420" y="45" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Expert</text>
+  <text x="420" y="35" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Systems</text>
+
+  <line x1="530" y1="268" x2="530" y2="310" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="530" y="320" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">1987–93</text>
+  <text x="530" y="330" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">Expert sys.</text>
+  <text x="530" y="340" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">collapse</text>
+
+  <line x1="640" y1="150" x2="640" y2="60" stroke="#5C3D1E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="640" y="55" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">1995–2006</text>
+  <text x="640" y="45" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">SVMs · DBNs</text>
+
+  <line x1="740" y1="60" x2="740" y2="40" stroke="#7C2530" stroke-width="1"/>
+  <text x="740" y="35" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">2012+</text>
+  <text x="740" y="25" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">AlexNet</text>
+
+  <!-- Winter labels -->
+  <text x="280" y="175" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">1st Winter</text>
+  <text x="280" y="188" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">1969–79</text>
+  <text x="530" y="175" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">2nd Winter</text>
+  <text x="530" y="188" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">1987–93</text>
+
+  <!-- Y axis labels -->
+  <text x="28" y="115" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="end">hype</text>
+  <text x="28" y="200" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="end">—</text>
+  <text x="28" y="270" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="end">bust</text>
+
+  <!-- Bottom boxes -->
+  <rect x="30" y="355" width="220" height="32" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="140" y="368" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">What triggers winters</text>
+  <text x="140" y="380" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Overpromise · intractability · funding cuts</text>
+
+  <rect x="290" y="355" width="220" height="32" rx="3" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="368" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">What ends winters</text>
+  <text x="400" y="380" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">New paradigm · data · hardware</text>
+
+  <rect x="550" y="355" width="220" height="32" rx="3" fill="#FAF0EE" stroke="#7C2530" stroke-width="1"/>
+  <text x="660" y="368" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">The pattern</text>
+  <text x="660" y="380" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Hype → overreach → cut → quiet progress</text>
+</svg>

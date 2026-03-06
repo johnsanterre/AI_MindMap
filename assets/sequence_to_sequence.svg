@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="15" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Sequence-to-Sequence: Encoder → Context Vector → Decoder</text>
+
+  <!-- Input tokens -->
+  <text x="120" y="68" font-family="Georgia,serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Source: "The cat sat"</text>
+  <rect x="30"  y="78" width="52" height="32" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="56"  y="99" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">The</text>
+  <rect x="90"  y="78" width="52" height="32" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="116" y="99" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">cat</text>
+  <rect x="150" y="78" width="52" height="32" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="176" y="99" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">sat</text>
+
+  <!-- Encoder LSTM cells -->
+  <text x="120" y="140" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Encoder (LSTM)</text>
+  <!-- Encoder cell 1 -->
+  <rect x="30" y="150" width="52" height="45" rx="4" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="56" y="176" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle">LSTM</text>
+  <line x1="56" y1="110" x2="56" y2="150" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="52,147 56,155 60,147" fill="#2D5A8E"/>
+  <!-- Encoder cell 2 -->
+  <rect x="90" y="150" width="52" height="45" rx="4" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="116" y="176" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle">LSTM</text>
+  <line x1="116" y1="110" x2="116" y2="150" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="112,147 116,155 120,147" fill="#2D5A8E"/>
+  <line x1="82" y1="172" x2="90" y2="172" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="87,168 95,172 87,176" fill="#2D5A8E"/>
+  <!-- Encoder cell 3 -->
+  <rect x="150" y="150" width="52" height="45" rx="4" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="176" y="176" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle">LSTM</text>
+  <line x1="176" y1="110" x2="176" y2="150" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="172,147 176,155 180,147" fill="#2D5A8E"/>
+  <line x1="142" y1="172" x2="150" y2="172" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="147,168 155,172 147,176" fill="#2D5A8E"/>
+
+  <!-- Context vector -->
+  <line x1="202" y1="172" x2="245" y2="172" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="242,168 250,172 242,176" fill="#C4A87A"/>
+  <rect x="250" y="145" width="80" height="55" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="290" y="166" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Context</text>
+  <text x="290" y="180" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Vector</text>
+  <text x="290" y="195" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">fixed size!</text>
+  <text x="290" y="220" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">← bottleneck</text>
+
+  <!-- Arrow to decoder -->
+  <line x1="330" y1="172" x2="368" y2="172" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="365,168 373,172 365,176" fill="#C4A87A"/>
+
+  <!-- Decoder LSTM cells -->
+  <text x="540" y="140" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Decoder (LSTM)</text>
+  <rect x="373" y="150" width="52" height="45" rx="4" fill="#FAD4D4" stroke="#7C2530" stroke-width="2"/>
+  <text x="399" y="176" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">LSTM</text>
+  <rect x="443" y="150" width="52" height="45" rx="4" fill="#FAD4D4" stroke="#7C2530" stroke-width="2"/>
+  <text x="469" y="176" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">LSTM</text>
+  <line x1="425" y1="172" x2="443" y2="172" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="440,168 448,172 440,176" fill="#7C2530"/>
+  <rect x="513" y="150" width="52" height="45" rx="4" fill="#FAD4D4" stroke="#7C2530" stroke-width="2"/>
+  <text x="539" y="176" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">LSTM</text>
+  <line x1="495" y1="172" x2="513" y2="172" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="510,168 518,172 510,176" fill="#7C2530"/>
+  <!-- More dots -->
+  <text x="590" y="177" font-family="Georgia,serif" font-size="16" fill="#7C2530">...</text>
+
+  <!-- Output tokens -->
+  <text x="540" y="68" font-family="Georgia,serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Target: "Le chat s'est assis"</text>
+  <line x1="399" y1="150" x2="399" y2="110" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="395,112 399,104 403,112" fill="#7C2530"/>
+  <rect x="373" y="78" width="52" height="32" rx="3" fill="#FAF0EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="399" y="99" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">Le</text>
+  <line x1="469" y1="150" x2="469" y2="110" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="465,112 469,104 473,112" fill="#7C2530"/>
+  <rect x="443" y="78" width="52" height="32" rx="3" fill="#FAF0EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="469" y="99" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">chat</text>
+  <line x1="539" y1="150" x2="539" y2="110" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="535,112 539,104 543,112" fill="#7C2530"/>
+  <rect x="513" y="78" width="52" height="32" rx="3" fill="#FAF0EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="539" y="99" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">s'est</text>
+
+  <!-- The problem + attention fix -->
+  <rect x="30" y="230" width="340" height="80" rx="4" fill="#FAF0EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="200" y="250" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">The Problem: Bottleneck</text>
+  <text x="200" y="268" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">All source meaning compressed to one vector.</text>
+  <text x="200" y="283" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Short sentences: OK. Long sentences: catastrophic.</text>
+  <text x="200" y="298" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">BLEU score degrades sharply beyond ~20 tokens.</text>
+
+  <rect x="390" y="230" width="385" height="80" rx="4" fill="#EEF5EE" stroke="#509050" stroke-width="1.5"/>
+  <text x="582" y="250" font-family="Georgia,serif" font-size="11" fill="#306030" text-anchor="middle" font-weight="bold">The Fix: Attention (Bahdanau 2015)</text>
+  <text x="582" y="268" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Decoder attends to all encoder hidden states.</text>
+  <text x="582" y="283" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Soft alignment: αᵢ weights encoder output at step i.</text>
+  <text x="582" y="298" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">Context vector is now dynamic, not fixed.</text>
+
+  <text x="400" y="345" font-family="Georgia,serif" font-size="12" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Seq2seq bottleneck → attention → Transformer (discard RNN entirely)</text>
+  <text x="400" y="365" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">The progression from seq2seq to Transformers is a single thread: removing the fixed-vector constraint step by step.</text>
+</svg>

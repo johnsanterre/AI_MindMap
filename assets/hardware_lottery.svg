@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="15" fill="#2C2C2C" text-anchor="middle" font-weight="bold">The Hardware Lottery: Ideas Win When Hardware Fits Them</text>
+
+  <!-- Central concept: 2 axes: Algorithm fit × Hardware availability -->
+  <!-- 2x2 grid -->
+  <rect x="240" y="55" width="180" height="130" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="330" y="78" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Good algorithm</text>
+  <text x="330" y="92" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Bad hardware fit</text>
+  <text x="330" y="114" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Neural nets 1980s</text>
+  <text x="330" y="128" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Sparse models today</text>
+  <text x="330" y="142" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Neuromorphic computing</text>
+  <text x="330" y="162" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">→ Loses lottery</text>
+  <text x="330" y="178" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">(for now)</text>
+
+  <rect x="430" y="55" width="180" height="130" rx="3" fill="#EEF5EE" stroke="#509050" stroke-width="2"/>
+  <text x="520" y="78" font-family="Georgia,serif" font-size="10" fill="#306030" text-anchor="middle" font-weight="bold">Good algorithm</text>
+  <text x="520" y="92" font-family="Georgia,serif" font-size="10" fill="#306030" text-anchor="middle" font-weight="bold">Good hardware fit</text>
+  <text x="520" y="114" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Deep learning (GPUs)</text>
+  <text x="520" y="128" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Transformers (matrix mult)</text>
+  <text x="520" y="142" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">CNNs (parallel conv)</text>
+  <text x="520" y="162" font-family="Georgia,serif" font-size="11" fill="#306030" text-anchor="middle" font-weight="bold">→ Wins lottery</text>
+  <text x="520" y="178" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">(gets researched, deployed)</text>
+
+  <!-- The GPU accident story -->
+  <rect x="30" y="55" width="200" height="130" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="130" y="75" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">The GPU Accident</text>
+  <text x="40" y="95" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">NVIDIA built GPUs for</text>
+  <text x="40" y="109" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">3D video game rendering:</text>
+  <text x="40" y="123" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">• massive parallelism</text>
+  <text x="40" y="137" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">• float32 throughput</text>
+  <text x="40" y="151" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">• matrix operations</text>
+  <text x="130" y="172" font-family="Georgia,serif" font-size="10" fill="#C4A87A" text-anchor="middle">↕ same operations!</text>
+  <text x="130" y="185" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">Neural net training</text>
+
+  <!-- Right: future hardware -->
+  <rect x="620" y="55" width="155" height="130" rx="4" fill="#FAF0EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="697" y="75" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Future Lotteries</text>
+  <text x="630" y="95" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">TPUs → transformers</text>
+  <text x="630" y="110" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">Neuromorphic →?</text>
+  <text x="630" y="125" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">Photonic →?</text>
+  <text x="630" y="140" font-family="Georgia,serif" font-size="10" fill="#5C3D1E">Quantum →?</text>
+  <text x="697" y="162" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">new hardware unlocks</text>
+  <text x="697" y="174" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">new winning ideas</text>
+
+  <!-- Middle bottom: timeline of compute -->
+  <rect x="30" y="205" width="740" height="75" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="224" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Compute Available (FLOPS/dollar) — doubles roughly every ~2 years</text>
+  <!-- Fake log-scale bar -->
+  <rect x="50"  y="235" width="15"  height="25" fill="#CCCCCC" rx="2"/>
+  <rect x="140" y="230" width="20"  height="30" fill="#AABBCC" rx="2"/>
+  <rect x="240" y="224" width="25"  height="36" fill="#8899CC" rx="2"/>
+  <rect x="350" y="216" width="30"  height="44" fill="#6677BB" rx="2"/>
+  <rect x="470" y="205" width="35"  height="55" fill="#4455AA" rx="2" opacity="0.8"/>
+  <rect x="600" y="195" width="40"  height="65" fill="#3344A0" rx="2" opacity="0.7"/>
+  <text x="57"  y="270" font-family="Georgia,serif" font-size="8" fill="#555" text-anchor="middle">1980s</text>
+  <text x="150" y="270" font-family="Georgia,serif" font-size="8" fill="#555" text-anchor="middle">1990</text>
+  <text x="252" y="270" font-family="Georgia,serif" font-size="8" fill="#555" text-anchor="middle">2000</text>
+  <text x="365" y="270" font-family="Georgia,serif" font-size="8" fill="#555" text-anchor="middle">2006</text>
+  <text x="487" y="270" font-family="Georgia,serif" font-size="8" fill="#333" text-anchor="middle">2012</text>
+  <text x="620" y="270" font-family="Georgia,serif" font-size="8" fill="#111" text-anchor="middle">2017+</text>
+
+  <!-- Hooker quote -->
+  <text x="400" y="308" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle" font-style="italic">"A research idea wins if it works, but it doesn't get tried unless the hardware can run it."</text>
+  <text x="400" y="325" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">— Sara Hooker, "The Hardware Lottery" (2020)</text>
+
+  <text x="400" y="360" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Implication: benchmark culture + GPU monoculture may be systematically</text>
+  <text x="400" y="378" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">crowding out architectures that need different hardware to shine.</text>
+</svg>

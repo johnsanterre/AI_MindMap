@@ -1,0 +1,133 @@
+! Hardware Lottery
+
+<img src="assets/hardware_lottery.svg" alt="Diagram illustrating the Hardware Lottery" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine two equally talented writers in 1985: one writes for print, the other for the web. The print writer gets published, praised, and funded. The web writer's manuscripts sit in a drawer — not because the ideas are worse, but because the infrastructure to distribute them doesn't exist yet. Sara Hooker's 2020 paper ''The Hardware Lottery'' makes the same argument about AI research: which ideas //win// is determined not just by intellectual merit, but by whether the hardware of that era happens to fit them. Deep learning didn't triumph because it was provably the best approach — it triumphed partly because the GPU, built to render video games, turned out to be a near-perfect accelerator for the matrix multiplications at the heart of neural network training.
+
+---
+
+!! The Core Insight
+
+The thesis is simple and unsettling: ''research success is path-dependent on hardware availability''. When an algorithm's computational demands match what hardware can efficiently deliver, that algorithm gets resources, produces results, attracts funding, and shapes what the next generation of researchers studies. Algorithms that require hardware that doesn't yet exist — or that runs poorly on hardware that does — get abandoned. The ideas themselves may be sound; they simply drew the wrong ticket in the hardware lottery.
+
+This is not a new phenomenon. [[Backpropagation and Chain Rule|Backpropagation]] was known in the 1960s and formalized for [[Neural Networks]] by 1986 — but the networks researchers wanted to train required millions of floating-point operations. Consumer CPUs of the era were sequential, scalar machines. The idea sat largely dormant for decades, not because it was wrong, but because the hardware to run it efficiently didn't exist.
+
+The ''hardware lottery'' reframes AI history: instead of a clean story of ideas triumphing on merit, we see a messy story of ideas triumphing //when their hardware era arrived//.
+
+---
+
+!! Historical Winners and Losers
+
+''Winner — [[Transformers]]:'' The Transformer architecture (Vaswani et al., 2017) is almost perfectly shaped for GPU parallelism. Self-attention is a sequence of matrix multiplications over the full input simultaneously. No sequential dependency; every token attends to every other token in one parallel pass. Modern GPUs and TPUs are optimized for exactly this kind of dense, regular linear algebra. Transformers didn't just win because attention was a good idea — they won because they fit 2017 hardware like a key in a lock.
+
+''Winner — [[CNN]]:'' Convolutional neural networks were described theoretically in the 1980s. [[AlexNet]] (2012) was their breakout moment — not because convolutions were newly invented, but because GPU memory and CUDA libraries had just reached the threshold where training a deep ConvNet in days, rather than years, became feasible.
+
+''Loser (then) — [[Recurrent Networks and LSTMs|LSTMs]]:'' Long Short-Term Memory networks were invented by Hochreiter and Schmidhuber in 1997. Sequence-to-sequence learning with LSTMs only became //practical// in 2014 — when GPU memory had grown large enough to hold long sequences in a single batch. The idea was right. The hardware took 17 years to catch up.
+
+''Loser — Sparse and symbolic models:'' Sparse activations, mixture-of-experts, and symbolic AI require irregular, conditional computation — some neurons fire, most don't. GPUs hate irregular computation. Their strength is doing the //same// thing to thousands of values simultaneously. Sparse architectures that would be cheap on neuromorphic hardware run inefficiently on the GPUs that dominate every research lab.
+
+''Loser — Neuromorphic computing:'' Spiking neural networks, which communicate in sparse, event-driven pulses (much like biological neurons), require fundamentally different hardware — chips like Intel's Loihi. They promise extreme energy efficiency for certain workloads. But almost no standard GPU or TPU infrastructure supports them, so they receive a tiny fraction of research resources and produce proportionally few compelling benchmarks.
+
+---
+
+!! The GPU Accident
+
+NVIDIA did not build the GPU for AI. They built it to render triangles quickly for video games. A modern frame has millions of pixels, each requiring independent floating-point calculations. The GPU's massive parallelism — thousands of cores doing the same arithmetic simultaneously — was designed to make games look good at 60 frames per second.
+
+Matrix multiplication for [[Neural Networks]] turns out to require exactly the same structure: compute the same dot-product operation on thousands of independent pairs of vectors simultaneously. A forward pass through a [[Deep Learning]] model is little more than a sequence of matrix multiplications. An NVIDIA gaming card from 2009 was already faster than the best CPU for training small neural networks. By 2012, researchers had lashed together multiple GTX 580s, and AI training transformed overnight.
+
+The accident compounds: NVIDIA invested heavily in CUDA (2006), a general-purpose parallel computing platform for GPU programming. Because CUDA existed, AI frameworks (Theano, then TensorFlow, then PyTorch) targeted it. Because those frameworks targeted it, researchers bought NVIDIA cards. Because researchers bought NVIDIA cards, NVIDIA invested more in AI-oriented hardware features. The historical accident became a locked-in ecosystem.
+
+''The implication:'' the dominance of [[Deep Learning]] over other approaches — Bayesian methods, kernel machines, symbolic systems — is not separable from the GPU story. We cannot easily know how good those alternatives would look if they had received comparable hardware investment.
+
+---
+
+!! What the Math Is Actually Doing
+
+The reason GPUs excel at neural networks comes down to three quantities: ''FLOPs'', ''memory bandwidth'', and ''parallelism''.
+
+A ''FLOP'' (floating-point operation) is one arithmetic operation — a multiply or an add. Training [[Large Language Models]] requires on the order of $6ND$ FLOPs per training token, where $N$ is the number of model parameters and $D$ is the number of training tokens. A 70-billion-parameter model trained on 1.4 trillion tokens requires roughly:
+
+$$\text{FLOPs} \approx 6 \times 7 \times 10^{10} \times 1.4 \times 10^{12} \approx 5.9 \times 10^{23}$$
+
+A high-end GPU delivers on the order of $10^{14}$–$10^{15}$ FLOPs per second (100–1000 TFLOPS). Training therefore takes on the order of $10^{8}$–$10^{9}$ GPU-seconds — thousands of A100s running for months.
+
+''Memory bandwidth'' is often the true bottleneck. Before computing a matrix product, the weight matrices must be loaded from DRAM into the GPU's on-chip SRAM (the "register file"). The ratio of FLOPs to memory bytes loaded is called ''arithmetic intensity'':
+
+$$\text{Arithmetic Intensity} = \frac{\text{FLOPs}}{\text{Bytes loaded}}$$
+
+A GPU's ''roofline'' — its effective maximum performance — is limited by whichever is smaller: raw compute (FLOP/s) or bandwidth $\times$ arithmetic intensity. Operations with low arithmetic intensity (like element-wise activations) are ''memory-bound''; dense matrix multiplications have high arithmetic intensity and are ''compute-bound''. Neural network training is dominated by large matrix multiplies — high arithmetic intensity — which is precisely why GPUs' compute-to-bandwidth ratio suits it so well.
+
+''Parallelism'' shapes everything. A [[Stochastic Gradient Descent|gradient descent]] step on a minibatch of size $B$ applies the same weight matrices to $B$ independent inputs. This is //embarrassingly parallel// — no input needs to wait for another. The GPU runs all $B$ forward passes simultaneously. Architectures that require //sequential// data dependencies (like unrolled RNNs) cannot exploit this: step $t$ must wait for step $t-1$, so most GPU cores sit idle. Transformers avoid this in the forward pass by processing the entire sequence at once; this is a large part of why they displaced [[Neural Networks|recurrent networks]] so quickly.
+
+---
+
+!! Implications for Research Culture
+
+If hardware determines winners, then ''benchmark culture'' and ''hardware monoculture'' together create a narrowing effect. Researchers optimize for metrics that are cheap to compute on available hardware. Papers that run on a single GPU in 24 hours get submitted, reviewed, and cited. Papers requiring hardware that doesn't yet exist don't get written.
+
+''[[Transfer Learning]]'' became dominant partly because it fit the hardware moment: pretraining a large model once on many GPUs, then fine-tuning cheaply, is a pattern that scales beautifully on GPU clusters. It is not obvious that this is the optimal learning paradigm in some abstract sense — it is the optimal paradigm //for the hardware we have//.
+
+''[[Self-supervised Learning]]'' similarly flourished because it removed the bottleneck of labeled data collection, making it possible to scale GPU utilization to internet-scale corpora. The method fits the hardware's appetite for data volume.
+
+The deeper concern: there may be fundamentally better approaches — probabilistic, symbolic, neuromorphic, optical — that are not being developed because they are hardware lottery losers in the current era. The methods that dominate the literature are not a random sample of good ideas; they are a sample filtered by GPU compatibility.
+
+---
+
+!! When the Hardware Lottery Breaks Down
+
+''The strong form is unfalsifiable.'' For any algorithm that didn't succeed, you can always claim it would have succeeded on better hardware. But this is nearly impossible to test, since the counterfactual hardware doesn't exist. The hypothesis is more a reframing of history than a predictive theory.
+
+''Hardware doesn't fully determine winners.'' [[Reinforcement Learning]], for instance, has repeatedly produced landmark results (AlphaGo, AlphaZero, OpenAI Five) on standard GPU infrastructure — yet RL remains far harder to scale and stabilize than supervised learning. The gap isn't explained by hardware misfit; algorithmic and theoretical difficulties play an independent role.
+
+''New hardware follows successful algorithms, not the reverse.'' Google built TPUs specifically to run [[Neural Networks|neural network]] inference and training faster. Cerebras built wafer-scale engines for dense matrix operations. The causality runs both ways: hardware shapes which algorithms win, but winning algorithms attract hardware investment that further entrenches them.
+
+---
+
+!! Technical Details
+
+''Key hardware generations and their AI impact:'' NVIDIA GTX 580 (2010, 1.6 TFLOPS FP32) — enabled AlexNet training. NVIDIA K80 (2014, 8.7 TFLOPS) — enabled seq2seq LSTMs. NVIDIA V100 (2017, 125 TOPS FP16 with Tensor Cores) — enabled large Transformer pretraining. NVIDIA A100 (2020, 312 TOPS) — enabled GPT-3 scale. NVIDIA H100 (2022, 989 TOPS) — enabled 100B+ parameter fine-tuning.
+
+''Tensor Cores:'' introduced with NVIDIA Volta (2017), Tensor Cores perform a $4 \times 4$ matrix multiply-accumulate in a single clock cycle using mixed precision (FP16 inputs, FP32 accumulation). This multiplied effective FLOP rates for matrix multiplications by ~8× compared to scalar CUDA cores — specifically benefiting [[Deep Learning]] workloads over other scientific computing tasks.
+
+''Roofline model:'' given peak compute $\pi$ (FLOP/s) and peak memory bandwidth $\beta$ (bytes/s), achievable performance $P$ for an operation with arithmetic intensity $I$ is $P = \min(\pi,\; \beta \cdot I)$. Dense matmuls with large matrices achieve $I \gg \pi/\beta$ (compute-bound). Attention softmax and layer-norm are memory-bound. Flash Attention (Dao et al., 2022) reorders computation to minimize DRAM round-trips, reducing attention's memory-boundedness and improving GPU utilization.
+
+''Alternative hardware frontiers:'' ''Neuromorphic chips'' (Intel Loihi 2, IBM NorthPole) implement spiking neural networks in analog circuits; energy per inference can be 100–1000× lower than GPU inference for sparse, event-driven workloads. ''Photonic computing'' uses light for matrix multiplications at the speed of light and near-zero heat dissipation; startups (Lightmatter, Luminous) are building photonic matrix engines. ''In-memory computing'' (analog resistive memory) performs matrix-vector products inside the memory array, eliminating the bandwidth bottleneck entirely. Each of these could be a hardware lottery winner for a future generation of algorithms currently deemed impractical.
+
+''Sparse computation:'' NVIDIA introduced structured sparsity support in the A100: 2:4 sparsity (two non-zero values per group of four) allows a 2× speedup in matrix operations. True unstructured sparsity remains difficult to exploit on GPUs; neuromorphic chips handle it natively. Mixture-of-Experts ([[Large Language Models|LLMs]] like Mixtral, GPT-4) are a workaround: keep the model sparse in //parameter activation//, but maintain dense computation by routing batches through full expert sub-networks.
+
+''Hooker's original paper:'' Sara Hooker, "The Hardware Lottery," Communications of the ACM, 2021 (arXiv:2009.06489). Required reading for anyone thinking about AI research methodology.
+
+---
+
+!! Quiz
+
+@@#hw-q1@@''Q1: What is the central claim of Sara Hooker's Hardware Lottery thesis?''
+<<button "A. Deep learning is mathematically superior to all other ML approaches">><<replace "#hw-q1">>''Q1'' //Incorrect. The thesis makes no claim about mathematical superiority — it argues the opposite: success is determined by hardware fit, not provable optimality.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Research success depends on whether an algorithm fits the available hardware of its era">><<replace "#hw-q1">>''Q1'' //Correct. This is the core claim: good ideas that don't fit current hardware lose the lottery and are abandoned, regardless of merit.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. NVIDIA deliberately designed GPUs to accelerate neural networks">><<replace "#hw-q1">>''Q1'' //Incorrect. The GPU was built for video game rendering. Its suitability for neural network training was a historical accident, not intentional design.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Hardware improvements always follow from algorithmic breakthroughs">><<replace "#hw-q1">>''Q1'' //Incorrect. Hooker's argument is the reverse: hardware availability shapes which algorithms get developed, not only the other way around.//<</replace>><<script>>typesetMath();<</script>><</button>>
+
+@@#hw-q2@@''Q2: Why are GPUs well-suited to training neural networks?''
+<<button "A. They have more memory than CPUs">><<replace "#hw-q2">>''Q2'' //Incorrect. GPUs typically have less total memory than servers with multiple CPU DIMMs. The advantage is parallelism and memory bandwidth for matrix operations, not total capacity.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. They perform sequential floating-point operations faster than any other chip">><<replace "#hw-q2">>''Q2'' //Incorrect. GPUs are slower than CPUs for sequential, scalar workloads. Their strength is massively parallel throughput across thousands of cores running the same operation simultaneously.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. They can perform thousands of floating-point operations in parallel, matching the structure of matrix multiplication">><<replace "#hw-q2">>''Q2'' //Correct. Neural network forward and backward passes are dominated by large matrix multiplications, which decompose into thousands of independent dot products — exactly what GPU parallelism is designed for.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They were built with neural network training as the primary design goal">><<replace "#hw-q2">>''Q2'' //Incorrect. GPUs were designed to render video game graphics. Their suitability for AI is a lucky accident of overlapping mathematical structure (parallel floating-point arithmetic).//<</replace>><<script>>typesetMath();<</script>><</button>>
+
+@@#hw-q3@@''Q3: Which of the following is an example of a hardware lottery //loser//?''
+<<button "A. Convolutional neural networks after 2012">><<replace "#hw-q3">>''Q3'' //Incorrect. CNNs became hardware lottery //winners// after 2012, when GPU memory and CUDA libraries grew sufficient to make training them practical and fast.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Transformers on modern GPU clusters">><<replace "#hw-q3">>''Q3'' //Incorrect. Transformers are perhaps the clearest hardware lottery winner — their parallel self-attention structure fits GPU architecture almost perfectly.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Sparse neuromorphic models on standard GPU infrastructure">><<replace "#hw-q3">>''Q3'' //Correct. Neuromorphic models rely on sparse, event-driven, irregular computation — exactly what GPUs handle poorly. They are hardware lottery losers on current infrastructure despite potential advantages.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Large language models trained with self-supervised learning">><<replace "#hw-q3">>''Q3'' //Incorrect. Large language models trained with self-supervised learning are hardware lottery winners — they are designed to saturate GPU compute by training on massive datasets with dense matrix operations.//<</replace>><<script>>typesetMath();<</script>><</button>>
+
+@@#hw-q4@@''Q4: What is "arithmetic intensity" and why does it matter for hardware performance?''
+<<button "A. The number of parameters in a neural network layer">><<replace "#hw-q4">>''Q4'' //Incorrect. Arithmetic intensity refers to a ratio involving computation and memory, not parameter count.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The ratio of FLOPs performed to bytes of memory loaded; it determines whether an operation is compute-bound or memory-bound">><<replace "#hw-q4">>''Q4'' //Correct. High arithmetic intensity (many FLOPs per byte loaded) means the GPU's compute units are fully utilized. Low arithmetic intensity means the chip is waiting on memory — it's memory-bound, and raw FLOP/s doesn't help.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The rate at which a model's loss decreases per training step">><<replace "#hw-q4">>''Q4'' //Incorrect. That describes the learning dynamics, not a hardware concept. Arithmetic intensity is a property of specific computational operations in relation to memory access patterns.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The number of floating-point additions performed per multiplication">><<replace "#hw-q4">>''Q4'' //Incorrect. Arithmetic intensity measures FLOPs relative to memory bandwidth consumed, not the ratio of additions to multiplications within the computation.//<</replace>><<script>>typesetMath();<</script>><</button>>
+
+@@#hw-q5@@''Q5: What is the main criticism of the strong form of the Hardware Lottery hypothesis?''
+<<button "A. It ignores the role of large datasets in AI progress">><<replace "#hw-q5">>''Q5'' //Partially relevant, but not the main critique. The central problem is logical, not empirical: the strong form cannot be disproven.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It is unfalsifiable — any failed algorithm can be attributed to hardware mismatch after the fact">><<replace "#hw-q5">>''Q5'' //Correct. The counterfactual ("this would have worked on the right hardware") cannot be tested since that hardware doesn't exist. A hypothesis that can explain every outcome without prediction is not scientifically falsifiable.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Hardware has never influenced which AI approaches received research attention">><<replace "#hw-q5">>''Q5'' //Incorrect. This is clearly false — hardware absolutely influences research directions. The critique is about whether hardware is the //sole or dominant// explanation for success, not whether it matters at all.//<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. GPU manufacturers have always prioritized AI workloads over gaming">><<replace "#hw-q5">>''Q5'' //Incorrect. This is historically false — GPUs were built for gaming. It also wouldn't be a critique of the hypothesis even if it were true.//<</replace>><<script>>typesetMath();<</script>><</button>>

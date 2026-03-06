@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Deep Belief Networks: Layer-wise Pre-training</text>
+
+  <!-- Phase 1: Train bottom RBM -->
+  <text x="130" y="58" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Step 1: Train RBM₁</text>
+  <!-- Visible layer -->
+  <text x="50" y="86" font-family="Georgia,serif" font-size="10" fill="#888">visible</text>
+  <circle cx="80"  cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="120" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="160" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="200" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Hidden layer 1 -->
+  <text x="50" y="176" font-family="Georgia,serif" font-size="10" fill="#888">h₁</text>
+  <circle cx="95"  cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="145" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="195" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- connections -->
+  <line x1="80"  y1="122" x2="95"  y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="80"  y1="122" x2="145" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="120" y1="122" x2="95"  y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="120" y1="122" x2="145" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="160" y1="122" x2="145" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="160" y1="122" x2="195" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="200" y1="122" x2="145" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="200" y1="122" x2="195" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <text x="130" y="238" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">train unsupervised (CD)</text>
+  <text x="130" y="252" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">freeze W₁</text>
+
+  <!-- Arrow between phases -->
+  <line x1="260" y1="180" x2="290" y2="180" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="287,176 295,180 287,184" fill="#C4A87A"/>
+
+  <!-- Phase 2: stack second RBM on top of frozen h1 -->
+  <text x="420" y="58" font-family="Georgia,serif" font-size="12" fill="#5040A0" text-anchor="middle" font-weight="bold">Step 2: Train RBM₂ on h₁</text>
+  <circle cx="320" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="360" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="400" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="440" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- h1 frozen -->
+  <circle cx="335" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="385" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="435" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="380" y="218" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">frozen</text>
+  <!-- h2 new -->
+  <circle cx="355" cy="270" r="12" fill="#E8D4F8" stroke="#5040A0" stroke-width="2"/>
+  <circle cx="415" cy="270" r="12" fill="#E8D4F8" stroke="#5040A0" stroke-width="2"/>
+  <text x="380" y="300" font-family="Georgia,serif" font-size="10" fill="#5040A0" text-anchor="middle" font-style="italic">train RBM₂ (CD)</text>
+  <text x="380" y="314" font-family="Georgia,serif" font-size="10" fill="#5040A0" text-anchor="middle" font-style="italic">freeze W₂</text>
+  <!-- connections -->
+  <line x1="320" y1="122" x2="335" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="360" y1="122" x2="335" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="400" y1="122" x2="385" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="440" y1="122" x2="435" y2="178" stroke="#2D5A8E" stroke-width="0.8" opacity="0.4"/>
+  <line x1="335" y1="202" x2="355" y2="258" stroke="#5040A0" stroke-width="0.8" opacity="0.5"/>
+  <line x1="385" y1="202" x2="355" y2="258" stroke="#5040A0" stroke-width="0.8" opacity="0.5"/>
+  <line x1="385" y1="202" x2="415" y2="258" stroke="#5040A0" stroke-width="0.8" opacity="0.5"/>
+  <line x1="435" y1="202" x2="415" y2="258" stroke="#5040A0" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Arrow to fine-tune -->
+  <line x1="465" y1="180" x2="495" y2="180" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="492,176 500,180 492,184" fill="#C4A87A"/>
+
+  <!-- Phase 3: Fine-tune whole stack -->
+  <text x="640" y="58" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Step 3: Fine-tune (backprop)</text>
+  <circle cx="570" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="610" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="650" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="690" cy="110" r="12" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="585" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="635" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="685" cy="190" r="12" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <circle cx="605" cy="270" r="12" fill="#E8D4F8" stroke="#5040A0" stroke-width="1.5"/>
+  <circle cx="665" cy="270" r="12" fill="#E8D4F8" stroke="#5040A0" stroke-width="1.5"/>
+  <!-- label output -->
+  <rect x="615" y="318" width="60" height="22" rx="3" fill="#7C2530" opacity="0.8"/>
+  <text x="645" y="333" font-family="Georgia,serif" font-size="10" fill="#FFF" text-anchor="middle">label</text>
+  <line x1="605" y1="282" x2="625" y2="315" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="665" y1="282" x2="655" y2="315" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="640" y="360" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">backprop tunes all weights</text>
+  <text x="640" y="374" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">pre-training gives good init</text>
+</svg>

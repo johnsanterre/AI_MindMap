@@ -1,0 +1,126 @@
+! History of AI
+
+<img src="assets/history_of_ai.svg" alt="History of AI timeline diagram" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Think of AI research as a series of gold rushes: each one starts with genuine excitement and real finds, then hits a wall when the current tools run out, and the camps empty out until someone brings a better shovel. The field has done this at least twice — two periods of hype and two hard crashes — before finally striking a vein deep enough to sustain a decade-long boom. Understanding //why// each crash happened is just as important as understanding the breakthroughs.
+
+!! The Core Insight
+
+''Artificial intelligence is not a single technology'' — it is a shifting collection of bets about what kind of math best approximates thought. The history of AI is the history of those bets being placed, failing, and being replaced. The field's recurring trap is mistaking a powerful technique for a general solution: when the technique hits its limits, funding collapses and researchers scatter. What survives each winter is not the technique itself, but the hard-won intuition about //what the real bottlenecks are//.
+
+!! Key Eras
+
+''1950s–1960s: The Optimistic Dawn.'' The field was born with almost boundless optimism. Researchers believed that human reasoning could be captured in formal logic and symbol manipulation. [[Expert Systems]] — programs built from hand-crafted "if-then" rules — could diagnose diseases, play chess, and prove theorems. The [[Perceptron]], invented by Frank Rosenblatt in 1958, showed that a single artificial neuron could learn to classify inputs. Early demos were impressive enough that government agencies funded the work lavishly.
+
+''1970s–1980s: The First [[AI Winter]].'' Progress stalled. Expert systems required thousands of hand-coded rules and broke immediately outside their narrow domain. The Perceptron was shown to be incapable of learning non-linearly separable functions (the XOR problem). Funding dried up. The winter lasted roughly from the mid-1970s through the mid-1980s. It ended not with a single invention but with two quiet contributions: [[Backpropagation and Chain Rule|Backpropagation and Chain Rule]] (popularised by Rumelhart, Hinton, and Williams in 1986) gave [[Neural Networks]] a practical training algorithm, and hardware began to improve.
+
+''1990s: The Statistical Thaw.'' A new philosophy took hold: instead of hand-crafting rules, let data drive the model. [[Support Vector Machine|Support Vector Machine]]s (Vapnik, 1995) provided principled, theoretically grounded classifiers. Hidden Markov Models dominated speech recognition. Yann LeCun's LeNet-5 (1998) showed that [[Neural Networks]] could read handwritten digits reliably using convolutional filters. The mood was cautiously optimistic but not euphoric — neural networks still lost to SVMs on most benchmarks.
+
+''2000s: The Second AI Winter (and its thaw).'' Despite steady progress, a second, softer winter set in around 2000–2005. Funding for neural-network research contracted again; the term "neural network" itself became unfashionable. The escape hatch opened in 2006 when Geoffrey Hinton demonstrated that deep networks could be pre-trained layer-by-layer using [[Restricted Boltzmann Machines]] stacked into [[Deep Belief Networks]]. This "greedy pre-training" trick let gradients propagate through many layers without vanishing — and it rekindled serious interest in deep architectures.
+
+''2012: The Deep Learning Revolution.'' [[AlexNet]] — trained by Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton — won the [[ImageNet]] Large Scale Visual Recognition Challenge by a margin that shocked the computer vision community. The key ingredients: deep convolutional layers, ReLU activations, dropout regularization, and — crucially — training on two NVIDIA GPUs. This was the moment [[Statistical Machine Learning]] gave way to [[Deep Learning]] as the dominant paradigm. The [[Hardware Lottery]] had been won: GPU parallelism fit the matrix algebra of deep networks perfectly.
+
+''2017–present: The Transformer Era.'' The 2017 paper "Attention Is All You Need" introduced the [[Transformers|Transformers]] architecture, discarding recurrence entirely in favour of self-attention. Pre-training on vast text corpora followed by fine-tuning unlocked transfer learning at scale. [[Large Language Models]] like GPT, BERT, and their successors demonstrated that a single architecture, scaled up with enough data and compute, could achieve state-of-the-art results across language, vision, code, and scientific tasks.
+
+!! What the Math Was Actually Doing
+
+Each era corresponded to a different mathematical framework for representing knowledge and uncertainty.
+
+''Symbolic AI'' encoded knowledge as first-order logic predicates. Inference was theorem proving — sound but brittle and exponential in the worst case.
+
+''Statistical ML'' replaced hard rules with probability distributions. The [[Support Vector Machine]] found the maximum-margin hyperplane separating classes, solving the primal problem:
+
+$$\min_{w,b} \frac{1}{2}\|w\|^2 \quad \text{subject to } y_i(w \cdot x_i + b) \geq 1$$
+
+''[[Backpropagation and Chain Rule|Backpropagation]]'' made neural networks trainable by computing gradients via the chain rule. For a loss $\mathcal{L}$ and layer weights $W_\ell$:
+
+$$\frac{\partial \mathcal{L}}{\partial W_\ell} = \frac{\partial \mathcal{L}}{\partial a_\ell} \cdot \frac{\partial a_\ell}{\partial W_\ell}$$
+
+where each upstream gradient is passed backward through the network layer by layer.
+
+''Self-attention'' in [[Transformers]] computes weighted sums over all positions simultaneously:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$
+
+This single operation, parallelisable across the full sequence, replaced the sequential bottleneck of recurrent networks and unlocked training on internet-scale corpora.
+
+!! Paradigm Shifts
+
+Every major transition in AI history shared the same structure: a ''new representation'' met a ''new optimization method'' at the moment ''hardware made it tractable''.
+
+The symbolic-to-statistical shift was driven by the failure of hand-crafted rules to generalise beyond curated domains. The statistical-to-deep shift was driven by the failure of shallow models to exploit raw perceptual data (pixels, waveforms) without hand-engineered features. The deep-to-transformer shift was driven by the failure of convolutional and recurrent architectures to efficiently model long-range dependencies.
+
+Each shift also required a sociological change: researchers had to abandon the vocabulary, benchmarks, and publication venues of the previous era. The [[AI Winter]] was not just a funding crisis — it was the collapse of a shared research programme.
+
+The [[Hardware Lottery]] thesis (Hooker, 2020) adds a sobering footnote: the ideas that //won// were not necessarily the best ideas available — they were the ideas that happened to fit the hardware that happened to be cheap. Biological neural networks were not the only inspiration on the table in the 1980s; they succeeded partly because matrix multiplication on GPUs turned out to be an extraordinarily efficient primitive.
+
+!! When AI Progress Stalls
+
+''1. The brittleness wall.'' Rule-based and early neural systems fail catastrophically outside their training distribution. Expert systems encode only what their human designers knew; they have no way to generalise. This is why both AI winters were triggered by real-world deployment failures, not theoretical refutations.
+
+''2. The vanishing gradient problem.'' Deep networks trained with sigmoid activations suffered from gradients shrinking exponentially as they propagated backward, making early layers effectively untrainable. This was the core technical barrier that kept deep learning dormant through the 1990s, resolved by ReLU activations, careful initialisation, batch normalisation, and residual connections.
+
+''3. The data and compute gap.'' Many powerful ideas existed years before they became practical. Convolutional networks were demonstrated in 1998; transformers were theoretically feasible long before 2017. What was missing was sufficient labelled data (solved by [[ImageNet]] and web-scale corpora) and sufficient compute (solved by GPU clusters and later TPUs). When the theory outruns the infrastructure, progress stalls until hardware catches up.
+
+!! Technical Details
+
+- ''Dartmouth Conference (1956)'' — the founding workshop that coined the term "artificial intelligence." Participants included McCarthy, Minsky, Shannon, and Simon.
+- ''Perceptron convergence theorem (1958)'' — Rosenblatt proved that the Perceptron would converge to a correct solution //if// one existed. Minsky and Papert's 1969 book showed the "if" was severe.
+- ''Backpropagation (1986)'' — Rumelhart, Hinton, Williams. Gradient descent through differentiable layers via the chain rule. Independently derived multiple times; the 1986 //Nature// paper made it standard.
+- ''VC dimension (1971/1995)'' — Vapnik and Chervonenkis established the theoretical framework for generalisation bounds; the SVM operationalised this into a practical algorithm.
+- ''LSTM (1997)'' — Hochreiter and Schmidhuber's Long Short-Term Memory solved the vanishing gradient problem for sequences using gated memory cells.
+- ''Deep Belief Networks (2006)'' — Hinton and Salakhutdinov: layer-wise pretraining using [[Restricted Boltzmann Machines]] enabled initialisation of deep networks in a good basin.
+- ''AlexNet (2012)'' — 60M parameters, trained on two GTX 580 GPUs, top-5 error of 15.3% vs. runner-up's 26.2% on [[ImageNet]]. Triggered massive industry investment.
+- ''Word2Vec (2013)'' — Mikolov et al. showed that word embeddings encode semantic relationships: $\vec{\text{king}} - \vec{\text{man}} + \vec{\text{woman}} \approx \vec{\text{queen}}$.
+- ''"Attention Is All You Need" (2017)'' — Vaswani et al. introduced the Transformer: multi-head self-attention + positional encodings + feed-forward sublayers. Formed the backbone of BERT, GPT, T5, and all subsequent [[Large Language Models]].
+- ''Scaling laws (2020)'' — Kaplan et al. (OpenAI) showed that loss scales as a power law in model parameters $N$, dataset tokens $D$, and compute $C$: $L \propto N^{-\alpha}$, enabling principled decisions about how to allocate resources.
+
+!! Quiz
+
+@@#hai-q1@@''Q1. What was the primary reason the first AI winter began in the 1970s?''
+<<button "A. Neural networks were proven mathematically impossible">><<replace "#hai-q1">>''Q1. What was the primary reason the first AI winter began in the 1970s?'' //Incorrect. Neural networks were not proven impossible — the Perceptron's limits were shown, but the deeper reason was that rule-based expert systems could not generalise beyond narrow domains.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. Expert systems and early neural networks failed to generalise beyond narrow domains">><<replace "#hai-q1">>''Q1. What was the primary reason the first AI winter began in the 1970s?'' //Correct. Expert systems required thousands of hand-coded rules and collapsed outside their design domain; the Perceptron's limits compounded this. Funding followed failure.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. Computers became too expensive for research labs to afford">><<replace "#hai-q1">>''Q1. What was the primary reason the first AI winter began in the 1970s?'' //Incorrect. Hardware cost was a constraint but not the primary cause. The deeper problem was algorithmic and conceptual, not financial.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. The Turing Test was shown to be unsolvable">><<replace "#hai-q1">>''Q1. What was the primary reason the first AI winter began in the 1970s?'' //Incorrect. The Turing Test remained a philosophical benchmark; it played no direct role in triggering the funding collapse.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q2@@''Q2. What mathematical technique, popularised in 1986, gave neural networks a practical training algorithm?''
+<<button "A. Support Vector Machines">><<replace "#hai-q2">>''Q2. What mathematical technique, popularised in 1986, gave neural networks a practical training algorithm?'' //Incorrect. SVMs appeared in 1995 and belong to the statistical ML era, not the 1986 neural-network revival.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. Expectation-Maximisation">><<replace "#hai-q2">>''Q2. What mathematical technique, popularised in 1986, gave neural networks a practical training algorithm?'' //Incorrect. EM is used for latent variable models; it was not the key to training deep networks.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. Backpropagation via the chain rule">><<replace "#hai-q2">>''Q2. What mathematical technique, popularised in 1986, gave neural networks a practical training algorithm?'' //Correct. Rumelhart, Hinton, and Williams showed that gradients could be computed layer by layer using the chain rule, making multi-layer networks trainable for the first time at scale.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. Monte Carlo sampling">><<replace "#hai-q2">>''Q2. What mathematical technique, popularised in 1986, gave neural networks a practical training algorithm?'' //Incorrect. Monte Carlo methods are used for probabilistic inference, not gradient-based optimisation of neural networks.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q3@@''Q3. AlexNet's 2012 ImageNet victory is considered a watershed moment primarily because of which combination of factors?''
+<<button "A. A novel loss function and larger training set">><<replace "#hai-q3">>''Q3. AlexNet's 2012 ImageNet victory is considered a watershed moment primarily because of which combination of factors?'' //Incorrect. The loss function was standard cross-entropy. The key ingredients were architectural and hardware choices, not a new objective.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. Deeper convolutional layers, ReLU activations, dropout, and GPU training">><<replace "#hai-q3">>''Q3. AlexNet's 2012 ImageNet victory is considered a watershed moment primarily because of which combination of factors?'' //Correct. These four elements together — depth, non-saturating activations, regularisation via dropout, and GPU parallelism — produced an error rate that stunned the field and triggered massive industry investment in deep learning.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. Transformer self-attention applied to image patches">><<replace "#hai-q3">>''Q3. AlexNet's 2012 ImageNet victory is considered a watershed moment primarily because of which combination of factors?'' //Incorrect. Transformers were not introduced until 2017. AlexNet used convolutional layers, not self-attention.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. Pre-training on Wikipedia and fine-tuning on ImageNet">><<replace "#hai-q3">>''Q3. AlexNet's 2012 ImageNet victory is considered a watershed moment primarily because of which combination of factors?'' //Incorrect. AlexNet was trained directly on ImageNet from scratch; large-scale language pre-training came later with BERT and GPT.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q4@@''Q4. What role did Deep Belief Networks play in ending the second AI winter?''
+<<button "A. They replaced backpropagation with a more stable optimisation algorithm">><<replace "#hai-q4">>''Q4. What role did Deep Belief Networks play in ending the second AI winter?'' //Incorrect. DBNs used backpropagation for fine-tuning; they did not replace it.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. They provided a way to pre-train deep networks layer-by-layer, giving gradients a good starting point">><<replace "#hai-q4">>''Q4. What role did Deep Belief Networks play in ending the second AI winter?'' //Correct. Hinton's 2006 paper showed that stacking Restricted Boltzmann Machines and training greedily layer by layer initialised deep networks in a region where fine-tuning with backpropagation could succeed — bypassing the vanishing gradient problem.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. They introduced the attention mechanism that later became the Transformer">><<replace "#hai-q4">>''Q4. What role did Deep Belief Networks play in ending the second AI winter?'' //Incorrect. The attention mechanism came from sequence-to-sequence work (Bahdanau, 2015) and was formalised in the Transformer (2017), unrelated to DBNs.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. They demonstrated that symbolic AI and neural networks could be combined">><<replace "#hai-q4">>''Q4. What role did Deep Belief Networks play in ending the second AI winter?'' //Incorrect. DBNs were purely connectionist; they did not integrate symbolic reasoning.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q5@@''Q5. The "Hardware Lottery" thesis argues that:''
+<<button "A. AI progress is determined solely by algorithmic innovation">><<replace "#hai-q5">>''Q5. The "Hardware Lottery" thesis argues that:'' //Incorrect. The thesis specifically challenges this view, arguing hardware availability shapes which algorithms win in practice.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. The ideas that dominate AI are those that fit the hardware that happens to be cheap and abundant">><<replace "#hai-q5">>''Q5. The "Hardware Lottery" thesis argues that:'' //Correct. Hooker (2020) argues that GPU matrix multiplication happened to align perfectly with deep learning's computational profile — a historical contingency, not a logical necessity. Better-fitting hardware could have privileged different research directions.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. AI winters are caused by hardware becoming too expensive">><<replace "#hai-q5">>''Q5. The "Hardware Lottery" thesis argues that:'' //Incorrect. The thesis is about which ideas win given available hardware, not about cost causing winters.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. Quantum hardware will make current AI methods obsolete">><<replace "#hai-q5">>''Q5. The "Hardware Lottery" thesis argues that:'' //Incorrect. The thesis makes no claim about quantum computing; it is a historical analysis of hardware-algorithm co-evolution.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q6@@''Q6. Which of the following correctly describes the Transformer's self-attention operation?''
+<<button "A. $\text{Attention}(Q,K,V) = \text{softmax}(QK^\top)V$">><<replace "#hai-q6">>''Q6. Which of the following correctly describes the Transformer's self-attention operation?'' //Almost correct but missing the scaling factor. Without $1/\sqrt{d_k}$, dot products grow large in magnitude and softmax saturates, destroying gradient flow.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. $\text{Attention}(Q,K,V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$">><<replace "#hai-q6">>''Q6. Which of the following correctly describes the Transformer's self-attention operation?'' //Correct. Queries $Q$, keys $K$, and values $V$ are projected from input embeddings. The dot-product scores are scaled by $\sqrt{d_k}$ to keep gradients stable, then normalised with softmax and used to weight the value vectors.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. $\text{Attention}(Q,K,V) = \sigma(QV^\top)K$">><<replace "#hai-q6">>''Q6. Which of the following correctly describes the Transformer's self-attention operation?'' //Incorrect. This transposes the roles of $K$ and $V$ and uses sigmoid instead of softmax — neither matches the original formulation.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. $\text{Attention}(Q,K,V) = QK^\top / d_k$">><<replace "#hai-q6">>''Q6. Which of the following correctly describes the Transformer's self-attention operation?'' //Incorrect. This omits both the softmax normalisation and the value matrix multiplication, which are essential to how attention weights are used.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q7@@''Q7. Which sequence correctly orders these milestones chronologically?''
+<<button "A. Perceptron → Backprop → SVM → AlexNet → Transformer">><<replace "#hai-q7">>''Q7. Which sequence correctly orders these milestones chronologically?'' //Correct. Perceptron (1958), Backprop popularised (1986), SVM (1995), AlexNet (2012), Transformer (2017). This traces the full arc from symbolic optimism through the winters to the current era.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. SVM → Backprop → Perceptron → Transformer → AlexNet">><<replace "#hai-q7">>''Q7. Which sequence correctly orders these milestones chronologically?'' //Incorrect. The Perceptron predates backprop and SVMs; AlexNet (2012) predates the Transformer (2017).//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. Backprop → Perceptron → AlexNet → SVM → Transformer">><<replace "#hai-q7">>''Q7. Which sequence correctly orders these milestones chronologically?'' //Incorrect. The Perceptron (1958) came well before backprop (1986), and SVMs (1995) predate AlexNet (2012).//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. Perceptron → AlexNet → SVM → Backprop → Transformer">><<replace "#hai-q7">>''Q7. Which sequence correctly orders these milestones chronologically?'' //Incorrect. AlexNet (2012) and SVMs (1995) both come after backprop (1986); this order scrambles the timeline significantly.//<<script>>typesetMath();<</script>><</replace>><</button>>
+
+@@#hai-q8@@''Q8. What was the core technical reason that deep networks were difficult to train through the 1990s?''
+<<button "A. They required too much labelled data to collect manually">><<replace "#hai-q8">>''Q8. What was the core technical reason that deep networks were difficult to train through the 1990s?'' //Partially true but not the core technical reason. Data scarcity was a constraint, but the fundamental blocker was that gradients could not propagate reliably through many layers.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B. Convolutional architectures had not yet been invented">><<replace "#hai-q8">>''Q8. What was the core technical reason that deep networks were difficult to train through the 1990s?'' //Incorrect. LeNet-5 demonstrated convolutional networks in 1998. The problem was not the architecture but the training dynamics of deep stacks.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C. The vanishing gradient problem caused early layers to receive near-zero gradient updates">><<replace "#hai-q8">>''Q8. What was the core technical reason that deep networks were difficult to train through the 1990s?'' //Correct. Sigmoid and tanh saturate; their derivatives shrink toward zero in the tails. Multiplying many such small derivatives across layers produces exponentially small gradients, leaving early layers essentially untrained.//<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D. Recurrent networks were too slow to run on 1990s hardware">><<replace "#hai-q8">>''Q8. What was the core technical reason that deep networks were difficult to train through the 1990s?'' //Incorrect. Speed was a constraint, but the vanishing gradient problem was the fundamental mathematical barrier to training depth, independent of hardware speed.//<<script>>typesetMath();<</script>><</replace>><</button>>

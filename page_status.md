@@ -1,6 +1,6 @@
 # Twine Page Status
 
-Last updated: 2026-03-05
+Last updated: 2026-03-06
 
 **Status key:**
 - ✅ Full — has SVG diagram and full content with sections, math, and quiz
@@ -9,19 +9,21 @@ Last updated: 2026-03-05
 
 ---
 
-## Full Pages ✅ (334 total — all have SVGs)
+## Full Pages ✅ (344 total — all have SVGs)
 
 | Page | SVG |
 |---|---|
 | A* search | ✅ a_star_search.svg |
 | A/B Testing | ✅ ab_testing.svg |
 | Activation Functions | ✅ activation_functions.svg |
-| activations | ⚠️ activations.svg (MISSING) |
+| activations | ✅ activations.svg |
 | active inference | ✅ active_inference.svg |
 | Actor-critic | ✅ actor_critic.svg |
 | AdaBoost | ✅ adaboost.svg |
 | adam | ✅ adam_optimizer.svg |
 | Adversarial Attacks | ✅ adversarial_attacks.svg |
+| AI Winter | ✅ ai_winter.svg |
+| AlexNet | ✅ alexnet.svg |
 | ANCOVA | ✅ ancova.svg |
 | ANOVA | ✅ anova.svg |
 | ARIMA | ✅ arima.svg |
@@ -79,6 +81,7 @@ Last updated: 2026-03-05
 | Data Augmentation | ✅ data_augmentation.svg |
 | Dataset Distillation | ✅ dataset_distillation.svg |
 | decision boundary | ✅ decision_boundary.svg |
+| Deep Belief Networks | ✅ deep_belief_networks.svg |
 | Decision Trees | ✅ decision_trees.svg |
 | Deep Learning | ✅ deep_learning.svg |
 | Deep Learning errors | ✅ dl_errors.svg |
@@ -107,12 +110,14 @@ Last updated: 2026-03-05
 | Embeddings | ✅ embeddings.svg |
 | Emergent behaviors | ✅ emergent_behaviors.svg |
 | empirical methods | ✅ empirical_methods.svg |
+| Encoder-Decoder | ✅ encoder_decoder.svg |
 | Ensemble Methods | ✅ ensemble_methods.svg |
 | Estimating Model Proformance | ✅ model_performance.svg |
 | Euler’s Formula | ✅ eulers_formula.svg |
 | Evasion attacks | ✅ evasion_attacks.svg |
 | Expectation Maximization | ✅ expectation_maximization.svg |
 | Expected Value | ✅ expected_value.svg |
+| Expert Systems | ✅ expert_systems.svg |
 | exploding gradient | ✅ exploding_gradient.svg |
 | Explore and Exploit | ✅ explore_exploit.svg |
 | F1 | ✅ f1_score.svg |
@@ -144,6 +149,8 @@ Last updated: 2026-03-05
 | Graph Convolutional Networks | ✅ gcn.svg |
 | Graph Neural Network | ✅ graph_neural_network.svg |
 | grid search | ✅ grid_search.svg |
+| Hardware Lottery | ✅ hardware_lottery.svg |
+| History of AI | ✅ history_of_ai.svg |
 | hessian | ✅ hessian.svg |
 | heterogeneity of treatment effects | ✅ hte.svg |
 | Hidden Markov Machine | ✅ hidden_markov.svg |
@@ -154,6 +161,7 @@ Last updated: 2026-03-05
 | hyperplane | ✅ hyperplane.svg |
 | hypothesis test | ✅ hypothesis_test.svg |
 | Hypothesis Testing | ✅ hypothesis_testing.svg |
+| ImageNet | ✅ imagenet.svg |
 | Independent Draws From Same Distibution | ✅ iid.svg |
 | Information Bottleneck | ✅ information_bottleneck.svg |
 | Information Theory | ✅ information_theory.svg |
@@ -280,6 +288,7 @@ Last updated: 2026-03-05
 | Reinforcement Learning | ✅ reinforcement_learning.svg |
 | ReLU | ✅ relu.svg |
 | ResNets | ✅ resnets.svg |
+| Restricted Boltzmann Machines | ✅ restricted_boltzmann_machines.svg |
 | Ridge regression | ✅ ridge_regression.svg |
 | RLHF | ✅ rlhf.svg |
 | RNN | ✅ rnn.svg |
@@ -296,6 +305,7 @@ Last updated: 2026-03-05
 | Self-supervised Learning | ✅ self_supervised.svg |
 | semantic | ✅ semantics.svg |
 | Semantic Segmentation | ✅ semantic_segmentation.svg |
+| Sequence-to-sequence | ✅ sequence_to_sequence.svg |
 | Sequential NN | ✅ sequential_nn.svg |
 | sgd | ✅ sgd.svg |
 | Shear Transformation | ✅ shear_transformation.svg |

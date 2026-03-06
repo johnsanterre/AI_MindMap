@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="15" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Encoder-Decoder: A Universal Architectural Pattern</text>
+
+  <!-- General pattern (top row) -->
+  <text x="400" y="58" font-family="Georgia,serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">General: input → compressed representation (latent space) → output</text>
+
+  <rect x="40"  y="68" width="120" height="50" rx="5" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="100" y="89" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Input x</text>
+  <text x="100" y="106" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">image / text / signal</text>
+  <line x1="160" y1="93" x2="190" y2="93" stroke="#888" stroke-width="1.5"/>
+  <polygon points="187,89 195,93 187,97" fill="#888"/>
+
+  <rect x="195" y="68" width="120" height="50" rx="5" fill="#D4E8F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="255" y="89" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Encoder</text>
+  <text x="255" y="106" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">f_θ(x) = z</text>
+  <line x1="315" y1="93" x2="345" y2="93" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="342,89 350,93 342,97" fill="#C4A87A"/>
+
+  <rect x="350" y="68" width="100" height="50" rx="5" fill="#F5EFE4" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="400" y="89" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Latent z</text>
+  <text x="400" y="106" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">bottleneck</text>
+  <line x1="450" y1="93" x2="480" y2="93" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="477,89 485,93 477,97" fill="#C4A87A"/>
+
+  <rect x="485" y="68" width="120" height="50" rx="5" fill="#FAD4D4" stroke="#7C2530" stroke-width="2"/>
+  <text x="545" y="89" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Decoder</text>
+  <text x="545" y="106" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">g_φ(z) = x̂</text>
+  <line x1="605" y1="93" x2="635" y2="93" stroke="#888" stroke-width="1.5"/>
+  <polygon points="632,89 640,93 632,97" fill="#888"/>
+
+  <rect x="640" y="68" width="120" height="50" rx="5" fill="#FAF0EE" stroke="#7C2530" stroke-width="2"/>
+  <text x="700" y="89" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Output x̂</text>
+  <text x="700" y="106" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">translation / label</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="132" x2="770" y2="132" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="148" font-family="Georgia,serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Four variants of the same pattern:</text>
+
+  <!-- 4 variant boxes -->
+  <!-- Seq2seq -->
+  <rect x="30" y="158" width="170" height="105" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="115" y="176" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Seq2Seq (NLP)</text>
+  <text x="115" y="193" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">LSTM encoder</text>
+  <text x="115" y="207" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">+ LSTM decoder</text>
+  <text x="115" y="224" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">z = final hidden state</text>
+  <text x="115" y="241" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">machine translation</text>
+  <text x="115" y="253" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">summarisation</text>
+
+  <!-- U-Net / Vision -->
+  <rect x="212" y="158" width="170" height="105" rx="4" fill="#EEF5EE" stroke="#509050" stroke-width="1.5"/>
+  <text x="297" y="176" font-family="Georgia,serif" font-size="11" fill="#306030" text-anchor="middle" font-weight="bold">U-Net (Vision)</text>
+  <text x="297" y="193" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Conv encoder</text>
+  <text x="297" y="207" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">+ deconv decoder</text>
+  <text x="297" y="224" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">skip connections</text>
+  <text x="297" y="241" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">semantic segmentation</text>
+  <text x="297" y="253" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">medical imaging</text>
+
+  <!-- Transformer full -->
+  <rect x="394" y="158" width="170" height="105" rx="4" fill="#EAE8F2" stroke="#7060A0" stroke-width="1.5"/>
+  <text x="479" y="176" font-family="Georgia,serif" font-size="11" fill="#5040A0" text-anchor="middle" font-weight="bold">Transformer</text>
+  <text x="479" y="193" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Attn encoder</text>
+  <text x="479" y="207" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">+ Attn decoder</text>
+  <text x="479" y="224" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">cross-attention bridge</text>
+  <text x="479" y="241" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">translation (original use)</text>
+  <text x="479" y="253" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">BERT enc / GPT dec</text>
+
+  <!-- VAE -->
+  <rect x="576" y="158" width="185" height="105" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="668" y="176" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">VAE (Generative)</text>
+  <text x="668" y="193" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">NN encoder → μ, σ</text>
+  <text x="668" y="207" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">sample z ~ N(μ, σ²)</text>
+  <text x="668" y="224" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">NN decoder → x̂</text>
+  <text x="668" y="241" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">image generation</text>
+  <text x="668" y="253" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">latent space interpolation</text>
+
+  <!-- Enc-only / Dec-only note -->
+  <rect x="30" y="276" width="740" height="65" rx="4" fill="#F9F5EF" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="295" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Encoder-only vs Decoder-only vs Both</text>
+  <text x="190" y="316" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Encoder-only</text>
+  <text x="190" y="330" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">BERT — classification tasks</text>
+  <text x="400" y="316" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Decoder-only</text>
+  <text x="400" y="330" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">GPT — generation tasks</text>
+  <text x="615" y="316" font-family="Georgia,serif" font-size="10" fill="#5040A0" text-anchor="middle" font-weight="bold">Encoder + Decoder</text>
+  <text x="615" y="330" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">T5, original Transformer — translation</text>
+
+  <text x="400" y="362" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle">The encoder-decoder split is not about architecture — it is about what information the model needs to condition on.</text>
+  <text x="400" y="378" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">Understanding which you need tells you whether your problem is classification, generation, or translation.</text>
+</svg>

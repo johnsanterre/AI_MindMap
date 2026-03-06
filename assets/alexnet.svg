@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">AlexNet (2012): Architecture That Changed Everything</text>
+
+  <!-- Architecture flow: Input → Conv layers → FC layers → Output -->
+  <!-- Input -->
+  <rect x="20" y="140" width="55" height="120" rx="3" fill="#EBEBEB" stroke="#888" stroke-width="1.5"/>
+  <text x="47" y="168" font-family="Georgia,serif" font-size="9" fill="#555" text-anchor="middle">Input</text>
+  <text x="47" y="181" font-family="Georgia,serif" font-size="9" fill="#555" text-anchor="middle">224×224</text>
+  <text x="47" y="194" font-family="Georgia,serif" font-size="9" fill="#555" text-anchor="middle">×3 RGB</text>
+
+  <!-- Arrow -->
+  <line x1="75" y1="200" x2="88" y2="200" stroke="#888" stroke-width="1.5"/>
+  <polygon points="85,196 93,200 85,204" fill="#888"/>
+
+  <!-- Conv1 -->
+  <rect x="93" y="120" width="60" height="160" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="123" y="144" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Conv1</text>
+  <text x="123" y="157" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">96 filters</text>
+  <text x="123" y="169" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">11×11, s=4</text>
+  <text x="123" y="181" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">→ ReLU</text>
+  <text x="123" y="193" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">→ MaxPool</text>
+  <text x="123" y="205" font-family="Georgia,serif" font-size="8" fill="#888" text-anchor="middle">55×55×96</text>
+
+  <line x1="153" y1="200" x2="163" y2="200" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="160,196 168,200 160,204" fill="#2D5A8E"/>
+
+  <!-- Conv2 -->
+  <rect x="168" y="130" width="60" height="140" rx="3" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="198" y="152" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Conv2</text>
+  <text x="198" y="165" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">256 filters</text>
+  <text x="198" y="177" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">5×5</text>
+  <text x="198" y="189" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">→ ReLU</text>
+  <text x="198" y="201" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">→ MaxPool</text>
+  <text x="198" y="213" font-family="Georgia,serif" font-size="8" fill="#888" text-anchor="middle">27×27×256</text>
+
+  <line x1="228" y1="200" x2="238" y2="200" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="235,196 243,200 235,204" fill="#2D5A8E"/>
+
+  <!-- Conv3+4+5 grouped -->
+  <rect x="243" y="145" width="80" height="110" rx="3" fill="#E0E8F5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="283" y="163" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Conv 3–5</text>
+  <text x="283" y="177" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">384 / 384 / 256</text>
+  <text x="283" y="190" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">filters, 3×3</text>
+  <text x="283" y="203" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">→ ReLU each</text>
+  <text x="283" y="216" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">MaxPool after 5</text>
+  <text x="283" y="229" font-family="Georgia,serif" font-size="8" fill="#888" text-anchor="middle">6×6×256</text>
+
+  <line x1="323" y1="200" x2="338" y2="200" stroke="#2D5A8E" stroke-width="1.5"/>
+  <polygon points="335,196 343,200 335,204" fill="#2D5A8E"/>
+
+  <!-- FC6 -->
+  <rect x="343" y="155" width="68" height="90" rx="3" fill="#EEF5EE" stroke="#509050" stroke-width="1.5"/>
+  <text x="377" y="175" font-family="Georgia,serif" font-size="9" fill="#306030" text-anchor="middle" font-weight="bold">FC 6</text>
+  <text x="377" y="190" font-family="Georgia,serif" font-size="8" fill="#306030" text-anchor="middle">4096 units</text>
+  <text x="377" y="203" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">ReLU</text>
+  <text x="377" y="216" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">Dropout</text>
+  <text x="377" y="229" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">p=0.5</text>
+
+  <line x1="411" y1="200" x2="421" y2="200" stroke="#509050" stroke-width="1.5"/>
+  <polygon points="418,196 426,200 418,204" fill="#509050"/>
+
+  <!-- FC7 -->
+  <rect x="426" y="155" width="68" height="90" rx="3" fill="#EEF5EE" stroke="#509050" stroke-width="1.5"/>
+  <text x="460" y="175" font-family="Georgia,serif" font-size="9" fill="#306030" text-anchor="middle" font-weight="bold">FC 7</text>
+  <text x="460" y="190" font-family="Georgia,serif" font-size="8" fill="#306030" text-anchor="middle">4096 units</text>
+  <text x="460" y="203" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">ReLU</text>
+  <text x="460" y="216" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">Dropout</text>
+  <text x="460" y="229" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">p=0.5</text>
+
+  <line x1="494" y1="200" x2="509" y2="200" stroke="#509050" stroke-width="1.5"/>
+  <polygon points="506,196 514,200 506,204" fill="#509050"/>
+
+  <!-- FC8 + Softmax -->
+  <rect x="514" y="165" width="68" height="70" rx="3" fill="#FAF0EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="548" y="185" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">FC 8</text>
+  <text x="548" y="200" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">1000 units</text>
+  <text x="548" y="213" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">Softmax</text>
+  <text x="548" y="225" font-family="Georgia,serif" font-size="8" fill="#888" text-anchor="middle">1000 classes</text>
+
+  <!-- Key innovations box -->
+  <rect x="610" y="55" width="165" height="210" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="692" y="74" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Key Innovations</text>
+  <text x="620" y="94" font-family="Georgia,serif" font-size="10" fill="#7C2530">✓ ReLU activations</text>
+  <text x="620" y="109" font-family="Georgia,serif" font-size="9" fill="#888" font-style="italic">  no vanishing gradient</text>
+  <text x="620" y="128" font-family="Georgia,serif" font-size="10" fill="#7C2530">✓ Dropout (p=0.5)</text>
+  <text x="620" y="143" font-family="Georgia,serif" font-size="9" fill="#888" font-style="italic">  prevents co-adaptation</text>
+  <text x="620" y="162" font-family="Georgia,serif" font-size="10" fill="#7C2530">✓ Data augmentation</text>
+  <text x="620" y="177" font-family="Georgia,serif" font-size="9" fill="#888" font-style="italic">  crops, flips, colour jitter</text>
+  <text x="620" y="196" font-family="Georgia,serif" font-size="10" fill="#7C2530">✓ 2-GPU training</text>
+  <text x="620" y="211" font-family="Georgia,serif" font-size="9" fill="#888" font-style="italic">  model split across GPUs</text>
+  <text x="620" y="230" font-family="Georgia,serif" font-size="10" fill="#7C2530">✓ Local response norm</text>
+  <text x="620" y="245" font-family="Georgia,serif" font-size="9" fill="#888" font-style="italic">  (later superseded by BN)</text>
+
+  <!-- Result banner -->
+  <rect x="20" y="315" width="570" height="55" rx="4" fill="#FAF0EE" stroke="#7C2530" stroke-width="2"/>
+  <text x="305" y="334" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">ILSVRC 2012 Result</text>
+  <text x="305" y="352" font-family="Georgia,serif" font-size="12" fill="#2C2C2C" text-anchor="middle">AlexNet: 15.3% top-5 error  vs.  2nd place: 26.2%</text>
+  <text x="305" y="366" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">A 10-point margin that launched the deep learning era</text>
+
+  <!-- Total params -->
+  <text x="692" y="290" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">~60M parameters</text>
+  <text x="692" y="304" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">trained 5–6 days on</text>
+  <text x="692" y="318" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">2× GTX 580 GPUs</text>
+</svg>
