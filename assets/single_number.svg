@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="44" font-family="Georgia,serif" font-size="17" fill="#2C2C2C" text-anchor="middle" font-weight="bold">The Same Data — Three Different Single Numbers</text>
+
+  <!-- Number line -->
+  <line x1="100" y1="270" x2="710" y2="270" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="710,266 720,270 710,274" fill="#5C3D1E"/>
+
+  <!-- Ticks: 0,5,10,15,20,25,30,35,40 — scale: x = 100 + val*15 -->
+  <line x1="100" y1="265" x2="100" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="100"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">0</text>
+  <line x1="175" y1="265" x2="175" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="175"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">5</text>
+  <line x1="250" y1="265" x2="250" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="250"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">10</text>
+  <line x1="325" y1="265" x2="325" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="325"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">15</text>
+  <line x1="400" y1="265" x2="400" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="400"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">20</text>
+  <line x1="475" y1="265" x2="475" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="475"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">25</text>
+  <line x1="550" y1="265" x2="550" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="550"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">30</text>
+  <line x1="625" y1="265" x2="625" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="625"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">35</text>
+  <line x1="700" y1="265" x2="700" y2="275" stroke="#5C3D1E" stroke-width="1.5"/><text x="700"  y="292" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">40</text>
+
+  <!-- Data points: {2,4,5,6,6,7,8,28,34} — x = 100 + val*15 -->
+  <circle cx="130" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="160" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="175" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="190" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="190" cy="246" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="205" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="220" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="520" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="610" cy="262" r="7" fill="#2D5A8E" opacity="0.85"/>
+
+  <!-- Outlier callout -->
+  <line x1="520" y1="253" x2="530" y2="225" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="610" y1="253" x2="600" y2="225" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="565" y="220" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">two outliers pull</text>
+  <text x="565" y="233" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">the mean rightward</text>
+
+  <!-- Median = 6, x=190, deep red -->
+  <line x1="190" y1="145" x2="190" y2="263" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="190" y="140" font-family="Georgia,serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">Median = 6</text>
+  <text x="190" y="122" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">minimizes  Σ|xᵢ − c|</text>
+  <text x="190" y="108" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">(also the Mode)</text>
+
+  <!-- Mean ≈ 11.1, x=267, navy -->
+  <line x1="267" y1="145" x2="267" y2="263" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="267" y="140" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Mean ≈ 11.1</text>
+  <text x="267" y="122" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">minimizes  Σ(xᵢ − c)²</text>
+
+  <!-- Gap callout arrow -->
+  <line x1="195" y1="163" x2="262" y2="163" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="228" y="158" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">gap = 5.1</text>
+
+  <!-- Dataset label -->
+  <text x="400" y="320" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle">Dataset: {2, 4, 5, 6, 6, 7, 8, 28, 34}</text>
+
+  <!-- Bottom insight -->
+  <text x="400" y="355" font-family="Georgia,serif" font-size="13" fill="#2C2C2C" text-anchor="middle">Every summary answers: <tspan font-style="italic">which value c minimizes my chosen penalty?</tspan></text>
+</svg>
