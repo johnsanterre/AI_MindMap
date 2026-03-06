@@ -4,10 +4,10 @@ Interactive ML/math/statistics reference built with Twine 2 / SugarCube 2.37.3.
 
 ## Key Files
 
-- `ml_mindmap_published.html` — the single published Twine file containing all ~300 passages
-- `page_status.md` — tracks which passages are full vs stubs (217 full as of 2026-03-05)
-- `page_style_prompt.md` — style guide and template for generating new full pages
+- `index.html` — the single published Twine file containing all ~400 passages
+- `page_status.md` — tracks which passages are full vs stubs
 - `generate_twine_pages.py` — Python script that uses Claude API to generate passages and insert them
+- `generate_index.py` — generates `page_directory.html`, a searchable table of all passages
 - `assets/` — SVG diagrams, one per full content page
 
 ## Passage Architecture

@@ -5,8 +5,8 @@ import re
 import html as htmlmod
 from urllib.parse import quote
 
-HTML_PATH = 'AI_MindMap.html'
-OUTPUT_PATH = 'index.html'
+HTML_PATH = 'index.html'
+OUTPUT_PATH = 'page_directory.html'
 
 # System/nav passages to exclude from the table
 EXCLUDE = {
@@ -58,7 +58,7 @@ full = sorted([(n, d) for n, f, d in rows if f], key=lambda x: x[0].lower())
 stubs = sorted([(n, d) for n, f, d in rows if not f], key=lambda x: x[0].lower())
 
 def make_row(name, desc, badge=''):
-    link = f'AI_MindMap.html?passage={quote(name)}'
+    link = f'index.html?passage={quote(name)}'
     badge_html = f'<span class="badge">{badge}</span>' if badge else ''
     return f'<tr><td><a href="{link}">{htmlmod.escape(name)}</a> {badge_html}</td><td>{htmlmod.escape(desc)}</td></tr>'
 
@@ -161,7 +161,7 @@ html_out = f"""<!DOCTYPE html>
 <h1>AI MindMap</h1>
 <p class="subtitle">Interactive ML / Math / Statistics reference — {len(full) + len(stubs)} pages</p>
 
-<a class="enter-btn" href="AI_MindMap.html">Enter the Map →</a>
+<a class="enter-btn" href="index.html">Enter the Map →</a>
 
 <div>
   <input type="search" id="search" placeholder="Filter pages…" oninput="filterTable()">
