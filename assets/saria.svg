@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="233" y1="20" x2="233" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="533" y1="20" x2="533" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===== LEFT PANEL: Timeline ===== -->
+  <text x="116" y="42" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Suchi Saria</text>
+  <line x1="30" y1="50" x2="202" y2="50" stroke="#C4A87A" stroke-width="1"/>
+  <text x="116" y="65" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-style="italic">— Career Timeline —</text>
+
+  <!-- Timeline vertical line -->
+  <line x1="75" y1="78" x2="75" y2="365" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Event 1: Undergrad -->
+  <circle cx="75" cy="90" r="5" fill="#7C2530"/>
+  <text x="87" y="88" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">~2003</text>
+  <text x="87" y="100" font-family="Georgia, serif" font-size="8.5" fill="#333">BS, IIT Bombay</text>
+  <text x="87" y="111" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">Computer Science</text>
+
+  <!-- Event 2: PhD -->
+  <circle cx="75" cy="135" r="6" fill="#7C2530"/>
+  <text x="87" y="133" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#7C2530">2011</text>
+  <text x="87" y="144" font-family="Georgia, serif" font-size="8.5" fill="#333">PhD, Stanford University</text>
+  <text x="87" y="155" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">Advisor: Daphne Koller</text>
+
+  <!-- Event 3: Postdoc / early career -->
+  <circle cx="75" cy="177" r="5" fill="#2D5A8E"/>
+  <text x="87" y="175" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2012</text>
+  <text x="87" y="186" font-family="Georgia, serif" font-size="8.5" fill="#333">Joins Johns Hopkins Univ.</text>
+  <text x="87" y="197" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">CS, Statistics &amp; Health Policy</text>
+
+  <!-- Event 4: ML Healthcare Lab -->
+  <circle cx="75" cy="218" r="5" fill="#2D5A8E"/>
+  <text x="87" y="216" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2013</text>
+  <text x="87" y="227" font-family="Georgia, serif" font-size="8.5" fill="#333">Founds ML &amp; Healthcare Lab</text>
+
+  <!-- Event 5: Sepsis paper -->
+  <circle cx="75" cy="248" r="6" fill="#7C2530"/>
+  <text x="87" y="246" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#7C2530">2015</text>
+  <text x="87" y="257" font-family="Georgia, serif" font-size="8.5" fill="#333">Sepsis early warning system</text>
+  <text x="87" y="268" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">Science Translational Medicine</text>
+
+  <!-- Event 6: Malone Associate Prof -->
+  <circle cx="75" cy="290" r="5" fill="#5C3D1E"/>
+  <text x="87" y="288" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2018</text>
+  <text x="87" y="299" font-family="Georgia, serif" font-size="8.5" fill="#333">John C. Malone Associate Prof.</text>
+
+  <!-- Event 7: Causal ML / robustness work -->
+  <circle cx="75" cy="321" r="5" fill="#5C3D1E"/>
+  <text x="87" y="319" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2019–21</text>
+  <text x="87" y="330" font-family="Georgia, serif" font-size="8.5" fill="#333">Distribution shift &amp;</text>
+  <text x="87" y="341" font-family="Georgia, serif" font-size="8.5" fill="#333">causal robustness papers</text>
+
+  <!-- Event 8: Broader recognition -->
+  <circle cx="75" cy="360" r="5" fill="#2D5A8E"/>
+  <text x="87" y="358" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2022+</text>
+  <text x="87" y="369" font-family="Georgia, serif" font-size="8.5" fill="#333">TR35, key note talks;</text>
+  <text x="87" y="380" font-family="Georgia, serif" font-size="8.5" fill="#333">FDA / policy advisory work</text>
+
+  <!-- ===== CENTER PANEL: Clinical ML Pipeline ===== -->
+  <text x="383" y="35" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Clinical ML Pipeline</text>
+  <text x="383" y="50" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-style="italic">From patient data to clinical alert — with distribution shift danger</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowS" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowDanger" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Step 1: Patient Data -->
+  <rect x="248" y="75" width="110" height="44" rx="5" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="303" y="93" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Patient Data</text>
+  <text x="303" y="108" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">Vitals, labs, notes</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="358" y1="97" x2="385" y2="97" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowS)"/>
+
+  <!-- Step 2: Feature Extraction -->
+  <rect x="385" y="75" width="120" height="44" rx="5" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="445" y="93" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Feature Extraction</text>
+  <text x="445" y="108" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">Temporal patterns</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="445" y1="119" x2="445" y2="148" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowS)"/>
+
+  <!-- Distribution Shift WARNING — overlaid on arrow -->
+  <rect x="340" y="132" width="120" height="28" rx="3" fill="#7C2530" fill-opacity="0.10" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="400" y="145" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle" font-weight="bold">⚠ Distribution Shift</text>
+  <text x="400" y="156" font-family="Georgia, serif" font-size="7.5" fill="#7C2530" text-anchor="middle">Train ≠ Deploy population</text>
+
+  <!-- Step 3: ML Model -->
+  <rect x="385" y="156" width="120" height="44" rx="5" fill="#5C3D1E" fill-opacity="0.12" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="445" y="174" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">ML Model</text>
+  <text x="445" y="189" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Bayesian / causal</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="445" y1="200" x2="445" y2="228" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowS)"/>
+
+  <!-- Step 4: Risk Score -->
+  <rect x="385" y="235" width="120" height="44" rx="5" fill="#C4A87A" fill-opacity="0.20" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="445" y="253" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Risk Score</text>
+  <text x="445" y="268" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Calibrated probability</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="445" y1="279" x2="445" y2="307" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowS)"/>
+
+  <!-- Step 5: Clinical Alert -->
+  <rect x="385" y="314" width="120" height="44" rx="5" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="445" y="332" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#7C2530" text-anchor="middle">Clinical Alert</text>
+  <text x="445" y="347" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle">Actionable &amp; timely</text>
+
+  <!-- Causal feedback loop (left side) -->
+  <path d="M385,336 Q310,336 310,200 Q310,80 385,80" fill="none" stroke="#888" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="295" y="200" font-family="Georgia, serif" font-size="7.5" fill="#888" text-anchor="middle" transform="rotate(-90,295,200)">Causal feedback / policy</text>
+
+  <!-- Saria's key methods label -->
+  <text x="303" y="175" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle" font-weight="bold">Saria's focus:</text>
+  <text x="303" y="188" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Causal inference</text>
+  <text x="303" y="200" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">for treatment effects</text>
+  <text x="303" y="218" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Robustness under</text>
+  <text x="303" y="230" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">covariate shift</text>
+
+  <!-- Bottom note -->
+  <text x="383" y="372" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle" font-style="italic">High-stakes decisions require calibration + causal validity</text>
+
+  <!-- ===== RIGHT PANEL: Key Applications ===== -->
+  <text x="666" y="35" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Key Research &amp; Applications</text>
+  <line x1="548" y1="44" x2="782" y2="44" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- App 1: Sepsis -->
+  <rect x="550" y="52" width="228" height="68" rx="4" fill="#7C2530" fill-opacity="0.07" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="664" y="68" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#7C2530" text-anchor="middle">Sepsis Early Warning</text>
+  <text x="664" y="81" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">Bayesian model of patient trajectories</text>
+  <text x="664" y="94" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Science Translational Medicine (2015)</text>
+  <text x="664" y="107" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Detects sepsis hours before clinical onset</text>
+  <text x="664" y="117" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Adopted by clinical partners</text>
+
+  <!-- App 2: ICU monitoring -->
+  <rect x="550" y="128" width="228" height="58" rx="4" fill="#2D5A8E" fill-opacity="0.07" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="664" y="144" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">ICU Deterioration Monitoring</text>
+  <text x="664" y="157" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">Temporal process models for</text>
+  <text x="664" y="168" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">continuous physiological streams</text>
+  <text x="664" y="181" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Personalized, nonparametric trajectories</text>
+
+  <!-- App 3: Causal treatment effect -->
+  <rect x="550" y="194" width="228" height="58" rx="4" fill="#5C3D1E" fill-opacity="0.07" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="664" y="210" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Causal Treatment Effects</text>
+  <text x="664" y="223" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">Estimating individualized treatment</text>
+  <text x="664" y="234" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">rules from observational EHR data</text>
+  <text x="664" y="247" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Addresses confounding + selection bias</text>
+
+  <!-- App 4: Distribution shift -->
+  <rect x="550" y="260" width="228" height="58" rx="4" fill="#C4A87A" fill-opacity="0.15" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="664" y="276" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Robustness to Distribution Shift</text>
+  <text x="664" y="289" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">Detecting &amp; correcting for covariate</text>
+  <text x="664" y="300" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">shift between training &amp; deployment</text>
+  <text x="664" y="312" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Predictive model monitoring in clinical use</text>
+
+  <!-- Summary box -->
+  <line x1="550" y1="327" x2="782" y2="327" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="664" y="343" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">Focus: Safe, Reliable Clinical AI</text>
+  <text x="664" y="357" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Causal inference · Bayesian nonparametrics</text>
+  <text x="664" y="370" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Distribution robustness · EHR modeling</text>
+  <text x="664" y="383" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle" font-style="italic">Johns Hopkins University · ML &amp; Healthcare Lab</text>
+</svg>

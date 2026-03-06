@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <defs>
+    <marker id="arrow-tan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrow-navy" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel dividers -->
+  <line x1="210" y1="20" x2="210" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="570" y1="20" x2="570" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ===== LEFT PANEL: Timeline ===== -->
+  <text x="105" y="16" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">BIOGRAPHY &amp; TIMELINE</text>
+
+  <!-- Vertical timeline line -->
+  <line x1="62" y1="32" x2="62" y2="360" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- 1975: Born -->
+  <circle cx="62" cy="42" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="74" y="46" font-size="9" fill="#1C1713" font-family="Georgia,serif">b. 1975, Brazil</text>
+
+  <!-- 2003: CMU PhD -->
+  <circle cx="62" cy="88" r="7" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="74" y="76" width="124" height="26" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="136" y="89" font-size="9" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">PhD Carnegie Mellon</text>
+  <text x="136" y="99" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Computer Science, 2003</text>
+
+  <!-- 2004: UW Professor -->
+  <circle cx="62" cy="135" r="5" fill="#2D5A8E" stroke="#1C3A5C" stroke-width="1"/>
+  <rect x="74" y="124" width="124" height="24" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="136" y="137" font-size="9" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Professor, U. Washington</text>
+  <text x="136" y="146" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Paul G. Allen School</text>
+
+  <!-- 2014: LIME -->
+  <circle cx="62" cy="182" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="74" y="180" font-size="9" fill="#1C1713" font-family="Georgia,serif">LIME (with Ribeiro, Singh)</text>
+  <text x="74" y="192" font-size="8" fill="#6B5D4F" font-family="Georgia,serif">KDD 2016</text>
+
+  <!-- 2016: XGBoost / Turi -->
+  <circle cx="62" cy="228" r="7" fill="#5C3D1E" stroke="#3A2510" stroke-width="1.5"/>
+  <rect x="74" y="216" width="124" height="28" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="136" y="230" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">XGBoost paper + Turi</text>
+  <text x="136" y="241" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">KDD 2016</text>
+
+  <!-- 2016: Apple acquires Turi -->
+  <circle cx="62" cy="275" r="7" fill="#2D5A8E" stroke="#1C3A5C" stroke-width="1.5"/>
+  <rect x="74" y="263" width="124" height="28" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="136" y="276" font-size="9" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Apple acquires Turi</text>
+  <text x="136" y="287" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">~$200M, 2016</text>
+
+  <!-- Post-2016: Apple ML -->
+  <circle cx="62" cy="318" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="74" y="316" font-size="9" fill="#1C1713" font-family="Georgia,serif">Turi Create → Create ML</text>
+  <text x="74" y="328" font-size="8" fill="#6B5D4F" font-family="Georgia,serif">CoreML / on-device inference</text>
+
+  <text x="105" y="360" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">Returns to UW research</text>
+
+  <!-- ===== CENTER PANEL: XGBoost diagram ===== -->
+  <text x="390" y="16" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">XGBOOST: SEQUENTIAL ENSEMBLE BOOSTING</text>
+
+  <!-- Training data box -->
+  <rect x="226" y="28" width="90" height="24" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
+  <text x="271" y="44" font-size="9" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Training Data</text>
+
+  <line x1="316" y1="40" x2="332" y2="40" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+
+  <!-- TREE 1 -->
+  <rect x="334" y="28" width="72" height="24" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="370" y="44" font-size="9" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Tree 1: f₁(x)</text>
+
+  <!-- Residuals 1 -->
+  <line x1="370" y1="52" x2="370" y2="68" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+  <rect x="320" y="70" width="100" height="20" fill="#F2EAD8" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="370" y="84" font-size="8" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">r₁ = y − f₁(x)</text>
+
+  <!-- TREE 2 fits residuals 1 -->
+  <line x1="370" y1="90" x2="370" y2="106" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+  <rect x="334" y="108" width="72" height="24" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.5" rx="3"/>
+  <text x="370" y="124" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Tree 2: f₂(x)</text>
+
+  <text x="416" y="119" font-size="8" fill="#6B5D4F" font-family="Georgia,serif" font-style="italic">fits r₁</text>
+
+  <!-- Residuals 2 -->
+  <line x1="370" y1="132" x2="370" y2="148" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+  <rect x="320" y="150" width="100" height="20" fill="#F2EAD8" stroke="#5C3D1E" stroke-width="1" rx="2"/>
+  <text x="370" y="164" font-size="8" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif">r₂ = r₁ − f₂(x)</text>
+
+  <!-- TREE 3 fits residuals 2 -->
+  <line x1="370" y1="170" x2="370" y2="186" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+  <rect x="334" y="188" width="72" height="24" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="370" y="204" font-size="9" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Tree 3: f₃(x)</text>
+
+  <text x="416" y="199" font-size="8" fill="#6B5D4F" font-family="Georgia,serif" font-style="italic">fits r₂</text>
+
+  <!-- Dots indicating more trees -->
+  <text x="370" y="228" font-size="14" fill="#C4A87A" text-anchor="middle" font-family="Georgia,serif">⋮</text>
+  <text x="370" y="242" font-size="14" fill="#C4A87A" text-anchor="middle" font-family="Georgia,serif">⋮</text>
+
+  <!-- Tree K -->
+  <rect x="334" y="252" width="72" height="24" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.5" rx="3"/>
+  <text x="370" y="268" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Tree K: fₖ(x)</text>
+
+  <!-- FINAL PREDICTION -->
+  <line x1="370" y1="276" x2="370" y2="294" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrow-red)"/>
+  <rect x="298" y="296" width="144" height="30" fill="#7C2530" stroke="#5C3D1E" stroke-width="1" rx="4"/>
+  <text x="370" y="308" font-size="9" fill="white" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">ŷ = Σ fₖ(x)</text>
+  <text x="370" y="320" font-size="8" fill="#F2EAD8" text-anchor="middle" font-family="Georgia,serif">Final Prediction</text>
+
+  <!-- XGBoost innovations callout box -->
+  <rect x="440" y="28" width="120" height="100" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1" rx="4"/>
+  <text x="500" y="42" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">XGBoost Additions</text>
+  <line x1="450" y1="48" x2="550" y2="48" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="451" y="62" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; L1 + L2 regularisation</text>
+  <text x="451" y="76" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; 2nd-order Taylor obj.</text>
+  <text x="451" y="90" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; Column subsampling</text>
+  <text x="451" y="104" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; Parallel tree building</text>
+  <text x="451" y="118" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; Cache-aware access</text>
+
+  <!-- Objective formula -->
+  <rect x="225" y="340" width="336" height="32" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1" rx="3"/>
+  <text x="393" y="352" font-size="8.5" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Objective:</text>
+  <text x="393" y="366" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">L(θ) = Σᵢ l(yᵢ, ŷᵢ) + Σₖ Ω(fₖ),  Ω(f) = γT + ½λ‖w‖²</text>
+
+  <!-- ===== RIGHT PANEL: Contributions ===== -->
+  <text x="685" y="16" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">KEY CONTRIBUTIONS</text>
+
+  <!-- XGBoost card -->
+  <rect x="580" y="28" width="205" height="70" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="683" y="44" font-size="9.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">XGBoost</text>
+  <text x="683" y="58" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Chen &amp; Guestrin (KDD 2016)</text>
+  <text x="683" y="71" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Gradient boosting + regularisation</text>
+  <text x="683" y="84" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Dominated Kaggle 2015–2018</text>
+
+  <!-- LIME card -->
+  <rect x="580" y="108" width="205" height="70" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.2" rx="4"/>
+  <text x="683" y="124" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">LIME</text>
+  <text x="683" y="138" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Ribeiro, Singh, Guestrin (KDD 2016)</text>
+  <text x="683" y="151" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Local interpretable explanations</text>
+  <text x="683" y="164" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Model-agnostic; perturb + fit linear</text>
+
+  <!-- Turi Create card -->
+  <rect x="580" y="188" width="205" height="70" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="4"/>
+  <text x="683" y="204" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Turi Create / Create ML</text>
+  <text x="683" y="218" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">ML for Apple developers</text>
+  <text x="683" y="231" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Acq. by Apple 2016 (~$200M)</text>
+  <text x="683" y="244" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Now powers CoreML / on-device</text>
+
+  <!-- Impact section -->
+  <rect x="580" y="268" width="205" height="100" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="683" y="283" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Research Impact</text>
+  <line x1="590" y1="289" x2="776" y2="289" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="591" y="304" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; XGBoost: 25,000+ citations</text>
+  <text x="591" y="318" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; LIME: 10,000+ citations</text>
+  <text x="591" y="332" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; XGBoost used in finance,</text>
+  <text x="604" y="344" font-size="8" fill="#1C1713" font-family="Georgia,serif">healthcare, ad ranking</text>
+  <text x="591" y="358" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; SHAP built on LIME ideas</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="388" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">Guestrin bridged theory and practice: XGBoost made gradient boosting reliable at scale; LIME made black-box models accountable.</text>
+</svg>

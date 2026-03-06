@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="233" y1="20" x2="233" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="533" y1="20" x2="533" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===== LEFT PANEL: Timeline ===== -->
+  <text x="116" y="42" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Andrew McCallum</text>
+  <line x1="30" y1="50" x2="202" y2="50" stroke="#C4A87A" stroke-width="1"/>
+  <text x="116" y="65" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-style="italic">— Career Timeline —</text>
+
+  <!-- Timeline vertical line -->
+  <line x1="75" y1="78" x2="75" y2="355" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Event 1: undergrad -->
+  <circle cx="75" cy="90" r="5" fill="#7C2530"/>
+  <text x="87" y="88" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">1989</text>
+  <text x="87" y="100" font-family="Georgia, serif" font-size="8.5" fill="#333">BS, UC San Diego</text>
+
+  <!-- Event 2: PhD -->
+  <circle cx="75" cy="125" r="5" fill="#7C2530"/>
+  <text x="87" y="123" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">1995</text>
+  <text x="87" y="135" font-family="Georgia, serif" font-size="8.5" fill="#333">PhD, Carnegie Mellon</text>
+  <text x="87" y="146" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">Advisor: T. Mitchell</text>
+
+  <!-- Event 3: CMU / AT&T -->
+  <circle cx="75" cy="168" r="5" fill="#2D5A8E"/>
+  <text x="87" y="166" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">1995–99</text>
+  <text x="87" y="177" font-family="Georgia, serif" font-size="8.5" fill="#333">Postdoc → AT&amp;T Labs</text>
+  <text x="87" y="188" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">Email filtering, Naive Bayes</text>
+
+  <!-- Event 4: UMass -->
+  <circle cx="75" cy="210" r="5" fill="#2D5A8E"/>
+  <text x="87" y="208" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2001</text>
+  <text x="87" y="219" font-family="Georgia, serif" font-size="8.5" fill="#333">Joins UMass Amherst</text>
+
+  <!-- Event 5: CRF paper -->
+  <circle cx="75" cy="242" r="6" fill="#7C2530"/>
+  <text x="87" y="240" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#7C2530">2001</text>
+  <text x="87" y="251" font-family="Georgia, serif" font-size="8.5" fill="#333">CRF paper (ICML)</text>
+  <text x="87" y="262" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">w/ Lafferty &amp; Pereira</text>
+
+  <!-- Event 6: MALLET -->
+  <circle cx="75" cy="285" r="5" fill="#5C3D1E"/>
+  <text x="87" y="283" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2002</text>
+  <text x="87" y="294" font-family="Georgia, serif" font-size="8.5" fill="#333">MALLET toolkit released</text>
+
+  <!-- Event 7: NELL -->
+  <circle cx="75" cy="317" r="5" fill="#5C3D1E"/>
+  <text x="87" y="315" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2010</text>
+  <text x="87" y="326" font-family="Georgia, serif" font-size="8.5" fill="#333">NELL project launched</text>
+  <text x="87" y="337" font-family="Georgia, serif" font-size="8" fill="#888" font-style="italic">Never-Ending Learning</text>
+
+  <!-- Event 8: Director -->
+  <circle cx="75" cy="355" r="5" fill="#2D5A8E"/>
+  <text x="87" y="353" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E">2013+</text>
+  <text x="87" y="364" font-family="Georgia, serif" font-size="8.5" fill="#333">Dir., UMass Center for</text>
+  <text x="87" y="375" font-family="Georgia, serif" font-size="8.5" fill="#333">Data Science; Full Prof.</text>
+
+  <!-- ===== CENTER PANEL: CRF Chain Diagram ===== -->
+  <text x="383" y="35" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Conditional Random Field (CRF)</text>
+  <text x="383" y="50" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-style="italic">Named Entity Recognition: sequence labeling</text>
+
+  <!-- Label nodes (top row) -->
+  <!-- y=100 for label nodes -->
+  <!-- y=210 for word nodes -->
+
+  <!-- Connections between labels (horizontal, chain) -->
+  <line x1="278" y1="100" x2="328" y2="100" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="353" y1="100" x2="403" y2="100" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="428" y1="100" x2="478" y2="100" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="503" y1="100" x2="515" y2="100" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Label nodes -->
+  <rect x="248" y="82" width="55" height="36" rx="5" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="275" y="96" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">y₁</text>
+  <text x="275" y="109" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">O</text>
+
+  <rect x="323" y="82" width="55" height="36" rx="5" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="350" y="96" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">y₂</text>
+  <text x="350" y="109" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle">B-PER</text>
+
+  <rect x="398" y="82" width="55" height="36" rx="5" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="425" y="96" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">y₃</text>
+  <text x="425" y="109" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle">I-PER</text>
+
+  <rect x="473" y="82" width="55" height="36" rx="5" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="500" y="96" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">y₄</text>
+  <text x="500" y="109" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">O</text>
+
+  <!-- Vertical edges: label to word -->
+  <line x1="275" y1="118" x2="275" y2="168" stroke="#888" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="350" y1="118" x2="350" y2="168" stroke="#888" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="425" y1="118" x2="425" y2="168" stroke="#888" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="500" y1="118" x2="500" y2="168" stroke="#888" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+  <!-- Word nodes (bottom row) -->
+  <rect x="248" y="168" width="55" height="36" rx="5" fill="#5C3D1E" fill-opacity="0.10" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="275" y="182" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">x₁</text>
+  <text x="275" y="195" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">The</text>
+
+  <rect x="323" y="168" width="55" height="36" rx="5" fill="#5C3D1E" fill-opacity="0.10" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="350" y="182" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">x₂</text>
+  <text x="350" y="195" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Andrew</text>
+
+  <rect x="398" y="168" width="55" height="36" rx="5" fill="#5C3D1E" fill-opacity="0.10" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="425" y="182" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">x₃</text>
+  <text x="425" y="195" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">spoke</text>
+
+  <rect x="473" y="168" width="55" height="36" rx="5" fill="#5C3D1E" fill-opacity="0.10" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="500" y="182" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">x₄</text>
+  <text x="500" y="195" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">today</text>
+
+  <!-- Row labels -->
+  <text x="242" y="106" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="end" font-style="italic">Labels</text>
+  <text x="242" y="192" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="end" font-style="italic">Words</text>
+
+  <!-- CRF formula -->
+  <rect x="248" y="225" width="280" height="44" rx="4" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="388" y="242" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">p(y|x) ∝ exp( Σ λₖ fₖ(yₜ, yₜ₋₁, x, t) )</text>
+  <text x="388" y="259" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle" font-style="italic">Globally normalized; arbitrary overlapping features</text>
+
+  <!-- Annotation: NER color key -->
+  <rect x="248" y="282" width="12" height="12" fill="#7C2530" fill-opacity="0.25" stroke="#7C2530" stroke-width="1" rx="2"/>
+  <text x="264" y="292" font-family="Georgia, serif" font-size="8.5" fill="#7C2530">Person entity (B/I tags)</text>
+  <rect x="370" y="282" width="12" height="12" fill="#2D5A8E" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="1" rx="2"/>
+  <text x="386" y="292" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E">Outside (O)</text>
+
+  <!-- MALLET note -->
+  <rect x="248" y="306" width="280" height="32" rx="4" fill="#5C3D1E" fill-opacity="0.07" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="388" y="320" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle" font-weight="bold">MALLET: implements CRFs + topic models</text>
+  <text x="388" y="331" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle" font-style="italic">Open-source Java NLP toolkit (2002)</text>
+
+  <!-- vs HMM note -->
+  <text x="388" y="358" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle" font-style="italic">CRF vs HMM: discriminative vs generative; no label-bias</text>
+  <text x="388" y="372" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Global normalization avoids the label bias problem</text>
+
+  <!-- ===== RIGHT PANEL: Key Works ===== -->
+  <text x="666" y="35" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Landmark Papers &amp; Impact</text>
+  <line x1="548" y1="44" x2="782" y2="44" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- Paper 1: CRF -->
+  <rect x="550" y="52" width="228" height="66" rx="4" fill="#7C2530" fill-opacity="0.07" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="664" y="68" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#7C2530" text-anchor="middle">Lafferty, McCallum &amp; Pereira (2001)</text>
+  <text x="664" y="81" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">"Conditional Random Fields:…"</text>
+  <text x="664" y="94" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">ICML 2001 · 30,000+ citations</text>
+  <text x="664" y="107" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Foundation of modern sequence labeling</text>
+
+  <!-- Paper 2: MALLET -->
+  <rect x="550" y="126" width="228" height="54" rx="4" fill="#2D5A8E" fill-opacity="0.07" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="664" y="141" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">McCallum (2002)</text>
+  <text x="664" y="154" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">MALLET: A Machine Learning</text>
+  <text x="664" y="165" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">for Language Toolkit</text>
+  <text x="664" y="174" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">Widely used in academia &amp; industry</text>
+
+  <!-- Paper 3: NELL -->
+  <rect x="550" y="188" width="228" height="54" rx="4" fill="#5C3D1E" fill-opacity="0.07" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="664" y="203" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Carlson et al. (2010)</text>
+  <text x="664" y="216" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">"Toward an Architecture for</text>
+  <text x="664" y="227" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">Never-Ending Language Learning"</text>
+  <text x="664" y="237" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">AAAI 2010 · continual learning KB</text>
+
+  <!-- Paper 4: Topic model / info extraction -->
+  <rect x="550" y="250" width="228" height="52" rx="4" fill="#C4A87A" fill-opacity="0.15" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="664" y="265" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">McCallum et al. (2000)</text>
+  <text x="664" y="278" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">"Maximum Entropy Markov Models</text>
+  <text x="664" y="290" font-family="Georgia, serif" font-size="8.5" fill="#333" text-anchor="middle" font-style="italic">for IE and Segmentation"</text>
+  <text x="664" y="300" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">ICML 2000 · precursor to CRFs</text>
+
+  <!-- Impact summary -->
+  <line x1="550" y1="312" x2="782" y2="312" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="664" y="328" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">Research Areas</text>
+  <text x="664" y="342" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">NLP · Information Extraction</text>
+  <text x="664" y="355" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Knowledge Base Construction</text>
+  <text x="664" y="368" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Topic Modeling · Social Networks</text>
+  <text x="664" y="381" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle" font-style="italic">UMass Amherst · h-index 80+</text>
+</svg>

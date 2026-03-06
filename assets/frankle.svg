@@ -1,0 +1,234 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <defs>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrow-tan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrow-navy" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel dividers -->
+  <line x1="220" y1="20" x2="220" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="570" y1="20" x2="570" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ===== LEFT PANEL: Timeline ===== -->
+  <text x="110" y="16" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">BIOGRAPHY &amp; TIMELINE</text>
+
+  <!-- Vertical timeline line -->
+  <line x1="70" y1="32" x2="70" y2="360" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- 1992: Born -->
+  <circle cx="70" cy="42" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="82" y="46" font-size="9" fill="#1C1713" font-family="Georgia,serif">b. 1992</text>
+
+  <!-- 2014: Georgetown BS -->
+  <circle cx="70" cy="82" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="82" y="80" font-size="9" fill="#1C1713" font-family="Georgia,serif">BS Georgetown</text>
+  <text x="82" y="92" font-size="8" fill="#6B5D4F" font-family="Georgia,serif">Computer Science, 2014</text>
+
+  <!-- 2019: Lottery Ticket -->
+  <circle cx="70" cy="140" r="7" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="82" y="126" width="122" height="30" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="143" y="140" font-size="9" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Lottery Ticket Hypothesis</text>
+  <text x="143" y="152" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">ICLR Best Paper, 2019</text>
+
+  <!-- 2020: Linear Mode Connectivity -->
+  <circle cx="70" cy="195" r="5" fill="#2D5A8E" stroke="#1C3A5C" stroke-width="1"/>
+  <text x="82" y="193" font-size="9" fill="#1C1713" font-family="Georgia,serif">Linear Mode Connectivity</text>
+  <text x="82" y="205" font-size="8" fill="#6B5D4F" font-family="Georgia,serif">NeurIPS 2020</text>
+
+  <!-- 2023: MIT PhD -->
+  <circle cx="70" cy="245" r="7" fill="#5C3D1E" stroke="#3A2510" stroke-width="1.5"/>
+  <rect x="82" y="233" width="122" height="24" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="143" y="244" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">PhD MIT (advisor: Carbin)</text>
+  <text x="143" y="254" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">2023</text>
+
+  <!-- 2023+: Mosaic / Databricks -->
+  <circle cx="70" cy="295" r="7" fill="#2D5A8E" stroke="#1C3A5C" stroke-width="1.5"/>
+  <rect x="82" y="283" width="122" height="30" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="143" y="296" font-size="9" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Chief Scientist</text>
+  <text x="143" y="308" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Databricks Mosaic AI</text>
+
+  <!-- Bottom note -->
+  <text x="110" y="360" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">DBRX, LLM training infra</text>
+
+  <!-- ===== CENTER PANEL: Lottery Ticket Concept ===== -->
+  <text x="395" y="16" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">THE LOTTERY TICKET HYPOTHESIS</text>
+
+  <!-- DENSE NETWORK (left side of center) -->
+  <text x="290" y="38" font-size="9" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">Dense Network</text>
+
+  <!-- Input layer -->
+  <rect x="240" y="50" width="32" height="16" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1" rx="2"/>
+  <text x="256" y="62" font-size="7" fill="#6B5D4F" text-anchor="middle">IN</text>
+
+  <!-- Hidden layer 1 -->
+  <rect x="278" y="44" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <rect x="278" y="58" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <rect x="278" y="72" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <rect x="278" y="86" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+
+  <!-- Hidden layer 2 -->
+  <rect x="308" y="44" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <rect x="308" y="58" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <rect x="308" y="72" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <rect x="308" y="86" width="18" height="12" fill="#EDE5D0" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+
+  <!-- Output layer -->
+  <rect x="338" y="52" width="26" height="16" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1" rx="2"/>
+  <text x="351" y="64" font-size="7" fill="#6B5D4F" text-anchor="middle">OUT</text>
+
+  <!-- All grey connections (dense) -->
+  <line x1="272" y1="58" x2="278" y2="50" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="272" y1="58" x2="278" y2="64" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="272" y1="58" x2="278" y2="78" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="272" y1="58" x2="278" y2="92" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="50" x2="308" y2="50" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="50" x2="308" y2="64" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="50" x2="308" y2="78" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="50" x2="308" y2="92" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="64" x2="308" y2="50" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="64" x2="308" y2="64" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="64" x2="308" y2="78" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="64" x2="308" y2="92" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="78" x2="308" y2="50" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="78" x2="308" y2="64" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="78" x2="308" y2="78" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="78" x2="308" y2="92" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="92" x2="308" y2="50" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="92" x2="308" y2="64" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="92" x2="308" y2="78" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="296" y1="92" x2="308" y2="92" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="326" y1="50" x2="338" y2="60" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="326" y1="64" x2="338" y2="60" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="326" y1="78" x2="338" y2="60" stroke="#D4C5A9" stroke-width="0.6"/>
+  <line x1="326" y1="92" x2="338" y2="60" stroke="#D4C5A9" stroke-width="0.6"/>
+
+  <!-- Winning ticket path in RED over the dense network -->
+  <line x1="272" y1="58" x2="278" y2="64" stroke="#7C2530" stroke-width="2"/>
+  <line x1="296" y1="64" x2="308" y2="78" stroke="#7C2530" stroke-width="2"/>
+  <line x1="326" y1="78" x2="338" y2="60" stroke="#7C2530" stroke-width="2"/>
+  <!-- Highlight the winning ticket nodes -->
+  <rect x="278" y="58" width="18" height="12" fill="#F2EAD8" stroke="#7C2530" stroke-width="2" rx="2"/>
+  <rect x="308" y="72" width="18" height="12" fill="#F2EAD8" stroke="#7C2530" stroke-width="2" rx="2"/>
+
+  <!-- ARROW: prune → -->
+  <text x="395" y="78" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif">prune +</text>
+  <text x="395" y="90" font-size="9" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif">rewind</text>
+  <line x1="367" y1="65" x2="415" y2="65" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow-navy)"/>
+
+  <!-- PRUNED (winning ticket) NETWORK -->
+  <text x="470" y="38" font-size="9" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">Winning Ticket</text>
+
+  <rect x="420" y="50" width="32" height="16" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.5" rx="2"/>
+  <text x="436" y="62" font-size="7" fill="#7C2530" text-anchor="middle">IN</text>
+
+  <!-- Sparse hidden layers (only 1-2 active nodes) -->
+  <rect x="458" y="56" width="18" height="12" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.5" rx="2"/>
+  <rect x="458" y="72" width="18" height="12" fill="#EDE5D0" stroke="#D4C5A9" stroke-width="0.8" rx="2" opacity="0.4"/>
+
+  <rect x="488" y="56" width="18" height="12" fill="#EDE5D0" stroke="#D4C5A9" stroke-width="0.8" rx="2" opacity="0.4"/>
+  <rect x="488" y="70" width="18" height="12" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.5" rx="2"/>
+
+  <rect x="518" y="52" width="26" height="16" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.5" rx="2"/>
+  <text x="531" y="64" font-size="7" fill="#7C2530" text-anchor="middle">OUT</text>
+
+  <!-- Winning ticket connections only -->
+  <line x1="452" y1="58" x2="458" y2="62" stroke="#7C2530" stroke-width="2"/>
+  <line x1="476" y1="62" x2="488" y2="76" stroke="#7C2530" stroke-width="2"/>
+  <line x1="506" y1="76" x2="518" y2="60" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Badge: same accuracy -->
+  <rect x="420" y="100" width="124" height="20" fill="#EDE5D0" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="482" y="114" font-size="8.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-style="italic">matches full network accuracy</text>
+
+  <!-- KEY INSIGHT BOX -->
+  <rect x="235" y="132" width="320" height="52" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="4"/>
+  <text x="395" y="147" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Core Hypothesis</text>
+  <text x="395" y="162" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">A dense random network contains a sparse subnetwork</text>
+  <text x="395" y="175" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">that, trained from its original initialisation, matches full accuracy.</text>
+
+  <!-- ITERATIVE MAGNITUDE PRUNING diagram -->
+  <text x="395" y="210" font-size="9" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Iterative Magnitude Pruning (IMP)</text>
+
+  <!-- Step boxes -->
+  <rect x="232" y="220" width="68" height="30" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="266" y="233" font-size="8" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">1. Train</text>
+  <text x="266" y="244" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">full net</text>
+
+  <line x1="300" y1="235" x2="314" y2="235" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+
+  <rect x="316" y="220" width="68" height="30" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <text x="350" y="233" font-size="8" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">2. Prune</text>
+  <text x="350" y="244" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">lowest |w|</text>
+
+  <line x1="384" y1="235" x2="398" y2="235" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+
+  <rect x="400" y="220" width="68" height="30" fill="#EDE5D0" stroke="#7C2530" stroke-width="1" rx="3"/>
+  <text x="434" y="233" font-size="8" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">3. Rewind</text>
+  <text x="434" y="244" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">to θ₀ mask</text>
+
+  <line x1="468" y1="235" x2="482" y2="235" stroke="#C4A87A" stroke-width="1.2" marker-end="url(#arrow-tan)"/>
+
+  <rect x="484" y="220" width="68" height="30" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="518" y="233" font-size="8" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">4. Retrain</text>
+  <text x="518" y="244" font-size="7.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif">→ ticket!</text>
+
+  <!-- Curved repeat arrow -->
+  <path d="M552,220 Q560,195 480,195 Q400,195 316,195 Q260,195 250,220" fill="none" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="395" y="192" font-size="7.5" fill="#888" text-anchor="middle" font-family="Georgia,serif" font-style="italic">repeat until target sparsity</text>
+
+  <!-- Sparsity note -->
+  <text x="395" y="280" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Typical winning tickets: 80–95% weights removed; accuracy unchanged</text>
+
+  <!-- Late resetting note -->
+  <rect x="270" y="292" width="250" height="24" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1" rx="3"/>
+  <text x="395" y="305" font-size="8" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Late Resetting (2019):</text>
+  <text x="395" y="310" font-size="0" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif"> </text>
+  <text x="395" y="312" font-size="8" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">rewind to θₜ (step t ≈ 100) rather than θ₀ for large nets</text>
+
+  <!-- ===== RIGHT PANEL: Papers / Impact ===== -->
+  <text x="685" y="16" font-size="10" fill="#6B5D4F" letter-spacing="1" text-anchor="middle" font-family="Georgia,serif">KEY PAPERS &amp; IMPACT</text>
+
+  <!-- Paper 1 -->
+  <rect x="580" y="28" width="205" height="62" fill="#F2EAD8" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="683" y="42" font-size="9.5" fill="#7C2530" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">The Lottery Ticket Hypothesis</text>
+  <text x="683" y="55" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Frankle &amp; Carbin (ICLR 2019)</text>
+  <text x="683" y="68" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Best Paper Award</text>
+  <text x="683" y="81" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Sparse subnetworks trainable to full accuracy</text>
+
+  <!-- Paper 2 -->
+  <rect x="580" y="100" width="205" height="62" fill="#EDE5D0" stroke="#5C3D1E" stroke-width="1.2" rx="4"/>
+  <text x="683" y="114" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Stabilizing the LTH</text>
+  <text x="683" y="127" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Frankle et al. (ICLR 2019)</text>
+  <text x="683" y="140" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Late resetting fixes large-net failure</text>
+  <text x="683" y="153" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Rewind to early training, not step 0</text>
+
+  <!-- Paper 3 -->
+  <rect x="580" y="173" width="205" height="62" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.2" rx="4"/>
+  <text x="683" y="187" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Linear Mode Connectivity</text>
+  <text x="683" y="200" font-size="8.5" fill="#1C1713" text-anchor="middle" font-family="Georgia,serif">Frankle et al. (NeurIPS 2020)</text>
+  <text x="683" y="213" font-size="8" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Loss landscapes between optima</text>
+  <text x="683" y="226" font-size="7.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif">Networks converge to flat basins</text>
+
+  <!-- Impact section -->
+  <rect x="580" y="247" width="205" height="110" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="683" y="262" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Research Impact</text>
+  <line x1="590" y1="268" x2="776" y2="268" stroke="#C4A87A" stroke-width="0.8"/>
+  <text x="591" y="282" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; Sparked pruning-at-init field</text>
+  <text x="591" y="296" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; SNIP, GraSP, SynFlow methods</text>
+  <text x="591" y="310" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; Inspired sparse LLM training</text>
+  <text x="591" y="324" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; ~4,000+ citations (2024)</text>
+  <text x="591" y="338" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; Led to SparseGPT, Wanda</text>
+  <text x="591" y="352" font-size="8" fill="#1C1713" font-family="Georgia,serif">&#x25B8; DBRX open LLM (2024)</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="388" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-family="Georgia,serif" font-style="italic">Frankle showed that overparameterisation is a feature, not a bug — the extra weights are lottery tickets waiting to be found.</text>
+</svg>

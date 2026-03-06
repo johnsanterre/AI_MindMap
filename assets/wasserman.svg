@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="250" y1="20" x2="250" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="550" y1="20" x2="550" y2="380" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===== LEFT PANEL: Timeline ===== -->
+  <text x="125" y="40" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Larry Wasserman</text>
+  <text x="125" y="56" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">b. 1959, Hamilton, Ontario</text>
+
+  <!-- Timeline line -->
+  <line x1="60" y1="75" x2="60" y2="370" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Timeline events -->
+  <!-- 1959 -->
+  <circle cx="60" cy="85" r="5" fill="#7C2530"/>
+  <text x="72" y="82" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">1959</text>
+  <text x="72" y="94" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Born, Hamilton ON</text>
+
+  <!-- BSc -->
+  <circle cx="60" cy="120" r="4" fill="#2D5A8E"/>
+  <text x="72" y="117" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">1981</text>
+  <text x="72" y="129" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">B.Sc., McMaster</text>
+
+  <!-- PhD -->
+  <circle cx="60" cy="158" r="4" fill="#2D5A8E"/>
+  <text x="72" y="155" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">1987</text>
+  <text x="72" y="167" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Ph.D., Univ. of Toronto</text>
+
+  <!-- CMU join -->
+  <circle cx="60" cy="196" r="4" fill="#2D5A8E"/>
+  <text x="72" y="193" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">1988</text>
+  <text x="72" y="205" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Joins CMU Statistics</text>
+
+  <!-- All of Statistics -->
+  <circle cx="60" cy="234" r="5" fill="#7C2530"/>
+  <text x="72" y="231" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">2004</text>
+  <text x="72" y="243" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">''All of Statistics''</text>
+
+  <!-- All of Nonparametric -->
+  <circle cx="60" cy="272" r="5" fill="#7C2530"/>
+  <text x="72" y="269" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">2006</text>
+  <text x="72" y="281" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">''All of Nonparametric''</text>
+  <text x="72" y="291" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">''Statistics''</text>
+
+  <!-- Normal Deviate blog -->
+  <circle cx="60" cy="315" r="4" fill="#5C3D1E"/>
+  <text x="72" y="312" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">2012</text>
+  <text x="72" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Normal Deviate blog</text>
+
+  <!-- MLD joint appt -->
+  <circle cx="60" cy="350" r="4" fill="#5C3D1E"/>
+  <text x="72" y="347" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">2010s</text>
+  <text x="72" y="359" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Joint appt: Statistics</text>
+  <text x="72" y="369" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">+ Machine Learning</text>
+
+  <!-- ===== CENTER PANEL: Concept Map ===== -->
+  <text x="400" y="40" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Wasserman's Unifying Vision</text>
+  <text x="400" y="56" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"All of Statistics" as conceptual bridge</text>
+
+  <!-- Central hub -->
+  <ellipse cx="400" cy="190" rx="52" ry="28" fill="#7C2530" opacity="0.9"/>
+  <text x="400" y="186" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Statistical</text>
+  <text x="400" y="199" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Inference</text>
+
+  <!-- Frequentist node -->
+  <ellipse cx="310" cy="120" rx="44" ry="22" fill="#2D5A8E" opacity="0.85"/>
+  <text x="310" y="116" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Frequentist</text>
+  <text x="310" y="128" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Methods</text>
+  <line x1="350" y1="140" x2="370" y2="168" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="370" y1="168" x2="350" y2="140" stroke="#C4A87A" stroke-width="1" opacity="0.5"/>
+
+  <!-- Bayesian node -->
+  <ellipse cx="490" cy="120" rx="44" ry="22" fill="#2D5A8E" opacity="0.85"/>
+  <text x="490" y="116" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Bayesian</text>
+  <text x="490" y="128" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Methods</text>
+  <line x1="450" y1="140" x2="430" y2="168" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="430" y1="168" x2="450" y2="140" stroke="#C4A87A" stroke-width="1" opacity="0.5"/>
+
+  <!-- Double-headed arrow between Freq and Bayes -->
+  <line x1="354" y1="120" x2="446" y2="120" stroke="#888" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="113" font-family="Georgia, serif" font-size="8" fill="#888" text-anchor="middle">debate</text>
+
+  <!-- Nonparametric node -->
+  <ellipse cx="310" cy="265" rx="48" ry="22" fill="#5C3D1E" opacity="0.85"/>
+  <text x="310" y="261" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Nonparametric</text>
+  <text x="310" y="273" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Statistics</text>
+  <line x1="352" y1="248" x2="370" y2="212" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Machine Learning node -->
+  <ellipse cx="490" cy="265" rx="44" ry="22" fill="#5C3D1E" opacity="0.85"/>
+  <text x="490" y="261" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Machine</text>
+  <text x="490" y="273" font-family="Georgia, serif" font-size="9" fill="white" text-anchor="middle">Learning</text>
+  <line x1="448" y1="248" x2="430" y2="212" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- TDA node -->
+  <ellipse cx="400" cy="330" rx="44" ry="20" fill="#C4A87A" opacity="0.9"/>
+  <text x="400" y="326" font-family="Georgia, serif" font-size="9" fill="#3C2010" text-anchor="middle">Topological</text>
+  <text x="400" y="338" font-family="Georgia, serif" font-size="9" fill="#3C2010" text-anchor="middle">Data Analysis</text>
+  <line x1="400" y1="218" x2="400" y2="310" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Minimax label -->
+  <text x="400" y="360" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">Minimax theory · Astrostatistics · Density estimation</text>
+
+  <!-- ===== RIGHT PANEL: Key Works ===== -->
+  <text x="675" y="40" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Key Works</text>
+
+  <!-- All of Statistics -->
+  <rect x="565" y="60" width="210" height="72" rx="5" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="670" y="78" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">All of Statistics (2004)</text>
+  <text x="670" y="92" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">~650 pages; frequentist +</text>
+  <text x="670" y="104" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Bayesian + ML in one volume</text>
+  <text x="670" y="118" font-family="Georgia, serif" font-size="9" fill="#888" text-anchor="middle">Springer Texts in Statistics</text>
+  <text x="670" y="128" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle">10,000+ citations</text>
+
+  <!-- All of Nonparametric -->
+  <rect x="565" y="145" width="210" height="72" rx="5" fill="#5C3D1E" opacity="0.12" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="670" y="163" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">All of Nonparametric</text>
+  <text x="670" y="176" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Statistics (2006)</text>
+  <text x="670" y="190" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Kernels, wavelets, density</text>
+  <text x="670" y="202" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">estimation, minimax bounds</text>
+
+  <!-- TDA / Topology -->
+  <rect x="565" y="230" width="210" height="62" rx="5" fill="#C4A87A" opacity="0.2" stroke="#C4A87A" stroke-width="1"/>
+  <text x="670" y="248" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Topological Data Analysis</text>
+  <text x="670" y="262" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Persistent homology; statistical</text>
+  <text x="670" y="274" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">inference for TDA</text>
+
+  <!-- Normal Deviate / Astro -->
+  <rect x="565" y="305" width="210" height="65" rx="5" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="670" y="323" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Outreach &amp; Service</text>
+  <text x="670" y="337" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Normal Deviate blog (2012+)</text>
+  <text x="670" y="349" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Astrostatistics collaborations</text>
+  <text x="670" y="362" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">JASA, AoS, JRSS-B publications</text>
+</svg>

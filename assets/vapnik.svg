@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A8E" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" />
+  <rect x="1" y="1" width="798" height="398" fill="none" stroke="#D4C5A9" stroke-width="2" />
+
+  <!-- Panel dividers -->
+  <line x1="233" y1="20" x2="233" y2="380" stroke="#D4C5A9" stroke-width="1.5" />
+  <line x1="567" y1="20" x2="567" y2="380" stroke="#D4C5A9" stroke-width="1.5" />
+
+  <!-- ===== LEFT PANEL: Timeline ===== -->
+  <text x="116" y="42" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Vladimir Vapnik</text>
+  <text x="116" y="58" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">1936 – present</text>
+
+  <!-- Timeline vertical line -->
+  <line x1="85" y1="75" x2="85" y2="365" stroke="#C4A87A" stroke-width="2" />
+
+  <!-- Timeline events -->
+  <!-- 1936 -->
+  <circle cx="85" cy="85" r="5" fill="#7C2530" />
+  <line x1="85" y1="85" x2="100" y2="85" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="82" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">1936</text>
+  <text x="104" y="94" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Born, Tashkent,</text>
+  <text x="104" y="105" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Uzbekistan, USSR</text>
+
+  <!-- 1958 -->
+  <circle cx="85" cy="130" r="5" fill="#7C2530" />
+  <line x1="85" y1="130" x2="100" y2="130" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="127" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">1958</text>
+  <text x="104" y="139" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">First SVM concept,</text>
+  <text x="104" y="150" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Moscow (with Lerner)</text>
+
+  <!-- 1964 -->
+  <circle cx="85" cy="175" r="5" fill="#7C2530" />
+  <line x1="85" y1="175" x2="100" y2="175" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="172" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">1964</text>
+  <text x="104" y="184" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">PhD, ICS Moscow;</text>
+  <text x="104" y="195" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">VC theory begins</text>
+
+  <!-- 1971 -->
+  <circle cx="85" cy="220" r="5" fill="#5C3D1E" />
+  <line x1="85" y1="220" x2="100" y2="220" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="217" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">1971</text>
+  <text x="104" y="229" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">VC dimension paper</text>
+  <text x="104" y="240" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">(with Chervonenkis)</text>
+
+  <!-- 1992 -->
+  <circle cx="85" cy="268" r="5" fill="#5C3D1E" />
+  <line x1="85" y1="268" x2="100" y2="268" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="265" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">1992</text>
+  <text x="104" y="277" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">AT&amp;T Bell Labs;</text>
+  <text x="104" y="288" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">modern SVM (soft margin)</text>
+
+  <!-- 2014 -->
+  <circle cx="85" cy="318" r="5" fill="#2D5A8E" />
+  <line x1="85" y1="318" x2="100" y2="318" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="315" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">2014</text>
+  <text x="104" y="327" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Facebook AI Research</text>
+  <text x="104" y="338" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">&amp; Columbia University</text>
+
+  <!-- 2024 -->
+  <circle cx="85" cy="358" r="5" fill="#2D5A8E" />
+  <line x1="85" y1="358" x2="100" y2="358" stroke="#C4A87A" stroke-width="1.5" />
+  <text x="104" y="355" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">2024</text>
+  <text x="104" y="367" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Turing Award (ACM)</text>
+
+  <!-- ===== CENTER PANEL: SVM Diagram ===== -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Maximum Margin Classifier</text>
+  <text x="400" y="54" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">The SVM finds the widest possible street between classes</text>
+
+  <!-- Data points: class +1 (circles, upper-right) -->
+  <circle cx="460" cy="110" r="8" fill="none" stroke="#2D5A8E" stroke-width="2" />
+  <circle cx="490" cy="145" r="8" fill="none" stroke="#2D5A8E" stroke-width="2" />
+  <circle cx="440" cy="155" r="8" fill="none" stroke="#2D5A8E" stroke-width="2" />
+  <circle cx="510" cy="115" r="8" fill="none" stroke="#2D5A8E" stroke-width="2" />
+  <circle cx="475" cy="178" r="8" fill="none" stroke="#2D5A8E" stroke-width="2" />
+  <circle cx="530" cy="160" r="8" fill="none" stroke="#2D5A8E" stroke-width="2" />
+
+  <!-- Data points: class -1 (crosses, lower-left) -->
+  <!-- cross helper: x at cx,cy with arm a -->
+  <line x1="298" y1="218" x2="318" y2="238" stroke="#7C2530" stroke-width="2.5" />
+  <line x1="318" y1="218" x2="298" y2="238" stroke="#7C2530" stroke-width="2.5" />
+
+  <line x1="330" y1="248" x2="350" y2="268" stroke="#7C2530" stroke-width="2.5" />
+  <line x1="350" y1="248" x2="330" y2="268" stroke="#7C2530" stroke-width="2.5" />
+
+  <line x1="268" y1="248" x2="288" y2="268" stroke="#7C2530" stroke-width="2.5" />
+  <line x1="288" y1="248" x2="268" y2="268" stroke="#7C2530" stroke-width="2.5" />
+
+  <line x1="305" y1="280" x2="325" y2="300" stroke="#7C2530" stroke-width="2.5" />
+  <line x1="325" y1="280" x2="305" y2="300" stroke="#7C2530" stroke-width="2.5" />
+
+  <line x1="255" y1="292" x2="275" y2="312" stroke="#7C2530" stroke-width="2.5" />
+  <line x1="275" y1="292" x2="255" y2="312" stroke="#7C2530" stroke-width="2.5" />
+
+  <line x1="350" y1="295" x2="370" y2="315" stroke="#7C2530" stroke-width="2.5" />
+  <line x1="370" y1="295" x2="350" y2="315" stroke="#7C2530" stroke-width="2.5" />
+
+  <!-- Decision boundary (solid, navy) -->
+  <line x1="260" y1="170" x2="540" y2="260" stroke="#2D5A8E" stroke-width="2.5" />
+  <text x="555" y="256" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">w·x + b = 0</text>
+
+  <!-- Upper margin line (dashed, support vectors +1) -->
+  <line x1="295" y1="140" x2="565" y2="228" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="6,4" />
+  <text x="568" y="225" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">+1</text>
+
+  <!-- Lower margin line (dashed, support vectors -1) -->
+  <line x1="235" y1="198" x2="515" y2="288" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="6,4" />
+  <text x="518" y="285" font-family="Georgia, serif" font-size="9" fill="#7C2530">−1</text>
+
+  <!-- Support vector circles highlight -->
+  <circle cx="440" cy="155" r="12" fill="none" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="3,3" />
+  <circle cx="330" cy="258" r="12" fill="none" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="3,3" />
+
+  <!-- Margin bracket arrow -->
+  <line x1="395" y1="175" x2="420" y2="183" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="395" y1="175" x2="370" y2="218" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <text x="354" y="197" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">margin</text>
+  <text x="358" y="209" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">= 2/‖w‖</text>
+
+  <!-- Labels -->
+  <text x="505" y="108" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">class +1</text>
+  <text x="243" y="320" font-family="Georgia, serif" font-size="10" fill="#7C2530">class −1</text>
+
+  <!-- Support vector label -->
+  <text x="396" y="370" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">Support vectors: closest points to boundary (circled)</text>
+
+  <!-- ===== RIGHT PANEL: Papers & Impact ===== -->
+  <text x="683" y="38" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Key Papers &amp; Impact</text>
+
+  <!-- Paper 1 -->
+  <rect x="580" y="55" width="205" height="68" rx="4" fill="#F0EBE0" stroke="#C4A87A" stroke-width="1.2" />
+  <text x="682" y="72" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Theory of Pattern Recognition</text>
+  <text x="682" y="85" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Vapnik &amp; Chervonenkis, 1974</text>
+  <text x="682" y="99" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Foundational VC theory;</text>
+  <text x="682" y="111" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">uniform convergence bounds</text>
+
+  <!-- Paper 2 -->
+  <rect x="580" y="135" width="205" height="68" rx="4" fill="#F0EBE0" stroke="#C4A87A" stroke-width="1.2" />
+  <text x="682" y="152" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">The Nature of Statistical</text>
+  <text x="682" y="165" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Learning Theory</text>
+  <text x="682" y="178" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Vapnik, 1995</text>
+  <text x="682" y="191" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">SRM + kernel trick intro</text>
+
+  <!-- Paper 3 -->
+  <rect x="580" y="215" width="205" height="68" rx="4" fill="#F0EBE0" stroke="#C4A87A" stroke-width="1.2" />
+  <text x="682" y="232" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Statistical Learning Theory</text>
+  <text x="682" y="245" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Vapnik, 1998</text>
+  <text x="682" y="259" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Complete SLT framework;</text>
+  <text x="682" y="271" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">SVMs for regression (SVR)</text>
+
+  <!-- Impact metrics -->
+  <rect x="580" y="295" width="205" height="90" rx="4" fill="#EBF0F8" stroke="#2D5A8E" stroke-width="1.2" />
+  <text x="682" y="313" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Impact</text>
+  <text x="682" y="328" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">100,000+ citations (SLT book)</text>
+  <text x="682" y="342" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Dominated ML 1995–2010</text>
+  <text x="682" y="356" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Kernel trick → RKHS theory</text>
+  <text x="682" y="370" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">ACM Turing Award 2024</text>
+</svg>
