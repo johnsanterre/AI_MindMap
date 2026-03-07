@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Hallucination: Confident Generation of False Content</text>
+
+  <!-- Fluency Spectrum bar -->
+  <text x="400" y="60" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">"Sounds right" ≠ "Is right"</text>
+  <defs>
+    <linearGradient id="spectrumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2D5A8E;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#7C2530;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <rect x="160" y="70" width="480" height="18" rx="9" fill="url(#spectrumGrad)" opacity="0.85"/>
+  <text x="160" y="102" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Factually Correct</text>
+  <text x="640" y="102" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Hallucinated</text>
+  <text x="400" y="102" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">← Fluency is constant throughout →</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="114" x2="760" y2="114" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Three taxonomy boxes -->
+
+  <!-- Box 1: Factual Hallucination -->
+  <rect x="40" y="124" width="220" height="210" rx="10" fill="#F5EFE6" stroke="#7C2530" stroke-width="2"/>
+  <rect x="40" y="124" width="220" height="34" rx="10" fill="#7C2530"/>
+  <rect x="40" y="144" width="220" height="14" fill="#7C2530"/>
+  <text x="150" y="147" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Factual Hallucination</text>
+  <text x="150" y="178" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Invents facts with confidence</text>
+  <line x1="60" y1="188" x2="240" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="150" y="208" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Example:</text>
+  <text x="150" y="224" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">"Einstein was born in 1874"</text>
+  <text x="150" y="240" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">(correct: 1879)</text>
+  <line x1="60" y1="252" x2="240" y2="252" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="150" y="270" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Cause: knowledge gap</text>
+  <text x="150" y="286" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">or pattern completion</text>
+  <text x="150" y="308" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">long-tail facts most vulnerable</text>
+
+  <!-- Box 2: Faithfulness Hallucination -->
+  <rect x="290" y="124" width="220" height="210" rx="10" fill="#F5EFE6" stroke="#2D5A8E" stroke-width="2"/>
+  <rect x="290" y="124" width="220" height="34" rx="10" fill="#2D5A8E"/>
+  <rect x="290" y="144" width="220" height="14" fill="#2D5A8E"/>
+  <text x="400" y="147" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Faithfulness Hallucination</text>
+  <text x="400" y="178" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Contradicts the source document</text>
+  <line x1="310" y1="188" x2="490" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="208" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">Example (summarization):</text>
+  <text x="400" y="224" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Source says "Q3 profit fell";</text>
+  <text x="400" y="240" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">summary says "profit rose"</text>
+  <line x1="310" y1="252" x2="490" y2="252" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="270" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Cause: attention dilution,</text>
+  <text x="400" y="286" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">lost-in-the-middle effect</text>
+  <text x="400" y="308" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">RAG faithfulness metrics detect this</text>
+
+  <!-- Box 3: Reasoning Hallucination -->
+  <rect x="540" y="124" width="220" height="210" rx="10" fill="#F5EFE6" stroke="#5C3D1E" stroke-width="2"/>
+  <rect x="540" y="124" width="220" height="34" rx="10" fill="#5C3D1E"/>
+  <rect x="540" y="144" width="220" height="14" fill="#5C3D1E"/>
+  <text x="650" y="147" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Reasoning Hallucination</text>
+  <text x="650" y="178" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Wrong steps in chain of thought</text>
+  <line x1="560" y1="188" x2="740" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="650" y="208" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Example:</text>
+  <text x="650" y="224" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">"If A&gt;B and B&gt;C then C&gt;A"</text>
+  <text x="650" y="240" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(confident, logical-sounding, wrong)</text>
+  <line x1="560" y1="252" x2="740" y2="252" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="650" y="270" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Cause: multi-hop error</text>
+  <text x="650" y="286" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">accumulation, sycophancy</text>
+  <text x="650" y="308" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">each reasoning hop adds error risk</text>
+
+  <!-- Bottom note -->
+  <text x="400" y="356" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Detection: self-consistency sampling · semantic entropy · retrieval verification</text>
+  <text x="400" y="376" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Mitigation: RAG · citation generation · chain-of-verification · abstention</text>
+</svg>

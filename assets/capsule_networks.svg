@@ -1,0 +1,184 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#5C3D1E">Capsule Networks: From Scalar to Vector Representations</text>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- LEFT PANEL: Traditional CNN neuron vs Capsule           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <!-- Panel background -->
+  <rect x="12" y="40" width="240" height="175" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="132" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Neuron vs Capsule</text>
+
+  <!-- Traditional neuron -->
+  <text x="75" y="76" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">Traditional Neuron</text>
+  <circle cx="75" cy="105" r="18" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="75" y="109" text-anchor="middle" font-size="10" fill="#5C3D1E">0.87</text>
+  <!-- Output arrow -->
+  <line x1="93" y1="105" x2="120" y2="105" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow-brown)"/>
+  <text x="128" y="102" font-size="9" fill="#5C3D1E">"eye?"</text>
+  <text x="128" y="114" font-size="9" fill="#5C3D1E">scalar</text>
+
+  <!-- Label: scalar = presence only -->
+  <text x="75" y="135" text-anchor="middle" font-size="9" fill="#7C2530">scalar = presence only</text>
+
+  <!-- Divider -->
+  <line x1="20" y1="148" x2="244" y2="148" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Capsule -->
+  <text x="75" y="164" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">Capsule</text>
+  <!-- Capsule = rounded rect suggesting a group of neurons -->
+  <rect x="38" y="170" width="74" height="34" rx="8" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5" opacity="0.85"/>
+  <text x="75" y="183" text-anchor="middle" font-size="8.5" fill="white">[0.87, 15°,</text>
+  <text x="75" y="196" text-anchor="middle" font-size="8.5" fill="white">0.3, 0.7, 0.8]</text>
+  <!-- Output arrow -->
+  <line x1="112" y1="187" x2="135" y2="187" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <text x="140" y="181" font-size="8" fill="#2D5A8E">pose,</text>
+  <text x="140" y="191" font-size="8" fill="#2D5A8E">scale,</text>
+  <text x="140" y="201" font-size="8" fill="#2D5A8E">orient.</text>
+
+  <!-- Caption below panel -->
+  <text x="132" y="225" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">vector = presence + properties</text>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- CENTER PANEL: Dynamic Routing                           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <rect x="268" y="40" width="300" height="330" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="418" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Dynamic Routing by Agreement</text>
+
+  <!-- Layer labels -->
+  <text x="310" y="80" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">Layer 1</text>
+  <text x="310" y="92" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">(edges, curves)</text>
+
+  <text x="418" y="80" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">Layer 2</text>
+  <text x="418" y="92" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">(face parts)</text>
+
+  <text x="526" y="80" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">Layer 3</text>
+  <text x="526" y="92" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">(face)</text>
+
+  <!-- Layer 1 capsules (4) -->
+  <rect x="280" y="108" width="58" height="22" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="309" y="123" text-anchor="middle" font-size="8.5" fill="#5C3D1E">edge-L</text>
+
+  <rect x="280" y="140" width="58" height="22" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="309" y="155" text-anchor="middle" font-size="8.5" fill="#5C3D1E">curve-A</text>
+
+  <rect x="280" y="172" width="58" height="22" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="309" y="187" text-anchor="middle" font-size="8.5" fill="#5C3D1E">curve-B</text>
+
+  <rect x="280" y="204" width="58" height="22" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="309" y="219" text-anchor="middle" font-size="8.5" fill="#5C3D1E">edge-R</text>
+
+  <!-- Layer 2 capsules (3) -->
+  <rect x="389" y="120" width="58" height="22" rx="6" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1" opacity="0.85"/>
+  <text x="418" y="135" text-anchor="middle" font-size="8.5" fill="white">eye-cap.</text>
+
+  <rect x="389" y="160" width="58" height="22" rx="6" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1" opacity="0.85"/>
+  <text x="418" y="175" text-anchor="middle" font-size="8.5" fill="white">nose-cap.</text>
+
+  <rect x="389" y="200" width="58" height="22" rx="6" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1" opacity="0.85"/>
+  <text x="418" y="215" text-anchor="middle" font-size="8.5" fill="white">mouth-cap.</text>
+
+  <!-- Layer 3 capsule (1) -->
+  <rect x="497" y="152" width="58" height="28" rx="8" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="526" y="165" text-anchor="middle" font-size="9" fill="white" font-weight="bold">face</text>
+  <text x="526" y="176" text-anchor="middle" font-size="9" fill="white">capsule</text>
+
+  <!-- Routing arrows L1→L2: strong agree (solid) and weak (dashed) -->
+  <!-- edge-L → eye (strong) -->
+  <line x1="338" y1="119" x2="389" y2="131" stroke="#7C2530" stroke-width="2"/>
+  <!-- curve-A → eye (strong) -->
+  <line x1="338" y1="151" x2="389" y2="131" stroke="#7C2530" stroke-width="2"/>
+  <!-- curve-B → nose (medium) -->
+  <line x1="338" y1="183" x2="389" y2="171" stroke="#7C2530" stroke-width="1.5"/>
+  <!-- edge-R → mouth (strong) -->
+  <line x1="338" y1="215" x2="389" y2="211" stroke="#7C2530" stroke-width="2"/>
+  <!-- curve-A → nose weak -->
+  <line x1="338" y1="151" x2="389" y2="171" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+  <!-- curve-B → mouth weak -->
+  <line x1="338" y1="183" x2="389" y2="211" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- L2→L3 arrows -->
+  <line x1="447" y1="131" x2="497" y2="160" stroke="#7C2530" stroke-width="2"/>
+  <line x1="447" y1="171" x2="497" y2="166" stroke="#7C2530" stroke-width="2"/>
+  <line x1="447" y1="211" x2="497" y2="172" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Vote labels -->
+  <text x="362" y="115" text-anchor="middle" font-size="8" fill="#7C2530" font-style="italic">strong</text>
+  <text x="362" y="125" text-anchor="middle" font-size="8" fill="#7C2530" font-style="italic">vote</text>
+  <text x="362" y="198" text-anchor="middle" font-size="8" fill="#D4C5A9" font-style="italic">weak</text>
+
+  <!-- Routing explanation box -->
+  <rect x="276" y="248" width="284" height="56" rx="4" fill="#EDE4D3" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="284" y="262" font-size="9" fill="#5C3D1E" font-weight="bold">Routing step:</text>
+  <text x="284" y="275" font-size="9" fill="#5C3D1E">1. Each capsule i predicts pose of capsule j: û_{j|i} = W_{ij} u_i</text>
+  <text x="284" y="288" font-size="9" fill="#5C3D1E">2. Agreement: b_{ij} ← b_{ij} + û_{j|i} · v_j   (dot product vote)</text>
+  <text x="284" y="301" font-size="9" fill="#5C3D1E">3. Softmax b → coupling c;  capsules that agree get stronger weight</text>
+
+  <!-- Equivariance note -->
+  <rect x="276" y="312" width="284" height="50" rx="4" fill="#EDE4D3" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="284" y="326" font-size="9" fill="#2D5A8E" font-weight="bold">Equivariance (not just invariance):</text>
+  <text x="284" y="340" font-size="9" fill="#5C3D1E">If input rotates 30°, capsule vector direction changes</text>
+  <text x="284" y="353" font-size="9" fill="#5C3D1E">predictably — the representation transforms with the input.</text>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- RIGHT PANEL: Capsule vector anatomy + squash           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <rect x="582" y="40" width="206" height="330" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="685" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Capsule Vector</text>
+
+  <!-- Vector anatomy diagram -->
+  <text x="685" y="76" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">capsule = vector of properties</text>
+
+  <!-- Arrow representing vector -->
+  <line x1="620" y1="145" x2="740" y2="95" stroke="#2D5A8E" stroke-width="3" marker-end="url(#arrow-blue2)"/>
+
+  <!-- Magnitude label -->
+  <text x="672" y="140" font-size="9" fill="#7C2530" font-weight="bold">‖v‖ = probability</text>
+  <text x="672" y="152" font-size="9" fill="#7C2530">of presence</text>
+
+  <!-- Direction label -->
+  <text x="700" y="90" font-size="9" fill="#2D5A8E" font-weight="bold">direction =</text>
+  <text x="700" y="102" font-size="9" fill="#2D5A8E">pose properties</text>
+
+  <!-- Component breakdown -->
+  <rect x="592" y="165" width="186" height="88" rx="4" fill="#EDE4D3" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="685" y="180" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Vector components</text>
+  <text x="600" y="196" font-size="9" fill="#5C3D1E">v[0] = 0.87  → probability</text>
+  <text x="600" y="210" font-size="9" fill="#5C3D1E">v[1] = 15°   → rotation</text>
+  <text x="600" y="224" font-size="9" fill="#5C3D1E">v[2,3] = (0.3, 0.7) → position</text>
+  <text x="600" y="238" font-size="9" fill="#5C3D1E">v[4] = 0.8   → scale</text>
+
+  <!-- Squash function box -->
+  <rect x="592" y="262" width="186" height="62" rx="4" fill="#EDE4D3" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="685" y="277" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Squash (non-linearity)</text>
+  <text x="685" y="292" text-anchor="middle" font-size="9" fill="#5C3D1E">Keeps ‖v‖ ∈ [0, 1)</text>
+  <text x="685" y="306" text-anchor="middle" font-size="9" fill="#2D5A8E" font-style="italic">short vectors → near 0</text>
+  <text x="685" y="318" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">long vectors → near 1</text>
+
+  <!-- Part-whole label -->
+  <rect x="592" y="333" width="186" height="30" rx="4" fill="#7C2530"/>
+  <text x="685" y="350" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Parts → Whole via Routing</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow-brown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrow-blue2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Bottom caption -->
+  <text x="400" y="392" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">Sabour, Frosst, Hinton (2017) — Dynamic Routing Between Capsules</text>
+</svg>

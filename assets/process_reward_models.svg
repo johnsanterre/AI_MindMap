@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Outcome vs Process Reward Models</text>
+  <text x="400" y="52" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">dense step-level supervision  vs  sparse outcome supervision</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="62" x2="400" y2="385" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+  <!-- ===== LEFT PANEL: ORM ===== -->
+  <text x="200" y="80" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Outcome Reward Model (ORM)</text>
+
+  <!-- Math problem box -->
+  <rect x="50" y="95" width="300" height="36" rx="6" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="200" y="113" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Math Problem</text>
+  <text x="200" y="126" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">x: "Solve 2x + 5 = 13"</text>
+
+  <!-- Arrow down -->
+  <line x1="200" y1="131" x2="200" y2="148" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="200,153 195,144 205,144" fill="#5C3D1E"/>
+
+  <!-- Full solution box -->
+  <rect x="50" y="155" width="300" height="80" rx="6" fill="#C4A87A" opacity="0.18" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="200" y="173" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Full Solution (all steps combined)</text>
+  <text x="200" y="189" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Step 1: subtract 5 → 2x = 8</text>
+  <text x="200" y="203" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Step 2: divide by 2 → x = 4</text>
+  <text x="200" y="217" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Step 3: check → 2(4)+5 = 13 ✓</text>
+  <text x="200" y="231" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Answer: x = 4</text>
+
+  <!-- Arrow down -->
+  <line x1="200" y1="235" x2="200" y2="252" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="200,257 195,248 205,248" fill="#5C3D1E"/>
+
+  <!-- Single reward box -->
+  <rect x="90" y="259" width="220" height="42" rx="8" fill="#2D5A8E" opacity="0.85" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="200" y="276" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Single Reward at End</text>
+  <text x="200" y="293" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle">r(x, y) = 1  (correct)</text>
+
+  <!-- ORM limitation note -->
+  <rect x="50" y="315" width="300" height="38" rx="5" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="200" y="331" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Cannot identify where reasoning</text>
+  <text x="200" y="345" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">failed if final answer is wrong</text>
+
+  <!-- Sparse label -->
+  <text x="200" y="372" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">SPARSE supervision</text>
+
+  <!-- ===== RIGHT PANEL: PRM ===== -->
+  <text x="600" y="80" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">Process Reward Model (PRM)</text>
+
+  <!-- Math problem box -->
+  <rect x="450" y="95" width="300" height="36" rx="6" fill="#7C2530" opacity="0.10" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="600" y="113" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Math Problem</text>
+  <text x="600" y="126" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">x: "Solve 2x + 5 = 13"</text>
+
+  <!-- Arrow down -->
+  <line x1="600" y1="131" x2="600" y2="148" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="600,153 595,144 605,144" fill="#5C3D1E"/>
+
+  <!-- Step rows with per-step rewards -->
+  <!-- Step 1 -->
+  <rect x="450" y="155" width="220" height="28" rx="5" fill="#C4A87A" opacity="0.20" stroke="#C4A87A" stroke-width="1.1"/>
+  <text x="560" y="174" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Step 1: subtract 5 → 2x = 8</text>
+  <rect x="678" y="155" width="64" height="28" rx="5" fill="#2D5A8E" opacity="0.80" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="710" y="174" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle" font-weight="bold">r₁ = ✓</text>
+
+  <!-- Step 2 -->
+  <rect x="450" y="191" width="220" height="28" rx="5" fill="#C4A87A" opacity="0.20" stroke="#C4A87A" stroke-width="1.1"/>
+  <text x="560" y="210" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Step 2: divide by 3 → x = 2.67</text>
+  <rect x="678" y="191" width="64" height="28" rx="5" fill="#7C2530" opacity="0.85" stroke="#7C2530" stroke-width="1"/>
+  <text x="710" y="210" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle" font-weight="bold">r₂ = ✗</text>
+
+  <!-- First wrong step marker -->
+  <text x="745" y="210" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="start" font-weight="bold">← first wrong step</text>
+
+  <!-- Step 3 -->
+  <rect x="450" y="227" width="220" height="28" rx="5" fill="#C4A87A" opacity="0.08" stroke="#D4C5A9" stroke-width="1.1" stroke-dasharray="4,3"/>
+  <text x="560" y="246" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" opacity="0.55" text-anchor="middle">Step 3: check → 2(2.67)+5 ≠ 13</text>
+  <rect x="678" y="227" width="64" height="28" rx="5" fill="#5C3D1E" opacity="0.30" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="710" y="246" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">r₃ = —</text>
+
+  <!-- Arrow down to reward summary -->
+  <line x1="600" y1="257" x2="600" y2="272" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="600,277 595,268 605,268" fill="#5C3D1E"/>
+
+  <!-- Reward summary box -->
+  <rect x="490" y="279" width="220" height="42" rx="8" fill="#7C2530" opacity="0.85" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="600" y="296" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Per-Step Rewards</text>
+  <text x="600" y="313" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">R(y) = min(r₁, r₂, r₃) → reject</text>
+
+  <!-- PRM benefit note -->
+  <rect x="450" y="334" width="300" height="30" rx="5" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="600" y="351" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Pinpoints error at Step 2 — enables targeted correction</text>
+
+  <!-- Dense label -->
+  <text x="600" y="372" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">DENSE step-level supervision</text>
+</svg>

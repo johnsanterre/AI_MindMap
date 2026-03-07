@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="7"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Tensor Parallelism: Split Matrix Multiply Across GPUs</text>
+
+  <!-- ===== TOP SECTION: Matrix Sharding ===== -->
+  <!-- Label -->
+  <text x="20" y="58" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">Column-wise sharding of weight matrix W across 4 GPUs</text>
+
+  <!-- Full matrix W (conceptual) -->
+  <rect x="20" y="65" width="60" height="80" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1.5" rx="3"/>
+  <text x="50" y="101" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">W</text>
+  <text x="50" y="116" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">d×d</text>
+  <text x="50" y="158" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">X (input)</text>
+
+  <!-- Arrow: W → split -->
+  <line x1="80" y1="105" x2="110" y2="105" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="93" y="99" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">split</text>
+
+  <!-- GPU slabs -->
+  <!-- GPU 1 -->
+  <rect x="115" y="65" width="30" height="80" fill="#7C2530" fill-opacity="0.18" stroke="#7C2530" stroke-width="1.5" rx="2"/>
+  <text x="130" y="108" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">W₁</text>
+
+  <!-- GPU 2 -->
+  <rect x="148" y="65" width="30" height="80" fill="#2D5A8E" fill-opacity="0.18" stroke="#2D5A8E" stroke-width="1.5" rx="2"/>
+  <text x="163" y="108" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">W₂</text>
+
+  <!-- GPU 3 -->
+  <rect x="181" y="65" width="30" height="80" fill="#7C2530" fill-opacity="0.18" stroke="#7C2530" stroke-width="1.5" rx="2"/>
+  <text x="196" y="108" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">W₃</text>
+
+  <!-- GPU 4 -->
+  <rect x="214" y="65" width="30" height="80" fill="#2D5A8E" fill-opacity="0.18" stroke="#2D5A8E" stroke-width="1.5" rx="2"/>
+  <text x="229" y="108" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">W₄</text>
+
+  <!-- GPU labels -->
+  <text x="130" y="156" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">GPU 1</text>
+  <text x="163" y="156" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">GPU 2</text>
+  <text x="196" y="156" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">GPU 3</text>
+  <text x="229" y="156" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">GPU 4</text>
+
+  <!-- Compute arrows down to Y partial -->
+  <line x1="130" y1="148" x2="130" y2="170" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="163" y1="148" x2="163" y2="170" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="196" y1="148" x2="196" y2="170" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="229" y1="148" x2="229" y2="170" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- Partial outputs -->
+  <rect x="115" y="170" width="30" height="28" fill="#7C2530" fill-opacity="0.22" stroke="#7C2530" stroke-width="1.2" rx="2"/>
+  <text x="130" y="189" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Y₁</text>
+  <rect x="148" y="170" width="30" height="28" fill="#2D5A8E" fill-opacity="0.22" stroke="#2D5A8E" stroke-width="1.2" rx="2"/>
+  <text x="163" y="189" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Y₂</text>
+  <rect x="181" y="170" width="30" height="28" fill="#7C2530" fill-opacity="0.22" stroke="#7C2530" stroke-width="1.2" rx="2"/>
+  <text x="196" y="189" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Y₃</text>
+  <rect x="214" y="170" width="30" height="28" fill="#2D5A8E" fill-opacity="0.22" stroke="#2D5A8E" stroke-width="1.2" rx="2"/>
+  <text x="229" y="189" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Y₄</text>
+
+  <!-- All-reduce bracket -->
+  <line x1="115" y1="208" x2="244" y2="208" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="115" y1="203" x2="115" y2="208" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="244" y1="203" x2="244" y2="208" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="180" y="220" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">All-Reduce</text>
+  <text x="180" y="231" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">(sum partials)</text>
+
+  <!-- Arrow to final Y -->
+  <line x1="180" y1="234" x2="180" y2="248" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Final Y -->
+  <rect x="148" y="249" width="64" height="28" fill="#C4A87A" fill-opacity="0.35" stroke="#C4A87A" stroke-width="1.8" rx="3"/>
+  <text x="180" y="268" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Y = XW</text>
+
+  <!-- ===== RIGHT SECTION: GPU detail boxes ===== -->
+  <!-- NVLink note -->
+  <text x="290" y="58" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">GPU cluster (NVLink, 600–900 GB/s)</text>
+
+  <!-- GPU box group -->
+  <rect x="288" y="65" width="120" height="55" fill="#7C2530" fill-opacity="0.10" stroke="#7C2530" stroke-width="1.5" rx="5"/>
+  <text x="348" y="83" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">GPU 1</text>
+  <text x="348" y="97" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">holds W₁  →  computes XW₁</text>
+  <text x="348" y="110" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">output features 1..d/4</text>
+
+  <rect x="288" y="128" width="120" height="55" fill="#2D5A8E" fill-opacity="0.10" stroke="#2D5A8E" stroke-width="1.5" rx="5"/>
+  <text x="348" y="146" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">GPU 2</text>
+  <text x="348" y="160" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">holds W₂  →  computes XW₂</text>
+  <text x="348" y="173" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">output features d/4+1..d/2</text>
+
+  <rect x="288" y="191" width="120" height="55" fill="#7C2530" fill-opacity="0.10" stroke="#7C2530" stroke-width="1.5" rx="5"/>
+  <text x="348" y="209" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">GPU 3</text>
+  <text x="348" y="223" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">holds W₃  →  computes XW₃</text>
+  <text x="348" y="236" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">output features d/2+1..3d/4</text>
+
+  <rect x="288" y="254" width="120" height="55" fill="#2D5A8E" fill-opacity="0.10" stroke="#2D5A8E" stroke-width="1.5" rx="5"/>
+  <text x="348" y="272" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">GPU 4</text>
+  <text x="348" y="286" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">holds W₄  →  computes XW₄</text>
+  <text x="348" y="299" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">output features 3d/4+1..d</text>
+
+  <!-- All-reduce double arrow between GPUs -->
+  <line x1="415" y1="92" x2="415" y2="305" stroke="#C4A87A" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="430" y="200" font-family="Georgia, serif" font-size="10" fill="#C4A87A" transform="rotate(90,430,200)" text-anchor="middle">all-reduce</text>
+
+  <!-- ===== BOTTOM SECTION: Parallelism Strategy Comparison ===== -->
+  <line x1="20" y1="318" x2="780" y2="318" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="400" y="336" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Parallelism Strategy Comparison</text>
+
+  <!-- Data Parallelism -->
+  <rect x="30" y="344" width="220" height="45" fill="#C4A87A" fill-opacity="0.15" stroke="#C4A87A" stroke-width="1.5" rx="5"/>
+  <text x="140" y="361" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Data Parallelism</text>
+  <text x="140" y="375" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">same model, different data batches</text>
+  <text x="140" y="387" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">gradient all-reduce each step</text>
+
+  <!-- Tensor Parallelism -->
+  <rect x="290" y="344" width="220" height="45" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="2" rx="5"/>
+  <text x="400" y="361" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Tensor Parallelism  ★</text>
+  <text x="400" y="375" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">model split within a layer (W columns)</text>
+  <text x="400" y="387" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">activation all-reduce, needs fast NVLink</text>
+
+  <!-- Pipeline Parallelism -->
+  <rect x="550" y="344" width="220" height="45" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5" rx="5"/>
+  <text x="660" y="361" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Pipeline Parallelism</text>
+  <text x="660" y="375" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">different layers on different GPUs</text>
+  <text x="660" y="387" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">micro-batches; bubble overhead</text>
+
+  <!-- Arrow defs -->
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

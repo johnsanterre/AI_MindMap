@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Rotary Position Embeddings (RoPE)</text>
+  <text x="400" y="52" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Dot product depends only on relative position (n − m), not absolute positions</text>
+
+  <!-- ===== LEFT PANEL: Token at position m ===== -->
+  <!-- Circle / unit disk -->
+  <circle cx="175" cy="210" r="100" fill="none" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Axes -->
+  <line x1="75" y1="210" x2="275" y2="210" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="175" y1="110" x2="175" y2="310" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Arc for angle theta_m -->
+  <path d="M 235 210 A 60 60 0 0 0 193 155" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="248" y="188" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-style="italic">θ_m</text>
+
+  <!-- Rotated query vector q_m -->
+  <line x1="175" y1="210" x2="248" y2="144" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+  <text x="258" y="138" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">q_m = R_m q</text>
+
+  <!-- Original (unrotated) reference vector (faint) -->
+  <line x1="175" y1="210" x2="270" y2="210" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <text x="272" y="214" font-family="Georgia, serif" font-size="11" fill="#7C2530" opacity="0.6">q</text>
+
+  <!-- Label -->
+  <rect x="90" y="318" width="170" height="26" rx="4" fill="#7C2530" opacity="0.1"/>
+  <text x="175" y="335" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Token at position m</text>
+  <text x="175" y="352" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">angle = m · θ  (frequency θ_i = 10000^{−2i/d})</text>
+
+  <!-- ===== RIGHT PANEL: Token at position n ===== -->
+  <circle cx="580" cy="210" r="100" fill="none" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="480" y1="210" x2="680" y2="210" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="580" y1="110" x2="580" y2="310" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Arc for angle theta_n -->
+  <path d="M 640 210 A 60 60 0 0 0 619 154" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="652" y="183" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-style="italic">θ_n</text>
+
+  <!-- Rotated key vector k_n -->
+  <line x1="580" y1="210" x2="615" y2="115" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+  <text x="622" y="110" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">k_n = R_n k</text>
+
+  <!-- Original (unrotated) reference vector (faint) -->
+  <line x1="580" y1="210" x2="675" y2="210" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <text x="677" y="214" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" opacity="0.6">k</text>
+
+  <!-- Label -->
+  <rect x="495" y="318" width="170" height="26" rx="4" fill="#2D5A8E" opacity="0.1"/>
+  <text x="580" y="335" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Token at position n</text>
+  <text x="580" y="352" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">angle = n · θ</text>
+
+  <!-- ===== CENTER: Relative position annotation ===== -->
+  <!-- Connecting bracket / arrow -->
+  <line x1="285" y1="210" x2="470" y2="210" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <polygon points="466,206 478,210 466,214" fill="#5C3D1E"/>
+  <polygon points="289,206 277,210 289,214" fill="#5C3D1E"/>
+
+  <!-- Center box -->
+  <rect x="293" y="152" width="214" height="116" rx="8" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="400" y="176" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Dot Product</text>
+  <text x="400" y="196" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">q_m · k_n = q&#7488; R_{n−m} k</text>
+  <line x1="308" y1="204" x2="492" y2="204" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="222" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">depends only on</text>
+  <text x="400" y="240" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">relative position (n − m)</text>
+  <text x="400" y="258" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">= rotation angle difference</text>
+
+  <!-- ===== Rotation matrix label ===== -->
+  <rect x="293" y="280" width="214" height="40" rx="6" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="400" y="297" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">R_m = block-diag of 2×2 rotations</text>
+  <text x="400" y="313" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">[cos mθ_i, −sin mθ_i; sin mθ_i, cos mθ_i]</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+</svg>

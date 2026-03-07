@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Label Smoothing: Hard vs. Soft Targets</text>
+
+  <!-- ======= LEFT PANEL: Hard Labels ======= -->
+  <rect x="40" y="55" width="330" height="295" rx="8" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="205" y="82" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530" text-anchor="middle">Hard Labels (One-Hot)</text>
+  <text x="205" y="100" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">[0, 0, 1, 0, 0]</text>
+
+  <!-- Axes -->
+  <line x1="75" y1="310" x2="345" y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="75" y1="310" x2="75" y2="118" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="68" y="313" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0.0</text>
+  <text x="68" y="214" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0.5</text>
+  <text x="68" y="122" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">1.0</text>
+  <!-- Y gridlines -->
+  <line x1="75" y1="214" x2="345" y2="214" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <line x1="75" y1="118" x2="345" y2="118" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+  <!-- Bars: hard labels. bar width=38, gap=12, 5 bars, centered in [75,345] -->
+  <!-- x positions: 85, 135, 185, 235, 285 -->
+  <!-- bar height for p=0: 0px; p=1: 192px (310-118=192) -->
+
+  <!-- Class 1: p=0 -->
+  <rect x="85" y="310" width="38" height="0" fill="#2D5A8E" opacity="0.85"/>
+  <!-- Class 2: p=0 -->
+  <rect x="135" y="310" width="38" height="0" fill="#2D5A8E" opacity="0.85"/>
+  <!-- Class 3: p=1 (correct) -->
+  <rect x="185" y="118" width="38" height="192" fill="#7C2530" opacity="0.9"/>
+  <!-- Class 4: p=0 -->
+  <rect x="235" y="310" width="38" height="0" fill="#2D5A8E" opacity="0.85"/>
+  <!-- Class 5: p=0 -->
+  <rect x="285" y="310" width="38" height="0" fill="#2D5A8E" opacity="0.85"/>
+
+  <!-- X-axis class labels -->
+  <text x="104" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C1</text>
+  <text x="154" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C2</text>
+  <text x="204" y="326" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">C3*</text>
+  <text x="254" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C4</text>
+  <text x="304" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C5</text>
+
+  <!-- Probability label on spike -->
+  <text x="204" y="112" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">1.0</text>
+
+  <!-- Annotation -->
+  <text x="205" y="350" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Infinite confidence → overconfidence</text>
+
+  <!-- ======= RIGHT PANEL: Label Smoothing ======= -->
+  <rect x="430" y="55" width="330" height="295" rx="8" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="595" y="82" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Label Smoothing (ε = 0.1)</text>
+  <text x="595" y="100" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">[0.02, 0.02, 0.92, 0.02, 0.02]</text>
+
+  <!-- Axes -->
+  <line x1="465" y1="310" x2="735" y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="465" y1="310" x2="465" y2="118" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="458" y="313" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0.0</text>
+  <text x="458" y="214" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0.5</text>
+  <text x="458" y="122" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">1.0</text>
+  <!-- Y gridlines -->
+  <line x1="465" y1="214" x2="735" y2="214" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <line x1="465" y1="118" x2="735" y2="118" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+  <!-- Bars: smoothed labels
+       p=0.02 → height = 0.02*192 = 3.84 ≈ 4px
+       p=0.92 → height = 0.92*192 = 176.6 ≈ 177px
+  -->
+
+  <!-- Class 1: p=0.02 -->
+  <rect x="475" y="306" width="38" height="4" fill="#2D5A8E" opacity="0.85"/>
+  <!-- Class 2: p=0.02 -->
+  <rect x="525" y="306" width="38" height="4" fill="#2D5A8E" opacity="0.85"/>
+  <!-- Class 3: p=0.92 (correct) -->
+  <rect x="575" y="133" width="38" height="177" fill="#7C2530" opacity="0.9"/>
+  <!-- Class 4: p=0.02 -->
+  <rect x="625" y="306" width="38" height="4" fill="#2D5A8E" opacity="0.85"/>
+  <!-- Class 5: p=0.02 -->
+  <rect x="675" y="306" width="38" height="4" fill="#2D5A8E" opacity="0.85"/>
+
+  <!-- X-axis class labels -->
+  <text x="494" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C1</text>
+  <text x="544" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C2</text>
+  <text x="594" y="326" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">C3*</text>
+  <text x="644" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C4</text>
+  <text x="694" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C5</text>
+
+  <!-- Probability label on smoothed peak -->
+  <text x="594" y="127" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">0.92</text>
+
+  <!-- Small prob labels -->
+  <text x="494" y="300" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">0.02</text>
+  <text x="544" y="300" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">0.02</text>
+  <text x="644" y="300" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">0.02</text>
+  <text x="694" y="300" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">0.02</text>
+
+  <!-- Annotation -->
+  <text x="595" y="350" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">Finite confidence → better calibration</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="390" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Prevents overconfidence, improves calibration   |   Szegedy et al. 2016 (Inception-v3)</text>
+</svg>

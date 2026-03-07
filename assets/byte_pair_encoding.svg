@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Byte Pair Encoding — Iterative Merge Process</text>
+
+  <!-- ── STEP 0: Initial character tokens ── -->
+  <text x="14" y="60" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Step 0 — Character tokens</text>
+  <!-- boxes -->
+  <!-- h -->
+  <rect x="14" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="27" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">h</text>
+  <!-- e -->
+  <rect x="44" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="57" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">e</text>
+  <!-- l -->
+  <rect x="74" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="87" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">l</text>
+  <!-- l -->
+  <rect x="104" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="117" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">l</text>
+  <!-- o -->
+  <rect x="134" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="147" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">o</text>
+  <!-- space -->
+  <rect x="164" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="177" y="82" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">_</text>
+  <!-- w -->
+  <rect x="194" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="207" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">w</text>
+  <!-- o -->
+  <rect x="224" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="237" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">o</text>
+  <!-- r -->
+  <rect x="254" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="267" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">r</text>
+  <!-- l -->
+  <rect x="284" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="297" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">l</text>
+  <!-- d -->
+  <rect x="314" y="66" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="327" y="82" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">d</text>
+
+  <!-- arrow down -->
+  <line x1="190" y1="96" x2="190" y2="110" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="230" y="107" font-family="Georgia, serif" font-size="11" fill="#7C2530">most frequent pair: l + l → ll (freq 3)</text>
+
+  <!-- ── STEP 1 ── -->
+  <text x="14" y="128" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Step 1 — Merge: l+l → ll</text>
+  <!-- h -->
+  <rect x="14" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="27" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">h</text>
+  <!-- e -->
+  <rect x="44" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="57" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">e</text>
+  <!-- ll merged -->
+  <rect x="74" y="134" width="36" height="22" rx="3" fill="#D6E8F7" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="92" y="150" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">ll</text>
+  <!-- o -->
+  <rect x="114" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="127" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">o</text>
+  <!-- space -->
+  <rect x="144" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="157" y="150" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">_</text>
+  <!-- w -->
+  <rect x="174" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="187" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">w</text>
+  <!-- o -->
+  <rect x="204" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="217" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">o</text>
+  <!-- r -->
+  <rect x="234" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="247" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">r</text>
+  <!-- l -->
+  <rect x="264" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="277" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">l</text>
+  <!-- d -->
+  <rect x="294" y="134" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="307" y="150" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">d</text>
+
+  <!-- arrow down -->
+  <line x1="190" y1="164" x2="190" y2="178" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="230" y="175" font-family="Georgia, serif" font-size="11" fill="#7C2530">next most frequent: l+o → lo (freq 2)</text>
+
+  <!-- ── STEP 2 ── -->
+  <text x="14" y="196" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Step 2 — Merge: l+o → lo</text>
+  <!-- h -->
+  <rect x="14" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="27" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">h</text>
+  <!-- e -->
+  <rect x="44" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="57" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">e</text>
+  <!-- ll -->
+  <rect x="74" y="202" width="36" height="22" rx="3" fill="#D6E8F7" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="92" y="218" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">ll</text>
+  <!-- o -->
+  <rect x="114" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="127" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">o</text>
+  <!-- space -->
+  <rect x="144" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="157" y="218" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">_</text>
+  <!-- w -->
+  <rect x="174" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="187" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">w</text>
+  <!-- lo merged -->
+  <rect x="204" y="202" width="32" height="22" rx="3" fill="#D6E8F7" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="220" y="218" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">lo</text>
+  <!-- r -->
+  <rect x="240" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="253" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">r</text>
+  <!-- l -->
+  <rect x="270" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="283" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">l</text>
+  <!-- d -->
+  <rect x="300" y="202" width="26" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="313" y="218" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">d</text>
+
+  <!-- arrow down -->
+  <line x1="190" y1="232" x2="190" y2="246" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="230" y="243" font-family="Georgia, serif" font-size="11" fill="#7C2530">continue merges: he, hel, hello, world…</text>
+
+  <!-- ── FINAL tokens ── -->
+  <text x="14" y="264" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Final — after K merges</text>
+  <rect x="14" y="270" width="60" height="22" rx="3" fill="#F0E8CC" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="44" y="286" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">hello</text>
+  <rect x="80" y="270" width="22" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="91" y="286" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">_</text>
+  <rect x="108" y="270" width="55" height="22" rx="3" fill="#F0E8CC" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="135" y="286" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">world</text>
+
+  <!-- ── RIGHT PANEL: unknown word tokenization ── -->
+  <line x1="390" y1="44" x2="390" y2="310" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <text x="410" y="60" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Handling an Unknown Word</text>
+  <text x="410" y="78" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">"tokenization" (not in vocabulary)</text>
+
+  <!-- character fallback chain -->
+  <text x="410" y="100" font-family="Georgia, serif" font-size="11" fill="#7C2530">Greedy merge using learned rules:</text>
+
+  <!-- token boxes for "tokenization" -->
+  <!-- token -->
+  <rect x="410" y="108" width="44" height="22" rx="3" fill="#D6E8F7" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="432" y="124" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">token</text>
+  <!-- i -->
+  <rect x="458" y="108" width="18" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="467" y="124" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">i</text>
+  <!-- z -->
+  <rect x="480" y="108" width="18" height="22" rx="3" fill="#EEE8D8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="489" y="124" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">z</text>
+  <!-- at -->
+  <rect x="502" y="108" width="26" height="22" rx="3" fill="#D6E8F7" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="515" y="124" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">at</text>
+  <!-- ion -->
+  <rect x="532" y="108" width="34" height="22" rx="3" fill="#D6E8F7" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="549" y="124" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">ion</text>
+
+  <text x="410" y="152" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Known subwords (blue) handle the word;</text>
+  <text x="410" y="166" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">unseen characters fall back to singles.</text>
+
+  <!-- ── Vocabulary size vs sequence length tradeoff ── -->
+  <text x="410" y="196" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Vocabulary Size vs. Sequence Length</text>
+
+  <!-- axis box -->
+  <rect x="410" y="205" width="360" height="90" rx="4" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.2"/>
+
+  <!-- Y axis label -->
+  <text x="420" y="295" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" transform="rotate(-90 420 295)" text-anchor="middle">seq length</text>
+
+  <!-- X axis -->
+  <line x1="436" y1="283" x2="760" y2="283" stroke="#5C3D1E" stroke-width="1.2"/>
+  <!-- Y axis -->
+  <line x1="436" y1="214" x2="436" y2="283" stroke="#5C3D1E" stroke-width="1.2"/>
+
+  <!-- curve: seq length decreases as vocab grows -->
+  <polyline points="436,278 480,260 530,242 590,228 660,218 730,214" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- X axis label -->
+  <text x="596" y="296" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">vocabulary size →</text>
+
+  <!-- annotations -->
+  <text x="445" y="245" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">char-level</text>
+  <text x="445" y="255" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">(long seqs)</text>
+
+  <text x="700" y="225" font-family="Georgia, serif" font-size="9" fill="#7C2530">word-level</text>
+  <text x="700" y="235" font-family="Georgia, serif" font-size="9" fill="#7C2530">(OOV risk)</text>
+
+  <!-- sweet spot marker -->
+  <circle cx="590" cy="228" r="5" fill="none" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="570" y="218" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">BPE</text>
+  <text x="563" y="228" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">sweet spot</text>
+  <text x="555" y="238" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">~32K–50K</text>
+
+  <!-- ── bottom caption ── -->
+  <text x="400" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">BPE: frequency-driven greedy merges • handles unknown words as subword sequences • used in GPT-2/3/4, LLaMA, RoBERTa</text>
+
+  <!-- arrowhead marker -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,1 L0,7 L7,4 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

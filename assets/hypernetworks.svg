@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Hypernetworks: A Network That Generates Another Network's Weights</text>
+
+  <!-- ── HYPERNETWORK BOX (left) ── -->
+  <rect x="60" y="80" width="200" height="200" rx="10" fill="#EDE8DD" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="160" y="105" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Hypernetwork  h</text>
+
+  <!-- h nodes (3 layers) -->
+  <!-- Layer 1 -->
+  <circle cx="100" cy="145" r="10" fill="#7C2530"/>
+  <circle cx="100" cy="175" r="10" fill="#7C2530"/>
+  <circle cx="100" cy="205" r="10" fill="#7C2530"/>
+  <!-- Layer 2 -->
+  <circle cx="160" cy="155" r="10" fill="#7C2530"/>
+  <circle cx="160" cy="185" r="10" fill="#7C2530"/>
+  <!-- Layer 3 -->
+  <circle cx="220" cy="170" r="10" fill="#7C2530"/>
+
+  <!-- h edges layer1→layer2 -->
+  <line x1="110" y1="145" x2="150" y2="155" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <line x1="110" y1="145" x2="150" y2="185" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <line x1="110" y1="175" x2="150" y2="155" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <line x1="110" y1="175" x2="150" y2="185" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <line x1="110" y1="205" x2="150" y2="155" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <line x1="110" y1="205" x2="150" y2="185" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <!-- h edges layer2→layer3 -->
+  <line x1="170" y1="155" x2="210" y2="170" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+  <line x1="170" y1="185" x2="210" y2="170" stroke="#7C2530" stroke-width="1" opacity="0.5"/>
+
+  <!-- Task embedding z input arrow -->
+  <line x1="30" y1="175" x2="88" y2="175" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowGold)"/>
+  <text x="10" y="162" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#C4A87A" text-anchor="middle">z</text>
+  <text x="10" y="178" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">task</text>
+  <text x="10" y="190" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">embed.</text>
+
+  <!-- ── WEIGHT GENERATION ARROW ── -->
+  <!-- Wide arrow h → W -->
+  <line x1="262" y1="175" x2="318" y2="175" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+  <text x="290" y="163" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">h(z) → W</text>
+
+  <!-- ── WEIGHT MATRIX W (center) ── -->
+  <rect x="320" y="120" width="110" height="110" rx="6" fill="#F5EDD5" stroke="#C4A87A" stroke-width="2"/>
+  <text x="375" y="145" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C4A87A" text-anchor="middle">Weights W</text>
+  <!-- grid cells -->
+  <rect x="333" y="155" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.35"/>
+  <rect x="358" y="155" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.55"/>
+  <rect x="383" y="155" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.25"/>
+  <rect x="333" y="178" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.60"/>
+  <rect x="358" y="178" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.30"/>
+  <rect x="383" y="178" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.50"/>
+  <rect x="333" y="201" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.40"/>
+  <rect x="358" y="201" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.20"/>
+  <rect x="383" y="201" width="22" height="18" rx="2" fill="#C4A87A" opacity="0.65"/>
+  <text x="375" y="234" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">generated weights</text>
+
+  <!-- ── WEIGHT LOAD ARROW W → primary net ── -->
+  <line x1="432" y1="175" x2="488" y2="175" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+  <text x="460" y="163" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">load W</text>
+
+  <!-- ── PRIMARY NETWORK BOX (right) ── -->
+  <rect x="490" y="80" width="200" height="200" rx="10" fill="#E8EEF6" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="590" y="105" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Primary Network  f</text>
+
+  <!-- f nodes -->
+  <!-- Layer 1 -->
+  <circle cx="530" cy="145" r="10" fill="#2D5A8E"/>
+  <circle cx="530" cy="175" r="10" fill="#2D5A8E"/>
+  <circle cx="530" cy="205" r="10" fill="#2D5A8E"/>
+  <!-- Layer 2 -->
+  <circle cx="590" cy="155" r="10" fill="#2D5A8E"/>
+  <circle cx="590" cy="185" r="10" fill="#2D5A8E"/>
+  <!-- Layer 3 -->
+  <circle cx="650" cy="170" r="10" fill="#2D5A8E"/>
+
+  <!-- f edges layer1→layer2 -->
+  <line x1="540" y1="145" x2="580" y2="155" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <line x1="540" y1="145" x2="580" y2="185" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <line x1="540" y1="175" x2="580" y2="155" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <line x1="540" y1="175" x2="580" y2="185" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <line x1="540" y1="205" x2="580" y2="155" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <line x1="540" y1="205" x2="580" y2="185" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <!-- f edges layer2→layer3 -->
+  <line x1="600" y1="155" x2="640" y2="170" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+  <line x1="600" y1="185" x2="640" y2="170" stroke="#2D5A8E" stroke-width="1" opacity="0.5"/>
+
+  <!-- Input x arrow into primary network -->
+  <line x1="590" y1="295" x2="590" y2="262" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="590" y="315" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#2D5A8E" text-anchor="middle">x</text>
+  <text x="590" y="330" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">actual input</text>
+
+  <!-- Output y arrow out of primary network -->
+  <line x1="662" y1="170" x2="760" y2="170" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <text x="780" y="166" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#5C3D1E" text-anchor="middle">y</text>
+  <text x="775" y="182" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">output</text>
+
+  <!-- ── FORMULA BANNER ── -->
+  <rect x="190" y="315" width="420" height="50" rx="8" fill="#EDE8DD" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="336" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Full pipeline:   h(z) &#x2192; W   then   f(x ; W) &#x2192; y</text>
+  <text x="400" y="354" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Hypernetwork generates weights &#x2022; Primary network uses them &#x2022; Task embedding controls everything</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowGold" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

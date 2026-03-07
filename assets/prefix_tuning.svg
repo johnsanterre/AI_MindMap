@@ -1,0 +1,134 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C3D1E">Prefix Tuning — Only 0.1% of Parameters Trained</text>
+
+  <!-- ===== MAIN DIAGRAM (top half) ===== -->
+
+  <!-- Prefix tokens label -->
+  <text x="62" y="68" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Prefix (trainable)</text>
+
+  <!-- Prefix token boxes P1..P4 -->
+  <rect x="10" y="74" width="36" height="28" rx="4" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="28" y="92" text-anchor="middle" font-size="11" font-weight="bold" fill="white">P1</text>
+
+  <rect x="52" y="74" width="36" height="28" rx="4" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="70" y="92" text-anchor="middle" font-size="11" font-weight="bold" fill="white">P2</text>
+
+  <rect x="94" y="74" width="36" height="28" rx="4" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="112" y="92" text-anchor="middle" font-size="11" font-weight="bold" fill="white">P3</text>
+
+  <rect x="136" y="74" width="36" height="28" rx="4" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="154" y="92" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Pk</text>
+
+  <!-- "+" separator -->
+  <text x="190" y="94" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">+</text>
+
+  <!-- Input tokens label -->
+  <text x="290" y="68" text-anchor="middle" font-size="11" fill="#2D5A8E">Input tokens (frozen embeddings)</text>
+
+  <!-- Input token boxes -->
+  <rect x="210" y="74" width="36" height="28" rx="4" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="228" y="92" text-anchor="middle" font-size="10" fill="#2D5A8E">T1</text>
+
+  <rect x="252" y="74" width="36" height="28" rx="4" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="270" y="92" text-anchor="middle" font-size="10" fill="#2D5A8E">T2</text>
+
+  <rect x="294" y="74" width="36" height="28" rx="4" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="312" y="92" text-anchor="middle" font-size="10" fill="#2D5A8E">T3</text>
+
+  <rect x="336" y="74" width="36" height="28" rx="4" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="354" y="92" text-anchor="middle" font-size="10" fill="#2D5A8E">…</text>
+
+  <!-- Arrow from tokens to transformer block -->
+  <line x1="376" y1="88" x2="430" y2="88" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Frozen Transformer block -->
+  <rect x="432" y="58" width="160" height="60" rx="8" fill="#E8E8E8" stroke="#999" stroke-width="2"/>
+  <text x="512" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#555">Frozen Transformer</text>
+  <text x="512" y="100" text-anchor="middle" font-size="10" fill="#777">Attn( Q, [P_K ; K], [P_V ; V] )</text>
+
+  <!-- Frozen indicator icon -->
+  <text x="560" y="75" font-size="14" fill="#888">&#x1F512;</text>
+
+  <!-- Arrow from transformer to output -->
+  <line x1="592" y1="88" x2="646" y2="88" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Output box -->
+  <rect x="648" y="68" width="110" height="40" rx="6" fill="#EAF3E0" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="703" y="92" text-anchor="middle" font-size="12" fill="#5C3D1E" font-weight="bold">Output</text>
+
+  <!-- Trainable label under prefix -->
+  <text x="92" y="120" text-anchor="middle" font-size="10" font-style="italic" fill="#7C2530">&#x25B2; gradients flow here only</text>
+
+  <!-- Frozen label under transformer -->
+  <text x="512" y="132" text-anchor="middle" font-size="10" font-style="italic" fill="#888">weights frozen — no updates</text>
+
+  <!-- Key stat callout -->
+  <rect x="10" y="148" width="780" height="26" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="165" text-anchor="middle" font-size="12" fill="#5C3D1E" font-weight="bold">Only prefix parameters trained: ~0.1% of model   |   Prefix injects via K,V at EVERY layer   |   Swap prefix to switch tasks</text>
+
+  <!-- ===== COMPARISON DIAGRAMS (bottom half) ===== -->
+  <line x1="10" y1="186" x2="790" y2="186" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <text x="400" y="206" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Comparison: PEFT Methods</text>
+
+  <!-- --- Full Fine-Tuning --- -->
+  <text x="130" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#555">Full Fine-Tuning</text>
+  <!-- Model block fully colored -->
+  <rect x="50" y="236" width="160" height="50" rx="6" fill="#B0C8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="130" y="257" text-anchor="middle" font-size="11" fill="#2D5A8E">All Weights Updated</text>
+  <text x="130" y="273" text-anchor="middle" font-size="10" fill="#2D5A8E">100% params trained</text>
+  <rect x="50" y="296" width="160" height="22" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1"/>
+  <text x="130" y="311" text-anchor="middle" font-size="10" fill="#555">high cost, best quality</text>
+
+  <!-- --- Prefix Tuning --- -->
+  <text x="400" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Prefix Tuning  &#x2190; you are here</text>
+  <!-- Prefix tokens small boxes -->
+  <rect x="298" y="236" width="18" height="50" rx="3" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="320" y="236" width="18" height="50" rx="3" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="342" y="236" width="18" height="50" rx="3" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Frozen transformer -->
+  <rect x="368" y="236" width="92" height="50" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
+  <text x="414" y="257" text-anchor="middle" font-size="10" fill="#777">Frozen</text>
+  <text x="414" y="271" text-anchor="middle" font-size="10" fill="#777">LLM</text>
+  <text x="309" y="300" text-anchor="middle" font-size="9" fill="#7C2530">prefix</text>
+  <rect x="278" y="296" width="204" height="22" rx="4" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
+  <text x="380" y="311" text-anchor="middle" font-size="10" fill="#5C3D1E">~0.1% params — inject via K,V every layer</text>
+
+  <!-- --- LoRA --- -->
+  <text x="666" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">LoRA</text>
+  <!-- Frozen model + low-rank adapters -->
+  <rect x="590" y="236" width="90" height="50" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
+  <text x="635" y="257" text-anchor="middle" font-size="10" fill="#777">Frozen</text>
+  <text x="635" y="271" text-anchor="middle" font-size="10" fill="#777">Weights</text>
+  <!-- Low-rank arrows/boxes -->
+  <rect x="688" y="243" width="28" height="16" rx="3" fill="#2D5A8E"/>
+  <text x="702" y="254" text-anchor="middle" font-size="9" fill="white">A</text>
+  <rect x="688" y="264" width="28" height="16" rx="3" fill="#2D5A8E"/>
+  <text x="702" y="275" text-anchor="middle" font-size="9" fill="white">B</text>
+  <text x="720" y="257" font-size="9" fill="#2D5A8E">&#x0394;W</text>
+  <text x="721" y="269" font-size="9" fill="#2D5A8E">=AB</text>
+  <rect x="578" y="296" width="164" height="22" rx="4" fill="#E8E4F5" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="660" y="311" text-anchor="middle" font-size="10" fill="#2D5A8E">1–5% params — weight matrix adapters</text>
+
+  <!-- --- Legend box --- -->
+  <rect x="10" y="338" width="780" height="50" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="22" y="355" width="14" height="14" rx="2" fill="#7C2530"/>
+  <text x="42" y="366" font-size="11" fill="#5C3D1E">Trainable prefix vectors (K &amp; V per layer)</text>
+  <rect x="252" y="355" width="14" height="14" rx="2" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
+  <text x="272" y="366" font-size="11" fill="#5C3D1E">Frozen transformer layers</text>
+  <rect x="452" y="355" width="14" height="14" rx="2" fill="#2D5A8E"/>
+  <text x="472" y="366" font-size="11" fill="#5C3D1E">LoRA low-rank adapters (A, B matrices)</text>
+  <text x="400" y="383" text-anchor="middle" font-size="10" font-style="italic" fill="#888">Li &amp; Liang 2021 — prefix tuning on T5 matches full fine-tuning on NLG benchmarks at 0.1% parameter cost</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

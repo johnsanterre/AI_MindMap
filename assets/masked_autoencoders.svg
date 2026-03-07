@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Masked Autoencoder (MAE) — Self-Supervised Vision Pretraining</text>
+
+  <!-- ===== STAGE 1: Image Patches ===== -->
+  <text x="72" y="62" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Input Image</text>
+  <!-- 4x4 grid of patches -->
+  <g transform="translate(24,70)">
+    <!-- Row 0 -->
+    <rect x="0"  y="0"  width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="24" y="0"  width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="48" y="0"  width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="72" y="0"  width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <!-- Row 1 -->
+    <rect x="0"  y="24" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="24" y="24" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="48" y="24" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="72" y="24" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <!-- Row 2 -->
+    <rect x="0"  y="48" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="24" y="48" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="48" y="48" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="72" y="48" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <!-- Row 3 -->
+    <rect x="0"  y="72" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="24" y="72" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="48" y="72" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="72" y="72" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  </g>
+  <text x="72" y="162" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">16 patches</text>
+
+  <!-- Arrow 1 -->
+  <line x1="145" y1="155" x2="175" y2="155" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ===== STAGE 2: Masking ===== -->
+  <text x="237" y="62" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Mask 75% of Patches</text>
+  <g transform="translate(189,70)">
+    <!-- Row 0: patch 0 visible, 1 masked, 2 masked, 3 visible -->
+    <rect x="0"  y="0"  width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="24" y="0"  width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="48" y="0"  width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="72" y="0"  width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <!-- Row 1 -->
+    <rect x="0"  y="24" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="24" y="24" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="48" y="24" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="72" y="24" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <!-- Row 2 -->
+    <rect x="0"  y="48" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="24" y="48" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="48" y="48" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="72" y="48" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <!-- Row 3 -->
+    <rect x="0"  y="72" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="24" y="72" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="48" y="72" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+    <rect x="72" y="72" width="23" height="23" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+  </g>
+  <!-- Legend -->
+  <rect x="189" y="165" width="11" height="11" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="203" y="174" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">visible (25%)</text>
+  <rect x="258" y="165" width="11" height="11" fill="#BBBBBB" stroke="#888888" stroke-width="1"/>
+  <text x="272" y="174" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">masked (75%)</text>
+
+  <!-- Arrow 2 -->
+  <line x1="313" y1="130" x2="343" y2="115" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="328" y="108" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">visible</text>
+  <text x="328" y="118" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">patches</text>
+
+  <!-- ===== STAGE 3: ViT Encoder ===== -->
+  <rect x="343" y="74" width="110" height="80" rx="6" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="398" y="100" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">ViT</text>
+  <text x="398" y="116" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Encoder</text>
+  <text x="398" y="133" font-family="Georgia, serif" font-size="9" fill="#C4D8F0" text-anchor="middle">(visible only)</text>
+  <text x="398" y="145" font-family="Georgia, serif" font-size="9" fill="#C4D8F0" text-anchor="middle">no mask tokens</text>
+  <text x="398" y="165" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Encoder</text>
+
+  <!-- Arrow 3: encoder → decoder -->
+  <line x1="453" y1="114" x2="483" y2="114" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="468" y="107" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">encoded</text>
+  <text x="468" y="117" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">tokens</text>
+
+  <!-- Mask tokens join arrow -->
+  <line x1="530" y1="185" x2="530" y2="155" stroke="#888888" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrgrey)"/>
+  <text x="530" y="200" font-family="Georgia, serif" font-size="9" fill="#666666" text-anchor="middle">[MASK]</text>
+  <text x="530" y="211" font-family="Georgia, serif" font-size="9" fill="#666666" text-anchor="middle">tokens</text>
+
+  <!-- ===== STAGE 4: Lightweight Decoder ===== -->
+  <rect x="483" y="74" width="110" height="80" rx="6" fill="#7C2530" stroke="#4a1520" stroke-width="1.5"/>
+  <text x="538" y="100" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Lightweight</text>
+  <text x="538" y="116" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Decoder</text>
+  <text x="538" y="133" font-family="Georgia, serif" font-size="9" fill="#F5C5C5" text-anchor="middle">(enc tokens +</text>
+  <text x="538" y="145" font-family="Georgia, serif" font-size="9" fill="#F5C5C5" text-anchor="middle">mask tokens)</text>
+  <text x="538" y="165" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Decoder</text>
+
+  <!-- Arrow 4: decoder → reconstruction -->
+  <line x1="593" y1="114" x2="623" y2="114" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ===== STAGE 5: Reconstructed Image ===== -->
+  <text x="683" y="62" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Reconstructed Patches</text>
+  <g transform="translate(635,70)">
+    <!-- Row 0 -->
+    <rect x="0"  y="0"  width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="24" y="0"  width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="48" y="0"  width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="72" y="0"  width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- Row 1 -->
+    <rect x="0"  y="24" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="24" y="24" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="48" y="24" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="72" y="24" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- Row 2 -->
+    <rect x="0"  y="48" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="24" y="48" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="48" y="48" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="72" y="48" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <!-- Row 3 -->
+    <rect x="0"  y="72" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="24" y="72" width="23" height="23" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+    <rect x="48" y="72" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="72" y="72" width="23" height="23" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+  </g>
+  <!-- Legend recon -->
+  <rect x="635" y="165" width="11" height="11" fill="#D4B88A" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="649" y="174" font-family="Georgia, serif" font-size="9" fill="#7C2530">reconstructed</text>
+
+  <!-- ===== MSE Loss box ===== -->
+  <rect x="340" y="230" width="330" height="52" rx="6" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="505" y="250" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">MSE Loss — masked patches only</text>
+  <text x="505" y="268" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">L = (1/|M|) · Σ ||x_i − x̂_i||²   (normalized pixel values)</text>
+
+  <!-- Arrows from encoder/decoder down to loss -->
+  <line x1="398" y1="154" x2="398" y2="229" stroke="#5C3D1E" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="538" y1="154" x2="538" y2="229" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+  <!-- ===== Fine-tune note ===== -->
+  <rect x="24" y="225" width="290" height="62" rx="6" fill="#EEE8DC" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="169" y="245" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">After Pretraining</text>
+  <text x="169" y="261" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Discard decoder · Fine-tune encoder</text>
+  <text x="169" y="275" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">ViT-H → 87.8% ImageNet top-1</text>
+
+  <!-- ===== Bottom caption ===== -->
+  <text x="400" y="320" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#5C3D1E" text-anchor="middle">Mask 75%, reconstruct pixels — self-supervised vision pretraining</text>
+  <text x="400" y="338" font-family="Georgia, serif" font-size="10" fill="#888888" text-anchor="middle">He et al. 2022 · Encoder only sees visible patches (asymmetric design → 3× faster pretraining)</text>
+
+  <!-- Arrow marker (dark) -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrgrey" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#888888"/>
+    </marker>
+  </defs>
+</svg>

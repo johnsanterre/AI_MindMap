@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Mixed Precision Training Loop</text>
+
+  <!-- ── Training loop boxes ── -->
+
+  <!-- Box 1: FP32 Master Weights -->
+  <rect x="30" y="60" width="150" height="70" rx="8" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="105" y="88" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">FP32 Master</text>
+  <text x="105" y="104" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Weights</text>
+  <text x="105" y="121" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">4 bytes / param</text>
+
+  <!-- Arrow: FP32 master → FP16 copy -->
+  <line x1="180" y1="95" x2="225" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="202" y="87" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">cast</text>
+
+  <!-- Box 2: FP16/BF16 Forward Pass -->
+  <rect x="225" y="60" width="155" height="70" rx="8" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="302" y="85" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">FP16 / BF16</text>
+  <text x="302" y="101" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Forward Pass</text>
+  <text x="302" y="118" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">2 bytes / param · fast</text>
+
+  <!-- Arrow: forward → gradients -->
+  <line x1="380" y1="95" x2="425" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Box 3: FP16 Gradients -->
+  <rect x="425" y="60" width="150" height="70" rx="8" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="500" y="88" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">FP16 Gradients</text>
+  <text x="500" y="107" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">backward pass</text>
+  <text x="500" y="121" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">2 bytes / param</text>
+
+  <!-- Arrow: gradients → loss scale -->
+  <line x1="575" y1="95" x2="620" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Box 4: Loss Scaling -->
+  <rect x="620" y="60" width="150" height="70" rx="8" fill="#C4A87A" opacity="0.30" stroke="#C4A87A" stroke-width="2"/>
+  <text x="695" y="85" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Loss Scaling</text>
+  <text x="695" y="101" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">multiply loss × S</text>
+  <text x="695" y="116" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">dynamic S ∈ [1, 65536]</text>
+
+  <!-- Curved arrow from loss scale back down and left to FP32 master -->
+  <!-- Down from box 4 -->
+  <line x1="695" y1="130" x2="695" y2="175" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- Horizontal back left -->
+  <line x1="695" y1="175" x2="105" y2="175" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Label on return path -->
+  <text x="400" y="168" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">unscale gradients ÷ S → update FP32 master weights (optimizer in FP32)</text>
+
+  <!-- Arrow from FP32 master going up/loop back indicator -->
+  <line x1="105" y1="175" x2="105" y2="130" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ── Memory comparison panel ── -->
+  <rect x="30" y="200" width="370" height="170" rx="8" fill="#2D5A8E" opacity="0.07" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="215" y="223" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Memory Per Parameter</text>
+
+  <!-- FP32 bar -->
+  <text x="50" y="248" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">FP32 only:</text>
+  <rect x="140" y="235" width="160" height="18" rx="3" fill="#2D5A8E" opacity="0.6"/>
+  <text x="308" y="249" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">4 bytes</text>
+
+  <!-- FP16 bar -->
+  <text x="50" y="278" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">FP16 compute:</text>
+  <rect x="140" y="265" width="80" height="18" rx="3" fill="#7C2530" opacity="0.6"/>
+  <text x="228" y="279" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">2 bytes</text>
+
+  <!-- BF16 bar -->
+  <text x="50" y="308" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">BF16 compute:</text>
+  <rect x="140" y="295" width="80" height="18" rx="3" fill="#7C2530" opacity="0.45"/>
+  <text x="228" y="309" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">2 bytes</text>
+
+  <!-- FP8 bar -->
+  <text x="50" y="338" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">FP8 (H100):</text>
+  <rect x="140" y="325" width="40" height="18" rx="3" fill="#C4A87A" opacity="0.8"/>
+  <text x="188" y="339" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">1 byte</text>
+
+  <text x="215" y="360" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">2× memory reduction vs all-FP32</text>
+
+  <!-- ── Speedup / Tensor Core panel ── -->
+  <rect x="425" y="200" width="345" height="170" rx="8" fill="#7C2530" opacity="0.06" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="597" y="223" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Tensor Core Speedup</text>
+
+  <!-- Speedup bars -->
+  <text x="445" y="250" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">FP32 (cuBLAS):</text>
+  <rect x="560" y="237" width="40" height="16" rx="3" fill="#2D5A8E" opacity="0.5"/>
+  <text x="608" y="250" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">1× baseline</text>
+
+  <text x="445" y="277" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">FP16 Tensor Core:</text>
+  <rect x="560" y="264" width="160" height="16" rx="3" fill="#7C2530" opacity="0.55"/>
+  <text x="728" y="277" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">2–8×</text>
+
+  <text x="445" y="304" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">BF16 Tensor Core:</text>
+  <rect x="560" y="291" width="160" height="16" rx="3" fill="#7C2530" opacity="0.45"/>
+  <text x="728" y="304" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">2–8×</text>
+
+  <text x="445" y="331" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">FP8 (H100):</text>
+  <rect x="560" y="318" width="190" height="16" rx="3" fill="#C4A87A" opacity="0.75"/>
+  <text x="757" y="331" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">~2× over BF16</text>
+
+  <text x="597" y="357" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">BF16 preferred: FP32 exponent range, safer gradients</text>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Sparse Autoencoders: Decomposing Superposition</text>
+
+  <!-- ===== INPUT: Dense residual stream ===== -->
+  <!-- Column of dense activations d=512 -->
+  <rect x="40" y="60" width="30" height="280" fill="#2D5A8E" rx="3" opacity="0.85"/>
+  <!-- Dense fill pattern (small horizontal bars) -->
+  <g fill="#FDFAF4" opacity="0.5">
+    <rect x="43" y="65"  width="24" height="3" rx="1"/>
+    <rect x="43" y="73"  width="24" height="3" rx="1"/>
+    <rect x="43" y="81"  width="24" height="3" rx="1"/>
+    <rect x="43" y="89"  width="24" height="3" rx="1"/>
+    <rect x="43" y="97"  width="24" height="3" rx="1"/>
+    <rect x="43" y="105" width="24" height="3" rx="1"/>
+    <rect x="43" y="113" width="24" height="3" rx="1"/>
+    <rect x="43" y="121" width="24" height="3" rx="1"/>
+    <rect x="43" y="129" width="24" height="3" rx="1"/>
+    <rect x="43" y="137" width="24" height="3" rx="1"/>
+    <rect x="43" y="145" width="24" height="3" rx="1"/>
+    <rect x="43" y="153" width="24" height="3" rx="1"/>
+    <rect x="43" y="161" width="24" height="3" rx="1"/>
+    <rect x="43" y="169" width="24" height="3" rx="1"/>
+    <rect x="43" y="177" width="24" height="3" rx="1"/>
+    <rect x="43" y="185" width="24" height="3" rx="1"/>
+    <rect x="43" y="193" width="24" height="3" rx="1"/>
+    <rect x="43" y="201" width="24" height="3" rx="1"/>
+    <rect x="43" y="209" width="24" height="3" rx="1"/>
+    <rect x="43" y="217" width="24" height="3" rx="1"/>
+    <rect x="43" y="225" width="24" height="3" rx="1"/>
+    <rect x="43" y="233" width="24" height="3" rx="1"/>
+    <rect x="43" y="241" width="24" height="3" rx="1"/>
+    <rect x="43" y="249" width="24" height="3" rx="1"/>
+    <rect x="43" y="257" width="24" height="3" rx="1"/>
+    <rect x="43" y="265" width="24" height="3" rx="1"/>
+    <rect x="43" y="273" width="24" height="3" rx="1"/>
+    <rect x="43" y="281" width="24" height="3" rx="1"/>
+    <rect x="43" y="289" width="24" height="3" rx="1"/>
+    <rect x="43" y="297" width="24" height="3" rx="1"/>
+    <rect x="43" y="305" width="24" height="3" rx="1"/>
+    <rect x="43" y="313" width="24" height="3" rx="1"/>
+    <rect x="43" y="321" width="24" height="3" rx="1"/>
+    <rect x="43" y="329" width="24" height="3" rx="1"/>
+  </g>
+  <text x="55" y="355" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">x</text>
+  <text x="55" y="369" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">d = 512</text>
+  <text x="55" y="383" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">(dense, polysemantic)</text>
+
+  <!-- Label: Residual Stream -->
+  <text x="55" y="50" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Residual</text>
+  <text x="55" y="62" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Stream</text>
+
+  <!-- Arrow: x -> encoder -->
+  <line x1="72" y1="200" x2="148" y2="200" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="148,195 158,200 148,205" fill="#5C3D1E"/>
+
+  <!-- ===== ENCODER BOX ===== -->
+  <rect x="158" y="155" width="90" height="90" fill="#C4A87A" rx="5" opacity="0.7"/>
+  <text x="203" y="193" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Encoder</text>
+  <text x="203" y="210" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">W_enc</text>
+  <text x="203" y="227" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">+ ReLU</text>
+
+  <!-- Superposition label below encoder -->
+  <text x="203" y="260" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">superposition</text>
+  <text x="203" y="272" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">→ monosemantic</text>
+  <text x="203" y="284" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">features</text>
+
+  <!-- Arrow: encoder -> sparse vector -->
+  <line x1="248" y1="200" x2="308" y2="200" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="308,195 318,200 308,205" fill="#5C3D1E"/>
+
+  <!-- ===== SPARSE FEATURE VECTOR ===== -->
+  <!-- Large tall column for d=50000+ -->
+  <rect x="318" y="45" width="32" height="310" fill="#FDFAF4" rx="3" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Mostly zero (light gray) slots -->
+  <g fill="#E8E0D0" opacity="0.8">
+    <rect x="320" y="47"  width="28" height="4"/>
+    <rect x="320" y="53"  width="28" height="4"/>
+    <rect x="320" y="59"  width="28" height="4"/>
+    <rect x="320" y="65"  width="28" height="4"/>
+    <rect x="320" y="71"  width="28" height="4"/>
+    <rect x="320" y="77"  width="28" height="4"/>
+    <rect x="320" y="83"  width="28" height="4"/>
+    <rect x="320" y="89"  width="28" height="4"/>
+    <rect x="320" y="95"  width="28" height="4"/>
+    <rect x="320" y="101" width="28" height="4"/>
+    <rect x="320" y="107" width="28" height="4"/>
+    <rect x="320" y="113" width="28" height="4"/>
+    <rect x="320" y="119" width="28" height="4"/>
+    <rect x="320" y="125" width="28" height="4"/>
+    <rect x="320" y="131" width="28" height="4"/>
+    <rect x="320" y="143" width="28" height="4"/>
+    <rect x="320" y="149" width="28" height="4"/>
+    <rect x="320" y="155" width="28" height="4"/>
+    <rect x="320" y="161" width="28" height="4"/>
+    <rect x="320" y="167" width="28" height="4"/>
+    <rect x="320" y="179" width="28" height="4"/>
+    <rect x="320" y="185" width="28" height="4"/>
+    <rect x="320" y="191" width="28" height="4"/>
+    <rect x="320" y="203" width="28" height="4"/>
+    <rect x="320" y="209" width="28" height="4"/>
+    <rect x="320" y="215" width="28" height="4"/>
+    <rect x="320" y="221" width="28" height="4"/>
+    <rect x="320" y="233" width="28" height="4"/>
+    <rect x="320" y="239" width="28" height="4"/>
+    <rect x="320" y="245" width="28" height="4"/>
+    <rect x="320" y="251" width="28" height="4"/>
+    <rect x="320" y="257" width="28" height="4"/>
+    <rect x="320" y="269" width="28" height="4"/>
+    <rect x="320" y="275" width="28" height="4"/>
+    <rect x="320" y="281" width="28" height="4"/>
+    <rect x="320" y="287" width="28" height="4"/>
+    <rect x="320" y="293" width="28" height="4"/>
+    <rect x="320" y="299" width="28" height="4"/>
+    <rect x="320" y="305" width="28" height="4"/>
+    <rect x="320" y="311" width="28" height="4"/>
+    <rect x="320" y="317" width="28" height="4"/>
+    <rect x="320" y="323" width="28" height="4"/>
+    <rect x="320" y="329" width="28" height="4"/>
+    <rect x="320" y="335" width="28" height="4"/>
+    <rect x="320" y="341" width="28" height="4"/>
+    <rect x="320" y="347" width="28" height="4"/>
+  </g>
+
+  <!-- Active (non-zero) features — highlighted in deep red -->
+  <rect x="320" y="137" width="28" height="4" fill="#7C2530"/>
+  <rect x="320" y="173" width="28" height="4" fill="#7C2530"/>
+  <rect x="320" y="197" width="28" height="4" fill="#7C2530"/>
+  <rect x="320" y="227" width="28" height="4" fill="#7C2530"/>
+  <rect x="320" y="263" width="28" height="4" fill="#7C2530"/>
+
+  <text x="334" y="380" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">d = 50,000+</text>
+  <text x="334" y="392" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">(sparse: ~5 active)</text>
+
+  <text x="334" y="42" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Sparse</text>
+  <text x="334" y="54" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Features z</text>
+
+  <!-- ===== CALLOUT LINES: active features → concept labels ===== -->
+  <!-- Feature 1: Golden Gate Bridge -->
+  <line x1="350" y1="139" x2="430" y2="100" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <rect x="430" y="85" width="185" height="22" fill="#FFF8EE" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="522" y="100" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">"Golden Gate Bridge"</text>
+
+  <!-- Feature 2: DNA repair -->
+  <line x1="350" y1="175" x2="430" y2="155" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <rect x="430" y="140" width="185" height="22" fill="#FFF8EE" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="522" y="155" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">"DNA repair proteins"</text>
+
+  <!-- Feature 3: code syntax error -->
+  <line x1="350" y1="199" x2="430" y2="200" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <rect x="430" y="188" width="185" height="22" fill="#FFF8EE" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="522" y="203" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">"code syntax error"</text>
+
+  <!-- Feature 4: Paris -->
+  <line x1="350" y1="229" x2="430" y2="248" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <rect x="430" y="236" width="185" height="22" fill="#FFF8EE" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="522" y="251" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">"city of Paris"</text>
+
+  <!-- Feature 5: chemical formula -->
+  <line x1="350" y1="265" x2="430" y2="295" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <rect x="430" y="283" width="185" height="22" fill="#FFF8EE" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="522" y="298" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">"chemical formula"</text>
+
+  <!-- Zero label -->
+  <text x="365" y="320" font-family="Georgia, serif" font-size="9" fill="#9A9A9A" text-anchor="start">= 0</text>
+  <text x="365" y="332" font-family="Georgia, serif" font-size="9" fill="#9A9A9A" text-anchor="start">(zero)</text>
+
+  <!-- Arrow: sparse z -> decoder -->
+  <line x1="334" y1="355" x2="334" y2="370" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <!-- ===== DECODER BOX (below sparse vector) — compact ===== -->
+  <rect x="270" y="355" width="128" height="32" fill="#C4A87A" rx="5" opacity="0.7"/>
+  <text x="334" y="367" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Decoder W_dec</text>
+  <text x="334" y="381" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">reconstruct x̂ ≈ x</text>
+
+  <!-- Arrow decoder -> reconstructed -->
+  <line x1="270" y1="371" x2="188" y2="371" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="188,366 178,371 188,376" fill="#5C3D1E"/>
+
+  <!-- Reconstructed vector -->
+  <rect x="138" y="340" width="40" height="62" fill="#2D5A8E" rx="3" opacity="0.6"/>
+  <text x="158" y="415" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">x̂ ≈ x</text>
+
+  <!-- Loss equation -->
+  <text x="55" y="395" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Loss = ‖x−x̂‖² + λ‖z‖₁</text>
+</svg>

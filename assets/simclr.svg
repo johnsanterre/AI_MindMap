@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">SimCLR: Simple Framework for Contrastive Learning of Visual Representations</text>
+
+  <!-- Self-supervised label -->
+  <rect x="290" y="38" width="220" height="20" rx="4" fill="#C4A87A" opacity="0.4"/>
+  <text x="400" y="52" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">self-supervised: no labels needed</text>
+
+  <!-- Original image box -->
+  <rect x="30" y="80" width="80" height="80" rx="6" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- Dog sketch placeholder -->
+  <ellipse cx="70" cy="115" rx="22" ry="18" fill="#C4A87A" opacity="0.6"/>
+  <ellipse cx="56" cy="102" rx="8" ry="10" fill="#C4A87A" opacity="0.6"/>
+  <ellipse cx="84" cy="102" rx="8" ry="10" fill="#C4A87A" opacity="0.6"/>
+  <circle cx="70" cy="120" r="4" fill="#5C3D1E" opacity="0.5"/>
+  <text x="70" y="175" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Image x</text>
+
+  <!-- Arrow from image to augment split -->
+  <line x1="110" y1="120" x2="145" y2="100" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="110" y1="120" x2="145" y2="155" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Augmentation label -->
+  <text x="70" y="200" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">crop · flip</text>
+  <text x="70" y="213" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">color jitter · blur</text>
+
+  <!-- Augmented view 1 -->
+  <rect x="148" y="65" width="72" height="72" rx="6" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <ellipse cx="184" cy="94" rx="18" ry="14" fill="#2D5A8E" opacity="0.35"/>
+  <ellipse cx="173" cy="83" rx="6" ry="8" fill="#2D5A8E" opacity="0.35"/>
+  <ellipse cx="195" cy="83" rx="6" ry="8" fill="#2D5A8E" opacity="0.35"/>
+  <text x="184" y="151" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">view x&#x2081;</text>
+  <text x="184" y="163" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">(augment t)</text>
+
+  <!-- Augmented view 2 -->
+  <rect x="148" y="140" width="72" height="72" rx="6" fill="#7C2530" opacity="0.10" stroke="#7C2530" stroke-width="2"/>
+  <ellipse cx="184" cy="168" rx="20" ry="15" fill="#7C2530" opacity="0.30"/>
+  <ellipse cx="172" cy="157" rx="7" ry="9" fill="#7C2530" opacity="0.30"/>
+  <ellipse cx="196" cy="157" rx="7" ry="9" fill="#7C2530" opacity="0.30"/>
+  <text x="184" y="226" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">view x&#x2082;</text>
+  <text x="184" y="238" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">(augment t&#x2019;)</text>
+
+  <!-- Arrows: views → encoder -->
+  <line x1="220" y1="101" x2="268" y2="120" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <line x1="220" y1="176" x2="268" y2="165" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+  <!-- Encoder f(·) block -->
+  <rect x="270" y="100" width="90" height="85" rx="8" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="315" y="133" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">f(·)</text>
+  <text x="315" y="150" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Encoder</text>
+  <text x="315" y="163" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">(ResNet-50)</text>
+  <text x="315" y="200" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">representations</text>
+  <text x="315" y="212" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">h&#x2081;, h&#x2082;</text>
+
+  <!-- Arrow: encoder → projection head -->
+  <line x1="360" y1="142" x2="408" y2="142" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+  <!-- Projection head g(·) block -->
+  <rect x="410" y="100" width="90" height="85" rx="8" fill="#C4A87A" opacity="0.25" stroke="#C4A87A" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="455" y="133" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">g(·)</text>
+  <text x="455" y="150" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Projection</text>
+  <text x="455" y="163" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Head (MLP)</text>
+  <text x="455" y="200" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">embeddings</text>
+  <text x="455" y="212" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">z&#x2081;, z&#x2082;</text>
+
+  <!-- Dashed "discarded at test time" note -->
+  <text x="455" y="250" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">discarded at test time</text>
+  <line x1="455" y1="185" x2="455" y2="242" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Arrow: projection head → loss -->
+  <line x1="500" y1="142" x2="548" y2="142" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+  <!-- NT-Xent Loss block -->
+  <rect x="550" y="90" width="115" height="105" rx="8" fill="#7C2530" opacity="0.10" stroke="#7C2530" stroke-width="2"/>
+  <text x="607" y="115" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">NT-Xent Loss</text>
+  <text x="607" y="133" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">cosine sim + temperature τ</text>
+
+  <!-- Positive pair label -->
+  <text x="607" y="153" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Positive pair:</text>
+  <text x="607" y="165" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">z&#x2081; ↔ z&#x2082; (same image)</text>
+
+  <!-- Negative pair label -->
+  <text x="607" y="181" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Negatives:</text>
+  <text x="607" y="193" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">all other 2(N-1) views</text>
+
+  <!-- Batch negatives diagram -->
+  <rect x="550" y="215" width="115" height="60" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="607" y="232" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Batch (N images)</text>
+  <!-- mini squares for batch -->
+  <rect x="560" y="238" width="14" height="14" rx="2" fill="#2D5A8E" opacity="0.7"/>
+  <rect x="578" y="238" width="14" height="14" rx="2" fill="#2D5A8E" opacity="0.3"/>
+  <rect x="596" y="238" width="14" height="14" rx="2" fill="#C4A87A" opacity="0.5"/>
+  <rect x="614" y="238" width="14" height="14" rx="2" fill="#C4A87A" opacity="0.5"/>
+  <rect x="632" y="238" width="14" height="14" rx="2" fill="#C4A87A" opacity="0.5"/>
+  <text x="567" y="248" font-family="Georgia, serif" font-size="7" fill="white" text-anchor="middle">+</text>
+  <text x="607" y="266" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">blue = positive pair</text>
+
+  <!-- Downstream task box -->
+  <rect x="270" y="300" width="175" height="60" rx="8" fill="#5C3D1E" opacity="0.10" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="357" y="322" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Downstream Task</text>
+  <text x="357" y="338" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Freeze f(·), train linear head</text>
+  <text x="357" y="352" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">76.5% ImageNet (ResNet-50)</text>
+
+  <!-- Arrow: encoder down to downstream -->
+  <line x1="315" y1="185" x2="315" y2="298" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr4)"/>
+
+  <!-- Large batch note -->
+  <text x="607" y="298" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">N = 4096–8192 for best results</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>
