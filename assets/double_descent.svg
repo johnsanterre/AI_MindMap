@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Double Descent Risk Curve</text>
+
+  <!-- Axes -->
+  <!-- Y axis -->
+  <line x1="90" y1="50" x2="90" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- X axis -->
+  <line x1="90" y1="320" x2="760" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Axis arrows -->
+  <polygon points="90,44 85,58 95,58" fill="#5C3D1E"/>
+  <polygon points="766,320 752,315 752,325" fill="#5C3D1E"/>
+
+  <!-- Axis labels -->
+  <text x="425" y="355" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Model Complexity / Parameters</text>
+  <text x="22" y="190" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,22,190)">Test / Train Error</text>
+
+  <!-- Interpolation threshold vertical line -->
+  <line x1="430" y1="50" x2="430" y2="320" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="430" y="44" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Interpolation</text>
+  <text x="430" y="56" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Threshold</text>
+
+  <!-- TRAIN ERROR CURVE (green/brown): goes to 0 at threshold, stays near 0 -->
+  <!-- Classical regime: decreasing from left to threshold -->
+  <!-- Modern regime: stays near 0 -->
+  <path d="M 100,240
+             C 140,230 200,210 260,190
+             C 300,175 360,155 430,320
+             L 430,318
+             C 480,310 540,305 600,302
+             C 660,300 720,299 750,298"
+        fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="7,4"/>
+
+  <!-- Note: train error in classical regime goes down but doesn't reach 0 until threshold -->
+  <!-- Redraw train error more carefully -->
+  <!-- Classical: high bias region down to near-0 at threshold -->
+  <!-- Let me redo as a clean path -->
+
+  <!-- TEST ERROR CURVE (deep red): U-shape in classical, spike at threshold, second descent -->
+  <!-- Classical regime: starts high ~260, decreases to local min ~160 around x=330, then rises sharply to spike at x=430 ~290 -->
+  <!-- Modern regime: descends from ~290 at x=430 down to ~100 at x=750 -->
+  <path d="M 100,280
+             C 140,250 190,200 250,175
+             C 300,158 340,155 375,162
+             C 395,168 412,200 430,290
+             C 448,340 452,345 460,330
+             C 490,280 540,190 600,148
+             C 660,120 710,108 750,100"
+        fill="none" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- TRAIN ERROR CURVE (cleaner) -->
+  <path d="M 100,260
+             C 150,245 200,225 270,200
+             C 330,180 390,158 430,318
+             C 460,314 500,310 560,307
+             C 630,304 700,301 750,300"
+        fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="7,4"/>
+
+  <!-- Region shading: Classical -->
+  <rect x="90" y="50" width="340" height="270" fill="#2D5A8E" fill-opacity="0.05"/>
+  <!-- Region shading: Modern -->
+  <rect x="430" y="50" width="330" height="270" fill="#7C2530" fill-opacity="0.05"/>
+
+  <!-- Region labels -->
+  <text x="260" y="78" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#2D5A8E" text-anchor="middle">Classical Regime</text>
+  <text x="590" y="78" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530" text-anchor="middle">Modern (Overparameterized)</text>
+  <text x="590" y="93" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530" text-anchor="middle">Regime</text>
+
+  <!-- Classical U-shape annotation -->
+  <path d="M 200,172 Q 200,140 240,132" fill="none" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="245" y="128" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Classical U-shape</text>
+
+  <!-- Spike annotation -->
+  <path d="M 455,290 Q 490,270 510,258" fill="none" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="514" y="254" font-family="Georgia, serif" font-size="11" fill="#7C2530">Peak: max test error</text>
+  <text x="514" y="267" font-family="Georgia, serif" font-size="11" fill="#7C2530">(memorizes noise)</text>
+
+  <!-- Second descent annotation -->
+  <path d="M 660,122 Q 670,108 690,100" fill="none" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="600" y="97" font-family="Georgia, serif" font-size="11" fill="#7C2530">Second descent</text>
+
+  <!-- Legend -->
+  <rect x="96" y="335" width="280" height="48" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <line x1="110" y1="353" x2="150" y2="353" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="158" y="357" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Test Error</text>
+  <line x1="230" y1="353" x2="270" y2="353" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="278" y="357" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Train Error</text>
+  <text x="200" y="375" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Train error → 0 at interpolation threshold</text>
+
+  <!-- Underfitting label -->
+  <text x="130" y="300" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Underfitting</text>
+
+  <!-- Optimal classical label -->
+  <text x="310" y="145" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Classical</text>
+  <text x="310" y="157" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">optimum</text>
+  <circle cx="310" cy="165" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+
+  <!-- Modern optimum -->
+  <circle cx="750" cy="100" r="4" fill="#7C2530" fill-opacity="0.7"/>
+  <text x="738" y="95" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Modern</text>
+  <text x="738" y="107" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">optimum</text>
+</svg>

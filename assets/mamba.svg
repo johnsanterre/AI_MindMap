@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-tan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ══ TITLE ══ -->
+  <text x="400" y="24" text-anchor="middle" font-size="13" fill="#5C3D1E" font-weight="bold" letter-spacing="1">MAMBA: SELECTIVE STATE SPACE MODELS</text>
+
+  <!-- ══ PANEL 1: SSM BLOCK (left, main) ══ -->
+  <!-- Panel label -->
+  <text x="195" y="48" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">SSM BLOCK</text>
+
+  <!-- x(t) input arrow -->
+  <line x1="30" y1="200" x2="78" y2="200" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arr-red)"/>
+  <text x="54" y="193" text-anchor="middle" font-size="10" fill="#7C2530" font-style="italic">x(t)</text>
+
+  <!-- Input label box -->
+  <rect x="78" y="183" width="52" height="34" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.4"/>
+  <text x="104" y="198" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">Input</text>
+  <text x="104" y="210" text-anchor="middle" font-size="8" fill="#5C3D1E">sequence</text>
+
+  <!-- Arrow from input to SSM core -->
+  <line x1="130" y1="200" x2="155" y2="200" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arr-red)"/>
+
+  <!-- SSM Core block -->
+  <rect x="155" y="155" width="140" height="90" rx="5" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="225" y="180" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">SSM Core</text>
+  <text x="225" y="196" text-anchor="middle" font-size="9" fill="#5C3D1E">h&#39;(t) = Ah(t) + Bx(t)</text>
+  <text x="225" y="210" text-anchor="middle" font-size="9" fill="#5C3D1E">y(t) = Ch(t)</text>
+  <text x="225" y="226" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">hidden state h(t)</text>
+
+  <!-- Arrow from SSM core to output -->
+  <line x1="295" y1="200" x2="320" y2="200" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+
+  <!-- Output box -->
+  <rect x="320" y="183" width="52" height="34" rx="3" fill="#EDE5D0" stroke="#2D5A8E" stroke-width="1.4"/>
+  <text x="346" y="198" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">Output</text>
+  <text x="346" y="210" text-anchor="middle" font-size="8" fill="#5C3D1E">y(t)</text>
+
+  <!-- Arrow from output right -->
+  <line x1="372" y1="200" x2="400" y2="200" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+
+  <!-- Selectivity parameters block — floats below SSM core -->
+  <rect x="155" y="270" width="140" height="70" rx="4" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.4"/>
+  <text x="225" y="289" text-anchor="middle" font-size="9.5" fill="#7C2530" font-weight="bold">Selective Parameters</text>
+  <text x="225" y="305" text-anchor="middle" font-size="9" fill="#5C3D1E">Δ(x),  B(x),  C(x)</text>
+  <text x="225" y="319" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">functions of input x</text>
+  <text x="225" y="332" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">(Mamba's key innovation)</text>
+
+  <!-- Arrow from selective params up into SSM core -->
+  <line x1="225" y1="270" x2="225" y2="248" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-red)"/>
+
+  <!-- Arrow from input down to selective params (showing input drives selectivity) -->
+  <line x1="104" y1="217" x2="155" y2="285" stroke="#C4A87A" stroke-width="1.3" stroke-dasharray="3,3" marker-end="url(#arr-tan)"/>
+  <text x="118" y="258" text-anchor="middle" font-size="7.5" fill="#C4A87A" font-style="italic">drives</text>
+
+  <!-- ══ DIVIDER ══ -->
+  <line x1="415" y1="38" x2="415" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ PANEL 2: S4 vs MAMBA comparison (top right) ══ -->
+  <text x="608" y="48" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">S4  vs  MAMBA</text>
+
+  <!-- S4 box -->
+  <rect x="430" y="58" width="160" height="100" rx="5" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="510" y="78" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">S4 (fixed SSM)</text>
+  <text x="510" y="96" text-anchor="middle" font-size="8.5" fill="#5C3D1E">A, B, C = constant</text>
+  <text x="510" y="111" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">same coefficients for</text>
+  <text x="510" y="123" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">every input token</text>
+  <text x="510" y="138" text-anchor="middle" font-size="8" fill="#6B5D4F">Good for audio/signals</text>
+  <text x="510" y="150" text-anchor="middle" font-size="8" fill="#6B5D4F">Weak for discrete language</text>
+
+  <!-- Mamba box -->
+  <rect x="610" y="58" width="168" height="100" rx="5" fill="#EDE5D0" stroke="#7C2530" stroke-width="2"/>
+  <text x="694" y="78" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">Mamba (selective)</text>
+  <text x="694" y="96" text-anchor="middle" font-size="8.5" fill="#7C2530">Δ(x), B(x), C(x) vary</text>
+  <text x="694" y="111" text-anchor="middle" font-size="8" fill="#5C3D1E" font-style="italic">per-token, input-driven</text>
+  <text x="694" y="123" text-anchor="middle" font-size="8" fill="#5C3D1E" font-style="italic">selective state updates</text>
+  <text x="694" y="138" text-anchor="middle" font-size="8" fill="#5C3D1E">Excels at language</text>
+  <text x="694" y="150" text-anchor="middle" font-size="8" fill="#5C3D1E">Excels at long sequences</text>
+
+  <!-- vs label -->
+  <text x="600" y="112" text-anchor="middle" font-size="12" fill="#C4A87A" font-weight="bold">vs</text>
+
+  <!-- ══ PANEL 3: Memory complexity comparison (bottom right) ══ -->
+  <text x="608" y="185" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">MEMORY COMPLEXITY</text>
+
+  <!-- Attention bar -->
+  <rect x="430" y="198" width="160" height="34" rx="3" fill="#D4A0A8" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="440" y="212" font-size="9.5" fill="#7C2530" font-weight="bold">Attention (Transformer)</text>
+  <text x="440" y="226" font-size="9" fill="#5C3D1E">O(L²) memory — quadratic</text>
+
+  <!-- Mamba bar -->
+  <rect x="430" y="244" width="100" height="34" rx="3" fill="#B8D0E8" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="440" y="258" font-size="9.5" fill="#2D5A8E" font-weight="bold">Mamba (SSM)</text>
+  <text x="440" y="271" font-size="9" fill="#2D5A8E">O(L) memory — linear</text>
+
+  <!-- Visual bar comparison -->
+  <text x="440" y="302" font-size="8" fill="#6B5D4F">sequence length L →</text>
+  <!-- Attention bar graphic -->
+  <rect x="430" y="308" width="160" height="12" rx="2" fill="#D4A0A8" stroke="#7C2530" stroke-width="0.8"/>
+  <text x="595" y="318" font-size="8" fill="#7C2530">L²</text>
+  <!-- Mamba bar graphic -->
+  <rect x="430" y="326" width="60" height="12" rx="2" fill="#B8D0E8" stroke="#2D5A8E" stroke-width="0.8"/>
+  <text x="495" y="336" font-size="8" fill="#2D5A8E">L</text>
+
+  <!-- ══ PANEL 4: Discretization note (bottom left) ══ -->
+  <rect x="30" y="355" width="378" height="36" rx="4" fill="#F5EDE0" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="219" y="370" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-weight="bold">Discretization (Zero-Order Hold):</text>
+  <text x="219" y="384" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Ā = e^(ΔA)   B̄ = (ΔA)⁻¹(e^(ΔA) − I)ΔB   Δ learned per token</text>
+
+  <!-- ══ PANEL 5: Parallel scan note (bottom right) ══ -->
+  <rect x="430" y="355" width="348" height="36" rx="4" fill="#F5EDE0" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="604" y="370" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-weight="bold">Hardware-Aware Parallel Scan:</text>
+  <text x="604" y="384" text-anchor="middle" font-size="8.5" fill="#5C3D1E">States fused in SRAM — no HBM round-trips for intermediate h(t)</text>
+</svg>

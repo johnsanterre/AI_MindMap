@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">In-Context Learning vs. Fine-Tuning</text>
+
+  <!-- ===== LEFT SIDE: In-Context Learning ===== -->
+  <!-- Section label -->
+  <text x="195" y="58" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">In-Context Learning (Few-Shot)</text>
+
+  <!-- Prompt box -->
+  <rect x="20" y="68" width="230" height="190" rx="6" fill="#EAF1F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="135" y="86" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Prompt</text>
+
+  <!-- Example 1 -->
+  <rect x="30" y="92" width="210" height="28" rx="3" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="40" y="105" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#5C3D1E">Ex 1:</text>
+  <text x="40" y="116" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Input: "great movie" → Output: Positive</text>
+
+  <!-- Example 2 -->
+  <rect x="30" y="126" width="210" height="28" rx="3" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="40" y="139" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#5C3D1E">Ex 2:</text>
+  <text x="40" y="150" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Input: "boring film" → Output: Negative</text>
+
+  <!-- Example 3 -->
+  <rect x="30" y="160" width="210" height="28" rx="3" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="40" y="173" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#5C3D1E">Ex 3:</text>
+  <text x="40" y="184" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Input: "loved it!" → Output: Positive</text>
+
+  <!-- Test input -->
+  <rect x="30" y="198" width="210" height="28" rx="3" fill="#FFF8E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="40" y="211" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530">Test:</text>
+  <text x="40" y="222" font-family="Georgia, serif" font-size="9" fill="#7C2530">Input: "terrible acting" → ?</text>
+
+  <!-- Arrow: Prompt → LLM -->
+  <line x1="252" y1="163" x2="290" y2="163" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- LLM box -->
+  <rect x="290" y="130" width="80" height="66" rx="8" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="330" y="158" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">LLM</text>
+  <text x="330" y="173" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">(weights</text>
+  <text x="330" y="185" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">frozen)</text>
+
+  <!-- Arrow: LLM → Output -->
+  <line x1="370" y1="163" x2="408" y2="163" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Output box -->
+  <rect x="408" y="143" width="90" height="40" rx="5" fill="#E8F5E8" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="453" y="159" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Output:</text>
+  <text x="453" y="174" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Negative</text>
+
+  <!-- No weight updates label -->
+  <rect x="20" y="270" width="478" height="24" rx="4" fill="#FFF3CD" stroke="#C4A87A" stroke-width="1"/>
+  <text x="259" y="286" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">No weight updates — inference only.</text>
+
+  <!-- ===== DIVIDER ===== -->
+  <line x1="520" y1="50" x2="520" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="520" y="42" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">vs.</text>
+
+  <!-- ===== RIGHT SIDE: Fine-Tuning ===== -->
+  <text x="660" y="58" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Fine-Tuning</text>
+
+  <!-- Pre-trained model box -->
+  <rect x="535" y="68" width="110" height="50" rx="6" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="590" y="89" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Pre-trained</text>
+  <text x="590" y="104" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">LLM</text>
+
+  <!-- Training data box -->
+  <rect x="535" y="138" width="110" height="50" rx="6" fill="#EAF1F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="590" y="158" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Training</text>
+  <text x="590" y="173" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Dataset</text>
+
+  <!-- Gradient arrow (curved, pointing to model, indicating weight update) -->
+  <path d="M 590 138 L 590 122" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrow-red)" fill="none"/>
+
+  <!-- Gradient label -->
+  <text x="600" y="132" font-family="Georgia, serif" font-size="9" fill="#7C2530">∇ loss</text>
+
+  <!-- Epochs label -->
+  <text x="590" y="210" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Multiple epochs</text>
+  <text x="590" y="222" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">backpropagation</text>
+
+  <!-- Updated model box -->
+  <rect x="535" y="235" width="110" height="50" rx="6" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="590" y="256" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Fine-tuned</text>
+  <text x="590" y="271" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">LLM</text>
+
+  <!-- Arrow from training → updated model -->
+  <line x1="590" y1="188" x2="590" y2="233" stroke="#7C2530" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-red)"/>
+
+  <!-- Weights updated label -->
+  <rect x="535" y="298" width="110" height="30" rx="4" fill="#FDE8E8" stroke="#7C2530" stroke-width="1"/>
+  <text x="590" y="313" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530" text-anchor="middle">Weights updated</text>
+  <text x="590" y="324" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">via gradient descent</text>
+
+  <!-- Right side: contrast notes -->
+  <text x="665" y="90" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Requires labeled</text>
+  <text x="665" y="103" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">  training data</text>
+  <text x="665" y="120" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Computationally</text>
+  <text x="665" y="133" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">  expensive</text>
+  <text x="665" y="150" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Permanent task</text>
+  <text x="665" y="163" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">  specialisation</text>
+  <text x="665" y="185" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">ICL advantages:</text>
+  <text x="665" y="200" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• No training data</text>
+  <text x="665" y="215" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Zero compute cost</text>
+  <text x="665" y="230" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Switch tasks</text>
+  <text x="665" y="243" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">  instantly</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="370" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">ICL: examples live in the prompt. Fine-tuning: examples update the model's parameters.</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

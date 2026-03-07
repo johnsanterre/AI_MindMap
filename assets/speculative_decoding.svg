@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Speculative Decoding</text>
+  <text x="400" y="56" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">Draft fast. Verify in parallel. Output is identical to the large model.</text>
+
+  <!-- LEFT PANEL: Draft Model -->
+  <rect x="24" y="72" width="340" height="296" rx="8" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="194" y="96" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">Draft Model (7B params)</text>
+  <text x="194" y="113" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Small &amp; fast — generates K=4 tokens serially</text>
+
+  <!-- Token generation arrows (serial) -->
+  <!-- Token 1 -->
+  <rect x="44" y="128" width="60" height="30" rx="4" fill="#2D5A8E"/>
+  <text x="74" y="148" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle">x₁</text>
+  <text x="74" y="170" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"the"</text>
+  <line x1="104" y1="143" x2="124" y2="143" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Token 2 -->
+  <rect x="124" y="128" width="60" height="30" rx="4" fill="#2D5A8E"/>
+  <text x="154" y="148" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle">x₂</text>
+  <text x="154" y="170" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"cat"</text>
+  <line x1="184" y1="143" x2="204" y2="143" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Token 3 -->
+  <rect x="204" y="128" width="60" height="30" rx="4" fill="#2D5A8E"/>
+  <text x="234" y="148" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle">x₃</text>
+  <text x="234" y="170" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"sat"</text>
+  <line x1="264" y1="143" x2="284" y2="143" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Token 4 -->
+  <rect x="284" y="128" width="60" height="30" rx="4" fill="#2D5A8E"/>
+  <text x="314" y="148" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" text-anchor="middle">x₄</text>
+  <text x="314" y="170" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"on"</text>
+
+  <!-- Serial label -->
+  <text x="194" y="196" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">4 serial forward passes (cheap)</text>
+
+  <!-- Speed indicator -->
+  <rect x="64" y="210" width="260" height="26" rx="5" fill="#2D5A8E" opacity="0.12"/>
+  <text x="194" y="228" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">⚡ Fast: milliseconds per token</text>
+
+  <!-- Draft model diagram box -->
+  <rect x="64" y="248" width="260" height="52" rx="6" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="194" y="268" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">q(x) = draft distribution</text>
+  <text x="194" y="285" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Small model, low cost per call</text>
+
+  <text x="194" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Drafts tokens with probability q(xₜ)</text>
+  <text x="194" y="344" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">No guarantee they match target model</text>
+
+  <!-- RIGHT PANEL: Target Model -->
+  <rect x="436" y="72" width="340" height="296" rx="8" fill="#F5F0E8" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="606" y="96" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">Target Model (70B params)</text>
+  <text x="606" y="113" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Large &amp; slow — verifies all 4 tokens in ONE parallel pass</text>
+
+  <!-- Parallel verification block -->
+  <rect x="456" y="128" width="300" height="50" rx="6" fill="#7C2530" opacity="0.10" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="606" y="150" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">ONE Parallel Forward Pass</text>
+  <text x="606" y="167" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Scores all K=4 draft tokens simultaneously</text>
+
+  <!-- Token results with accept/reject -->
+  <!-- x1: accepted -->
+  <rect x="456" y="194" width="58" height="52" rx="5" fill="#5C3D1E" opacity="0.13" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="485" y="213" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">x₁</text>
+  <text x="485" y="227" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"the"</text>
+  <text x="485" y="240" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle">✓</text>
+
+  <!-- x2: accepted -->
+  <rect x="524" y="194" width="58" height="52" rx="5" fill="#5C3D1E" opacity="0.13" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="553" y="213" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">x₂</text>
+  <text x="553" y="227" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"cat"</text>
+  <text x="553" y="240" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle">✓</text>
+
+  <!-- x3: accepted -->
+  <rect x="592" y="194" width="58" height="52" rx="5" fill="#5C3D1E" opacity="0.13" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="621" y="213" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">x₃</text>
+  <text x="621" y="227" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">"sat"</text>
+  <text x="621" y="240" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle">✓</text>
+
+  <!-- x4: rejected -->
+  <rect x="660" y="194" width="76" height="52" rx="5" fill="#7C2530" opacity="0.13" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="698" y="213" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">x₄</text>
+  <text x="698" y="227" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">"on"</text>
+  <text x="698" y="240" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="middle">✗</text>
+
+  <!-- Rejected label -->
+  <text x="698" y="260" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">resample from</text>
+  <text x="698" y="271" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">p'(x) ∝ max(0,p−q)</text>
+
+  <!-- Acceptance formula box -->
+  <rect x="456" y="284" width="176" height="40" rx="5" fill="#C4A87A" opacity="0.20" stroke="#C4A87A" stroke-width="1"/>
+  <text x="544" y="300" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Accept if: min(1, p(x)/q(x))</text>
+  <text x="544" y="316" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Preserves target distribution</text>
+
+  <!-- Arrow from draft to target -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+  <line x1="364" y1="200" x2="434" y2="200" stroke="#C4A87A" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow)"/>
+  <text x="399" y="193" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">K drafts</text>
+
+  <!-- Bottom speedup banner -->
+  <rect x="24" y="378" width="752" height="18" rx="4" fill="#2D5A8E" opacity="0.0"/>
+  <text x="400" y="390" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Speedup: ~4 tokens for ~1 forward pass of the large model · Output distribution is mathematically identical to target-only sampling</text>
+</svg>
