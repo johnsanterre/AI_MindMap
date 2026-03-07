@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-tan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- ══ TITLE BANNER ══ -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1.5">REASON + ACT = ReAct</text>
+
+  <!-- ══ CENTER: LLM ══ -->
+  <ellipse cx="400" cy="210" rx="62" ry="46" fill="#EDE5D0" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="205" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">LLM</text>
+  <text x="400" y="221" text-anchor="middle" font-size="9" fill="#5C3D1E">Reasoning</text>
+  <text x="400" y="233" text-anchor="middle" font-size="9" fill="#5C3D1E">Engine</text>
+
+  <!-- ══ REACT LOOP ARROWS ══ -->
+
+  <!-- (1) THOUGHT arrow: LLM → top arc label -->
+  <!-- Curved path: LLM top going left-upward, labeled Thought -->
+  <path d="M 370 166 C 330 120, 240 100, 200 140" fill="none" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arr-red)"/>
+  <text x="277" y="108" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">① Thought</text>
+  <text x="277" y="121" text-anchor="middle" font-size="8.5" fill="#5C3D1E">LLM reasons about</text>
+  <text x="277" y="132" text-anchor="middle" font-size="8.5" fill="#5C3D1E">what to do next</text>
+
+  <!-- (2) ACTION arrow: left side → tool boxes (going further left) -->
+  <path d="M 170 175 C 130 180, 110 200, 110 210" fill="none" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+  <text x="105" y="160" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">② Action</text>
+  <text x="105" y="173" text-anchor="middle" font-size="8.5" fill="#5C3D1E">calls a tool</text>
+
+  <!-- (3) OBSERVATION arrow: tool result back to LLM (bottom arc) -->
+  <path d="M 110 248 C 110 300, 250 330, 350 270" fill="none" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arr-brown)"/>
+  <text x="200" y="340" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">③ Observation</text>
+  <text x="200" y="353" text-anchor="middle" font-size="8.5" fill="#5C3D1E">tool returns result</text>
+
+  <!-- Loop-back label near LLM bottom-right -->
+  <path d="M 450 248 C 490 290, 490 150, 452 172" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-tan)"/>
+  <text x="522" y="215" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">④ loop back</text>
+  <text x="522" y="227" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">to Thought</text>
+
+  <!-- ══ TOOL BOXES ══ -->
+  <!-- Web Search -->
+  <rect x="28" y="115" width="108" height="36" rx="4" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="1.4"/>
+  <text x="82" y="130" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2D5A8E">Web Search</text>
+  <text x="82" y="143" text-anchor="middle" font-size="8" fill="#5C3D1E">retrieve live facts</text>
+
+  <!-- Code Exec -->
+  <rect x="28" y="163" width="108" height="36" rx="4" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="1.4"/>
+  <text x="82" y="178" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2D5A8E">Code Exec</text>
+  <text x="82" y="191" text-anchor="middle" font-size="8" fill="#5C3D1E">Python interpreter</text>
+
+  <!-- Memory Store -->
+  <rect x="28" y="211" width="108" height="36" rx="4" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="1.4"/>
+  <text x="82" y="226" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2D5A8E">Memory Store</text>
+  <text x="82" y="239" text-anchor="middle" font-size="8" fill="#5C3D1E">episodic retrieval</text>
+
+  <!-- APIs -->
+  <rect x="28" y="259" width="108" height="36" rx="4" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="1.4"/>
+  <text x="82" y="274" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2D5A8E">APIs</text>
+  <text x="82" y="287" text-anchor="middle" font-size="8" fill="#5C3D1E">external services</text>
+
+  <!-- bracket label for tools -->
+  <line x1="140" y1="110" x2="140" y2="300" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="148" y="210" font-size="8" fill="#6B5D4F" font-style="italic">Tools</text>
+
+  <!-- ══ RIGHT SIDE: TRAJECTORY EXAMPLE ══ -->
+  <text x="595" y="42" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">EXAMPLE TRAJECTORY</text>
+  <text x="595" y="55" text-anchor="middle" font-size="8.5" fill="#5C3D1E" font-style="italic">Task: What is the population of France × 2?</text>
+
+  <!-- Cycle 1 -->
+  <rect x="488" y="64" width="215" height="28" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="595" y="75" text-anchor="middle" font-size="8" font-weight="bold" fill="#7C2530">Thought 1:</text>
+  <text x="595" y="86" text-anchor="middle" font-size="8" fill="#5C3D1E">I need the population of France.</text>
+
+  <line x1="595" y1="92" x2="595" y2="100" stroke="#2D5A8E" stroke-width="1.4" marker-end="url(#arr-blue)"/>
+
+  <rect x="488" y="100" width="215" height="28" rx="3" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="595" y="111" text-anchor="middle" font-size="8" font-weight="bold" fill="#2D5A8E">Action 1:</text>
+  <text x="595" y="122" text-anchor="middle" font-size="8" fill="#5C3D1E">Search["population of France"]</text>
+
+  <line x1="595" y1="128" x2="595" y2="136" stroke="#5C3D1E" stroke-width="1.4" marker-end="url(#arr-brown)"/>
+
+  <rect x="488" y="136" width="215" height="28" rx="3" fill="#F0EBE3" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="595" y="147" text-anchor="middle" font-size="8" font-weight="bold" fill="#5C3D1E">Obs 1:</text>
+  <text x="595" y="158" text-anchor="middle" font-size="8" fill="#5C3D1E">Result: 68 million people.</text>
+
+  <line x1="595" y1="164" x2="595" y2="172" stroke="#7C2530" stroke-width="1.4" marker-end="url(#arr-red)"/>
+
+  <!-- Cycle 2 -->
+  <rect x="488" y="172" width="215" height="28" rx="3" fill="#EDE5D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="595" y="183" text-anchor="middle" font-size="8" font-weight="bold" fill="#7C2530">Thought 2:</text>
+  <text x="595" y="194" text-anchor="middle" font-size="8" fill="#5C3D1E">Now compute 68M × 2.</text>
+
+  <line x1="595" y1="200" x2="595" y2="208" stroke="#2D5A8E" stroke-width="1.4" marker-end="url(#arr-blue)"/>
+
+  <rect x="488" y="208" width="215" height="28" rx="3" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="595" y="219" text-anchor="middle" font-size="8" font-weight="bold" fill="#2D5A8E">Action 2:</text>
+  <text x="595" y="230" text-anchor="middle" font-size="8" fill="#5C3D1E">Calculator[68000000 × 2]</text>
+
+  <line x1="595" y1="236" x2="595" y2="244" stroke="#5C3D1E" stroke-width="1.4" marker-end="url(#arr-brown)"/>
+
+  <rect x="488" y="244" width="215" height="28" rx="3" fill="#F0EBE3" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="595" y="255" text-anchor="middle" font-size="8" font-weight="bold" fill="#5C3D1E">Obs 2:</text>
+  <text x="595" y="266" text-anchor="middle" font-size="8" fill="#5C3D1E">Result: 136,000,000</text>
+
+  <line x1="595" y1="272" x2="595" y2="280" stroke="#7C2530" stroke-width="1.4" marker-end="url(#arr-red)"/>
+
+  <!-- Final Answer -->
+  <rect x="488" y="280" width="215" height="32" rx="4" fill="#EDE5D0" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="595" y="294" text-anchor="middle" font-size="9" font-weight="bold" fill="#5C3D1E">Answer: 136 million</text>
+  <text x="595" y="306" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">goal achieved — loop exits</text>
+
+  <!-- ══ BOTTOM CAPTION ══ -->
+  <text x="310" y="384" text-anchor="middle" font-size="9" fill="#6B5D4F">
+    Each cycle: Thought → Action → Observation feeds back into the LLM's context until the goal is reached
+  </text>
+</svg>

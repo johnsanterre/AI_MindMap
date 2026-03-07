@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E" text-anchor="middle">The Lottery Ticket Hypothesis</text>
+
+  <!-- ============================================================ -->
+  <!-- LEFT: Dense Network -->
+  <!-- ============================================================ -->
+  <text x="112" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Dense Network</text>
+  <text x="112" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(original init θ₀)</text>
+
+  <!-- Nodes: layer 1 (input) -->
+  <!-- 4 nodes at x=50, y = 110, 155, 200, 245 -->
+  <!-- layer 2 hidden: x=110, y = 100, 135, 170, 205, 240, 275 -->
+  <!-- layer 3 output: x=170, y = 140, 185, 230 -->
+
+  <!-- All connections (dense, various greys / active colours) -->
+  <!-- L1->L2: draw most as grey (will be pruned), a few as coloured -->
+  <!-- Grey connections (weak, to be pruned) -->
+  <g stroke="#C4A87A" stroke-width="1" stroke-dasharray="none" opacity="0.45">
+    <line x1="58" y1="110" x2="100" y2="100"/>
+    <line x1="58" y1="110" x2="100" y2="135"/>
+    <line x1="58" y1="110" x2="100" y2="205"/>
+    <line x1="58" y1="110" x2="100" y2="240"/>
+    <line x1="58" y1="155" x2="100" y2="100"/>
+    <line x1="58" y1="155" x2="100" y2="170"/>
+    <line x1="58" y1="155" x2="100" y2="240"/>
+    <line x1="58" y1="155" x2="100" y2="275"/>
+    <line x1="58" y1="200" x2="100" y2="135"/>
+    <line x1="58" y1="200" x2="100" y2="170"/>
+    <line x1="58" y1="200" x2="100" y2="205"/>
+    <line x1="58" y1="200" x2="100" y2="275"/>
+    <line x1="58" y1="245" x2="100" y2="100"/>
+    <line x1="58" y1="245" x2="100" y2="135"/>
+    <line x1="58" y1="245" x2="100" y2="170"/>
+    <line x1="58" y1="245" x2="100" y2="240"/>
+    <!-- L2->L3 grey -->
+    <line x1="108" y1="100" x2="160" y2="140"/>
+    <line x1="108" y1="100" x2="160" y2="230"/>
+    <line x1="108" y1="135" x2="160" y2="185"/>
+    <line x1="108" y1="135" x2="160" y2="230"/>
+    <line x1="108" y1="170" x2="160" y2="140"/>
+    <line x1="108" y1="205" x2="160" y2="140"/>
+    <line x1="108" y1="205" x2="160" y2="230"/>
+    <line x1="108" y1="240" x2="160" y2="185"/>
+    <line x1="108" y1="240" x2="160" y2="230"/>
+    <line x1="108" y1="275" x2="160" y2="140"/>
+    <line x1="108" y1="275" x2="160" y2="185"/>
+  </g>
+  <!-- Active (surviving) connections -->
+  <g stroke="#2D5A8E" stroke-width="2" opacity="0.85">
+    <line x1="58" y1="155" x2="100" y2="135"/>
+    <line x1="58" y1="200" x2="100" y2="240"/>
+    <line x1="58" y1="245" x2="100" y2="275"/>
+    <line x1="108" y1="170" x2="160" y2="185"/>
+    <line x1="108" y1="170" x2="160" y2="230"/>
+    <line x1="108" y1="275" x2="160" y2="230"/>
+  </g>
+
+  <!-- Layer 1 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="58" cy="110" r="8"/>
+    <circle cx="58" cy="155" r="8"/>
+    <circle cx="58" cy="200" r="8"/>
+    <circle cx="58" cy="245" r="8"/>
+  </g>
+  <!-- Layer 2 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="108" cy="100" r="8"/>
+    <circle cx="108" cy="135" r="8"/>
+    <circle cx="108" cy="170" r="8"/>
+    <circle cx="108" cy="205" r="8"/>
+    <circle cx="108" cy="240" r="8"/>
+    <circle cx="108" cy="275" r="8"/>
+  </g>
+  <!-- Layer 3 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="162" cy="140" r="8"/>
+    <circle cx="162" cy="185" r="8"/>
+    <circle cx="162" cy="230" r="8"/>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PRUNING ARROW (center-left) -->
+  <!-- ============================================================ -->
+  <text x="240" y="168" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">magnitude</text>
+  <text x="240" y="183" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">pruning</text>
+  <!-- Arrow -->
+  <line x1="185" y1="185" x2="295" y2="185" stroke="#7C2530" stroke-width="2.5"/>
+  <polygon points="295,180 305,185 295,190" fill="#7C2530"/>
+
+  <!-- small label: remove |θ_i| < τ -->
+  <text x="240" y="200" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">remove |θᵢ| &lt; τ</text>
+
+  <!-- ============================================================ -->
+  <!-- CENTER: Sparse / Pruned network (greyed nodes removed) -->
+  <!-- ============================================================ -->
+  <text x="390" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">After Pruning</text>
+  <text x="390" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(reset to θ₀)</text>
+
+  <!-- Grey dead nodes -->
+  <g fill="#D4C5A9" stroke="#C4A87A" stroke-width="1.5">
+    <circle cx="352" cy="100" r="8"/>
+    <circle cx="352" cy="205" r="8"/>
+    <circle cx="352" cy="240" r="8"/>
+    <!-- output dead -->
+    <circle cx="430" cy="140" r="8"/>
+  </g>
+  <!-- Surviving connections (sparse) -->
+  <g stroke="#2D5A8E" stroke-width="2" opacity="0.85">
+    <line x1="322" y1="155" x2="352" y2="135"/>
+    <line x1="322" y1="200" x2="352" y2="170"/>
+    <line x1="322" y1="245" x2="352" y2="275"/>
+    <line x1="360" y1="135" x2="430" y2="185"/>
+    <line x1="360" y1="170" x2="430" y2="185"/>
+    <line x1="360" y1="170" x2="430" y2="230"/>
+    <line x1="360" y1="275" x2="430" y2="230"/>
+  </g>
+  <!-- Surviving nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="322" cy="155" r="8"/>
+    <circle cx="322" cy="200" r="8"/>
+    <circle cx="322" cy="245" r="8"/>
+    <circle cx="352" cy="135" r="8"/>
+    <circle cx="352" cy="170" r="8"/>
+    <circle cx="352" cy="275" r="8"/>
+    <circle cx="430" cy="185" r="8"/>
+    <circle cx="430" cy="230" r="8"/>
+  </g>
+  <!-- Dead node placeholders (input) -->
+  <g fill="#D4C5A9" stroke="#C4A87A" stroke-width="1.5">
+    <circle cx="322" cy="110" r="8"/>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- TWO PATHS DOWNWARD from pruned network -->
+  <!-- ============================================================ -->
+
+  <!-- Fork arrow down -->
+  <line x1="390" y1="300" x2="390" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="390" y1="320" x2="248" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="390" y1="320" x2="550" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- down arrows -->
+  <line x1="248" y1="320" x2="248" y2="340" stroke="#7C2530" stroke-width="2"/>
+  <polygon points="243,340 248,350 253,340" fill="#7C2530"/>
+  <line x1="550" y1="320" x2="550" y2="340" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="545,340 550,350 555,340" fill="#5C3D1E"/>
+
+  <!-- Left branch: random reinit → FAILS -->
+  <rect x="170" y="350" width="158" height="34" rx="5" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="249" y="365" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Random reinit → Fails</text>
+  <text x="249" y="379" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">accuracy drops significantly</text>
+
+  <!-- Right branch: original init → WINS -->
+  <rect x="472" y="350" width="158" height="34" rx="5" fill="#5C3D1E" opacity="0.12" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="551" y="365" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Original init (θ₀) → Wins</text>
+  <text x="551" y="379" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">matches full network accuracy</text>
+
+  <!-- label above fork -->
+  <text x="390" y="312" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">retrain sparse subnetwork from...</text>
+
+  <!-- Connect pruned to fork -->
+  <line x1="390" y1="280" x2="390" y2="300" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="4,2"/>
+  <!-- approx centre of pruned network -->
+
+  <!-- ============================================================ -->
+  <!-- RIGHT: Winning ticket -->
+  <!-- ============================================================ -->
+  <text x="660" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Winning Ticket</text>
+  <text x="660" y="78" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">sparse + original init θ₀</text>
+
+  <!-- Sparse winning ticket connections -->
+  <g stroke="#7C2530" stroke-width="2.5" opacity="0.9">
+    <line x1="615" y1="155" x2="660" y2="135"/>
+    <line x1="615" y1="200" x2="660" y2="170"/>
+    <line x1="615" y1="245" x2="660" y2="275"/>
+    <line x1="668" y1="135" x2="740" y2="185"/>
+    <line x1="668" y1="170" x2="740" y2="185"/>
+    <line x1="668" y1="170" x2="740" y2="230"/>
+    <line x1="668" y1="275" x2="740" y2="230"/>
+  </g>
+  <!-- Winning ticket nodes (gold outline) -->
+  <g fill="#7C2530" stroke="#C4A87A" stroke-width="2">
+    <circle cx="615" cy="155" r="8"/>
+    <circle cx="615" cy="200" r="8"/>
+    <circle cx="615" cy="245" r="8"/>
+    <circle cx="660" cy="135" r="8"/>
+    <circle cx="660" cy="170" r="8"/>
+    <circle cx="660" cy="275" r="8"/>
+    <circle cx="740" cy="185" r="8"/>
+    <circle cx="740" cy="230" r="8"/>
+  </g>
+
+  <!-- Arrow from center to winning ticket -->
+  <line x1="455" y1="185" x2="595" y2="185" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="595,180 605,185 595,190" fill="#5C3D1E"/>
+  <text x="527" y="176" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">retrain from θ₀</text>
+
+  <!-- ============================================================ -->
+  <!-- Key: bottom-right annotation -->
+  <!-- ============================================================ -->
+  <text x="660" y="295" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">≈10–20% of original size</text>
+  <text x="660" y="311" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">matches or exceeds full network accuracy</text>
+
+  <!-- Legend -->
+  <line x1="30" y1="308" x2="55" y2="308" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="60" y="312" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">active weight</text>
+  <line x1="30" y1="324" x2="55" y2="324" stroke="#C4A87A" stroke-width="1.5" opacity="0.5"/>
+  <text x="60" y="328" font-family="Georgia, serif" font-size="10" fill="#888">pruned weight</text>
+  <circle cx="38" cy="342" r="6" fill="#7C2530" stroke="#C4A87A" stroke-width="2"/>
+  <text x="50" y="346" font-family="Georgia, serif" font-size="10" fill="#7C2530"> winning ticket node</text>
+</svg>
