@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#7C2530">Bayesian Network</text>
+  <text x="400" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Directed Acyclic Graph with Conditional Probability Tables</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="bn-arr" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L10,4 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- DAG Nodes -->
+  <!-- Season -->
+  <circle cx="200" cy="120" r="36" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="200" y="117" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Season</text>
+  <text x="200" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">S</text>
+
+  <!-- Flu -->
+  <circle cx="120" cy="230" r="36" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="120" y="227" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Flu</text>
+  <text x="120" y="244" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">F</text>
+
+  <!-- Allergy -->
+  <circle cx="280" cy="230" r="36" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="280" y="227" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Allergy</text>
+  <text x="280" y="244" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">A</text>
+
+  <!-- Sneeze -->
+  <circle cx="200" cy="340" r="36" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="200" y="337" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Sneeze</text>
+  <text x="200" y="354" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Sn</text>
+
+  <!-- Edges: Season -> Flu -->
+  <line x1="174" y1="148" x2="140" y2="200" stroke="#2D5A8E" stroke-width="2" marker-end="url(#bn-arr)"/>
+  <!-- Season -> Allergy -->
+  <line x1="226" y1="148" x2="260" y2="200" stroke="#2D5A8E" stroke-width="2" marker-end="url(#bn-arr)"/>
+  <!-- Flu -> Sneeze -->
+  <line x1="140" y1="262" x2="178" y2="312" stroke="#2D5A8E" stroke-width="2" marker-end="url(#bn-arr)"/>
+  <!-- Allergy -> Sneeze -->
+  <line x1="260" y1="262" x2="222" y2="312" stroke="#2D5A8E" stroke-width="2" marker-end="url(#bn-arr)"/>
+
+  <!-- CPT for Season (prior) -->
+  <rect x="440" y="75" width="160" height="60" rx="6" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="520" y="93" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">P(Season)</text>
+  <line x1="440" y1="98" x2="600" y2="98" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="480" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Winter: 0.25</text>
+  <text x="560" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Spring: 0.25</text>
+  <text x="520" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Summer: 0.25  Fall: 0.25</text>
+
+  <!-- CPT for Flu -->
+  <rect x="440" y="155" width="160" height="65" rx="6" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="520" y="173" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">P(Flu | Season)</text>
+  <line x1="440" y1="178" x2="600" y2="178" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="520" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Winter: 0.8</text>
+  <text x="520" y="212" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Summer: 0.1</text>
+
+  <!-- CPT for Sneeze -->
+  <rect x="440" y="240" width="200" height="75" rx="6" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="540" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">P(Sneeze | Flu, Allergy)</text>
+  <line x1="440" y1="263" x2="640" y2="263" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="540" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">F=T, A=T: 0.99</text>
+  <text x="540" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">F=T, A=F: 0.90</text>
+  <text x="540" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">F=F, A=F: 0.01</text>
+
+  <!-- Joint factorization formula -->
+  <rect x="440" y="335" width="340" height="45" rx="6" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="610" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">Joint Factorization:</text>
+  <text x="610" y="373" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">P(S,F,A,Sn) = P(S) P(F|S) P(A|S) P(Sn|F,A)</text>
+</svg>

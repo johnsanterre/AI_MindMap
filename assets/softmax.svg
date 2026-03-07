@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Softmax: From Logits to Probabilities</text>
+
+  <!-- ======= LEFT PANEL: Raw Logits ======= -->
+  <rect x="40" y="55" width="310" height="300" rx="8" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="195" y="80" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530" text-anchor="middle">Raw Logits</text>
+  <text x="195" y="98" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Unbounded real numbers</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="310" x2="320" y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="80" y1="310" x2="80" y2="115" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="73" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0</text>
+  <text x="73" y="245" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">1</text>
+  <text x="73" y="180" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">2</text>
+  <text x="73" y="119" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">3</text>
+
+  <!-- Bars: logits [0.5, 2.0, 3.1, 0.2] — scale: 65px per unit -->
+  <!-- Class A: z=0.5, height=32.5 -->
+  <rect x="95" y="277" width="42" height="33" fill="#2D5A8E" opacity="0.85"/>
+  <text x="116" y="272" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">0.5</text>
+
+  <!-- Class B: z=2.0, height=130 -->
+  <rect x="150" y="180" width="42" height="130" fill="#2D5A8E" opacity="0.85"/>
+  <text x="171" y="175" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">2.0</text>
+
+  <!-- Class C: z=3.1, height=201.5 -->
+  <rect x="205" y="109" width="42" height="201" fill="#7C2530" opacity="0.9"/>
+  <text x="226" y="104" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">3.1</text>
+
+  <!-- Class D: z=0.2, height=13 -->
+  <rect x="260" y="297" width="42" height="13" fill="#2D5A8E" opacity="0.85"/>
+  <text x="281" y="292" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">0.2</text>
+
+  <!-- X-axis labels -->
+  <text x="116" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">A</text>
+  <text x="171" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">B</text>
+  <text x="226" y="326" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">C</text>
+  <text x="281" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">D</text>
+
+  <!-- ======= CENTER: Arrow with formula ======= -->
+  <line x1="365" y1="210" x2="425" y2="210" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+  </defs>
+  <text x="395" y="195" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">e^z / Σe^z</text>
+  <text x="395" y="235" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">softmax</text>
+
+  <!-- ======= RIGHT PANEL: Probabilities ======= -->
+  <rect x="440" y="55" width="320" height="300" rx="8" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="600" y="80" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Probabilities</text>
+  <text x="600" y="98" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Sum to 1.0, all positive</text>
+
+  <!-- Axes -->
+  <line x1="480" y1="310" x2="730" y2="310" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="480" y1="310" x2="480" y2="115" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="473" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0.0</text>
+  <text x="473" y="214" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0.5</text>
+  <text x="473" y="119" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">1.0</text>
+  <!-- Gridlines -->
+  <line x1="480" y1="214" x2="730" y2="214" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+  <!-- Bars: softmax([0.5, 2.0, 3.1, 0.2]) ≈ [0.06, 0.26, 0.62, 0.04]
+       scale: 195px = 1.0 -->
+  <!-- Class A: p=0.06, height=12 -->
+  <rect x="497" y="298" width="42" height="12" fill="#2D5A8E" opacity="0.85"/>
+  <text x="518" y="293" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">.06</text>
+
+  <!-- Class B: p=0.26, height=51 -->
+  <rect x="555" y="259" width="42" height="51" fill="#2D5A8E" opacity="0.85"/>
+  <text x="576" y="254" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">.26</text>
+
+  <!-- Class C: p=0.62, height=121 -->
+  <rect x="613" y="189" width="42" height="121" fill="#7C2530" opacity="0.9"/>
+  <text x="634" y="184" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">.62</text>
+
+  <!-- Class D: p=0.04, height=8 -->
+  <rect x="671" y="302" width="42" height="8" fill="#2D5A8E" opacity="0.85"/>
+  <text x="692" y="297" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">.04</text>
+
+  <!-- X-axis labels -->
+  <text x="518" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">A</text>
+  <text x="576" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">B</text>
+  <text x="634" y="326" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">C</text>
+  <text x="692" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">D</text>
+
+  <!-- Sum annotation -->
+  <text x="600" y="345" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">Σ = 1.0  (valid probability distribution)</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="390" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Exponentiates, then normalizes — preserves ranking, enforces competition</text>
+</svg>

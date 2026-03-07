@@ -1,0 +1,71 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Evidence Lower Bound (ELBO)</text>
+
+  <!-- Main vertical bar: log p(x) -->
+  <rect x="120" y="60" width="80" height="280" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="2" rx="4"/>
+  <text x="160" y="55" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">log p(x)</text>
+
+  <!-- ELBO portion (lower, larger) -->
+  <rect x="125" y="150" width="70" height="185" fill="#2D5A8E" fill-opacity="0.35" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
+  <text x="160" y="255" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">ELBO</text>
+
+  <!-- KL gap (upper, smaller) -->
+  <rect x="125" y="65" width="70" height="80" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="1.5" rx="3"/>
+  <text x="160" y="110" text-anchor="middle" fill="#7C2530" font-size="12" font-weight="bold">KL gap</text>
+
+  <!-- Brace and decomposition arrow -->
+  <line x1="210" y1="65" x2="240" y2="65" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="210" y1="340" x2="240" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="240" y1="65" x2="240" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="240" y1="200" x2="270" y2="200" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowBrown)"/>
+
+  <defs>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Decomposition formulas -->
+  <text x="290" y="105" fill="#7C2530" font-size="13">KL( q(z|x) ‖ p(z|x) )</text>
+  <text x="290" y="125" fill="#7C2530" font-size="11">always ≥ 0</text>
+
+  <text x="290" y="180" fill="#5C3D1E" font-size="14" font-weight="bold">log p(x) = ELBO + KL</text>
+
+  <text x="290" y="230" fill="#2D5A8E" font-size="13">ELBO = E_q[ log p(x,z) - log q(z|x) ]</text>
+  <text x="290" y="255" fill="#2D5A8E" font-size="12">= E_q[ log p(x|z) ] - KL( q(z|x) ‖ p(z) )</text>
+
+  <!-- Lower box: two components -->
+  <rect x="290" y="290" width="200" height="45" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1" rx="4"/>
+  <text x="390" y="308" text-anchor="middle" fill="#2D5A8E" font-size="11" font-weight="bold">Reconstruction</text>
+  <text x="390" y="325" text-anchor="middle" fill="#2D5A8E" font-size="11">E_q[ log p(x|z) ]</text>
+
+  <rect x="510" y="290" width="200" height="45" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1" rx="4"/>
+  <text x="610" y="308" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">Regularization</text>
+  <text x="610" y="325" text-anchor="middle" fill="#7C2530" font-size="11">-KL( q(z|x) ‖ p(z) )</text>
+
+  <!-- Minus sign between boxes -->
+  <text x="500" y="315" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">+</text>
+
+  <!-- Key insight callout -->
+  <text x="290" y="370" fill="#5C3D1E" font-size="12" font-style="italic">Maximizing ELBO ≈ maximizing log p(x) when KL gap → 0</text>
+
+  <!-- Right side diagram: encoder/decoder -->
+  <rect x="590" y="60" width="80" height="35" fill="#C4A87A" fill-opacity="0.3" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="630" y="82" text-anchor="middle" fill="#5C3D1E" font-size="12">x (data)</text>
+
+  <line x1="630" y1="95" x2="630" y2="120" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowBrown)"/>
+  <text x="660" y="112" fill="#2D5A8E" font-size="10">q(z|x)</text>
+
+  <ellipse cx="630" cy="145" rx="35" ry="20" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="630" y="150" text-anchor="middle" fill="#2D5A8E" font-size="12">z</text>
+
+  <line x1="630" y1="165" x2="630" y2="195" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowBrown)"/>
+  <text x="660" y="185" fill="#7C2530" font-size="10">p(x|z)</text>
+
+  <rect x="590" y="200" width="80" height="35" fill="#C4A87A" fill-opacity="0.3" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="630" y="222" text-anchor="middle" fill="#5C3D1E" font-size="12">x̂ (recon)</text>
+</svg>

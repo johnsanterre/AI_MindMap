@@ -1,99 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" style="font-family:Georgia,serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
   <defs>
-    <marker id="arr-path" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
-    </marker>
-    <marker id="arr-grad" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
-    </marker>
-    <marker id="arr-axis" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
-      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
     </marker>
   </defs>
 
-  <!-- Background -->
-  <rect x="1" y="1" width="598" height="308" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
 
-  <!-- ══ PANEL 1: Loss surface contours ══ -->
-  <text x="145" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">LOSS SURFACE (CONTOURS)</text>
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Gradient Descent on a Loss Landscape</text>
 
-  <!-- Contour fills — outer to inner -->
-  <ellipse cx="148" cy="158" rx="108" ry="36" fill="#F2EAD8" stroke="#E2D5BC" stroke-width="1"/>
-  <ellipse cx="148" cy="158" rx="84"  ry="28" fill="#E9DEC5" stroke="#D5C4A5" stroke-width="1"/>
-  <ellipse cx="148" cy="158" rx="61"  ry="20" fill="#DCCFA8" stroke="#C4B085" stroke-width="1"/>
-  <ellipse cx="148" cy="158" rx="39"  ry="13" fill="#CAB882" stroke="#A89058" stroke-width="1"/>
-  <ellipse cx="148" cy="158" rx="18"  ry="6"  fill="#B09050" stroke="#8A7038" stroke-width="1"/>
+  <!-- Contour lines representing loss surface -->
+  <ellipse cx="390" cy="275" rx="320" ry="140" fill="none" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <ellipse cx="390" cy="275" rx="260" ry="115" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <ellipse cx="390" cy="275" rx="200" ry="90" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <ellipse cx="390" cy="275" rx="140" ry="65" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <ellipse cx="390" cy="275" rx="80" ry="40" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <ellipse cx="390" cy="275" rx="30" ry="15" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
 
-  <!-- Minimum -->
-  <circle cx="148" cy="158" r="4" fill="#7C2530"/>
-  <text x="154" y="150" font-size="9" fill="#7C2530" font-style="italic">L*</text>
+  <!-- Global minimum point -->
+  <circle cx="390" cy="275" r="5" fill="#7C2530"/>
+  <text x="390" y="305" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">Global Minimum</text>
 
-  <!-- Descent path -->
-  <polyline
-    points="52,86 176,104 124,118 156,130 143,139 148,145 147,150 148,153 148,156 148,158"
-    fill="none" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-path)"/>
+  <!-- Gradient descent path with arrows -->
+  <circle cx="148" cy="178" r="6" fill="#7C2530"/>
+  <text x="135" y="166" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">Start</text>
 
-  <!-- Step dots -->
-  <circle cx="52"  cy="86"  r="4"   fill="#7C2530"/>
-  <circle cx="176" cy="104" r="3.5" fill="#7C2530" opacity="0.85"/>
-  <circle cx="124" cy="118" r="3"   fill="#7C2530" opacity="0.80"/>
-  <circle cx="156" cy="130" r="3"   fill="#7C2530" opacity="0.75"/>
-  <circle cx="143" cy="139" r="2.5" fill="#7C2530" opacity="0.70"/>
-  <circle cx="148" cy="145" r="2.5" fill="#7C2530" opacity="0.65"/>
-  <circle cx="147" cy="150" r="2"   fill="#7C2530" opacity="0.60"/>
-  <circle cx="148" cy="153" r="2"   fill="#7C2530" opacity="0.55"/>
-  <circle cx="148" cy="156" r="2"   fill="#7C2530" opacity="0.50"/>
+  <!-- Step 1 -->
+  <line x1="154" y1="182" x2="200" y2="205" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <circle cx="205" cy="208" r="4" fill="#7C2530"/>
 
-  <!-- Negative gradient arrow at θ₀ -->
-  <line x1="52" y1="86" x2="68" y2="97"
-        stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arr-grad)"/>
+  <!-- Step 2 -->
+  <line x1="210" y1="211" x2="255" y2="230" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <circle cx="260" cy="232" r="4" fill="#7C2530"/>
 
-  <!-- Labels -->
-  <text x="30"  y="80"  font-size="9"   fill="#5C3D1E" font-weight="bold">θ₀</text>
-  <text x="20"  y="92"  font-size="8.5" fill="#2D5A8E" font-style="italic">−∇L</text>
-  <text x="100" y="90"  font-size="8"   fill="#7C2530">η ‖∇L‖</text>
+  <!-- Step 3 -->
+  <line x1="265" y1="235" x2="305" y2="248" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <circle cx="309" cy="250" r="4" fill="#7C2530"/>
 
-  <!-- Step-size hint line -->
-  <line x1="52" y1="86" x2="176" y2="104"
-        stroke="#7C2530" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.35"/>
+  <!-- Step 4 -->
+  <line x1="314" y1="252" x2="342" y2="260" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <circle cx="346" cy="262" r="3.5" fill="#7C2530"/>
 
-  <!-- Axis labels -->
-  <text x="148" y="297" text-anchor="middle" font-size="9" fill="#6B5D4F">θ₁</text>
-  <text x="16"  y="160" font-size="9"   fill="#6B5D4F" text-anchor="middle"
-        transform="rotate(-90,16,160)">θ₂</text>
+  <!-- Step 5 (converging) -->
+  <line x1="350" y1="264" x2="370" y2="270" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <circle cx="373" cy="271" r="3" fill="#7C2530"/>
 
-  <!-- Panel divider -->
-  <line x1="292" y1="26" x2="292" y2="293" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+  <!-- Step 6 -->
+  <line x1="376" y1="272" x2="386" y2="274" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
 
-  <!-- ══ PANEL 2: Loss vs iterations ══ -->
-  <text x="443" y="18" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">LOSS vs ITERATIONS</text>
+  <!-- Local minimum -->
+  <ellipse cx="600" cy="248" rx="28" ry="18" fill="#C4A87A" fill-opacity="0.2" stroke="#C4A87A" stroke-width="1.5"/>
+  <circle cx="600" cy="248" r="4" fill="#5C3D1E"/>
+  <text x="600" y="228" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Local Minimum</text>
 
-  <!-- Axes -->
-  <line x1="328" y1="270" x2="580" y2="270" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
-  <line x1="328" y1="270" x2="328" y2="30"  stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+  <!-- Saddle point -->
+  <circle cx="470" cy="215" r="3" fill="#5C3D1E" fill-opacity="0.5"/>
+  <text x="470" y="205" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Saddle Point</text>
 
-  <!-- Axis labels -->
-  <text x="455" y="287" text-anchor="middle" font-size="9.5" fill="#6B5D4F">iterations</text>
-  <text x="313" y="152" font-size="9.5"   fill="#6B5D4F" text-anchor="middle"
-        transform="rotate(-90,313,152)">loss</text>
+  <!-- Annotations -->
+  <text x="680" y="78" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">Step size =</text>
+  <text x="680" y="96" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-style="italic">learning rate</text>
 
-  <!-- Area fill under curve -->
-  <polygon
-    points="328,35 350,60 372,83 395,108 417,129 440,148 462,167 485,184 507,202 530,220 552,241 575,268 575,270 328,270"
-    fill="#7C2530" opacity="0.07"/>
+  <text x="185" y="140" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">Negative gradient</text>
+  <text x="185" y="155" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">points downhill</text>
 
-  <!-- Loss curve -->
-  <polyline
-    points="328,35 350,60 372,83 395,108 417,129 440,148 462,167 485,184 507,202 530,220 552,241 575,268"
-    fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="680" y="170" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle">Contour lines =</text>
+  <text x="680" y="187" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle">equal loss</text>
 
-  <!-- Convergence annotation -->
-  <line x1="530" y1="220" x2="530" y2="262" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="2,2"/>
-  <text x="533" y="260" font-size="8" fill="#6B5D4F">converging</text>
+  <text x="680" y="360" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">Inner rings = lower loss</text>
 
-  <!-- Bottom caption -->
-  <text x="300" y="302" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
-    θ ← θ − η ∇L(θ)  ·  each step follows the steepest downhill direction
-  </text>
+  <!-- Update rule -->
+  <text x="400" y="380" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-style="italic">w = w - lr * dL/dw</text>
 </svg>

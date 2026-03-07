@@ -1,0 +1,96 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="38" text-anchor="middle" fill="#5C3D1E" font-size="20" font-weight="bold">Adversarial Examples: Imperceptible Perturbations, Dramatic Failures</text>
+
+  <!-- Clean image box -->
+  <rect x="45" y="70" width="180" height="180" rx="10" fill="#EEF2F7" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Stylized panda drawing -->
+  <circle cx="135" cy="140" r="38" fill="#fff" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="118" cy="128" r="8" fill="#2D5A8E"/>
+  <circle cx="152" cy="128" r="8" fill="#2D5A8E"/>
+  <ellipse cx="135" cy="148" rx="6" ry="4" fill="#2D5A8E"/>
+  <circle cx="110" cy="110" r="12" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="160" cy="110" r="12" fill="#2D5A8E" opacity="0.6"/>
+  <text x="135" y="200" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">Clean Image</text>
+  <text x="135" y="222" text-anchor="middle" fill="#2D5A8E" font-size="13">Model: "panda"</text>
+  <text x="135" y="240" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">57.7% confidence</text>
+
+  <!-- Plus sign -->
+  <text x="252" y="168" text-anchor="middle" fill="#5C3D1E" font-size="42" font-weight="bold">+</text>
+
+  <!-- Perturbation box -->
+  <rect x="280" y="70" width="180" height="180" rx="10" fill="#FDF6EE" stroke="#C4A87A" stroke-width="2"/>
+  <!-- Noise grid -->
+  <g opacity="0.7">
+    <rect x="300" y="100" width="10" height="10" fill="#7C2530" opacity="0.3"/>
+    <rect x="315" y="100" width="10" height="10" fill="#7C2530" opacity="0.7"/>
+    <rect x="330" y="100" width="10" height="10" fill="#7C2530" opacity="0.2"/>
+    <rect x="345" y="100" width="10" height="10" fill="#7C2530" opacity="0.5"/>
+    <rect x="360" y="100" width="10" height="10" fill="#7C2530" opacity="0.4"/>
+    <rect x="375" y="100" width="10" height="10" fill="#7C2530" opacity="0.6"/>
+    <rect x="390" y="100" width="10" height="10" fill="#7C2530" opacity="0.3"/>
+    <rect x="405" y="100" width="10" height="10" fill="#7C2530" opacity="0.5"/>
+    <rect x="420" y="100" width="10" height="10" fill="#7C2530" opacity="0.2"/>
+    <rect x="435" y="100" width="10" height="10" fill="#7C2530" opacity="0.7"/>
+    <rect x="300" y="115" width="10" height="10" fill="#7C2530" opacity="0.5"/>
+    <rect x="315" y="115" width="10" height="10" fill="#7C2530" opacity="0.2"/>
+    <rect x="330" y="115" width="10" height="10" fill="#7C2530" opacity="0.6"/>
+    <rect x="345" y="115" width="10" height="10" fill="#7C2530" opacity="0.3"/>
+    <rect x="360" y="115" width="10" height="10" fill="#7C2530" opacity="0.7"/>
+    <rect x="375" y="115" width="10" height="10" fill="#7C2530" opacity="0.4"/>
+    <rect x="390" y="115" width="10" height="10" fill="#7C2530" opacity="0.6"/>
+    <rect x="405" y="115" width="10" height="10" fill="#7C2530" opacity="0.3"/>
+    <rect x="420" y="115" width="10" height="10" fill="#7C2530" opacity="0.5"/>
+    <rect x="435" y="115" width="10" height="10" fill="#7C2530" opacity="0.4"/>
+    <rect x="300" y="130" width="10" height="10" fill="#7C2530" opacity="0.4"/>
+    <rect x="315" y="130" width="10" height="10" fill="#7C2530" opacity="0.6"/>
+    <rect x="330" y="130" width="10" height="10" fill="#7C2530" opacity="0.3"/>
+    <rect x="345" y="130" width="10" height="10" fill="#7C2530" opacity="0.7"/>
+    <rect x="360" y="130" width="10" height="10" fill="#7C2530" opacity="0.2"/>
+    <rect x="375" y="130" width="10" height="10" fill="#7C2530" opacity="0.5"/>
+    <rect x="390" y="130" width="10" height="10" fill="#7C2530" opacity="0.4"/>
+    <rect x="405" y="130" width="10" height="10" fill="#7C2530" opacity="0.7"/>
+    <rect x="420" y="130" width="10" height="10" fill="#7C2530" opacity="0.3"/>
+    <rect x="435" y="130" width="10" height="10" fill="#7C2530" opacity="0.6"/>
+  </g>
+  <text x="370" y="170" text-anchor="middle" fill="#7C2530" font-size="13" font-style="italic">perturbation</text>
+  <text x="370" y="200" text-anchor="middle" fill="#5C3D1E" font-size="13">x_adv = x + epsilon * sign(nabla_x L)</text>
+  <text x="370" y="222" text-anchor="middle" fill="#7C2530" font-size="13">Imperceptible noise</text>
+  <text x="370" y="240" text-anchor="middle" fill="#C4A87A" font-size="12">(magnified 10x for visibility)</text>
+
+  <!-- Equals sign -->
+  <text x="487" y="168" text-anchor="middle" fill="#5C3D1E" font-size="42" font-weight="bold">=</text>
+
+  <!-- Adversarial image box -->
+  <rect x="515" y="70" width="180" height="180" rx="10" fill="#F9ECEC" stroke="#7C2530" stroke-width="2"/>
+  <!-- Same panda drawing -->
+  <circle cx="605" cy="140" r="38" fill="#fff" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="588" cy="128" r="8" fill="#2D5A8E"/>
+  <circle cx="622" cy="128" r="8" fill="#2D5A8E"/>
+  <ellipse cx="605" cy="148" rx="6" ry="4" fill="#2D5A8E"/>
+  <circle cx="580" cy="110" r="12" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="630" cy="110" r="12" fill="#2D5A8E" opacity="0.6"/>
+  <text x="605" y="200" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">Adversarial Image</text>
+  <text x="605" y="222" text-anchor="middle" fill="#7C2530" font-size="13">Model: "gibbon"</text>
+  <text x="605" y="240" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">99.3% confidence</text>
+
+  <!-- Arrow from clean to result -->
+  <line x1="135" y1="262" x2="605" y2="262" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="370" y="285" text-anchor="middle" fill="#5C3D1E" font-size="13" font-style="italic">Looks identical to humans -- completely fools the model</text>
+
+  <!-- Bottom labels -->
+  <rect x="45" y="310" width="220" height="65" rx="8" fill="#EEF2F7" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="155" y="332" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">FGSM (one-step)</text>
+  <text x="155" y="350" text-anchor="middle" fill="#2D5A8E" font-size="12">Fast, single gradient step</text>
+  <text x="155" y="366" text-anchor="middle" fill="#2D5A8E" font-size="12">x + epsilon * sign(nabla L)</text>
+
+  <rect x="290" y="310" width="220" height="65" rx="8" fill="#FDF6EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="332" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">PGD (iterative)</text>
+  <text x="400" y="350" text-anchor="middle" fill="#5C3D1E" font-size="12">Multiple small steps + projection</text>
+  <text x="400" y="366" text-anchor="middle" fill="#5C3D1E" font-size="12">Stronger but slower attack</text>
+
+  <rect x="535" y="310" width="220" height="65" rx="8" fill="#F9ECEC" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="645" y="332" text-anchor="middle" fill="#7C2530" font-size="13" font-weight="bold">C&amp;W (optimization)</text>
+  <text x="645" y="350" text-anchor="middle" fill="#7C2530" font-size="12">Minimizes perturbation size</text>
+  <text x="645" y="366" text-anchor="middle" fill="#7C2530" font-size="12">Strongest white-box attack</text>
+</svg>

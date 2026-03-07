@@ -1,29 +1,82 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Three slot machines / arms -->
-  <rect x="60" y="120" width="120" height="160" rx="10" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="120" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">Arm A</text>
-  <text x="120" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">μ = 0.3</text>
-  <text x="120" y="210" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Low reward</text>
-  <rect x="340" y="120" width="120" height="160" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="400" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e67e22">Arm B</text>
-  <text x="400" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">μ = 0.7</text>
-  <text x="400" y="210" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">High reward</text>
-  <rect x="620" y="120" width="120" height="160" rx="10" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="680" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">Arm C</text>
-  <text x="680" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">μ = ?</text>
-  <text x="680" y="210" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Unknown</text>
-  <!-- Agent -->
-  <rect x="310" y="320" width="180" height="50" rx="8" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
-  <text x="400" y="341" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#8e44ad">Agent</text>
-  <text x="400" y="358" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Explore vs. Exploit</text>
-  <!-- Lines from agent to arms -->
-  <line x1="360" y1="320" x2="200" y2="280" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <line x1="400" y1="320" x2="400" y2="280" stroke="#e67e22" stroke-width="2.5"/>
-  <line x1="440" y1="320" x2="600" y2="280" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <!-- Regret label -->
-  <text x="120" y="320" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">Regret: pulls wasted</text>
-  <text x="120" y="336" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">on suboptimal arms</text>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Multi-Armed Bandit</text>
-  <text x="400" y="65" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Unknown reward distributions — balance exploration and exploitation</text>
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="8"/>
+
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Multi-Armed Bandit: Explore vs. Exploit</text>
+
+  <!-- Slot Machine 1 -->
+  <rect x="60" y="70" width="120" height="180" rx="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <rect x="75" y="90" width="90" height="50" rx="6" fill="#F5EDE0" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="120" y="122" font-family="Georgia, serif" font-size="18" fill="#7C2530" text-anchor="middle" font-weight="bold">Arm 1</text>
+  <!-- Lever -->
+  <line x1="185" y1="110" x2="205" y2="110" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="210" cy="110" r="8" fill="#7C2530"/>
+  <!-- Reward label -->
+  <text x="120" y="170" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">p = 0.3</text>
+  <text x="120" y="190" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle" font-style="italic">Unknown</text>
+  <!-- Distribution curve -->
+  <path d="M75 230 Q90 195 105 220 Q115 200 130 215 Q145 190 160 230" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <line x1="75" y1="230" x2="160" y2="230" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Slot Machine 2 (best) -->
+  <rect x="250" y="70" width="120" height="180" rx="12" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="3"/>
+  <rect x="265" y="90" width="90" height="50" rx="6" fill="#F5EDE0" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="310" y="122" font-family="Georgia, serif" font-size="18" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Arm 2</text>
+  <line x1="375" y1="110" x2="395" y2="110" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="400" cy="110" r="8" fill="#2D5A8E"/>
+  <text x="310" y="170" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">p = 0.7</text>
+  <text x="310" y="190" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Best!</text>
+  <!-- Taller distribution curve -->
+  <path d="M265 230 Q280 210 295 225 Q310 185 325 220 Q340 195 355 230" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <line x1="265" y1="230" x2="355" y2="230" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- Star -->
+  <polygon points="310,60 314,68 323,68 316,74 318,83 310,78 302,83 304,74 297,68 306,68" fill="#C4A87A" stroke="#5C3D1E" stroke-width="0.8"/>
+
+  <!-- Slot Machine 3 -->
+  <rect x="440" y="70" width="120" height="180" rx="12" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <rect x="455" y="90" width="90" height="50" rx="6" fill="#F5EDE0" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="500" y="122" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Arm 3</text>
+  <line x1="565" y1="110" x2="585" y2="110" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="590" cy="110" r="8" fill="#5C3D1E"/>
+  <text x="500" y="170" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">p = 0.5</text>
+  <text x="500" y="190" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle" font-style="italic">Unknown</text>
+  <!-- Distribution curve -->
+  <path d="M455 230 Q470 205 485 222 Q500 195 515 218 Q530 205 550 230" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="455" y1="230" x2="550" y2="230" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Slot Machine 4 -->
+  <rect x="630" y="70" width="120" height="180" rx="12" fill="#FDFAF4" stroke="#C4A87A" stroke-width="2.5"/>
+  <rect x="645" y="90" width="90" height="50" rx="6" fill="#F5EDE0" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="690" y="122" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Arm 4</text>
+  <line x1="755" y1="110" x2="770" y2="100" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="773" cy="98" r="8" fill="#C4A87A"/>
+  <text x="690" y="170" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">p = 0.1</text>
+  <text x="690" y="190" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle" font-style="italic">Unknown</text>
+  <!-- Distribution curve -->
+  <path d="M645 230 Q660 220 675 228 Q690 215 705 225 Q720 220 740 230" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="645" y1="230" x2="740" y2="230" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Bottom panel: Regret over time -->
+  <text x="400" y="278" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Cumulative Regret Over Time</text>
+
+  <!-- Axes -->
+  <line x1="100" y1="370" x2="700" y2="370" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="100" y1="370" x2="100" y2="295" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="390" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Rounds</text>
+  <text x="70" y="335" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90, 70, 335)">Regret</text>
+
+  <!-- Random strategy (linear regret) -->
+  <line x1="100" y1="365" x2="690" y2="300" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="700" y="298" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="start">Random</text>
+
+  <!-- Epsilon-greedy -->
+  <path d="M100 365 Q250 350 400 340 Q550 332 690 325" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="700" y="323" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="start" font-style="italic">e-greedy</text>
+
+  <!-- UCB (sublinear) -->
+  <path d="M100 365 Q200 355 350 348 Q500 343 690 340" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="700" y="343" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="start" font-weight="bold">UCB</text>
+
+  <!-- Thompson Sampling (best) -->
+  <path d="M100 365 Q200 360 350 356 Q500 353 690 350" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="700" y="353" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="start" font-weight="bold">Thompson</text>
 </svg>

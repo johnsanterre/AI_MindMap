@@ -1,156 +1,128 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
-  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
 
   <!-- Title -->
-  <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Fine-tuning: Adapting Pretrained Models to New Tasks</text>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C3D1E">Fine-Tuning &mdash; Adapting a Pretrained Model to a Downstream Task</text>
 
-  <!-- Panel 1: Full vs PEFT overview -->
-  <rect x="20" y="50" width="188" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
-  <text x="114" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">APPROACHES</text>
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
 
-  <!-- Full fine-tuning -->
-  <rect x="32" y="78" width="164" height="110" fill="white" stroke="#7C2530" stroke-width="1.5" rx="3"/>
-  <text x="114" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Full Fine-tuning</text>
-  <!-- Model layers, all highlighted -->
-  <rect x="44" y="103" width="140" height="14" fill="#7C2530" rx="2"/>
-  <text x="114" y="113" text-anchor="middle" font-size="8" fill="white">Layer 1 — updated</text>
-  <rect x="44" y="119" width="140" height="14" fill="#7C2530" rx="2"/>
-  <text x="114" y="129" text-anchor="middle" font-size="8" fill="white">Layer 2 — updated</text>
-  <rect x="44" y="135" width="140" height="14" fill="#7C2530" rx="2"/>
-  <text x="114" y="145" text-anchor="middle" font-size="8" fill="white">... all N layers</text>
-  <text x="114" y="163" text-anchor="middle" font-size="9" fill="#7C2530">All weights updated</text>
-  <text x="114" y="177" text-anchor="middle" font-size="9" fill="#6B5D4F">High cost, high risk</text>
-  <text x="114" y="186" text-anchor="middle" font-size="8" fill="#6B5D4F">of forgetting</text>
+  <!-- ===== TOP: Pipeline from Pretrained to Downstream ===== -->
 
-  <!-- PEFT -->
-  <rect x="32" y="198" width="164" height="116" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
-  <text x="114" y="215" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">PEFT (LoRA etc.)</text>
-  <!-- Model layers, mostly frozen -->
-  <rect x="44" y="223" width="140" height="14" fill="#D4C5A9" rx="2"/>
-  <text x="114" y="233" text-anchor="middle" font-size="8" fill="#6B5D4F">Layer 1 — frozen</text>
-  <rect x="44" y="239" width="140" height="14" fill="#D4C5A9" rx="2"/>
-  <text x="114" y="249" text-anchor="middle" font-size="8" fill="#6B5D4F">Layer 2 — frozen</text>
-  <rect x="44" y="255" width="80" height="14" fill="#D4C5A9" rx="2"/>
-  <rect x="128" y="255" width="56" height="14" fill="#2D5A8E" rx="2"/>
-  <text x="156" y="265" text-anchor="middle" font-size="8" fill="white">adapter</text>
-  <text x="114" y="283" text-anchor="middle" font-size="9" fill="#2D5A8E">~0.1–3% of params</text>
-  <text x="114" y="297" text-anchor="middle" font-size="9" fill="#6B5D4F">Low cost, preserves</text>
-  <text x="114" y="306" text-anchor="middle" font-size="8" fill="#6B5D4F">base model knowledge</text>
+  <!-- Pretrained Model (large box) -->
+  <rect x="30" y="55" width="180" height="100" rx="8" fill="#B0C8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="120" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#2D5A8E">Pretrained Model</text>
+  <text x="120" y="96" text-anchor="middle" font-size="10" fill="#2D5A8E">General knowledge</text>
+  <text x="120" y="112" text-anchor="middle" font-size="10" fill="#2D5A8E">from massive corpus</text>
+  <text x="120" y="130" text-anchor="middle" font-size="10" font-style="italic" fill="#2D5A8E">All parameters frozen</text>
 
-  <!-- Panel 2: LoRA detail -->
-  <rect x="222" y="50" width="190" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
-  <text x="317" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">LoRA IN DETAIL</text>
+  <!-- Arrow: pretrained to fine-tuning -->
+  <line x1="210" y1="105" x2="270" y2="105" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="240" y="96" text-anchor="middle" font-size="9" fill="#5C3D1E">adapt</text>
 
-  <!-- LoRA diagram -->
-  <rect x="234" y="80" width="166" height="170" fill="white" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
-  <text x="317" y="97" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Low-Rank Adaptation</text>
+  <!-- Fine-Tuning Process (central box) -->
+  <rect x="272" y="50" width="230" height="110" rx="8" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="387" y="74" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Fine-Tuning</text>
 
-  <!-- W matrix -->
-  <rect x="258" y="108" width="50" height="50" fill="#D4C5A9" rx="2"/>
-  <text x="283" y="130" text-anchor="middle" font-size="10" fill="#5C3D1E">W</text>
-  <text x="283" y="144" text-anchor="middle" font-size="8" fill="#6B5D4F">d×d frozen</text>
+  <!-- Inner boxes for methods -->
+  <rect x="284" y="84" width="96" height="32" rx="4" fill="#A84555"/>
+  <text x="332" y="104" text-anchor="middle" font-size="10" fill="white">Full Fine-Tuning</text>
 
-  <text x="317" y="135" text-anchor="middle" font-size="14" fill="#5C3D1E">+</text>
+  <rect x="390" y="84" width="100" height="32" rx="4" fill="#A84555"/>
+  <text x="440" y="104" text-anchor="middle" font-size="10" fill="white">PEFT (LoRA, etc.)</text>
 
-  <!-- BA matrices -->
-  <rect x="330" y="108" width="22" height="50" fill="#2D5A8E" rx="2"/>
-  <text x="341" y="130" text-anchor="middle" font-size="9" fill="white">B</text>
-  <text x="341" y="148" text-anchor="middle" font-size="7" fill="#C8DCF0">d×r</text>
+  <!-- Task-specific data label -->
+  <rect x="310" y="126" width="130" height="24" rx="4" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
+  <text x="375" y="142" text-anchor="middle" font-size="10" fill="#5C3D1E">+ Task-Specific Data</text>
 
-  <rect x="355" y="125" width="36" height="22" fill="#2D5A8E" rx="2"/>
-  <text x="373" y="140" text-anchor="middle" font-size="9" fill="white">A</text>
-  <text x="373" y="148" text-anchor="middle" font-size="7" fill="#C8DCF0">r×d</text>
+  <!-- Arrow: fine-tuning to downstream -->
+  <line x1="502" y1="105" x2="562" y2="105" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arw)"/>
 
-  <text x="317" y="175" text-anchor="middle" font-size="9" fill="#5C3D1E">W' = W + BA</text>
-  <text x="317" y="190" text-anchor="middle" font-size="9" fill="#6B5D4F">r ≪ d (rank 4–16 typical)</text>
-  <text x="317" y="204" text-anchor="middle" font-size="9" fill="#6B5D4F">W frozen, BA trained</text>
-  <text x="317" y="218" text-anchor="middle" font-size="8" fill="#7C2530">Params: 2×d×r vs d²</text>
-  <text x="317" y="232" text-anchor="middle" font-size="8" fill="#2D5A8E">Merged at inference</text>
-  <text x="317" y="242" text-anchor="middle" font-size="8" fill="#2D5A8E">— zero overhead</text>
+  <!-- Downstream Task (result) -->
+  <rect x="564" y="55" width="210" height="100" rx="8" fill="#EAF3E0" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="669" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Adapted Model</text>
 
-  <!-- Other PEFT methods -->
-  <rect x="234" y="262" width="166" height="94" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1" rx="3"/>
-  <text x="317" y="279" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Other PEFT Methods</text>
-  <text x="240" y="295" font-size="9" fill="#6B5D4F">Adapters: small MLP blocks</text>
-  <text x="240" y="309" font-size="9" fill="#6B5D4F">   between Transformer layers</text>
-  <text x="240" y="323" font-size="9" fill="#6B5D4F">Prefix tuning: learned tokens</text>
-  <text x="240" y="337" font-size="9" fill="#6B5D4F">   prepended to every layer</text>
-  <text x="240" y="350" font-size="9" fill="#6B5D4F">Prompt tuning: soft prompts</text>
+  <!-- Four example downstream tasks -->
+  <rect x="578" y="92" width="84" height="22" rx="3" fill="#D4E8C4" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="620" y="107" text-anchor="middle" font-size="9" fill="#5C3D1E">Sentiment</text>
 
-  <!-- Panel 3: Catastrophic Forgetting -->
-  <rect x="426" y="50" width="178" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
-  <text x="515" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">CATASTROPHIC FORGETTING</text>
+  <rect x="578" y="120" width="84" height="22" rx="3" fill="#D4E8C4" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="620" y="135" text-anchor="middle" font-size="9" fill="#5C3D1E">Medical QA</text>
 
-  <rect x="438" y="78" width="154" height="120" fill="white" stroke="#7C2530" stroke-width="1.5" rx="3"/>
-  <text x="515" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">The Problem</text>
+  <rect x="676" y="92" width="84" height="22" rx="3" fill="#D4E8C4" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="718" y="107" text-anchor="middle" font-size="9" fill="#5C3D1E">Code Gen</text>
 
-  <!-- Before/after bars -->
-  <text x="515" y="113" text-anchor="middle" font-size="9" fill="#6B5D4F">General knowledge:</text>
-  <rect x="450" y="119" width="100" height="10" fill="#2D5A8E" rx="1"/>
-  <text x="555" y="128" font-size="8" fill="#6B5D4F">Before</text>
-  <rect x="450" y="131" width="35" height="10" fill="#7C2530" rx="1"/>
-  <text x="489" y="140" font-size="8" fill="#6B5D4F">After</text>
+  <rect x="676" y="120" width="84" height="22" rx="3" fill="#D4E8C4" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="718" y="135" text-anchor="middle" font-size="9" fill="#5C3D1E">Chatbot</text>
 
-  <text x="515" y="157" text-anchor="middle" font-size="9" fill="#6B5D4F">Task accuracy:</text>
-  <rect x="450" y="162" width="30" height="10" fill="#2D5A8E" rx="1"/>
-  <text x="484" y="171" font-size="8" fill="#6B5D4F">Before</text>
-  <rect x="450" y="174" width="95" height="10" fill="#5C3D1E" rx="1"/>
-  <text x="549" y="183" font-size="8" fill="#6B5D4F">After</text>
+  <!-- ===== Divider ===== -->
+  <line x1="10" y1="178" x2="790" y2="178" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="198" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Full Fine-Tuning vs Parameter-Efficient Fine-Tuning (PEFT)</text>
 
-  <text x="515" y="193" text-anchor="middle" font-size="9" fill="#6B5D4F">Fine-tuning overwrites</text>
+  <!-- ===== LEFT: Full Fine-Tuning ===== -->
+  <rect x="30" y="212" width="350" height="140" rx="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="205" y="232" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Full Fine-Tuning</text>
 
-  <!-- Mitigations -->
-  <rect x="438" y="210" width="154" height="110" fill="white" stroke="#2D5A8E" stroke-width="1" rx="3"/>
-  <text x="515" y="227" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Mitigations</text>
-  <text x="444" y="243" font-size="9" fill="#5C3D1E">• Low LR (1e-5 to 5e-5)</text>
-  <text x="444" y="257" font-size="9" fill="#5C3D1E">• PEFT — freeze most</text>
-  <text x="444" y="271" font-size="9" fill="#5C3D1E">• Replay: mix old data</text>
-  <text x="444" y="285" font-size="9" fill="#5C3D1E">• EWC: elastic weight</text>
-  <text x="444" y="299" font-size="9" fill="#5C3D1E">  consolidation</text>
-  <text x="444" y="313" font-size="9" fill="#5C3D1E">• Early stopping</text>
+  <!-- Weight matrix representation -->
+  <rect x="50" y="248" width="120" height="80" rx="4" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="80" y1="248" x2="80" y2="328" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="110" y1="248" x2="110" y2="328" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="140" y1="248" x2="140" y2="328" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="50" y1="268" x2="170" y2="268" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="50" y1="288" x2="170" y2="288" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="50" y1="308" x2="170" y2="308" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <text x="110" y="292" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">W</text>
+  <text x="110" y="344" text-anchor="middle" font-size="9" fill="#7C2530">All params updated</text>
 
-  <!-- LR schedule -->
-  <rect x="438" y="332" width="154" height="28" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="1" rx="3"/>
-  <text x="515" y="345" text-anchor="middle" font-size="9" fill="#2D5A8E">Use warmup + cosine decay</text>
-  <text x="515" y="356" text-anchor="middle" font-size="8" fill="#6B5D4F">for fine-tuning schedules</text>
+  <!-- Bullet points -->
+  <text x="195" y="258" font-size="10" fill="#5C3D1E">&#x2022; Updates every parameter</text>
+  <text x="195" y="276" font-size="10" fill="#5C3D1E">&#x2022; Maximum expressiveness</text>
+  <text x="195" y="294" font-size="10" fill="#5C3D1E">&#x2022; Risk: catastrophic forgetting</text>
+  <text x="195" y="312" font-size="10" fill="#5C3D1E">&#x2022; High GPU memory cost</text>
+  <text x="195" y="330" font-size="10" fill="#5C3D1E">&#x2022; Needs full optimizer states</text>
 
-  <!-- Panel 4: When to FT vs Prompt -->
-  <rect x="618" y="50" width="164" height="320" fill="#F5EFE6" stroke="#C4A87A" stroke-width="1" rx="4"/>
-  <text x="700" y="68" text-anchor="middle" font-size="10" letter-spacing="1" fill="#6B5D4F">FT vs. PROMPTING</text>
+  <!-- ===== RIGHT: PEFT / LoRA ===== -->
+  <rect x="420" y="212" width="360" height="140" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="600" y="232" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">Parameter-Efficient (LoRA / Prefix / Adapter)</text>
 
-  <!-- Decision table -->
-  <rect x="628" y="78" width="144" height="228" fill="white" stroke="#C4A87A" stroke-width="1" rx="3"/>
+  <!-- Frozen weight matrix -->
+  <rect x="440" y="248" width="90" height="80" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
+  <text x="485" y="282" text-anchor="middle" font-size="10" fill="#777">W (frozen)</text>
 
-  <!-- Headers -->
-  <rect x="628" y="78" width="144" height="18" fill="#5C3D1E" rx="2"/>
-  <text x="700" y="91" text-anchor="middle" font-size="9" font-weight="bold" fill="white">Use Fine-tuning when:</text>
+  <!-- Plus sign -->
+  <text x="543" y="292" text-anchor="middle" font-size="18" font-weight="bold" fill="#2D5A8E">+</text>
 
-  <text x="634" y="108" font-size="9" fill="#5C3D1E">• Consistent format needed</text>
-  <text x="634" y="122" font-size="9" fill="#5C3D1E">• Proprietary domain data</text>
-  <text x="634" y="136" font-size="9" fill="#5C3D1E">• High-volume inference</text>
-  <text x="634" y="150" font-size="9" fill="#5C3D1E">  (shorter prompts = cheaper)</text>
-  <text x="634" y="164" font-size="9" fill="#5C3D1E">• Style/tone control</text>
-  <text x="634" y="178" font-size="9" fill="#5C3D1E">• Base model underperforms</text>
+  <!-- LoRA low-rank matrices B and A -->
+  <rect x="558" y="248" width="24" height="80" rx="3" fill="#2D5A8E"/>
+  <text x="570" y="292" text-anchor="middle" font-size="10" font-weight="bold" fill="white">B</text>
 
-  <line x1="628" y1="188" x2="772" y2="188" stroke="#D4C5A9" stroke-width="1"/>
+  <rect x="590" y="270" width="56" height="24" rx="3" fill="#2D5A8E"/>
+  <text x="618" y="286" text-anchor="middle" font-size="10" font-weight="bold" fill="white">A</text>
 
-  <rect x="628" y="188" width="144" height="18" fill="#2D5A8E" rx="2"/>
-  <text x="700" y="201" text-anchor="middle" font-size="9" font-weight="bold" fill="white">Use Prompting when:</text>
+  <text x="604" y="258" text-anchor="middle" font-size="9" fill="#2D5A8E">rank r</text>
+  <text x="570" y="344" text-anchor="middle" font-size="9" fill="#2D5A8E">Low-rank adapters</text>
 
-  <text x="634" y="218" font-size="9" fill="#5C3D1E">• Rapid prototyping</text>
-  <text x="634" y="232" font-size="9" fill="#5C3D1E">• Low data volume</text>
-  <text x="634" y="246" font-size="9" fill="#5C3D1E">• Task variety changes</text>
-  <text x="634" y="260" font-size="9" fill="#5C3D1E">• No GPU budget</text>
-  <text x="634" y="274" font-size="9" fill="#5C3D1E">• Model already capable</text>
-  <text x="634" y="288" font-size="9" fill="#5C3D1E">• Need interpretability</text>
+  <!-- Bullet points -->
+  <text x="660" y="262" font-size="10" fill="#5C3D1E">&#x2022; 0.1&#x2013;1% params</text>
+  <text x="660" y="280" font-size="10" fill="#5C3D1E">&#x2022; No forgetting</text>
+  <text x="660" y="298" font-size="10" fill="#5C3D1E">&#x2022; Low memory</text>
+  <text x="660" y="316" font-size="10" fill="#5C3D1E">&#x2022; Composable</text>
 
-  <!-- RLHF as FT paradigm -->
-  <rect x="628" y="318" width="144" height="42" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1" rx="3"/>
-  <text x="700" y="334" text-anchor="middle" font-size="9" font-weight="bold" fill="#7C2530">RLHF = fine-tuning</text>
-  <text x="700" y="348" text-anchor="middle" font-size="9" fill="#5C3D1E">with human reward signal</text>
-  <text x="700" y="360" text-anchor="middle" font-size="8" fill="#6B5D4F">via PPO or DPO</text>
-
-  <!-- Bottom label -->
-  <text x="400" y="385" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="0.5">LoRA trains only 0.1–3% of parameters yet often matches full fine-tuning performance</text>
+  <!-- Legend bar -->
+  <rect x="10" y="362" width="780" height="30" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="22" y="372" width="12" height="12" rx="2" fill="#7C2530"/>
+  <text x="40" y="382" font-size="10" fill="#5C3D1E">Updated weights</text>
+  <rect x="160" y="372" width="12" height="12" rx="2" fill="#E8E8E8" stroke="#999" stroke-width="1"/>
+  <text x="178" y="382" font-size="10" fill="#5C3D1E">Frozen weights</text>
+  <rect x="290" y="372" width="12" height="12" rx="2" fill="#2D5A8E"/>
+  <text x="308" y="382" font-size="10" fill="#5C3D1E">LoRA adapters (trainable)</text>
+  <rect x="470" y="372" width="12" height="12" rx="2" fill="#EAF3E0" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="488" y="382" font-size="10" fill="#5C3D1E">Downstream task</text>
+  <text x="700" y="382" text-anchor="middle" font-size="9" font-style="italic" fill="#888">W' = W + BA</text>
 </svg>

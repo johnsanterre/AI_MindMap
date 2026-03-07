@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="13" fill="#5C3D1E" letter-spacing="1.5">MODEL COMPLEXITY vs VALIDATION PERFORMANCE</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="340" x2="720" y2="340" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="80" y1="340" x2="80" y2="50" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Axis labels -->
+  <text x="400" y="375" text-anchor="middle" font-size="11" fill="#5C3D1E">Model Complexity</text>
+  <text x="25" y="195" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,25,195)">Prediction Error</text>
+
+  <!-- Tick labels on x-axis -->
+  <text x="150" y="358" text-anchor="middle" font-size="9" fill="#6B5D4F">Simple</text>
+  <text x="400" y="358" text-anchor="middle" font-size="9" fill="#6B5D4F">Moderate</text>
+  <text x="650" y="358" text-anchor="middle" font-size="9" fill="#6B5D4F">Complex</text>
+
+  <!-- Training error curve (brown dashed, monotone decreasing) -->
+  <path d="M 100,280 C 200,230 300,160 400,120 C 500,90 600,75 700,68"
+        fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="710" y="62" font-size="9" fill="#5C3D1E">Training Error</text>
+
+  <!-- Validation error curve (red solid, U-shape) -->
+  <path d="M 100,300 C 180,240 260,170 340,130 C 380,115 420,112 440,115 C 500,130 560,165 620,215 C 660,245 700,280 700,290"
+        fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="710" y="288" font-size="9" fill="#7C2530">Validation Error</text>
+
+  <!-- Irreducible error (gray dashed) -->
+  <line x1="100" y1="85" x2="700" y2="85" stroke="#9B8877" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="710" y="89" font-size="8" fill="#9B8877">Bayes Error</text>
+
+  <!-- Optimal complexity vertical line -->
+  <line x1="400" y1="55" x2="400" y2="340" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Optimal point marker -->
+  <circle cx="400" cy="112" r="5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <text x="400" y="75" text-anchor="middle" font-size="10" fill="#2D5A8E" font-weight="bold">Optimal Model</text>
+
+  <!-- Underfitting zone -->
+  <rect x="100" y="45" width="180" height="285" fill="#7C2530" fill-opacity="0.04" rx="3"/>
+  <text x="190" y="65" text-anchor="middle" font-size="10" fill="#7C2530">Underfitting</text>
+  <text x="190" y="78" text-anchor="middle" font-size="8" fill="#7C2530">(high bias)</text>
+
+  <!-- Overfitting zone -->
+  <rect x="520" y="45" width="185" height="285" fill="#7C2530" fill-opacity="0.04" rx="3"/>
+  <text x="612" y="65" text-anchor="middle" font-size="10" fill="#7C2530">Overfitting</text>
+  <text x="612" y="78" text-anchor="middle" font-size="8" fill="#7C2530">(high variance)</text>
+
+  <!-- Model icons along the bottom -->
+  <!-- Simple: small box -->
+  <rect x="140" y="300" width="20" height="15" fill="none" stroke="#C4A87A" stroke-width="1.2" rx="2"/>
+  <text x="150" y="328" text-anchor="middle" font-size="7.5" fill="#6B5D4F">Linear</text>
+
+  <!-- Medium: stacked boxes -->
+  <rect x="280" y="296" width="18" height="10" fill="none" stroke="#C4A87A" stroke-width="1.2" rx="2"/>
+  <rect x="282" y="308" width="18" height="10" fill="none" stroke="#C4A87A" stroke-width="1.2" rx="2"/>
+  <text x="291" y="328" text-anchor="middle" font-size="7.5" fill="#6B5D4F">Shallow Tree</text>
+
+  <!-- Optimal: three boxes -->
+  <rect x="390" y="292" width="18" height="9" fill="none" stroke="#2D5A8E" stroke-width="1.2" rx="2"/>
+  <rect x="392" y="303" width="18" height="9" fill="none" stroke="#2D5A8E" stroke-width="1.2" rx="2"/>
+  <rect x="394" y="314" width="18" height="9" fill="none" stroke="#2D5A8E" stroke-width="1.2" rx="2"/>
+  <text x="400" y="328" text-anchor="middle" font-size="7.5" fill="#2D5A8E">Tuned RF</text>
+
+  <!-- Complex: many boxes -->
+  <rect x="560" y="288" width="14" height="7" fill="none" stroke="#C4A87A" stroke-width="1" rx="1"/>
+  <rect x="562" y="297" width="14" height="7" fill="none" stroke="#C4A87A" stroke-width="1" rx="1"/>
+  <rect x="564" y="306" width="14" height="7" fill="none" stroke="#C4A87A" stroke-width="1" rx="1"/>
+  <rect x="566" y="315" width="14" height="7" fill="none" stroke="#C4A87A" stroke-width="1" rx="1"/>
+  <text x="572" y="328" text-anchor="middle" font-size="7.5" fill="#6B5D4F">Deep Net</text>
+
+  <!-- Gap annotation -->
+  <line x1="630" y1="180" x2="630" y2="72" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="625" y1="180" x2="635" y2="180" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="625" y1="72" x2="635" y2="72" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="645" y="120" font-size="8.5" fill="#5C3D1E">Generalization</text>
+  <text x="645" y="132" font-size="8.5" fill="#5C3D1E">Gap</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="395" text-anchor="middle" font-size="9.5" fill="#6B5D4F">
+    Model selection seeks the complexity that minimizes validation error, not training error
+  </text>
+</svg>

@@ -1,117 +1,87 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
 
-  <!-- Panel 1: Input split -->
-  <rect x="18" y="28" width="180" height="344" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
-  <text x="108" y="48" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Input Projection</text>
-  <!-- Input vector -->
-  <rect x="64" y="58" width="88" height="28" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
-  <text x="108" y="76" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">X  (d_model)</text>
-  <!-- Three arrows down -->
-  <line x1="82" y1="87" x2="54" y2="108" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="108" y1="87" x2="108" y2="108" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="134" y1="87" x2="162" y2="108" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <!-- W_Q W_K W_V boxes -->
-  <rect x="28" y="108" width="46" height="26" fill="#FFF3E0" stroke="#C4A87A" stroke-width="1.2" rx="2"/>
-  <text x="51" y="125" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">W_Q</text>
-  <rect x="85" y="108" width="46" height="26" fill="#FFF3E0" stroke="#C4A87A" stroke-width="1.2" rx="2"/>
-  <text x="108" y="125" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">W_K</text>
-  <rect x="142" y="108" width="46" height="26" fill="#FFF3E0" stroke="#C4A87A" stroke-width="1.2" rx="2"/>
-  <text x="165" y="125" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">W_V</text>
-  <!-- Q K V labels -->
-  <line x1="51" y1="134" x2="51" y2="152" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="108" y1="134" x2="108" y2="152" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="165" y1="134" x2="165" y2="152" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <rect x="28" y="152" width="46" height="22" fill="#BECDDF" stroke="#2D5A8E" stroke-width="1" rx="2"/>
-  <text x="51" y="167" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Q</text>
-  <rect x="85" y="152" width="46" height="22" fill="#BECDDF" stroke="#2D5A8E" stroke-width="1" rx="2"/>
-  <text x="108" y="167" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">K</text>
-  <rect x="142" y="152" width="46" height="22" fill="#BECDDF" stroke="#2D5A8E" stroke-width="1" rx="2"/>
-  <text x="165" y="167" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">V</text>
-  <!-- Split into h heads note -->
-  <text x="108" y="198" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Split into h heads</text>
-  <text x="108" y="211" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">each dim = d_model/h</text>
-  <text x="108" y="228" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">e.g. d=512, h=8</text>
-  <text x="108" y="242" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">→ 64 dims/head</text>
-  <text x="108" y="268" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">Same total compute</text>
-  <text x="108" y="281" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">as one full head.</text>
+  <!-- Title -->
+  <text x="400" y="34" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Multi-Head Attention: Parallel Heads Concatenated</text>
 
-  <!-- Panel 2: Multiple heads running in parallel -->
-  <rect x="210" y="28" width="250" height="344" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
-  <text x="335" y="48" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Parallel Attention Heads</text>
+  <!-- Input block -->
+  <rect x="30" y="155" width="100" height="50" fill="#2D5A8E" rx="5"/>
+  <text x="80" y="177" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Input X</text>
+  <text x="80" y="195" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">n x d_model</text>
+
+  <!-- Linear projections label -->
+  <rect x="160" y="145" width="90" height="70" fill="#C4A87A" rx="4" opacity="0.6"/>
+  <text x="205" y="176" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Linear</text>
+  <text x="205" y="192" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Projections</text>
+
+  <!-- Arrow input to projections -->
+  <line x1="130" y1="180" x2="158" y2="180" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowB)"/>
+
+  <!-- Fan-out arrows to heads -->
+  <line x1="250" y1="160" x2="310" y2="80" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowB)"/>
+  <line x1="250" y1="172" x2="310" y2="162" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowB)"/>
+  <line x1="250" y1="188" x2="310" y2="250" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowB)"/>
+  <line x1="250" y1="200" x2="310" y2="335" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowB)"/>
+
   <!-- Head 1 -->
-  <rect x="220" y="58" width="68" height="110" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
-  <text x="254" y="74" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Head 1</text>
-  <text x="254" y="90" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Syntax</text>
-  <!-- Mini attention grid head1 -->
-  <rect x="228" y="96" width="12" height="12" fill="#2D5A8E" opacity="0.8"/><rect x="241" y="96" width="12" height="12" fill="#7C8FAE" opacity="0.5"/><rect x="254" y="96" width="12" height="12" fill="#BECDDF" opacity="0.3"/>
-  <rect x="228" y="109" width="12" height="12" fill="#BECDDF" opacity="0.3"/><rect x="241" y="109" width="12" height="12" fill="#2D5A8E" opacity="0.8"/><rect x="254" y="109" width="12" height="12" fill="#7C8FAE" opacity="0.5"/>
-  <rect x="228" y="122" width="12" height="12" fill="#7C8FAE" opacity="0.5"/><rect x="241" y="122" width="12" height="12" fill="#BECDDF" opacity="0.3"/><rect x="254" y="122" width="12" height="12" fill="#2D5A8E" opacity="0.8"/>
-  <text x="254" y="155" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" text-anchor="middle">subject-verb</text>
+  <rect x="312" y="55" width="150" height="54" fill="#7C2530" rx="5"/>
+  <text x="387" y="75" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Head 1</text>
+  <text x="387" y="95" font-family="Georgia, serif" font-size="9" fill="#FDFAF4" text-anchor="middle">softmax(Q&#x2081;K&#x2081;&#x1D40;/ &#x221A;d&#x2096;) V&#x2081;</text>
+
   <!-- Head 2 -->
-  <rect x="301" y="58" width="68" height="110" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5" rx="3"/>
-  <text x="335" y="74" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">Head 2</text>
-  <text x="335" y="90" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Coreference</text>
-  <rect x="309" y="96" width="12" height="12" fill="#7C2530" opacity="0.8"/><rect x="322" y="96" width="12" height="12" fill="#FAEAEA" opacity="0.5"/><rect x="335" y="96" width="12" height="12" fill="#7C2530" opacity="0.6"/>
-  <rect x="309" y="109" width="12" height="12" fill="#FAEAEA" opacity="0.3"/><rect x="322" y="109" width="12" height="12" fill="#7C2530" opacity="0.9"/><rect x="335" y="109" width="12" height="12" fill="#FAEAEA" opacity="0.2"/>
-  <rect x="309" y="122" width="12" height="12" fill="#7C2530" opacity="0.6"/><rect x="322" y="122" width="12" height="12" fill="#FAEAEA" opacity="0.3"/><rect x="335" y="122" width="12" height="12" fill="#7C2530" opacity="0.9"/>
-  <text x="335" y="155" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" text-anchor="middle">pronoun-ref</text>
-  <!-- Head 3 -->
-  <rect x="382" y="58" width="68" height="110" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5" rx="3"/>
-  <text x="416" y="74" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Head 3</text>
-  <text x="416" y="90" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">Semantics</text>
-  <rect x="390" y="96" width="12" height="12" fill="#C4A87A" opacity="0.5"/><rect x="403" y="96" width="12" height="12" fill="#9E7B4A" opacity="0.8"/><rect x="416" y="96" width="12" height="12" fill="#C4A87A" opacity="0.4"/>
-  <rect x="390" y="109" width="12" height="12" fill="#9E7B4A" opacity="0.8"/><rect x="403" y="109" width="12" height="12" fill="#C4A87A" opacity="0.5"/><rect x="416" y="109" width="12" height="12" fill="#9E7B4A" opacity="0.7"/>
-  <rect x="390" y="122" width="12" height="12" fill="#C4A87A" opacity="0.4"/><rect x="403" y="122" width="12" height="12" fill="#9E7B4A" opacity="0.7"/><rect x="416" y="122" width="12" height="12" fill="#C4A87A" opacity="0.5"/>
-  <text x="416" y="155" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" text-anchor="middle">topic words</text>
-  <!-- h heads note -->
-  <text x="335" y="182" font-family="Georgia, serif" font-size="8.5" fill="#6B5D4F" text-anchor="middle" font-style="italic">... h heads total ...</text>
-  <!-- Concatenate -->
-  <line x1="254" y1="192" x2="290" y2="212" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="335" y1="192" x2="335" y2="212" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="416" y1="192" x2="380" y2="212" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <rect x="240" y="212" width="190" height="28" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
-  <text x="335" y="230" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Concatenate  [h₁‖h₂‖…‖hₙ]</text>
-  <!-- W_O projection -->
-  <line x1="335" y1="241" x2="335" y2="258" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <rect x="275" y="258" width="120" height="26" fill="#FFF3E0" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
-  <text x="335" y="275" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">× W_O  (output proj.)</text>
-  <!-- Output -->
-  <line x1="335" y1="285" x2="335" y2="302" stroke="#6B5D4F" stroke-width="1.2" marker-end="url(#arr)"/>
-  <rect x="262" y="302" width="146" height="26" fill="#EAF2FA" stroke="#2D5A8E" stroke-width="1.5" rx="3"/>
-  <text x="335" y="319" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">Output  (d_model)</text>
-  <text x="335" y="352" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">Same shape as input.</text>
+  <rect x="312" y="140" width="150" height="54" fill="#7C2530" rx="5"/>
+  <text x="387" y="160" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Head 2</text>
+  <text x="387" y="180" font-family="Georgia, serif" font-size="9" fill="#FDFAF4" text-anchor="middle">softmax(Q&#x2082;K&#x2082;&#x1D40;/ &#x221A;d&#x2096;) V&#x2082;</text>
 
-  <!-- Panel 3: Cost and formula -->
-  <rect x="474" y="28" width="307" height="344" fill="#F5EFE6" stroke="#D4C5A9" stroke-width="1" rx="4"/>
-  <text x="627" y="48" font-family="Georgia, serif" font-size="10" letter-spacing="1" fill="#6B5D4F" text-anchor="middle" font-variant="small-caps">Mechanics &amp; Cost</text>
-  <!-- Attention formula -->
-  <rect x="484" y="58" width="287" height="54" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
-  <text x="627" y="76" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">Attention(Q,K,V) =</text>
-  <text x="627" y="93" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">softmax( QKᵀ / √d_k ) · V</text>
-  <!-- Complexity breakdown -->
-  <text x="484" y="128" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-weight="bold">Complexity per layer:</text>
-  <text x="484" y="146" font-family="Georgia, serif" font-size="9" fill="#7C2530">Time:  O(n² · d)</text>
-  <text x="484" y="162" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" font-style="italic">n = sequence length, d = d_model</text>
-  <text x="484" y="178" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">n² term is why long contexts are expensive.</text>
-  <text x="484" y="196" font-family="Georgia, serif" font-size="9" fill="#7C2530">Memory: O(n² · h)</text>
-  <text x="484" y="212" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Must store attention matrix per head.</text>
-  <!-- Key properties -->
-  <line x1="484" y1="224" x2="752" y2="224" stroke="#C4A87A" stroke-width="0.8" stroke-dasharray="3,2"/>
-  <text x="484" y="240" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-weight="bold">Why multiple heads help:</text>
-  <text x="484" y="258" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Each head learns a different subspace</text>
-  <text x="484" y="274" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Captures syntax, semantics, coreference</text>
-  <text x="484" y="290" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Ensemble effect without extra parameters</text>
-  <text x="484" y="306" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">• Parallel computation (no added wall time)</text>
-  <!-- Typical values -->
-  <line x1="484" y1="318" x2="752" y2="318" stroke="#C4A87A" stroke-width="0.8" stroke-dasharray="3,2"/>
-  <text x="484" y="334" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-weight="bold">Typical values:</text>
-  <text x="484" y="350" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">GPT-2: d=768, h=12  |  GPT-3: d=12288, h=96</text>
+  <!-- Head ... -->
+  <rect x="312" y="225" width="150" height="54" fill="#7C2530" rx="5" opacity="0.55"/>
+  <text x="387" y="258" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">. . .</text>
 
+  <!-- Head h -->
+  <rect x="312" y="310" width="150" height="54" fill="#7C2530" rx="5"/>
+  <text x="387" y="330" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Head h</text>
+  <text x="387" y="350" font-family="Georgia, serif" font-size="9" fill="#FDFAF4" text-anchor="middle">softmax(Q&#x2095;K&#x2095;&#x1D40;/ &#x221A;d&#x2096;) V&#x2095;</text>
+
+  <!-- Parallel bracket -->
+  <line x1="296" y1="60" x2="296" y2="360" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="286" y="215" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" transform="rotate(-90, 286, 215)">in parallel</text>
+
+  <!-- Arrows from heads to concat -->
+  <line x1="462" y1="82" x2="530" y2="172" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowN)"/>
+  <line x1="462" y1="167" x2="530" y2="182" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowN)"/>
+  <line x1="462" y1="252" x2="530" y2="198" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowN)"/>
+  <line x1="462" y1="337" x2="530" y2="208" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowN)"/>
+
+  <!-- Concat box -->
+  <rect x="532" y="156" width="90" height="68" fill="#2D5A8E" rx="5"/>
+  <text x="577" y="184" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Concat</text>
+  <text x="577" y="204" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">n x h&#xB7;d&#x2096;</text>
+
+  <!-- Arrow concat to output linear -->
+  <line x1="622" y1="190" x2="660" y2="190" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowB)"/>
+
+  <!-- Output linear -->
+  <rect x="662" y="156" width="90" height="68" fill="#C4A87A" rx="5"/>
+  <text x="707" y="182" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">W&#x1D3C;</text>
+  <text x="707" y="200" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Linear</text>
+  <text x="707" y="216" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">d_model x d_model</text>
+
+  <!-- Output label -->
+  <text x="707" y="246" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Output</text>
+  <text x="707" y="262" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">n x d_model</text>
+
+  <!-- Footer formula -->
+  <text x="400" y="390" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">MultiHead(Q, K, V) = Concat(head&#x2081;, ..., head&#x2095;) W&#x1D3C;   where head&#x1D62; = Attention(XW&#x1D62;Q, XW&#x1D62;K, XW&#x1D62;V)</text>
+
+  <!-- Arrowhead markers -->
   <defs>
-    <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L6,3 z" fill="#6B5D4F"/>
+    <marker id="arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowN" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
     </marker>
   </defs>
 </svg>

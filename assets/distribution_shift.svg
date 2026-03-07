@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Distribution Shift: Train vs. Test Mismatch</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="50" x2="80" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="80" y1="320" x2="760" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Axis arrows -->
+  <polygon points="80,44 75,58 85,58" fill="#5C3D1E"/>
+  <polygon points="766,320 752,315 752,325" fill="#5C3D1E"/>
+
+  <!-- Axis labels -->
+  <text x="420" y="355" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Feature Value (x)</text>
+  <text x="22" y="190" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,22,190)">Density P(x)</text>
+
+  <!-- Training distribution (navy bell curve, left-centered) -->
+  <path d="M 120,318
+           C 150,316 180,310 210,290
+           C 240,260 260,200 290,140
+           C 310,100 320,85 340,80
+           C 360,85 370,100 390,140
+           C 420,200 440,260 470,290
+           C 500,310 530,316 560,318"
+        fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Test distribution (red bell curve, right-shifted) -->
+  <path d="M 280,318
+           C 310,316 340,310 370,295
+           C 400,270 420,220 450,165
+           C 470,130 480,115 500,110
+           C 520,115 530,130 550,165
+           C 580,220 600,270 630,295
+           C 660,310 690,316 720,318"
+        fill="#7C2530" fill-opacity="0.15" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Shift arrow -->
+  <line x1="360" y1="72" x2="480" y2="102" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="420" y="66" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E" text-anchor="middle">Shift</text>
+
+  <!-- Training distribution label -->
+  <text x="340" y="58" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">P_train(x)</text>
+
+  <!-- Test distribution label -->
+  <text x="500" y="100" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle" dx="40">P_test(x)</text>
+
+  <!-- Overlap region annotation -->
+  <text x="420" y="250" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Overlap region</text>
+  <line x1="380" y1="255" x2="460" y2="255" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Decision boundary -->
+  <line x1="420" y1="60" x2="420" y2="315" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="420" y="378" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Decision boundary</text>
+  <text x="420" y="390" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">(optimal for train, suboptimal for test)</text>
+
+  <!-- Legend -->
+  <rect x="580" y="50" width="180" height="60" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <line x1="592" y1="70" x2="632" y2="70" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="640" y="74" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Training Data</text>
+  <line x1="592" y1="95" x2="632" y2="95" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="640" y="99" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Test / Deploy Data</text>
+</svg>

@@ -1,0 +1,70 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" rx="8" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" font-weight="bold">Eigenvalues &amp; Eigenvectors</text>
+
+  <!-- Grid lines -->
+  <g stroke="#D4C5A9" stroke-width="0.5" opacity="0.5">
+    <line x1="80" y1="220" x2="380" y2="220"/>
+    <line x1="230" y1="70" x2="230" y2="370"/>
+    <line x1="460" y1="220" x2="760" y2="220"/>
+    <line x1="610" y1="70" x2="610" y2="370"/>
+  </g>
+
+  <!-- Left panel: Before transformation -->
+  <text x="230" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">Before Transformation</text>
+
+  <!-- Original eigenvector (pointing upper-right) -->
+  <line x1="230" y1="220" x2="330" y2="140" stroke="#2D5A8E" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  <text x="310" y="128" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">v</text>
+
+  <!-- Original non-eigenvector (pointing right-ish) -->
+  <line x1="230" y1="220" x2="330" y2="190" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowTan)"/>
+  <text x="338" y="188" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">w</text>
+
+  <!-- Origin dot left -->
+  <circle cx="230" cy="220" r="4" fill="#5C3D1E"/>
+
+  <!-- Transformation arrow -->
+  <path d="M 390 200 Q 420 175 440 200" fill="none" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="415" y="168" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-style="italic">A</text>
+
+  <!-- Right panel: After transformation -->
+  <text x="610" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">After Transformation</text>
+
+  <!-- Scaled eigenvector (same direction, longer) -->
+  <line x1="610" y1="220" x2="760" y2="100" stroke="#2D5A8E" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  <text x="748" y="88" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">lambda v</text>
+
+  <!-- Ghost of original eigenvector -->
+  <line x1="610" y1="220" x2="710" y2="140" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+
+  <!-- Rotated+scaled non-eigenvector (different direction) -->
+  <line x1="610" y1="220" x2="740" y2="130" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowTan)"/>
+  <text x="750" y="132" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Aw</text>
+
+  <!-- Origin dot right -->
+  <circle cx="610" cy="220" r="4" fill="#5C3D1E"/>
+
+  <!-- Key insight box -->
+  <rect x="160" y="310" rx="6" width="480" height="60" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="400" y="335" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-weight="bold">Eigenvector v: direction unchanged by A</text>
+  <text x="400" y="357" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E">Av = lambda v  (only scaled, never rotated)</text>
+
+  <!-- Labels for eigenvalue -->
+  <text x="685" y="175" font-family="Georgia, serif" font-size="12" fill="#7C2530">lambda = 1.5</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

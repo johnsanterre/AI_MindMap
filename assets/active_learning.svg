@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Active Learning: Selecting the Most Informative Points</text>
+
+  <!-- Unlabeled pool -->
+  <text x="130" y="75" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Unlabeled Pool</text>
+
+  <!-- Unlabeled points (gray circles) -->
+  <circle cx="50" cy="120" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="90" cy="105" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="130" cy="130" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="170" cy="110" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="210" cy="125" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="70" cy="155" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="110" cy="170" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="150" cy="160" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="190" cy="150" r="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Highlighted "most informative" points with question marks -->
+  <circle cx="90" cy="105" r="12" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="90" y="110" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">?</text>
+  <circle cx="150" cy="160" r="12" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="150" y="165" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">?</text>
+  <circle cx="210" cy="125" r="12" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="210" y="130" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">?</text>
+
+  <!-- Arrow from pool to model -->
+  <line x1="240" y1="140" x2="310" y2="200" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+  <text x="260" y="160" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic" transform="rotate(22, 260, 160)">query</text>
+
+  <!-- Model box -->
+  <rect x="310" y="170" width="180" height="65" rx="12" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="200" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" text-anchor="middle" font-weight="bold">Model</text>
+  <text x="400" y="220" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle">evaluates uncertainty</text>
+
+  <!-- Arrow from model to oracle -->
+  <line x1="490" y1="200" x2="570" y2="140" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+  <text x="540" y="155" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-style="italic" transform="rotate(-28, 540, 155)">ask oracle</text>
+
+  <!-- Oracle / annotator -->
+  <rect x="570" y="90" width="160" height="65" rx="12" fill="#C4A87A" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="650" y="117" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Oracle</text>
+  <text x="650" y="137" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">(human annotator)</text>
+
+  <!-- Arrow from oracle back to labeled set -->
+  <line x1="650" y1="155" x2="650" y2="250" stroke="#5C3D1E" stroke-width="2.5" marker-end="url(#arrowBrown)"/>
+  <text x="665" y="210" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">label</text>
+
+  <!-- Labeled set -->
+  <rect x="560" y="255" width="180" height="65" rx="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="650" y="280" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">Labeled Set</text>
+  <!-- Labeled points -->
+  <circle cx="600" cy="303" r="7" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="625" cy="303" r="7" fill="#7C2530" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="650" cy="303" r="7" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="675" cy="303" r="7" fill="#7C2530" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="700" cy="303" r="7" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- Arrow from labeled set back to model (retrain) -->
+  <path d="M 560 290 Q 450 340 400 235" fill="none" stroke="#5C3D1E" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrowBrown)"/>
+  <text x="450" y="310" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">retrain</text>
+
+  <!-- Strategy labels at bottom -->
+  <text x="400" y="370" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">Query Strategies:</text>
+  <text x="170" y="390" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Uncertainty Sampling</text>
+  <text x="400" y="390" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Query-by-Committee</text>
+  <text x="630" y="390" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Expected Model Change</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

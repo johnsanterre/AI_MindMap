@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Pruning and Sparsity</text>
+
+  <!-- ============================================================ -->
+  <!-- LEFT: Dense Network -->
+  <!-- ============================================================ -->
+  <text x="150" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Dense Network</text>
+  <text x="150" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">all weights active</text>
+
+  <!-- Dense connections L1->L2 -->
+  <g stroke="#2D5A8E" stroke-width="1.2" opacity="0.5">
+    <line x1="70" y1="110" x2="140" y2="105"/>
+    <line x1="70" y1="110" x2="140" y2="145"/>
+    <line x1="70" y1="110" x2="140" y2="185"/>
+    <line x1="70" y1="110" x2="140" y2="225"/>
+    <line x1="70" y1="110" x2="140" y2="265"/>
+    <line x1="70" y1="160" x2="140" y2="105"/>
+    <line x1="70" y1="160" x2="140" y2="145"/>
+    <line x1="70" y1="160" x2="140" y2="185"/>
+    <line x1="70" y1="160" x2="140" y2="225"/>
+    <line x1="70" y1="160" x2="140" y2="265"/>
+    <line x1="70" y1="210" x2="140" y2="105"/>
+    <line x1="70" y1="210" x2="140" y2="145"/>
+    <line x1="70" y1="210" x2="140" y2="185"/>
+    <line x1="70" y1="210" x2="140" y2="225"/>
+    <line x1="70" y1="210" x2="140" y2="265"/>
+    <line x1="70" y1="260" x2="140" y2="105"/>
+    <line x1="70" y1="260" x2="140" y2="145"/>
+    <line x1="70" y1="260" x2="140" y2="185"/>
+    <line x1="70" y1="260" x2="140" y2="225"/>
+    <line x1="70" y1="260" x2="140" y2="265"/>
+  </g>
+  <!-- Dense connections L2->L3 -->
+  <g stroke="#2D5A8E" stroke-width="1.2" opacity="0.5">
+    <line x1="148" y1="105" x2="220" y2="140"/>
+    <line x1="148" y1="105" x2="220" y2="190"/>
+    <line x1="148" y1="105" x2="220" y2="240"/>
+    <line x1="148" y1="145" x2="220" y2="140"/>
+    <line x1="148" y1="145" x2="220" y2="190"/>
+    <line x1="148" y1="145" x2="220" y2="240"/>
+    <line x1="148" y1="185" x2="220" y2="140"/>
+    <line x1="148" y1="185" x2="220" y2="190"/>
+    <line x1="148" y1="185" x2="220" y2="240"/>
+    <line x1="148" y1="225" x2="220" y2="140"/>
+    <line x1="148" y1="225" x2="220" y2="190"/>
+    <line x1="148" y1="225" x2="220" y2="240"/>
+    <line x1="148" y1="265" x2="220" y2="140"/>
+    <line x1="148" y1="265" x2="220" y2="190"/>
+    <line x1="148" y1="265" x2="220" y2="240"/>
+  </g>
+
+  <!-- Dense L1 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="70" cy="110" r="8"/>
+    <circle cx="70" cy="160" r="8"/>
+    <circle cx="70" cy="210" r="8"/>
+    <circle cx="70" cy="260" r="8"/>
+  </g>
+  <!-- Dense L2 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="144" cy="105" r="8"/>
+    <circle cx="144" cy="145" r="8"/>
+    <circle cx="144" cy="185" r="8"/>
+    <circle cx="144" cy="225" r="8"/>
+    <circle cx="144" cy="265" r="8"/>
+  </g>
+  <!-- Dense L3 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="224" cy="140" r="8"/>
+    <circle cx="224" cy="190" r="8"/>
+    <circle cx="224" cy="240" r="8"/>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- SCISSORS / PRUNING ARROW -->
+  <!-- ============================================================ -->
+  <text x="330" y="160" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">prune</text>
+  <text x="330" y="176" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">remove small |wᵢ|</text>
+  <line x1="265" y1="185" x2="385" y2="185" stroke="#7C2530" stroke-width="2.5"/>
+  <polygon points="385,180 395,185 385,190" fill="#7C2530"/>
+
+  <!-- Scissors icon -->
+  <text x="330" y="202" font-family="Georgia, serif" font-size="18" fill="#7C2530" text-anchor="middle">&#x2702;</text>
+
+  <!-- ============================================================ -->
+  <!-- CENTER-RIGHT: Sparse Network (unstructured) -->
+  <!-- ============================================================ -->
+  <text x="530" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Unstructured Sparse</text>
+  <text x="530" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">individual weights removed</text>
+
+  <!-- Sparse surviving connections L1->L2 (only ~7 of 20) -->
+  <g stroke="#2D5A8E" stroke-width="2" opacity="0.85">
+    <line x1="450" y1="110" x2="520" y2="145"/>
+    <line x1="450" y1="160" x2="520" y2="105"/>
+    <line x1="450" y1="160" x2="520" y2="185"/>
+    <line x1="450" y1="210" x2="520" y2="225"/>
+    <line x1="450" y1="260" x2="520" y2="185"/>
+    <line x1="450" y1="260" x2="520" y2="265"/>
+  </g>
+  <!-- Sparse surviving connections L2->L3 (only ~5 of 15) -->
+  <g stroke="#2D5A8E" stroke-width="2" opacity="0.85">
+    <line x1="528" y1="105" x2="600" y2="140"/>
+    <line x1="528" y1="145" x2="600" y2="190"/>
+    <line x1="528" y1="185" x2="600" y2="140"/>
+    <line x1="528" y1="185" x2="600" y2="240"/>
+    <line x1="528" y1="265" x2="600" y2="240"/>
+  </g>
+  <!-- Pruned (dead) connections shown as faint dashes -->
+  <g stroke="#C4A87A" stroke-width="0.8" opacity="0.25" stroke-dasharray="3,3">
+    <line x1="450" y1="110" x2="520" y2="105"/>
+    <line x1="450" y1="110" x2="520" y2="225"/>
+    <line x1="450" y1="210" x2="520" y2="145"/>
+    <line x1="450" y1="210" x2="520" y2="265"/>
+    <line x1="528" y1="225" x2="600" y2="190"/>
+    <line x1="528" y1="105" x2="600" y2="240"/>
+  </g>
+
+  <!-- Sparse L1 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="450" cy="110" r="8"/>
+    <circle cx="450" cy="160" r="8"/>
+    <circle cx="450" cy="210" r="8"/>
+    <circle cx="450" cy="260" r="8"/>
+  </g>
+  <!-- Sparse L2 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="524" cy="105" r="8"/>
+    <circle cx="524" cy="145" r="8"/>
+    <circle cx="524" cy="185" r="8"/>
+    <circle cx="524" cy="225" r="7" opacity="0.4"/>
+    <circle cx="524" cy="265" r="8"/>
+  </g>
+  <!-- Sparse L3 nodes -->
+  <g fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="604" cy="140" r="8"/>
+    <circle cx="604" cy="190" r="7" opacity="0.4"/>
+    <circle cx="604" cy="240" r="8"/>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- BOTTOM: Structured Pruning illustration -->
+  <!-- ============================================================ -->
+  <text x="530" y="300" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Structured Sparse</text>
+  <text x="530" y="316" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">entire neurons removed</text>
+
+  <!-- Structured: L1 all present, L2 missing 2 neurons, L3 all present -->
+  <!-- Connections to surviving L2 nodes only -->
+  <g stroke="#7C2530" stroke-width="2" opacity="0.7">
+    <line x1="450" y1="340" x2="520" y2="335"/>
+    <line x1="450" y1="340" x2="520" y2="365"/>
+    <line x1="450" y1="370" x2="520" y2="335"/>
+    <line x1="450" y1="370" x2="520" y2="365"/>
+    <line x1="528" y1="335" x2="600" y2="350"/>
+    <line x1="528" y1="365" x2="600" y2="350"/>
+  </g>
+  <!-- Structured L1 -->
+  <g fill="#7C2530" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="450" cy="340" r="7"/>
+    <circle cx="450" cy="370" r="7"/>
+  </g>
+  <!-- Structured L2: 2 active, 1 dead -->
+  <g fill="#7C2530" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="524" cy="335" r="7"/>
+    <circle cx="524" cy="365" r="7"/>
+  </g>
+  <circle cx="524" cy="350" r="7" fill="#D4C5A9" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="517" y1="343" x2="531" y2="357" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="531" y1="343" x2="517" y2="357" stroke="#7C2530" stroke-width="1.5"/>
+  <!-- Structured L3 -->
+  <g fill="#7C2530" stroke="#FDFAF4" stroke-width="1.5">
+    <circle cx="604" cy="350" r="7"/>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- BOTTOM LEFT: Weight magnitude histogram -->
+  <!-- ============================================================ -->
+  <text x="150" y="300" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Weight Magnitude Distribution</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="380" x2="240" y2="380" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="60" y1="380" x2="60" y2="315" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Histogram bars - bell shape centered near zero -->
+  <rect x="68" y="365" width="12" height="15" fill="#C4A87A" opacity="0.6"/>
+  <rect x="82" y="345" width="12" height="35" fill="#C4A87A" opacity="0.6"/>
+  <rect x="96" y="330" width="12" height="50" fill="#C4A87A" opacity="0.6"/>
+  <rect x="110" y="320" width="12" height="60" fill="#C4A87A" opacity="0.6"/>
+  <rect x="124" y="328" width="12" height="52" fill="#C4A87A" opacity="0.6"/>
+  <rect x="138" y="340" width="12" height="40" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="152" y="348" width="12" height="32" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="166" y="355" width="12" height="25" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="180" y="362" width="12" height="18" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="194" y="370" width="12" height="10" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="208" y="374" width="12" height="6" fill="#2D5A8E" opacity="0.6"/>
+
+  <!-- Threshold line -->
+  <line x1="131" y1="315" x2="131" y2="382" stroke="#7C2530" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="131" y="312" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">threshold τ</text>
+
+  <!-- Labels -->
+  <text x="90" y="394" font-family="Georgia, serif" font-size="9" fill="#C4A87A">pruned</text>
+  <text x="175" y="394" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">kept</text>
+  <text x="150" y="394" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">|w|</text>
+
+  <!-- Legend -->
+  <line x1="650" y1="300" x2="675" y2="300" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="680" y="304" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">surviving weight</text>
+  <line x1="650" y1="318" x2="675" y2="318" stroke="#C4A87A" stroke-width="1.5" opacity="0.5" stroke-dasharray="3,3"/>
+  <text x="680" y="322" font-family="Georgia, serif" font-size="10" fill="#888">pruned weight</text>
+  <circle cx="662" cy="338" r="5" fill="#D4C5A9" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="680" y="342" font-family="Georgia, serif" font-size="10" fill="#7C2530">removed neuron</text>
+</svg>

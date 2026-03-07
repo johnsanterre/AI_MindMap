@@ -1,0 +1,159 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#5C3D1E">Graph Neural Networks: Message Passing Between Nodes</text>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- LEFT PANEL: Input Graph                                 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <rect x="12" y="40" width="230" height="200" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="127" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Input Graph</text>
+
+  <!-- Edges (drawn first, behind nodes) -->
+  <line x1="72" y1="100" x2="170" y2="90" stroke="#D4C5A9" stroke-width="2"/>
+  <line x1="72" y1="100" x2="90" y2="175" stroke="#D4C5A9" stroke-width="2"/>
+  <line x1="170" y1="90" x2="180" y2="165" stroke="#D4C5A9" stroke-width="2"/>
+  <line x1="90" y1="175" x2="180" y2="165" stroke="#D4C5A9" stroke-width="2"/>
+  <line x1="170" y1="90" x2="130" y2="145" stroke="#D4C5A9" stroke-width="2"/>
+  <line x1="72" y1="100" x2="130" y2="145" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Nodes -->
+  <circle cx="72" cy="100" r="18" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="72" y="104" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A</text>
+
+  <circle cx="170" cy="90" r="18" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="170" y="94" text-anchor="middle" font-size="10" fill="white" font-weight="bold">B</text>
+
+  <circle cx="130" cy="145" r="18" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="130" y="149" text-anchor="middle" font-size="10" fill="white" font-weight="bold">C</text>
+
+  <circle cx="90" cy="175" r="18" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="90" y="179" text-anchor="middle" font-size="10" fill="white" font-weight="bold">D</text>
+
+  <circle cx="180" cy="165" r="18" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="180" y="169" text-anchor="middle" font-size="10" fill="white" font-weight="bold">E</text>
+
+  <!-- Feature vectors label -->
+  <text x="127" y="218" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">Each node has a feature vector h</text>
+  <text x="127" y="232" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">Edges define neighborhood N(v)</text>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- CENTER PANEL: Message Passing                           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <rect x="258" y="40" width="310" height="330" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="413" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Message Passing (one round)</text>
+
+  <!-- Central target node C -->
+  <circle cx="413" cy="155" r="24" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="413" y="152" text-anchor="middle" font-size="11" fill="white" font-weight="bold">C</text>
+  <text x="413" y="164" text-anchor="middle" font-size="8" fill="white">target</text>
+
+  <!-- Neighbor nodes sending messages -->
+  <circle cx="305" cy="95" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="305" y="99" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">A</text>
+
+  <circle cx="520" cy="95" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="520" y="99" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">B</text>
+
+  <circle cx="305" cy="215" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="305" y="219" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">D</text>
+
+  <circle cx="520" cy="215" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="520" y="219" text-anchor="middle" font-size="10" fill="#5C3D1E" font-weight="bold">E</text>
+
+  <!-- Message arrows from neighbors to C -->
+  <line x1="318" y1="105" x2="393" y2="140" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="507" y1="105" x2="433" y2="140" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="318" y1="205" x2="393" y2="170" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="507" y1="205" x2="433" y2="170" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- Message labels -->
+  <text x="340" y="105" font-size="8" fill="#7C2530" font-style="italic">msg(A)</text>
+  <text x="475" y="105" font-size="8" fill="#7C2530" font-style="italic">msg(B)</text>
+  <text x="340" y="205" font-size="8" fill="#7C2530" font-style="italic">msg(D)</text>
+  <text x="475" y="205" font-size="8" fill="#7C2530" font-style="italic">msg(E)</text>
+
+  <!-- Step boxes -->
+  <rect x="270" y="248" width="286" height="50" rx="4" fill="#EDE4D3" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="278" y="263" font-size="9" fill="#5C3D1E" font-weight="bold">1. Message:</text>
+  <text x="340" y="263" font-size="9" fill="#5C3D1E">m_u = MSG(h_u)  for each neighbor u</text>
+  <text x="278" y="278" font-size="9" fill="#5C3D1E" font-weight="bold">2. Aggregate:</text>
+  <text x="348" y="278" font-size="9" fill="#5C3D1E">M_v = AGG({m_u : u in N(v)})</text>
+  <text x="278" y="293" font-size="9" fill="#5C3D1E" font-weight="bold">3. Update:</text>
+  <text x="336" y="293" font-size="9" fill="#5C3D1E">h_v' = UPDATE(h_v, M_v)</text>
+
+  <!-- K layers note -->
+  <rect x="270" y="306" width="286" height="56" rx="4" fill="#EDE4D3" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="278" y="321" font-size="9" fill="#2D5A8E" font-weight="bold">K rounds = K-hop neighborhood:</text>
+  <text x="278" y="336" font-size="9" fill="#5C3D1E">After K layers, each node's embedding</text>
+  <text x="278" y="349" font-size="9" fill="#5C3D1E">encodes information from K hops away.</text>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- RIGHT PANEL: Updated Embeddings / Readout               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <rect x="582" y="40" width="206" height="200" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="685" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Updated Embeddings</text>
+
+  <!-- Updated node representations as bars -->
+  <text x="615" y="82" font-size="9" fill="#5C3D1E" font-weight="bold">Node</text>
+  <text x="685" y="82" font-size="9" fill="#5C3D1E" font-weight="bold">New h_v</text>
+
+  <text x="615" y="102" font-size="10" fill="#2D5A8E" font-weight="bold">A</text>
+  <rect x="650" y="92" width="100" height="12" rx="3" fill="#2D5A8E" opacity="0.7"/>
+
+  <text x="615" y="122" font-size="10" fill="#2D5A8E" font-weight="bold">B</text>
+  <rect x="650" y="112" width="85" height="12" rx="3" fill="#2D5A8E" opacity="0.7"/>
+
+  <text x="615" y="142" font-size="10" fill="#7C2530" font-weight="bold">C</text>
+  <rect x="650" y="132" width="120" height="12" rx="3" fill="#7C2530" opacity="0.8"/>
+
+  <text x="615" y="162" font-size="10" fill="#2D5A8E" font-weight="bold">D</text>
+  <rect x="650" y="152" width="70" height="12" rx="3" fill="#2D5A8E" opacity="0.7"/>
+
+  <text x="615" y="182" font-size="10" fill="#2D5A8E" font-weight="bold">E</text>
+  <rect x="650" y="172" width="90" height="12" rx="3" fill="#2D5A8E" opacity="0.7"/>
+
+  <!-- Readout -->
+  <text x="685" y="208" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">Node C absorbed neighbor info</text>
+  <text x="685" y="222" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">via aggregated messages</text>
+
+  <!-- Architectures box -->
+  <rect x="582" y="250" width="206" height="120" fill="#F5EFE4" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="685" y="268" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">GNN Variants</text>
+
+  <rect x="600" y="278" width="170" height="18" rx="4" fill="#2D5A8E"/>
+  <text x="685" y="291" text-anchor="middle" font-size="9" fill="white">GCN (mean aggregation)</text>
+
+  <rect x="600" y="302" width="170" height="18" rx="4" fill="#7C2530"/>
+  <text x="685" y="315" text-anchor="middle" font-size="9" fill="white">GAT (attention weights)</text>
+
+  <rect x="600" y="326" width="170" height="18" rx="4" fill="#5C3D1E"/>
+  <text x="685" y="339" text-anchor="middle" font-size="9" fill="white">GIN (sum + injective map)</text>
+
+  <text x="685" y="360" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">MPNN (general framework)</text>
+
+  <!-- Transition arrow left to center -->
+  <line x1="242" y1="140" x2="258" y2="140" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr-brown)"/>
+
+  <!-- Transition arrow center to right -->
+  <line x1="568" y1="140" x2="582" y2="140" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr-brown)"/>
+
+  <!-- Bottom caption -->
+  <text x="400" y="392" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">Gilmer et al. (2017) -- Neural Message Passing for Quantum Chemistry</text>
+</svg>

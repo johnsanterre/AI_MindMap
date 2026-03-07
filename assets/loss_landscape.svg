@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Loss Landscape: Minima, Saddle Points, and Valleys</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="320" x2="740" y2="320" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="355" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Parameter Space</text>
+  <text x="45" y="190" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,45,190)">Loss</text>
+
+  <!-- Loss surface curve -->
+  <path d="M80,120 Q120,80 160,130 Q190,170 220,160 Q250,150 280,200 Q310,250 340,180 Q360,130 390,280 Q410,320 440,310 Q470,290 500,160 Q520,90 540,70 Q560,55 580,70 Q600,90 620,140 Q650,200 680,180 Q710,160 730,170"
+        fill="none" stroke="#2D5A8E" stroke-width="3"/>
+
+  <!-- Shaded region under curve for depth cue -->
+  <path d="M80,120 Q120,80 160,130 Q190,170 220,160 Q250,150 280,200 Q310,250 340,180 Q360,130 390,280 Q410,320 440,310 Q470,290 500,160 Q520,90 540,70 Q560,55 580,70 Q600,90 620,140 Q650,200 680,180 Q710,160 730,170 L730,320 L80,320 Z"
+        fill="#2D5A8E" opacity="0.07"/>
+
+  <!-- Global minimum marker -->
+  <circle cx="560" cy="55" r="6" fill="#7C2530"/>
+  <line x1="560" y1="62" x2="560" y2="320" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <text x="560" y="44" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Global Minimum</text>
+
+  <!-- Local minimum 1 -->
+  <circle cx="160" cy="130" r="5" fill="#5C3D1E"/>
+  <text x="160" y="118" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Local Min</text>
+
+  <!-- Local minimum 2 -->
+  <circle cx="440" cy="310" r="5" fill="#5C3D1E"/>
+  <text x="440" y="300" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Local Min</text>
+
+  <!-- Saddle point 1 -->
+  <circle cx="280" cy="200" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="280" y="225" font-family="Georgia,serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-weight="bold">Saddle Point</text>
+  <!-- Curvature arrows at saddle -->
+  <line x1="260" y1="195" x2="265" y2="185" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowTan)"/>
+  <line x1="300" y1="195" x2="295" y2="185" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowTan)"/>
+
+  <!-- Saddle point 2 -->
+  <circle cx="680" cy="180" r="5" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="700" y="198" font-family="Georgia,serif" font-size="10" fill="#C4A87A" font-weight="bold">Saddle</text>
+
+  <!-- Flat region annotation -->
+  <path d="M500,162 Q520,155 540,155" fill="none" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="480" y="155" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="end" font-style="italic">flat valley</text>
+
+  <!-- SGD trajectory -->
+  <circle cx="120" cy="82" r="4" fill="#7C2530" opacity="0.7"/>
+  <line x1="120" y1="82" x2="148" y2="120" stroke="#7C2530" stroke-width="1.5" opacity="0.6" marker-end="url(#arrowRed)"/>
+  <line x1="155" y1="130" x2="195" y2="163" stroke="#7C2530" stroke-width="1.5" opacity="0.6" marker-end="url(#arrowRed)"/>
+  <line x1="205" y1="162" x2="260" y2="195" stroke="#7C2530" stroke-width="1.5" opacity="0.6" marker-end="url(#arrowRed)"/>
+  <line x1="290" y1="205" x2="345" y2="175" stroke="#7C2530" stroke-width="1.5" opacity="0.6" marker-end="url(#arrowRed)"/>
+  <text x="120" y="74" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">SGD path</text>
+
+  <!-- Legend -->
+  <rect x="580" y="340" width="160" height="40" rx="4" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="595" cy="352" r="4" fill="#7C2530"/>
+  <text x="605" y="356" font-family="Georgia,serif" font-size="9" fill="#2C2C2C">Global min</text>
+  <circle cx="660" cy="352" r="4" fill="#5C3D1E"/>
+  <text x="670" y="356" font-family="Georgia,serif" font-size="9" fill="#2C2C2C">Local min</text>
+  <circle cx="595" cy="370" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="605" y="374" font-family="Georgia,serif" font-size="9" fill="#2C2C2C">Saddle point</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530" opacity="0.7"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

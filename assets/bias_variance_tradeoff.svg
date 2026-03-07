@@ -1,0 +1,41 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="19" font-weight="bold">Bias-Variance Tradeoff</text>
+
+  <!-- Axes -->
+  <line x1="90" y1="320" x2="720" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="90" y1="60" x2="90" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="405" y="355" text-anchor="middle" fill="#5C3D1E" font-size="14">Model Complexity</text>
+  <text x="22" y="195" fill="#5C3D1E" font-size="14" transform="rotate(-90,32,195)">Error</text>
+  <!-- Axis arrow tips -->
+  <polygon points="720,315 720,325 735,320" fill="#5C3D1E"/>
+  <polygon points="85,60 95,60 90,45" fill="#5C3D1E"/>
+
+  <!-- Bias² curve (decreasing) -->
+  <path d="M 110,100 C 200,110 300,160 400,230 C 480,270 560,290 690,305" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <!-- Variance curve (increasing) -->
+  <path d="M 110,300 C 200,295 300,275 400,230 C 480,185 560,140 690,90" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <!-- Total error curve (U-shape) -->
+  <path d="M 110,280 C 180,230 260,180 340,155 C 380,147 410,146 440,150 C 520,165 580,200 650,260 C 670,278 690,300 700,315" fill="none" stroke="#5C3D1E" stroke-width="3.5" stroke-dasharray="8,4"/>
+
+  <!-- Optimal complexity marker -->
+  <line x1="400" y1="60" x2="400" y2="320" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="400" y="375" text-anchor="middle" fill="#C4A87A" font-size="13" font-weight="bold">Optimal Complexity</text>
+
+  <!-- Region labels -->
+  <text x="220" y="80" text-anchor="middle" fill="#2D5A8E" font-size="13" font-style="italic">High Bias</text>
+  <text x="220" y="96" text-anchor="middle" fill="#2D5A8E" font-size="13" font-style="italic">(Underfitting)</text>
+  <text x="590" y="80" text-anchor="middle" fill="#7C2530" font-size="13" font-style="italic">High Variance</text>
+  <text x="590" y="96" text-anchor="middle" fill="#7C2530" font-size="13" font-style="italic">(Overfitting)</text>
+
+  <!-- Legend -->
+  <line x1="530" y1="142" x2="570" y2="142" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="578" y="147" fill="#2D5A8E" font-size="13">Bias²</text>
+  <line x1="530" y1="165" x2="570" y2="165" stroke="#7C2530" stroke-width="3"/>
+  <text x="578" y="170" fill="#7C2530" font-size="13">Variance</text>
+  <line x1="530" y1="188" x2="570" y2="188" stroke="#5C3D1E" stroke-width="3" stroke-dasharray="8,4"/>
+  <text x="578" y="193" fill="#5C3D1E" font-size="13">Total Error</text>
+
+  <!-- Sweet spot dot -->
+  <circle cx="400" cy="146" r="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+</svg>

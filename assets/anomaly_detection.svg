@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" font-weight="bold">Anomaly Detection</text>
+
+  <!-- Normal data cluster (ellipse of dots) -->
+  <ellipse cx="340" cy="220" rx="160" ry="110" fill="none" stroke="#C4A87A" stroke-width="2" stroke-dasharray="8,4" opacity="0.7"/>
+  <text x="340" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">Normal Data Region</text>
+
+  <!-- Normal data points -->
+  <circle cx="310" cy="190" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="350" cy="210" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="330" cy="240" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="370" cy="195" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="290" cy="225" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="360" cy="250" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="320" cy="170" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="380" cy="230" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="300" cy="260" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="340" cy="200" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="355" cy="175" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="275" cy="210" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="325" cy="255" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="365" cy="220" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="305" cy="205" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="345" cy="235" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="285" cy="245" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="395" cy="210" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="260" cy="230" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="335" cy="185" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="315" cy="230" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="375" cy="245" r="5" fill="#2D5A8E" opacity="0.7"/>
+
+  <!-- Anomaly points (red, outside cluster) -->
+  <circle cx="620" cy="90" r="8" fill="#7C2530" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="680" cy="310" r="8" fill="#7C2530" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="140" cy="80" r="8" fill="#7C2530" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="700" cy="170" r="8" fill="#7C2530" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="100" cy="320" r="8" fill="#7C2530" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Anomaly labels -->
+  <text x="620" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">Anomaly</text>
+  <text x="680" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">Anomaly</text>
+  <text x="140" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">Anomaly</text>
+  <text x="700" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">Anomaly</text>
+  <text x="100" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">Anomaly</text>
+
+  <!-- Decision boundary hint -->
+  <ellipse cx="340" cy="220" rx="210" ry="145" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.5"/>
+  <text x="555" y="105" text-anchor="start" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-style="italic">Decision Boundary</text>
+
+  <!-- Legend -->
+  <circle cx="600" cy="370" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <text x="612" y="375" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Normal</text>
+  <circle cx="670" cy="370" r="7" fill="#7C2530"/>
+  <text x="682" y="375" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Anomaly</text>
+</svg>

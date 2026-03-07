@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" font-weight="bold">The Exponential Family</text>
+
+  <!-- Central unifying box -->
+  <rect x="270" y="55" width="260" height="60" rx="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#FDFAF4" font-weight="bold">Canonical Form</text>
+  <text x="400" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4">p(x|eta) = h(x) exp(eta^T T(x) - A(eta))</text>
+
+  <!-- Connecting lines from center to distributions -->
+  <!-- Gaussian -->
+  <line x1="330" y1="115" x2="120" y2="175" stroke="#C4A87A" stroke-width="2"/>
+  <!-- Bernoulli -->
+  <line x1="370" y1="115" x2="290" y2="175" stroke="#C4A87A" stroke-width="2"/>
+  <!-- Poisson -->
+  <line x1="430" y1="115" x2="510" y2="175" stroke="#C4A87A" stroke-width="2"/>
+  <!-- Exponential -->
+  <line x1="470" y1="115" x2="680" y2="175" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Gaussian box -->
+  <rect x="40" y="170" width="160" height="55" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="120" y="193" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" font-weight="bold">Gaussian</text>
+  <text x="120" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">T(x) = (x, x^2)</text>
+
+  <!-- Bernoulli box -->
+  <rect x="210" y="170" width="160" height="55" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="290" y="193" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" font-weight="bold">Bernoulli</text>
+  <text x="290" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">T(x) = x</text>
+
+  <!-- Poisson box -->
+  <rect x="430" y="170" width="160" height="55" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="510" y="193" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" font-weight="bold">Poisson</text>
+  <text x="510" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">T(x) = x</text>
+
+  <!-- Exponential box -->
+  <rect x="600" y="170" width="160" height="55" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="680" y="193" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" font-weight="bold">Exponential</text>
+  <text x="680" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">T(x) = x</text>
+
+  <!-- Second row connections -->
+  <line x1="120" y1="225" x2="120" y2="275" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="290" y1="225" x2="290" y2="275" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="510" y1="225" x2="510" y2="275" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="680" y1="225" x2="680" y2="275" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Property boxes row -->
+  <rect x="30" y="270" width="180" height="50" rx="8" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="120" y="291" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">eta = (mu/sigma^2, -1/2sigma^2)</text>
+  <text x="120" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Continuous, R</text>
+
+  <rect x="200" y="270" width="180" height="50" rx="8" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="290" y="291" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">eta = log(p/(1-p))</text>
+  <text x="290" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Discrete, {0,1}</text>
+
+  <rect x="420" y="270" width="180" height="50" rx="8" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="510" y="291" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">eta = log(lambda)</text>
+  <text x="510" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Discrete, N</text>
+
+  <rect x="590" y="270" width="180" height="50" rx="8" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="680" y="291" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">eta = -lambda</text>
+  <text x="680" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Continuous, R+</text>
+
+  <!-- Unifying properties at bottom -->
+  <rect x="140" y="345" width="520" height="42" rx="8" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="400" y="363" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">Shared Properties: conjugate priors, sufficient statistics, MLE in closed form, convex A(eta)</text>
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">E[T(x)] = nabla A(eta)     Var[T(x)] = nabla^2 A(eta)</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" font-weight="bold">Variational Autoencoder</text>
+
+  <!-- Input -->
+  <rect x="30" y="140" width="100" height="120" rx="6" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="80" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Input</text>
+  <text x="80" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">x</text>
+
+  <!-- Encoder -->
+  <polygon points="170,120 300,170 300,230 170,280" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="225" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" font-weight="bold">Encoder</text>
+  <text x="225" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-style="italic">q(z|x)</text>
+
+  <!-- Arrow: Input to Encoder -->
+  <line x1="130" y1="200" x2="168" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Mu and Sigma outputs -->
+  <rect x="325" y="115" width="60" height="35" rx="5" fill="#2D5A8E" fill-opacity="0.2" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="355" y="137" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-style="italic">&#956;</text>
+
+  <rect x="325" y="250" width="60" height="35" rx="5" fill="#2D5A8E" fill-opacity="0.2" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="355" y="272" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-style="italic">&#963;</text>
+
+  <!-- Arrows: Encoder to mu/sigma -->
+  <line x1="300" y1="185" x2="323" y2="140" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="300" y1="215" x2="323" y2="260" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Epsilon noise -->
+  <rect x="395" y="310" width="55" height="30" rx="5" fill="#7C2530" fill-opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="422" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-style="italic">&#949; ~ N(0,1)</text>
+
+  <!-- Latent Space (Sampling) -->
+  <circle cx="450" cy="200" r="45" fill="#7C2530" fill-opacity="0.1" stroke="#7C2530" stroke-width="2"/>
+  <text x="450" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Latent</text>
+  <text x="450" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">z = &#956; + &#963;&#949;</text>
+
+  <!-- Arrows: mu/sigma/epsilon to latent -->
+  <line x1="385" y1="135" x2="415" y2="175" stroke="#7C2530" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="385" y1="265" x2="415" y2="225" stroke="#7C2530" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="422" y1="310" x2="440" y2="247" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+  <!-- Reparameterization label -->
+  <text x="450" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Reparameterization</text>
+  <text x="450" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Trick</text>
+  <line x1="450" y1="95" x2="450" y2="153" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+
+  <!-- Decoder -->
+  <polygon points="530,170 660,120 660,280 530,230" fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="605" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E" font-weight="bold">Decoder</text>
+  <text x="605" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">p(x|z)</text>
+
+  <!-- Arrow: Latent to Decoder -->
+  <line x1="495" y1="200" x2="528" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Output -->
+  <rect x="685" y="140" width="100" height="120" rx="6" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="735" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Output</text>
+  <text x="735" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">x&#770;</text>
+
+  <!-- Arrow: Decoder to Output -->
+  <line x1="660" y1="200" x2="683" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Loss labels at bottom -->
+  <text x="235" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">KL Divergence Loss</text>
+  <text x="235" y="377" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-style="italic">D_KL(q(z|x) || p(z))</text>
+
+  <text x="600" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Reconstruction Loss</text>
+  <text x="600" y="377" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">-log p(x|z)</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

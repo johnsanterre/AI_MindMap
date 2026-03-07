@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Discrete ResNet Layers vs Continuous ODE Trajectory</text>
+
+  <!-- Left side: Discrete ResNet -->
+  <text x="200" y="65" font-family="Georgia,serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">ResNet (Discrete)</text>
+
+  <!-- Discrete layers as boxes -->
+  <rect x="140" y="80" width="120" height="32" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="200" y="100" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">h₀ (input)</text>
+
+  <line x1="200" y1="112" x2="200" y2="130" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="196,127 200,135 204,127" fill="#7C2530"/>
+  <text x="240" y="128" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" font-style="italic">+ f(h₀, θ₁)</text>
+
+  <rect x="140" y="138" width="120" height="32" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="200" y="158" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">h₁</text>
+
+  <line x1="200" y1="170" x2="200" y2="188" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="196,185 200,193 204,185" fill="#7C2530"/>
+  <text x="240" y="186" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" font-style="italic">+ f(h₁, θ₂)</text>
+
+  <rect x="140" y="196" width="120" height="32" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="200" y="216" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">h₂</text>
+
+  <line x1="200" y1="228" x2="200" y2="246" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="196,243 200,251 204,243" fill="#7C2530"/>
+  <text x="240" y="244" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" font-style="italic">+ f(h₂, θ₃)</text>
+
+  <rect x="140" y="254" width="120" height="32" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="200" y="274" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">h₃</text>
+
+  <line x1="200" y1="286" x2="200" y2="304" stroke="#7C2530" stroke-width="1.5"/>
+  <polygon points="196,301 200,309 204,301" fill="#7C2530"/>
+
+  <rect x="140" y="312" width="120" height="32" rx="4" fill="#7C2530" opacity="0.9" rx="4"/>
+  <text x="200" y="332" font-family="Georgia,serif" font-size="11" fill="#FDFAF4" text-anchor="middle">h₄ (output)</text>
+
+  <text x="200" y="368" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Fixed number of steps</text>
+
+  <!-- Divider -->
+  <line x1="370" y1="55" x2="370" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="5,5"/>
+
+  <!-- Right side: Continuous ODE -->
+  <text x="580" y="65" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Neural ODE (Continuous)</text>
+
+  <!-- Axes -->
+  <line x1="420" y1="340" x2="740" y2="340" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="420" y1="340" x2="420" y2="80" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="580" y="365" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">depth t (continuous)</text>
+  <text x="410" y="210" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,410,210)">hidden state h(t)</text>
+
+  <!-- Continuous trajectory curve -->
+  <path d="M 440,310 C 480,300 500,260 520,220 C 540,180 560,140 590,120 C 620,100 660,95 720,105" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Start point -->
+  <circle cx="440" cy="310" r="6" fill="#2D5A8E"/>
+  <text x="455" y="325" font-family="Georgia,serif" font-size="10" fill="#2D5A8E">h(t₀)</text>
+
+  <!-- End point -->
+  <circle cx="720" cy="105" r="6" fill="#2D5A8E"/>
+  <text x="710" y="95" font-family="Georgia,serif" font-size="10" fill="#2D5A8E">h(t₁)</text>
+
+  <!-- Tangent arrows along curve -->
+  <line x1="480" y1="278" x2="495" y2="255" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="492,259 498,250 489,254" fill="#C4A87A"/>
+
+  <line x1="545" y1="188" x2="560" y2="158" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="557,162 563,153 554,157" fill="#C4A87A"/>
+
+  <line x1="630" y1="97" x2="655" y2="95" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="651,91 660,95 651,99" fill="#C4A87A"/>
+
+  <!-- Label for tangent arrows -->
+  <text x="510" y="240" font-family="Georgia,serif" font-size="9" fill="#C4A87A" font-style="italic">dh/dt = f(h, t, θ)</text>
+
+  <!-- t-axis ticks -->
+  <line x1="440" y1="338" x2="440" y2="342" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="440" y="355" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">t₀</text>
+  <line x1="720" y1="338" x2="720" y2="342" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="720" y="355" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">t₁</text>
+
+  <text x="580" y="378" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">ODE solver chooses steps adaptively</text>
+
+  <!-- Arrow between sides -->
+  <text x="370" y="46" font-family="Georgia,serif" font-size="11" fill="#C4A87A" text-anchor="middle" font-weight="bold">Δt → 0</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Manifold Hypothesis: Low-Dimensional Structure in High-Dimensional Space</text>
+
+  <!-- 3D axes -->
+  <line x1="120" y1="340" x2="120" y2="80" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="120" y1="340" x2="680" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="120" y1="340" x2="50" y2="290" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="122" y="72" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">x₃</text>
+  <text x="690" y="345" font-family="Georgia,serif" font-size="12" fill="#5C3D1E">x₁</text>
+  <text x="40" y="286" font-family="Georgia,serif" font-size="12" fill="#5C3D1E">x₂</text>
+
+  <!-- Curved surface (manifold) — a warped 2D sheet in 3D -->
+  <path d="M 160,300 C 200,260 240,200 300,220 C 360,240 380,180 440,160 C 500,140 540,190 580,170 C 620,150 640,120 660,130" fill="none" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <path d="M 140,270 C 180,230 220,170 280,190 C 340,210 360,150 420,130 C 480,110 520,160 560,140 C 600,120 620,90 640,100" fill="none" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <path d="M 130,240 C 170,200 210,140 270,160 C 330,180 350,120 410,100 C 470,80 510,130 550,110 C 590,90 610,60 630,70" fill="none" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <!-- Cross-lines for mesh feel -->
+  <path d="M 160,300 C 155,280 145,260 130,240" fill="none" stroke="#2D5A8E" stroke-width="1" opacity="0.3"/>
+  <path d="M 300,220 C 290,205 280,195 270,160" fill="none" stroke="#2D5A8E" stroke-width="1" opacity="0.3"/>
+  <path d="M 440,160 C 430,145 420,135 410,100" fill="none" stroke="#2D5A8E" stroke-width="1" opacity="0.3"/>
+  <path d="M 580,170 C 570,150 560,140 550,110" fill="none" stroke="#2D5A8E" stroke-width="1" opacity="0.3"/>
+  <path d="M 660,130 C 650,115 645,105 630,70" fill="none" stroke="#2D5A8E" stroke-width="1" opacity="0.3"/>
+  <!-- Surface fill hint -->
+  <path d="M 160,300 C 200,260 240,200 300,220 C 360,240 380,180 440,160 C 500,140 540,190 580,170 C 620,150 640,120 660,130 L 630,70 C 610,60 590,90 550,110 C 510,130 470,80 410,100 C 350,120 330,180 270,160 C 210,140 170,200 130,240 Z" fill="#2D5A8E" opacity="0.08"/>
+
+  <!-- Data points ON the manifold -->
+  <circle cx="180" cy="278" r="5" fill="#7C2530"/>
+  <circle cx="230" cy="218" r="5" fill="#7C2530"/>
+  <circle cx="290" cy="210" r="5" fill="#7C2530"/>
+  <circle cx="340" cy="200" r="5" fill="#7C2530"/>
+  <circle cx="390" cy="155" r="5" fill="#7C2530"/>
+  <circle cx="430" cy="145" r="5" fill="#7C2530"/>
+  <circle cx="480" cy="135" r="5" fill="#7C2530"/>
+  <circle cx="530" cy="155" r="5" fill="#7C2530"/>
+  <circle cx="570" cy="148" r="5" fill="#7C2530"/>
+  <circle cx="610" cy="118" r="5" fill="#7C2530"/>
+  <circle cx="250" cy="182" r="5" fill="#7C2530"/>
+  <circle cx="310" cy="175" r="5" fill="#7C2530"/>
+  <circle cx="450" cy="115" r="5" fill="#7C2530"/>
+  <circle cx="560" cy="120" r="5" fill="#7C2530"/>
+  <circle cx="200" cy="240" r="5" fill="#7C2530"/>
+  <circle cx="370" cy="168" r="5" fill="#7C2530"/>
+
+  <!-- A few off-manifold points (noise) shown lighter -->
+  <circle cx="350" cy="290" r="4" fill="#C4A87A" opacity="0.6"/>
+  <circle cx="500" cy="260" r="4" fill="#C4A87A" opacity="0.6"/>
+
+  <!-- Annotations -->
+  <text x="680" y="175" font-family="Georgia,serif" font-size="11" fill="#7C2530" font-style="italic">data points</text>
+  <text x="680" y="190" font-family="Georgia,serif" font-size="11" fill="#7C2530" font-style="italic">on manifold</text>
+  <line x1="670" y1="140" x2="618" y2="120" stroke="#7C2530" stroke-width="1" opacity="0.6"/>
+
+  <text x="510" y="290" font-family="Georgia,serif" font-size="11" fill="#C4A87A" font-style="italic">off-manifold</text>
+  <line x1="508" y1="268" x2="504" y2="262" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+
+  <text x="350" y="70" font-family="Georgia,serif" font-size="13" fill="#2D5A8E" font-weight="bold">2D manifold</text>
+  <text x="350" y="86" font-family="Georgia,serif" font-size="13" fill="#2D5A8E" font-weight="bold">embedded in 3D</text>
+  <line x1="350" y1="90" x2="330" y2="140" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Intrinsic dimension callout -->
+  <rect x="50" y="52" width="160" height="44" rx="4" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="130" y="68" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Ambient dimension: 3</text>
+  <text x="130" y="86" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Intrinsic dimension: 2</text>
+</svg>
