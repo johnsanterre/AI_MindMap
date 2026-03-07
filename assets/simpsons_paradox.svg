@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Simpson's Paradox: Trend Reversal When Groups Are Combined</text>
+
+  <!-- Axes -->
+  <line x1="90" y1="50" x2="90" y2="330" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="90" y1="330" x2="760" y2="330" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Axis arrows -->
+  <polygon points="90,44 85,58 95,58" fill="#5C3D1E"/>
+  <polygon points="766,330 752,325 752,335" fill="#5C3D1E"/>
+
+  <!-- Axis labels -->
+  <text x="425" y="365" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Treatment Dosage</text>
+  <text x="22" y="190" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,22,190)">Recovery Rate</text>
+
+  <!-- Group A (navy) - upper cluster, negative slope within group -->
+  <!-- Points scattered around a downward-sloping line from (150,100) to (380,170) -->
+  <circle cx="140" cy="95" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="165" cy="108" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="180" cy="90" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="210" cy="115" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="230" cy="125" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="250" cy="110" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="270" cy="135" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="290" cy="128" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="310" cy="145" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="340" cy="150" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="360" cy="160" r="5" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="380" cy="155" r="5" fill="#2D5A8E" opacity="0.7"/>
+
+  <!-- Group A trend line (negative slope within group) -->
+  <line x1="130" y1="92" x2="390" y2="162" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="6,3"/>
+
+  <!-- Group B (deep red) - lower cluster, negative slope within group -->
+  <!-- Points scattered around a downward-sloping line from (350,210) to (600,280) -->
+  <circle cx="350" cy="205" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="375" cy="218" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="400" cy="210" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="430" cy="230" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="455" cy="240" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="470" cy="225" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="500" cy="250" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="530" cy="260" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="555" cy="255" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="580" cy="270" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="610" cy="278" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="635" cy="285" r="5" fill="#7C2530" opacity="0.7"/>
+
+  <!-- Group B trend line (negative slope within group) -->
+  <line x1="340" y1="202" x2="645" y2="288" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,3"/>
+
+  <!-- Combined trend line (positive slope! reversal!) -->
+  <!-- Goes from lower-left to upper-right across both clusters -->
+  <line x1="130" y1="280" x2="645" y2="85" stroke="#C4A87A" stroke-width="3"/>
+
+  <!-- Annotations -->
+  <!-- Group A label -->
+  <text x="200" y="78" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Group A (Mild cases)</text>
+  <text x="200" y="93" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#2D5A8E">Trend: recovery decreases with dosage</text>
+
+  <!-- Group B label -->
+  <text x="420" y="305" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Group B (Severe cases)</text>
+  <text x="420" y="320" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#7C2530">Trend: recovery decreases with dosage</text>
+
+  <!-- Combined trend annotation -->
+  <path d="M 655,90 Q 680,80 700,82" fill="none" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="660" y="72" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">Combined trend:</text>
+  <text x="660" y="87" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">REVERSED!</text>
+
+  <!-- Legend -->
+  <rect x="96" y="345" width="400" height="38" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <line x1="110" y1="365" x2="140" y2="365" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="148" y="369" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Group A</text>
+  <line x1="210" y1="365" x2="240" y2="365" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="248" y="369" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Group B</text>
+  <line x1="310" y1="365" x2="340" y2="365" stroke="#C4A87A" stroke-width="3"/>
+  <text x="348" y="369" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Combined (misleading)</text>
+
+  <!-- Confounding variable callout -->
+  <rect x="560" y="345" width="210" height="38" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="665" y="362" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Confounding variable:</text>
+  <text x="665" y="377" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#7C2530" text-anchor="middle">disease severity determines group</text>
+</svg>

@@ -1,0 +1,175 @@
+<<include "Header">>
+! Superposition
+<img src="assets/superposition.svg" alt="Diagram showing superposition: many feature directions packed into fewer dimensions, with sparse vs dense activation comparison" style="max-width:100%;margin:1em 0;">
+
+Imagine a small apartment shared by eight people who each own a full set of furniture. There is no way to give everyone their own room — the apartment only has two bedrooms. But if most people are away at any given time, the few who are home can spread out comfortably and use the space without tripping over each other. Neural networks face exactly this problem: they need to represent far more concepts (features) than they have neurons (dimensions), so they pack many features into overlapping directions in activation space — a phenomenon called ''superposition''. It works because most features are inactive for any given input, just as most roommates are out of the apartment at any given time.
+
+!! The Core Insight
+
+''Superposition'' is the phenomenon where neural networks encode more ''features'' than they have ''dimensions'' by representing each feature as a direction in activation space rather than a dedicated neuron. In a network with a 512-dimensional residual stream, there may be tens of thousands of meaningful concepts the model has learned — far too many to assign one neuron per concept. Instead, each feature gets its own direction (a unit vector in $\mathbb{R}^{512}$), and these directions are packed to be ''nearly orthogonal'' to each other. Because high-dimensional spaces have room for far more nearly-orthogonal directions than truly orthogonal ones, this encoding is geometrically possible.
+
+The critical enabling condition is ''sparsity'': for any given input, only a small fraction of features are active. When only a handful of feature directions are "on" simultaneously, their signals can be separated with minimal interference — the small dot products between nearly-orthogonal vectors produce only minor crosstalk. This is why superposition works in practice even though, in principle, the directions overlap.
+
+Superposition is central to understanding why individual neurons in large models are ''polysemantic'' — responding to multiple, seemingly unrelated concepts — and it motivates the entire research program of <<link "Sparse Autoencoders" "Sparse Autoencoders">><</link>> and <<link "Mechanistic Interpretability" "Mechanistic Interpretability">><</link>>.
+
+!! Why Networks Use Superposition
+
+A network's hidden layer has $d$ dimensions. In the simplest case, the network could assign one neuron to each feature, giving it $d$ features — a ''monosemantic'' representation. But the world contains far more than $d$ concepts. Superposition allows the network to represent $N \gg d$ features at the cost of some interference between them. The network implicitly optimizes a tradeoff: more features mean better task performance (the model can detect more patterns), but more interference means noisier computation.
+
+Elhage et al. (2022) demonstrated this with ''toy models of superposition''. They trained small networks where the number of ground-truth features, their sparsity, and their importance were all controlled. The key findings were:
+
+''Phase transitions:'' as feature sparsity increases, the model abruptly switches from a monosemantic regime (one feature per neuron) to a superposition regime (many features sharing neurons). The transition is sharp, not gradual.
+
+''Importance-weighted packing:'' more important features get directions closer to the principal axes (less interference), while less important features are packed into the remaining space at the cost of higher interference. The network prioritizes the features that matter most for the loss function.
+
+''Geometric structure:'' in toy models with specific sparsity levels, features arrange themselves into beautiful geometric configurations — pentagons, hexagons, and other polytopes that maximize the minimum angle between any pair of feature directions.
+
+!! What the Math Is Actually Doing
+
+Consider a model with hidden dimension $d$ that represents $N$ features where $N \gg d$. Each feature $i$ is encoded as a unit vector $\mathbf{v}_i \in \mathbb{R}^d$ (its ''feature direction''). The model represents an input where features have activations $a_1, a_2, \ldots, a_N$ as the sum:
+
+$$\mathbf{x} = \sum_{i=1}^{N} a_i \, \mathbf{v}_i$$
+
+To read out feature $j$, the model computes $\hat{a}_j = \mathbf{v}_j^\top \mathbf{x}$. Expanding:
+
+$$\hat{a}_j = \mathbf{v}_j^\top \sum_{i} a_i \, \mathbf{v}_i = a_j \underbrace{(\mathbf{v}_j^\top \mathbf{v}_j)}_{=1} + \sum_{i \neq j} a_i \underbrace{(\mathbf{v}_j^\top \mathbf{v}_i)}_{\text{interference}}$$
+
+The first term is the true activation $a_j$. The second term is ''interference'' — the sum of dot products with all other active features. If the $\mathbf{v}_i$ were exactly orthogonal, interference would be zero, but orthogonality in $\mathbb{R}^d$ limits us to $d$ features. Nearly-orthogonal vectors make each individual dot product $\mathbf{v}_j^\top \mathbf{v}_i$ small (say $\epsilon \approx 0.01$). If only $k$ features are active at once (sparsity), the total interference is approximately $k \epsilon$, which remains small when $k$ is small — even though $N$ is large.
+
+The ''Johnson-Lindenstrauss lemma'' provides the theoretical foundation: $N$ points in high-dimensional space can be projected into $d = O(\log N / \epsilon^2)$ dimensions while preserving all pairwise distances to within a factor of $(1 \pm \epsilon)$. This means the number of nearly-orthogonal directions grows //exponentially// with $d$.
+
+The ''capacity'' of a superposition scheme — how many features can be reliably encoded — depends on the sparsity $S$ of feature activations. Empirically:
+
+$$N_{\text{effective}} \propto \frac{d}{1 - S}$$
+
+When $S$ is close to 1 (very sparse features, rarely active), the denominator is small and $N_{\text{effective}}$ is much larger than $d$. This matches the toy model findings: sparser features permit denser packing.
+
+!! Connecting Superposition to Interpretability
+
+Superposition has profound implications for neural network interpretability. If each neuron responded to exactly one concept (the monosemantic dream), we could simply read off what a network was computing by examining individual neuron activations. Superposition destroys this possibility: a single neuron participates in encoding many features, and a single feature is distributed across many neurons. This is ''polysemanticity''.
+
+The <<link "Sparse Autoencoders" "Sparse Autoencoders">><</link>> research program is a direct response to superposition. SAEs learn a dictionary of monosemantic feature directions from the tangled activation space, effectively "de-superposing" the representation. The <<link "Mechanistic Interpretability" "Mechanistic Interpretability">><</link>> agenda more broadly seeks to understand the circuits that read and write these superposed features.
+
+Superposition also connects to <<link "Embeddings" "Embeddings">><</link>> — learned embedding spaces use exactly the same geometric trick to pack a large vocabulary into a manageable number of dimensions. The <<link "Curse of Dimensionality" "Curse of Dimensionality">><</link>> is the flip side: while high dimensions allow more nearly-orthogonal directions, they also make distances behave counterintuitively. And the <<link "Information Bottleneck" "Information Bottleneck">><</link>> framework provides a complementary view: networks compress information about inputs while preserving information about outputs, and superposition is the geometric mechanism by which this compression is achieved.
+
+!! When Superposition Breaks Down
+
+''Dense feature co-activation:'' superposition relies on sparsity — few features active simultaneously. When many related features must be active at once (e.g., a complex scene with many objects, or a sentence activating dozens of semantic concepts), interference accumulates and the model's internal representation becomes noisy. This may explain why models struggle with inputs that require simultaneously tracking many independent facts.
+
+''Feature importance collisions:'' the model prioritizes important features by giving them directions with less interference. When two equally important features have similar sparsity patterns and tend to co-activate, the model faces an irresolvable tradeoff — it cannot give both of them clean, low-interference directions while also packing in all the other features. This creates systematic errors on inputs where both features matter.
+
+''Adversarial exploitation:'' because superposition introduces small but nonzero interference between features, carefully crafted inputs can amplify this interference. An adversarial input can activate many features simultaneously in a pattern that causes the interference terms to constructively add up, pushing the model's representation of one feature far from its true value. This provides a geometric explanation for why adversarial examples exist and are transferable across models that share similar superposed representations.
+
+!! Technical Details
+
+''Key paper:'' Elhage et al. 2022, "Toy Models of Superposition" — the foundational theoretical and empirical study of superposition using controlled toy models with known ground-truth features.
+
+''Almost-orthogonal vectors:'' in $\mathbb{R}^d$, one can find $\exp(c \cdot d)$ unit vectors such that all pairwise dot products are at most $\epsilon$, for a constant $c$ depending on $\epsilon$. This exponential scaling is why superposition becomes increasingly effective in higher-dimensional models.
+
+''Compressed sensing connection:'' superposition is closely related to compressed sensing (Candes and Tao 2005), where sparse signals are recovered from low-dimensional measurements. The restricted isometry property (RIP) — the condition that all sparse subsets of measurement vectors are nearly orthogonal — is essentially the same condition that makes superposition work. The model's weight matrices act as implicit measurement matrices.
+
+''Feature splitting:'' as SAE dictionary size increases, previously monosemantic features sometimes split into finer-grained sub-features (e.g., "code" splits into "Python code" and "JavaScript code"). This suggests the true feature set is hierarchical and the "right" number of features depends on the granularity of analysis.
+
+''Privileged basis:'' not all dimensions in a neural network are equivalent. In networks with elementwise nonlinearities (like <<link "ReLU" "ReLU">><</link>>), the standard basis is ''privileged'' — the nonlinearity operates on individual coordinates, giving the axes special status. Superposition interacts with this privilege: the model must balance the benefits of superposition against the computational constraints imposed by the nonlinearity.
+
+''Residual stream bandwidth:'' in <<link "Transformers" "Transformers">><</link>>, the residual stream is a shared communication channel that all attention heads and MLP layers read from and write to. Superposition determines how much information this channel can carry. Wider residual streams (higher $d$) allow more features and less interference, which partly explains why scaling model width improves performance.
+
+!! Quiz
+
+<span id="sp-q1">
+''1. What is superposition in neural networks?''
+
+<<button "A. A quantum computing technique applied to neural weights">><<replace "#sp-q1">>A. A quantum computing technique applied to neural weights — Incorrect. Superposition here is a classical geometric phenomenon about how features are packed into activation space, unrelated to quantum mechanics.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The encoding of more features than dimensions by using overlapping, nearly-orthogonal directions">><<replace "#sp-q1">>B. Correct. Superposition allows $N \gg d$ features to coexist in a $d$-dimensional space by assigning each feature a direction that is approximately (but not exactly) orthogonal to the others.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. A method for stacking multiple neural network layers">><<replace "#sp-q1">>C. A method for stacking multiple neural network layers — Incorrect. Layer stacking is simply depth in a network architecture; superposition refers to how features are encoded within a single representation space.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The process of training multiple models simultaneously">><<replace "#sp-q1">>D. The process of training multiple models simultaneously — Incorrect. That describes ensemble training, not superposition.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q2">
+''2. What condition makes superposition work despite the interference between feature directions?''
+
+<<button "A. High learning rates during training">><<replace "#sp-q2">>A. High learning rates during training — Incorrect. Learning rates affect optimization, not the geometric viability of superposition.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Large batch sizes">><<replace "#sp-q2">>B. Large batch sizes — Incorrect. Batch size is a training hyperparameter unrelated to the geometric conditions enabling superposition.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Feature sparsity — only a few features are active for any given input">><<replace "#sp-q2">>C. Correct. When only $k$ features are active at once and $k$ is small, the total interference $k\epsilon$ remains manageable even though $N$ total features is large.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Weight sharing across layers">><<replace "#sp-q2">>D. Weight sharing across layers — Incorrect. Weight sharing is an architectural choice (as in RNNs), not the sparsity condition that makes superposition viable.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q3">
+''3. In the toy models of Elhage et al. (2022), what happens as feature sparsity increases?''
+
+<<button "A. The model gradually adds more superposed features one at a time">><<replace "#sp-q3">>A. The model gradually adds more superposed features one at a time — Incorrect. The transition is abrupt (a phase transition), not gradual.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The model undergoes a sharp phase transition from monosemantic to superposition regime">><<replace "#sp-q3">>B. Correct. As sparsity crosses a threshold, the model abruptly switches from assigning one feature per neuron to packing many features into overlapping directions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The model loses accuracy because features become too compressed">><<replace "#sp-q3">>C. The model loses accuracy because features become too compressed — Incorrect. Higher sparsity actually makes superposition //more// effective, not less, because interference is lower.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The model's weights become sparse, leading to pruning">><<replace "#sp-q3">>D. The model's weights become sparse, leading to pruning — Incorrect. Feature sparsity refers to activation patterns, not weight sparsity, and does not lead to pruning.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q4">
+''4. Why does superposition cause polysemanticity in individual neurons?''
+
+<<button "A. Because neurons are randomly initialized and never specialize">><<replace "#sp-q4">>A. Because neurons are randomly initialized and never specialize — Incorrect. Neurons do specialize, but each participates in encoding multiple features via superposition.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Because each feature is distributed across many neurons, so each neuron participates in encoding multiple features">><<replace "#sp-q4">>B. Correct. In a superposed representation, features are directions (not individual neurons), and each direction has nonzero components along many neuron axes, causing each neuron to respond to multiple unrelated concepts.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Because the training data contains ambiguous labels">><<replace "#sp-q4">>C. Because the training data contains ambiguous labels — Incorrect. Polysemanticity arises from the geometry of superposition, not from label noise.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Because dropout randomly deactivates neurons during training">><<replace "#sp-q4">>D. Because dropout randomly deactivates neurons during training — Incorrect. Dropout is a regularization technique; polysemanticity comes from the network packing more features than dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q5">
+''5. The interference term when reading out feature $j$ is $\sum_{i \neq j} a_i (\mathbf{v}_j^\top \mathbf{v}_i)$. What keeps this term small?''
+
+<<button "A. The activations $a_i$ are all exactly zero except for feature $j$">><<replace "#sp-q5">>A. The activations $a_i$ are all exactly zero except for feature $j$ — Incorrect. This would mean no superposition at all (only one feature active). Superposition allows //several// features to be active, just not too many.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The feature vectors $\mathbf{v}_i$ are all identical, making dot products equal to 1">><<replace "#sp-q5">>B. The feature vectors are all identical — Incorrect. If all vectors were identical, there would be no way to distinguish features. The vectors must be //different// and nearly orthogonal.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Near-orthogonality makes each $\mathbf{v}_j^\top \mathbf{v}_i$ small, and sparsity means few $a_i$ are nonzero">><<replace "#sp-q5">>C. Correct. The combination of small pairwise dot products (near-orthogonality) and few nonzero activations (sparsity) keeps the total interference manageable.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Batch normalization centers all activations around zero">><<replace "#sp-q5">>D. Batch normalization centers all activations around zero — Incorrect. Normalization is a separate technique; the interference is controlled by geometry and sparsity, not normalization.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q6">
+''6. How does the Johnson-Lindenstrauss lemma relate to superposition?''
+
+<<button "A. It proves that neural networks always converge to a global minimum">><<replace "#sp-q6">>A. It proves that neural networks always converge to a global minimum — Incorrect. The JL lemma is about geometric projections, not optimization convergence.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It shows that the number of nearly-orthogonal directions grows exponentially with dimension, making superposition increasingly effective">><<replace "#sp-q6">>B. Correct. JL establishes that $N$ points can be embedded in $O(\log N / \epsilon^2)$ dimensions with bounded distortion, implying exponentially many near-orthogonal directions exist in high-dimensional spaces.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. It provides bounds on training time for deep networks">><<replace "#sp-q6">>C. It provides bounds on training time for deep networks — Incorrect. The JL lemma concerns dimensionality reduction, not training complexity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It guarantees that sparse autoencoders will find all features">><<replace "#sp-q6">>D. It guarantees that sparse autoencoders will find all features — Incorrect. The JL lemma describes what is geometrically possible in high dimensions; it does not guarantee that any particular algorithm will recover all features.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q7">
+''7. What is a "privileged basis" in the context of superposition?''
+
+<<button "A. The basis vectors learned by PCA on the training data">><<replace "#sp-q7">>A. The basis vectors learned by PCA on the training data — Incorrect. The privileged basis comes from the network architecture (elementwise nonlinearities), not from PCA.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The standard coordinate axes, which are special because elementwise nonlinearities (like ReLU) operate on individual coordinates">><<replace "#sp-q7">>B. Correct. Nonlinearities like ReLU apply to each coordinate independently, making the standard basis axes special — the model cannot freely rotate its representation without changing how the nonlinearity interacts with features.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. A randomly chosen orthogonal basis used for initialization">><<replace "#sp-q7">>C. A randomly chosen orthogonal basis used for initialization — Incorrect. Initialization bases are arbitrary; the privileged basis is determined by the structure of the nonlinearity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The eigenvectors of the weight matrix">><<replace "#sp-q7">>D. The eigenvectors of the weight matrix — Incorrect. Weight matrix eigenvectors are analytically interesting but not what "privileged basis" refers to in the superposition literature.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="sp-q8">
+''8. When superposition breaks down due to dense feature co-activation, what is the likely consequence?''
+
+<<button "A. The model trains faster because more features are active">><<replace "#sp-q8">>A. The model trains faster because more features are active — Incorrect. Dense co-activation causes interference problems; it does not speed up training.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The model's internal representations become noisy and unreliable due to accumulated interference">><<replace "#sp-q8">>B. Correct. When many features activate simultaneously, the sum of interference terms $\sum_{i \neq j} a_i (\mathbf{v}_j^\top \mathbf{v}_i)$ grows large, corrupting the model's ability to cleanly read out individual feature activations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The network automatically increases its hidden dimension to accommodate more features">><<replace "#sp-q8">>C. The network automatically increases its hidden dimension to accommodate more features — Incorrect. Network architecture is fixed after design; the model cannot dynamically add dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Gradient descent corrects the interference during the next training step">><<replace "#sp-q8">>D. Gradient descent corrects the interference during the next training step — Incorrect. Interference is a fundamental geometric limitation of superposition, not a transient training artifact that gradient descent can fix.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

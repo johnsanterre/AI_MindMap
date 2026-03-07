@@ -1,0 +1,165 @@
+<<include "Header">>
+
+! Ergodic Theory
+
+<img src="assets/ergodic_theory.svg" alt="Diagram showing time average equals space average for an ergodic system" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+If you stir a cup of coffee once and sample it, you might get mostly cream. Stir it long enough and any sample you take will taste the same as any other — the liquid has explored every region of the cup uniformly. ''Ergodic theory'' asks: when does the time average of a dynamical system equal the space average? The answer determines whether MCMC sampling works, whether gradient descent over minibatches represents the full dataset, and whether training on sequences of data from one trajectory is statistically equivalent to sampling independently.
+
+!! The Core Insight
+
+The central result is ''Birkhoff's ergodic theorem'': for an ergodic measure-preserving system, the time average of any integrable function equals its space average, almost surely:
+
+$$\frac{1}{T}\int_0^T f(T^t x)\, dt \;\xrightarrow{T\to\infty}\; \int f\, d\mu$$
+
+The key condition is //ergodicity//: the system cannot be decomposed into two invariant subsets of positive measure. In plain terms, a single long trajectory eventually explores the entire state space, so what you see over time faithfully represents what exists across space. This is why running a Markov chain long enough gives you valid samples from the target distribution — not because each step is independent, but because the trajectory's time averages converge to the distribution's true expectations.
+
+!! Ergodic Systems and Mixing
+
+Ergodicity sits at the bottom of a hierarchy of increasingly strong properties:
+
+''Ergodic → Mixing → K-system → Bernoulli''
+
+- //Ergodic//: time averages equal space averages. The weakest useful property.
+- //Mixing//: correlations between events decay over time — knowing where the system is now tells you less and less about where it will be far in the future. Formally: $\mu(A \cap T^{-n}B) \to \mu(A)\mu(B)$.
+- //K-system// (Kolmogorov): positive entropy; the system generates genuine randomness at a fixed rate.
+- //Bernoulli//: isomorphic to an independent coin-flip process — the strongest possible randomness property.
+
+Most "nice" dynamical systems and well-behaved Markov chains are at least ergodic, and many are mixing. Canonical examples from mathematics include the ''baker's map'' (fold and stretch the unit square) and Arnold's ''cat map'' (a linear toral automorphism). Both are Bernoulli systems. These examples clarify the intuition: folding and stretching mixes regions of phase space the way a good shuffling of cards mixes the deck.
+
+!! What the Math Is Actually Doing
+
+A ''measure-preserving transformation'' $T$ on a probability space $(\Omega, \mathcal{F}, \mu)$ satisfies:
+
+$$\mu(T^{-1}A) = \mu(A) \quad \text{for all measurable } A$$
+
+The measure doesn't change as the system evolves — $\mu$ is a stationary distribution for $T$.
+
+''Ergodicity'' is equivalent to: every $T$-invariant measurable set has measure 0 or 1. There are no "trapping regions" of intermediate measure.
+
+Two convergence theorems formalize the core insight:
+
+- ''von Neumann's mean ergodic theorem'' (1932): the time averages converge in $L^2$ norm.
+- ''Birkhoff's pointwise ergodic theorem'' (1931): convergence holds //almost surely// (for $\mu$-almost every starting point $x$).
+
+$$\frac{1}{N}\sum_{k=0}^{N-1} f(T^k x) \;\xrightarrow{a.s.}\; \int f\, d\mu \quad \text{as } N\to\infty$$
+
+The ''mixing condition'' is:
+
+$$\mu(A \cap T^{-n}B) \to \mu(A)\mu(B) \quad \text{as } n\to\infty$$
+
+This says that in the long run, the events $A$ and $T^{-n}B$ become independent — the system forgets its past. The spectral signature of mixing is that the eigenvalue 1 of the Koopman operator is //simple// (multiplicity one); all other eigenvalues have modulus strictly less than 1.
+
+!! Ergodic Theory in ML
+
+Ergodicity is a silent assumption underlying several core ML methods:
+
+''MCMC correctness'': A Metropolis-Hastings or Gibbs sampler is correct because the constructed Markov chain is ergodic with the target distribution $\pi$ as its stationary measure. Birkhoff's theorem guarantees that time averages — empirical estimates of expectations — converge to true expectations under $\pi$. Without ergodicity, the chain might explore only part of the space.
+
+''Minibatch SGD'': Using a random minibatch as an unbiased estimator of the full-dataset gradient implicitly invokes ergodicity. If data are drawn i.i.d., or if the shuffled data sequence is ergodic, then gradient estimates averaged over steps converge to the true gradient.
+
+''Reinforcement learning'': An agent learning from a single long trajectory (online RL) relies on the MDP being ergodic — that the trajectory covers the state-action space like many independent samples. If the MDP has absorbing states or disconnected regions, this fails. The ''mixing time'' of the Markov chain underlying the MDP determines how quickly empirical statistics from the trajectory become reliable.
+
+''Time-series learning'': Training a model on one long sequence (e.g., a language model on a corpus treated as a single token stream) is statistically valid only if the underlying process is ergodic. Ergodicity justifies treating temporal samples as representative of the distribution.
+
+!! When Ergodic Theory Breaks Down
+
+''(1) Non-ergodic systems.'' If the phase space has multiple attractors — different modes of a distribution — a trajectory started in one basin never visits the other. MCMC gets stuck: time averages give biased estimates of the full distribution, because the chain samples only from the local basin. This is the mode-collapse problem given a rigorous name. Multimodal posteriors in Bayesian inference, and energy landscapes in protein folding, are practical instances. The fix requires either tempering (simulated annealing, parallel tempering) or an ergodicity-restoring proposal kernel.
+
+''(2) Slow mixing.'' The system is technically ergodic — given infinite time, every region is visited — but the mixing time is exponentially long. In practice, the chain never mixes within a feasible run. High-dimensional distributions with large energy barriers (glassy systems, multimodal posteriors with thin necks) suffer from this. The spectral gap of the chain's transition operator governs mixing time: $t_{\text{mix}} = O(1/\text{gap})$. A tiny spectral gap means astronomically slow mixing.
+
+''(3) Non-stationary environments.'' Ergodic theory assumes a //stationary// invariant measure. In RL with non-stationary rewards, or in ML with distribution shift, the system's statistics change over time. There is no fixed $\mu$ for Birkhoff's theorem to converge to. Time averages don't represent any meaningful spatial average, because the "space" itself is moving. Continual learning and online adaptation methods must grapple with this fundamental violation.
+
+!! Technical Details
+
+''Historical roots'': Ludwig Boltzmann (1871) introduced the ergodic hypothesis in statistical mechanics to justify replacing time averages with phase-space averages in thermodynamics. The rigorous mathematical treatment came from Birkhoff (1931) and von Neumann (1932).
+
+''Ergodic decomposition theorem'': Every measure-preserving system decomposes uniquely into ergodic components. Non-ergodic systems are mixtures of ergodic ones — each trajectory stays within one ergodic component.
+
+''Entropy'': The Kolmogorov-Sinai (metric) entropy of an ergodic process equals the Shannon entropy rate. For Bernoulli systems, this equals $-\sum p_i \log p_i$.
+
+''Mixing time bounds'': For a Markov chain with transition matrix $P$ and stationary distribution $\pi$, the mixing time to $\varepsilon$-total variation is bounded by:
+
+$$t_{\text{mix}}(\varepsilon) \leq \frac{\log(1/(\varepsilon \pi_{\min}))}{\text{gap}(P)}$$
+
+where $\text{gap}(P) = 1 - \lambda_2$ is the spectral gap and $\pi_{\min} = \min_x \pi(x)$.
+
+''Connections to Kolmogorov complexity'': Ergodic sequences have maximal complexity relative to their entropy; they cannot be compressed beyond their entropy rate.
+
+See also: <<link "Stochastic Processes" "Stochastic Processes">><</link>>, <<link "Markov Chains" "Markov Chains">><</link>>, <<link "MCMC" "MCMC">><</link>>, <<link "Reinforcement Learning" "Reinforcement Learning">><</link>>.
+
+!! Quiz
+
+<span id="et-q1">What does Birkhoff's ergodic theorem guarantee for an ergodic measure-preserving system?</span>
+
+A. The system converges to a fixed point in finite time.
+B. Time averages of integrable functions equal their space averages, almost surely.
+C. The system's entropy is zero.
+D. All trajectories are periodic.
+
+<<button "A">><<replace "#et-q1">>Incorrect. Birkhoff's theorem does not assert convergence to a fixed point. It concerns the long-run average of a function along a trajectory, not the trajectory itself stabilizing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q1">>Correct. Birkhoff's pointwise ergodic theorem states that $(1/N)\sum_{k=0}^{N-1} f(T^k x) \to \int f\, d\mu$ almost surely for every integrable $f$ — the time average equals the space average.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q1">>Incorrect. Ergodic systems can have any entropy, including positive entropy. Zero entropy would imply a very orderly, deterministic structure — not a consequence of ergodicity itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q1">>Incorrect. Periodic orbits are a special case and are generally not ergodic in continuous systems. Ergodicity requires the trajectory to be dense in the space, not periodic.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q2">In the ergodic hierarchy, which property is stronger than ergodic but weaker than a K-system?</span>
+
+A. Bernoulli
+B. Periodic
+C. Mixing
+D. Recurrent
+
+<<button "A">><<replace "#et-q2">>Incorrect. Bernoulli is the strongest property in the hierarchy — stronger than K-system, which is stronger than mixing, which is stronger than ergodic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q2">>Incorrect. Periodicity is generally incompatible with ergodicity in a meaningful sense and is not part of the ergodic hierarchy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q2">>Correct. The hierarchy from weakest to strongest is: ergodic → mixing → K-system → Bernoulli. Mixing implies correlations decay, which is stronger than mere ergodicity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q2">>Incorrect. Recurrence (returning to neighborhoods infinitely often) is implied by measure preservation (Poincaré recurrence theorem) and is weaker than ergodicity, not between ergodic and K-system.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q3">What is the mixing condition for a measure-preserving transformation $T$?</span>
+
+A. $\mu(T^{-n}A) \to 0$ for all measurable $A$.
+B. $\mu(A \cap T^{-n}B) \to \mu(A)\mu(B)$ as $n \to \infty$.
+C. $\mu(A \cap T^{-n}B) \to \mu(A \cup B)$ as $n \to \infty$.
+D. $\mu(T^{-n}A) = \mu(A)$ for all $n$.
+
+<<button "A">><<replace "#et-q3">>Incorrect. $\mu(T^{-n}A) = \mu(A)$ for all $n$ by measure-preservation — it cannot go to 0 unless $\mu(A)=0$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q3">>Correct. The mixing condition $\mu(A \cap T^{-n}B) \to \mu(A)\mu(B)$ says events become asymptotically independent: knowing you're in $B$ now gives no information about whether you were in $A$ a long time ago.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q3">>Incorrect. This expression doesn't correspond to a standard probabilistic concept and is not the mixing condition.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q3">>Incorrect. $\mu(T^{-n}A) = \mu(A)$ is simply the definition of measure-preservation, which holds for all measure-preserving transformations, ergodic or not.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q4">Why does ergodicity justify the correctness of MCMC samplers?</span>
+
+A. It guarantees each sample is independent.
+B. It ensures the chain reaches its stationary distribution in exactly $N$ steps.
+C. It guarantees time averages along the chain converge to expectations under the target distribution.
+D. It proves the chain has zero autocorrelation.
+
+<<button "A">><<replace "#et-q4">>Incorrect. MCMC samples are //not// independent — they are correlated by construction. Ergodicity justifies convergence of time averages despite this correlation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q4">>Incorrect. MCMC chains converge asymptotically, not in a fixed number of steps. Mixing time can be very long in practice.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q4">>Correct. By Birkhoff's theorem, the empirical average $(1/N)\sum f(X_k)$ converges almost surely to $\mathbb{E}_\pi[f]$ when the chain is ergodic with stationary distribution $\pi$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q4">>Incorrect. Ergodic chains generally have nonzero autocorrelation. Mixing implies autocorrelations //decay// over time, but they are not zero.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q5">A Markov chain is ergodic but has a very small spectral gap. What is the practical consequence?</span>
+
+A. The chain samples from the wrong distribution.
+B. The chain mixes extremely slowly, so practical runs give biased estimates.
+C. The chain converges in a single step.
+D. The stationary distribution does not exist.
+
+<<button "A">><<replace "#et-q5">>Incorrect. An ergodic chain with the correct stationary distribution will eventually sample correctly — the distribution itself is right. The problem is //how long// it takes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q5">>Correct. Mixing time is $O(1/\text{gap})$. A tiny spectral gap means mixing time is enormous, so finite runs of the chain give estimates that haven't converged — effectively biased for any practical budget.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q5">>Incorrect. A small spectral gap is associated with //slow// convergence, not fast convergence. Rapid mixing requires a large spectral gap.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q5">>Incorrect. A spectral gap of zero would be problematic, but a small positive gap still guarantees a unique stationary distribution exists. It just takes a long time to reach.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q6">Which of the following is an example of a non-ergodic situation in machine learning?</span>
+
+A. Minibatch SGD on a well-shuffled dataset.
+B. A Gibbs sampler on a unimodal Gaussian posterior.
+C. An MCMC chain on a multimodal distribution where the chain cannot cross between modes.
+D. A random walk on a connected graph.
+
+<<button "A">><<replace "#et-q6">>Incorrect. With well-shuffled i.i.d. data, minibatch gradients are ergodic estimators of the full-data gradient. This is a case where ergodicity //holds//.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q6">>Incorrect. A unimodal Gaussian is a single-mode distribution; a Gibbs sampler on it is ergodic because there is only one basin of attraction to explore.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q6">>Correct. If the chain cannot cross the low-probability region between modes, the phase space decomposes into invariant subsets of positive measure — the definition of non-ergodicity. Time averages estimate only the local mode, not the full distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q6">>Incorrect. A random walk on a connected graph is irreducible and aperiodic (ergodic). All states communicate, so the walk eventually visits every node.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q7">Why does ergodic theory fail to apply in reinforcement learning with non-stationary rewards?</span>
+
+A. Because RL environments are always discrete.
+B. Because there is no stationary invariant measure — the distribution the system is averaging over keeps changing.
+C. Because RL uses neural networks, which are not measure-preserving.
+D. Because reward functions are always unbounded.
+
+<<button "A">><<replace "#et-q7">>Incorrect. Ergodic theory applies to both discrete and continuous systems. The issue is stationarity, not discreteness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q7">>Correct. Birkhoff's theorem requires a fixed stationary measure $\mu$. If rewards change over time (non-stationary), there is no fixed $\mu$, and time averages do not converge to any meaningful spatial expectation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q7">>Incorrect. Whether the function approximator is a neural network is irrelevant to ergodic theory, which concerns the dynamics of the system, not the structure of the value function estimator.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q7">>Incorrect. Boundedness of rewards is a technical condition for specific theorems but is not the fundamental reason ergodic theory fails under non-stationarity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="et-q8">What does the ergodic decomposition theorem state?</span>
+
+A. Every ergodic system can be decomposed into Bernoulli components.
+B. Every measure-preserving system decomposes uniquely into ergodic components.
+C. Every dynamical system is ergodic if observed long enough.
+D. Mixing systems have no ergodic decomposition.
+
+<<button "A">><<replace "#et-q8">>Incorrect. The decomposition is into ergodic components, not necessarily Bernoulli components. Bernoulli is a much stronger property.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#et-q8">>Correct. The ergodic decomposition theorem states that any measure-preserving system can be written as a unique mixture (direct integral) of ergodic systems. Non-ergodic systems are simply mixtures of ergodic ones; each trajectory is confined to one ergodic component.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#et-q8">>Incorrect. Some systems have invariant subsets of positive measure that trajectories never escape; these remain non-ergodic regardless of observation time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#et-q8">>Incorrect. Mixing systems are ergodic (mixing is stronger than ergodic), so they are their own ergodic component — but the decomposition theorem applies to all measure-preserving systems.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

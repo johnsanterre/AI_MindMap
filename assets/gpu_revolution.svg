@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="15" fill="#2C2C2C" text-anchor="middle" font-weight="bold">The GPU Revolution: From Game Rendering to Deep Learning</text>
+
+  <!-- Timeline arrow -->
+  <line x1="50" y1="200" x2="750" y2="200" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="750,195 765,200 750,205" fill="#C4A87A"/>
+
+  <!-- Era 1: Pre-CUDA -->
+  <rect x="40" y="60" width="140" height="110" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="110" y="80" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Pre-CUDA Era</text>
+  <text x="110" y="96" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">GPUs render triangles</text>
+  <text x="110" y="110" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">for video games</text>
+  <text x="110" y="128" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">Parallel float ops</text>
+  <text x="110" y="142" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">= matrix multiply</text>
+  <circle cx="110" cy="200" r="6" fill="#C4A87A"/>
+  <text x="110" y="225" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">~2000</text>
+
+  <!-- Era 2: CUDA -->
+  <rect x="210" y="60" width="130" height="110" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="275" y="80" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">CUDA (2006)</text>
+  <text x="275" y="96" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">General-purpose GPU</text>
+  <text x="275" y="110" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">programming unlocked</text>
+  <text x="275" y="128" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">Theano, then</text>
+  <text x="275" y="142" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">TensorFlow, PyTorch</text>
+  <circle cx="275" cy="200" r="6" fill="#2D5A8E"/>
+  <text x="275" y="225" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">2006</text>
+
+  <!-- Era 3: AlexNet -->
+  <rect x="370" y="60" width="130" height="110" rx="4" fill="#FAF0EE" stroke="#7C2530" stroke-width="2"/>
+  <text x="435" y="80" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">AlexNet (2012)</text>
+  <text x="435" y="96" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">2 GTX 580 GPUs</text>
+  <text x="435" y="110" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">crush ImageNet</text>
+  <text x="435" y="128" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">Deep learning boom</text>
+  <text x="435" y="142" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">begins overnight</text>
+  <circle cx="435" cy="200" r="6" fill="#7C2530"/>
+  <text x="435" y="225" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">2012</text>
+
+  <!-- Era 4: Tensor Cores -->
+  <rect x="530" y="60" width="130" height="110" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="595" y="80" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Tensor Cores</text>
+  <text x="595" y="96" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">V100 (2017): mixed</text>
+  <text x="595" y="110" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">precision 125 TFLOPS</text>
+  <text x="595" y="128" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">Enables Transformer</text>
+  <text x="595" y="142" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">pre-training at scale</text>
+  <circle cx="595" cy="200" r="6" fill="#2D5A8E"/>
+  <text x="595" y="225" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">2017</text>
+
+  <!-- Era 5: GPU clusters -->
+  <rect x="680" y="60" width="95" height="110" rx="4" fill="#F5EFE4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="727" y="80" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">GPU Clusters</text>
+  <text x="727" y="96" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">H100, B200</text>
+  <text x="727" y="110" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">1000s of GPUs</text>
+  <text x="727" y="128" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">LLM training:</text>
+  <text x="727" y="142" font-family="Georgia,serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">10^24 FLOPs</text>
+  <circle cx="727" cy="200" r="6" fill="#5C3D1E"/>
+  <text x="727" y="225" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">2022+</text>
+
+  <!-- Bottom: FLOPS growth bars -->
+  <rect x="40" y="250" width="720" height="100" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="268" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">GPU TFLOPS Growth (FP16)</text>
+
+  <rect x="90"  y="315" width="40" height="15" fill="#C4A87A" rx="2"/>
+  <text x="110" y="340" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">GTX 580</text>
+  <text x="110" y="310" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">1.6</text>
+
+  <rect x="220" y="305" width="40" height="25" fill="#2D5A8E" rx="2"/>
+  <text x="240" y="340" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">K80</text>
+  <text x="240" y="300" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">8.7</text>
+
+  <rect x="350" y="285" width="40" height="45" fill="#2D5A8E" rx="2"/>
+  <text x="370" y="340" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">V100</text>
+  <text x="370" y="280" font-family="Georgia,serif" font-size="8" fill="#2D5A8E" text-anchor="middle">125</text>
+
+  <rect x="480" y="275" width="40" height="55" fill="#7C2530" rx="2"/>
+  <text x="500" y="340" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">A100</text>
+  <text x="500" y="270" font-family="Georgia,serif" font-size="8" fill="#7C2530" text-anchor="middle">312</text>
+
+  <rect x="610" y="280" width="40" height="50" fill="#5C3D1E" rx="2"/>
+  <text x="630" y="340" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">H100</text>
+  <text x="630" y="275" font-family="Georgia,serif" font-size="8" fill="#5C3D1E" text-anchor="middle">989</text>
+
+  <!-- Key insight quote -->
+  <text x="400" y="375" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">"The GPU was built to render games. It accidentally became the engine of the AI revolution."</text>
+</svg>

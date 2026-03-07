@@ -1,0 +1,167 @@
+<<include "Header">>
+! Retrieval Augmented Generation
+
+<img src="assets/retrieval_augmented_generation.svg" alt="Retrieval Augmented Generation diagram showing query encoding, vector search, context augmentation, and grounded LLM output" style="max-width:100%; height:auto;">
+
+Imagine you are taking an open-book exam. You know how to read, reason, and write coherent answers, but instead of relying purely on what you memorized the night before, you flip through your textbook and notes to find the relevant passages first. That is exactly what ''Retrieval Augmented Generation'' (RAG) does for a large language model: it gives the model an open book. The model's parametric memory — the billions of weights frozen at training time — is supplemented at inference time with a live retrieval step that fetches relevant documents from an external knowledge store. The result is an answer grounded in actual source material rather than a confident-sounding guess.
+
+!! The Core Insight
+
+A language model's knowledge is ''static and implicit'' — baked into its parameters at training time, impossible to audit, and expensive to update. RAG decouples ''what the model knows how to do'' (reason, summarize, compose) from ''what it knows about'' (facts, figures, current events). By retrieving relevant context on the fly and injecting it into the prompt, you get three things at once: reduced <<link "Hallucination" "Hallucination">><</link>>, easy knowledge updates (just refresh the document store), and the ability to cite sources — something a vanilla language model cannot do.
+
+The architectural insight is that retrieval and generation are complementary, not competing. Retrieval excels at precise factual recall over huge corpora; generation excels at synthesis, reasoning, and fluent composition. RAG combines both strengths in a single pipeline.
+
+!! How the Pipeline Works
+
+A RAG system has two main phases: ''indexing'' (offline) and ''query-time retrieval + generation'' (online).
+
+'''Indexing phase:'''
+Documents are chunked into passages (typically 100–500 tokens), each passage is run through an embedding model to produce a dense vector representation (see <<link "Embeddings" "Embeddings">><</link>>), and the vectors are stored in a vector database alongside the raw text.
+
+'''Query-time phase:'''
+# The user's query is embedded using the same encoder.
+# The query vector is compared against all stored document vectors using <<link "Cosine Similarity" "Cosine Similarity">><</link>> (or another distance metric) to find the top-$k$ most relevant chunks.
+# Those chunks are prepended to the query as context inside the prompt.
+# The <<link "Transformers" "Transformers">><</link>>-based LLM generates an answer conditioned on both the query and the retrieved context.
+
+The key design choice is how many chunks to retrieve ($k$), how to chunk documents, and which embedding model to use. These choices profoundly affect answer quality.
+
+!! What the Math Is Actually Doing
+
+The retrieval step is a ''nearest-neighbor search in embedding space''. Given a query $q$ and a corpus of $N$ document chunks $\{d_1, d_2, \ldots, d_N\}$, we first encode them:
+
+$$\mathbf{q} = \text{Encode}(q), \quad \mathbf{d}_i = \text{Encode}(d_i)$$
+
+Relevance is scored by cosine similarity:
+
+$$\text{score}(q, d_i) = \frac{\mathbf{q} \cdot \mathbf{d}_i}{\|\mathbf{q}\| \, \|\mathbf{d}_i\|}$$
+
+We select the top-$k$ documents:
+
+$$\mathcal{R} = \text{top-}k \left( \{ \text{score}(q, d_i) \}_{i=1}^{N} \right)$$
+
+The generation step conditions on retrieved context. If $\theta$ denotes model parameters and $x$ the query, the output distribution becomes:
+
+$$P(y \mid x) = \sum_{d \in \mathcal{R}} P(d \mid x) \cdot P_\theta(y \mid x, d)$$
+
+In practice, most systems simply concatenate the retrieved chunks into the prompt rather than marginalizing, giving:
+
+$$P(y \mid x) \approx P_\theta(y \mid [d_1; d_2; \ldots; d_k; x])$$
+
+This concatenation approach is simpler and works well when the retriever is accurate. The more principled marginalization approach, used in the original RAG paper by Lewis et al. (2020), treats the retrieved document as a latent variable and trains retriever and generator end-to-end.
+
+!! Chunking, Indexing, and Reranking
+
+The practical success of RAG depends heavily on engineering details:
+
+''Chunking strategy:'' Documents must be split into passages small enough to be semantically coherent but large enough to carry useful context. Common strategies include fixed-size token windows with overlap, recursive splitting by headers or paragraphs, and semantic chunking based on embedding similarity breakpoints.
+
+''Hybrid retrieval:'' Dense vector search can miss exact keyword matches. Many production systems combine dense retrieval with sparse retrieval (BM25 / TF-IDF) and merge the ranked lists — a technique called hybrid search.
+
+''Reranking:'' The initial retrieval uses fast approximate search. A cross-encoder reranker can then rescore the top-$k$ candidates with higher accuracy, since cross-encoders attend jointly to query and document but are too expensive to run over the entire corpus.
+
+''Metadata filtering:'' Adding structured metadata (date, source, topic) lets you pre-filter the corpus before vector search, improving relevance and reducing noise.
+
+<<link "Knowledge Graphs" "Knowledge Graphs">><</link>> can also serve as a retrieval source, providing structured relational facts that complement unstructured text retrieval.
+
+!! When X Breaks Down
+
+''1. Retrieval failure (garbage in, garbage out):'' If the retriever returns irrelevant or misleading chunks — due to poor embeddings, bad chunking, or domain mismatch — the generator will faithfully incorporate that noise into its answer. The model cannot easily distinguish retrieved truth from retrieved nonsense. This is the single most common RAG failure mode.
+
+''2. Lost in the middle:'' Research shows that LLMs attend more strongly to information at the beginning and end of long contexts, neglecting material in the middle. When many chunks are retrieved, the most relevant passage may land in a low-attention zone and be effectively ignored, even though it was successfully retrieved.
+
+''3. Context window overflow:'' Every retrieved chunk consumes prompt tokens. Retrieve too many and you exceed the model's context window or crowd out the actual query. Retrieve too few and you risk missing the answer. There is no free lunch — chunk count $k$, chunk size, and context length are in constant tension.
+
+!! Technical Details
+
+''Original RAG paper:'' Lewis et al. (2020) introduced two variants: ''RAG-Sequence'' (one document conditions the entire output) and ''RAG-Token'' (different documents can condition different tokens). Both train the retriever (DPR) and generator (BART) end-to-end.
+
+''Retriever architectures:'' Dual-encoder (bi-encoder) models embed query and document independently for fast search. Cross-encoders process them jointly for higher accuracy but $O(N)$ cost. Dense Passage Retrieval (DPR) is the canonical dual-encoder.
+
+''Approximate nearest neighbor (ANN):'' Exact cosine search is $O(N)$. Production systems use ANN indices (FAISS, ScaNN, HNSW) for sub-linear search with controllable recall loss.
+
+''Advanced variants:''
+* ''Self-RAG:'' The model decides when to retrieve and critiques its own outputs.
+* ''Corrective RAG (CRAG):'' A lightweight evaluator scores retrieved documents; if scores are low, the system falls back to web search.
+* ''RAPTOR:'' Recursively summarizes and clusters chunks into a tree, enabling retrieval at multiple abstraction levels.
+* ''Hypothetical Document Embeddings (HyDE):'' The LLM first generates a hypothetical answer, which is then used as the retrieval query — often more effective than using the raw question.
+
+''Evaluation metrics:'' RAG systems are evaluated on both retrieval quality (recall@k, MRR) and generation quality (faithfulness, answer relevance, context precision). Frameworks like RAGAS formalize these into composite scores.
+
+''Embedding model choice:'' The quality of the embedding model is the single largest lever. Models like E5, GTE, and BGE are specifically trained for retrieval and outperform general-purpose <<link "Embeddings" "Embeddings">><</link>> on retrieval benchmarks.
+
+!! Quiz
+
+<div id="rag-q1">
+''1. What problem does RAG primarily address in large language models?''
+
+<<button "A) Slow inference speed">><<replace "#rag-q1">>Incorrect. RAG actually adds latency due to the retrieval step. It addresses factual accuracy, not speed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Hallucination and stale knowledge">><<replace "#rag-q1">>Correct! RAG grounds outputs in retrieved documents, reducing hallucination and enabling knowledge updates without retraining.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) High training cost">><<replace "#rag-q1">>Incorrect. While RAG avoids retraining for knowledge updates, its primary purpose is improving factual accuracy at inference time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Limited vocabulary size">><<replace "#rag-q1">>Incorrect. Vocabulary is determined by the tokenizer, not by retrieval.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q2">
+''2. In a RAG pipeline, what happens to the user's query before retrieval?''
+
+<<button "A) It is translated into SQL">><<replace "#rag-q2">>Incorrect. RAG uses vector similarity search, not SQL queries.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It is passed directly to the LLM">><<replace "#rag-q2">>Incorrect. The query must first go through retrieval to fetch relevant context.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It is embedded into a dense vector">><<replace "#rag-q2">>Correct! The query is encoded into the same embedding space as the document chunks so cosine similarity can be computed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It is tokenized and discarded">><<replace "#rag-q2">>Incorrect. The query is embedded and used for retrieval, then also passed to the generator.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q3">
+''3. Which similarity metric is most commonly used in RAG retrieval?''
+
+<<button "A) Euclidean distance">><<replace "#rag-q3">>Incorrect. While usable, cosine similarity is the standard choice for normalized embedding spaces.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Jaccard similarity">><<replace "#rag-q3">>Incorrect. Jaccard operates on sets of tokens, not dense vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Cosine similarity">><<replace "#rag-q3">>Correct! Cosine similarity measures the angle between the query and document vectors in embedding space and is the default metric for dense retrieval.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Hamming distance">><<replace "#rag-q3">>Incorrect. Hamming distance is for binary strings, not continuous embeddings.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q4">
+''4. What is the "lost in the middle" problem?''
+
+<<button "A) Documents in the middle of the corpus are never indexed">><<replace "#rag-q4">>Incorrect. Indexing covers all documents. The problem is about attention patterns during generation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The retriever skips documents in the middle of the ranking">><<replace "#rag-q4">>Incorrect. The retriever returns all top-k documents. The issue is how the generator processes them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) LLMs attend less to information placed in the middle of long contexts">><<replace "#rag-q4">>Correct! Research shows LLMs have a U-shaped attention pattern, attending most to the beginning and end of context, neglecting the middle.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Chunk embeddings drift toward the mean">><<replace "#rag-q4">>Incorrect. This describes an embedding collapse problem, not the lost-in-the-middle phenomenon.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q5">
+''5. What distinguishes a cross-encoder from a bi-encoder in retrieval?''
+
+<<button "A) Cross-encoders are faster for large-scale search">><<replace "#rag-q5">>Incorrect. Cross-encoders are slower because they process query and document jointly. Bi-encoders are faster.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Cross-encoders process query and document jointly, yielding higher accuracy">><<replace "#rag-q5">>Correct! Cross-encoders attend to both inputs simultaneously, capturing fine-grained interactions, but at $O(N)$ cost per query.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Cross-encoders only work with sparse representations">><<replace "#rag-q5">>Incorrect. Cross-encoders use dense transformer representations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Cross-encoders do not use attention">><<replace "#rag-q5">>Incorrect. Cross-encoders are transformer-based and rely heavily on attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q6">
+''6. In the original RAG paper, what is the retrieved document treated as?''
+
+<<button "A) A fixed prompt template">><<replace "#rag-q6">>Incorrect. The document is not a template — it is dynamic and varies per query.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A latent variable marginalized over during generation">><<replace "#rag-q6">>Correct! Lewis et al. treat the retrieved document as a latent variable $d$ and marginalize: $P(y|x) = \sum_d P(d|x) P(y|x,d)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A fine-tuning example">><<replace "#rag-q6">>Incorrect. RAG operates at inference time — no fine-tuning occurs during retrieval.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) An attention mask">><<replace "#rag-q6">>Incorrect. Retrieved documents are injected as input tokens, not as attention masks.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q7">
+''7. What does HyDE (Hypothetical Document Embeddings) do differently?''
+
+<<button "A) It uses the raw query directly for retrieval">><<replace "#rag-q7">>Incorrect. That is standard RAG. HyDE adds an intermediate generation step.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It generates a hypothetical answer first, then uses that for retrieval">><<replace "#rag-q7">>Correct! HyDE has the LLM generate a speculative answer, embeds that answer, and uses it as the retrieval query — the hypothesis is closer in embedding space to relevant documents than the original question.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It skips the retrieval step entirely">><<replace "#rag-q7">>Incorrect. HyDE still performs retrieval — it just changes what gets embedded as the query.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It retrieves from a knowledge graph instead of a vector store">><<replace "#rag-q7">>Incorrect. HyDE is about query reformulation, not about the retrieval backend.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="rag-q8">
+''8. Why do production RAG systems often combine dense and sparse retrieval?''
+
+<<button "A) Sparse retrieval is more accurate for all query types">><<replace "#rag-q8">>Incorrect. Sparse retrieval excels at exact keyword matching but misses semantic similarity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Dense retrieval captures exact keyword matches better">><<replace "#rag-q8">>Incorrect. Dense retrieval captures semantic meaning but can miss exact keyword matches — the opposite of what is stated.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Each method covers the other's blind spots — semantic vs. lexical matching">><<replace "#rag-q8">>Correct! Dense retrieval excels at semantic similarity while sparse retrieval (BM25) catches exact keyword and entity matches. Combining them in hybrid search yields better recall than either alone.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It is required by the transformer architecture">><<replace "#rag-q8">>Incorrect. Hybrid retrieval is an engineering choice, not an architectural requirement.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

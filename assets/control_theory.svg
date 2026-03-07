@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="ct-arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/></marker>
+    <marker id="ct-arr-r" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/></marker>
+    <marker id="ct-arr-b" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/></marker>
+  </defs>
+
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E">Control Theory: Feedback Control Loop</text>
+
+  <!-- Reference r(t) -->
+  <text x="42" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-style="italic">r(t)</text>
+  <text x="42" y="145" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Reference</text>
+  <line x1="62" y1="124" x2="98" y2="124" stroke="#2D5A8E" stroke-width="2" marker-end="url(#ct-arr)"/>
+
+  <!-- Summing junction (circle with +/-) -->
+  <circle cx="118" cy="124" r="16" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+  <text x="108" y="120" font-family="Georgia, serif" font-size="11" fill="#7C2530">+</text>
+  <text x="115" y="138" font-family="Georgia, serif" font-size="11" fill="#7C2530">-</text>
+
+  <!-- Error signal -->
+  <line x1="134" y1="124" x2="188" y2="124" stroke="#7C2530" stroke-width="2" marker-end="url(#ct-arr-r)"/>
+  <text x="161" y="116" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-style="italic">e(t)</text>
+
+  <!-- Controller box -->
+  <rect x="190" y="100" width="120" height="48" rx="6" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="250" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Controller</text>
+  <text x="250" y="137" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">u(t) = K(e)</text>
+
+  <!-- Controller to Plant arrow -->
+  <line x1="310" y1="124" x2="378" y2="124" stroke="#2D5A8E" stroke-width="2" marker-end="url(#ct-arr)"/>
+  <text x="344" y="116" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-style="italic">u(t)</text>
+
+  <!-- Plant / System box -->
+  <rect x="380" y="100" width="130" height="48" rx="6" fill="#7C2530" fill-opacity="0.10" stroke="#7C2530" stroke-width="2"/>
+  <text x="445" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Plant / System</text>
+  <text x="445" y="137" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">dx/dt = f(x, u)</text>
+
+  <!-- Plant to output arrow -->
+  <line x1="510" y1="124" x2="578" y2="124" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ct-arr-b)"/>
+
+  <!-- Output y(t) -->
+  <text x="606" y="120" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" font-style="italic">y(t)</text>
+  <text x="606" y="136" text-anchor="start" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Output</text>
+
+  <!-- Feedback path: output down, left, and up to summing junction -->
+  <!-- Down from output -->
+  <line x1="606" y1="144" x2="606" y2="195" stroke="#C4A87A" stroke-width="2"/>
+  <!-- Sensor box on feedback path -->
+  <rect x="540" y="180" width="90" height="32" rx="5" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="585" y="201" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Sensor</text>
+  <!-- Left from sensor -->
+  <line x1="540" y1="196" x2="118" y2="196" stroke="#C4A87A" stroke-width="2"/>
+  <!-- Up to summing junction -->
+  <line x1="118" y1="196" x2="118" y2="140" stroke="#C4A87A" stroke-width="2" marker-end="url(#ct-arr-r)"/>
+  <text x="330" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#C4A87A">feedback: measured y(t)</text>
+
+  <!-- PID Panel (bottom left) -->
+  <rect x="30" y="245" width="310" height="130" rx="8" fill="#2D5A8E" fill-opacity="0.06" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="185" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">PID Controller</text>
+
+  <text x="50" y="292" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">P</text>
+  <text x="68" y="292" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Proportional: Kp . e(t)</text>
+
+  <text x="50" y="314" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">I</text>
+  <text x="68" y="314" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Integral: Ki . integral of e(t) dt</text>
+
+  <text x="50" y="336" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">D</text>
+  <text x="68" y="336" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Derivative: Kd . de/dt</text>
+
+  <text x="185" y="364" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">u(t) = Kp.e + Ki.int(e) + Kd.de/dt</text>
+
+  <!-- RL Mapping Panel (bottom right) -->
+  <rect x="370" y="245" width="400" height="130" rx="8" fill="#7C2530" fill-opacity="0.06" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="570" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Control Theory &#x2194; Reinforcement Learning</text>
+
+  <text x="395" y="292" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">State x(t)</text>
+  <text x="500" y="292" font-family="Georgia, serif" font-size="11" fill="#C4A87A">&#x2192;</text>
+  <text x="520" y="292" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">observation s</text>
+
+  <text x="395" y="312" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Control input u(t)</text>
+  <text x="520" y="312" font-family="Georgia, serif" font-size="11" fill="#C4A87A">&#x2192;</text>
+  <text x="545" y="312" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">action a</text>
+
+  <text x="395" y="332" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Cost function J</text>
+  <text x="504" y="332" font-family="Georgia, serif" font-size="11" fill="#C4A87A">&#x2192;</text>
+  <text x="520" y="332" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">negative reward</text>
+
+  <text x="395" y="352" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Plant dynamics</text>
+  <text x="510" y="352" font-family="Georgia, serif" font-size="11" fill="#C4A87A">&#x2192;</text>
+  <text x="530" y="352" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">environment transition</text>
+
+  <text x="395" y="372" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Controller</text>
+  <text x="470" y="372" font-family="Georgia, serif" font-size="11" fill="#C4A87A">&#x2192;</text>
+  <text x="490" y="372" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">policy &#x03C0;(a|s)</text>
+</svg>

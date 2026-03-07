@@ -1,0 +1,133 @@
+Passage name: Model Merging
+
+<<include "Header">>
+! Model Merging
+<img src="assets/model_merging.svg" alt="Diagram showing three fine-tuned models being merged into a single model through TIES, DARE, SLERP, or task arithmetic" style="max-width:100%;margin:0.5em 0 1em;">
+
+Imagine three chefs who all trained at the same culinary school but then spent years specializing — one in pastry, one in sushi, one in barbecue. Model merging is like combining their specialized knowledge back into a single chef who can do all three, without sending anyone back to school. You take the weight differences each specialist developed and stitch them together into one model, with no additional training required.
+
+!! The Core Insight
+
+When you ''fine-tune'' a pre-trained model on different tasks, each fine-tuned copy drifts away from the base model in a specific direction in weight space. These directions are largely //orthogonal// — the code-generation specialist adjusts different parameters than the math-reasoning specialist. Model merging exploits this by combining the task-specific weight deltas back into a single model.
+
+The surprising finding: simple arithmetic on model weights — averaging, interpolating, or selectively combining them — often produces a model that inherits capabilities from all donors. No gradient updates, no training data, no GPU hours. Just weight manipulation.
+
+Related methods: <<link "Fine-Tuning" "Fine-Tuning">><</link>>, <<link "LoRA" "LoRA">><</link>>, <<link "Transfer Learning" "Transfer Learning">><</link>>, <<link "Ensemble Methods" "Ensemble Methods">><</link>>, <<link "Weight Decay" "Weight Decay">><</link>>.
+
+!! The Merging Toolkit
+
+Four major techniques dominate the merging landscape:
+
+''Task Arithmetic (Ilharco et al., 2023):'' The simplest approach. Compute a //task vector// $\tau = \theta_{\text{ft}} - \theta_{\text{base}}$ for each fine-tuned model, then add scaled task vectors back to the base: $\theta_{\text{merged}} = \theta_{\text{base}} + \lambda_1 \tau_1 + \lambda_2 \tau_2 + \ldots$ The scaling coefficients $\lambda_i$ control how much of each skill to inject.
+
+''TIES-Merging (Yadav et al., 2023):'' Task arithmetic suffers from //sign conflicts// — different task vectors may push the same parameter in opposite directions. TIES (Trim, Elect Sign, and Merge) addresses this in three steps: (1) trim small-magnitude values to zero, (2) resolve sign conflicts by majority vote, (3) average only the values that agree.
+
+''DARE (Yu et al., 2024):'' Most delta parameters are redundant. DARE randomly drops a large fraction (e.g., 90–99%) of delta values, then rescales the survivors by $1/(1-p)$ to preserve the expected magnitude. This sparsification dramatically reduces interference between task vectors.
+
+''SLERP (Shoemake, 1985; adapted for LLMs):'' Instead of linear interpolation between two models, SLERP (Spherical Linear Interpolation) traces a great-circle arc on the weight-space hypersphere, better preserving the norm of the weight vectors. Widely used for merging exactly two models.
+
+!! What the Math Is Actually Doing
+
+The foundation of model merging is the ''task vector''. Given base weights $\theta_{\text{base}}$ and a fine-tuned model $\theta_{\text{ft}}$:
+$$\tau = \theta_{\text{ft}} - \theta_{\text{base}}$$
+
+''Task arithmetic'' merges $n$ models by:
+$$\theta_{\text{merged}} = \theta_{\text{base}} + \sum_{i=1}^{n} \lambda_i \tau_i$$
+
+''TIES-Merging'' first creates a trimmed mask $M_i$ that zeros out the bottom $k\%$ of $|\tau_i|$ values, then resolves signs via element-wise majority vote across task vectors:
+$$\gamma_j = \text{sign}\!\left(\sum_i M_i^{(j)} \tau_i^{(j)}\right)$$
+Only entries whose sign matches $\gamma_j$ are averaged, producing a cleaner merged delta.
+
+''DARE'' applies a random binary mask $m \sim \text{Bernoulli}(1-p)$ to each task vector:
+$$\tilde{\tau}_i = \frac{m \odot \tau_i}{1-p}$$
+This is analogous to ''dropout'' applied to weight deltas rather than activations. The rescaling ensures $\mathbb{E}[\tilde{\tau}_i] = \tau_i$.
+
+''SLERP'' between two weight vectors $\theta_A$ and $\theta_B$ with interpolation parameter $t$:
+$$\theta_{\text{merged}} = \frac{\sin((1-t)\Omega)}{\sin \Omega}\,\theta_A + \frac{\sin(t\,\Omega)}{\sin \Omega}\,\theta_B$$
+where $\Omega = \arccos\!\left(\frac{\theta_A \cdot \theta_B}{\|\theta_A\|\,\|\theta_B\|}\right)$ is the angle between the weight vectors.
+
+!! Practical Merging Recipes
+
+''Choosing a method:'' for two models, SLERP is often the default. For three or more, TIES or DARE combined with task arithmetic tend to outperform naive averaging. LoRA weights merge particularly well because their low-rank structure constrains the delta space.
+
+''Hyperparameter tuning:'' the scaling coefficients $\lambda_i$ matter enormously. A common approach is to sweep $\lambda$ on a small validation set. Values between 0.3 and 1.0 per task are typical.
+
+''Merging LoRA adapters:'' because <<link "LoRA" "LoRA">><</link>> produces low-rank deltas $\Delta W = BA$, you can merge at the adapter level before folding into the base model. This is computationally cheaper and often cleaner than merging full-rank weights.
+
+''Evolutionary merging (Akiba et al., 2024):'' treat the merging recipe itself — which layers to merge, which method to use per layer, what $\lambda$ values — as a search problem and optimize with evolutionary algorithms. This "mergekit-evolve" approach has produced state-of-the-art open models.
+
+''The MergeKit ecosystem:'' the open-source MergeKit library implements all major merging methods and has become the standard tool. Many top models on the Open LLM Leaderboard are merges, not models trained from scratch.
+
+!! When Model Merging Breaks Down
+
+''Catastrophic interference from conflicting representations:'' when two fine-tuned models learn fundamentally incompatible internal representations — for instance, one model repurposes the same neurons for coding that another uses for poetry — merging produces destructive interference. TIES and DARE mitigate this but cannot eliminate it when the tasks are deeply entangled in weight space.
+
+''Capability dilution with too many donors:'' each additional model added to a merge dilutes the contribution of every other model. Beyond 3-4 donors, merged models often exhibit a "jack of all trades, master of none" degradation where no single capability matches the original specialist. The scaling coefficients become increasingly difficult to balance.
+
+''Base model mismatch:'' merging only works when all models share the same base architecture and (ideally) the same base checkpoint. Even subtle differences — different tokenizers, different pre-training runs, or architectural modifications — make the task vectors incommensurable and the merge meaningless.
+
+!! Technical Details
+
+''Key papers:'' Ilharco et al. 2023 ("Editing Models with Task Arithmetic"); Yadav et al. 2023 ("TIES-Merging: Resolving Interference When Merging Models"); Yu et al. 2024 ("Language Models are Super Mario: Absorbing Abilities from Homologous Models as a Free Lunch" — the DARE paper); Akiba et al. 2024 ("Evolutionary Optimization of Model Merging Recipes").
+
+''Why it works — the linear mode connectivity hypothesis:'' fine-tuned models from the same base tend to lie in the same loss basin, meaning linear interpolation between them stays in a region of low loss. This was formalized by Frankle et al. (2020) and underpins all averaging-based merging.
+
+''Frankenmerging:'' layer-wise merging where different layers come from different models entirely. For example, use Model A's attention layers but Model B's feed-forward layers. This is more art than science but has produced strong results.
+
+''Relationship to ensembles:'' <<link "Ensemble Methods" "Ensemble Methods">><</link>> run multiple models at inference and combine //outputs//. Model merging combines //weights// before inference, producing a single model with no extra compute cost. The trade-off: ensembles preserve each model's full capability; merges compress capabilities but may lose fidelity.
+
+''Merging and RLHF:'' models fine-tuned with reinforcement learning from human feedback often merge poorly because RLHF induces large, structured weight changes that conflict across models. DPO-tuned models tend to merge more cleanly.
+
+''Parameter count:'' merging produces a model of //identical// size to each donor — no parameter increase. This contrasts with mixture-of-experts approaches that scale parameter count.
+
+!! Quiz
+
+<span id="mm-q1">''1. What is a task vector in the context of model merging?''</span>
+<<button "A) The gradient computed on a specific task's training data">><<replace "#mm-q1">>1. A) — ''Incorrect.'' A task vector is the difference in weights, not a gradient computed during training.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The difference between fine-tuned weights and base model weights">><<replace "#mm-q1">>1. B) — ''Correct!'' The task vector $\tau = \theta_{\text{ft}} - \theta_{\text{base}}$ captures what the model learned during fine-tuning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A learned embedding that represents the task">><<replace "#mm-q1">>1. C) — ''Incorrect.'' That describes prompt tuning or task embeddings, not model merging's task vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The final hidden state of a model on task-specific inputs">><<replace "#mm-q1">>1. D) — ''Incorrect.'' Task vectors operate in weight space, not activation space.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q2">''2. What problem does TIES-Merging specifically address?''</span>
+<<button "A) Models having different architectures">><<replace "#mm-q2">>2. A) — ''Incorrect.'' TIES requires the same architecture. It addresses sign conflicts in task vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Excessive memory usage during merging">><<replace "#mm-q2">>2. B) — ''Incorrect.'' Memory is not the primary concern TIES targets.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Sign conflicts where different task vectors push parameters in opposite directions">><<replace "#mm-q2">>2. C) — ''Correct!'' TIES trims small values, resolves sign conflicts by majority vote, and averages only agreeing entries.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The need for a validation dataset">><<replace "#mm-q2">>2. D) — ''Incorrect.'' TIES does not eliminate the need for validation data to tune hyperparameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q3">''3. How does DARE reduce interference between task vectors?''</span>
+<<button "A) By training an alignment layer between models">><<replace "#mm-q3">>3. A) — ''Incorrect.'' DARE requires no training at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) By randomly dropping most delta values and rescaling the survivors">><<replace "#mm-q3">>3. B) — ''Correct!'' DARE applies a Bernoulli mask to drop 90-99% of delta values, then rescales by $1/(1-p)$ to preserve the expected magnitude.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) By projecting task vectors into a shared subspace">><<replace "#mm-q3">>3. C) — ''Incorrect.'' DARE uses random sparsification, not subspace projection.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) By quantizing weights to lower precision">><<replace "#mm-q3">>3. D) — ''Incorrect.'' Quantization is unrelated to DARE's approach.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q4">''4. What distinguishes SLERP from simple linear interpolation?''</span>
+<<button "A) SLERP can merge more than two models at once">><<replace "#mm-q4">>4. A) — ''Incorrect.'' Standard SLERP operates on exactly two vectors. It is the interpolation //path// that differs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) SLERP requires gradient computation">><<replace "#mm-q4">>4. B) — ''Incorrect.'' SLERP is a closed-form formula with no gradients involved.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) SLERP follows a great-circle arc on the hypersphere, better preserving weight vector norms">><<replace "#mm-q4">>4. C) — ''Correct!'' Linear interpolation can shrink the norm of the interpolated vector. SLERP maintains a constant norm by tracing the shortest path on the hypersphere.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) SLERP is restricted to LoRA adapters only">><<replace "#mm-q4">>4. D) — ''Incorrect.'' SLERP can be applied to any weight vectors, not just LoRA adapters.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q5">''5. Why does model merging require all donor models to share the same base checkpoint?''</span>
+<<button "A) To ensure they have the same license">><<replace "#mm-q5">>5. A) — ''Incorrect.'' Licensing is a legal concern, not a mathematical requirement.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because task vectors are only meaningful relative to a shared starting point in weight space">><<replace "#mm-q5">>5. B) — ''Correct!'' The task vector $\tau = \theta_{\text{ft}} - \theta_{\text{base}}$ is only interpretable when all models share the same $\theta_{\text{base}}$. Different bases make the deltas incommensurable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) To guarantee identical tokenizers">><<replace "#mm-q5">>5. C) — ''Partially relevant but not the core reason.'' Tokenizer compatibility is necessary but insufficient; the weights themselves must share the same base.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) So that the merged model has the same parameter count">><<replace "#mm-q5">>5. D) — ''Incorrect.'' Same architecture ensures same parameter count, but that alone does not justify the shared-base requirement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q6">''6. How does model merging differ from ensemble methods?''</span>
+<<button "A) Merging combines outputs; ensembles combine weights">><<replace "#mm-q6">>6. A) — ''Incorrect.'' It is the reverse: merging combines weights; ensembles combine outputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Merging combines weights into one model; ensembles run multiple models and combine their outputs">><<replace "#mm-q6">>6. B) — ''Correct!'' Merging produces a single model with no inference overhead. Ensembles maintain separate models and aggregate predictions, multiplying compute cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Ensembles cannot handle more than two models">><<replace "#mm-q6">>6. C) — ''Incorrect.'' Ensembles can combine any number of models.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) There is no practical difference">><<replace "#mm-q6">>6. D) — ''Incorrect.'' The difference is fundamental: weight-space vs output-space combination.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q7">''7. What theoretical property explains why averaging fine-tuned weights often works?''</span>
+<<button "A) The universal approximation theorem">><<replace "#mm-q7">>7. A) — ''Incorrect.'' Universal approximation concerns network expressivity, not weight interpolation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The central limit theorem">><<replace "#mm-q7">>7. B) — ''Incorrect.'' CLT concerns distributions of sums, not loss landscape geometry.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Linear mode connectivity — fine-tuned models from the same base lie in the same loss basin">><<replace "#mm-q7">>7. C) — ''Correct!'' When models share a base and fine-tuning keeps them in the same loss basin, linear interpolation between them stays in a low-loss region.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The lottery ticket hypothesis">><<replace "#mm-q7">>7. D) — ''Incorrect.'' The lottery ticket hypothesis concerns sparse subnetworks, not weight interpolation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q8">''8. What is the inference cost of a merged model compared to a single donor model?''</span>
+<<button "A) Double the cost, since two models' knowledge is combined">><<replace "#mm-q8">>8. A) — ''Incorrect.'' Merging does not increase parameter count or inference cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Identical — the merged model has the same architecture and parameter count">><<replace "#mm-q8">>8. B) — ''Correct!'' A merged model is the same size as each donor. All the combination happens before inference, so there is zero additional runtime cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Slightly higher due to the merging metadata stored in the weights">><<replace "#mm-q8">>8. C) — ''Incorrect.'' No metadata is stored; the merged weights are plain model parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Lower, because merging prunes redundant parameters">><<replace "#mm-q8">>8. D) — ''Incorrect.'' While DARE and TIES prune during the merging process, the final merged model has the same full parameter count.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

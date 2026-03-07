@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Tool Use
+
+<img src="assets/tool_use.svg" alt="Diagram showing how an LLM generates structured function calls to external tools and receives results back into context" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are brilliant at writing essays but cannot do long division. You could struggle through the arithmetic yourself — getting it wrong half the time — or you could pick up a calculator. ''Tool use'' in large language models is exactly that move. Instead of forcing the model to hallucinate a computation, retrieve a live fact from memory, or execute code in its head, the system lets the model //call an external tool// — a calculator, a search engine, a Python interpreter, a database, an API — receive the result, and weave it into its response. The model does not become smarter at arithmetic; it becomes smart enough to know when to delegate. This single architectural decision transforms a text generator into something far more capable: a reasoning system that knows the boundaries of its own competence and can reach beyond them.
+
+---
+
+!! The Core Insight
+
+A language model is a conditional text generator. It is very good at predicting plausible next tokens, but there are entire classes of tasks where plausible and correct diverge sharply: exact arithmetic, real-time information retrieval, code execution, structured database queries. ''Tool use'' bridges this gap by giving the model a vocabulary of //actions// in addition to its vocabulary of //words//. When the model encounters a sub-problem better handled by an external system, it emits a structured ''function call'' — a JSON object specifying which tool to invoke and what arguments to pass — instead of generating a free-text answer. The runtime intercepts this call, executes the tool, and injects the result back into the model's context as an ''observation''. The model then continues generating, now grounded in a verified fact or computation rather than a guess.
+
+The key insight is that function calling does not require a fundamentally new architecture. It emerges from the same next-token prediction objective that produces fluent text. Models trained on code naturally acquire the ability to emit structured JSON, and models fine-tuned on examples of (query, tool call, observation, response) trajectories learn to reliably decide //when// and //how// to invoke tools. This is closely related to <<link "Instruction Tuning" "Instruction Tuning">><</link>>, which teaches models to follow structured directives, and to <<link "In-Context Learning" "In-Context Learning">><</link>>, which allows models to pick up new tool schemas from examples in the prompt. Tool use is the foundation on which <<link "LLM Agents" "LLM Agents">><</link>> are built — an agent is essentially a model using tools inside a reasoning loop.
+
+---
+
+!! The Function Calling Protocol
+
+The modern tool-use interface works through a well-defined protocol. Before generation begins, the system prompt includes a set of ''tool definitions'' — each specifying a function name, a natural-language description, and a parameter schema (typically JSON Schema). The model sees these definitions as part of its context, just like any other text.
+
+During generation, the model may decide to emit a ''tool call'' rather than ordinary text. In practice this means the model produces a structured JSON block:
+
+{{{
+{"name": "search", "arguments": {"query": "population of France 2024"}}
+}}}
+
+The runtime detects this structured output, routes it to the appropriate tool implementation, executes it, and returns the result as a new message of type ''tool result'' or ''observation''. The model reads this result and continues generating. It may call additional tools, chain results together, or produce a final text response that synthesises everything.
+
+This protocol is ''stateless from the tool's perspective'' — tools do not remember prior calls unless explicitly designed to — but ''stateful from the model's perspective'', because every tool call and result accumulates in the context window. The model can refer back to prior observations when making decisions about subsequent calls. This is what enables multi-step reasoning: search for a fact, use it as input to a calculation, verify the calculation by running code, then compose the final answer. The approach is central to <<link "Prompt Engineering" "Prompt Engineering">><</link>>, where careful tool descriptions dramatically affect reliability.
+
+---
+
+!! What the Math Is Actually Doing
+
+At each generation step, the model produces a probability distribution over its vocabulary, which now includes both regular tokens and special ''tool call tokens'' (or, equivalently, the model is trained to produce JSON-formatted tool calls as token sequences). Let $V$ be the token vocabulary and $T$ be the set of valid tool call formats. The model computes:
+
+$$p(y_t \mid y_{<t}, x, D) = \text{softmax}(W h_t)$$
+
+where $x$ is the user query, $D = \{d_1, \ldots, d_k\}$ is the set of tool definitions in the prompt, and $h_t$ is the hidden state at position $t$. The model implicitly learns a ''routing function'' $\sigma: \mathcal{X} \times \mathcal{D} \to \{0, 1\}$ that decides whether the current context warrants a tool call ($\sigma = 1$) or a direct text response ($\sigma = 0$).
+
+Training the routing function uses supervised fine-tuning on curated datasets of (prompt, tool_call, observation, response) tuples. The loss is standard cross-entropy over the entire sequence including the tool call tokens:
+
+$$\mathcal{L} = -\sum_{t=1}^{T} \log p_\theta(y_t \mid y_{<t})$$
+
+where the target sequence $y$ includes both the tool call JSON and the final response. Some systems additionally use <<link "Reinforcement Learning" "Reinforcement Learning">><</link>> — specifically RLHF or reward-model scoring — to improve the model's ability to decide //when// tool use is necessary versus when direct generation suffices. The reward signal penalises unnecessary tool calls (latency cost) and rewards correct tool use that produces verifiably accurate answers.
+
+For multi-turn tool use, the context grows as $s_{t+1} = s_t \oplus a_t \oplus o_t$, where $a_t$ is the tool call at step $t$ and $o_t$ is the returned observation. The model conditions on this full history at each step, enabling it to chain tool calls: $a_2$ can depend on $o_1$, and so on. This sequential dependency structure is what separates tool use from simple template filling — the model dynamically decides the //next// tool call based on //all prior// results.
+
+---
+
+!! Tool Design and Practical Patterns
+
+The quality of tool definitions matters as much as model capability. Empirical studies show that improving tool descriptions — adding precise parameter types, boundary conditions, example calls, and explicit error formats — can increase success rates by 20-30 percentage points with no change to the model. A good tool definition has five properties: (1) an unambiguous name, (2) a one-sentence description of what it does, (3) typed parameters with constraints, (4) example invocations, and (5) structured error returns.
+
+''Parallel tool calling'' allows the model to emit multiple tool calls simultaneously when they are independent. If the user asks "What is the weather in Paris and the population of Tokyo?", the model can call both tools in one generation step rather than sequentially — halving latency. This requires the runtime to support batched execution and the model to be trained on parallel-call examples.
+
+''Tool result verification'' is an emerging pattern where the model is trained to be sceptical of tool returns. Rather than blindly incorporating an observation, the model checks whether the result is plausible given the query. If a calculator returns a negative number for a factorial, or a search returns a result from an unreliable source, the model can flag the discrepancy or retry with a refined query. This pattern is closely related to the self-correction loops studied in <<link "LLM Agents" "LLM Agents">><</link>>.
+
+''Fallback generation'' handles cases where a tool call fails (network timeout, rate limit, malformed response). Well-designed systems allow the model to detect the failure, explain it to the user, and either retry or fall back to its parametric knowledge with an appropriate disclaimer.
+
+---
+
+!! When Tool Use Breaks Down
+
+''Hallucinated tool calls:'' The model generates a call to a tool that does not exist, uses fabricated parameter names, or passes arguments that violate the schema. This happens most often when the tool definitions are vague, when the model encounters a task outside its training distribution, or when the context is very long and the tool definitions have scrolled far from the current generation point. The model confidently emits syntactically valid JSON for a non-existent function, and the runtime returns an error that the model may then misinterpret or ignore. Mitigation requires strict schema validation, clear error messages injected back into context, and constrained decoding that restricts output to valid tool names.
+
+''Over-reliance on tools (tool addiction):'' Some fine-tuned models learn to call tools even when the answer is trivially available in their parametric knowledge. Asked "What is 2 + 2?", the model routes to a calculator rather than answering directly. This adds unnecessary latency and API cost. The root cause is training data that over-represents tool-call trajectories relative to direct-answer trajectories. The fix is balanced training data that includes examples where the correct behaviour is to answer directly, and reward signals that penalise unnecessary tool invocations.
+
+''Misinterpretation of tool results:'' The tool returns a correct result, but the model misreads or misinterprets it. A search engine returns a snippet saying "The population declined to 65 million" and the model extracts "65 million" while ignoring the word "declined," producing a misleadingly optimistic answer. This failure mode is especially dangerous because the tool result is objectively correct — the error is in the model's post-processing. It is closely related to reading comprehension failures and is exacerbated by long contexts where the observation is far from the final generation point.
+
+---
+
+!! Technical Details
+
+''Foundational work:'' Schick et al. (2023), "Toolformer: Language Models Can Teach Themselves to Use Tools." Trained a model to self-annotate its own training data with tool calls by identifying positions where a tool would improve prediction loss, then fine-tuning on the augmented data. This was the first demonstration that tool use could be learned in a self-supervised manner rather than requiring hand-curated training data.
+
+''API milestones:'' OpenAI introduced function calling for GPT-4 in June 2023, providing a structured JSON interface for tool definitions and calls. Anthropic followed with tool use in Claude (2023-2024). Google's Gemini added function calling in late 2023. All three follow a similar protocol: tool definitions in the system prompt, structured JSON tool calls in the assistant turn, tool results in a dedicated message role.
+
+''Gorilla (Patil et al. 2023):'' Fine-tuned LLaMA on a dataset of 1,645 API calls across Torch Hub, TensorFlow Hub, and HuggingFace. Demonstrated that specialised fine-tuning dramatically improves API call accuracy, with Gorilla outperforming GPT-4 on correct API selection while hallucinating fewer non-existent endpoints.
+
+''Training approaches:'' Three main strategies exist. (1) ''Supervised fine-tuning'' on curated (prompt, tool_call, result, response) tuples — most common and reliable. (2) ''Self-supervised annotation'' (Toolformer style) — the model identifies where tools would help and generates its own training data. (3) ''RL-based optimisation'' — using reward models that score trajectory-level outcomes (did the final answer improve because of the tool call?) to optimise the tool-use policy via <<link "Reinforcement Learning" "Reinforcement Learning">><</link>>.
+
+''Constrained decoding:'' Production systems often use grammar-constrained generation to ensure tool calls are valid JSON matching the declared schema. This eliminates syntactic hallucinations (malformed JSON, wrong parameter types) and restricts tool names to the declared set, at the cost of slightly increased inference complexity.
+
+''Benchmarks:'' ''API-Bank'' (Li et al. 2023) evaluates tool-use accuracy across 73 API tools. ''ToolBench'' (Qin et al. 2023) provides 16,000+ real-world APIs from RapidAPI for evaluating multi-step tool use. ''BFCL'' (Berkeley Function Calling Leaderboard) tracks structured function calling accuracy across models.
+
+---
+
+!! Quiz
+
+<span id="tu-q1">What is the primary purpose of tool use in LLMs?</span>
+A. To replace the transformer architecture with a more efficient design.
+B. To allow the model to delegate tasks it cannot reliably perform (arithmetic, live retrieval, code execution) to external systems.
+C. To reduce the model's parameter count by offloading knowledge to databases.
+D. To eliminate the need for pre-training by using tools as the sole knowledge source.
+<<button "A">><<replace "#tu-q1">>Wrong. Tool use does not change the model architecture; it adds an interface for calling external functions during generation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q1">>Correct! Tool use bridges the gap between what the model can generate plausibly and what requires verified computation or live data, by letting the model call external systems and incorporate their results.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q1">>Wrong. Tool use does not reduce parameters; the model retains all its weights. Tools supplement, not replace, parametric knowledge.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q1">>Wrong. Pre-training remains essential. Tools augment the model's capabilities at inference time but do not replace learned knowledge.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q2">In the function calling protocol, what does the model emit when it decides to use a tool?</span>
+A. A natural-language sentence describing which tool it wants, which is parsed by regex.
+B. A structured JSON object specifying the tool name and arguments, following a declared schema.
+C. A special embedding vector that the runtime maps to a tool.
+D. A numerical tool index from a fixed lookup table.
+<<button "A">><<replace "#tu-q2">>Wrong. Early systems used free-text parsing, but modern function calling uses structured JSON to avoid parsing failures.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q2">>Correct! The model produces a JSON tool call with a name and typed arguments. The runtime validates it against the declared schema and executes the corresponding function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q2">>Wrong. Tool calls happen at the token level as structured text, not as embedding vectors.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q2">>Wrong. Tools are identified by name in the JSON call, not by numerical index from a fixed table.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q3">What did Toolformer (Schick et al. 2023) demonstrate?</span>
+A. That tool use requires a separate policy network trained with reinforcement learning.
+B. That language models can self-annotate training data with tool calls by identifying positions where tools would improve prediction loss.
+C. That tool use only works with models above 100 billion parameters.
+D. That fine-tuning on tool-use data always degrades general language ability.
+<<button "A">><<replace "#tu-q3">>Wrong. Toolformer used self-supervised annotation and standard fine-tuning, not a separate RL-trained policy network.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q3">>Correct! Toolformer's key innovation was having the model identify where in its own training data a tool call would reduce prediction loss, then self-generating the training signal for tool use.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q3">>Wrong. Toolformer worked with much smaller models; tool use is not restricted to 100B+ scale.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q3">>Wrong. Toolformer showed that tool-use fine-tuning can be done without degrading general language performance when training data is properly constructed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q4">Which failure mode involves the model calling tools unnecessarily even when it could answer directly?</span>
+A. Hallucinated tool calls.
+B. Misinterpretation of tool results.
+C. Over-reliance on tools (tool addiction).
+D. Context window exhaustion.
+<<button "A">><<replace "#tu-q4">>Wrong. Hallucinated tool calls involve calling non-existent tools or using fabricated parameters, not calling real tools unnecessarily.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q4">>Wrong. Misinterpretation involves correctly calling a tool but misreading its output, which is a different failure mode.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q4">>Correct! Tool addiction occurs when the model routes trivial queries to tools instead of using parametric knowledge, adding unnecessary latency. It results from imbalanced training data that over-represents tool-call trajectories.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q4">>Wrong. Context window exhaustion is about running out of space, not about calling tools when they are not needed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q5">In the training loss for tool use, what does the target sequence $y$ include?</span>
+A. Only the final text response, with tool calls masked out of the loss.
+B. Both the tool call JSON and the final response — the model is trained to generate the entire trajectory.
+C. Only the tool call tokens, since the response is generated by a separate model.
+D. A binary label indicating whether a tool should have been called.
+<<button "A">><<replace "#tu-q5">>Wrong. Masking tool calls would prevent the model from learning when and how to emit them. The loss covers the full sequence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q5">>Correct! The cross-entropy loss is computed over the entire sequence including tool call tokens, so the model learns both when to invoke tools and how to format the calls correctly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q5">>Wrong. The same model generates both tool calls and responses; there is no separate response model.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q5">>Wrong. The training signal is richer than a binary label — the model must learn to generate the full structured call with correct arguments.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q6">Why can improving tool descriptions alone increase success rates by 20-30 percentage points?</span>
+A. Better descriptions cause the model to allocate more attention heads to tool-related tokens.
+B. The model relies on tool descriptions to understand what each tool does, how to format calls, and what to expect in return — vague descriptions cause format errors and wrong tool selection.
+C. Better descriptions reduce the model's parameter count, making inference faster.
+D. Tool descriptions are used to fine-tune the model at inference time via in-context gradient updates.
+<<button "A">><<replace "#tu-q6">>Wrong. Attention head allocation is not consciously directed by description quality; the effect operates through the model's understanding of the tool interface.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q6">>Correct! The model treats tool descriptions as its sole source of information about what a tool does. Precise names, typed parameters, example calls, and clear error formats eliminate ambiguity that would otherwise cause wrong tool selection or malformed arguments.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q6">>Wrong. Tool descriptions do not affect the model's parameter count; they are prompt-level text.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q6">>Wrong. No gradient updates occur at inference time; the model uses descriptions via in-context learning, not weight modification.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q7">What is constrained decoding in the context of tool use?</span>
+A. Limiting the model to generate only tool calls, never free text.
+B. Using grammar-based constraints during generation to ensure tool calls are valid JSON matching the declared schema.
+C. Restricting the model to a single tool call per conversation turn.
+D. Training the model on a constrained dataset that contains only successful tool-use examples.
+<<button "A">><<replace "#tu-q7">>Wrong. Constrained decoding restricts the format of tool calls when they occur, but the model can still generate free text when no tool call is needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q7">>Correct! Constrained decoding enforces that when the model begins emitting a tool call, the output must conform to valid JSON and match the declared tool schema — eliminating syntactic hallucinations like malformed JSON or non-existent parameter names.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q7">>Wrong. Constrained decoding is about output format validity, not about limiting the number of calls per turn.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q7">>Wrong. That describes a training data filtering strategy, not constrained decoding, which operates at inference time.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="tu-q8">How does tool use relate to LLM agents?</span>
+A. They are unrelated — agents use reinforcement learning while tool use is a prompting technique.
+B. Tool use is the foundational capability that agents build on; an agent is essentially a model using tools inside a reasoning loop that feeds observations back into context.
+C. Agents replace tool use by learning to perform all computations internally without external calls.
+D. Tool use is a subset of agent memory systems, specifically the episodic memory component.
+<<button "A">><<replace "#tu-q8">>Wrong. Tool use and agents are deeply connected. Agents depend on tool use as their primary mechanism for interacting with external systems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#tu-q8">>Correct! An LLM agent combines tool use with a reasoning loop (like ReAct): the model calls tools, observes results, reasons about what to do next, and repeats until the goal is achieved. Tool use is the enabling primitive.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#tu-q8">>Wrong. Agents heavily rely on external tool calls; they do not replace them with internal computation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#tu-q8">>Wrong. Tool use is the action mechanism of agents, not a memory component. Memory and tool use are separate capabilities that agents combine.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

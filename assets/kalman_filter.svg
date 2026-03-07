@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <title>Kalman Filter Predict-Update Cycle</title>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Kalman Filter: Predict-Update Cycle</text>
+
+  <!-- ── Cycle nodes ── -->
+  <!-- Node 1: Current State Estimate (left) -->
+  <rect x="30" y="160" width="140" height="56" rx="8" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="100" y="182" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Current State</text>
+  <text x="100" y="198" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Estimate x̂</text>
+  <text x="100" y="213" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">Covariance P</text>
+
+  <!-- Node 2: Predict (top center-left) -->
+  <rect x="220" y="70" width="140" height="56" rx="8" fill="#7C2530" stroke="#4d151e" stroke-width="1.5"/>
+  <text x="290" y="92" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Predict</text>
+  <text x="290" y="108" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">(Time Update)</text>
+  <text x="290" y="121" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">x̂⁻ = Fx̂ + Bu</text>
+
+  <!-- Node 3: Prior + Uncertainty (top center-right) -->
+  <rect x="440" y="70" width="140" height="56" rx="8" fill="#7C2530" stroke="#4d151e" stroke-width="1.5"/>
+  <text x="510" y="92" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Prior Estimate</text>
+  <text x="510" y="108" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">x̂⁻  with P⁻</text>
+  <text x="510" y="121" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">P⁻ = FPFᵀ + Q</text>
+
+  <!-- Node 4: Kalman Gain (right) -->
+  <rect x="630" y="160" width="140" height="56" rx="8" fill="#5C3D1E" stroke="#3a2510" stroke-width="1.5"/>
+  <text x="700" y="182" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Kalman Gain</text>
+  <text x="700" y="198" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">K = P⁻Hᵀ(HP⁻Hᵀ+R)⁻¹</text>
+  <text x="700" y="213" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">Measurement z</text>
+
+  <!-- Node 5: Update (bottom center-right) -->
+  <rect x="440" y="270" width="140" height="56" rx="8" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="510" y="292" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Update</text>
+  <text x="510" y="308" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">(Meas. Update)</text>
+  <text x="510" y="321" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">x̂ = x̂⁻ + K(z−Hx̂⁻)</text>
+
+  <!-- Node 6: Posterior (bottom center-left) -->
+  <rect x="220" y="270" width="140" height="56" rx="8" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="290" y="292" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Posterior</text>
+  <text x="290" y="308" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">x̂ updated, P shrinks</text>
+  <text x="290" y="321" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">P = (I−KH)P⁻</text>
+
+  <!-- ── Arrows ── -->
+  <!-- 1 → 2: Current State → Predict (up-right) -->
+  <line x1="170" y1="177" x2="218" y2="120" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="218,120 210,132 222,130" fill="#5C3D1E"/>
+
+  <!-- 2 → 3: Predict → Prior (right) -->
+  <line x1="360" y1="98" x2="438" y2="98" stroke="#7C2530" stroke-width="2"/>
+  <polygon points="438,98 428,93 428,103" fill="#7C2530"/>
+
+  <!-- 3 → 4: Prior → Kalman Gain (down-right) -->
+  <line x1="580" y1="120" x2="632" y2="165" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="632,165 622,158 634,154" fill="#5C3D1E"/>
+
+  <!-- 4 → 5: Kalman Gain → Update (down-left) -->
+  <line x1="632" y1="210" x2="582" y2="272" stroke="#2D5A8E" stroke-width="2"/>
+  <polygon points="582,272 588,260 596,268" fill="#2D5A8E"/>
+
+  <!-- 5 → 6: Update → Posterior (left) -->
+  <line x1="440" y1="298" x2="362" y2="298" stroke="#2D5A8E" stroke-width="2"/>
+  <polygon points="362,298 372,293 372,303" fill="#2D5A8E"/>
+
+  <!-- 6 → 1: Posterior → Current State (down-left) -->
+  <line x1="220" y1="282" x2="170" y2="218" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="170,218 175,230 181,220" fill="#5C3D1E"/>
+
+  <!-- ── Uncertainty shrink diagram (right panel) ── -->
+  <!-- Divider -->
+  <line x1="790" y1="55" x2="790" y2="355" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Mini chart: uncertainty over predict/update steps -->
+  <!-- Chart area: x 610–780, y 330–390 — moved to bottom right corner -->
+  <text x="695" y="352" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Uncertainty over time</text>
+
+  <!-- Axes -->
+  <line x1="622" y1="345" x2="778" y2="345" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="622" y1="345" x2="622" y2="375" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="618" y="349" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="end">P</text>
+  <text x="700" y="358" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">time →</text>
+
+  <!-- Sawtooth uncertainty: rises on predict, drops on update -->
+  <polyline points="622,375 635,368 648,360 648,372 661,364 674,356 674,368 687,360 700,352 700,364 713,356 726,348 726,360 739,352 752,344 752,356 765,348 778,340"
+            fill="none" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Labels: Predict / Update -->
+  <text x="641" y="385" font-family="Georgia, serif" font-size="7" fill="#7C2530" text-anchor="middle">P</text>
+  <text x="648" y="385" font-family="Georgia, serif" font-size="7" fill="#2D5A8E" text-anchor="middle">U</text>
+  <text x="667" y="385" font-family="Georgia, serif" font-size="7" fill="#7C2530" text-anchor="middle">P</text>
+  <text x="674" y="385" font-family="Georgia, serif" font-size="7" fill="#2D5A8E" text-anchor="middle">U</text>
+  <text x="693" y="385" font-family="Georgia, serif" font-size="7" fill="#7C2530" text-anchor="middle">P</text>
+  <text x="700" y="385" font-family="Georgia, serif" font-size="7" fill="#2D5A8E" text-anchor="middle">U</text>
+
+  <!-- Legend -->
+  <rect x="622" y="390" width="8" height="4" fill="#7C2530"/>
+  <text x="633" y="395" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">Predict (grows)</text>
+  <rect x="700" y="390" width="8" height="4" fill="#2D5A8E"/>
+  <text x="711" y="395" font-family="Georgia, serif" font-size="7" fill="#5C3D1E">Update (shrinks)</text>
+
+  <!-- Cycle label in center -->
+  <text x="400" y="198" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle" font-style="italic">Recursive</text>
+  <text x="400" y="213" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle" font-style="italic">cycle</text>
+</svg>

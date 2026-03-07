@@ -1,0 +1,170 @@
+<<include "Header">>
+
+! Martingales
+
+<img src="assets/martingales.svg" alt="Martingales: fair games, sample paths, and key concepts diagram" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are at a casino playing a perfectly fair coin-flip game: heads you win a dollar, tails you lose a dollar. After any number of flips, your expected fortune — given everything you have seen so far — is exactly what you have right now. No betting system, no matter how clever, can change this. You cannot outsmart a fair game. This is the essence of a ''martingale'': a <<link "Stochastic Processes" "Stochastic Processes">><</link>> where the conditional <<link "Expected Value" "Expected Value">><</link>> of the next observation, given all past observations, equals the current value. The concept was formalized by Joseph Doob in the 1940s and 1950s, drawing on earlier ideas from Paul Lévy and Jean Ville, and it has become one of the most powerful organizing principles in modern probability theory, with deep consequences in mathematical finance, statistics, and the theory of <<link "Random Walk" "Random Walk">><</link>>s and <<link "Brownian Motion" "Brownian Motion">><</link>>.
+
+!! The Core Insight
+
+A sequence of random variables $X_0, X_1, X_2, \ldots$ adapted to a filtration $\{\mathcal{F}_n\}$ is a ''martingale'' if, for every $n$:
+
+$$\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] = X_n$$
+
+This says: given everything you know up to time $n$ (the entire history $\mathcal{F}_n$), your best forecast of the next value is the current value. Not the average of all past values, not a trend extrapolation — just what you see right now.
+
+The filtration $\mathcal{F}_n$ is the key subtlety. It represents all the information available at time $n$. The martingale property is //relative to// a filtration: the same process can be a martingale under one information structure and not under another.
+
+Two close relatives complete the picture. A ''submartingale'' satisfies $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] \geq X_n$ — on average, the process tends upward (a favorable game). A ''supermartingale'' satisfies $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] \leq X_n$ — on average, it drifts downward (an unfavorable game, like a real casino).
+
+!! Stopping Theorems and Convergence
+
+The two pillars of martingale theory are the ''optional stopping theorem'' and the ''martingale convergence theorem''. Together, they constrain what a martingale can do in remarkably powerful ways.
+
+''Doob's optional stopping theorem:'' If $X_n$ is a martingale and $\tau$ is a stopping time (a random time determined by the information available so far), then under suitable integrability conditions:
+
+$$\mathbb{E}[X_\tau] = \mathbb{E}[X_0]$$
+
+You cannot improve your expected payoff by choosing when to stop playing a fair game. This is why doubling strategies (bet $1, then $2, then $4, ...) fail in practice — they require infinite credit, and without it, the stopping time violates the theorem's conditions.
+
+''Doob's martingale convergence theorem:'' If $X_n$ is a martingale (or submartingale) bounded in $L^1$ — meaning $\sup_n \mathbb{E}[|X_n|] < \infty$ — then $X_n$ converges almost surely to some finite random variable $X_\infty$. An $L^1$-bounded martingale cannot oscillate forever; it must settle down.
+
+''Doob's maximal inequality:'' For a non-negative submartingale:
+
+$$\mathbb{P}\left(\max_{0 \leq k \leq n} X_k \geq \lambda\right) \leq \frac{\mathbb{E}[X_n]}{\lambda}$$
+
+This bounds how likely the process is to reach extreme values — a probabilistic analogue of Markov's inequality, but applied to the running maximum.
+
+!! What the Math Is Actually Doing
+
+The formal setup requires <<link "Measure Theory" "Measure Theory">><</link>>. A ''filtered probability space'' $(\Omega, \mathcal{F}, \{\mathcal{F}_n\}, \mathbb{P})$ provides the scaffolding: $\Omega$ is the sample space, $\mathcal{F}_n \subseteq \mathcal{F}_{n+1} \subseteq \mathcal{F}$ is an increasing sequence of $\sigma$-algebras representing growing information, and $\mathbb{P}$ is a probability measure.
+
+A process $\{X_n\}$ is ''adapted'' if $X_n$ is $\mathcal{F}_n$-measurable — you can determine $X_n$ from the information available at time $n$. The martingale condition $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] = X_n$ uses the conditional expectation operator, which in measure theory is defined as a projection onto $L^2(\mathcal{F}_n)$.
+
+The ''Doob decomposition'' uniquely writes any adapted integrable process as:
+
+$$X_n = M_n + A_n$$
+
+where $M_n$ is a martingale and $A_n$ is a ''predictable'' process ($A_n$ is $\mathcal{F}_{n-1}$-measurable). This separates any process into its "fair" and "drift" components.
+
+In continuous time, if $W(t)$ is standard <<link "Brownian Motion" "Brownian Motion">><</link>>, then $W(t)$ is a martingale with respect to its natural filtration. So is $W(t)^2 - t$ — the Itô correction term ensures the martingale property holds. More generally, stochastic integrals $\int_0^t H(s)\, dW(s)$ are (local) martingales under mild conditions, which is the foundation of stochastic calculus.
+
+For continuous-time martingales, the ''Doob-Meyer decomposition'' generalizes the Doob decomposition: every submartingale $X_t$ decomposes as $X_t = M_t + A_t$, where $M_t$ is a martingale and $A_t$ is a predictable increasing process. The quadratic variation $\langle M \rangle_t$ of a continuous martingale is the unique such $A_t$ satisfying $M_t^2 - A_t$ is a martingale.
+
+!! Martingales in Practice
+
+''Finance — no-arbitrage pricing:'' The fundamental theorem of asset pricing states that a market is arbitrage-free if and only if there exists an equivalent ''risk-neutral measure'' under which discounted asset prices are martingales. Option pricing via Black-Scholes amounts to computing conditional expectations under this martingale measure. The entire edifice of derivative pricing rests on this connection.
+
+''Sequential hypothesis testing:'' The likelihood ratio $L_n = \prod_{i=1}^n \frac{p_1(X_i)}{p_0(X_i)}$ between two hypotheses is a martingale under the null hypothesis $H_0$. Wald's sequential probability ratio test exploits this: stop when $L_n$ crosses a threshold. The optional stopping theorem guarantees control of error rates.
+
+''Concentration inequalities:'' Azuma-Hoeffding's inequality bounds how far a martingale with bounded differences can deviate from its starting value:
+
+$$\mathbb{P}(|X_n - X_0| \geq t) \leq 2 \exp\left(-\frac{t^2}{2\sum_{i=1}^n c_i^2}\right)$$
+
+where $|X_i - X_{i-1}| \leq c_i$. This is a workhorse in combinatorics, computer science, and machine learning for proving tail bounds on complex random quantities.
+
+''Online learning:'' In online convex optimization, regret bounds are often proved by constructing a supermartingale from the cumulative loss difference between the algorithm and the best fixed strategy, then applying maximal inequalities.
+
+!! When Martingales Break Down
+
+''Integrability failure and the doubling strategy:'' The optional stopping theorem requires integrability conditions (uniform integrability, or bounded stopping times). The classic "martingale betting system" — double your bet after each loss — produces a martingale where $\mathbb{E}[X_\tau] = 1 > 0 = \mathbb{E}[X_0]$, seemingly violating the theorem. But the stopping time has infinite expected value and the process is not uniformly integrable. The theorem simply does not apply. In practice, finite wealth or table limits ensure the strategy fails.
+
+''Model misspecification breaks the martingale assumption:'' In finance, the claim that discounted prices are martingales depends on the market being arbitrage-free and on using the correct risk-neutral measure. When models misspecify volatility, correlations, or jump risk — as happened spectacularly in the 2008 financial crisis — the martingale assumption fails, hedging strategies break, and prices deviate from model predictions. The martingale framework is only as good as the probability model underlying it.
+
+''Non-stationarity and structural change:'' Martingale convergence requires the process to be $L^1$-bounded. In real applications — markets, ecological populations, evolving algorithms — structural changes can inject unbounded drift, causing the process to violate the martingale property entirely. A stock price may behave like a martingale in calm periods but shift to a submartingale or supermartingale during regime changes. Testing whether a time series is actually a martingale is a nontrivial statistical problem.
+
+!! Technical Details
+
+''Historical development:''
+- ''Lévy (1934):'' Introduced key ideas about conditional expectations and "fair games" in the context of sums of independent random variables.
+- ''Ville (1939):'' Coined the term "martingale" (from a French gambling term for a doubling strategy) and connected it to the foundations of probability.
+- ''Doob (1940s–1953):'' Developed the systematic theory: convergence theorems, optional stopping, maximal inequalities, the Doob decomposition. His 1953 book //Stochastic Processes// established martingales as central to modern probability.
+- ''Meyer (1962):'' Extended decomposition results to continuous time (Doob-Meyer decomposition).
+
+''Key examples of martingales:''
+- ''Simple random walk:'' $S_n = X_1 + \cdots + X_n$ with $\mathbb{P}(X_i = \pm 1) = 1/2$.
+- ''Brownian motion:'' $W(t)$ is a continuous-time martingale.
+- ''Compensated Poisson process:'' $N(t) - \lambda t$, where $N(t)$ is Poisson with rate $\lambda$.
+- ''Conditional expectations:'' $M_n = \mathbb{E}[Y \mid \mathcal{F}_n]$ for any integrable $Y$ — this is the ''Lévy martingale''.
+- ''Likelihood ratios:'' $L_n = \prod_{i=1}^n p_1(X_i)/p_0(X_i)$ under $\mathbb{P}_0$.
+
+''Martingale transforms:'' If $X_n$ is a martingale and $H_n$ is a bounded predictable process, then $(H \cdot X)_n = \sum_{i=1}^n H_i (X_i - X_{i-1})$ is also a martingale. This formalizes the impossibility of beating a fair game by varying your bet size based on past information.
+
+''Key connections:'' <<link "Stochastic Processes" "Stochastic Processes">><</link>> — <<link "Random Walk" "Random Walk">><</link>> — <<link "Brownian Motion" "Brownian Motion">><</link>> — <<link "Measure Theory" "Measure Theory">><</link>> — <<link "Expected Value" "Expected Value">><</link>>
+
+!! Quiz
+
+<span id="mt-q1">What does the martingale property $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] = X_n$ mean intuitively?</span>
+
+A. The process always returns to its starting value
+B. The best prediction of the next value, given all available information, is the current value
+C. The process has no randomness
+D. The variance of the process is constant over time
+
+<<button "A">><<replace "#mt-q1">>Incorrect. A martingale does not necessarily return to its starting value. Individual paths can diverge widely. The property is about //expected// future values, not actual paths.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q1">>Correct. The martingale property says that conditional on everything you know so far, the expected next value equals the current value. Past information gives you no edge in predicting the direction of the next move.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q1">>Incorrect. Martingales are stochastic processes — they are random. The constraint is on the //conditional expectation//, not on whether randomness is present.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q1">>Incorrect. A martingale can have growing variance. For example, a simple random walk is a martingale with variance $\text{Var}(S_n) = n$, which grows without bound.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q2">A submartingale satisfies $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] \geq X_n$. This corresponds to:</span>
+
+A. A game that is fair on average
+B. A game where the player tends to lose over time
+C. A game where the player tends to win over time
+D. A process that converges to zero
+
+<<button "A">><<replace "#mt-q2">>Incorrect. A fair game corresponds to a martingale (equality), not a submartingale (inequality).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q2">>Incorrect. A game where the player tends to lose is a supermartingale ($\leq$). The "sub" in submartingale is counterintuitive but refers to the process being below its future expected value.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q2">>Correct. A submartingale tends to increase: the expected future value is at least as large as the current value. The naming is from the process's perspective — it lies "sub" (below) its expected future, so it drifts upward.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q2">>Incorrect. A submartingale tends to drift upward, not toward zero. Convergence to zero is not implied by the submartingale property.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q3">The optional stopping theorem says $\mathbb{E}[X_\tau] = \mathbb{E}[X_0]$ for a martingale stopped at time $\tau$. Why does the "doubling strategy" (bet 1, 2, 4, 8, ...) not contradict this?</span>
+
+A. The doubling strategy is not actually a martingale
+B. The theorem's integrability conditions are violated — the stopping time has infinite expectation and the process is not uniformly integrable
+C. The strategy only works for supermartingales, not martingales
+D. The expected profit is actually zero, confirming the theorem
+
+<<button "A">><<replace "#mt-q3">>Incorrect. The cumulative gain process in a fair game with the doubling strategy is indeed a martingale. The issue lies with the stopping time and integrability, not with whether the process is a martingale.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q3">>Correct. The doubling strategy's stopping time $\tau$ (first win) has finite expectation, but the stopped process $X_\tau$ is not uniformly integrable — the losses grow exponentially on the event of long losing streaks. The theorem requires uniform integrability (or bounded stopping times), which fails here.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q3">>Incorrect. The optional stopping theorem applies to martingales directly. The issue is with the regularity conditions, not the type of process.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q3">>Incorrect. With infinite credit and no table limits, the strategy guarantees a profit of 1 with probability 1: $\mathbb{E}[X_\tau] = 1 \neq 0 = \mathbb{E}[X_0]$. This is precisely why the theorem's conditions must fail.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q4">Doob's martingale convergence theorem states that an $L^1$-bounded martingale converges almost surely. What does "$L^1$-bounded" mean?</span>
+
+A. The process values are bounded by 1
+B. The process takes values in $[0, 1]$
+C. $\sup_n \mathbb{E}[|X_n|] < \infty$ — the expected absolute values are uniformly bounded
+D. The variance of $X_n$ is bounded for all $n$
+
+<<button "A">><<replace "#mt-q4">>Incorrect. $L^1$-bounded does not mean the values themselves are bounded by 1. It refers to the expected absolute values being uniformly bounded over all $n$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q4">>Incorrect. The process can take any real values. $L^1$-boundedness is a constraint on expectations, not on the range of the random variables.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q4">>Correct. $L^1$-bounded means the expected absolute values $\mathbb{E}[|X_n|]$ are bounded by some finite constant uniformly over all $n$. This prevents the martingale from "escaping to infinity" in expectation and guarantees almost sure convergence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q4">>Incorrect. Bounded variance is an $L^2$ condition, not $L^1$. $L^1$-boundedness requires $\sup_n \mathbb{E}[|X_n|] < \infty$, which is weaker than bounded variance.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q5">In the fundamental theorem of asset pricing, discounted asset prices are martingales under:</span>
+
+A. The real-world (physical) probability measure
+B. The risk-neutral (equivalent martingale) measure
+C. The uniform distribution on possible outcomes
+D. Any probability measure — the result is measure-independent
+
+<<button "A">><<replace "#mt-q5">>Incorrect. Under the real-world measure, asset prices typically have a drift (risk premium) and are not martingales. The martingale property holds under a special change of measure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q5">>Correct. The fundamental theorem states that a market is arbitrage-free if and only if there exists an equivalent martingale measure (risk-neutral measure) under which discounted prices are martingales. Option prices are computed as conditional expectations under this measure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q5">>Incorrect. The uniform distribution has no special role. The risk-neutral measure is constructed to make discounted prices into martingales and generally assigns different probabilities than the uniform distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q5">>Incorrect. The martingale property is emphatically not measure-independent. The whole point is to find a specific measure under which it holds.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q6">The Azuma-Hoeffding inequality applies to martingales with bounded differences. What does it bound?</span>
+
+A. The expected value of the martingale at time $n$
+B. The probability that the martingale deviates from its starting value by more than $t$
+C. The variance of the martingale at time $n$
+D. The probability that the martingale ever becomes negative
+
+<<button "A">><<replace "#mt-q6">>Incorrect. The expected value of a martingale at any time equals $\mathbb{E}[X_0]$ by definition — there is nothing to bound. Azuma-Hoeffding bounds tail probabilities of deviations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q6">>Correct. The Azuma-Hoeffding inequality gives an exponential tail bound: $\mathbb{P}(|X_n - X_0| \geq t) \leq 2\exp(-t^2 / 2\sum c_i^2)$, where $|X_i - X_{i-1}| \leq c_i$. It controls how far the martingale can stray from its starting point.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q6">>Incorrect. While the bounded-difference condition implies finite variance, Azuma-Hoeffding provides a much stronger exponential //tail probability// bound, not merely a variance estimate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q6">>Incorrect. Azuma-Hoeffding bounds symmetric deviations from the starting value, not the probability of becoming negative. Doob's maximal inequality is more relevant for one-sided bounds.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q7">Which of the following is //not// a martingale (under standard assumptions)?</span>
+
+A. The simple symmetric random walk $S_n = X_1 + \cdots + X_n$ with $\mathbb{P}(X_i = \pm 1) = 1/2$
+B. Standard Brownian motion $W(t)$
+C. $W(t)^2$ where $W(t)$ is Brownian motion
+D. The conditional expectation $M_n = \mathbb{E}[Y \mid \mathcal{F}_n]$ for integrable $Y$
+
+<<button "A">><<replace "#mt-q7">>Incorrect. The simple symmetric random walk is the prototypical discrete-time martingale: $\mathbb{E}[S_{n+1} \mid S_1, \ldots, S_n] = S_n + \mathbb{E}[X_{n+1}] = S_n$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q7">>Incorrect. Brownian motion is a martingale: $\mathbb{E}[W(t) \mid \mathcal{F}_s] = W(s)$ for $s < t$, by the independence and zero mean of the increment $W(t) - W(s)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q7">>Correct. $W(t)^2$ is //not// a martingale. By Itô's formula, $\mathbb{E}[W(t)^2 \mid \mathcal{F}_s] = W(s)^2 + (t - s) \neq W(s)^2$. The correct martingale is $W(t)^2 - t$ — the Itô correction must be subtracted.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q7">>Incorrect. Conditional expectations of an integrable random variable always form a martingale (the Lévy martingale): $\mathbb{E}[M_{n+1} \mid \mathcal{F}_n] = \mathbb{E}[\mathbb{E}[Y \mid \mathcal{F}_{n+1}] \mid \mathcal{F}_n] = \mathbb{E}[Y \mid \mathcal{F}_n] = M_n$ by the tower property.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mt-q8">The Doob decomposition uniquely writes an adapted integrable process as $X_n = M_n + A_n$. What are $M_n$ and $A_n$?</span>
+
+A. $M_n$ is a supermartingale and $A_n$ is a submartingale
+B. $M_n$ is a martingale and $A_n$ is a predictable process
+C. $M_n$ is the mean and $A_n$ is the variance
+D. $M_n$ is the trend component and $A_n$ is i.i.d. noise
+
+<<button "A">><<replace "#mt-q8">>Incorrect. The decomposition does not split into a supermartingale and submartingale. It separates the "fair" part (martingale) from the "drift" part (predictable process).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mt-q8">>Correct. The Doob decomposition separates any adapted integrable process into a martingale $M_n$ (the unpredictable, fair-game component) and a predictable process $A_n$ ($\mathcal{F}_{n-1}$-measurable, representing systematic drift). This decomposition is unique.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mt-q8">>Incorrect. The Doob decomposition is not about separating mean from variance. $M_n$ is a full martingale process and $A_n$ is a predictable process capturing the drift.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mt-q8">>Incorrect. The terminology "trend and noise" is loosely related but imprecise. Specifically, $A_n$ is predictable (known given $\mathcal{F}_{n-1}$) and $M_n$ is a martingale — not i.i.d. noise.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

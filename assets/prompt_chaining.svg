@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <!-- Border -->
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Prompt Chaining</text>
+  <text x="400" y="58" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle" font-style="italic">Decompose, execute sequentially, pass outputs forward</text>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arrowNavy" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Complex Task input -->
+  <rect x="40" y="80" width="130" height="50" rx="6" fill="#EDE8DC" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="105" y="101" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Complex Task</text>
+  <text x="105" y="118" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">"Analyze paper &amp;</text>
+  <text x="105" y="128" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">write summary"</text>
+
+  <!-- Arrow to decomposer -->
+  <line x1="170" y1="105" x2="200" y2="105" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowBrown)"/>
+
+  <!-- Decomposer -->
+  <rect x="200" y="80" width="110" height="50" rx="6" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="255" y="101" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">Decompose</text>
+  <text x="255" y="117" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle" font-style="italic">into subtasks</text>
+
+  <!-- Arrows fanning down from decomposer -->
+  <line x1="230" y1="130" x2="130" y2="175" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <line x1="255" y1="130" x2="330" y2="175" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <line x1="280" y1="130" x2="530" y2="175" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <!-- ===== CHAIN: Step 1 ===== -->
+  <rect x="60" y="175" width="140" height="60" rx="6" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="130" y="196" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Step 1: Extract</text>
+  <text x="130" y="212" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">LLM extracts key</text>
+  <text x="130" y="224" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">claims from paper</text>
+
+  <!-- Output 1 -->
+  <rect x="75" y="245" width="110" height="28" rx="4" fill="#EDE8DC" stroke="#C4A87A" stroke-width="1"/>
+  <text x="130" y="264" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Output: claim list</text>
+
+  <!-- Arrow from output 1 to step 2 -->
+  <line x1="185" y1="259" x2="260" y2="259" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowNavy)"/>
+  <text x="222" y="252" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle" font-style="italic">feeds into</text>
+
+  <!-- ===== CHAIN: Step 2 ===== -->
+  <rect x="260" y="175" width="140" height="60" rx="6" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="330" y="196" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Step 2: Evaluate</text>
+  <text x="330" y="212" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">LLM assesses each</text>
+  <text x="330" y="224" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">claim for validity</text>
+
+  <!-- Output 2 -->
+  <rect x="275" y="245" width="110" height="28" rx="4" fill="#EDE8DC" stroke="#C4A87A" stroke-width="1"/>
+  <text x="330" y="264" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Output: evaluations</text>
+
+  <!-- Arrow from output 2 to step 3 -->
+  <line x1="385" y1="259" x2="460" y2="259" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowNavy)"/>
+  <text x="422" y="252" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle" font-style="italic">feeds into</text>
+
+  <!-- ===== CHAIN: Step 3 ===== -->
+  <rect x="460" y="175" width="140" height="60" rx="6" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="530" y="196" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Step 3: Synthesize</text>
+  <text x="530" y="212" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">LLM writes final</text>
+  <text x="530" y="224" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">summary from evals</text>
+
+  <!-- Output 3 -->
+  <rect x="475" y="245" width="110" height="28" rx="4" fill="#EDE8DC" stroke="#C4A87A" stroke-width="1"/>
+  <text x="530" y="264" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Output: summary</text>
+
+  <!-- Arrow to final -->
+  <line x1="585" y1="259" x2="640" y2="259" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Final Result -->
+  <rect x="640" y="240" width="130" height="38" rx="6" fill="#E8F0E8" stroke="#2D6B2D" stroke-width="2"/>
+  <text x="705" y="264" font-family="Georgia, serif" font-size="12" fill="#2D6B2D" text-anchor="middle" font-weight="bold">Final Result</text>
+
+  <!-- ===== Bottom annotation: key properties ===== -->
+  <line x1="60" y1="300" x2="740" y2="300" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Property 1 -->
+  <rect x="60" y="316" width="160" height="55" rx="5" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="140" y="336" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Modular</text>
+  <text x="140" y="352" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Each step has a focused</text>
+  <text x="140" y="364" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">prompt and clear output</text>
+
+  <!-- Property 2 -->
+  <rect x="260" y="316" width="160" height="55" rx="5" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="340" y="336" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Debuggable</text>
+  <text x="340" y="352" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Inspect intermediate</text>
+  <text x="340" y="364" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">outputs at each stage</text>
+
+  <!-- Property 3 -->
+  <rect x="460" y="316" width="160" height="55" rx="5" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="540" y="336" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Sequential</text>
+  <text x="540" y="352" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Each step depends on</text>
+  <text x="540" y="364" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">prior step's output</text>
+
+  <!-- Step number circles -->
+  <circle cx="80" cy="185" r="12" fill="#2D5A8E"/>
+  <text x="80" y="189" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">1</text>
+
+  <circle cx="280" cy="185" r="12" fill="#2D5A8E"/>
+  <text x="280" y="189" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">2</text>
+
+  <circle cx="480" cy="185" r="12" fill="#2D5A8E"/>
+  <text x="480" y="189" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">3</text>
+</svg>

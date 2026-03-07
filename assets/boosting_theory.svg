@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" rx="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Boosting Theory: Weak to Strong Learning</text>
+
+  <!-- Left: Weak Learners -->
+  <text x="150" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">Weak Learners</text>
+
+  <rect x="55" y="88" width="190" height="38" rx="8" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="150" y="112" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">h1: accuracy = 51%</text>
+
+  <rect x="55" y="138" width="190" height="38" rx="8" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="150" y="162" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">h2: accuracy = 53%</text>
+
+  <rect x="55" y="188" width="190" height="38" rx="8" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="150" y="212" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">h3: accuracy = 52%</text>
+
+  <text x="150" y="248" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle">...</text>
+
+  <rect x="55" y="260" width="190" height="38" rx="8" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="150" y="284" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">hT: accuracy = 50.5%</text>
+
+  <!-- Center: Boosting Process -->
+  <text x="400" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Adaptive Reweighting</text>
+
+  <!-- Reweighting arrows from left to center -->
+  <path d="M 245 107 C 300 90, 330 130, 370 140" fill="none" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowTan)"/>
+  <path d="M 245 157 C 310 150, 340 155, 370 160" fill="none" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowTan)"/>
+  <path d="M 245 207 C 310 200, 340 175, 370 180" fill="none" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowTan)"/>
+
+  <!-- Weight distribution visualization -->
+  <rect x="370" y="100" width="60" height="28" rx="5" fill="#C4A87A" opacity="0.35" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="400" y="119" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">w1 = 0.3</text>
+
+  <rect x="370" y="138" width="60" height="28" rx="5" fill="#C4A87A" opacity="0.5" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="400" y="157" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">w2 = 0.5</text>
+
+  <rect x="370" y="176" width="60" height="28" rx="5" fill="#C4A87A" opacity="0.2" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="400" y="195" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">w3 = 0.1</text>
+
+  <text x="400" y="222" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">...</text>
+
+  <!-- Summation symbol -->
+  <circle cx="400" cy="260" r="22" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="267" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">&#x03A3;</text>
+
+  <!-- Arrow down to combined -->
+  <line x1="400" y1="282" x2="400" y2="310" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <!-- Combined classifier -->
+  <rect x="330" y="312" width="140" height="36" rx="8" fill="#2D5A8E" opacity="0.2" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="335" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">H(x) = sign(&#x03A3; &#x03B1;t ht)</text>
+
+  <!-- Right: Strong Learner result -->
+  <text x="650" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Strong Learner</text>
+
+  <rect x="555" y="88" width="190" height="60" rx="10" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="650" y="114" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle">Combined classifier</text>
+  <text x="650" y="136" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">accuracy = 99%</text>
+
+  <!-- Arrow from combined to strong -->
+  <path d="M 470 330 C 520 330, 540 140, 555 118" fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrowBlue)"/>
+
+  <!-- Margin visualization on right -->
+  <text x="650" y="182" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Margin Distribution</text>
+
+  <!-- Margin bar chart -->
+  <rect x="570" y="198" width="12" height="20" rx="2" fill="#7C2530" opacity="0.6"/>
+  <rect x="588" y="193" width="12" height="25" rx="2" fill="#7C2530" opacity="0.5"/>
+  <rect x="606" y="188" width="12" height="30" rx="2" fill="#C4A87A" opacity="0.7"/>
+  <rect x="624" y="183" width="12" height="35" rx="2" fill="#C4A87A" opacity="0.8"/>
+  <rect x="642" y="178" width="12" height="40" rx="2" fill="#2D5A8E" opacity="0.5"/>
+  <rect x="660" y="183" width="12" height="35" rx="2" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="678" y="193" width="12" height="25" rx="2" fill="#2D5A8E" opacity="0.4"/>
+  <rect x="696" y="198" width="12" height="20" rx="2" fill="#2D5A8E" opacity="0.3"/>
+  <rect x="714" y="203" width="12" height="15" rx="2" fill="#2D5A8E" opacity="0.2"/>
+
+  <!-- Margin axis -->
+  <line x1="568" y1="218" x2="728" y2="218" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="580" y="234" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">-</text>
+  <text x="648" y="234" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">0</text>
+  <text x="720" y="234" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">+</text>
+  <text x="650" y="250" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">margin &#x2192;</text>
+
+  <!-- Schapire 1990 annotation -->
+  <text x="650" y="290" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Schapire 1990: weak &#x21D4; strong</text>
+  <text x="650" y="308" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Freund &amp; Schapire 1997: AdaBoost</text>
+
+  <!-- Bottom annotation -->
+  <text x="400" y="378" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Any learner slightly better than random can be boosted to arbitrarily high accuracy</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,156 @@
+Passage name: Frank-Wolfe Algorithm
+
+<<include "Header">>
+! Frank-Wolfe Algorithm
+<img src="assets/frank_wolfe.svg" alt="Diagram showing the Frank-Wolfe algorithm iterating over a convex feasible set by solving linear subproblems and stepping toward vertices" style="max-width:100%; margin:1em 0;">
+
+Imagine you need to find the lowest point in a valley, but you are only allowed to walk within a fenced park. Most optimization methods would, at each step, walk downhill and then project back inside the fence — an expensive correction. The Frank-Wolfe algorithm (also called the ''Conditional Gradient'' method) takes a cleverer approach: instead of projecting, it asks "which corner of the fence is most downhill from here?" and then takes a step toward that corner. Because the step is a convex combination of the current point and a vertex, the result is automatically inside the fence — no projection needed.
+
+!! The Core Insight
+
+Frank and Wolfe (1956) observed that minimizing a smooth convex function over a convex set can be reduced to solving a sequence of ''linear'' minimization problems over the same set. At each iteration, you linearize the objective around the current point and find the vertex of the constraint set that minimizes this linear approximation. Then you step toward that vertex. The update is always a convex combination of feasible points, so feasibility is maintained for free.
+
+This is transformative when projection onto the constraint set is expensive but linear minimization over it is cheap. Think of the ''nuclear norm ball'' (where projection requires a full SVD, but linear minimization requires only the top singular vector), or ''combinatorial polytopes'' (where projection is NP-hard, but linear optimization is polynomial). Related topics: <<link "Gradient Descent" "Gradient Descent">><</link>>, <<link "Convex Optimization" "Convex Optimization">><</link>>, <<link "Linear Programming" "Linear Programming">><</link>>, <<link "Sparsity" "Sparsity">><</link>>, <<link "Nuclear Norm" "Nuclear Norm">><</link>>.
+
+!! Why Iterates Are Naturally Sparse
+
+Each Frank-Wolfe iterate is a convex combination of at most $t+1$ vertices of the constraint set after $t$ steps. When the feasible set is a polytope (e.g., the simplex, the $\ell_1$ ball, or the Birkhoff polytope), vertices are extremely sparse — the vertices of the $\ell_1$ ball are the standard basis vectors $\pm e_i$, for instance.
+
+This means Frank-Wolfe builds up solutions as sparse combinations of atoms without any explicit sparsity penalty or thresholding. In matrix completion and low-rank problems over the nuclear norm ball, each "vertex" is a rank-1 matrix, so after $t$ steps the iterate has rank at most $t+1$. This ''structural sparsity'' is a major practical advantage.
+
+!! What the Math Is Actually Doing
+
+''Problem:'' Minimize $f(x)$ subject to $x \in \mathcal{C}$, where $f$ is convex and differentiable with $L$-Lipschitz continuous gradient, and $\mathcal{C}$ is a compact convex set.
+
+''Linear Minimization Oracle (LMO):'' At iteration $t$, solve:
+
+$$s_t = \arg\min_{s \in \mathcal{C}} \langle \nabla f(x_t), s \rangle$$
+
+This replaces the objective with its first-order Taylor expansion at $x_t$ and minimizes over $\mathcal{C}$ — a linear program.
+
+''Update:'' The descent direction is $d_t = s_t - x_t$. With step size $\gamma_t \in [0, 1]$:
+
+$$x_{t+1} = x_t + \gamma_t (s_t - x_t) = (1 - \gamma_t) x_t + \gamma_t s_t$$
+
+''Step size choices:''
+* Fixed schedule: $\gamma_t = \frac{2}{t + 2}$
+* Line search: $\gamma_t = \arg\min_{\gamma \in [0,1]} f(x_t + \gamma d_t)$
+
+''Convergence rate:'' With the $2/(t+2)$ schedule, the ''Frank-Wolfe gap'' $g_t = \langle \nabla f(x_t), x_t - s_t \rangle$ satisfies:
+
+$$f(x_t) - f(x^*) \leq \frac{2LD^2}{t + 2}$$
+
+where $D = \text{diam}(\mathcal{C})$ and $L$ is the Lipschitz constant of $\nabla f$. This is an $O(1/t)$ sublinear rate — slower than projected gradient descent's $O(1/t^2)$ with acceleration, but each iteration may be dramatically cheaper.
+
+''Duality gap certificate:'' The Frank-Wolfe gap $g_t$ is always an upper bound on the suboptimality $f(x_t) - f(x^*)$, giving a built-in stopping criterion at no extra cost.
+
+!! Practical Applications
+
+''Low-rank matrix problems:'' For matrix completion or matrix regression over the nuclear norm ball $\{X : \|X\|_* \leq \tau\}$, the LMO requires computing only the ''top singular vector pair'' of $-\nabla f(X_t)$, which is $O(mn)$ via power iteration — far cheaper than the full SVD needed for projection.
+
+''Structured prediction in ML:'' In structured SVMs and CRFs, the feasible set is a marginal polytope. Frank-Wolfe reduces optimization to repeated MAP inference (a combinatorial problem with efficient solvers), avoiding the expensive projection onto the marginal polytope.
+
+''Traffic assignment:'' The original motivation. Frank and Wolfe studied network flow problems where the feasible set is a flow polytope. The LMO is a shortest-path computation — fast and well-understood.
+
+''Video co-localization and tracking:'' The flow polytope formulation of multi-object tracking problems allows Frank-Wolfe to decompose a joint optimization into successive shortest-path queries.
+
+!! When Frank-Wolfe Breaks Down
+
+''Non-smooth objectives:'' Frank-Wolfe requires $\nabla f$ to be Lipschitz continuous. If the objective has kinks or is non-differentiable (e.g., the hinge loss without smoothing), the algorithm may oscillate or fail to converge. Subgradient variants exist but lose the clean convergence guarantees.
+
+''Slow tail convergence:'' The $O(1/t)$ rate means high-accuracy solutions require many iterations. For problems where projected gradient descent achieves $O(1/t^2)$ or linear convergence, Frank-Wolfe can be orders of magnitude slower in the final digits. Away-step and pairwise variants partially mitigate this, achieving linear convergence for strongly convex objectives over polytopes.
+
+''Zig-zagging near the boundary:'' When the optimum lies on a face of $\mathcal{C}$ rather than at a vertex, Frank-Wolfe iterates can zig-zag between vertices of that face without converging efficiently. The duality gap decreases but the iterates themselves oscillate. Fully corrective or in-face variants address this by optimizing over the convex hull of previously visited vertices.
+
+!! Technical Details
+
+''Original paper:'' Frank, M. and Wolfe, P. (1956), "An algorithm for quadratic programming." Published in Naval Research Logistics Quarterly.
+
+''Variants:''
+- ''Away-step Frank-Wolfe (AFW):'' Can move away from bad vertices, achieving linear convergence for strongly convex functions over polytopes.
+- ''Pairwise Frank-Wolfe:'' Transfers weight between two vertices per step, also achieving linear convergence.
+- ''Fully corrective:'' At each step, re-optimizes over the convex hull of all visited vertices.
+- ''Stochastic Frank-Wolfe:'' Uses stochastic gradient estimates in the LMO; convergence rate degrades to $O(1/\sqrt{t})$.
+- ''Lazy / MFW (Momentum Frank-Wolfe):'' Reuses previous LMO solutions when the gradient has not changed much, reducing the number of LMO calls.
+
+''Relation to boosting:'' Boosting in machine learning can be viewed as Frank-Wolfe on the exponential loss over the convex hull of weak learners. Each weak learner is a "vertex," and boosting greedily selects the one most aligned with the negative gradient.
+
+''Affine-invariance:'' Unlike projected gradient descent, Frank-Wolfe convergence depends on the ''curvature constant'' $C_f$ of $f$ over $\mathcal{C}$, not on the Lipschitz constant in a particular norm. This makes the algorithm affine-invariant — its behavior does not change under invertible linear transformations.
+
+''Memory:'' Iterates can be stored as a sparse combination of at most $t$ vertices, which is $O(t)$ in the number of atoms. Fully corrective variants periodically prune inactive vertices to control memory.
+
+!! Quiz
+
+<span id="fw-q1">
+''1. What is the key advantage of Frank-Wolfe over projected gradient descent?''
+
+<<button "A. Faster convergence rate">><<replace "#fw-q1">>Incorrect. Frank-Wolfe has an $O(1/t)$ rate, which is slower than projected gradient descent's $O(1/t)$ (or $O(1/t^2)$ with acceleration).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It avoids projections by solving linear subproblems instead">><<replace "#fw-q1">>Correct. The LMO (linear minimization oracle) replaces the projection step, which can be dramatically cheaper for structured constraint sets.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It works on non-convex objectives">><<replace "#fw-q1">>Incorrect. Standard Frank-Wolfe requires convex, smooth objectives for its convergence guarantees.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It does not require computing gradients">><<replace "#fw-q1">>Incorrect. Frank-Wolfe linearizes the objective using the gradient at each step — gradients are essential.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q2">
+''2. What does the Linear Minimization Oracle (LMO) compute at each iteration?''
+
+<<button "A. The projection of the current iterate onto the constraint set">><<replace "#fw-q2">>Incorrect. The LMO solves a linear minimization, not a projection (which is a quadratic minimization).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The full eigendecomposition of the gradient">><<replace "#fw-q2">>Incorrect. The LMO minimizes a linear function over the constraint set; eigendecomposition is not involved in general.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The point in C that minimizes the inner product with the current gradient">><<replace "#fw-q2">>Correct. $s_t = \arg\min_{s \in \mathcal{C}} \langle \nabla f(x_t), s \rangle$ — this is a linear program over $\mathcal{C}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The step size for the next iteration">><<replace "#fw-q2">>Incorrect. Step size is determined separately, either by a fixed schedule or line search.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q3">
+''3. Why do Frank-Wolfe iterates tend to be sparse when the constraint set is a polytope?''
+
+<<button "A. The algorithm applies an explicit L1 penalty">><<replace "#fw-q3">>Incorrect. There is no explicit sparsity penalty — sparsity arises structurally from the algorithm.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Each iterate is a convex combination of at most t+1 vertices, and polytope vertices are sparse">><<replace "#fw-q3">>Correct. After $t$ steps, the iterate is a convex combination of visited vertices. Vertices of polytopes like the $\ell_1$ ball are extremely sparse.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The algorithm projects onto the nearest sparse point">><<replace "#fw-q3">>Incorrect. Frank-Wolfe does not perform projections at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Sparsity is enforced by the step size schedule">><<replace "#fw-q3">>Incorrect. The step size schedule affects convergence rate but not the structural sparsity of iterates.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q4">
+''4. What is the convergence rate of standard Frank-Wolfe with step size $\gamma_t = 2/(t+2)$?''
+
+<<button "A. Linear convergence (exponential decay)">><<replace "#fw-q4">>Incorrect. Standard Frank-Wolfe achieves only sublinear convergence. Away-step variants can achieve linear convergence for strongly convex objectives.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. O(1/t) sublinear rate">><<replace "#fw-q4">>Correct. $f(x_t) - f(x^*) \leq \frac{2LD^2}{t+2}$, which is $O(1/t)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. O(1/t^2) accelerated rate">><<replace "#fw-q4">>Incorrect. The $O(1/t^2)$ rate is achievable by Nesterov-accelerated projected gradient descent, not standard Frank-Wolfe.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Convergence is not guaranteed">><<replace "#fw-q4">>Incorrect. Convergence is guaranteed for smooth convex objectives over compact convex sets.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q5">
+''5. For optimization over the nuclear norm ball, why is the LMO much cheaper than projection?''
+
+<<button "A. The LMO requires only the top singular vector pair, while projection requires a full SVD">><<replace "#fw-q5">>Correct. The LMO computes $\arg\min_{\|S\|_* \leq \tau} \langle \nabla f, S \rangle = -\tau u_1 v_1^T$ using only the leading singular vectors. Projection needs all singular values for soft-thresholding.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The nuclear norm ball has no vertices, so projection is undefined">><<replace "#fw-q5">>Incorrect. Projection onto the nuclear norm ball is well-defined (via singular value soft-thresholding); it is just expensive.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The LMO uses random sampling instead of exact computation">><<replace "#fw-q5">>Incorrect. The LMO is solved exactly via the top singular vector computation, not approximately.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The nuclear norm ball is not convex, so projection is impossible">><<replace "#fw-q5">>Incorrect. The nuclear norm ball is convex; projection is possible but computationally expensive.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q6">
+''6. The Frank-Wolfe gap $g_t = \langle \nabla f(x_t), x_t - s_t \rangle$ provides:''
+
+<<button "A. A lower bound on the suboptimality">><<replace "#fw-q6">>Incorrect. The FW gap is an upper bound, not a lower bound, on $f(x_t) - f(x^*)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. An upper bound on $f(x_t) - f(x^*)$, serving as a free stopping criterion">><<replace "#fw-q6">>Correct. $f(x_t) - f(x^*) \leq g_t$ always holds for convex $f$, and $g_t$ is computed as a byproduct of the LMO — no extra cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The exact value of the objective at the optimum">><<replace "#fw-q6">>Incorrect. The gap is a certificate of suboptimality, not the optimal value itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The gradient norm at the current iterate">><<replace "#fw-q6">>Incorrect. The FW gap involves the inner product of the gradient with the direction $x_t - s_t$, not the gradient norm alone.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q7">
+''7. What causes zig-zagging behavior in Frank-Wolfe near the optimum?''
+
+<<button "A. The step size schedule is too aggressive">><<replace "#fw-q7">>Incorrect. Zig-zagging is a geometric issue, not a step size issue — it occurs even with line search.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The gradient becomes zero at the optimum">><<replace "#fw-q7">>Incorrect. A zero gradient at the optimum would mean convergence, not zig-zagging.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The optimum lies on a face rather than a vertex, so the algorithm alternates between vertices of that face">><<replace "#fw-q7">>Correct. When the solution is in the relative interior of a face, the LMO can only return vertices of that face, causing oscillation. Away-step and in-face variants fix this.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The constraint set is unbounded">><<replace "#fw-q7">>Incorrect. Frank-Wolfe requires a compact (bounded) constraint set; unboundedness would be a violation of assumptions, not a cause of zig-zagging.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="fw-q8">
+''8. How is boosting related to the Frank-Wolfe algorithm?''
+
+<<button "A. Boosting uses projected gradient descent, not Frank-Wolfe">><<replace "#fw-q8">>Incorrect. Boosting is more naturally connected to Frank-Wolfe than to projected gradient descent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Boosting can be viewed as Frank-Wolfe on the loss over the convex hull of weak learners, where each weak learner is a vertex">><<replace "#fw-q8">>Correct. Each boosting round selects the weak learner most aligned with the negative gradient of the loss — exactly the LMO step with the weak learner set as the constraint set.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Both algorithms require projection onto a simplex">><<replace "#fw-q8">>Incorrect. Neither boosting nor Frank-Wolfe requires projection — that is precisely the appeal.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Boosting achieves linear convergence while Frank-Wolfe does not">><<replace "#fw-q8">>Incorrect. This is not the conceptual connection. Both can exhibit sublinear convergence depending on the setting.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

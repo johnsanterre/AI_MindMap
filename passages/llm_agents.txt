@@ -1,0 +1,145 @@
+<<include "Header">>
+
+! LLM Agents
+
+<img src="assets/llm_agents.svg" alt="Diagram illustrating the ReAct loop for LLM Agents" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+A calculator is smart but passive — it only answers when you ask. An ''LLM agent'' is different. It has a goal, makes a plan, picks up tools, checks what they return, and adjusts course. The language model is not just generating text to be read; it is the reasoning engine of a system that acts in the world. It decides to run a web search, inspects the result, decides the answer was incomplete, runs a follow-up query, writes and executes code to crunch the numbers, and only then produces a final answer. That loop — reason, act, observe, repeat — is what separates an agent from a chatbot. The key breakthrough was realizing that language models are surprisingly capable of orchestrating this loop if given the right prompting structure and a well-defined set of tools to call.
+
+---
+
+!! The Core Insight
+
+An LLM agent is an LLM augmented with three things: a set of ''tools'' it can invoke (web search, code execution, APIs, memory retrieval), a ''loop'' that feeds each tool's output back into the model's context, and a ''reasoning strategy'' that decomposes a complex goal into a sequence of manageable subtasks. None of those pieces alone is novel. What is new is combining them with a sufficiently capable language model and showing that the result can autonomously solve multi-step tasks that are completely beyond a single forward pass.
+
+The key insight is that language models trained on code and natural language acquire a latent capacity for tool-use reasoning. Given a description of what a tool does — a function name, a docstring, an example — a large model can reliably decide when to call it, how to format the call, and how to interpret the result. This means the "brain" of the agent does not need to be redesigned for each new tool; you add a tool description to the context and the model figures out the rest. This enables tasks that are impossible for a single forward pass: multi-step research across a live web, code debugging with execution feedback, web-based question answering requiring dozens of retrieval steps, and autonomous software engineering. See [[Large Language Models]], [[Chain of Thought]], [[In-Context Learning]], [[Prompt Engineering]], and [[RAG]] for the building blocks this architecture rests on.
+
+The most important structural feature is the ''context window as working memory''. Every thought the model has produced, every tool call it has made, and every observation the tool returned accumulates in the context. The model reads this entire history before generating its next thought. This gives it the ability to track state across many steps — but also means that very long tasks risk exhausting the context window, a central limitation of current agents.
+
+---
+
+!! ReAct: Reason + Act
+
+''ReAct'' (Yao et al. 2023) is the foundational algorithm for tool-using agents. The name is a portmanteau: //Reason// + //Act//. The idea is to interleave reasoning traces and tool-use actions in the same generation stream, in a strict alternating format:
+
+//Thought: I need to find the current population of France.//<br>
+//Action: Search[population of France 2024]//<br>
+//Observation: 68 million as of 2024.//<br>
+//Thought: Now I can multiply by two.//<br>
+//Action: Calculator[68000000 × 2]//<br>
+//Observation: 136000000//<br>
+//Answer: 136 million.//
+
+The reasoning trace serves two functions. First, it keeps the model on-task by making the plan explicit — the model can re-read its own prior thoughts and see what step comes next. Second, it provides a place to notice and recover from errors: if an observation returns an unexpected result, the thought step can register the discrepancy and choose a corrective action. ReAct outperforms both chain-of-thought alone (no tools, so it cannot retrieve live facts or run exact arithmetic) and action-only approaches (no reasoning trace, so the model loses track of multi-step plans). It became the standard backbone for almost all subsequent agent frameworks. See [[Chain of Thought]] for the reasoning-only baseline this builds on.
+
+The format is implemented through structured prompting or, in modern systems, through the model's built-in ''function calling'' or ''tool use'' API (available in GPT-4, Claude, and Gemini). In function calling, the model emits a structured JSON tool call rather than free-text, the runtime executes it, and the result is injected back as a special message type. This is more reliable than parsing free-text actions and dramatically reduces format errors.
+
+---
+
+!! What the Math Is Actually Doing
+
+An agent trajectory is a sequence: $(s_1, a_1, o_1,\ s_2, a_2, o_2,\ \ldots,\ s_T, a_T)$ where $s_t$ is the full context at step $t$ (all prior thoughts, actions, and observations concatenated), $a_t$ is the action the model takes (a tool call or a final answer), and $o_t$ is the observation returned by the tool. At each step, the LLM samples:
+
+$$a_t \sim \pi_\theta(a_t \mid s_t)$$
+
+where $\pi_\theta$ is the language model's conditional distribution over next tokens. The context $s_t$ grows monotonically: $s_{t+1} = s_t \oplus a_t \oplus o_t$, where $\oplus$ denotes concatenation. The agent terminates when the model emits a special ''final answer'' action rather than a tool call.
+
+The context window is the agent's working memory. Its finite length (128K–1M tokens in current models) sets a hard ceiling on the number of steps the agent can take before old context must be dropped or summarized. Planning strategies differ in how they structure the generation: ''ReAct'' interleaves thoughts and actions in a flat chain; ''Tree of Thought'' branches the search, generating multiple candidate continuations at each step and using the model to score and prune them; ''Plan-and-Solve'' generates a full plan first, then executes it step by step, reducing mid-task drift.
+
+External memory extends the effective horizon beyond the context window. ''In-context memory'' stores observations directly in the prompt (cheap, limited). ''Retrieval-augmented memory'' (RAG) stores observations in a vector database and retrieves relevant ones at each step (expensive to query, essentially unlimited capacity). ''Episodic memory'' records summaries of prior task runs and retrieves them when facing similar tasks, allowing the agent to improve over time without retraining. See [[RAG]] for the retrieval mechanism in detail.
+
+---
+
+!! Multi-Agent Systems and Tool Design
+
+Single agents hit two hard limits: the context window fills up during long tasks, and errors compound — a wrong observation at step 3 corrupts the reasoning for all subsequent steps. ''Multi-agent'' architectures address both. A ''planner'' agent decomposes a complex goal into subtasks and delegates each to a ''specialist'' agent with a focused role: a researcher agent does web retrieval, a coder agent writes and executes code, a critic agent checks outputs for errors. The planner synthesizes results. Because each specialist operates over a shorter trajectory, context limits are less binding. Frameworks implementing this pattern include ''LangChain'', ''AutoGen'' (Wu et al. 2023), and ''CrewAI''.
+
+''Tool design'' turns out to matter as much as model capability. A tool with a vague description, no error messages, or unstructured output will fail constantly — the model cannot interpret malformed returns and tends to hallucinate plausible-looking results when observations are ambiguous. A well-designed tool has: a precise name, a one-sentence docstring explaining exactly what it does, typed parameters with examples, and structured JSON output with explicit error fields. Studies have shown that improving tool descriptions can increase agent success rate by 20–30 percentage points with no change to the model.
+
+''Code execution'' is the most powerful single tool. It lets the agent offload all arithmetic to a Python interpreter, manipulate structured data with pandas, and — critically — //verify its own outputs// by running unit tests or assertions. An agent that can write a test and see it fail has a self-correction mechanism that dramatically improves reliability on software engineering tasks. ''Reflexion'' (Shinn et al. 2023) formalizes this: after each failed attempt, the agent writes a verbal self-critique describing what went wrong, stores it in memory, and uses it to guide the next attempt. This simple loop more than doubles success rates on certain benchmarks.
+
+---
+
+!! When LLM Agents Break Down
+
+''Error propagation and cascading failures:'' Because each step's observation becomes part of the context for all subsequent steps, a single incorrect tool call — a search that returns a misleading snippet, a code bug that silently produces the wrong number — corrupts the reasoning chain from that point forward. The model tends to trust its own prior outputs; it rarely spontaneously backtracks to question an earlier observation. On long tasks (20+ steps), even a 5% per-step error rate compounds to near-certain failure at the trajectory level. Self-consistency (sampling multiple trajectories and taking a majority vote) helps for tasks with verifiable answers but is not practical for open-ended tasks where there is no ground-truth to vote on.
+
+''Hallucinated tool calls and confabulation:'' When a model is uncertain or when a task requires knowledge outside its training distribution, it may emit a plausible-looking tool call with fabricated parameters, interpret a vague observation as confirmation, and proceed confidently toward a wrong answer. This is particularly dangerous in agentic settings because the model's confident prose gives no signal that the underlying information is fabricated. Unlike a chatbot where hallucination is visible in the output, an agent's hallucination can be buried in the middle of a 40-step trajectory and go unnoticed until the final answer is checked.
+
+''Long-horizon planning and goal drift:'' Current agents are much better at executing a pre-specified plan than at maintaining coherent long-horizon goals autonomously. Over very long trajectories, models tend to lose track of the original objective, over-commit to an early interpretation of the task, or get stuck in repetitive loops of similar tool calls. Benchmarks like SWE-bench (software engineering) and WebArena (web navigation) currently see success rates of roughly 20–50% on realistic tasks for the best available models, suggesting that reliable long-horizon planning remains an open research problem.
+
+---
+
+!! Technical Details
+
+''Foundational papers:'' Yao et al. 2023 ("ReAct: Synergizing Reasoning and Acting in Language Models") established the interleaved thought-action-observation format. Shinn et al. 2023 ("Reflexion: Language Agents with Verbal Reinforcement Learning") added verbal self-critique and memory. Wang et al. 2023 ("Plan-and-Solve Prompting") showed that planning before acting reduces mid-task drift. Wu et al. 2023 ("AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation") introduced the multi-agent conversation framework.
+
+''API milestones:'' OpenAI function calling (June 2023) standardized structured tool-use format in GPT-4. Anthropic tool use in Claude (2023) followed. Both allow the model to emit typed JSON function calls rather than free-text actions, and to receive structured observations, reducing parsing failures dramatically.
+
+''Benchmarks:'' ''WebArena'' (Zhou et al. 2023) — 812 realistic web navigation tasks (shopping, Reddit, GitLab) requiring multi-step browser interaction; best agents score ~35–45%. ''SWE-bench'' (Jimenez et al. 2023) — 2,294 real GitHub issues requiring code changes to pass tests; best agents (with scaffolding) score ~20–50% depending on difficulty split. ''HotpotQA'' and ''FEVER'' — multi-hop question answering and fact verification, earlier benchmarks where ReAct showed the first strong results.
+
+''Planning strategies compared:'' ReAct (flat chain, interleaved) is simplest and most widely deployed. Tree of Thought (branching + search) is more powerful on combinatorial tasks but requires $O(b^d)$ model calls for branching factor $b$ and depth $d$. Plan-and-Solve generates a plan in one pass and executes it; faster but brittle if the plan is wrong. Reflexion adds a memory-augmented outer loop: attempt → self-critique → revised attempt; effective but requires multiple episodes per task.
+
+''Current reliability:'' State-of-the-art agents using GPT-4 or Claude 3+ with well-designed tool scaffolding succeed on roughly 20–50% of complex, real-world tasks depending on domain. Key bottlenecks are error recovery, long-horizon coherence, and context-window exhaustion. Active research directions include agent fine-tuning (training models specifically on agent trajectories), hierarchical planning, and formal verification of intermediate steps.
+
+---
+
+!! Quiz
+
+<span id="ag-q1">What is the core idea of the ReAct framework?</span>
+A. Train a separate policy network to decide which tool to call at each step.
+B. Interleave reasoning traces and tool-use actions in the same generation, feeding observations back as context.
+C. Generate a complete plan in one pass, then execute all tool calls in parallel.
+D. Use a retrieval database to supply intermediate reasoning steps.
+<<button "A">><<replace "#ag-q1">>✗ Wrong. ReAct uses the LLM itself as both the reasoner and the action selector, not a separate policy network.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q1">>✓ Correct! ReAct interleaves Thought, Action, and Observation in a single generation stream — the reasoning trace keeps the model on-task while the actions let it gather real information.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q1">>✗ Wrong. Generating a full plan and executing in parallel describes Plan-and-Solve, not ReAct. ReAct is a sequential, step-by-step loop.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q1">>✗ Wrong. Retrieval-augmented generation (RAG) is a tool an agent can use, but it is not the defining idea of the ReAct framework.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q2">In the agent trajectory formulation, what does the context $s_t$ at step $t$ contain?</span>
+A. Only the most recent tool observation, to save context window space.
+B. The concatenation of all prior thoughts, actions, and observations up to step $t$.
+C. A compressed vector summary of the full trajectory.
+D. Only the original task description and the current action.
+<<button "A">><<replace "#ag-q2">>✗ Wrong. Discarding prior context would prevent the agent from tracking state across steps — a fundamental requirement for multi-step tasks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q2">>✓ Correct! $s_t = s_{t-1} \oplus a_{t-1} \oplus o_{t-1}$: the context grows by appending each action and observation, giving the LLM access to the full history when deciding its next move.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q2">>✗ Wrong. Current agents store the raw text, not compressed vectors, though compressed memory is an active research direction for very long tasks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q2">>✗ Wrong. Including only the task description and current action would prevent the agent from using observations — exactly what distinguishes an agent from a single-turn prompt.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q3">Why is code execution considered the most powerful tool available to an LLM agent?</span>
+A. It allows the agent to access the internet without a separate search tool.
+B. It offloads exact arithmetic to an interpreter and lets the agent verify its own outputs by running tests.
+C. It bypasses the context window limit by storing intermediate results externally.
+D. It enables the agent to fine-tune itself on the current task.
+<<button "A">><<replace "#ag-q3">>✗ Wrong. Code execution runs locally in a sandbox; internet access is a separate capability requiring a web search or HTTP tool.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q3">>✓ Correct! A Python interpreter handles exact arithmetic the LLM would otherwise hallucinate, and the agent can write assertions or tests to check its own intermediate results — a powerful self-correction loop.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q3">>✗ Wrong. Code execution does not extend the context window; that is the role of external memory or retrieval systems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q3">>✗ Wrong. Code execution runs inference-time programs; it does not modify model weights or perform fine-tuning.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q4">What does the Reflexion framework (Shinn et al. 2023) add on top of basic ReAct?</span>
+A. A branching tree search over multiple candidate action sequences.
+B. Parallel execution of all tool calls simultaneously to speed up the loop.
+C. Verbal self-critique after each failed attempt, stored in memory and used to guide the next try.
+D. A separate verifier model that scores the agent's final answer before returning it.
+<<button "A">><<replace "#ag-q4">>✗ Wrong. Branching tree search describes Tree of Thought, not Reflexion. Reflexion's loop is sequential: attempt, critique, retry.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q4">>✗ Wrong. Reflexion does not parallelize tool calls; it is a sequential outer loop that revisits failed attempts using stored self-critiques.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q4">>✓ Correct! After a failure, Reflexion has the model write a natural-language critique explaining what went wrong. That critique is stored in memory and prepended to the next attempt, acting as a form of verbal reinforcement learning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q4">>✗ Wrong. Reflexion uses the same model to self-critique, not a separate verifier. The key is the memory of prior failures, not an independent scoring model.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q5">Which benchmark specifically measures agent performance on real GitHub software engineering issues?</span>
+A. WebArena
+B. HotpotQA
+C. GSM8K
+D. SWE-bench
+<<button "A">><<replace "#ag-q5">>✗ Wrong. WebArena tests web navigation tasks (shopping sites, Reddit, GitLab UI), not code-level GitHub issue resolution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q5">>✗ Wrong. HotpotQA is a multi-hop question answering benchmark over Wikipedia, not software engineering.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q5">>✗ Wrong. GSM8K is a grade-school math benchmark used to evaluate chain-of-thought reasoning, not software agents.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q5">>✓ Correct! SWE-bench (Jimenez et al. 2023) contains 2,294 real GitHub issues. An agent must read the issue, navigate the codebase, write a fix, and pass the associated test suite. State-of-the-art agents score 20–50% depending on difficulty split.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q6">What is the primary reason multi-agent architectures are used instead of a single agent?</span>
+A. Multi-agent systems are cheaper to run because each agent uses a smaller model.
+B. A single agent cannot call more than one tool per step.
+C. Decomposing tasks across specialist agents reduces context window pressure and limits error propagation within each sub-task.
+D. Multi-agent systems eliminate the need for a reasoning trace entirely.
+<<button "A">><<replace "#ag-q6">>✗ Wrong. Multi-agent architectures often use the same large model for multiple agents; cost reduction is a side effect, not the primary motivation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q6">>✗ Wrong. A single agent with function calling can invoke multiple tools; the one-call-per-step limit is a framework detail, not an architectural constraint.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q6">>✓ Correct! Each specialist agent works on a focused sub-task with a shorter trajectory, keeping context usage manageable and isolating errors so they do not cascade across the full task.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q6">>✗ Wrong. Multi-agent systems still rely on reasoning traces within each agent — the planner and specialists all use thought steps to coordinate and make decisions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q7">Which failure mode is most dangerous in agentic settings compared to single-turn chatbots?</span>
+A. The model occasionally produces grammatically incorrect output.
+B. Hallucinated tool calls with fabricated parameters that propagate silently through a long trajectory before the error is caught.
+C. The model being overly verbose in its reasoning traces.
+D. High latency from processing long input prompts.
+<<button "A">><<replace "#ag-q7">>✗ Wrong. Grammatical errors are cosmetic and immediately visible; they do not compound across a trajectory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q7">>✓ Correct! In a chatbot, a hallucination appears in the final output and is visible. In an agent, a hallucinated tool call can corrupt step 3 of a 30-step trajectory; subsequent steps treat the fabricated observation as ground truth and build on it, making the error very hard to detect until the final answer is checked.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q7">>✗ Wrong. Verbosity is a quality issue but does not cause task failure and does not compound across steps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q7">>✗ Wrong. Latency is a practical concern but not an agentic-specific failure mode — it affects chatbots equally.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ag-q8">According to current benchmarks, what is the approximate success rate of state-of-the-art LLM agents on complex real-world tasks?</span>
+A. 5–10%, indicating the technology is still mostly experimental.
+B. 20–50%, showing genuine capability with significant room for improvement.
+C. 70–80%, indicating agents reliably handle most real-world tasks.
+D. Over 90%, meaning agents are essentially solved for common tasks.
+<<button "A">><<replace "#ag-q8">>✗ Wrong. 5–10% would describe much earlier systems. Current agents with strong scaffolding perform substantially better on structured benchmarks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ag-q8">>✓ Correct! Benchmarks like SWE-bench and WebArena show best-in-class agents succeeding on roughly 20–50% of realistic tasks. This demonstrates real capability while making clear that reliable long-horizon planning remains an open problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ag-q8">>✗ Wrong. 70–80% would imply agents are nearly production-ready for arbitrary tasks — current benchmarks do not support this, especially on tasks requiring many sequential steps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ag-q8">>✗ Wrong. Over 90% would mean the agent problem is effectively solved. Error propagation, hallucination, and context limits keep current agents well below this bar on hard real-world tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

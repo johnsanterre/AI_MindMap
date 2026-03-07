@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" font-weight="bold">Curiosity-Driven Exploration</text>
+
+  <!-- Agent box -->
+  <rect x="40" y="70" width="120" height="60" rx="8" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="100" y="97" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">Agent</text>
+  <text x="100" y="117" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Policy</text>
+
+  <!-- Environment box -->
+  <rect x="40" y="260" width="120" height="60" rx="8" fill="#C4A87A" opacity="0.25" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="100" y="287" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">Environment</text>
+  <text x="100" y="307" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Sparse Reward</text>
+
+  <!-- Action arrow down -->
+  <line x1="70" y1="130" x2="70" y2="260" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="50" y="200" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" transform="rotate(-90, 50, 200)">action</text>
+
+  <!-- State arrow up -->
+  <line x1="130" y1="260" x2="130" y2="130" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <text x="155" y="200" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" transform="rotate(-90, 155, 200)">state s'</text>
+
+  <!-- Prediction Model -->
+  <rect x="260" y="70" width="160" height="70" rx="10" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="340" y="97" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-weight="bold">Forward Model</text>
+  <text x="340" y="117" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">Predicts next state</text>
+  <text x="340" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">f(s, a)</text>
+
+  <!-- Arrow from Agent to Forward Model -->
+  <line x1="160" y1="95" x2="258" y2="95" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="210" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">s, a</text>
+
+  <!-- Actual next state box -->
+  <rect x="260" y="200" width="160" height="50" rx="10" fill="#C4A87A" opacity="0.2" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="340" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Actual Next State</text>
+  <text x="340" y="240" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">s'</text>
+
+  <!-- Arrow from environment to actual state -->
+  <path d="M 160 290 Q 210 290 260 225" fill="none" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowBrown)"/>
+
+  <!-- Comparison / prediction error -->
+  <rect x="500" y="120" width="160" height="80" rx="12" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="2"/>
+  <text x="580" y="148" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-weight="bold">Prediction Error</text>
+  <text x="580" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">|| f(s,a) - s' ||</text>
+  <text x="580" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">= Intrinsic Reward</text>
+
+  <!-- Arrow from forward model to prediction error -->
+  <line x1="420" y1="105" x2="498" y2="140" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Arrow from actual state to prediction error -->
+  <line x1="420" y1="225" x2="498" y2="180" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowBrown)"/>
+
+  <!-- Arrow from prediction error back to agent (intrinsic reward) -->
+  <path d="M 580 200 Q 580 340 340 350 Q 140 360 100 322" fill="none" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowRed)"/>
+  <text x="400" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">Intrinsic Reward Signal</text>
+
+  <!-- Three method labels -->
+  <rect x="540" y="260" width="220" height="110" rx="8" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="650" y="282" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-weight="bold">Curiosity Signals</text>
+  <circle cx="558" cy="300" r="4" fill="#7C2530"/>
+  <text x="570" y="305" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Prediction Error (ICM)</text>
+  <circle cx="558" cy="322" r="4" fill="#2D5A8E"/>
+  <text x="570" y="327" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Information Gain (RND)</text>
+  <circle cx="558" cy="344" r="4" fill="#C4A87A"/>
+  <text x="570" y="349" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">State Novelty (Count-based)</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

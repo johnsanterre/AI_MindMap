@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="1.5" rx="6"/>
+
+  <!-- ===== SECTION 1: Homeomorphism (coffee cup ↔ torus) ===== -->
+  <!-- Section label -->
+  <text x="155" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Homeomorphism</text>
+  <line x1="30" y1="33" x2="280" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Coffee cup silhouette (left) -->
+  <!-- Cup body -->
+  <rect x="60" y="60" width="70" height="80" rx="4" fill="#C4A87A" opacity="0.35" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- Cup rim (top) -->
+  <ellipse cx="95" cy="60" rx="38" ry="8" fill="#C4A87A" opacity="0.45" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Cup base -->
+  <ellipse cx="95" cy="140" rx="38" ry="8" fill="#C4A87A" opacity="0.45" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Handle (the hole) -->
+  <path d="M130,75 C165,75 165,125 130,125" fill="none" stroke="#7C2530" stroke-width="3" stroke-linecap="round"/>
+  <path d="M130,82 C152,82 152,118 130,118" fill="#FDFAF4" stroke="#FDFAF4" stroke-width="1"/>
+  <!-- Handle inner arc (visible gap = the hole) -->
+  <path d="M130,85 C148,85 148,115 130,115" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <!-- β₁=1 label -->
+  <text x="95" y="168" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">β₁ = 1</text>
+  <text x="95" y="183" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Coffee Cup</text>
+
+  <!-- Double-headed arrow -->
+  <line x1="172" y1="100" x2="218" y2="100" stroke="#2D5A8E" stroke-width="2"/>
+  <polygon points="172,100 180,96 180,104" fill="#2D5A8E"/>
+  <polygon points="218,100 210,96 210,104" fill="#2D5A8E"/>
+  <text x="195" y="93" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">~</text>
+
+  <!-- Torus (donut) silhouette (right) -->
+  <!-- Outer ellipse -->
+  <ellipse cx="252" cy="100" rx="44" ry="44" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- Inner hole (the hole of the torus) -->
+  <ellipse cx="252" cy="100" rx="18" ry="18" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Dashed inner ring to suggest 3D torus form -->
+  <ellipse cx="252" cy="100" rx="31" ry="31" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.7"/>
+  <!-- Torus shading arc -->
+  <path d="M225,80 Q252,65 279,80" fill="none" stroke="#5C3D1E" stroke-width="1" opacity="0.5"/>
+
+  <text x="252" y="168" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">β₁ = 1</text>
+  <text x="252" y="183" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Torus (Donut)</text>
+
+  <!-- Divider -->
+  <line x1="300" y1="20" x2="300" y2="390" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 2: Betti Numbers ===== -->
+  <text x="530" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Betti Numbers β_k</text>
+  <line x1="305" y1="33" x2="620" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Shape A: Circle (β₀=1, β₁=1) -->
+  <circle cx="365" cy="100" r="42" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="365" y="168" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">β₀=1, β₁=1</text>
+  <text x="365" y="182" font-family="Georgia, serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">Circle</text>
+
+  <!-- Shape B: Disk (β₀=1, β₁=0) -->
+  <circle cx="490" cy="100" r="42" fill="#C4A87A" opacity="0.3" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="490" y="168" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">β₀=1, β₁=0</text>
+  <text x="490" y="182" font-family="Georgia, serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">Disk (filled)</text>
+
+  <!-- Shape C: Two disconnected disks (β₀=2, β₁=0) -->
+  <circle cx="578" cy="82" r="26" fill="#C4A87A" opacity="0.25" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="605" cy="118" r="20" fill="#C4A87A" opacity="0.25" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="591" y="168" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">β₀=2, β₁=0</text>
+  <text x="591" y="182" font-family="Georgia, serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">Two Components</text>
+
+  <!-- Divider -->
+  <line x1="630" y1="20" x2="630" y2="390" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 3: Persistence Diagram ===== -->
+  <text x="715" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Persistence Diagram</text>
+  <line x1="635" y1="33" x2="795" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Axes -->
+  <!-- Diagonal line (birth = death) -->
+  <line x1="650" y1="195" x2="790" y2="55" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Y axis (death) -->
+  <line x1="660" y1="200" x2="660" y2="50" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <!-- X axis (birth) -->
+  <line x1="655" y1="195" x2="790" y2="195" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Axis labels -->
+  <text x="720" y="215" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Birth (b)</text>
+  <text x="640" y="125" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90, 640, 125)">Death (d)</text>
+
+  <!-- Near-diagonal points (noise) -->
+  <circle cx="690" cy="177" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="705" cy="160" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="718" cy="145" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <circle cx="730" cy="132" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- Far-from-diagonal points (signal) -->
+  <circle cx="668" cy="95" r="6" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="680" cy="75" r="6" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="695" cy="110" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Labels for near/far points -->
+  <text x="760" y="148" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-style="italic">noise</text>
+  <text x="730" y="80" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">signal</text>
+  <!-- Arrow from "signal" to signal points -->
+  <line x1="718" y1="83" x2="698" y2="93" stroke="#7C2530" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+  <!-- ===== Bottom caption bar ===== -->
+  <rect x="0" y="360" width="800" height="40" fill="#F0EAD8" rx="0"/>
+  <rect x="0" y="360" width="800" height="40" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="376" font-family="Georgia, serif" font-size="11.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">
+    Topology studies shape invariants preserved under continuous deformation — the mathematical foundation of the manifold hypothesis.
+  </text>
+  <text x="400" y="392" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">
+    Betti numbers count holes; persistent homology tracks them across scales to separate signal from noise.
+  </text>
+</svg>

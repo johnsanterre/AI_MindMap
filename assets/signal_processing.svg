@@ -1,0 +1,85 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="32" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Signal Processing: Time Domain &#x2194; Frequency Domain</text>
+
+  <!-- Time-domain noisy signal (left) -->
+  <rect x="30" y="55" width="220" height="160" rx="8" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="140" y="78" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">Time Domain</text>
+  <!-- Noisy waveform -->
+  <polyline points="45,155 55,140 65,125 75,145 85,110 95,150 105,100 115,155 125,120 135,160 145,105 155,145 165,115 175,155 185,130 195,160 205,110 215,140 225,150 235,130" fill="none" stroke="#7C2530" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Axis -->
+  <line x1="40" y1="190" x2="240" y2="190" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="140" y="207" text-anchor="middle" fill="#5C3D1E" font-size="11">x(t) — noisy signal</text>
+
+  <!-- Arrow: FFT -->
+  <line x1="260" y1="135" x2="305" y2="135" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="283" y="122" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">FFT /</text>
+  <text x="283" y="136" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">Transform</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Frequency-domain spectrum (center) -->
+  <rect x="315" y="55" width="180" height="160" rx="8" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="405" y="78" text-anchor="middle" fill="#7C2530" font-size="13" font-weight="bold">Frequency Domain</text>
+  <!-- Spectrum bars / peaks -->
+  <line x1="330" y1="190" x2="480" y2="190" stroke="#5C3D1E" stroke-width="1"/>
+  <rect x="345" y="130" width="12" height="60" rx="2" fill="#2D5A8E" fill-opacity="0.7"/>
+  <rect x="365" y="100" width="12" height="90" rx="2" fill="#2D5A8E"/>
+  <rect x="385" y="155" width="12" height="35" rx="2" fill="#C4A87A"/>
+  <rect x="405" y="165" width="12" height="25" rx="2" fill="#C4A87A" fill-opacity="0.6"/>
+  <rect x="425" y="170" width="12" height="20" rx="2" fill="#C4A87A" fill-opacity="0.4"/>
+  <rect x="445" y="140" width="12" height="50" rx="2" fill="#2D5A8E" fill-opacity="0.8"/>
+  <rect x="465" y="160" width="12" height="30" rx="2" fill="#C4A87A" fill-opacity="0.5"/>
+  <text x="405" y="207" text-anchor="middle" fill="#5C3D1E" font-size="11">X(f) — spectrum</text>
+
+  <!-- Nyquist line -->
+  <line x1="445" y1="88" x2="445" y2="195" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="460" y="95" fill="#7C2530" font-size="9" font-weight="bold">Nyquist</text>
+  <text x="460" y="105" fill="#7C2530" font-size="9" font-weight="bold">f_s/2</text>
+
+  <!-- Filter passband bracket -->
+  <line x1="340" y1="218" x2="430" y2="218" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="340" y1="214" x2="340" y2="222" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="430" y1="214" x2="430" y2="222" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="385" y="232" text-anchor="middle" fill="#2D5A8E" font-size="10" font-weight="bold">filter passband</text>
+
+  <!-- Arrow: Inverse Transform -->
+  <line x1="505" y1="135" x2="555" y2="135" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="530" y="118" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">Inverse</text>
+  <text x="530" y="132" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">Transform</text>
+
+  <!-- Clean signal (right) -->
+  <rect x="565" y="55" width="210" height="160" rx="8" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="670" y="78" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">Filtered Signal</text>
+  <!-- Clean sine wave -->
+  <polyline points="580,140 595,120 610,105 625,110 640,130 655,155 670,165 685,155 700,130 715,110 730,105 745,120 760,140" fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-linejoin="round"/>
+  <line x1="575" y1="190" x2="765" y2="190" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="670" y="207" text-anchor="middle" fill="#5C3D1E" font-size="11">y(t) — clean output</text>
+
+  <!-- Aliasing warning box (bottom left) -->
+  <rect x="30" y="260" width="230" height="55" rx="6" fill="#7C2530" fill-opacity="0.1" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="145" y="280" text-anchor="middle" fill="#7C2530" font-size="12" font-weight="bold">&#x26A0; Aliasing Warning</text>
+  <text x="145" y="297" text-anchor="middle" fill="#5C3D1E" font-size="11">Sample rate &lt; 2 f_max</text>
+  <text x="145" y="310" text-anchor="middle" fill="#5C3D1E" font-size="11">&#x2192; frequencies fold back, data lost</text>
+
+  <!-- Convolution theorem (bottom center) -->
+  <rect x="280" y="260" width="240" height="55" rx="6" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="280" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">Convolution Theorem</text>
+  <text x="400" y="298" text-anchor="middle" fill="#5C3D1E" font-size="12">F{f * g} = F{f} &#xB7; F{g}</text>
+  <text x="400" y="312" text-anchor="middle" fill="#5C3D1E" font-size="10">convolution &#x2194; multiplication</text>
+
+  <!-- Nyquist-Shannon (bottom right) -->
+  <rect x="540" y="260" width="235" height="55" rx="6" fill="#2D5A8E" fill-opacity="0.1" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="658" y="280" text-anchor="middle" fill="#2D5A8E" font-size="12" font-weight="bold">Nyquist-Shannon Theorem</text>
+  <text x="658" y="298" text-anchor="middle" fill="#5C3D1E" font-size="12">f_s &#x2265; 2 f_max</text>
+  <text x="658" y="312" text-anchor="middle" fill="#5C3D1E" font-size="10">for perfect reconstruction</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="365" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">time domain &#x2194; frequency domain</text>
+  <text x="400" y="385" text-anchor="middle" fill="#C4A87A" font-size="11">Operations hard in one domain become easy in the other</text>
+</svg>

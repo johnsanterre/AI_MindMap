@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="1.5" rx="6"/>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowMorph" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowFunctor" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowNat" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- ===== SECTION 1: Category (Objects + Morphisms) ===== -->
+  <text x="150" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">A Category</text>
+  <line x1="20" y1="33" x2="280" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Object A -->
+  <circle cx="70" cy="100" r="24" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="70" y="105" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">A</text>
+
+  <!-- Object B -->
+  <circle cx="230" cy="100" r="24" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="230" y="105" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">B</text>
+
+  <!-- Object C -->
+  <circle cx="150" cy="200" r="24" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="150" y="205" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">C</text>
+
+  <!-- Morphism f: A -> B -->
+  <line x1="96" y1="95" x2="203" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowMorph)"/>
+  <text x="150" y="87" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle" font-style="italic">f</text>
+
+  <!-- Morphism g: B -> C -->
+  <line x1="216" y1="121" x2="167" y2="181" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowMorph)"/>
+  <text x="202" y="157" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle" font-style="italic">g</text>
+
+  <!-- Composition g∘f: A -> C -->
+  <line x1="84" y1="121" x2="133" y2="181" stroke="#7C2530" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowNat)"/>
+  <text x="92" y="162" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">g&#x2218;f</text>
+
+  <!-- Identity arrows (small loops) -->
+  <path d="M70,74 C55,55 85,55 70,74" fill="none" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowMorph)"/>
+  <text x="70" y="54" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">id</text>
+
+  <!-- Labels -->
+  <text x="150" y="240" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Objects + Morphisms</text>
+  <text x="150" y="255" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Composition: g&#x2218;f</text>
+
+  <!-- Divider -->
+  <line x1="290" y1="20" x2="290" y2="350" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 2: Functor F: C -> D ===== -->
+  <text x="430" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Functor F : C &#x2192; D</text>
+  <line x1="295" y1="33" x2="565" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Category C (left box) -->
+  <rect x="310" y="55" width="100" height="130" rx="8" fill="none" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="360" y="72" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">C</text>
+
+  <!-- Small objects in C -->
+  <circle cx="335" cy="105" r="12" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="335" y="109" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">A</text>
+  <circle cx="385" cy="105" r="12" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="385" y="109" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">B</text>
+  <line x1="348" y1="102" x2="371" y2="102" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowMorph)"/>
+  <text x="360" y="96" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">f</text>
+
+  <!-- Category D (right box) -->
+  <rect x="460" y="55" width="100" height="130" rx="8" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="510" y="72" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">D</text>
+
+  <!-- Small objects in D -->
+  <circle cx="485" cy="105" r="12" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="485" y="109" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">F(A)</text>
+  <circle cx="535" cy="105" r="12" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="535" y="109" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">F(B)</text>
+  <line x1="498" y1="102" x2="521" y2="102" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowFunctor)"/>
+  <text x="510" y="96" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">F(f)</text>
+
+  <!-- Big functor arrow -->
+  <line x1="412" y1="140" x2="455" y2="140" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowFunctor)"/>
+  <text x="434" y="158" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">F</text>
+
+  <!-- Functor caption -->
+  <text x="430" y="210" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Maps objects to objects,</text>
+  <text x="430" y="225" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">morphisms to morphisms</text>
+  <text x="430" y="255" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">F(g&#x2218;f) = F(g)&#x2218;F(f)</text>
+
+  <!-- Divider -->
+  <line x1="575" y1="20" x2="575" y2="350" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 3: Natural Transformation ===== -->
+  <text x="688" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Natural Transformation</text>
+  <line x1="580" y1="33" x2="795" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Functor F path (top) -->
+  <circle cx="635" cy="90" r="14" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="635" y="94" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">F(A)</text>
+  <circle cx="740" cy="90" r="14" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="740" y="94" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">F(B)</text>
+  <line x1="651" y1="87" x2="723" y2="87" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowFunctor)"/>
+  <text x="687" y="80" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">F(f)</text>
+
+  <!-- Functor G path (bottom) -->
+  <circle cx="635" cy="190" r="14" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="635" y="194" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">G(A)</text>
+  <circle cx="740" cy="190" r="14" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="740" y="194" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">G(B)</text>
+  <line x1="651" y1="187" x2="723" y2="187" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowNat)"/>
+  <text x="687" y="180" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">G(f)</text>
+
+  <!-- Natural transformation arrows (vertical) -->
+  <line x1="635" y1="106" x2="635" y2="173" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowMorph)"/>
+  <text x="620" y="143" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">&#x03B7;_A</text>
+  <line x1="740" y1="106" x2="740" y2="173" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowMorph)"/>
+  <text x="756" y="143" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">&#x03B7;_B</text>
+
+  <!-- Commutative square label -->
+  <text x="688" y="230" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">&#x03B7; : F &#x21D2; G</text>
+  <text x="688" y="248" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Commutative square:</text>
+  <text x="688" y="263" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">&#x03B7;_B &#x2218; F(f) = G(f) &#x2218; &#x03B7;_A</text>
+
+  <!-- ===== Bottom caption bar ===== -->
+  <rect x="0" y="360" width="800" height="40" fill="#F0EAD8" rx="0"/>
+  <rect x="0" y="360" width="800" height="40" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="376" font-family="Georgia, serif" font-size="11.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">
+    Category theory studies structure-preserving maps: objects, morphisms, functors, natural transformations.
+  </text>
+  <text x="400" y="392" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">
+    The "mathematics of mathematics" &#x2014; abstracting patterns that recur across algebra, topology, logic, and computation.
+  </text>
+</svg>

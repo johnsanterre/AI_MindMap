@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="20" font-weight="bold">Multi-Agent Reinforcement Learning</text>
+
+  <!-- Shared Environment -->
+  <rect x="250" y="160" width="300" height="100" rx="14" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="218" text-anchor="middle" fill="#5C3D1E" font-size="16" font-weight="bold">Shared Environment</text>
+
+  <!-- Agent 1 -->
+  <rect x="40" y="70" width="140" height="70" rx="10" fill="#7C2530" stroke="#5a1a22" stroke-width="2"/>
+  <text x="110" y="100" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Agent 1</text>
+  <text x="110" y="120" text-anchor="middle" fill="#f0d0d0" font-size="11">Policy pi_1</text>
+
+  <!-- Agent 2 -->
+  <rect x="40" y="260" width="140" height="70" rx="10" fill="#2D5A8E" stroke="#1a3f66" stroke-width="2"/>
+  <text x="110" y="290" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Agent 2</text>
+  <text x="110" y="310" text-anchor="middle" fill="#c0d8f0" font-size="11">Policy pi_2</text>
+
+  <!-- Agent 3 -->
+  <rect x="620" y="70" width="140" height="70" rx="10" fill="#7C2530" stroke="#5a1a22" stroke-width="2"/>
+  <text x="690" y="100" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Agent 3</text>
+  <text x="690" y="120" text-anchor="middle" fill="#f0d0d0" font-size="11">Policy pi_3</text>
+
+  <!-- Agent N -->
+  <rect x="620" y="260" width="140" height="70" rx="10" fill="#2D5A8E" stroke="#1a3f66" stroke-width="2"/>
+  <text x="690" y="290" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Agent N</text>
+  <text x="690" y="310" text-anchor="middle" fill="#c0d8f0" font-size="11">Policy pi_N</text>
+
+  <!-- Arrows: Agent 1 -> Env -->
+  <line x1="180" y1="105" x2="250" y2="175" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="195" y="128" fill="#7C2530" font-size="10">a_1</text>
+
+  <!-- Arrows: Agent 2 -> Env -->
+  <line x1="180" y1="295" x2="250" y2="245" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="195" y="282" fill="#2D5A8E" font-size="10">a_2</text>
+
+  <!-- Arrows: Agent 3 -> Env -->
+  <line x1="620" y1="105" x2="550" y2="175" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="595" y="128" fill="#7C2530" font-size="10">a_3</text>
+
+  <!-- Arrows: Agent N -> Env -->
+  <line x1="620" y1="295" x2="550" y2="245" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="595" y="282" fill="#2D5A8E" font-size="10">a_N</text>
+
+  <!-- Reward/Obs arrows back (dashed) -->
+  <line x1="260" y1="170" x2="175" y2="115" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBrown)"/>
+  <line x1="260" y1="250" x2="175" y2="290" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBrown)"/>
+  <line x1="540" y1="170" x2="625" y2="115" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBrown)"/>
+  <line x1="540" y1="250" x2="625" y2="290" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBrown)"/>
+
+  <!-- CTDE label -->
+  <rect x="290" y="290" width="220" height="45" rx="8" fill="#C4A87A" fill-opacity="0.5" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="310" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">Centralised Training</text>
+  <text x="400" y="326" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">Decentralised Execution</text>
+
+  <!-- Legend -->
+  <line x1="290" y1="370" x2="320" y2="370" stroke="#7C2530" stroke-width="2"/>
+  <text x="325" y="374" fill="#5C3D1E" font-size="11">actions</text>
+  <line x1="410" y1="370" x2="440" y2="370" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="445" y="374" fill="#5C3D1E" font-size="11">observations + rewards</text>
+
+  <!-- Ellipsis between agents -->
+  <text x="400" y="80" text-anchor="middle" fill="#5C3D1E" font-size="24">...</text>
+  <text x="400" y="310" text-anchor="middle" fill="none" font-size="1">.</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

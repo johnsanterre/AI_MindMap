@@ -1,0 +1,173 @@
+<<include "Header">>
+
+! Fokker-Planck Equation
+
+<img src="assets/fokker_planck.svg" alt="Diagram showing probability density evolution under drift and diffusion" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine releasing a drop of ink in still water — it spreads outward, the cloud of dye diffusing in all directions. Now tilt the container slightly so there is a gentle current (drift). The ink cloud both drifts and spreads simultaneously. The ''Fokker-Planck equation'' is the PDE that describes exactly this: how a probability density evolves over time under both drift and diffusion. It is the deterministic (PDE) description of what is stochastically described by an SDE. Rather than tracking individual particle trajectories, it tells you how the entire //distribution// of possible states flows and spreads through time.
+
+!! The Core Insight
+
+There is a profound duality at the heart of stochastic processes: the same physical system can be described in two equivalent but complementary ways.
+
+An ''SDE'' (stochastic differential equation) describes the world from the perspective of //individual trajectories//. Given a single particle, where does it go? The SDE $dX = \mu(X,t)\,dt + \sigma(X,t)\,dW$ says: the particle drifts with rate $\mu$ and is jostled by random noise of strength $\sigma$, where $dW$ is a Wiener increment.
+
+The ''Fokker-Planck equation'' (also called the forward Kolmogorov equation) describes the world from the perspective of //population distributions//. If you released millions of particles from the same initial condition, how would their collective density $p(x,t)$ evolve? The answer is a deterministic PDE — no randomness in sight.
+
+Both descriptions are mathematically equivalent. The SDE is the microscopic view; the Fokker-Planck equation is the macroscopic view. This duality is one of the deep unifying ideas of probability theory, statistical mechanics, and modern machine learning.
+
+!! Deriving the Equation
+
+For the SDE $dX = \mu(X,t)\,dt + \sigma(X,t)\,dW$, the Fokker-Planck (forward Kolmogorov) equation governing the probability density $p(x,t)$ is:
+
+$$\frac{\partial p}{\partial t} = -\frac{\partial}{\partial x}\bigl[\mu(x,t)\,p\bigr] + \frac{1}{2}\frac{\partial^2}{\partial x^2}\bigl[\sigma^2(x,t)\,p\bigr]$$
+
+The two terms have clear physical interpretations:
+
+- ''Drift term'' $-\dfrac{\partial(\mu p)}{\partial x}$: this is a continuity equation — it //advects// (transports) the probability density in the direction of $\mu$. If $\mu > 0$, the density flows to the right. This is the ink cloud being carried by the current.
+
+- ''Diffusion term'' $\dfrac{1}{2}\dfrac{\partial^2(\sigma^2 p)}{\partial x^2}$: this //spreads// the density, making the distribution broader over time. This is the ink diffusing outward through random molecular collisions.
+
+''Stationary distribution:'' Setting $\partial p / \partial t = 0$ gives the equilibrium density. For ''Langevin dynamics'' driven by a potential $U(x)$ — that is, $dX = -U'(X)\,dt + \sqrt{2T}\,dW$ — the stationary solution is the ''Boltzmann distribution'':
+
+$$p_\infty(x) \propto \exp\!\left(-\frac{U(x)}{T}\right)$$
+
+where $T$ is the temperature (noise level). This is the bridge between stochastic dynamics and statistical mechanics: run Langevin dynamics long enough and your samples come from the Boltzmann measure.
+
+!! What the Math Is Actually Doing
+
+The Fokker-Planck equation can be derived rigorously using ''Itô's lemma''. For any smooth test function $f(x)$, Itô's lemma gives:
+
+$$d f(X_t) = f'(X_t)\,\mu\,dt + \frac{1}{2}f''(X_t)\,\sigma^2\,dt + f'(X_t)\,\sigma\,dW_t$$
+
+Taking expectations and using $\mathbb{E}[dW_t] = 0$, then integrating by parts, yields the Fokker-Planck equation as the equation governing $\mathbb{E}[f(X_t)] = \int f(x)\,p(x,t)\,dx$.
+
+''Multivariate FPE:'' In $d$ dimensions with drift vector $\boldsymbol{\mu}$ and diffusion matrix $\mathbf{D}$:
+
+$$\frac{\partial p}{\partial t} = -\nabla \cdot (\boldsymbol{\mu}\,p) + \frac{1}{2}\nabla^2(\sigma^2 p)$$
+
+or more generally $-\nabla \cdot (\boldsymbol{\mu}\,p) + \nabla \cdot \nabla \cdot (\mathbf{D}\,p)$.
+
+''Probability current:'' Define the current $J(x,t) = \mu\,p - \dfrac{1}{2}\dfrac{\partial(\sigma^2 p)}{\partial x}$. The FPE is simply a continuity equation:
+
+$$\frac{\partial p}{\partial t} = -\frac{\partial J}{\partial x}$$
+
+This is conservation of probability: density flows like a fluid, never created or destroyed.
+
+''Detailed balance:'' At equilibrium, $J = 0$ everywhere — the probability current vanishes at every point, not just globally. This is a stronger condition than mere stationarity and characterizes //reversible// (time-symmetric) processes.
+
+''Backward Kolmogorov equation:'' The adjoint of the FPE describes how expected values of functions propagate //backward// in time:
+
+$$\frac{\partial u}{\partial t} = \mu\,\frac{\partial u}{\partial x} + \frac{1}{2}\sigma^2\,\frac{\partial^2 u}{\partial x^2}$$
+
+where $u(x,t) = \mathbb{E}[f(X_T) \mid X_t = x]$. Forward FPE: propagate densities forward. Backward equation: propagate expected values backward.
+
+!! Fokker-Planck in ML
+
+The Fokker-Planck equation has become surprisingly central to modern machine learning.
+
+''Diffusion models'' (Song et al. 2021, DDPM, score-based generative models): The forward noising process — gradually adding Gaussian noise to data — is a stochastic process with an exact Fokker-Planck equation. The reverse denoising process //inverts// the FPE using the ''score function'' $\nabla_x \log p(x,t)$. Remarkably, knowing the score at every noise level is sufficient to reverse the diffusion and generate new samples. The FPE provides the theoretical foundation for why this works.
+
+''Langevin MCMC:'' The Langevin SDE $dX = \nabla \log p(X)\,dt + \sqrt{2}\,dW$ has stationary distribution exactly $p(x)$. Fokker-Planck analysis proves convergence and quantifies mixing rates. This is the basis of score-based sampling.
+
+''Score matching:'' Rather than solving the FPE analytically, score matching trains a neural network to estimate $\nabla \log p(x,t)$ from data. This learned score function can then drive Langevin sampling or reverse diffusion.
+
+''Mean-field theory for neural networks:'' In the infinite-width limit, the distribution of weights in a neural network during SGD training evolves according to a Fokker-Planck equation. This provides theoretical insight into loss landscape geometry, implicit regularization, and generalization — though the high dimensionality means this analysis remains mostly theoretical.
+
+!! When the Fokker-Planck Equation Breaks Down
+
+''(1) Non-Markovian processes:'' The FPE fundamentally assumes the ''Markov property'' — the future depends only on the present state, not on history. Systems with memory — fractional Brownian motion, viscoelastic fluids, non-equilibrium glassy dynamics, systems with feedback loops — violate this assumption. The generalization requires integro-differential equations (generalized Langevin equations) where the drift depends on the entire past trajectory via a memory kernel. Standard FPE analysis simply does not apply.
+
+''(2) High-dimensional intractability:'' In $d$ dimensions, $p(x,t)$ is a function on $\mathbb{R}^d$. Numerically solving the FPE requires discretizing this space: even with just 100 grid points per dimension, the grid has $100^d$ points. For $d = 10$, that is $10^{20}$ points — computationally infeasible. Neural network weight spaces live in millions of dimensions. FPE-based analysis of deep learning dynamics is therefore a theoretical tool, not a practical computational one. This is why diffusion models use learned score functions rather than solving the FPE directly.
+
+''(3) Discontinuous or heavy-tailed noise:'' The FPE assumes Gaussian (Wiener process) noise with smooth diffusion coefficients. Jump processes — Poisson jumps, Lévy noise, impulsive perturbations — produce discontinuous sample paths and require a generalized equation with an integral (jump) term added to the standard FPE. This Lévy-Fokker-Planck or integro-differential FPE is substantially harder to analyze and solve.
+
+!! Technical Details
+
+''History:'' Adriaan Fokker (1914) and Max Planck (1917) derived the equation in the context of Brownian motion in physics. Andrei Kolmogorov (1931) provided the rigorous mathematical foundation, identifying the forward (FPE) and backward Kolmogorov equations as fundamental objects in the theory of Markov processes.
+
+''Exact solutions:'' The FPE for the ''Ornstein-Uhlenbeck process'' ($\mu = -\theta x$, $\sigma$ constant) has an exact Gaussian solution with time-varying mean and variance. The mean relaxes exponentially to zero; the variance relaxes to $\sigma^2 / (2\theta)$.
+
+''Onsager-Machlup functional:'' The path probability for an SDE can be written as a functional integral, with the Onsager-Machlup action measuring how "surprising" a given trajectory is. This connects to variational principles and large deviation theory.
+
+''Smoluchowski equation:'' The overdamped limit of the Langevin equation (ignoring inertia) yields a simpler FPE called the Smoluchowski equation, widely used in colloidal physics and polymer dynamics.
+
+''Connections:'' The FPE is the probability-theoretic version of the diffusion equation from physics. It connects to the ''Boltzmann equation'' (kinetic theory), ''Maxwell-Boltzmann distribution'' (statistical mechanics), and the ''heat equation'' (when $\mu = 0$, $\sigma$ constant).
+
+Cross-references: <<link "Stochastic Processes" "Stochastic Processes">><</link>> · <<link "Brownian Motion" "Brownian Motion">><</link>> · <<link "Itô Calculus" "Itô Calculus">><</link>> · <<link "Diffusion Models" "Diffusion Models">><</link>> · <<link "Score Matching" "Score Matching">><</link>> · <<link "MCMC" "MCMC">><</link>>
+
+!! Quiz
+
+<span id="fp-q1">What does the Fokker-Planck equation describe?</span>
+
+A. The trajectory of a single particle under Brownian motion
+B. The evolution of a probability density under drift and diffusion
+C. The gradient of the log-likelihood of observed data
+D. The optimal control policy for a stochastic system
+
+<<button "A">><<replace "#fp-q1">>Incorrect. The FPE describes the //population-level// probability density $p(x,t)$, not individual trajectories. Individual trajectories are described by the corresponding SDE.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q1">>Correct. The Fokker-Planck equation is a PDE for $p(x,t)$, the probability density of a stochastic process, showing how it drifts and spreads over time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q1">>Incorrect. The gradient of the log-density $\nabla \log p$ is the score function, central to score matching and diffusion models, but it is not what the FPE directly describes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q1">>Incorrect. Optimal control under stochastic dynamics uses the Hamilton-Jacobi-Bellman equation, not the Fokker-Planck equation (though the two are related via duality).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q2">For the SDE $dX = \mu\,dt + \sigma\,dW$, what does the drift term $-\partial(\mu p)/\partial x$ in the FPE do?</span>
+
+A. Spreads the probability density outward symmetrically
+B. Sets the stationary distribution to the Boltzmann measure
+C. Advects (transports) the density in the direction of $\mu$
+D. Ensures detailed balance is satisfied
+
+<<button "A">><<replace "#fp-q2">>Incorrect. Symmetric spreading is caused by the //diffusion// term $\frac{1}{2}\partial^2(\sigma^2 p)/\partial x^2$, not the drift term.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q2">>Incorrect. The Boltzmann stationary distribution emerges from the //combination// of drift and diffusion terms when detailed balance holds, not from the drift term alone.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q2">>Correct. The drift term $-\partial(\mu p)/\partial x$ is a continuity equation that transports the density in the direction of $\mu$ — like a current carrying the ink cloud downstream.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q2">>Incorrect. Detailed balance ($J = 0$) is a property of the equilibrium solution, not something enforced by the drift term alone.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q3">What is the stationary distribution of Langevin dynamics $dX = -U'(X)\,dt + \sqrt{2T}\,dW$?</span>
+
+A. A uniform distribution over the support of $U$
+B. The Boltzmann distribution $p_\infty \propto \exp(-U(x)/T)$
+C. A Gaussian centered at the minimum of $U$
+D. The empirical distribution of the observed data
+
+<<button "A">><<replace "#fp-q3">>Incorrect. The stationary distribution is not uniform; it concentrates around minima of $U$ with exponential tails determined by the temperature $T$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q3">>Correct. Setting $\partial p/\partial t = 0$ in the FPE for Langevin dynamics yields $p_\infty(x) \propto \exp(-U(x)/T)$ — the Boltzmann distribution from statistical mechanics.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q3">>Incorrect. A Gaussian centered at the minimum would be correct only for a //quadratic// potential $U$, i.e., the Ornstein-Uhlenbeck process. For general $U$, the stationary distribution is the Boltzmann measure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q3">>Incorrect. The empirical distribution is a property of a dataset, not of the Langevin dynamical system. Langevin dynamics converges to the Boltzmann distribution defined by $U$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q4">What is the probability current $J$ in the Fokker-Planck framework?</span>
+
+A. The rate at which probability mass is created at a point
+B. The combination $\mu p - \frac{1}{2}\partial(\sigma^2 p)/\partial x$ that satisfies the continuity equation
+C. The score function $\nabla \log p$ evaluated at the current state
+D. The total variation of $p$ over time
+
+<<button "A">><<replace "#fp-q4">>Incorrect. Probability is conserved — it is never created or destroyed. The FPE is precisely a continuity equation expressing this conservation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q4">>Correct. The probability current is $J = \mu p - \frac{1}{2}\partial(\sigma^2 p)/\partial x$, and the FPE takes the form $\partial p/\partial t = -\partial J/\partial x$ — a continuity equation for probability flow.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q4">>Incorrect. The score function $\nabla \log p$ is related to the score matching objective and diffusion model reverse process, not the probability current directly (though they are connected at stationarity).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q4">>Incorrect. Total variation is a global measure of change in $p$, not the local current describing how probability flows from place to place.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q5">How do diffusion models (Song et al. 2021) use the Fokker-Planck equation?</span>
+
+A. They solve the FPE numerically to generate new samples directly
+B. The forward noising process has a FPE; reversal uses the score function $\nabla \log p$
+C. They use the FPE to compute the KL divergence between the data and model distributions
+D. The FPE provides the loss function minimized during training
+
+<<button "A">><<replace "#fp-q5">>Incorrect. Numerically solving the high-dimensional FPE is computationally infeasible. Diffusion models //bypass// this by learning the score function and using Langevin sampling.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q5">>Correct. The forward process of adding noise is governed by an FPE. To reverse it — going from noise back to data — you need the score $\nabla_x \log p(x,t)$ at each noise level, which a neural network learns via score matching.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q5">>Incorrect. Diffusion models minimize a denoising score matching loss, not a KL divergence computed from the FPE.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q5">>Incorrect. The training loss is a score matching or ELBO objective, not the FPE itself. The FPE provides theoretical justification for the approach.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q6">What does ''detailed balance'' mean in the context of the Fokker-Planck equation?</span>
+
+A. The drift and diffusion terms are equal in magnitude
+B. The probability current $J = 0$ everywhere at equilibrium
+C. The stationary distribution is uniform across state space
+D. The forward and backward Kolmogorov equations have the same solutions
+
+<<button "A">><<replace "#fp-q6">>Incorrect. Detailed balance is not about the magnitudes of drift and diffusion being equal; it is about the probability current vanishing pointwise at equilibrium.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q6">>Correct. Detailed balance means $J(x) = 0$ everywhere in equilibrium — not just globally (zero net flux), but locally (zero flux at every point). This characterizes reversible, time-symmetric processes and ensures the system has a proper equilibrium distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q6">>Incorrect. The equilibrium distribution is determined by the potential $U$; it is uniform only in the trivial case $U = $ constant.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q6">>Incorrect. The forward (FPE) and backward Kolmogorov equations are adjoints of each other and generally have different solutions — the forward propagates densities, the backward propagates expected values.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q7">Why is the Fokker-Planck equation computationally intractable for high-dimensional systems like neural networks?</span>
+
+A. The equation has no known solutions for nonlinear drift terms
+B. The density $p(x,t)$ lives on $\mathbb{R}^d$, requiring exponentially many grid points in $d$
+C. Automatic differentiation cannot compute the required partial derivatives
+D. The FPE requires the score function, which is NP-hard to compute exactly
+
+<<button "A">><<replace "#fp-q7">>Incorrect. While exact analytical solutions are rare, this is not the //computational// bottleneck. The fundamental issue is the dimension of the state space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q7">>Correct. This is the curse of dimensionality. With $d$ dimensions and $n$ grid points per axis, the total grid size is $n^d$. For $d = 10^6$ (a small neural network), this is astronomically large. FPE analysis of deep learning is therefore a theoretical tool, not a practical one.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q7">>Incorrect. Automatic differentiation is highly effective at computing partial derivatives in high dimensions — it is the foundation of deep learning training. The FPE intractability is about representing the full density, not computing derivatives.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q7">>Incorrect. The score function can be learned approximately via score matching (which is tractable). The intractability is about numerically solving the full FPE, not computing the score.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q8">Which type of noise process is //not// well-described by the standard Fokker-Planck equation?</span>
+
+A. An Ornstein-Uhlenbeck process with Gaussian noise
+B. Brownian motion with constant diffusion coefficient
+C. A Lévy process with occasional large jumps
+D. Langevin dynamics in a double-well potential
+
+<<button "A">><<replace "#fp-q8">>Incorrect. The OU process is the //canonical// example with an exact Gaussian solution to the FPE — it is perfectly well-described by the standard equation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q8">>Incorrect. Brownian motion with constant diffusion is the simplest FPE case, reducing to the heat equation $\partial p/\partial t = \frac{\sigma^2}{2}\partial^2 p/\partial x^2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q8">>Correct. Lévy processes have heavy-tailed jump distributions and discontinuous sample paths. The standard FPE assumes smooth Gaussian (Wiener) noise. Lévy noise requires a generalized equation with an integral (Lévy-Khintchine) term, producing a fundamentally different PDE.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q8">>Incorrect. Langevin dynamics in a double-well potential — a classic model for bistable systems — is perfectly well-described by the FPE, although it lacks a simple closed-form stationary solution for asymmetric wells.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

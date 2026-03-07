@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <style>
+      text { font-family: Georgia, serif; }
+    </style>
+  </defs>
+
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">Percolation Threshold</text>
+
+  <!-- Panel labels -->
+  <text x="138" y="62" text-anchor="middle" font-size="15" fill="#5C3D1E">p &lt; p_c</text>
+  <text x="400" y="62" text-anchor="middle" font-size="15" fill="#5C3D1E">p = p_c</text>
+  <text x="662" y="62" text-anchor="middle" font-size="15" fill="#5C3D1E">p &gt; p_c</text>
+
+  <!-- Sublabels -->
+  <text x="138" y="78" text-anchor="middle" font-size="11" fill="#C4A87A">Isolated clusters</text>
+  <text x="400" y="78" text-anchor="middle" font-size="11" fill="#C4A87A">Critical threshold</text>
+  <text x="662" y="78" text-anchor="middle" font-size="11" fill="#C4A87A">Giant component</text>
+
+  <!-- Dividers -->
+  <line x1="268" y1="48" x2="268" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="532" y1="48" x2="532" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ======================== PANEL 1: p < p_c ======================== -->
+  <!-- Grid nodes (6x6) - many missing, small isolated clusters -->
+  <!-- Row 1 -->
+  <circle cx="58" cy="110" r="6" fill="#C4A87A"/>
+  <circle cx="98" cy="110" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="138" cy="110" r="6" fill="#C4A87A"/>
+  <circle cx="178" cy="110" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="218" cy="110" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 2 -->
+  <circle cx="58" cy="155" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="98" cy="155" r="6" fill="#7C2530"/>
+  <circle cx="138" cy="155" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="178" cy="155" r="6" fill="#7C2530"/>
+  <circle cx="218" cy="155" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 3 -->
+  <circle cx="58" cy="200" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="98" cy="200" r="6" fill="#7C2530"/>
+  <circle cx="138" cy="200" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="178" cy="200" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="218" cy="200" r="6" fill="#C4A87A"/>
+
+  <!-- Row 4 -->
+  <circle cx="58" cy="245" r="6" fill="#C4A87A"/>
+  <circle cx="98" cy="245" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="138" cy="245" r="6" fill="#C4A87A"/>
+  <circle cx="178" cy="245" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="218" cy="245" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 5 -->
+  <circle cx="58" cy="290" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="98" cy="290" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="138" cy="290" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="178" cy="290" r="6" fill="#C4A87A"/>
+  <circle cx="218" cy="290" r="6" fill="#C4A87A"/>
+
+  <!-- Row 6 -->
+  <circle cx="58" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="98" cy="335" r="6" fill="#C4A87A"/>
+  <circle cx="138" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="178" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="218" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Small cluster bonds (panel 1) -->
+  <line x1="98" y1="155" x2="98" y2="200" stroke="#7C2530" stroke-width="2"/>
+  <line x1="178" y1="290" x2="218" y2="290" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- ======================== PANEL 2: p = p_c ======================== -->
+  <!-- More nodes active, fractal-like cluster emerging -->
+  <!-- Row 1 -->
+  <circle cx="320" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="360" cy="110" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="400" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="440" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="480" cy="110" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 2 -->
+  <circle cx="320" cy="155" r="6" fill="#2D5A8E"/>
+  <circle cx="360" cy="155" r="6" fill="#C4A87A"/>
+  <circle cx="400" cy="155" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="440" cy="155" r="6" fill="#2D5A8E"/>
+  <circle cx="480" cy="155" r="6" fill="#C4A87A"/>
+
+  <!-- Row 3 -->
+  <circle cx="320" cy="200" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="360" cy="200" r="6" fill="#2D5A8E"/>
+  <circle cx="400" cy="200" r="6" fill="#2D5A8E"/>
+  <circle cx="440" cy="200" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="480" cy="200" r="6" fill="#2D5A8E"/>
+
+  <!-- Row 4 -->
+  <circle cx="320" cy="245" r="6" fill="#C4A87A"/>
+  <circle cx="360" cy="245" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="400" cy="245" r="6" fill="#2D5A8E"/>
+  <circle cx="440" cy="245" r="6" fill="#2D5A8E"/>
+  <circle cx="480" cy="245" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 5 -->
+  <circle cx="320" cy="290" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="360" cy="290" r="6" fill="#2D5A8E"/>
+  <circle cx="400" cy="290" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="440" cy="290" r="6" fill="#C4A87A"/>
+  <circle cx="480" cy="290" r="6" fill="#2D5A8E"/>
+
+  <!-- Row 6 -->
+  <circle cx="320" cy="335" r="6" fill="#2D5A8E"/>
+  <circle cx="360" cy="335" r="6" fill="#2D5A8E"/>
+  <circle cx="400" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="440" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="480" cy="335" r="6" fill="#C4A87A"/>
+
+  <!-- Fractal cluster bonds (panel 2) -->
+  <line x1="400" y1="110" x2="440" y2="110" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="320" y1="110" x2="320" y2="155" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="440" y1="110" x2="440" y2="155" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="360" y1="200" x2="400" y2="200" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="360" y1="155" x2="360" y2="200" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="400" y1="200" x2="400" y2="245" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="400" y1="245" x2="440" y2="245" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="360" y1="290" x2="360" y2="335" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="320" y1="335" x2="360" y2="335" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="480" y1="200" x2="480" y2="290" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- ======================== PANEL 3: p > p_c ======================== -->
+  <!-- Giant component highlighted in red, spanning top to bottom -->
+  <!-- Row 1 -->
+  <circle cx="582" cy="110" r="6" fill="#7C2530"/>
+  <circle cx="622" cy="110" r="6" fill="#7C2530"/>
+  <circle cx="662" cy="110" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="702" cy="110" r="6" fill="#7C2530"/>
+  <circle cx="742" cy="110" r="6" fill="#7C2530"/>
+
+  <!-- Row 2 -->
+  <circle cx="582" cy="155" r="6" fill="#7C2530"/>
+  <circle cx="622" cy="155" r="6" fill="#C4A87A"/>
+  <circle cx="662" cy="155" r="6" fill="#7C2530"/>
+  <circle cx="702" cy="155" r="6" fill="#7C2530"/>
+  <circle cx="742" cy="155" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 3 -->
+  <circle cx="582" cy="200" r="6" fill="#7C2530"/>
+  <circle cx="622" cy="200" r="6" fill="#7C2530"/>
+  <circle cx="662" cy="200" r="6" fill="#7C2530"/>
+  <circle cx="702" cy="200" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="742" cy="200" r="6" fill="#7C2530"/>
+
+  <!-- Row 4 -->
+  <circle cx="582" cy="245" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="622" cy="245" r="6" fill="#7C2530"/>
+  <circle cx="662" cy="245" r="6" fill="#C4A87A"/>
+  <circle cx="702" cy="245" r="6" fill="#7C2530"/>
+  <circle cx="742" cy="245" r="6" fill="#7C2530"/>
+
+  <!-- Row 5 -->
+  <circle cx="582" cy="290" r="6" fill="#7C2530"/>
+  <circle cx="622" cy="290" r="6" fill="#7C2530"/>
+  <circle cx="662" cy="290" r="6" fill="#7C2530"/>
+  <circle cx="702" cy="290" r="6" fill="#7C2530"/>
+  <circle cx="742" cy="290" r="6" fill="#D4C5A9" opacity="0.3"/>
+
+  <!-- Row 6 -->
+  <circle cx="582" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="622" cy="335" r="6" fill="#7C2530"/>
+  <circle cx="662" cy="335" r="6" fill="#7C2530"/>
+  <circle cx="702" cy="335" r="6" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="742" cy="335" r="6" fill="#7C2530"/>
+
+  <!-- Giant component bonds (panel 3) — spanning path highlighted -->
+  <line x1="582" y1="110" x2="622" y2="110" stroke="#7C2530" stroke-width="3"/>
+  <line x1="702" y1="110" x2="742" y2="110" stroke="#7C2530" stroke-width="3"/>
+  <line x1="582" y1="110" x2="582" y2="155" stroke="#7C2530" stroke-width="3"/>
+  <line x1="702" y1="110" x2="702" y2="155" stroke="#7C2530" stroke-width="3"/>
+  <line x1="662" y1="155" x2="702" y2="155" stroke="#7C2530" stroke-width="3"/>
+  <line x1="582" y1="155" x2="582" y2="200" stroke="#7C2530" stroke-width="3"/>
+  <line x1="582" y1="200" x2="622" y2="200" stroke="#7C2530" stroke-width="3"/>
+  <line x1="622" y1="200" x2="662" y2="200" stroke="#7C2530" stroke-width="3"/>
+  <line x1="622" y1="200" x2="622" y2="245" stroke="#7C2530" stroke-width="3"/>
+  <line x1="702" y1="245" x2="742" y2="245" stroke="#7C2530" stroke-width="3"/>
+  <line x1="742" y1="200" x2="742" y2="245" stroke="#7C2530" stroke-width="3"/>
+  <line x1="582" y1="290" x2="622" y2="290" stroke="#7C2530" stroke-width="3"/>
+  <line x1="622" y1="290" x2="662" y2="290" stroke="#7C2530" stroke-width="3"/>
+  <line x1="662" y1="290" x2="702" y2="290" stroke="#7C2530" stroke-width="3"/>
+  <line x1="622" y1="245" x2="622" y2="290" stroke="#7C2530" stroke-width="3"/>
+  <line x1="662" y1="200" x2="662" y2="290" stroke="#7C2530" stroke-width="3"/>
+  <line x1="622" y1="290" x2="622" y2="335" stroke="#7C2530" stroke-width="3"/>
+  <line x1="622" y1="335" x2="662" y2="335" stroke="#7C2530" stroke-width="3"/>
+  <line x1="702" y1="245" x2="702" y2="290" stroke="#7C2530" stroke-width="2" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <!-- Bottom annotation -->
+  <text x="138" y="365" text-anchor="middle" font-size="12" fill="#5C3D1E" font-style="italic">Disconnected</text>
+  <text x="400" y="365" text-anchor="middle" font-size="12" fill="#2D5A8E" font-style="italic">Fractal clusters</text>
+  <text x="662" y="365" text-anchor="middle" font-size="12" fill="#7C2530" font-style="italic">Spanning cluster</text>
+</svg>

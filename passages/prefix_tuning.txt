@@ -1,0 +1,121 @@
+Passage name: Prefix Tuning
+
+<<include "Header">>
+! Prefix Tuning
+<img src="assets/prefix_tuning.svg" alt="Prefix tuning diagram showing trainable prefix vectors prepended to frozen transformer layers" style="max-width:100%;margin:0.5em 0 1em;">
+
+Instead of rewriting an employee's entire job description (full fine-tuning), you give them a short briefing memo that reframes how they approach every task (prefix tuning). The briefing is small and task-specific; the employee's deep knowledge stays completely unchanged.
+
+!! The Core Insight
+
+''Li & Liang (2021)'' introduced prefix tuning as a parameter-efficient alternative to full fine-tuning. The idea: prepend $k$ trainable "virtual token" embeddings — the //prefix// — to every transformer layer's key-value pairs. Only the prefix parameters are updated during training; the rest of the LLM is frozen solid.
+
+The result is striking: prefix tuning achieves performance comparable to full fine-tuning on natural language generation tasks using only ''0.1% of the model's parameters''. Unlike input-only prompt tuning, prefix vectors inject information through the attention mechanism at //every// layer, giving them far more expressive power.
+
+Related approaches: [[Fine-tuning]], [[Instruction Tuning]], [[LoRA]], [[Large Language Models]], [[Transformers]], [[Attention]].
+
+!! Prefix vs Prompt Tuning vs LoRA
+
+Three closely related PEFT methods are often confused:
+
+''Prompt Tuning (Lester 2021)'' — append soft (continuous) tokens only to the input layer. Simplest approach, fewest parameters, least expressive.
+
+''Prefix Tuning (Li & Liang 2021)'' — prepend trainable vectors to the key and value matrices at //all// layers. More expressive because every attention layer can be guided. The prefix lives in the K-V cache, not just the input stream.
+
+''LoRA (Hu 2022)'' — inject trainable low-rank matrices $\Delta W = AB$ into the weight matrices themselves. Most popular today due to simpler optimization and strong empirical results.
+
+''P-Tuning v2 (Liu 2022)'' — essentially prefix tuning reparameterized; confirms that depth of injection (all layers vs input only) is the key driver of quality.
+
+Key conceptual difference: prefix tuning shapes what the model //attends to// (via K and V); LoRA changes how the model //transforms// the input (via weight updates).
+
+!! What the Math Is Actually Doing
+
+Standard self-attention at each layer computes:
+$$\text{Attn}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d}}\right)V$$
+where $Q$, $K$, $V$ are derived from input tokens.
+
+Prefix tuning prepends $k$ trainable prefix matrices $P_K \in \mathbb{R}^{k \times d}$ and $P_V \in \mathbb{R}^{k \times d}$ to the key and value tensors at every layer:
+$$\text{Attn}(Q,\,[P_K;\,K],\,[P_V;\,V])$$
+where $[;]$ denotes concatenation along the sequence dimension. The original tokens' queries can now attend to prefix keys and retrieve prefix values — meaning the prefix steers what information gets surfaced, at every depth.
+
+''Reparameterization trick:'' directly optimizing prefix embeddings is numerically unstable. Li & Liang instead train a small MLP: $P = \text{MLP}_\theta(P')$. After training, the MLP is discarded and only the resulting $P$ is stored and swapped at inference.
+
+!! When to Use Prefix vs LoRA
+
+Prefix tuning suits ''generation tasks'' (summarization, translation, dialogue) and scenarios where you want to serve many tasks from a single frozen model by swapping lightweight prefix vectors — no model reload required, just a vector swap.
+
+LoRA tends to win on ''instruction following, classification, and tasks requiring deep behavioral change'', and its training is more stable. LoRA also offers a flexible rank hyperparameter; prefix tuning's expressivity scales with $k$ (longer prefix = more compute at inference).
+
+Practical verdict: LoRA has largely displaced prefix tuning in production pipelines, but prefix tuning's legacy is significant — it demonstrated that PEFT was viable and inspired a wave of soft-prompt research.
+
+!! When Prefix Tuning Breaks Down
+
+''Optimization instability:'' directly optimizing raw prefix embeddings frequently diverges. The reparameterization through an MLP is necessary, adding training complexity.
+
+''Fixed expressivity ceiling:'' the prefix length $k$ is chosen before training. If a task requires more adaptive capacity than $k$ vectors can provide, the only fix is increasing $k$ — which raises inference-time memory and compute proportionally.
+
+''Task interference across layer types:'' some tasks involve structural transformations (e.g., complex reasoning chains) that cannot be naturally expressed as modifications to the attention's key-value lookup. Prefix tuning cannot alter how the model computes its queries or applies its feed-forward sublayers.
+
+!! Technical Details
+
+''Papers:'' Li & Liang 2021 ("Prefix-Tuning: Optimizing Continuous Prompts for Generation"); Lester et al. 2021 ("The Power of Scale for Parameter-Efficient Prompt Tuning"); Liu et al. 2022 ("P-Tuning v2").
+
+''Prefix length:'' $k$ typically ranges from 10 to 100 tokens per layer. Longer prefixes improve quality up to a point, then plateau.
+
+''Memory overhead per task:'' $k \times d \times 2 \times L$ floats (K and V matrices across $L$ layers). For GPT-2 medium ($d=1024$, $L=24$, $k=100$): ~5M parameters — a tiny fraction of 345M total.
+
+''Multi-task serving:'' a single frozen LLM can serve $N$ tasks simultaneously by loading $N$ prefix sets; switching tasks requires only swapping the cached prefix vectors.
+
+''Benchmark result:'' prefix-tuned T5-large matches full fine-tuning on XSUM summarization and other NLG tasks at 0.1% parameter cost.
+
+!! Quiz
+
+<span id="pt-q1">''1. What does prefix tuning prepend to the transformer?''</span>
+<<button "A) Extra attention heads">><<replace "#pt-q1">>1. A) Extra attention heads — ''Incorrect.'' Prefix tuning adds trainable embedding vectors to the K-V inputs, not new attention heads.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Trainable virtual token embeddings injected at every layer's K and V">><<replace "#pt-q1">>1. B) Trainable virtual token embeddings injected at every layer's K and V — ''Correct! ✓'' The prefix $P_K, P_V$ are prepended to every layer's key and value tensors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Adapter modules between feed-forward sublayers">><<replace "#pt-q1">>1. C) Adapter modules — ''Incorrect.'' That describes adapter tuning, not prefix tuning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Low-rank weight matrix updates">><<replace "#pt-q1">>1. D) Low-rank weight matrix updates — ''Incorrect.'' That is LoRA. Prefix tuning does not modify weight matrices.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q2">''2. Approximately what fraction of model parameters does prefix tuning train?''</span>
+<<button "A) 50%">><<replace "#pt-q2">>2. A) 50% — ''Incorrect.'' That would approach full fine-tuning territory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 5–10%">><<replace "#pt-q2">>2. B) 5–10% — ''Incorrect.'' LoRA is typically in this range; prefix tuning is far smaller.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) ~0.1%">><<replace "#pt-q2">>2. C) ~0.1% — ''Correct! ✓'' Li & Liang (2021) report prefix tuning trains roughly 0.1% of parameters while matching full fine-tuning quality on NLG tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 0.001%">><<replace "#pt-q2">>2. D) 0.001% — ''Incorrect.'' This underestimates prefix tuning's parameter count.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q3">''3. How does prefix tuning differ from input-only prompt tuning?''</span>
+<<button "A) Prefix tuning uses discrete tokens; prompt tuning uses continuous embeddings">><<replace "#pt-q3">>3. A) — ''Incorrect.'' Both use continuous (soft) embeddings, not discrete tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Prefix tuning injects into K and V at every layer; prompt tuning only modifies the input layer">><<replace "#pt-q3">>3. B) — ''Correct! ✓'' The depth of injection distinguishes them: prefix tuning acts at every attention layer, giving it greater expressivity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Prefix tuning trains the feed-forward layers; prompt tuning trains attention">><<replace "#pt-q3">>3. C) — ''Incorrect.'' Neither method trains the feed-forward layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) There is no meaningful difference">><<replace "#pt-q3">>3. D) — ''Incorrect.'' The depth of injection has a significant empirical effect on quality.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q4">''4. Why did Li & Liang use an MLP reparameterization during training?''</span>
+<<button "A) To reduce inference-time memory">><<replace "#pt-q4">>4. A) — ''Incorrect.'' The MLP is discarded after training; it does not affect inference memory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) To enable multi-task prefix sharing">><<replace "#pt-q4">>4. B) — ''Incorrect.'' Multi-task serving is possible without the MLP trick.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) To stabilize optimization, since direct prefix embedding training diverges">><<replace "#pt-q4">>4. C) — ''Correct! ✓'' Directly optimizing prefix embeddings is numerically unstable. The MLP ($P = \text{MLP}(P')$) stabilizes training; the MLP is then discarded.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) To allow the prefix to attend to future tokens">><<replace "#pt-q4">>4. D) — ''Incorrect.'' Causal masking is unrelated to the MLP reparameterization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q5">''5. In the modified attention formula $\text{Attn}(Q, [P_K; K], [P_V; V])$, what does $[;]$ denote?''</span>
+<<button "A) Element-wise addition">><<replace "#pt-q5">>5. A) — ''Incorrect.'' That would require identical shapes; prefix and input tokens can have different sequence lengths.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Matrix multiplication">><<replace "#pt-q5">>5. B) — ''Incorrect.''<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Concatenation along the sequence dimension">><<replace "#pt-q5">>5. C) — ''Correct! ✓'' The prefix key/value vectors are concatenated with the input-derived key/value tensors along the sequence axis, extending the context the queries can attend over.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Hadamard (element-wise) product">><<replace "#pt-q5">>5. D) — ''Incorrect.''<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q6">''6. Which task type is prefix tuning best suited for?''</span>
+<<button "A) Binary classification on short texts">><<replace "#pt-q6">>6. A) — ''Not the best fit.'' LoRA or adapters tend to outperform prefix tuning on classification tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Natural language generation tasks such as summarization and dialogue">><<replace "#pt-q6">>6. B) — ''Correct! ✓'' Prefix tuning was designed and evaluated on NLG tasks (summarization, table-to-text, translation) and matches full fine-tuning quality there.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Sparse retrieval and document ranking">><<replace "#pt-q6">>6. C) — ''Incorrect.'' These tasks typically require different adaptation strategies.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Vision-language contrastive learning">><<replace "#pt-q6">>6. D) — ''Incorrect.'' Prefix tuning was developed for text generation in language models.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q7">''7. How does prefix tuning enable efficient multi-task serving from a single model?''</span>
+<<button "A) By fine-tuning separate model copies per task">><<replace "#pt-q7">>7. A) — ''Incorrect.'' That would negate the efficiency advantage entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) By quantizing the frozen weights differently for each task">><<replace "#pt-q7">>7. B) — ''Incorrect.''<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) By swapping small prefix vectors at inference without reloading the model">><<replace "#pt-q7">>7. C) — ''Correct! ✓'' The frozen LLM stays loaded; switching tasks requires only replacing the cached $P_K, P_V$ prefix vectors — a tiny memory operation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) By routing tokens to different attention heads per task">><<replace "#pt-q7">>7. D) — ''Incorrect.'' Mixture-of-experts routing is a different technique.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q8">''8. What is the main reason LoRA has largely displaced prefix tuning in practice?''</span>
+<<button "A) LoRA uses fewer total parameters">><<replace "#pt-q8">>8. A) — ''Not primarily.'' Both are very parameter-efficient; parameter count alone does not explain LoRA's dominance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) LoRA is simpler to optimize and delivers better empirical quality across a wider range of tasks">><<replace "#pt-q8">>8. B) — ''Correct! ✓'' LoRA avoids the instability of prefix optimization, offers a flexible rank hyperparameter, and has shown stronger results on instruction following and other tasks — making it the practical PEFT standard.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) LoRA can be applied to vision models; prefix tuning cannot">><<replace "#pt-q8">>8. C) — ''Incorrect.'' Both methods can in principle be adapted to vision transformers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Prefix tuning requires labeled data; LoRA does not">><<replace "#pt-q8">>8. D) — ''Incorrect.'' Both methods require labeled (or instruction) data for training.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

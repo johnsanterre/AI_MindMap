@@ -1,0 +1,122 @@
+<<include "Header">>
+! Test-Time Compute
+<img src="assets/test_time_compute.svg" style="width:100%;max-width:800px;display:block;margin:0.5em auto 1em;" alt="Test-Time Compute diagram showing Best-of-N and sequential chain-of-thought scaling"/>
+
+Like a student who double-checks work and tries multiple approaches before handing in an exam, ''test-time compute scaling'' lets an AI system spend more computation //at inference time// — after training — to produce better answers. The insight is simple: thinking longer, or trying more options and picking the best, improves quality without retraining.
+
+!! The Core Insight
+
+The classic scaling law concerns training compute: more parameters and more data produce better models. ''Test-time compute scaling'' (Snell et al. 2024, Brown et al. 2024) reveals a parallel law: you can also trade //inference// compute for accuracy. Two main mechanisms exist:
+
+# ''Best-of-N:'' generate N candidate solutions in parallel, score each with a verifier, return the highest-scoring.
+# ''Sequential search / chain of thought:'' generate a long internal reasoning trace — "thinking tokens" — that searches the solution space before committing to an answer.
+
+OpenAI's o1 (2024) demonstrated that a smaller model with large test-time compute budget can match or exceed a much larger model running standard greedy decoding. Links: [[Chain of Thought]], [[Process Reward Models]], [[Reward Modeling]], [[Large Language Models]], [[Monte Carlo Tree Search]].
+
+!! Best-of-N and Verifiers
+
+In best-of-N, the generator produces N independent candidate solutions. A ''verifier'' (outcome reward model or process reward model) scores each candidate; the highest-scoring answer is returned.
+
+Performance scales roughly as $O(\log N)$ — each doubling of $N$ yields a fixed accuracy increment. At $N = 256$, a small model frequently matches the accuracy of a model ten times larger at $N = 1$.
+
+''Bottleneck:'' the verifier must be more reliable than the generator. A miscalibrated reward model confidently selects wrong answers. Best-of-N is embarrassingly parallel: all candidates are independent, so distribution across hardware is trivial.
+
+!! What the Math Is Actually Doing
+
+Let $p$ be the probability that a single generation is correct. The probability that at least one of $N$ samples is correct is:
+
+$$P(\text{at least one correct}) = 1 - (1-p)^N$$
+
+This rises rapidly from $p$ toward 1 as $N$ grows, even for small $p$.
+
+For sequential compute, a reasoning model generates $T$ thinking tokens before producing its answer. Empirically, accuracy scales as $O(T^\alpha)$ for some exponent $\alpha > 0$.
+
+''MCTS over reasoning steps:'' treat each partial reasoning chain as a node, branch into multiple continuations, evaluate branches with a process reward model, and prune unpromising paths — analogous to AlphaZero search over game states.
+
+''Dynamic budget allocation:'' route easy questions to small compute budgets and hard questions to large ones, maximising efficiency across a distribution of tasks.
+
+!! The o1 / o3 Paradigm
+
+OpenAI's o1 (September 2024) was trained with reinforcement learning to produce extended chain-of-thought "thinking" before every answer. The thinking trace is hidden from users but consumes substantial inference compute. On mathematical olympiad problems and coding benchmarks, o1 outperformed much larger models running standard decoding.
+
+o3 (late 2024) extended this further. The ARC-AGI benchmark — designed to require general fluid intelligence and long thought to be unsolvable by LLMs — was largely solved by scaling inference compute with o3. The key reframing: ''reasoning is a form of search, and search scales with compute.''
+
+!! When Test-Time Compute Breaks Down
+
+''Verifier reliability:'' if the reward model is miscalibrated or reward-hacked, best-of-N selection amplifies errors rather than correcting them. A wrong verifier chosen with high confidence is worse than random selection.
+
+''Compute cost:'' running 256 forward passes at inference is expensive. Test-time compute scaling is only economically justified for high-value tasks where quality outweighs cost — batch processing or low-latency applications may not tolerate it.
+
+''Overthinking and error compounding:'' very long chains of thought can introduce compounding reasoning errors. Each step has a small failure probability; a 100-step chain compounds those failures. The model may also "talk itself out of" a correct early answer through excessive deliberation.
+
+!! Technical Details
+
+Key papers: Snell et al. 2024 ("Scaling LLM Test-Time Compute Optimally"), Brown et al. 2024 ("Large Language Monkeys: Scaling Inference Compute with Repeated Sampling"), OpenAI o1 System Card 2024, ARC-AGI evaluation of o3 (Chollet 2024).
+
+MCTS for reasoning: Zhang et al. 2024 apply AlphaZero-style tree search over reasoning steps, using a PRM as the value function.
+
+''Beam search'' over reasoning chains maintains a beam of partial chains, expanding and pruning at each step.
+
+''Budget forcing:'' train the model with a special token signalling the thinking budget; the model learns to pace its reasoning to fill exactly $T$ tokens before answering.
+
+''Process reward models (PRMs)'' provide step-level correctness signals, enabling pruning mid-chain rather than only at the final answer — critical for effective MCTS.
+
+!! Quiz
+
+<span id="ttc-q1">''1. What does best-of-N sampling improve by generating multiple solutions?''
+
+<<button "A. Training loss">><<replace "#ttc-q1">>Incorrect. Best-of-N operates at inference time, not training time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Answer quality by selecting the highest-scoring candidate">><<replace "#ttc-q1">>✓ Correct. A verifier scores all N candidates and returns the best, improving answer quality without retraining.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Model parameter count">><<replace "#ttc-q1">>Incorrect. Best-of-N does not change model parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Tokenizer vocabulary size">><<replace "#ttc-q1">>Incorrect. Vocabulary is fixed; best-of-N is an inference-time sampling strategy.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q2">''2. If a single sample is correct with probability p, what is the probability that at least one of N samples is correct?''
+
+<<button "A. p × N">><<replace "#ttc-q2">>Incorrect. That formula can exceed 1; probabilities don't simply multiply like that.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. p^N">><<replace "#ttc-q2">>Incorrect. That is the probability that ALL samples are correct, not at least one.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. 1 − (1−p)^N">><<replace "#ttc-q2">>✓ Correct. The complement of all N samples being wrong gives $1 - (1-p)^N$, which approaches 1 as N grows.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. 1 − p^N">><<replace "#ttc-q2">>Incorrect. This would be the complement of all samples being correct, not the target formula.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q3">''3. How does best-of-N performance scale with N?''
+
+<<button "A. Linearly — O(N)">><<replace "#ttc-q3">>Incorrect. Linear scaling would require each extra sample to add a fixed absolute accuracy gain, which is not observed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Quadratically — O(N²)">><<replace "#ttc-q3">>Incorrect. Quadratic scaling would be far more generous than what is empirically observed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Logarithmically — O(log N)">><<replace "#ttc-q3">>✓ Correct. Each doubling of N yields a roughly fixed accuracy increment — logarithmic scaling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Exponentially — O(e^N)">><<replace "#ttc-q3">>Incorrect. Exponential would be extraordinary; in practice the returns are logarithmic.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q4">''4. What is the key bottleneck limiting best-of-N effectiveness?''
+
+<<button "A. The number of GPUs available">><<replace "#ttc-q4">>Incorrect. Best-of-N is embarrassingly parallel and scales easily across GPUs; hardware is not the key bottleneck.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The reliability of the verifier model">><<replace "#ttc-q4">>✓ Correct. If the reward model is miscalibrated, it confidently selects wrong answers — a bad verifier makes best-of-N harmful.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The context window length">><<replace "#ttc-q4">>Incorrect. Candidates are generated independently; context length is not the primary bottleneck.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The model's training data size">><<replace "#ttc-q4">>Incorrect. Training data affects base capability; at inference time the verifier reliability is the binding constraint.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q5">''5. What was significant about OpenAI o1's approach to test-time compute?''
+
+<<button "A. It increased the number of model parameters at inference">><<replace "#ttc-q5">>Incorrect. Model parameters are fixed after training; o1 innovates in how inference compute is spent, not parameter count.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It was trained with RL to generate extended chain-of-thought thinking before answering">><<replace "#ttc-q5">>✓ Correct. o1 uses RL to learn to produce long hidden reasoning traces, spending substantial compute before committing to an answer.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It used best-of-N with N = 1000 for every query">><<replace "#ttc-q5">>Incorrect. o1's primary mechanism is sequential chain-of-thought, not best-of-N sampling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It eliminated the need for a reward model">><<replace "#ttc-q5">>Incorrect. Reward models are central to o1's RL training pipeline.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q6">''6. In MCTS applied to reasoning, what role does the process reward model play?''
+
+<<button "A. It generates the initial question">><<replace "#ttc-q6">>Incorrect. The process reward model evaluates reasoning steps; question generation is a separate function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It acts as a value function, scoring partial reasoning chains to guide search">><<replace "#ttc-q6">>✓ Correct. The PRM provides step-level scores that guide tree expansion and pruning — analogous to the value network in AlphaZero.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It encodes the input tokens">><<replace "#ttc-q6">>Incorrect. Token encoding is the model's standard forward pass; the PRM scores reasoning quality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It sets the thinking budget">><<replace "#ttc-q6">>Incorrect. Budget allocation is a separate mechanism; the PRM evaluates correctness of reasoning steps.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q7">''7. Which failure mode involves a model producing more errors by reasoning too long?''
+
+<<button "A. Verifier collapse">><<replace "#ttc-q7">>Incorrect. Verifier collapse refers to reward model failure, not the generator producing excessively long chains.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Context overflow">><<replace "#ttc-q7">>Incorrect. Context overflow is a technical limit; overthinking is a reasoning quality problem, not a length limit problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Overthinking and error compounding">><<replace "#ttc-q7">>✓ Correct. Very long reasoning chains compound per-step error probabilities and can cause the model to abandon initially correct reasoning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Reward hacking at training time">><<replace "#ttc-q7">>Incorrect. Reward hacking is a training phenomenon; the question describes an inference-time failure of excessive chain length.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ttc-q8">''8. What does "budget forcing" mean in the context of test-time compute?''
+
+<<button "A. Capping the number of parameters used during inference">><<replace "#ttc-q8">>Incorrect. Budget forcing concerns token generation length, not parameter count.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Training the model to use exactly T thinking tokens before answering">><<replace "#ttc-q8">>✓ Correct. Budget forcing uses a special signal so the model learns to pace its reasoning to fill a specified token budget before producing its final answer.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Limiting the batch size during training">><<replace "#ttc-q8">>Incorrect. Batch size is a training hyperparameter unrelated to test-time compute budget control.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Allocating a fixed dollar cost per API call">><<replace "#ttc-q8">>Incorrect. Budget forcing is a technical training method for controlling reasoning length, not an economic pricing mechanism.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

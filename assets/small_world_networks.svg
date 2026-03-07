@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <style>
+      text { font-family: Georgia, serif; }
+    </style>
+  </defs>
+
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" rx="6" ry="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C3D1E">Small-World Networks: From Order to Randomness</text>
+
+  <!-- === Panel 1: Regular Lattice (p=0) === -->
+  <text x="133" y="55" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">Regular Lattice (p = 0)</text>
+
+  <!-- Ring of 10 nodes -->
+  <circle cx="133" cy="130" r="6" fill="#2D5A8E"/>
+  <circle cx="170" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="190" cy="140" r="6" fill="#2D5A8E"/>
+  <circle cx="180" cy="175" r="6" fill="#2D5A8E"/>
+  <circle cx="150" cy="195" r="6" fill="#2D5A8E"/>
+  <circle cx="116" cy="195" r="6" fill="#2D5A8E"/>
+  <circle cx="86" cy="175" r="6" fill="#2D5A8E"/>
+  <circle cx="76" cy="140" r="6" fill="#2D5A8E"/>
+  <circle cx="96" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="133" cy="100" r="6" fill="#2D5A8E"/>
+
+  <!-- Nearest-neighbor edges (ring connections) -->
+  <line x1="133" y1="130" x2="170" y2="110" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="170" y1="110" x2="190" y2="140" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="190" y1="140" x2="180" y2="175" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="180" y1="175" x2="150" y2="195" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="150" y1="195" x2="116" y2="195" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="116" y1="195" x2="86" y2="175" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="86" y1="175" x2="76" y2="140" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="76" y1="140" x2="96" y2="110" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="96" y1="110" x2="133" y2="100" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="133" y1="100" x2="133" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Second-neighbor edges -->
+  <line x1="133" y1="130" x2="190" y2="140" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="170" y1="110" x2="180" y2="175" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="190" y1="140" x2="150" y2="195" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="180" y1="175" x2="116" y2="195" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="150" y1="195" x2="86" y2="175" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="116" y1="195" x2="76" y2="140" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="86" y1="175" x2="96" y2="110" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="76" y1="140" x2="133" y2="100" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="96" y1="110" x2="133" y2="130" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="133" y1="100" x2="170" y2="110" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <text x="133" y="218" text-anchor="middle" font-size="10" fill="#5C3D1E">High C, High L</text>
+
+  <!-- === Panel 2: Small-World (p=0.05) === -->
+  <text x="400" y="55" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">Small-World (p &#x2248; 0.05)</text>
+
+  <!-- Ring of 10 nodes -->
+  <circle cx="400" cy="130" r="6" fill="#2D5A8E"/>
+  <circle cx="437" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="457" cy="140" r="6" fill="#2D5A8E"/>
+  <circle cx="447" cy="175" r="6" fill="#2D5A8E"/>
+  <circle cx="417" cy="195" r="6" fill="#2D5A8E"/>
+  <circle cx="383" cy="195" r="6" fill="#2D5A8E"/>
+  <circle cx="353" cy="175" r="6" fill="#2D5A8E"/>
+  <circle cx="343" cy="140" r="6" fill="#2D5A8E"/>
+  <circle cx="363" cy="110" r="6" fill="#2D5A8E"/>
+  <circle cx="400" cy="100" r="6" fill="#2D5A8E"/>
+
+  <!-- Regular edges -->
+  <line x1="400" y1="130" x2="437" y2="110" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="437" y1="110" x2="457" y2="140" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="457" y1="140" x2="447" y2="175" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="447" y1="175" x2="417" y2="195" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="417" y1="195" x2="383" y2="195" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="383" y1="195" x2="353" y2="175" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="353" y1="175" x2="343" y2="140" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="343" y1="140" x2="363" y2="110" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="363" y1="110" x2="400" y2="100" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="400" y1="100" x2="400" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Random shortcut edges (the key feature!) -->
+  <line x1="400" y1="130" x2="353" y2="175" stroke="#7C2530" stroke-width="2.5" opacity="0.8"/>
+  <line x1="437" y1="110" x2="383" y2="195" stroke="#7C2530" stroke-width="2.5" opacity="0.8"/>
+  <line x1="457" y1="140" x2="363" y2="110" stroke="#7C2530" stroke-width="2.5" opacity="0.8"/>
+
+  <text x="400" y="218" text-anchor="middle" font-size="10" fill="#5C3D1E">High C, Low L</text>
+  <text x="400" y="230" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">&#x2190; Sweet Spot &#x2192;</text>
+
+  <!-- === Panel 3: Random Graph (p=1) === -->
+  <text x="667" y="55" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">Random Graph (p = 1)</text>
+
+  <!-- Scattered nodes -->
+  <circle cx="650" cy="100" r="6" fill="#2D5A8E"/>
+  <circle cx="710" cy="115" r="6" fill="#2D5A8E"/>
+  <circle cx="690" cy="160" r="6" fill="#2D5A8E"/>
+  <circle cx="725" cy="185" r="6" fill="#2D5A8E"/>
+  <circle cx="670" cy="195" r="6" fill="#2D5A8E"/>
+  <circle cx="625" cy="185" r="6" fill="#2D5A8E"/>
+  <circle cx="610" cy="150" r="6" fill="#2D5A8E"/>
+  <circle cx="640" cy="170" r="6" fill="#2D5A8E"/>
+  <circle cx="680" cy="120" r="6" fill="#2D5A8E"/>
+  <circle cx="660" cy="145" r="6" fill="#2D5A8E"/>
+
+  <!-- Random edges -->
+  <line x1="650" y1="100" x2="725" y2="185" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="710" y1="115" x2="625" y2="185" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="690" y1="160" x2="650" y2="100" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="725" y1="185" x2="610" y2="150" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="670" y1="195" x2="680" y2="120" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="625" y1="185" x2="660" y2="145" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="610" y1="150" x2="710" y2="115" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="640" y1="170" x2="650" y2="100" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="680" y1="120" x2="725" y2="185" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="660" y1="145" x2="670" y2="195" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="640" y1="170" x2="710" y2="115" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="690" y1="160" x2="625" y2="185" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <text x="667" y="218" text-anchor="middle" font-size="10" fill="#5C3D1E">Low C, Low L</text>
+
+  <!-- === Bottom Plot: C(p) and L(p) vs p === -->
+  <rect x="150" y="250" width="500" height="135" rx="4" ry="4" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Axes -->
+  <line x1="200" y1="360" x2="610" y2="360" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="200" y1="360" x2="200" y2="265" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- X-axis label -->
+  <text x="405" y="385" text-anchor="middle" font-size="12" fill="#5C3D1E">Rewiring probability p</text>
+  <text x="210" y="375" text-anchor="middle" font-size="9" fill="#5C3D1E">0</text>
+  <text x="330" y="375" text-anchor="middle" font-size="9" fill="#5C3D1E">0.01</text>
+  <text x="450" y="375" text-anchor="middle" font-size="9" fill="#5C3D1E">0.1</text>
+  <text x="600" y="375" text-anchor="middle" font-size="9" fill="#5C3D1E">1</text>
+
+  <!-- Y-axis labels -->
+  <text x="190" y="275" text-anchor="end" font-size="9" fill="#5C3D1E">1.0</text>
+  <text x="190" y="362" text-anchor="end" font-size="9" fill="#5C3D1E">0</text>
+
+  <!-- Tick marks on x-axis -->
+  <line x1="210" y1="358" x2="210" y2="362" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="330" y1="358" x2="330" y2="362" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="450" y1="358" x2="450" y2="362" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="600" y1="358" x2="600" y2="362" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- C(p) curve - stays high then drops (clustering coefficient) -->
+  <polyline points="210,275 250,276 290,277 330,279 370,282 410,290 450,310 490,330 530,345 570,352 600,355" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- L(p) curve - drops quickly (path length) -->
+  <polyline points="210,275 250,290 290,315 330,335 370,345 410,350 450,353 490,355 530,356 570,357 600,358" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Small-world region shading -->
+  <rect x="290" y="265" width="140" height="95" fill="#C4A87A" opacity="0.15"/>
+  <text x="360" y="262" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Small-World Regime</text>
+
+  <!-- Legend -->
+  <line x1="480" y1="272" x2="510" y2="272" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="515" y="276" font-size="10" fill="#7C2530">C(p) / C(0)</text>
+  <line x1="480" y1="288" x2="510" y2="288" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="515" y="292" font-size="10" fill="#2D5A8E">L(p) / L(0)</text>
+</svg>

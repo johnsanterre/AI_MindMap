@@ -1,0 +1,171 @@
+<<include "Header">>
+! Network Theory
+<img src="assets/network_theory.svg" alt="Network Theory diagram showing random, small-world, and scale-free network structures with their degree distributions" style="max-width:100%;margin:1em 0;">
+
+A city's road network determines how quickly ambulances reach hospitals, how traffic jams cascade through intersections, and whether a single bridge closure can isolate entire neighborhoods. ''Network theory'' studies how the structure of connections — who is linked to whom, how tightly, through how many intermediaries — determines the behavior of the whole system. The same mathematics describes social networks, neural circuits, the internet, protein interactions, and the architecture of [[Transformers]]. A network is just a set of things (nodes) and the connections between them (edges), but which connections exist — and which do not — changes everything about how information, disease, influence, and computation flow.
+
+---
+
+!! The Core Insight
+
+A ''network'' (or ''graph'') is a set of //nodes// connected by //edges//. Network theory asks: what structural properties determine global behavior? The key measures are ''degree distribution'' (how many connections each node has), ''clustering coefficient'' (how cliquish neighborhoods are), ''path length'' (degrees of separation between any two nodes), ''centrality'' (which nodes are most important), and ''community structure'' (natural clusters). The remarkable finding of the late 1990s: real-world networks — the web, social graphs, metabolic pathways, citation networks — share universal structural properties that purely random graphs do not have. Specifically, they exhibit the ''small-world property'' (short average path lengths despite high clustering), ''scale-free degree distributions'' (a few hubs with enormous connectivity), and ''modular community structure'' (densely connected groups loosely connected to each other).
+
+Links: [[Graph Neural Network]], [[Graph Convolutional Networks]], [[Page Rank]], [[Complex systems]], [[Spectral Clustering]], [[Knowledge Graph Embeddings]], [[Random Variables]], [[Power Laws]]
+
+---
+
+!! Three Canonical Network Models
+
+''Erdos-Renyi (1959):'' the simplest possible model. Take $N$ nodes and connect each pair independently with probability $p$. The degree distribution is Poisson — most nodes have roughly the same number of connections, with no hubs and no clustering. This is the //null model// of network science: it tells you what structure looks like when there is no organizing principle at all.
+
+''Watts-Strogatz (1998):'' start with a regular ring lattice where each node connects to its $k$ nearest neighbors. Then randomly //rewire// each edge with probability $p$. Even a tiny rewiring probability ($p \approx 0.01$) creates a ''small-world network'': the clustering coefficient stays high (your friends know each other) but the average path length drops dramatically (six degrees of separation). This explains why you can reach anyone on Earth through roughly six handshakes.
+
+''Barabasi-Albert (1999):'' new nodes join the network one at a time and connect preferentially to nodes that already have many connections — //rich get richer//. This ''preferential attachment'' creates ''scale-free networks'' with a power-law degree distribution $P(k) \sim k^{-\gamma}$. A few nodes become massive hubs (Google, airports, influencers), while most nodes have very few connections. This topology appears in the World Wide Web, citation networks, airline routes, and protein interaction networks.
+
+---
+
+!! What the Math Is Actually Doing
+
+The ''adjacency matrix'' $A$ encodes the network: $A_{ij} = 1$ if edge $(i,j)$ exists, 0 otherwise. The ''degree'' of node $i$ is $d_i = \sum_j A_{ij}$. The ''graph Laplacian'' is:
+
+$$L = D - A$$
+
+where $D = \text{diag}(d_1, \ldots, d_N)$. The eigenvalues of $L$ reveal community structure — the ''Fiedler vector'' (eigenvector of the second-smallest eigenvalue) gives the optimal graph bisection. This is [[Spectral Clustering]]:
+
+$$\min_{\mathbf{x}} \frac{\mathbf{x}^T L \mathbf{x}}{\mathbf{x}^T \mathbf{x}} \quad \text{subject to } \mathbf{x} \perp \mathbf{1}$$
+
+[[Page Rank]] computes the stationary distribution of a random walk on the web graph:
+
+$$\pi = \alpha A D^{-1} \pi + \frac{1-\alpha}{N} \mathbf{1}$$
+
+The power-law degree distribution of scale-free networks:
+
+$$P(k) \sim k^{-\gamma}, \quad \gamma \in [2, 3]$$
+
+for most real networks. A critical consequence: scale-free networks are ''robust to random failure'' (removing random nodes barely affects connectivity) but ''fragile to targeted attack'' on hubs (removing the top few hubs shatters the network into disconnected fragments).
+
+---
+
+!! Networks in ML
+
+''Graph Neural Networks'' ([[Graph Neural Network|GNNs]]) learn on network-structured data by ''message-passing'' along edges — each node aggregates information from its neighbors, then updates its own representation. This is how models reason about molecules, social graphs, and knowledge bases.
+
+''Knowledge graphs'' represent entities as nodes and relations as directed, typed edges. [[Knowledge Graph Embeddings]] learn low-dimensional vectors that preserve graph structure, enabling link prediction and question answering.
+
+''Transformer attention'' forms a fully-connected weighted graph at each layer — each token can attend to every other token. Attention heads learn to //sparsify// this complete graph, creating dynamic, input-dependent connectivity patterns. The structure of learned attention patterns reveals what the model considers relevant.
+
+''Neural architecture'' itself is a computation graph. Neural architecture search (NAS) explores the space of possible graph topologies to find optimal architectures. ''Network motifs'' — recurring subgraph patterns like feed-forward loops and bi-fan structures — serve as functional building blocks in both biological and artificial neural networks.
+
+''Community detection'' algorithms (modularity maximization, Louvain algorithm) power clustering in recommendation systems, fraud detection, and social network analysis.
+
+---
+
+!! When Network Theory Breaks Down
+
+''Static assumption:'' most network models treat the graph as fixed, but real networks evolve continuously — friendships form and dissolve, neurons rewire, web pages appear and disappear. Temporal network theory addresses this but adds substantial complexity, and many classical results (e.g., percolation thresholds) do not transfer directly to dynamic settings.
+
+''Binary edges:'' standard graph models represent connections as present or absent, but real connections have weights (strong vs. weak ties), directions (who follows whom), temporal dynamics, and multiple types (multiplex networks). Collapsing this richness into a simple adjacency matrix loses critical information.
+
+''Scale:'' billion-node networks (social media platforms, the web, connectomics) require approximate algorithms. Exact spectral methods require $O(N^3)$ eigendecomposition, which is infeasible for $N > 10^6$. Scalable alternatives like randomized spectral methods, graph sampling, and distributed algorithms trade exactness for tractability.
+
+---
+
+!! Technical Details
+
+''Foundational papers:'' Erdos & Renyi (1959) random graphs; Watts & Strogatz (1998) "Collective dynamics of small-world networks" in //Nature//; Barabasi & Albert (1999) "Emergence of scaling in random networks" in //Science//; Newman (2003) comprehensive review in //SIAM Review//.
+
+''Centrality measures:'' degree centrality (how many connections), betweenness centrality (how many shortest paths pass through a node), closeness centrality (average distance to all other nodes), eigenvector centrality (connections weighted by importance of neighbors — the idea behind [[Page Rank]]).
+
+''Community detection:'' modularity maximization (Newman-Girvan), Louvain algorithm ($O(N \log N)$), stochastic block models (generative probabilistic approach), label propagation.
+
+''Network robustness:'' percolation theory quantifies the critical fraction of nodes that must be removed to fragment the network. For scale-free networks, random removal is nearly harmless but targeted hub removal has a very low percolation threshold.
+
+''Advanced structures:'' multiplex networks (multiple edge types), temporal networks (edges with timestamps), hypergraphs (edges connecting $>2$ nodes simultaneously), bipartite networks (two node types with edges only between types).
+
+''Network neuroscience:'' connectomics maps the brain as a network. The human connectome exhibits small-world structure, modular organization, and rich-club connectivity among hub regions.
+
+---
+
+!! Quiz
+
+<span id="nt-q1">''1. In an Erdos-Renyi random graph, the degree distribution follows which form?''
+
+<<button "A. Power law">><<replace "#nt-q1">>A. Power law — Incorrect. Power-law degree distributions arise in scale-free networks (Barabasi-Albert), not in random graphs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Uniform">><<replace "#nt-q1">>B. Uniform — Incorrect. While connections are created uniformly at random, the resulting degree distribution is Poisson, not uniform.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Poisson">><<replace "#nt-q1">>✓ C. Poisson — Correct! Each edge exists independently with probability $p$, so the number of connections per node follows a binomial distribution, which converges to Poisson for large $N$. Most nodes have similar degree.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Exponential">><<replace "#nt-q1">>D. Exponential — Incorrect. Exponential degree distributions arise in some network models but not in the basic Erdos-Renyi random graph.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q2">''2. What mechanism generates scale-free networks in the Barabasi-Albert model?''
+
+<<button "A. Random rewiring">><<replace "#nt-q2">>A. Random rewiring — Incorrect. Random rewiring is the mechanism in the Watts-Strogatz small-world model, not the Barabasi-Albert model.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Preferential attachment">><<replace "#nt-q2">>✓ B. Preferential attachment — Correct! New nodes connect preferentially to already-well-connected nodes ("rich get richer"), producing a power-law degree distribution $P(k) \sim k^{-\gamma}$ with a few highly connected hubs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Nearest-neighbor lattice">><<replace "#nt-q2">>C. Nearest-neighbor lattice — Incorrect. A regular lattice is the starting point for the Watts-Strogatz model, not the Barabasi-Albert model.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Modularity optimization">><<replace "#nt-q2">>D. Modularity optimization — Incorrect. Modularity optimization is a community detection algorithm, not a network growth mechanism.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q3">''3. The Watts-Strogatz model creates small-world networks by:''
+
+<<button "A. Adding hubs with many connections">><<replace "#nt-q3">>A. Adding hubs with many connections — Incorrect. Hubs are a feature of scale-free networks, not small-world networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Randomly rewiring edges in a regular lattice">><<replace "#nt-q3">>✓ B. Randomly rewiring edges in a regular lattice — Correct! Starting from a ring lattice and rewiring a small fraction of edges creates shortcuts that dramatically reduce path length while preserving high clustering — the hallmark of small-world networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Removing low-degree nodes">><<replace "#nt-q3">>C. Removing low-degree nodes — Incorrect. The Watts-Strogatz model does not remove nodes; it rewires edges in an existing lattice.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Connecting all pairs with probability p">><<replace "#nt-q3">>D. Connecting all pairs with probability p — Incorrect. That describes the Erdos-Renyi model, which does not produce small-world structure.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q4">''4. The graph Laplacian is defined as $L = D - A$. What does the Fiedler vector (second-smallest eigenvalue eigenvector) of $L$ provide?''
+
+<<button "A. The PageRank scores">><<replace "#nt-q4">>A. The PageRank scores — Incorrect. PageRank is computed from the adjacency matrix and degree matrix differently; the Fiedler vector gives graph partitioning information.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The optimal graph bisection">><<replace "#nt-q4">>✓ B. The optimal graph bisection — Correct! The Fiedler vector partitions the graph into two groups that minimize edge cuts between them. This is the foundation of spectral clustering: nodes with positive vs. negative Fiedler vector values form the two clusters.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Node degree rankings">><<replace "#nt-q4">>C. Node degree rankings — Incorrect. Degree rankings come directly from the diagonal of $D$; the Fiedler vector captures community structure, not degree.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The shortest path between all node pairs">><<replace "#nt-q4">>D. The shortest path between all node pairs — Incorrect. Shortest paths require algorithms like Dijkstra's or BFS; the Fiedler vector reveals partitioning structure.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q5">''5. Scale-free networks are robust to random node failure but fragile to targeted attacks. Why?''
+
+<<button "A. All nodes have equal degree">><<replace "#nt-q5">>A. All nodes have equal degree — Incorrect. If all nodes had equal degree, the network would be equally sensitive to any removal. Scale-free networks have highly unequal degree distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Most nodes have few connections, so random removal rarely hits a hub">><<replace "#nt-q5">>✓ B. Most nodes have few connections, so random removal rarely hits a hub — Correct! In a power-law distribution, the vast majority of nodes have low degree. Random removal almost always targets these peripheral nodes, which barely affects connectivity. But deliberately targeting the rare high-degree hubs fragments the network rapidly.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The clustering coefficient is too high">><<replace "#nt-q5">>C. The clustering coefficient is too high — Incorrect. Clustering coefficient describes local neighborhood density, not the robustness-fragility asymmetry of scale-free networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. They have no community structure">><<replace "#nt-q5">>D. They have no community structure — Incorrect. Scale-free networks can have community structure; their robustness/fragility comes from the power-law degree distribution, not community organization.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q6">''6. In the context of GNNs, what is message passing?''
+
+<<button "A. Sending gradients backward through the network">><<replace "#nt-q6">>A. Sending gradients backward through the network — Incorrect. That describes backpropagation. Message passing is a forward computation where nodes aggregate information from their graph neighbors.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Each node aggregates information from its neighbors and updates its representation">><<replace "#nt-q6">>✓ B. Each node aggregates information from its neighbors and updates its representation — Correct! In each message-passing layer, a node collects "messages" (feature vectors) from adjacent nodes, aggregates them (sum, mean, or max), and uses the result to update its own representation. This is how GNNs propagate information through graph structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Transmitting data packets through a computer network">><<replace "#nt-q6">>C. Transmitting data packets through a computer network — Incorrect. While the metaphor is apt, message passing in GNNs refers to aggregating neighbor features in a graph neural network layer.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Broadcasting the loss function to all layers">><<replace "#nt-q6">>D. Broadcasting the loss function to all layers — Incorrect. Message passing refers to the forward-pass neighbor aggregation in GNNs, not loss computation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q7">''7. Which centrality measure is the conceptual basis of PageRank?''
+
+<<button "A. Degree centrality">><<replace "#nt-q7">>A. Degree centrality — Incorrect. Degree centrality just counts connections. PageRank weights connections by the importance of the connecting node.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Betweenness centrality">><<replace "#nt-q7">>B. Betweenness centrality — Incorrect. Betweenness counts shortest paths through a node, which is a different concept from PageRank's recursive importance scoring.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Closeness centrality">><<replace "#nt-q7">>C. Closeness centrality — Incorrect. Closeness measures average distance to all nodes, not recursive importance through link structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Eigenvector centrality">><<replace "#nt-q7">>✓ D. Eigenvector centrality — Correct! PageRank is a variant of eigenvector centrality: a node's importance depends on the importance of the nodes linking to it. It computes the dominant eigenvector of a modified adjacency matrix with a damping factor $\alpha$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="nt-q8">''8. What is the typical range of the power-law exponent $\gamma$ in real-world scale-free networks?''
+
+<<button "A. 0 to 1">><<replace "#nt-q8">>A. 0 to 1 — Incorrect. An exponent this small would produce an even heavier tail than observed in real networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. 2 to 3">><<replace "#nt-q8">>✓ B. 2 to 3 — Correct! Most real-world scale-free networks have $\gamma \in [2, 3]$. Values in this range produce networks with well-defined mean degree but divergent variance, creating the characteristic hub-dominated topology.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. 5 to 10">><<replace "#nt-q8">>C. 5 to 10 — Incorrect. An exponent this large would make the distribution decay so fast that hubs effectively disappear, and the network would behave more like a random graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Negative values">><<replace "#nt-q8">>D. Negative values — Incorrect. The exponent in $P(k) \sim k^{-\gamma}$ must be positive for the distribution to decay with increasing degree.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

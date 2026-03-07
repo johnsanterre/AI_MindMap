@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Panel dividers -->
+  <line x1="270" y1="25" x2="270" y2="375" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="540" y1="25" x2="540" y2="375" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ══ PANEL 1: FRAME t ══ -->
+  <text x="135" y="22" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">FRAME t</text>
+
+  <!-- Simple scene: a rectangle (car) on a road -->
+  <rect x="30" y="220" width="220" height="4" fill="#C4A87A" rx="1"/>
+  <text x="135" y="240" text-anchor="middle" font-size="8" fill="#6B5D4F">ground plane</text>
+
+  <!-- Car shape at position 1 -->
+  <rect x="70" y="160" width="80" height="50" fill="#2D5A8E" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <rect x="80" y="145" width="55" height="20" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <circle cx="90" cy="212" r="8" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.2"/>
+  <circle cx="130" cy="212" r="8" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="110" y="185" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">car</text>
+
+  <!-- Tree (static object) -->
+  <rect x="190" y="120" width="8" height="100" fill="#5C3D1E" fill-opacity="0.4"/>
+  <circle cx="194" cy="110" r="22" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="194" y="250" text-anchor="middle" font-size="8" fill="#5C3D1E">tree</text>
+
+  <!-- Pixel grid overlay hint -->
+  <rect x="40" y="55" width="180" height="50" fill="none" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <text x="130" y="73" text-anchor="middle" font-size="9" fill="#7C2530">Each pixel has intensity</text>
+  <text x="130" y="87" text-anchor="middle" font-size="9" fill="#7C2530">I(x, y, t)</text>
+
+  <!-- ══ PANEL 2: FRAME t+1 + FLOW VECTORS ══ -->
+  <text x="405" y="22" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">FRAME t+1 + FLOW</text>
+
+  <!-- Road -->
+  <rect x="300" y="220" width="220" height="4" fill="#C4A87A" rx="1"/>
+
+  <!-- Car shifted right -->
+  <rect x="110" y="160" width="80" height="50" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="0.8" stroke-dasharray="4,3" rx="4" transform="translate(230,0)"/>
+  <rect x="120" y="145" width="55" height="20" fill="#2D5A8E" fill-opacity="0.05" stroke="#2D5A8E" stroke-width="0.6" stroke-dasharray="4,3" rx="3" transform="translate(230,0)"/>
+
+  <!-- Flow arrows on car (pointing right = motion) -->
+  <line x1="320" y1="170" x2="350" y2="170" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="320" y1="185" x2="350" y2="185" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="320" y1="200" x2="350" y2="200" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="355" y1="170" x2="385" y2="170" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="355" y1="185" x2="385" y2="185" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="355" y1="200" x2="385" y2="200" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="390" y1="170" x2="420" y2="170" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="390" y1="185" x2="420" y2="185" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+  <line x1="390" y1="200" x2="420" y2="200" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- Tree: zero flow (dots) -->
+  <circle cx="464" cy="130" r="2" fill="#5C3D1E"/>
+  <circle cx="464" cy="145" r="2" fill="#5C3D1E"/>
+  <circle cx="464" cy="160" r="2" fill="#5C3D1E"/>
+  <circle cx="454" cy="140" r="2" fill="#5C3D1E"/>
+  <circle cx="474" cy="140" r="2" fill="#5C3D1E"/>
+  <rect x="460" y="170" width="8" height="50" fill="#5C3D1E" fill-opacity="0.4"/>
+  <circle cx="464" cy="160" r="22" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- Labels -->
+  <text x="370" y="145" text-anchor="middle" font-size="8.5" fill="#7C2530" font-weight="bold">motion vectors</text>
+  <text x="464" y="250" text-anchor="middle" font-size="8" fill="#5C3D1E">zero flow</text>
+
+  <!-- Flow legend box -->
+  <rect x="300" y="55" width="220" height="50" fill="none" stroke="#C4A87A" stroke-width="0.8" rx="2"/>
+  <text x="410" y="73" text-anchor="middle" font-size="9" fill="#7C2530">u(x,y) = horizontal displacement</text>
+  <text x="410" y="87" text-anchor="middle" font-size="9" fill="#7C2530">v(x,y) = vertical displacement</text>
+
+  <!-- ══ PANEL 3: METHOD TIMELINE ══ -->
+  <text x="670" y="22" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">METHODS</text>
+
+  <!-- Timeline -->
+  <line x1="670" y1="50" x2="670" y2="350" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Lucas-Kanade -->
+  <circle cx="670" cy="70" r="5" fill="#5C3D1E" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="695" y="65" font-size="9" fill="#5C3D1E" font-weight="bold">Lucas-Kanade</text>
+  <text x="695" y="77" font-size="8" fill="#6B5D4F">1981 / sparse / local</text>
+
+  <!-- Horn-Schunck -->
+  <circle cx="670" cy="115" r="5" fill="#5C3D1E" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="695" y="110" font-size="9" fill="#5C3D1E" font-weight="bold">Horn-Schunck</text>
+  <text x="695" y="122" font-size="8" fill="#6B5D4F">1981 / dense / global</text>
+
+  <!-- Farneback -->
+  <circle cx="670" cy="165" r="5" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="695" y="160" font-size="9" fill="#2D5A8E" font-weight="bold">Farneback</text>
+  <text x="695" y="172" font-size="8" fill="#6B5D4F">2003 / polynomial</text>
+
+  <!-- FlowNet -->
+  <circle cx="670" cy="220" r="5" fill="#7C2530" stroke="#7C2530" stroke-width="1"/>
+  <text x="695" y="215" font-size="9" fill="#7C2530" font-weight="bold">FlowNet</text>
+  <text x="695" y="227" font-size="8" fill="#6B5D4F">2015 / CNN-based</text>
+
+  <!-- PWC-Net -->
+  <circle cx="670" cy="265" r="5" fill="#7C2530" stroke="#7C2530" stroke-width="1"/>
+  <text x="695" y="260" font-size="9" fill="#7C2530" font-weight="bold">PWC-Net</text>
+  <text x="695" y="272" font-size="8" fill="#6B5D4F">2018 / cost volume</text>
+
+  <!-- RAFT -->
+  <circle cx="670" cy="315" r="6" fill="#7C2530" stroke="#7C2530" stroke-width="2"/>
+  <text x="695" y="310" font-size="9.5" fill="#7C2530" font-weight="bold">RAFT</text>
+  <text x="695" y="323" font-size="8" fill="#6B5D4F">2020 / iterative / SOTA</text>
+
+  <!-- Era labels -->
+  <text x="555" y="93" font-size="7.5" fill="#5C3D1E" text-anchor="end">classical</text>
+  <text x="555" y="165" font-size="7.5" fill="#2D5A8E" text-anchor="end">variational</text>
+  <text x="555" y="268" font-size="7.5" fill="#7C2530" text-anchor="end">deep learning</text>
+
+  <!-- Era brackets -->
+  <line x1="560" y1="60" x2="560" y2="125" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="560" y1="60" x2="565" y2="60" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="560" y1="125" x2="565" y2="125" stroke="#5C3D1E" stroke-width="1"/>
+
+  <line x1="560" y1="155" x2="560" y2="175" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="560" y1="155" x2="565" y2="155" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="560" y1="175" x2="565" y2="175" stroke="#2D5A8E" stroke-width="1"/>
+
+  <line x1="560" y1="210" x2="560" y2="325" stroke="#7C2530" stroke-width="1"/>
+  <line x1="560" y1="210" x2="565" y2="210" stroke="#7C2530" stroke-width="1"/>
+  <line x1="560" y1="325" x2="565" y2="325" stroke="#7C2530" stroke-width="1"/>
+
+  <!-- Bottom caption -->
+  <text x="400" y="390" text-anchor="middle" font-size="9" fill="#6B5D4F">
+    Optical flow estimates per-pixel motion vectors between consecutive video frames
+  </text>
+</svg>

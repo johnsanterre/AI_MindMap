@@ -1,0 +1,159 @@
+<<include "Header">>
+
+! Graph Attention Networks
+
+<img src="assets/graph_attention_networks.svg" alt="Diagram comparing standard GNN with equal neighbor weights versus GAT with learned attention weights" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you live on a street and want to predict tomorrow's weather. You could ask every neighbor equally and average their guesses, but that treats the retired meteorologist the same as the five-year-old next door. A smarter strategy: let each conversation //teach you// how much weight that neighbor deserves, based on what they know and what you need. ''Graph Attention Networks'' (GATs) do exactly this for nodes in a graph. Instead of treating every connected node identically, each node learns to attend to its neighbors with different strengths, amplifying the signal from relevant connections and muting the noise from irrelevant ones.
+
+---
+
+!! The Core Insight
+
+Standard <<link "Graph Convolutional Networks" "Graph Convolutional Networks">><</link>> aggregate neighbor information using fixed, structure-dependent weights -- typically normalized by node degree. This means a node with five neighbors divides its attention equally among all five, regardless of whether some carry far more useful information than others. The core insight of GATs is to replace these fixed weights with //learned attention coefficients// that are computed dynamically from the features of the nodes themselves.
+
+This is the same conceptual leap that <<link "Attention" "Attention">><</link>> brought to sequence models: rather than treating all input positions equally (as in simple pooling) or using a fixed receptive field (as in convolutions), let the model learn //where to look//. GATs transplant this idea from sequences to graphs. Each node becomes a query, its neighbors become keys and values, and a small neural network computes how much each neighbor matters -- all without requiring any knowledge of the global graph structure. The computation is entirely //local//: a node only needs its own features and those of its immediate neighbors.
+
+This locality is what makes GATs ''inductive'' -- they generalize to unseen nodes and entirely new graphs at test time, unlike spectral methods that are tied to a specific graph's eigenstructure.
+
+---
+
+!! From Sequences to Graphs
+
+The <<link "Transformers" "Transformers">><</link>> architecture applies attention over sequences, where every token can attend to every other token. Graphs are different: nodes should only attend to their //neighbors// as defined by the edge structure. GATs respect this constraint by masking attention to only the local neighborhood $\mathcal{N}(i)$ of each node $i$ (including $i$ itself via a self-loop).
+
+This has a subtle but powerful consequence. In a transformer, attention is dense -- quadratic in sequence length. In a GAT, attention is //sparse by construction// -- each node only computes attention over its neighbors, making the cost proportional to the number of edges rather than the square of the number of nodes. For large, sparse graphs (social networks, molecular structures, citation networks), this is dramatically more efficient.
+
+<<link "Multi-head Attention" "Multi-head Attention">><</link>> carries over directly: GATs run $K$ independent attention heads in parallel, each learning different aspects of the neighborhood relationship. In intermediate layers the $K$ head outputs are concatenated; in the final layer they are averaged. This mirrors multi-head attention in transformers and provides the same benefit -- different heads can specialize in different relationship types (e.g., one head attends to structurally similar nodes, another to nodes with complementary features).
+
+---
+
+!! What the Math Is Actually Doing
+
+Each node $i$ has a feature vector $\vec{h}_i \in \mathbb{R}^F$. A shared linear transformation $W \in \mathbb{R}^{F' \times F}$ projects all nodes into a new feature space:
+
+$$\vec{h}_i' = W \vec{h}_i$$
+
+For each edge $(i, j)$ where $j \in \mathcal{N}(i)$, a ''pairwise attention coefficient'' is computed. A shared attention vector $\vec{a} \in \mathbb{R}^{2F'}$ is applied to the concatenation of the two projected features:
+
+$$e_{ij} = \text{LeakyReLU}\!\left(\vec{a}^T \left[W\vec{h}_i \| W\vec{h}_j\right]\right)$$
+
+These raw scores are normalized across the neighborhood using softmax:
+
+$$\alpha_{ij} = \text{softmax}_j(e_{ij}) = \frac{\exp(e_{ij})}{\sum_{k \in \mathcal{N}(i)} \exp(e_{ik})}$$
+
+The output for node $i$ is the weighted sum of its neighbors' projected features:
+
+$$\vec{h}_i^{\,\prime\prime} = \sigma\!\left(\sum_{j \in \mathcal{N}(i)} \alpha_{ij}\, W\vec{h}_j\right)$$
+
+With $K$ attention heads, intermediate layers concatenate:
+
+$$\vec{h}_i^{\,\prime\prime} = \overset{K}{\underset{k=1}{\Big\|}}\ \sigma\!\left(\sum_{j \in \mathcal{N}(i)} \alpha_{ij}^k\, W^k\vec{h}_j\right)$$
+
+The final layer averages instead of concatenating:
+
+$$\vec{h}_i^{\,\text{out}} = \sigma\!\left(\frac{1}{K}\sum_{k=1}^{K}\sum_{j \in \mathcal{N}(i)} \alpha_{ij}^k\, W^k\vec{h}_j\right)$$
+
+The entire mechanism is parameterized only by $W^k$ and $\vec{a}^k$ per head -- no eigendecomposition, no knowledge of the full graph, no learned position encodings. The attention weights $\alpha_{ij}$ are implicitly //functions of both endpoints//, giving the model the ability to modulate information flow edge by edge.
+
+---
+
+!! Practical Applications
+
+''Node classification'' is the canonical GAT benchmark. On citation networks (Cora, Citeseer, Pubmed), each paper is a node, citation links are edges, and the task is to predict the research topic of each paper. GATs matched or exceeded <<link "Graph Convolutional Networks" "Graph Convolutional Networks">><</link>> on all three datasets in the original 2018 paper (Velickovic et al.), demonstrating that learned attention weights capture meaningful citation relationships that fixed-weight aggregation misses.
+
+''Molecular property prediction:'' In drug discovery, molecules are naturally represented as graphs (atoms as nodes, bonds as edges). GATs allow the model to learn that a carbon atom bonded to an oxygen should attend differently than one bonded to another carbon -- the attention weights adapt to chemical context.
+
+''Recommender systems:'' User-item interaction graphs benefit from attention because not all past interactions are equally informative. A user's purchase of running shoes is more relevant for recommending athletic wear than their one-time purchase of a gift.
+
+''Traffic forecasting:'' Road networks form spatial graphs where GATs learn that congestion at a highway merge point matters more than conditions on a quiet side street three intersections away.
+
+''GATv2'' (Brody et al. 2022) identified a limitation of the original GAT: because the attention mechanism applies $\vec{a}^T$ //after// concatenation but //before// any nonlinearity mixes the two representations, the original GAT computes a restricted form of attention called ''static attention'' -- the ranking of neighbors is the same regardless of the query node. GATv2 fixes this by applying the nonlinearity //before// the dot product with $\vec{a}$, yielding truly ''dynamic attention'' where the ranking changes depending on the query.
+
+---
+
+!! When Graph Attention Networks Break Down
+
+''Over-smoothing in deep stacks:'' Like all message-passing <<link "Graph Neural Network" "Graph Neural Network">><</link>> architectures, stacking many GAT layers causes all node representations to converge to indistinguishable vectors. Each layer mixes a node with its neighbors, so $L$ layers mix each node with its $L$-hop neighborhood. On small-diameter graphs, 4-6 layers can reach the entire graph, collapsing all nodes to the same representation regardless of how cleverly attention weights are set. Attention cannot save you from over-smoothing -- it can only slow it down.
+
+''Static attention in the original formulation:'' As GATv2 revealed, the original GAT's attention mechanism cannot produce different neighbor rankings for different query nodes. If node A and node B share the same neighbors, the original GAT assigns the same attention ranking to those neighbors from both A and B. This is a fundamental expressiveness limitation: the attention is not truly query-dependent. For tasks where the same neighbor should be high-priority for one node and low-priority for another, original GATs silently fail to learn the correct weighting.
+
+''Scalability on dense graphs:'' GATs are efficient on sparse graphs because attention is computed only over neighbors. But on dense or near-complete graphs (e.g., fully connected molecular graphs with virtual edges, or dense knowledge graphs), the cost per node approaches $O(N)$ and the memory for storing attention coefficients becomes prohibitive. In the limit of a complete graph, a GAT degenerates into a transformer without positional encoding -- losing the structural inductive bias that makes graph methods useful in the first place.
+
+---
+
+!! Technical Details
+
+''Original paper:'' Velickovic, Cucurull, Casanova, Romero, Lio, and Bengio (2018), "Graph Attention Networks," published at ICLR 2018. Introduced the masked self-attention mechanism for graphs and demonstrated state-of-the-art results on Cora (83.0% accuracy), Citeseer (72.5%), and Pubmed (79.0%).
+
+''Parameters per layer:'' For $K$ heads with input dimension $F$ and output dimension $F'$: $K \times (F \cdot F' + 2F')$ parameters ($K$ weight matrices of size $F' \times F$ plus $K$ attention vectors of size $2F'$). This is substantially fewer parameters than a full transformer layer because there are no separate key/query/value projections -- the same $W$ serves all roles.
+
+''Relation to GCN:'' If all attention coefficients $\alpha_{ij}$ are set equal to $1/|\mathcal{N}(i)|$, GAT reduces to a <<link "Graph Convolutional Networks" "Graph Convolutional Networks">><</link>> layer with mean aggregation. GAT is strictly more expressive.
+
+''Complexity:'' Time complexity is $O(|V| \cdot F \cdot F' + |E| \cdot F')$ per layer per head, where $|V|$ is nodes and $|E|$ is edges. The first term is the linear projection; the second is the attention computation over edges. Storage for attention coefficients is $O(|E|)$ per head.
+
+''Dropout:'' The original implementation applies dropout to both the normalized attention coefficients and the input features. Dropping attention edges during training acts as a form of edge-level data augmentation, forcing the model to not rely on any single neighbor.
+
+''GATv2 fix:'' Replaces $\text{LeakyReLU}(\vec{a}^T[Wh_i \| Wh_j])$ with $\vec{a}^T \text{LeakyReLU}(W_l h_i + W_r h_j)$, where $W_l$ and $W_r$ are separate weight matrices. This allows the nonlinearity to mix features //before// the final projection, enabling dynamic attention.
+
+---
+
+!! Quiz
+
+<span id="gat-q1">What is the key advantage of GATs over standard graph convolutional networks?</span>
+A. GATs use spectral graph theory while GCNs do not.
+B. GATs learn //different attention weights// for different neighbors, rather than weighting all neighbors equally by degree.
+C. GATs can only operate on directed graphs, making them more specialized.
+D. GATs require the full graph Laplacian eigendecomposition.
+<<button "A">><<replace "#gat-q1">>x Wrong. GATs are a spatial method that avoids spectral decomposition entirely -- that is actually one of their advantages.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q1">>Correct! GATs compute learned attention coefficients that weight neighbors by relevance, unlike GCNs which use fixed, degree-normalized weights.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q1">>x Wrong. GATs work on both directed and undirected graphs -- the attention mechanism is general.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q1">>x Wrong. GATs are entirely local and require no eigendecomposition -- that is a property of spectral methods, which GATs specifically avoid.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q2">How are raw attention scores $e_{ij}$ computed in the original GAT?</span>
+A. By taking the dot product of the two node feature vectors directly.
+B. By applying a shared attention vector $\vec{a}$ to the concatenation of the linearly projected features, followed by LeakyReLU.
+C. By computing the cosine similarity between node embeddings.
+D. By using the graph Laplacian to weight edges.
+<<button "A">><<replace "#gat-q2">>x Wrong. GAT does not use a simple dot product -- it uses a learned attention vector applied to concatenated projected features.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q2">>Correct! The score is $e_{ij} = \text{LeakyReLU}(\vec{a}^T [W\vec{h}_i \| W\vec{h}_j])$, using a shared linear projection $W$ and a shared attention vector $\vec{a}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q2">>x Wrong. Cosine similarity is not used in GAT -- the attention mechanism uses a learned parametric function, not a fixed similarity metric.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q2">>x Wrong. GATs are spatial methods that do not use the graph Laplacian -- attention weights are learned from node features, not graph structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q3">Why does GAT use softmax normalization over the neighborhood?</span>
+A. To ensure gradients flow properly during backpropagation.
+B. To make attention coefficients comparable across nodes with different numbers of neighbors by normalizing them to sum to 1.
+C. To enforce sparsity in the attention weights.
+D. To convert node features from integer to floating-point representation.
+<<button "A">><<replace "#gat-q3">>x Wrong. While softmax is differentiable, its purpose here is normalization, not gradient management.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q3">>Correct! Softmax normalizes attention weights to sum to 1 across each node's neighborhood, making them interpretable as a probability distribution over neighbors regardless of neighborhood size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q3">>x Wrong. Softmax actually produces dense (non-sparse) outputs -- every neighbor gets some nonzero weight. Sparse attention would require a different mechanism like sparsemax.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q3">>x Wrong. Softmax operates on real-valued attention scores, not data type conversion.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q4">How does multi-head attention work differently in GAT intermediate layers versus the final layer?</span>
+A. Intermediate layers use attention while the final layer uses max pooling.
+B. Intermediate layers concatenate head outputs; the final layer averages them.
+C. Intermediate layers use single-head attention; only the final layer uses multiple heads.
+D. There is no difference -- all layers concatenate head outputs.
+<<button "A">><<replace "#gat-q4">>x Wrong. The final layer still uses attention -- it simply changes how multiple heads are combined.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q4">>Correct! Intermediate layers concatenate the $K$ head outputs (multiplying the feature dimension by $K$), while the final layer averages them to produce a single output vector of the desired dimension.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q4">>x Wrong. Both intermediate and final layers can use multiple heads -- the difference is in how the heads are combined, not how many there are.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q4">>x Wrong. If the final layer concatenated, the output dimension would be $K$ times larger than intended. Averaging in the final layer keeps the output at the desired dimensionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q5">What problem does GATv2 solve that exists in the original GAT?</span>
+A. GATv2 adds positional encodings that the original GAT lacks.
+B. GATv2 fixes the ''static attention'' limitation where the original GAT produces the same neighbor ranking regardless of the query node.
+C. GATv2 reduces the number of parameters by half.
+D. GATv2 enables GATs to work on directed graphs for the first time.
+<<button "A">><<replace "#gat-q5">>x Wrong. Neither GAT nor GATv2 uses positional encodings -- the improvement is in the attention computation itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q5">>Correct! The original GAT applies the nonlinearity after concatenation but before mixing, producing static attention where neighbor rankings cannot change based on the query. GATv2 applies the nonlinearity before the final projection, enabling truly dynamic, query-dependent attention.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q5">>x Wrong. GATv2 actually uses slightly more parameters (separate $W_l$ and $W_r$ matrices) -- the improvement is in expressiveness, not efficiency.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q5">>x Wrong. The original GAT already works on directed graphs -- GATv2 addresses attention expressiveness, not graph type support.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q6">Why does over-smoothing occur in deep GAT models?</span>
+A. Because attention weights decay exponentially with depth.
+B. Because each layer mixes a node with its neighbors, so $L$ layers mix each node with its $L$-hop neighborhood, eventually collapsing all representations.
+C. Because the LeakyReLU activation saturates in deep networks.
+D. Because the softmax temperature decreases with depth.
+<<button "A">><<replace "#gat-q6">>x Wrong. Attention weights do not inherently decay with depth -- over-smoothing occurs because of repeated neighborhood aggregation, not weight decay.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q6">>Correct! Each message-passing layer expands the effective receptive field by one hop. After enough layers, every node has aggregated information from the entire graph, causing all representations to converge to indistinguishable vectors.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q6">>x Wrong. LeakyReLU is specifically designed to avoid saturation (it has a nonzero slope for negative inputs). Over-smoothing is a graph-structural problem, not an activation function problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q6">>x Wrong. The softmax temperature is fixed (at 1) across all layers in standard GATs -- over-smoothing is caused by repeated aggregation, not temperature changes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q7">How does the computational complexity of GAT compare to a transformer on the same set of nodes?</span>
+A. Both are $O(N^2)$ in the number of nodes.
+B. GAT is $O(|E|)$ in the number of edges (sparse), while a transformer is $O(N^2)$ (dense), making GATs more efficient on sparse graphs.
+C. GAT is always more expensive because attention computation is harder on graphs.
+D. They have identical complexity because both use the same attention mechanism.
+<<button "A">><<replace "#gat-q7">>x Wrong. GAT attention is masked to the graph neighborhood, making it proportional to edges $|E|$, not $N^2$. Only on a complete graph are they equivalent.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q7">>Correct! GATs compute attention only over actual edges, so cost scales with $|E|$. Transformers attend to all pairs, costing $O(N^2)$. For sparse graphs where $|E| \ll N^2$, GATs are far more efficient.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q7">>x Wrong. GATs are typically cheaper than transformers on sparse graphs precisely because they exploit graph sparsity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q7">>x Wrong. The key difference is that GATs restrict attention to neighbors (sparse), while transformers attend to all positions (dense), giving them very different complexity profiles.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gat-q8">If all attention coefficients $\alpha_{ij}$ in a GAT are set equal to $1/|\mathcal{N}(i)|$, what does the model reduce to?</span>
+A. A standard feedforward neural network with no graph structure.
+B. A graph convolutional network with mean aggregation.
+C. A transformer with uniform attention.
+D. A recurrent neural network over the node sequence.
+<<button "A">><<replace "#gat-q8">>x Wrong. Even with uniform attention, the model still aggregates over the graph neighborhood -- it does not ignore graph structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gat-q8">>Correct! With uniform $1/|\mathcal{N}(i)|$ weights, GAT computes a simple mean of neighbor features after linear projection -- exactly what a GCN with mean aggregation does. GAT strictly generalizes GCN.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gat-q8">>x Wrong. A transformer with uniform attention attends to //all// positions, not just graph neighbors. The graph structure still constrains which nodes are aggregated.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gat-q8">>x Wrong. There is no sequential recurrence in GATs -- the computation is parallel over all nodes, not sequential.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

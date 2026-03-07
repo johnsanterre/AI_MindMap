@@ -1,0 +1,147 @@
+<<include "Header">>
+
+! Boosting Theory
+
+<img src="assets/boosting_theory.svg" alt="Diagram showing weak learners combined via adaptive reweighting into a strong learner with margin distribution" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are assembling a jury of mildly informed citizens. No single juror is an expert — each one is right just slightly more often than a coin flip. But if you let each juror vote, and you give more influence to the jurors who were right on the cases that tripped up everyone else, the collective verdict becomes remarkably reliable. ''Boosting theory'' is the mathematical proof that this always works: any learning algorithm that performs just barely better than random guessing can be mechanically converted into one that achieves arbitrarily high accuracy. This is the ''weak-to-strong learning equivalence'', and it is one of the deepest results in computational learning theory.
+
+---
+
+!! The Core Insight
+
+In 1990, Robert Schapire answered a question that had been open since Kearns and Valiant posed it in 1988: is ''weak learnability'' equivalent to ''strong learnability'' in the <<link "PAC Learning" "PAC Learning">><</link>> framework? A weak learner need only classify with accuracy slightly better than $1/2$ (for binary problems). A strong learner must achieve accuracy $1 - \epsilon$ for any desired $\epsilon > 0$. The question was whether these two notions are fundamentally different or secretly the same.
+
+Schapire proved they are the same. Given any weak learner that achieves accuracy $1/2 + \gamma$ for some $\gamma > 0$, you can construct a strong learner by running the weak learner multiple times on carefully reweighted versions of the training data and combining the results. This is not a heuristic — it is a theorem with a constructive proof. The boosting procedure itself is the proof.
+
+This result transformed machine learning. It meant that practitioners never need to build a single brilliant classifier. They only need to find a learning algorithm that does slightly better than guessing, then let boosting do the rest. The practical realization of this idea is <<link "AdaBoost" "AdaBoost">><</link>>, introduced by Freund and Schapire in 1997, which remains one of the most influential algorithms in the field and spawned the entire family of <<link "Ensemble Methods" "Ensemble Methods">><</link>>.
+
+---
+
+!! Margins and Generalization
+
+The naive explanation for why boosting works — "it reduces training error" — is incomplete. Boosting typically drives training error to zero quickly, often within the first few rounds. Yet test error continues to decrease for many more rounds, long after training error has hit zero. This puzzled researchers until Schapire, Freund, Bartlett, and Lee (1998) introduced the ''margin theory'' of boosting.
+
+The ''margin'' of a sample $(x_i, y_i)$ under the combined classifier $H(x) = \sum_t \alpha_t h_t(x)$ is the quantity $y_i \cdot H(x_i) / \sum_t |\alpha_t|$, normalized to lie in $[-1, 1]$. A positive margin means correct classification; the //magnitude// measures confidence. Margin theory says that generalization depends not on whether training examples are classified correctly, but on //how confidently// they are classified. Each additional boosting round pushes the margins of training examples away from zero — it increases the confidence of the combined classifier on difficult examples.
+
+The margin bound states that the generalization error of the combined classifier is controlled by the fraction of training examples with margin below any threshold $\theta$, plus a complexity term that depends on $T$ (the number of weak learners) only logarithmically. This means boosting can keep improving generalization by widening margins, even after training error is already zero. The margin distribution, not the training error, is the true measure of progress.
+
+This insight connects boosting to the theory of <<link "AdaBoost" "AdaBoost">><</link>> and large-margin classifiers like SVMs, and explains why <<link "Gradient Boosting" "Gradient Boosting">><</link>> and <<link "XGBoost" "XGBoost">><</link>> benefit from many rounds of boosting without always overfitting.
+
+---
+
+!! What the Math Is Actually Doing
+
+The AdaBoost algorithm maintains a distribution $D_t$ over training examples. At round $t$, a weak learner $h_t$ is trained under $D_t$. Let $\epsilon_t = \Pr_{D_t}[h_t(x_i) \neq y_i]$ be the weighted error. The weak learning assumption guarantees $\epsilon_t < 1/2 - \gamma$. The weight of the weak learner in the final combination is:
+
+$$\alpha_t = \frac{1}{2} \ln \frac{1 - \epsilon_t}{\epsilon_t}$$
+
+The distribution is then updated: examples that $h_t$ misclassified get higher weight, and correctly classified examples get lower weight:
+
+$$D_{t+1}(i) = \frac{D_t(i) \cdot \exp(-\alpha_t y_i h_t(x_i))}{Z_t}$$
+
+where $Z_t$ is a normalization constant. The final classifier is $H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right)$.
+
+Freund and Schapire proved the training error bound:
+
+$$\text{Training error} \leq \prod_{t=1}^{T} Z_t = \prod_{t=1}^{T} 2\sqrt{\epsilon_t(1 - \epsilon_t)} \leq \exp\left(-2\sum_{t=1}^{T} \gamma_t^2\right)$$
+
+where $\gamma_t = 1/2 - \epsilon_t$ is the edge of the weak learner at round $t$. This bound decreases //exponentially// in the number of rounds. Even if each $\gamma_t$ is tiny, the training error is driven to zero at an exponential rate.
+
+Breiman (1999) and Friedman, Hastie, and Tibshirani (2000) later showed that AdaBoost can be understood as ''coordinate-wise gradient descent on the exponential loss'' $L(y, f(x)) = \exp(-y \cdot f(x))$. Each boosting round adds the weak learner that most reduces the exponential loss. This interpretation connects boosting to <<link "Gradient Boosting" "Gradient Boosting">><</link>>, which generalizes the idea to arbitrary differentiable loss functions.
+
+---
+
+!! From Theory to Practice
+
+The theoretical beauty of boosting translates directly into practical power. Decision stumps (single-split trees) are canonical weak learners: they are fast to train, and they almost always beat random guessing on real data. Running AdaBoost with 500 decision stumps can rival far more complex models.
+
+<<link "Gradient Boosting" "Gradient Boosting">><</link>> extends the exponential loss interpretation to squared error, logistic loss, and other objectives. <<link "XGBoost" "XGBoost">><</link>> adds second-order optimization and regularization to gradient boosting, dominating tabular data benchmarks and Kaggle competitions for years. All of these owe their theoretical foundation to Schapire's 1990 equivalence theorem and the margin analysis that followed.
+
+In practice, the number of boosting rounds $T$ is the primary capacity control. The margin theory suggests that more rounds are usually beneficial, but with noisy data, the margin distribution can become skewed by noise, and eventually overfitting occurs. Cross-validation over $T$ is the standard approach. Learning rate shrinkage (scaling each $\alpha_t$ by a small factor $\nu < 1$) is a practical regularization that slows margin growth and typically improves generalization, consistent with the theory that //slow, steady// margin growth beats aggressive memorization.
+
+The connections between boosting and <<link "Ensemble Methods" "Ensemble Methods">><</link>> are deep. Bagging reduces variance by averaging independent models; boosting reduces both bias and variance by adaptively focusing on hard examples. The theoretical analysis of boosting through the lens of <<link "PAC Learning" "PAC Learning">><</link>> and VC theory provides guarantees that pure bagging lacks.
+
+---
+
+!! When Boosting Theory Breaks Down
+
+''Label noise overwhelms the reweighting:'' AdaBoost's adaptive reweighting concentrates weight on misclassified examples. If some examples are mislabeled, they can never be correctly classified, and boosting exponentially increases their weight. Eventually the ensemble devotes most of its capacity to fitting noise, destroying generalization. The exponential loss is particularly sensitive to outliers and mislabeled points. Robust boosting variants (BrownBoost, LogitBoost) use bounded loss functions to mitigate this, but the classical theory assumes clean labels.
+
+''Weak learning assumption is violated:'' The entire theory hinges on each weak learner achieving accuracy strictly greater than $1/2$. If the data is so hard — or the weak learner so poorly matched to the problem — that some rounds produce classifiers with $\epsilon_t \geq 1/2$, the theory provides no guarantees. In practice, decision stumps on high-dimensional noisy data sometimes fail the weak learning condition for certain reweightings, which can stall or destabilize the boosting procedure.
+
+''Margin theory does not explain everything:'' While margin theory explains much of boosting's success, there are empirical observations it does not fully capture. For example, boosting sometimes continues to improve generalization even when the minimum margin is no longer increasing. More refined analyses involving the full margin distribution, or the ``dynamics'' of how margins evolve, are needed. The theoretical bounds, while qualitatively correct, are often too loose to be predictive in practice — they explain trends rather than giving tight numerical estimates of test error.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Schapire (1990), //The Strength of Weak Learnability//, Machine Learning — the original proof of weak-to-strong equivalence, constructing the first polynomial-time boosting algorithm. Freund and Schapire (1997), //A Decision-Theoretic Generalization of On-Line Learning and an Application to Boosting//, JCSS — introduced AdaBoost, proved the exponential training error bound, and launched the practical boosting revolution. Schapire, Freund, Bartlett, and Lee (1998), //Boosting the Margin//, Annals of Statistics — established the margin-based generalization bound explaining why boosting resists overfitting. Friedman, Hastie, and Tibshirani (2000), //Additive Logistic Regression: A Statistical View of Boosting//, Annals of Statistics — reinterpreted AdaBoost as stage-wise additive modeling with exponential loss.
+
+''The exponential loss connection:'' AdaBoost minimizes $\sum_{i=1}^n \exp(-y_i f(x_i))$ where $f(x) = \sum_t \alpha_t h_t(x)$. This is coordinate-wise gradient descent in the function space spanned by the weak learners. The exponential loss is a smooth upper bound on the 0-1 loss: $\mathbf{1}[yf(x) < 0] \leq \exp(-yf(x))$. Minimizing this surrogate provides a tractable optimization path toward low classification error. The relationship to logistic loss ($\log(1 + \exp(-yf))$) motivates LogitBoost, which is more robust to outliers.
+
+''VC-dimension and boosting:'' If the weak learner class has VC dimension $d$, then the combined classifier after $T$ rounds lives in a class with VC dimension at most $O(Td \log(Td))$. Classical VC bounds would suggest overfitting as $T$ grows. The margin bound circumvents this by showing that the effective complexity depends on the margin distribution, not just $T$. This explains the ''boosting paradox'' — why adding more weak learners does not necessarily cause overfitting, contradicting naive VC analysis.
+
+''The game-theoretic interpretation:'' Freund and Schapire showed that boosting can be viewed as a two-player game: the booster chooses distributions over examples, and the weak learner responds with classifiers. The minimax solution of this game yields the optimal boosting strategy. This connection to game theory provides an alternative derivation of AdaBoost and connects boosting to online learning, regret minimization, and the multiplicative weights update method.
+
+---
+
+!! Quiz
+
+<span id="bt-q1">What did Schapire prove in 1990?</span>
+A. That neural networks are universal function approximators
+B. That weak learnability and strong learnability are equivalent in the PAC framework
+C. That ensemble methods always outperform single classifiers
+D. That gradient descent converges to the global minimum for convex losses
+<<button "A">><<replace "#bt-q1">>Wrong. Universal approximation is a separate result (Cybenko 1989, Hornik 1991). Schapire's result concerns the equivalence of weak and strong PAC learning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q1">>Correct! Schapire proved that any concept class that is weakly learnable is also strongly learnable, by constructing a boosting procedure that amplifies weak learners into strong ones.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q1">>Wrong. Ensembles do not //always// outperform single classifiers. Schapire's result is a specific equivalence theorem in computational learning theory, not a blanket claim about ensembles.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q1">>Wrong. Gradient descent convergence for convex losses is a result from optimization theory. Schapire's 1990 result is about the relationship between weak and strong learnability.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q2">In AdaBoost, what determines the weight $\alpha_t$ assigned to weak learner $h_t$?</span>
+A. The number of training examples it sees
+B. The learning rate hyperparameter divided by the round number
+C. $\frac{1}{2} \ln \frac{1 - \epsilon_t}{\epsilon_t}$, where $\epsilon_t$ is the weighted error
+D. The variance of the weak learner's predictions
+<<button "A">><<replace "#bt-q2">>Wrong. The number of examples is irrelevant to $\alpha_t$. The weight depends on the weighted classification error $\epsilon_t$ of the weak learner.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q2">>Wrong. There is no learning rate in the original AdaBoost formulation. The weight $\alpha_t$ is derived from the weak learner's weighted error.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q2">>Correct! The weight is $\alpha_t = \frac{1}{2}\ln\frac{1-\epsilon_t}{\epsilon_t}$. This gives higher weight to more accurate weak learners. When $\epsilon_t$ is close to 0, $\alpha_t$ is large; when close to $1/2$, $\alpha_t$ is near zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q2">>Wrong. AdaBoost does not use the variance of predictions. The weight depends solely on the weighted classification error $\epsilon_t$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q3">Why does AdaBoost's test error often continue to decrease after training error reaches zero?</span>
+A. Because the model is memorizing the test set through data leakage
+B. Because additional boosting rounds increase the margins of training examples, improving generalization
+C. Because the weak learners become stronger over time through fine-tuning
+D. Because the normalization constant $Z_t$ acts as explicit regularization
+<<button "A">><<replace "#bt-q3">>Wrong. There is no data leakage. The improvement is explained by margin theory, which shows that wider margins on training data correspond to better generalization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q3">>Correct! Margin theory (Schapire et al. 1998) shows that generalization depends on the margin distribution, not just training accuracy. Each boosting round pushes margins away from zero, increasing classification confidence and improving generalization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q3">>Wrong. The weak learners are not fine-tuned — they are trained independently on reweighted distributions. The improvement comes from combining more learners, which widens margins.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q3">>Wrong. $Z_t$ is simply a normalization constant ensuring the distribution sums to 1. It is not a regularizer. The margin distribution explains the continued improvement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q4">How is AdaBoost connected to exponential loss minimization?</span>
+A. AdaBoost uses exponential loss as a regularization penalty
+B. AdaBoost performs coordinate-wise gradient descent on $\sum_i \exp(-y_i f(x_i))$ in function space
+C. AdaBoost minimizes the exponential of the 0-1 loss
+D. AdaBoost uses exponential learning rate decay to control overfitting
+<<button "A">><<replace "#bt-q4">>Wrong. The exponential loss is not a regularization penalty — it is the //objective// that AdaBoost implicitly minimizes through its stage-wise additive procedure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q4">>Correct! Friedman, Hastie, and Tibshirani (2000) showed that each AdaBoost round adds the weak learner that most reduces the exponential loss $\sum_i \exp(-y_i f(x_i))$, making AdaBoost coordinate-wise gradient descent in function space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q4">>Wrong. AdaBoost does not minimize the exponential //of// the 0-1 loss. It minimizes the exponential loss, which is an upper bound on the 0-1 loss: $\mathbf{1}[yf < 0] \leq \exp(-yf)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q4">>Wrong. AdaBoost does not use exponential learning rate decay. The exponential loss connection refers to the loss function being implicitly minimized, not a learning rate schedule.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q5">What is the "margin" of a training example in boosting?</span>
+A. The distance from the example to the nearest decision boundary in input space
+B. The normalized quantity $y_i \cdot H(x_i) / \sum_t |\alpha_t|$, measuring classification confidence
+C. The difference between the training error and test error
+D. The weight assigned to the example by the distribution $D_t$
+<<button "A">><<replace "#bt-q5">>Wrong. That is the geometric margin used in SVMs. In boosting, the margin is defined in terms of the weighted vote of the ensemble, not distance in input space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q5">>Correct! The margin is the normalized confidence of the ensemble's prediction. Positive margin means correct classification; larger magnitude means higher confidence. Margin theory shows generalization is controlled by this distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q5">>Wrong. The generalization gap (train vs. test error) is not the margin. The margin is a per-example quantity measuring the confidence of the ensemble's classification.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q5">>Wrong. The distribution weight $D_t(i)$ determines how much influence example $i$ has on the next weak learner, but it is not the margin. The margin measures the ensemble's confidence on that example.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q6">What is the training error bound for AdaBoost after $T$ rounds?</span>
+A. $O(1/T)$ — inverse polynomial decay
+B. $O(1/\sqrt{T})$ — standard stochastic convergence rate
+C. $\exp(-2\sum_{t=1}^T \gamma_t^2)$ — exponential decay in the sum of squared edges
+D. $\prod_{t=1}^T \epsilon_t$ — product of the weak learner errors
+<<button "A">><<replace "#bt-q6">>Wrong. AdaBoost's training error bound is exponential, not polynomial. The exponential rate is one of boosting's most striking theoretical properties.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q6">>Wrong. This is a common rate in stochastic optimization, but AdaBoost's bound is exponentially fast, much stronger than $O(1/\sqrt{T})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q6">>Correct! The training error is bounded by $\exp(-2\sum_t \gamma_t^2)$ where $\gamma_t = 1/2 - \epsilon_t$ is the edge. Even tiny edges accumulate exponentially fast, driving training error to zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q6">>Wrong. The bound involves the normalization constants $Z_t = 2\sqrt{\epsilon_t(1-\epsilon_t)}$, not the raw errors. The product of $Z_t$ values gives the bound, which simplifies to the exponential form.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q7">Why is AdaBoost particularly vulnerable to label noise?</span>
+A. Because the weak learners cannot handle noisy features
+B. Because the exponential loss causes mislabeled examples to receive exponentially increasing weight, dominating the ensemble
+C. Because AdaBoost has no regularization parameter
+D. Because the margin theory does not account for noise
+<<button "A">><<replace "#bt-q7">>Wrong. The vulnerability is not about the weak learners themselves but about AdaBoost's reweighting scheme. Mislabeled examples are persistently misclassified, causing their weights to grow exponentially under the exponential loss.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q7">>Correct! Mislabeled examples can never be correctly classified, so AdaBoost keeps increasing their weight. The exponential loss is unbounded below zero margin, causing these outliers to dominate the objective and distort the ensemble.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q7">>Wrong. While AdaBoost lacks an explicit regularization parameter in its basic form, the vulnerability to noise is specifically caused by the exponential loss amplifying the weight of mislabeled examples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q7">>Wrong. Margin theory does handle noise conceptually. The practical problem is the exponential loss function, which gives unbounded penalty to confidently wrong predictions, causing mislabeled points to hijack the ensemble.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q8">How does the game-theoretic view interpret boosting?</span>
+A. As a cooperative game where weak learners share information
+B. As a zero-sum game between a booster choosing distributions and a weak learner responding with classifiers
+C. As a Nash equilibrium between the training and test distributions
+D. As a Stackelberg game where the strong learner moves first
+<<button "A">><<replace "#bt-q8">>Wrong. Boosting is not cooperative — it is adversarial. The booster tries to find hard distributions, and the weak learner must respond with a classifier that beats random guessing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q8">>Correct! Freund and Schapire showed boosting can be viewed as a two-player zero-sum game. The booster picks distributions over examples to make classification hard; the weak learner responds. The minimax solution yields AdaBoost, connecting it to online learning and the multiplicative weights method.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q8">>Wrong. The game is not between training and test distributions. It is between the boosting algorithm (choosing example weights) and the weak learning oracle (producing classifiers).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q8">>Wrong. In a Stackelberg game one player commits first. In boosting's game-theoretic view, the interaction is simultaneous/sequential between the booster and weak learner within a minimax framework, not a Stackelberg structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Random Walk: From Lattice Steps to Diffusion</text>
+
+  <!-- ===== LEFT PANEL: 1D Random Walk ===== -->
+  <rect x="20" y="50" width="230" height="180" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="135" y="72" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">1D Random Walk</text>
+
+  <!-- Time axis -->
+  <line x1="35" y1="185" x2="240" y2="185" stroke="#5C3D1E" stroke-width="1.2"/>
+  <!-- Position axis -->
+  <line x1="35" y1="80" x2="35" y2="185" stroke="#5C3D1E" stroke-width="1.2"/>
+  <!-- Axis labels -->
+  <text x="238" y="198" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">time (n)</text>
+  <text x="28" y="78" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">X</text>
+  <!-- Zero line -->
+  <line x1="35" y1="140" x2="240" y2="140" stroke="#C4A87A" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <text x="29" y="143" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">0</text>
+
+  <!-- 1D walk path (jagged line) -->
+  <polyline points="
+    35,140
+    52,130
+    69,120
+    86,130
+    103,115
+    120,125
+    137,110
+    154,120
+    171,105
+    188,115
+    205,100
+    222,110
+    239,95
+  " fill="none" stroke="#7C2530" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- √n spread envelope (dashed) -->
+  <path d="M35,140 Q137,115 239,95" fill="none" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="5,3"/>
+  <path d="M35,140 Q137,165 239,185" fill="none" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="241" y="93" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">+√n</text>
+  <text x="241" y="187" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">-√n</text>
+
+  <text x="135" y="218" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Position spreads as $\sqrt{n}$</text>
+  <text x="135" y="230" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">E[Xₙ]=0, Var[Xₙ]=n</text>
+
+  <!-- ===== MIDDLE PANEL: 2D Random Walk ===== -->
+  <rect x="275" y="50" width="250" height="245" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="400" y="72" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">2D Random Walk (Recurrent)</text>
+
+  <!-- Grid lines -->
+  <line x1="400" y1="85" x2="400" y2="285" stroke="#C4A87A" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="285" y1="185" x2="515" y2="185" stroke="#C4A87A" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <text x="517" y="188" font-family="Georgia, serif" font-size="9" fill="#C4A87A">x</text>
+  <text x="401" y="84" font-family="Georgia, serif" font-size="9" fill="#C4A87A">y</text>
+
+  <!-- 2D walk path: wandering jagged line -->
+  <polyline points="
+    400,185
+    415,185
+    415,170
+    430,170
+    430,185
+    445,185
+    445,200
+    430,200
+    430,215
+    415,215
+    415,200
+    400,200
+    385,200
+    385,185
+    370,185
+    370,170
+    385,170
+    385,155
+    400,155
+    400,140
+    415,140
+    415,125
+    430,125
+    430,140
+    445,140
+    445,125
+    460,125
+    460,140
+    475,140
+    475,155
+    460,155
+    460,170
+    475,170
+    475,185
+    490,185
+    490,170
+    505,170
+  " fill="none" stroke="#7C2530" stroke-width="1.8" stroke-linejoin="round"/>
+
+  <!-- Start marker -->
+  <circle cx="400" cy="185" r="5" fill="#2D5A8E"/>
+  <text x="403" y="198" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">start</text>
+  <!-- End marker -->
+  <circle cx="505" cy="170" r="5" fill="#7C2530"/>
+  <text x="508" y="168" font-family="Georgia, serif" font-size="9" fill="#7C2530">now</text>
+
+  <!-- Spread circle -->
+  <circle cx="400" cy="185" r="55" fill="none" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="6,3" opacity="0.7"/>
+  <text x="400" y="248" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">typical radius ≈ √n</text>
+
+  <text x="400" y="272" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">2D: recurrent (returns to origin</text>
+  <text x="400" y="284" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">with probability 1)</text>
+
+  <!-- ===== RIGHT PANEL: Gaussian Distribution ===== -->
+  <rect x="550" y="50" width="230" height="180" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="665" y="72" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Distribution of Xₙ</text>
+  <text x="665" y="86" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">(CLT → Gaussian)</text>
+
+  <!-- Axis -->
+  <line x1="565" y1="185" x2="765" y2="185" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="665" y1="90" x2="665" y2="185" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="765" y="198" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="end">position</text>
+
+  <!-- Gaussian curve (approximated with cubic bezier) -->
+  <path d="M575,183 C605,183 630,100 665,97 C700,100 725,183 755,183"
+        fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- σ markers -->
+  <line x1="625" y1="180" x2="625" y2="190" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="705" y1="180" x2="705" y2="190" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="625" y="200" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">-√n</text>
+  <text x="705" y="200" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">+√n</text>
+  <text x="665" y="200" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">0</text>
+
+  <text x="665" y="218" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">N(0, n) as n → ∞</text>
+  <text x="665" y="230" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">by Central Limit Theorem</text>
+
+  <!-- ===== BOTTOM CONNECTIONS PANEL ===== -->
+  <rect x="20" y="310" width="760" height="75" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="400" y="330" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Random Walks Power Modern ML</text>
+
+  <!-- Four connection boxes -->
+  <!-- Diffusion Models -->
+  <rect x="35" y="338" width="160" height="38" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.2" rx="3"/>
+  <text x="115" y="354" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Diffusion Models</text>
+  <text x="115" y="368" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Forward: noise random walk</text>
+
+  <!-- MCMC -->
+  <rect x="210" y="338" width="160" height="38" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.2" rx="3"/>
+  <text x="290" y="354" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">MCMC</text>
+  <text x="290" y="368" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Walk → target distribution</text>
+
+  <!-- Node2vec / PageRank -->
+  <rect x="385" y="338" width="160" height="38" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+  <text x="465" y="354" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Node2vec / PageRank</text>
+  <text x="465" y="368" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Walk on graph → embeddings</text>
+
+  <!-- SGD -->
+  <rect x="560" y="338" width="205" height="38" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.2" rx="3"/>
+  <text x="662" y="354" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">SGD / Langevin Dynamics</text>
+  <text x="662" y="368" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Noisy gradient = biased walk</text>
+
+  <!-- Polya note -->
+  <text x="400" y="395" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle" font-style="italic">Polya 1921: recurrent in 1D &amp; 2D, transient in 3D+ · Einstein 1905: Brownian motion · Pearson 1905: coined "random walk"</text>
+</svg>

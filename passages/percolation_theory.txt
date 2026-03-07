@@ -1,0 +1,163 @@
+<<include "Header">>
+! Percolation Theory
+
+<img src="assets/percolation_theory.svg" alt="Lattice at three densities showing isolated clusters, critical threshold, and spanning giant component" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine pouring water through a bed of coffee grounds. If the grounds are packed too loosely with big air gaps, water pools in isolated pockets and never reaches the bottom — you get a sad, empty cup. Pack them just a little denser, past a critical threshold, and suddenly a connected path spans the entire filter from top to bottom. The coffee brews. That sharp transition from //disconnected// to //connected// is the ''percolation threshold'', and it is not a gradual slide — it is a sudden snap. The same mathematics governs whether a computer network survives random failures, whether an epidemic becomes a pandemic, and whether information can flow end-to-end through a <<link "neural network" "Neural Net">><</link>>.
+
+!! The Core Insight
+
+Percolation theory studies what happens when you randomly occupy sites or bonds in a lattice (or network) with probability $p$. The central result is a ''phase transition'' at a critical probability $p_c$:
+
+* ''Below'' $p_c$: only small, isolated clusters exist. No path connects distant parts of the system.
+* ''Above'' $p_c$: a ''giant connected component'' suddenly emerges that spans the entire system.
+* ''At'' $p_c$: the system is fractal — clusters of all sizes coexist, and the geometry is self-similar.
+
+The transition is //sharp//, not gradual. In the infinite-system limit, the probability of a spanning cluster jumps from exactly zero to strictly positive as $p$ crosses $p_c$. This is what makes percolation a true phase transition, analogous to water freezing at exactly 0°C — there is no halfway state.
+
+!! Bond and Site Percolation
+
+There are two fundamental flavors of percolation, depending on what you randomize:
+
+''Bond percolation:'' Every //edge// in the lattice is independently present with probability $p$ and absent with probability $1-p$. Nodes are always present; the question is whether enough edges exist to form a connected path.
+
+''Site percolation:'' Every //node// is independently occupied with probability $p$. Edges exist between adjacent occupied nodes. Here the randomness is in the nodes themselves.
+
+The critical thresholds depend on the lattice geometry:
+
+* ''Square lattice:'' $p_c \approx 0.5$ (bond), $p_c \approx 0.593$ (site)
+* ''Triangular lattice:'' $p_c = 2 \sin(\pi/18) \approx 0.347$ (bond), $p_c = 0.5$ (site)
+* ''Erdos-Renyi random graphs:'' $p_c = 1/N$ where $N$ is the number of nodes — even a vanishingly small connection probability suffices in large random graphs
+* ''Scale-free networks:'' $p_c \to 0$ for random failure (the hubs keep things connected), but $p_c$ is //finite// for targeted attack on high-degree nodes — a critical asymmetry for <<link "network robustness" "Network Theory">><</link>>
+
+!! What the Math Is Actually Doing
+
+The ''order parameter'' of percolation is $P_\infty(p)$, the probability that a randomly chosen node belongs to the infinite (spanning) cluster:
+
+$$P_\infty(p) = \begin{cases} 0 & \text{if } p < p_c \\ > 0 & \text{if } p > p_c \end{cases}$$
+
+Near the critical point, $P_\infty$ follows a ''power law'':
+
+$$P_\infty(p) \sim (p - p_c)^\beta \quad \text{for } p \to p_c^+$$
+
+where $\beta$ is a ''critical exponent''. On a 2D lattice, $\beta = 5/36 \approx 0.139$.
+
+At exactly $p = p_c$, the cluster size distribution follows another power law. If $n_s$ is the number of clusters of size $s$ per site:
+
+$$n_s \sim s^{-\tau} \quad \text{at } p = p_c$$
+
+with $\tau = 187/91 \approx 2.055$ in 2D. This tells us that at criticality, clusters of //every// size are present — there is no characteristic scale.
+
+The ''correlation length'' $\xi$ — the typical cluster diameter — diverges as:
+
+$$\xi \sim |p - p_c|^{-\nu}$$
+
+with $\nu = 4/3$ in 2D. At $p_c$, $\xi \to \infty$, meaning the system is correlated at all length scales. This is ''universality'': the exponents $\beta$, $\tau$, and $\nu$ depend only on the spatial dimension, not on whether you do bond or site percolation, nor on the specific lattice type. A square lattice and a triangular lattice in 2D share the same critical exponents.
+
+!! Percolation in ML and Networks
+
+Percolation theory provides the mathematical backbone for several phenomena in machine learning and network science:
+
+''Network robustness:'' <<link "Scale-free networks" "Network Theory">><</link>> (like the internet) are extraordinarily robust to //random// node failures — you can remove most nodes and the giant component persists because hubs hold everything together. But //targeted// removal of the highest-degree hubs shatters the network quickly. This is a percolation transition, and it explains why targeted attacks are so much more devastating than random ones.
+
+''Epidemic spreading:'' The <<link "SIR model" "Markov Chains">><</link>> on a network maps exactly onto bond percolation. The transmission probability plays the role of $p$, and the epidemic threshold is $p_c$. Below threshold: the disease dies out locally. Above threshold: a pandemic spanning a finite fraction of the population.
+
+''Dropout as percolation:'' <<link "Dropout" "Regularization">><</link>> in neural networks randomly removes nodes during training with probability $q$. This is literally site percolation run backwards — nodes are //present// with probability $1 - q$. If $q$ is too high, information cannot flow from input to output because no connected path survives. The practical dropout rates used (0.2 to 0.5) stay well above the percolation threshold for the network's architecture.
+
+''Random graph connectivity:'' The <<link "Erdos-Renyi" "Random Walk">><</link>> result that $p_c = 1/N$ means that adding just $N/2$ edges to an $N$-node graph produces a giant component with high probability. This sharp threshold governs the connectivity of random sensor networks, ad hoc wireless networks, and randomly wired neural architectures.
+
+''Information cascades:'' In <<link "social networks" "Network Theory">><</link>>, the spread of ideas, behaviors, or viral content follows percolation dynamics. A piece of content goes viral (spans the network) only if the per-contact sharing probability exceeds the network's percolation threshold.
+
+!! When Percolation Theory Breaks Down
+
+''Real networks are not random lattices.'' Classical percolation assumes uncorrelated random structure — every bond or site is independently occupied. Real networks have degree heterogeneity, clustering, and community structure that systematically shift the percolation threshold. A network with heavy-tailed degree distributions can have $p_c \to 0$, while strong community structure can create //multiple// local thresholds. Applying textbook lattice results to a real social or biological network without accounting for topology gives misleading predictions.
+
+''Correlated failures break mean-field predictions.'' Standard percolation assumes independent failures, but real systems exhibit //cascading// failures — one node's failure overloads its neighbors, causing them to fail too. Power grid blackouts, financial contagion, and cascading router failures all involve correlated percolation, where the failure of one component makes nearby failures more likely. The resulting transitions can be //discontinuous// (first-order) rather than the smooth continuous transition of classical percolation, making them harder to predict and more catastrophic.
+
+''Finite-size effects blur the transition.'' The sharp percolation threshold exists only in the infinite-system limit. Real networks are finite, and on a finite system the transition is a smooth crossover — there is no single $p_c$ but rather a window of probabilities where the giant component gradually emerges. For small networks (hundreds of nodes), the "threshold" can be so broad that the concept of a sharp transition is practically meaningless. Finite-size scaling theory provides corrections, but practitioners must be cautious about claiming sharp thresholds in small systems.
+
+!! Technical Details
+
+Percolation theory was introduced by ''Broadbent and Hammersley'' in 1957, originally motivated by the flow of fluid through a random porous medium. The standard reference is //Introduction to Percolation Theory// by Stauffer and Aharony (1994).
+
+The connection to <<link "statistical mechanics" "Statistical Mechanics">><</link>> is deep: percolation can be formulated as the $q \to 1$ limit of the <<link "Potts model" "Ising Model">><</link>>, which generalizes the Ising model. This places percolation within the framework of ''universality classes'' — systems with the same symmetry and dimensionality share critical exponents regardless of microscopic details. The <<link "renormalization group" "Optimization">><</link>> provides the theoretical machinery for computing these exponents.
+
+Key connections: in 2D, percolation is one of the few statistical mechanics models that can be solved exactly (Smirnov's proof of conformal invariance for critical percolation on the triangular lattice, 2001). The ''Harris criterion'' determines when disorder (randomness in $p_c$ itself) is relevant. ''Directed percolation'' — where bonds have a preferred direction — is the universality class for many non-equilibrium phase transitions.
+
+Related topics: <<link "Network Theory" "Network Theory">><</link>>, <<link "Random Walks" "Random Walk">><</link>>, <<link "Graph Laplacian" "Graph Laplacian">><</link>>, <<link "Information Theory" "Information Theory">><</link>>, <<link "Monte Carlo Methods" "Monte Carlo Methods">><</link>>.
+
+!! Quiz
+
+<div id="pt-q1">
+''Q1:'' In bond percolation on a square lattice, approximately what is the critical threshold $p_c$?
+
+<<button "A) 0.25">><<replace "#pt-q1">>Incorrect. That is too low — at $p = 0.25$, the lattice is well below the percolation threshold and consists only of small isolated clusters.<</replace>><</button>>
+<<button "B) 0.50">><<replace "#pt-q1">>Correct! For bond percolation on the square lattice, $p_c = 0.5$ exactly. This is one of the few lattices where the bond percolation threshold has an exact analytical value.<</replace>><</button>>
+<<button "C) 0.593">><<replace "#pt-q1">>Incorrect. That is the //site// percolation threshold for the square lattice, not the bond percolation threshold.<</replace>><</button>>
+<<button "D) 0.75">><<replace "#pt-q1">>Incorrect. At $p = 0.75$ the system is well above the bond percolation threshold, and a giant component exists with certainty.<</replace>><</button>>
+</div>
+
+<div id="pt-q2">
+''Q2:'' What does the order parameter $P_\infty(p)$ measure?
+
+<<button "A) The total number of clusters">><<replace "#pt-q2">>Incorrect. The total number of clusters is not the order parameter — it actually peaks near $p_c$ and decreases above it as clusters merge.<</replace>><</button>>
+<<button "B) The probability a random node belongs to the infinite cluster">><<replace "#pt-q2">>Correct! $P_\infty(p)$ is the fraction of nodes in the giant (infinite) component. It is zero below $p_c$ and positive above $p_c$, serving as the order parameter of the phase transition.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The average cluster size">><<replace "#pt-q2">>Incorrect. The average cluster size is a different quantity — it diverges at $p_c$ but is not the order parameter.<</replace>><</button>>
+<<button "D) The correlation length">><<replace "#pt-q2">>Incorrect. The correlation length $\xi$ diverges at $p_c$ but it measures spatial extent of correlations, not the order parameter.<</replace>><</button>>
+</div>
+
+<div id="pt-q3">
+''Q3:'' Why are scale-free networks robust to random failures but fragile to targeted attacks?
+
+<<button "A) They have more edges than random graphs">><<replace "#pt-q3">>Incorrect. Edge count alone does not explain the asymmetry between random and targeted failure modes.<</replace>><</button>>
+<<button "B) Random failures mostly hit low-degree nodes, leaving hubs intact">><<replace "#pt-q3">>Correct! In a scale-free network, most nodes have low degree. Random failures predominantly remove these unimportant nodes, barely affecting connectivity. But targeted attacks on the rare high-degree hubs rapidly fragment the network because the hubs are the backbone holding the giant component together.<</replace>><</button>>
+<<button "C) Scale-free networks have higher clustering coefficients">><<replace "#pt-q3">>Incorrect. Clustering coefficient is not the primary factor — it is the heterogeneous degree distribution that creates the asymmetry.<</replace>><</button>>
+<<button "D) Targeted attacks remove more edges total">><<replace "#pt-q3">>Incorrect. While removing hubs does remove many edges, the key insight is about the structural role of hubs in maintaining the giant component, not just edge count.<</replace>><</button>>
+</div>
+
+<div id="pt-q4">
+''Q4:'' What does "universality" mean in the context of percolation?
+
+<<button "A) All lattices have the same critical threshold">><<replace "#pt-q4">>Incorrect. Critical thresholds $p_c$ differ between lattice types. Universality refers to critical //exponents//, not thresholds.<</replace>><</button>>
+<<button "B) Critical exponents depend only on dimension, not lattice type">><<replace "#pt-q4">>Correct! Universality means that the critical exponents ($\beta$, $\tau$, $\nu$, etc.) are the same for all lattices of the same spatial dimension. A square lattice and a triangular lattice in 2D share exponents despite having different $p_c$ values.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Percolation occurs in all dimensions">><<replace "#pt-q4">>Incorrect. While percolation does occur in all dimensions, universality specifically refers to the invariance of critical exponents across lattice types within a given dimension.<</replace>><</button>>
+<<button "D) Bond and site percolation always have the same threshold">><<replace "#pt-q4">>Incorrect. Bond and site percolation have different thresholds on the same lattice. Universality means they share critical //exponents//.<</replace>><</button>>
+</div>
+
+<div id="pt-q5">
+''Q5:'' How does the SIR epidemic model relate to percolation?
+
+<<button "A) The infected population follows site percolation">><<replace "#pt-q5">>Incorrect. The SIR model maps specifically onto //bond// percolation, not site percolation.<</replace>><</button>>
+<<button "B) The transmission probability maps to bond occupation, and the epidemic threshold is the percolation threshold">><<replace "#pt-q5">>Correct! In the SIR model, each edge transmits the disease with some probability — this is exactly bond percolation. The epidemic threshold (below which outbreaks stay local) corresponds to $p_c$, and a pandemic occurs when transmission probability exceeds $p_c$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The recovery rate determines the critical exponents">><<replace "#pt-q5">>Incorrect. The recovery rate affects the effective transmission probability but does not determine the universality class or critical exponents of the percolation transition.<</replace>><</button>>
+<<button "D) Epidemics do not have sharp thresholds">><<replace "#pt-q5">>Incorrect. Epidemics on networks //do// have sharp thresholds (in the large-network limit), and this threshold corresponds precisely to the percolation threshold.<</replace>><</button>>
+</div>
+
+<div id="pt-q6">
+''Q6:'' At the critical point $p = p_c$, the cluster size distribution follows $n_s \sim s^{-\tau}$. What does this imply?
+
+<<button "A) All clusters are the same size">><<replace "#pt-q6">>Incorrect. A power-law distribution means clusters span a wide range of sizes — the opposite of uniformity.<</replace>><</button>>
+<<button "B) There is one very large cluster and many tiny ones">><<replace "#pt-q6">>Incorrect. That describes the situation above $p_c$, not at $p_c$. At criticality, there is no single dominant cluster — all sizes coexist.<</replace>><</button>>
+<<button "C) Clusters of all sizes coexist with no characteristic scale">><<replace "#pt-q6">>Correct! A power-law distribution is //scale-free// — there is no typical cluster size. You find clusters spanning every scale from single nodes to system-spanning structures. This self-similarity is the hallmark of criticality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The average cluster size is zero">><<replace "#pt-q6">>Incorrect. The average cluster size actually //diverges// at $p_c$ (for $\tau < 3$), which is one of the signatures of the critical point.<</replace>><</button>>
+</div>
+
+<div id="pt-q7">
+''Q7:'' For Erdos-Renyi random graphs with $N$ nodes, the percolation threshold is $p_c = 1/N$. What does this mean practically?
+
+<<button "A) You need at least N edges to get any connected pair">><<replace "#pt-q7">>Incorrect. A single edge creates a connected pair. The threshold $p_c = 1/N$ concerns the emergence of a //giant component//, not just any connection.<</replace>><</button>>
+<<button "B) Adding roughly N/2 edges produces a giant component">><<replace "#pt-q7">>Correct! With $N$ nodes and edge probability $p = 1/N$, the expected number of edges is $\binom{N}{2}/N \approx N/2$. This is the threshold where a giant component spanning a finite fraction of all nodes emerges — a remarkably small number of edges relative to the $\binom{N}{2}$ possible.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The network is fully connected at p = 1/N">><<replace "#pt-q7">>Incorrect. At $p = 1/N$ the network is very sparse. Full connectivity requires $p \sim \ln(N)/N$, which is much larger.<</replace>><</button>>
+<<button "D) Random graphs cannot have a percolation threshold">><<replace "#pt-q7">>Incorrect. Random graphs absolutely have a percolation threshold, and the Erdos-Renyi result $p_c = 1/N$ is one of the most celebrated results in random graph theory.<</replace>><</button>>
+</div>
+
+<div id="pt-q8">
+''Q8:'' Why do cascading failures violate standard percolation assumptions?
+
+<<button "A) Cascading failures only affect edges, not nodes">><<replace "#pt-q8">>Incorrect. Cascading failures can affect both nodes and edges. The key violation is about //independence//, not the type of element affected.<</replace>><</button>>
+<<button "B) They introduce correlations between failures, breaking the independence assumption">><<replace "#pt-q8">>Correct! Standard percolation assumes each node or edge fails independently. In cascading failures, one node's failure overloads neighbors, causing dependent failures. This correlation can change the transition from continuous (second-order) to discontinuous (first-order), making catastrophic system-wide collapse possible without warning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Cascading failures do not have a threshold">><<replace "#pt-q8">>Incorrect. Cascading failures do exhibit thresholds, but the nature of the transition changes — it can become abrupt and discontinuous rather than the smooth continuous transition of standard percolation.<</replace>><</button>>
+<<button "D) They only occur in infinite systems">><<replace "#pt-q8">>Incorrect. Cascading failures are very much a real-world, finite-system phenomenon — power grid blackouts being the canonical example.<</replace>><</button>>
+</div>
+
+<<include "Footer">>

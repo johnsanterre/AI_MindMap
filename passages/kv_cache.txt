@@ -1,0 +1,140 @@
+<<include "Header">>
+! KV Cache
+
+<img src="assets/kv_cache.svg" alt="Diagram showing KV cache mechanism: prefill phase stores key-value matrices, decode phase attends new token query against cached keys and values" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are writing a book one word at a time. Every time you need to choose the next word, you do not go back and re-read the entire manuscript from the beginning. You remember what you have already read &mdash; the characters, the plot threads, the tone &mdash; and you use that memory to write the next word. The ''KV cache'' does exactly the same thing for transformer inference. During autoregressive generation, the model produces one token at a time, and each new token must attend to every previous token. Without any caching, the model would recompute the key and value vectors for all previous tokens at every single step. The KV cache stores those previously computed ''key'' and ''value'' vectors so that each new token only needs to compute its own representations and attend against what is already stored. It is a simple idea that transforms a computationally brutal process into something tractable.
+
+!! The Core Insight
+
+During autoregressive generation, each new token must compute <<link "attention" "Attention">><</link>> over all previous tokens. Without a cache, this means recomputing the key ($K$) and value ($V$) projections for every prior token at every generation step. For a sequence of length $L$ with model dimension $d$, that is $O(L^2 d)$ work per token, and $O(L^3 d)$ total to generate a full sequence.
+
+With a KV cache, you compute the key and value vectors for each token //once// and store them. At each new step, you only compute $Q$, $K$, and $V$ for the single new token, attend against the cached keys and values, and append the new $K$ and $V$ to the cache. The per-token cost drops to $O(Ld)$, and total generation cost drops to $O(L^2 d)$. This is the difference between inference being feasible and inference being impossibly slow.
+
+!! How It Works
+
+The process has two distinct phases:
+
+''Prefill phase:'' The entire input prompt is processed in parallel, just like during training. The model computes $Q$, $K$, and $V$ for all prompt tokens at once. The resulting $K$ and $V$ matrices are stored in the cache. This phase is compute-bound and benefits from GPU parallelism.
+
+''Decode phase:'' New tokens are generated one at a time. For each new token, the model computes $Q_{\text{new}}$, $K_{\text{new}}$, and $V_{\text{new}}$ &mdash; each just a single vector. The new token's query attends against the full cached $K$ and $V$ matrices. Then $K_{\text{new}}$ and $V_{\text{new}}$ are appended to the cache. This phase is memory-bandwidth-bound because it reads the entire cache for each token but does relatively little arithmetic.
+
+The cache grows linearly with sequence length. Its total size is:
+
+$$\text{Cache size} = 2 \times n_{\text{layers}} \times n_{\text{heads}} \times d_{\text{head}} \times L \times \text{bytes per element}$$
+
+The factor of 2 accounts for storing both keys and values. For large models at long contexts, this memory cost dominates everything else.
+
+!! What the Math Is Actually Doing
+
+Standard multi-head <<link "attention" "Attention">><</link>> computes, for each head:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$
+
+where $Q, K, V \in \mathbb{R}^{L \times d_k}$. During full-sequence processing, all $L$ queries attend to all $L$ keys.
+
+With a KV cache during the decode phase, only the new token's query is computed:
+
+$$Q_{\text{new}} \in \mathbb{R}^{1 \times d_k}, \quad K_{\text{cache}} \in \mathbb{R}^{L \times d_k}, \quad V_{\text{cache}} \in \mathbb{R}^{L \times d_k}$$
+
+$$\text{Output} = \text{softmax}\!\left(\frac{Q_{\text{new}} \, K_{\text{cache}}^T}{\sqrt{d_k}}\right) V_{\text{cache}}$$
+
+This produces a single output vector &mdash; the attention output for the new token &mdash; in $O(Ld_k)$ instead of $O(L^2 d_k)$.
+
+To grasp why the KV cache is //the// bottleneck in modern inference, consider a concrete example. A 70B parameter model might have 80 layers, 64 attention heads, and $d_{\text{head}} = 128$. At 128K context length in fp16 (2 bytes per element):
+
+$$\text{Cache} = 2 \times 80 \times 64 \times 128 \times 131072 \times 2 \approx 2.68 \text{ TB}$$
+
+That is more memory than the model weights themselves. The KV cache, not the parameters, is what makes long-context inference so expensive.
+
+!! KV Cache Optimizations
+
+Several techniques have been developed to tame the KV cache memory problem:
+
+''Multi-Query Attention (MQA):'' Instead of separate $K$ and $V$ projections per head, all heads share a single set of keys and values. Only $Q$ differs across heads. This shrinks the cache by a factor of $n_{\text{heads}}$ &mdash; for a 64-head model, that is a 64x reduction. The quality loss is surprisingly small.
+
+''Grouped Query Attention (GQA):'' A middle ground between full multi-head attention and MQA. Heads are divided into groups, and each group shares one set of $K$, $V$ projections. With 8 groups across 64 heads, the cache shrinks by 8x while retaining more representational capacity than MQA. <<link "LLaMA" "Large Language Models">><</link>> 2 70B and many subsequent models use GQA.
+
+''PagedAttention (vLLM):'' Manages KV cache memory the way an operating system manages virtual memory. Instead of pre-allocating contiguous memory for each sequence's full potential length, cache blocks are allocated in fixed-size pages on demand. This eliminates memory fragmentation and allows near-perfect memory utilization across variable-length sequences in a batch.
+
+''Quantized KV cache:'' Store cached keys and values in int8 or int4 instead of fp16, reducing memory by 2&ndash;4x. Because the cached values are only used for attention computation (not gradient updates), aggressive <<link "quantization" "Quantization">><</link>> is tolerable.
+
+''Sliding window attention:'' Only cache the most recent $W$ tokens instead of the full history. Tokens beyond the window are discarded. This caps cache memory at a fixed size regardless of total sequence length, at the cost of losing direct attention to distant context. Models like Mistral combine sliding window layers with full-attention layers.
+
+!! When KV Cache Breaks Down
+
+''Memory wall at long contexts.'' As sequence length grows, the KV cache dominates GPU memory. At 128K context for a 70B model, the raw cache requirement exceeds the memory needed for the model weights themselves. Even with GQA and quantization, serving long-context requests requires either model parallelism across many GPUs or aggressive approximation techniques. The cache is what makes the jump from 4K to 128K context so much harder than it looks.
+
+''Batch size versus cache memory.'' In production serving, you want large batch sizes to amortize the cost of loading model weights from memory. But each sequence in the batch needs its own KV cache. Double the batch size, double the cache memory. At some point you run out of GPU memory, forcing smaller batches and lower throughput. This creates a fundamental tension between latency (larger batches) and the ability to serve long contexts.
+
+''Cache invalidation complexity.'' Advanced inference techniques such as <<link "speculative decoding" "Speculative Decoding">><</link>> and tree-based search generate multiple candidate continuations from the same prefix. Each branch needs its own cache state, which means managing cache trees rather than simple linear caches. Rolling back, forking, and garbage-collecting cache branches adds significant engineering complexity and can negate some of the memory savings from careful cache management.
+
+!! Technical Details
+
+The KV cache concept emerged naturally from the original <<link "Transformer" "Transformers">><</link>> architecture (Vaswani et al., 2017), but its importance only became central with the rise of large autoregressive language models. Key papers addressing KV cache efficiency:
+
+&bull; ''Shazeer 2019'' &mdash; introduced Multi-Query Attention, the first major KV cache compression technique.
+&bull; ''Ainslie et al. 2023 (GQA)'' &mdash; proposed Grouped Query Attention as a quality-preserving middle ground between MQA and standard multi-head attention.
+&bull; ''Kwon et al. 2023 (vLLM)'' &mdash; introduced PagedAttention, transforming KV cache memory management and enabling dramatically better serving throughput.
+
+Related topics: <<link "Transformers" "Transformers">><</link>> | <<link "Attention" "Attention">><</link>> | <<link "Flash Attention" "Flash Attention">><</link>> | <<link "Speculative Decoding" "Speculative Decoding">><</link>> | <<link "Large Language Models" "Large Language Models">><</link>> | <<link "Quantization" "Quantization">><</link>>
+
+!! Quiz
+
+<span id="kvc-q1">''1. Why does naive autoregressive generation without KV caching have O(L&sup3;) total cost?''
+(A) Because attention itself is cubic in sequence length
+(B) Because each of L tokens recomputes K,V for all previous tokens, making each step O(L&sup2;)
+(C) Because backpropagation through time is cubic
+(D) Because the vocabulary size scales with L
+<<button "Show Answer">><<replace "#kvc-q1">>''Answer: B.'' At step $t$, without caching, you recompute $K$ and $V$ for all $t$ prior tokens and compute attention over them &mdash; $O(t \cdot d)$ work. Summing over $L$ steps gives $O(L^2 d)$ total, but since each attention step is itself $O(td)$ for the matrix multiply, the total is $O(L^2 d)$. The naive approach recomputes the full $O(L^2)$ attention at each step, giving $O(L^3)$ total.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q2">''2. During the decode phase with KV caching, what is computed for each new token?''
+(A) Only Q for the new token; K and V come from the cache
+(B) Q, K, and V for all tokens, but only the new output is used
+(C) Only V for the new token; Q and K come from the cache
+(D) Nothing &mdash; all representations are fully cached
+<<button "Show Answer">><<replace "#kvc-q2">>''Answer: A.'' The new token's Q is computed fresh, then it attends against the cached K and V matrices. The new token's own K and V are also computed and appended to the cache for future steps, but the expensive part &mdash; recomputing K,V for all prior tokens &mdash; is avoided.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q3">''3. What does the factor of 2 represent in the KV cache size formula?''
+(A) Two bytes per fp16 element
+(B) Keys and values are stored separately
+(C) Two attention layers per transformer block
+(D) Double buffering for read/write operations
+<<button "Show Answer">><<replace "#kvc-q3">>''Answer: B.'' The cache stores both the key matrix and the value matrix for each layer and each head. The factor of 2 accounts for these two separate stored matrices.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q4">''4. How does Multi-Query Attention (MQA) reduce KV cache size?''
+(A) It uses smaller dimensions for K and V projections
+(B) It quantizes the cache to lower precision
+(C) It shares a single set of K,V across all attention heads
+(D) It limits the sequence length that can be cached
+<<button "Show Answer">><<replace "#kvc-q4">>''Answer: C.'' In MQA, all attention heads share one K projection and one V projection. Only Q differs across heads. This reduces the cache by a factor equal to the number of heads.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q5">''5. What problem does PagedAttention (vLLM) solve?''
+(A) It computes attention faster using tiling
+(B) It eliminates the need for KV caching entirely
+(C) It manages KV cache memory like virtual memory pages to reduce fragmentation
+(D) It compresses K and V using learned projections
+<<button "Show Answer">><<replace "#kvc-q5">>''Answer: C.'' PagedAttention allocates cache memory in fixed-size pages on demand, rather than pre-allocating contiguous blocks for maximum sequence length. This eliminates internal and external fragmentation, dramatically improving memory utilization in batch serving.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q6">''6. Why is the decode phase memory-bandwidth-bound rather than compute-bound?''
+(A) Because decoding does not use the GPU at all
+(B) Because each step reads the entire cache but only computes one output vector
+(C) Because the model weights are not needed during decoding
+(D) Because decoding uses CPU instead of GPU
+<<button "Show Answer">><<replace "#kvc-q6">>''Answer: B.'' During decoding, a single query vector attends against the full cached K and V matrices. The ratio of arithmetic operations to bytes read is very low (low arithmetic intensity), making the step bottlenecked by how fast memory can be read, not by how fast the GPU can compute.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q7">''7. What is the key tradeoff when increasing batch size in KV-cached inference?''
+(A) Larger batches reduce accuracy due to numerical instability
+(B) Larger batches amortize weight-loading cost but multiply cache memory
+(C) Larger batches require recomputing the cache from scratch
+(D) Larger batches make the prefill phase slower
+<<button "Show Answer">><<replace "#kvc-q7">>''Answer: B.'' Each sequence in a batch requires its own KV cache. Larger batches improve compute utilization by amortizing the cost of reading model weights, but the total cache memory scales linearly with batch size. Eventually GPU memory runs out, capping the achievable batch size.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="kvc-q8">''8. Which optimization is a middle ground between full multi-head attention and Multi-Query Attention?''
+(A) Flash Attention
+(B) Sliding window attention
+(C) Grouped Query Attention (GQA)
+(D) PagedAttention
+<<button "Show Answer">><<replace "#kvc-q8">>''Answer: C.'' GQA divides heads into groups, with each group sharing one set of K,V projections. It preserves more representational capacity than MQA (which uses just one K,V set for all heads) while still significantly reducing cache size compared to full multi-head attention.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

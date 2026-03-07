@@ -1,0 +1,165 @@
+<<include "Header">>
+
+! Control Theory
+
+<img src="assets/control_theory.svg" alt="Diagram showing a feedback control loop with PID controller and mapping to reinforcement learning" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Think of a thermostat. It measures the room temperature, compares it to the setting you dialled in, and adjusts the heater — more heat if the room is too cold, less if it is too warm. That loop — //measure, compare, correct// — is the core of ''control theory''. It is the same loop that keeps a drone stable in a crosswind, holds a self-driving car in its lane, and (it turns out) guides a [[Reinforcement Learning]] agent as it optimises its [[policy gradient|policy]]. Control theory is the original science of making systems do what you want through feedback, and modern ML quietly inherits many of its ideas.
+
+---
+
+!! The Core Insight
+
+''Control theory'' studies how to make dynamical systems behave the way you want by observing their output and feeding corrective inputs back in. The system you are trying to control is called the ''plant''. The plant has its own dynamics — potentially unknown, nonlinear, or unstable. The ''controller'' observes the plant's output $y(t)$, compares it to a reference signal $r(t)$ (the desired behaviour), computes the error $e(t) = r(t) - y(t)$, and applies a corrective input $u(t)$.
+
+Three questions dominate the field. ''Stability:'' does the system's output stay bounded, or does it diverge? ''Controllability:'' can you steer the system from any initial state to any desired state by choosing the right inputs? ''Observability:'' can you infer the plant's internal state from its outputs alone? These three pillars — stability, controllability, observability — have direct analogs in reinforcement learning. A [[Markov Decision Process]] //is// a discrete-time controlled dynamical system. The [[bellman equation|Bellman equation]] //is// a discrete-time version of the Hamilton-Jacobi-Bellman equation from optimal control. The policy //is// the controller. The connections run deep.
+
+---
+
+!! PID Control: The Workhorse
+
+The ''PID controller'' (Proportional-Integral-Derivative) is the most widely deployed feedback controller in history — it runs over 90% of industrial control loops worldwide. Its control signal combines three terms:
+
+$$u(t) = K_p \, e(t) \;+\; K_i \int_0^t e(\tau)\,d\tau \;+\; K_d \, \frac{de}{dt}$$
+
+The ''Proportional'' term $K_p \, e(t)$ responds to the //current// error: if the temperature is 5 degrees below target, push harder. The ''Integral'' term $K_i \int e\,d\tau$ accumulates //past// error and eliminates steady-state offset — if the system has been slightly below target for a long time, the integral builds up and pushes the output to where it should be. The ''Derivative'' term $K_d \, de/dt$ anticipates //future// error by responding to the rate of change — if the error is shrinking fast, ease off to avoid overshoot.
+
+Tuning these three gains $K_p, K_i, K_d$ is an art. The classic ''Ziegler-Nichols method'' increases proportional gain until the system oscillates, then sets all three gains from the oscillation period. Modern tuning uses optimisation. But PID has fundamental limits: it assumes roughly linear dynamics and struggles with long delays, strong nonlinearities, and high-dimensional systems. This is exactly where neural network controllers — learned end-to-end — are taking over.
+
+---
+
+!! What the Math Is Actually Doing
+
+The standard framework is ''state-space representation''. The plant is described by two equations:
+
+$$\dot{x}(t) = Ax(t) + Bu(t), \qquad y(t) = Cx(t) + Du(t)$$
+
+Here $x \in \mathbb{R}^n$ is the state vector, $u \in \mathbb{R}^m$ is the control input, $y \in \mathbb{R}^p$ is the measured output, and $A, B, C, D$ are matrices that encode the system's dynamics. In the Laplace domain the system becomes a ''transfer function'' $G(s) = C(sI - A)^{-1}B + D$, turning differential equations into algebra.
+
+''Stability'' comes down to the eigenvalues of $A$: if every eigenvalue has a negative real part (poles in the left half-plane), perturbations decay and the system is stable. If any eigenvalue has a positive real part, the system blows up.
+
+The crown jewel of classical optimal control is the ''Linear Quadratic Regulator'' (LQR). It minimises a quadratic cost:
+
+$$J = \int_0^\infty \bigl(x^T Q\, x + u^T R\, u\bigr)\,dt$$
+
+where $Q$ penalises state deviation and $R$ penalises control effort. The optimal controller is $u = -Kx$ where $K = R^{-1}B^T P$ and $P$ solves the ''algebraic Riccati equation''. This is the continuous-time analog of the [[bellman equation|Bellman equation]] — LQR is optimal control for linear dynamics with quadratic cost, just as value iteration is optimal control for discrete MDPs with arbitrary reward.
+
+---
+
+!! Control Theory Meets Reinforcement Learning
+
+The mapping between control theory and RL is more than analogy — it is mathematical equivalence in special cases.
+
+| ''Control Theory'' | ''Reinforcement Learning'' |
+| State $x(t)$ | Observation $s_t$ |
+| Control input $u(t)$ | Action $a_t$ |
+| Cost function $J$ | Negative cumulative reward |
+| Plant dynamics $\dot{x} = f(x,u)$ | Environment transition $P(s'|s,a)$ |
+| Controller $u = \pi(x)$ | Policy $\pi(a|s)$ |
+| Kalman filter | Optimal state estimation (POMDP belief) |
+
+''LQR'' is the optimal policy for linear dynamics + quadratic cost. ''Model Predictive Control'' (MPC) plans over a finite horizon using a known model — essentially the same idea as model-based RL with planning, as in [[World Models]]. The ''Kalman filter'' is optimal state estimation under linear-Gaussian assumptions — the observer that lets you infer hidden state from noisy measurements.
+
+Modern research lives at the intersection: learning controllers from data (''system identification'' maps to model-based RL), neural [[Lyapunov Functions|Lyapunov functions]] for verifying stability of learned policies, ''differentiable simulators'' that backpropagate through physics, and sim-to-real transfer in robotics where control-theoretic robustness guarantees meet [[Deep Learning]] representations.
+
+---
+
+!! When Control Theory Breaks Down
+
+''Nonlinear systems:'' Classical control theory is built on linearity — superposition, transfer functions, eigenvalue analysis. Real systems like robotic arms, biological networks, and turbulent flows are deeply nonlinear. Linearisation around an operating point works locally but fails globally. Nonlinear control (feedback linearisation, sliding mode control) exists but is far harder to apply, which is why learned controllers trained end-to-end are increasingly preferred for complex nonlinear systems.
+
+''Model uncertainty:'' Control design typically assumes you know the plant dynamics (the $A, B, C, D$ matrices). When the model is wrong — and it always is — performance degrades or the system destabilises. ''Robust control'' ($H_\infty$ methods) handles bounded uncertainty, but large model errors remain dangerous. This is precisely why sim-to-real transfer in robotics is hard: the simulator's dynamics never perfectly match reality.
+
+''High dimensionality:'' Classical control scales poorly to systems with thousands of state variables. A humanoid robot has dozens of joints; an image-based controller has millions of pixel inputs. Control-theoretic tools like LQR require solving matrix Riccati equations that scale cubically in state dimension. Deep RL sidesteps this by using neural networks as function approximators, but sacrifices the stability guarantees that make classical control trustworthy.
+
+---
+
+!! Technical Details
+
+''Historical milestones:'' Nyquist stability criterion (1932), Bode plots (1945), Kalman filter and LQR (1960), Pontryagin's maximum principle (1956), Zames $H_\infty$ robust control (1981). Standard textbook: Astrom & Murray, //Feedback Systems// (2008, free online).
+
+''Lyapunov stability theory:'' A system $\dot{x} = f(x)$ is stable at an equilibrium if there exists a ''Lyapunov function'' $V(x) > 0$ with $\dot{V}(x) \leq 0$. Finding Lyapunov functions is in general hard; recent work uses neural networks to learn them, providing stability certificates for learned controllers.
+
+''Adaptive control:'' When plant parameters are unknown, the controller estimates them online and adjusts its gains — a form of online learning that predates modern ML by decades.
+
+''Model Predictive Control (MPC):'' At each timestep, solve an optimisation problem over a finite horizon using a model of the plant, apply the first control action, then re-plan. MPC handles constraints naturally and is widely used in process control, autonomous driving, and robotics. It connects directly to planning in model-based RL.
+
+''Connections:'' [[Reinforcement Learning]], [[Markov Decision Process]], [[bellman equation|Bellman equation]], [[policy gradient|Policy Gradient]], [[Actor-critic]], [[dynamic programming|Dynamic Programming]], [[Q Learning]].
+
+---
+
+!! Quiz
+
+<span id="ct-q1">What is the error signal e(t) in a feedback control loop?</span>
+
+A. The derivative of the output signal
+B. The difference between the reference input and the measured output
+C. The integral of the control input over time
+D. The noise introduced by the sensor
+
+<<button "A">><<replace "#ct-q1">>The derivative of the output is used in the D term of PID, but it is not the error signal. The error is the gap between what you want and what you have.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q1">>Correct! e(t) = r(t) - y(t). The error is the difference between the desired reference and the actual measured output. The entire controller exists to drive this signal toward zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q1">>The integral of the control input is not the error. The I term in PID integrates the error, not the control input.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q1">>Sensor noise is a separate concern. The error signal is the deliberate comparison between reference and output, not an unwanted artifact.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q2">What does the Integral term in a PID controller eliminate?</span>
+
+A. High-frequency noise in the sensor signal
+B. Overshoot during transient response
+C. Steady-state error that the proportional term alone cannot remove
+D. Oscillations caused by excessive derivative gain
+
+<<button "A">><<replace "#ct-q2">>The integral term actually amplifies noise over time. Noise filtering is handled by low-pass filters, not the I term.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q2">>The integral term can actually //increase// overshoot. It is the derivative term that helps reduce overshoot by anticipating future error.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q2">>Correct! The integral term accumulates past error. Even a tiny persistent offset causes the integral to grow until the controller pushes the output to exactly the reference, eliminating steady-state error.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q2">>Oscillations from excessive derivative gain are a tuning problem, not something the integral term fixes. The I term addresses a different issue: persistent bias.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q3">In the state-space model dx/dt = Ax + Bu, what determines system stability?</span>
+
+A. The rank of matrix B
+B. The eigenvalues of matrix A
+C. The condition number of matrix C
+D. The trace of matrix D
+
+<<button "A">><<replace "#ct-q3">>The rank of B determines controllability (whether you can reach all states), not stability. Stability depends on the unforced dynamics in A.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q3">>Correct! If all eigenvalues of A have negative real parts, the system is stable (perturbations decay). If any eigenvalue has a positive real part, the system is unstable. These eigenvalues correspond to poles in the transfer function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q3">>Matrix C maps internal state to measured output (observability). It does not determine whether the system's dynamics are stable or unstable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q3">>Matrix D is the direct feedthrough term, which is zero in most physical systems. It has no bearing on stability.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q4">The Linear Quadratic Regulator (LQR) is the continuous-time analog of which RL concept?</span>
+
+A. Policy gradient with REINFORCE estimator
+B. The Bellman equation and value iteration
+C. Epsilon-greedy exploration
+D. Experience replay
+
+<<button "A">><<replace "#ct-q4">>Policy gradient methods estimate gradients stochastically. LQR finds the exact optimal solution analytically via the Riccati equation, which is much closer to dynamic programming.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q4">>Correct! LQR solves the algebraic Riccati equation to find the optimal value function and controller, just as value iteration solves the Bellman equation to find the optimal value function and policy. Both are dynamic programming in different settings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q4">>Epsilon-greedy is an exploration strategy. LQR is about computing the optimal controller, not about exploration.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q4">>Experience replay is a data management technique for off-policy RL. LQR is an optimal control method that computes the solution analytically.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q5">In the control-RL mapping, what does the plant (system being controlled) correspond to?</span>
+
+A. The policy network
+B. The reward function
+C. The environment transition dynamics
+D. The replay buffer
+
+<<button "A">><<replace "#ct-q5">>The policy corresponds to the controller, not the plant. The plant is the thing being controlled.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q5">>The reward function maps to the cost function (negated). The plant is the physical system with its own dynamics.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q5">>Correct! The plant's dynamics — how the system evolves given its current state and control input — map directly to the environment's transition function $P(s'|s,a)$ in an MDP.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q5">>The replay buffer is a data structure for storing past transitions. It has no analog in classical control theory.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q6">Why does classical control theory struggle with high-dimensional systems?</span>
+
+A. High-dimensional systems are always unstable
+B. PID controllers can only handle single-input-single-output systems
+C. Matrix operations like solving the Riccati equation scale cubically in state dimension
+D. The Laplace transform is undefined for systems with more than 10 state variables
+
+<<button "A">><<replace "#ct-q6">>Stability depends on system dynamics, not dimensionality. High-dimensional systems can be perfectly stable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q6">>While basic PID is SISO, multivariable PID and state-space methods handle MIMO systems. The real bottleneck is computational scaling.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q6">>Correct! Solving the Riccati equation for LQR scales as $O(n^3)$ in the state dimension. For a humanoid robot or image-based controller with thousands or millions of state variables, this becomes computationally intractable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q6">>The Laplace transform works for any finite-dimensional linear system regardless of the number of state variables. There is no such limit.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q7">What is Model Predictive Control (MPC)?</span>
+
+A. A technique that learns a model of the controller from data
+B. An open-loop method that computes the full control trajectory once and executes it
+C. An optimisation-based method that plans over a finite horizon, applies the first action, then re-plans
+D. A method that predicts when the model will fail and switches to a backup controller
+
+<<button "A">><<replace "#ct-q7">>MPC uses a model of the plant, not the controller. The controller is the MPC algorithm itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q7">>MPC does plan a trajectory, but it is //closed-loop//: it re-plans at every timestep using updated state measurements, not open-loop.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q7">>Correct! MPC solves a constrained optimisation over a rolling horizon at each step. It applies only the first action, observes the new state, and re-optimises. This is conceptually identical to planning with a world model in model-based RL.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q7">>MPC does not involve failure prediction or backup switching. It is a receding-horizon planning strategy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q8">Which control-theoretic concept provides a certificate that a system will remain stable?</span>
+
+A. The Bode plot
+B. The Kalman filter
+C. A Lyapunov function
+D. The Ziegler-Nichols tuning rule
+
+<<button "A">><<replace "#ct-q8">>Bode plots are a frequency-domain visualisation tool. They help analyse stability margins but do not provide a formal stability certificate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q8">>The Kalman filter is an optimal state estimator, not a stability certificate. It addresses observability, not stability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q8">>Correct! A Lyapunov function $V(x) > 0$ with $\dot{V}(x) \leq 0$ proves that the system cannot diverge. Finding one is hard in general, but recent work uses neural networks to learn Lyapunov functions for verifying learned controllers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q8">>Ziegler-Nichols is a PID tuning heuristic. It does not provide formal stability guarantees.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

@@ -1,0 +1,165 @@
+<<include "Header">>
+
+! Topology
+
+<img src="assets/topology.svg" alt="Diagram showing topological spaces, homeomorphisms, and persistent homology for data analysis" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+A topologist famously cannot tell a coffee cup from a donut: both have exactly one hole, and one can be continuously deformed into the other without tearing or gluing. Topology studies properties that survive continuous deformation — connectedness, holes, loops — rather than rigid geometric properties like distances or angles. In ML, the ''manifold hypothesis'' says high-dimensional data (images, text) lives on low-dimensional curved surfaces — manifolds — embedded in high-dimensional space. Topology gives us the tools to reason about these shapes, understand what neural networks learn about them, and detect structures that geometry alone misses.
+
+!! The Core Insight
+
+A ''topological space'' is a set equipped with a notion of "nearness" — defined via open sets — but //without// any notion of distance. Two spaces are ''homeomorphic'' if there exists a continuous bijection between them whose inverse is also continuous: they are "topologically equivalent" shapes that can be continuously deformed into each other without tearing or gluing.
+
+''Topological invariants'' are properties preserved by homeomorphisms: the number of holes, connectedness, the fundamental group. These invariants are powerful precisely because they are //robust// — they survive distortions that would destroy geometric measurements like distances or curvature.
+
+The ''manifold hypothesis'' is the central link to ML: real-world high-dimensional data (e.g., the space of all natural images) does not fill its ambient space uniformly. Instead, it concentrates near a low-dimensional curved surface — a manifold — of dimension far smaller than the ambient pixel count. Understanding that manifold's topology tells us something deep about the structure of the data.
+
+!! Key Topological Concepts
+
+''Connectedness'' asks the most basic question about a space: can you travel continuously between any two points? A space that falls into two or more disconnected pieces has $\beta_0 > 1$.
+
+''Simple connectedness'' goes further: a space is simply connected if every loop can be continuously contracted to a point. A sphere is simply connected; a torus (donut) is not — a loop that threads through the hole cannot be shrunk away.
+
+The ''Euler characteristic'' $\chi = V - E + F$ (vertices minus edges plus faces) is a topological invariant of polyhedral surfaces. For a sphere, $\chi = 2$; for a torus, $\chi = 0$. It generalises to higher dimensions.
+
+''Betti numbers'' $\beta_k$ count $k$-dimensional holes:
+$$\beta_0 = \text{number of connected components}$$
+$$\beta_1 = \text{number of independent loops (1-dimensional holes)}$$
+$$\beta_2 = \text{number of enclosed voids (2-dimensional holes)}$$
+
+A circle has $\beta_0 = 1$, $\beta_1 = 1$. A disk has $\beta_0 = 1$, $\beta_1 = 0$. A torus has $\beta_0 = 1$, $\beta_1 = 2$, $\beta_2 = 1$.
+
+The ''fundamental group'' $\pi_1(X)$ captures loop structure more finely: it is the group of equivalence classes of loops based at a point, where two loops are equivalent if one can be continuously deformed into the other. For a circle, $\pi_1(S^1) = \mathbb{Z}$ — you can wind around any integer number of times.
+
+!! What the Math Is Actually Doing
+
+''Persistent homology'' is the core tool of topological data analysis. Given a finite point cloud (e.g., a dataset), we cannot directly compute its topology — but we can build a sequence of simplicial complexes that approximate it at different scales.
+
+For a scale parameter $\varepsilon$, the ''Vietoris-Rips complex'' $\mathcal{R}_\varepsilon$ places an edge between any two points within distance $\varepsilon$, a triangle when three points are mutually within $\varepsilon$, and so on. As $\varepsilon$ grows from $0$ to $\infty$, we get a ''filtration'':
+$$\mathcal{R}_0 \subseteq \mathcal{R}_{\varepsilon_1} \subseteq \mathcal{R}_{\varepsilon_2} \subseteq \cdots \subseteq \mathcal{R}_\infty$$
+
+Topological features (components, loops, voids) are ''born'' at some scale $b$ and ''die'' at some scale $d > b$. The ''persistence diagram'' plots each feature as a point $(b, d)$ in the plane:
+
+$$\text{persistence} = d - b$$
+
+Features far from the diagonal (high persistence) correspond to //genuine// topological structure in the data. Features near the diagonal (low persistence) are likely noise.
+
+Two persistence diagrams can be compared using the ''bottleneck distance'':
+$$d_B(D_1, D_2) = \inf_{\gamma} \sup_{x \in D_1} \|x - \gamma(x)\|_\infty$$
+where the infimum is over all matchings $\gamma$ between the diagrams (with unmatched points mapped to the diagonal).
+
+The ''stability theorem'' guarantees that small perturbations in the data produce small changes in the persistence diagram — a crucial property for ML applications where data is noisy.
+
+!! Topology in ML
+
+''The manifold hypothesis in practice:'' natural images are $(256)^3$-dimensional vectors (for RGB) but the "true" degrees of freedom — object pose, lighting, identity — number perhaps in the hundreds. Dimensionality reduction methods like UMAP and t-SNE attempt to find low-dimensional coordinates that preserve topological structure (local neighbourhood relations) better than purely geometric methods like PCA.
+
+''UMAP'' (Uniform Manifold Approximation and Projection) formalises this using ''fuzzy simplicial sets'' — a topological framework that models the data manifold as a weighted simplicial complex and optimises a low-dimensional representation to match it. This is a rare case of serious topology entering a mainstream ML algorithm.
+
+''Topological data analysis (TDA)'' applies persistent homology to real scientific problems: detecting loops in gene expression data, characterising brain connectivity from fMRI, classifying molecular shapes in drug discovery, and identifying phase transitions in materials science.
+
+''Neural network loss landscapes:'' topological analysis of the sublevel sets of the loss function reveals how many connected components of low-loss regions exist, how they are connected, and whether the landscape is "benign" for gradient-based optimisation. Mode connectivity — the observation that two trained minima can often be connected by a low-loss path — is a topological statement.
+
+''Representation learning:'' a well-trained encoder should map data to a latent space whose topology matches the data manifold. If the data has loops (e.g., cyclic time-series), a good latent space should too. Topological regularisation methods penalise mismatch between the topology of the data and the topology of learned representations.
+
+''Shape analysis:'' in 3D computer vision, persistent homology provides shape descriptors invariant to rigid motions, useful for object recognition and medical image analysis.
+
+Cross-references: <<link "UMAP" "UMAP">><</link>> | <<link "Dimensionality Reduction" "Dimensionality Reduction">><</link>> | <<link "Manifold Hypothesis" "Manifold Hypothesis">><</link>> | <<link "Network Theory" "Network Theory">><</link>>
+
+!! When Topology Breaks Down
+
+''(1) Computational intractability:'' computing persistent homology via boundary matrix reduction scales roughly as $O(n^3)$ for $n$ points, and storing the full simplicial complex requires $O(n^k)$ space for $k$-dimensional features. For the massive point clouds typical of ML (millions of high-dimensional data points), exact TDA is completely infeasible. Approximations — witness complexes, random subsampling, landmark-based methods — reduce cost but introduce their own errors and can miss genuine topological features.
+
+''(2) Choice of filtration:'' persistent homology depends on the filtration used to build the simplicial complexes. The Vietoris-Rips complex, the Cech complex, and the Alpha complex all give different persistence diagrams for the same point cloud, and there is no canonical "correct" choice for ML data. The Vietoris-Rips complex is easy to compute but overestimates topology in high dimensions; the Cech complex is theoretically cleaner but computationally harder. This ambiguity limits the interpretability of TDA results and makes comparisons across studies difficult.
+
+''(3) Topology vs geometry:'' topology captures only coarse qualitative structure — holes, connectivity — and is deliberately blind to distances, curvature, and other geometric details. Two manifolds can be topologically identical (homeomorphic) yet geometrically very different: a flat torus and a doughnut-shaped torus are homeomorphic but have very different curvatures. For many ML tasks, the geometric structure (how distances are organised, how the manifold curves) matters far more than the topology, and TDA tools provide no purchase on these questions.
+
+!! Technical Details
+
+''Historical roots:'' Leonhard Euler's solution to the Königsberg bridge problem (1736) is often called the first topological result. Henri Poincaré founded algebraic topology (1895), introducing the fundamental group and homology. Enrico Betti introduced Betti numbers (1871). The modern computational framework is due to Edelsbrunner & Harer, //Computational Topology// (2010).
+
+''Key algorithms:'' the standard persistence algorithm reduces the boundary matrix $\partial$ of the filtration to a canonical form in $O(n^3)$ time. Ripser (Bauer 2021) is the fastest practical implementation for Vietoris-Rips persistence. The ''Mapper algorithm'' (Singh, Mémoli, Carlsson 2007) provides a topological lens on high-dimensional data using partial clustering and nerve complexes, producing network-like summaries widely used in single-cell genomics.
+
+''UMAP's topology:'' McInnes et al. (2018) construct a weighted fuzzy simplicial set from the $k$-nearest-neighbour graph and find a low-dimensional representation minimising the cross-entropy between fuzzy set representations. The theoretical foundation is Spivak's work on fuzzy simplicial sets and the nerve theorem.
+
+''Universal approximation and manifolds:'' the universal approximation theorem guarantees that neural networks can approximate any continuous function on compact subsets of $\mathbb{R}^n$. When data lies on a manifold, this effectively reduces the problem to approximating functions on the manifold — and the manifold's topology constrains what functions are globally definable on it.
+
+''Topological regularisation:'' methods like TopoReg (Hofer et al. 2019) add a loss term that penalises the mismatch between the persistence diagrams of the data and the latent representation, encouraging the encoder to preserve topological structure.
+
+''Connections:'' <<link "Stochastic Processes" "Stochastic Processes">><</link>> | <<link "Network Theory" "Network Theory">><</link>> | <<link "Core Linear Algebra" "Core Linear Algebra">><</link>> | <<link "Dimensionality Reduction" "Dimensionality Reduction">><</link>>
+
+!! Quiz
+
+<span id="top-q1">A topologist considers a coffee cup and a donut to be equivalent because:</span>
+
+A. They have the same volume
+B. They have the same number of holes and can be continuously deformed into each other
+C. They are made of similar materials
+D. They have the same surface area
+
+<<button "A">><<replace "#top-q1">>Incorrect. Volume is a geometric, not topological, property. Topology ignores distances, areas, and volumes — it only cares about properties preserved under continuous deformation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q1">>Correct. Both have exactly one hole ($\beta_1 = 1$), and one can be smoothly deformed into the other without tearing or gluing — they are homeomorphic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q1">>Incorrect. Topology says nothing about physical composition. Two spaces are equivalent if they can be continuously deformed into each other, regardless of what they are made of.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q1">>Incorrect. Surface area is a geometric property that topology ignores. A coffee cup and a donut would typically have very different surface areas.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q2">The Betti number $\beta_1$ counts:</span>
+
+A. The number of connected components
+B. The number of independent loops (1-dimensional holes)
+C. The number of enclosed voids
+D. The Euler characteristic
+
+<<button "A">><<replace "#top-q2">>Incorrect. Connected components are counted by $\beta_0$. $\beta_1$ counts the next level up: independent loops that cannot be contracted to a point.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q2">>Correct. $\beta_1$ counts independent 1-dimensional holes — loops that cannot be continuously shrunk to a point. A circle has $\beta_1 = 1$; a disk has $\beta_1 = 0$; a torus has $\beta_1 = 2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q2">>Incorrect. Enclosed voids (cavities) are counted by $\beta_2$. The Betti numbers form a sequence: $\beta_0$ = components, $\beta_1$ = loops, $\beta_2$ = voids.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q2">>Incorrect. The Euler characteristic $\chi = \beta_0 - \beta_1 + \beta_2 - \cdots$ is related to all Betti numbers together, not just $\beta_1$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q3">In a persistence diagram, what do points far from the diagonal represent?</span>
+
+A. Noise in the data
+B. Computational errors in the filtration
+C. Robust topological features with high persistence
+D. Points where the Vietoris-Rips complex fails
+
+<<button "A">><<replace "#top-q3">>Incorrect. Points //near// the diagonal represent noise — features that are born and die at almost the same scale. Points far from the diagonal have high persistence and are considered genuine signal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q3">>Incorrect. Distance from the diagonal is not related to computational errors. It reflects the persistence $d - b$ of a topological feature — how long it "lives" as the scale parameter grows.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q3">>Correct. A point $(b, d)$ in the persistence diagram represents a feature born at scale $b$ and dying at scale $d$. Persistence $d - b$ is large when the feature survives across many scales — indicating genuine structure rather than noise.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q3">>Incorrect. Failures of the Vietoris-Rips complex are not directly visible in the persistence diagram. Distance from the diagonal simply measures how long a topological feature persists.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q4">The manifold hypothesis claims that:</span>
+
+A. All ML models must be trained on manifolds
+B. High-dimensional data lies near a low-dimensional manifold embedded in the ambient space
+C. Gradient descent always converges on Riemannian manifolds
+D. Neural networks can only represent manifolds of dimension less than their number of layers
+
+<<button "A">><<replace "#top-q4">>Incorrect. The manifold hypothesis is a claim about the //data distribution//, not about training procedures. It says the data concentrates near a low-dimensional structure, not that models must be designed for manifolds.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q4">>Correct. The manifold hypothesis proposes that natural data (images, audio, text) lies near a manifold of intrinsic dimension far smaller than the ambient dimension — e.g., natural images in a million-dimensional pixel space might lie near a manifold of dimension ~100.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q4">>Incorrect. Gradient descent on Riemannian manifolds is an active research area, but convergence guarantees depend on the loss landscape, not the manifold hypothesis. The hypothesis is about data, not optimisation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q4">>Incorrect. There is no such constraint in the manifold hypothesis. The hypothesis is an empirical claim about the structure of natural data distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q5">UMAP is grounded in topology because it:</span>
+
+A. Uses Betti numbers to initialise embeddings
+B. Computes the Euler characteristic of the dataset before reducing dimensions
+C. Models the data manifold as a fuzzy simplicial set and minimises cross-entropy between topological representations
+D. Requires the input data to already lie on a known topological manifold
+
+<<button "A">><<replace "#top-q5">>Incorrect. UMAP does not use Betti numbers. It uses fuzzy simplicial sets — a different topological construction — to represent the local neighbourhood structure of the data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q5">>Incorrect. UMAP does not compute the Euler characteristic. Its topological foundation is the fuzzy simplicial set framework, not homological invariants like $\chi$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q5">>Correct. UMAP constructs a weighted fuzzy simplicial set from the $k$-nearest-neighbour graph, then finds a low-dimensional representation by minimising the cross-entropy between the high- and low-dimensional fuzzy set representations — a genuine topological objective.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q5">>Incorrect. UMAP works on arbitrary point clouds without prior knowledge of the manifold. The algorithm itself infers the manifold structure from the data via nearest-neighbour graphs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q6">Which of the following is the primary computational bottleneck of persistent homology?</span>
+
+A. Computing pairwise distances between points
+B. Boundary matrix reduction, which scales as $O(n^3)$ for $n$ points
+C. Visualising the persistence diagram
+D. Choosing the correct number of Betti numbers to compute
+
+<<button "A">><<replace "#top-q6">>Incorrect. Pairwise distance computation is $O(n^2)$, which is expensive but manageable. The bigger bottleneck is the boundary matrix reduction that follows, which can scale as $O(n^3)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q6">>Correct. The standard persistence algorithm reduces the boundary matrix $\partial$ of the filtration. In the worst case this is $O(n^3)$ for $n$ simplices, making exact persistent homology infeasible for large ML datasets.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q6">>Incorrect. Visualising a persistence diagram is essentially free once computed. The bottleneck is computing the diagram itself via boundary matrix reduction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q6">>Incorrect. You do not choose the number of Betti numbers in advance; the algorithm computes all of them simultaneously. The bottleneck is the matrix reduction step, not a parameter choice.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q7">Two spaces are homeomorphic if:</span>
+
+A. They have the same volume and surface area
+B. There exists a continuous bijection between them with a continuous inverse
+C. They can be embedded in the same Euclidean space
+D. They have the same number of points
+
+<<button "A">><<replace "#top-q7">>Incorrect. Volume and surface area are geometric, not topological, properties. Homeomorphism requires only a continuous bijection with continuous inverse — no metric properties are needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q7">>Correct. A homeomorphism is a continuous bijection $f: X \to Y$ whose inverse $f^{-1}$ is also continuous. This formalises "continuous deformation without tearing or gluing" and defines topological equivalence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q7">>Incorrect. Every compact manifold embeds in some Euclidean space, but homeomorphism is about the intrinsic structure, not the embedding. Two spaces can embed in the same space without being homeomorphic to each other.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q7">>Incorrect. Homeomorphism is defined for topological spaces, not finite sets. Two spaces with the same number of points can have completely different topological structures.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="top-q8">Why does the choice of filtration matter for topological data analysis?</span>
+
+A. Different filtrations run at different speeds but produce identical persistence diagrams
+B. Different filtrations (Vietoris-Rips, Cech, Alpha) can give different persistence diagrams for the same data, with no canonical correct choice
+C. Only the Vietoris-Rips filtration is mathematically valid for point cloud data
+D. The filtration choice only affects the visualisation, not the underlying topology
+
+<<button "A">><<replace "#top-q8">>Incorrect. Different filtrations do not produce identical persistence diagrams. They capture different approximations of the underlying topology and can give meaningfully different results for the same dataset.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#top-q8">>Correct. The Vietoris-Rips, Cech, and Alpha complexes are all valid filtrations but they build different simplicial complexes from the same point cloud. The resulting persistence diagrams can differ, and there is no universally correct choice — this is a genuine limitation of TDA for ML applications.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#top-q8">>Incorrect. The Cech and Alpha complexes are equally valid (and in some senses more theoretically justified) for point cloud data. Vietoris-Rips is popular because it is easier to compute, not because it is uniquely correct.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#top-q8">>Incorrect. The filtration choice affects the actual topological features detected, not just their visualisation. A loop present in the Cech complex may not appear in the Vietoris-Rips complex at the same scale.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

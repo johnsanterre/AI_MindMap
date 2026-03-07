@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Optimal Control: Trajectory Optimization &amp; Bellman Recursion</text>
+
+  <!-- ===== LEFT PANEL: Trajectory diagram ===== -->
+  <!-- Panel background -->
+  <rect x="18" y="50" width="430" height="330" rx="6" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="233" y="74" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">State Trajectory: Optimal vs Suboptimal</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="330" x2="430" y2="330" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="60" y1="330" x2="60" y2="90" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="240" y="355" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Time →</text>
+  <text x="30" y="215" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,30,215)">State x(t)</text>
+
+  <!-- Start point -->
+  <circle cx="60" cy="280" r="7" fill="#5C3D1E"/>
+  <text x="62" y="300" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">x₀</text>
+
+  <!-- Goal state -->
+  <circle cx="415" cy="140" r="7" fill="#2D5A8E"/>
+  <text x="415" y="128" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">x_goal</text>
+  <!-- Goal indicator -->
+  <line x1="415" y1="135" x2="415" y2="330" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Suboptimal path (wavy, higher cost) -->
+  <path d="M60,280 C100,230 130,160 175,200 C220,240 250,130 295,170 C330,200 360,120 415,140"
+        fill="none" stroke="#C4A87A" stroke-width="2.5" stroke-dasharray="7,4"/>
+  <text x="215" y="175" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">Suboptimal</text>
+  <text x="215" y="188" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">(high cost J)</text>
+
+  <!-- Optimal path (smooth, direct) -->
+  <path d="M60,280 C130,270 230,200 415,140"
+        fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="200" y="240" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Optimal u*(t)</text>
+  <text x="200" y="253" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">(min cost J)</text>
+
+  <!-- Control effort markers on optimal path -->
+  <circle cx="150" cy="270" r="4" fill="#7C2530" opacity="0.7"/>
+  <circle cx="240" cy="220" r="4" fill="#7C2530" opacity="0.7"/>
+  <circle cx="330" cy="175" r="4" fill="#7C2530" opacity="0.7"/>
+
+  <!-- Legend -->
+  <line x1="70" y1="350" x2="100" y2="350" stroke="#7C2530" stroke-width="3"/>
+  <text x="105" y="354" font-family="Georgia, serif" font-size="10" fill="#7C2530">Optimal</text>
+  <line x1="170" y1="350" x2="200" y2="350" stroke="#C4A87A" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="205" y="354" font-family="Georgia, serif" font-size="10" fill="#C4A87A">Suboptimal</text>
+  <circle cx="300" cy="350" r="4" fill="#2D5A8E"/>
+  <text x="308" y="354" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Goal</text>
+
+  <!-- ===== RIGHT PANEL: Bellman recursion diagram ===== -->
+  <rect x="460" y="50" width="325" height="330" rx="6" fill="#F5F0E8" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="622" y="74" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Bellman / HJB Recursion</text>
+
+  <!-- Three time-step boxes -->
+  <!-- t=0 box -->
+  <rect x="478" y="95" width="88" height="52" rx="5" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="522" y="115" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">State xₜ</text>
+  <text x="522" y="130" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">t = 0</text>
+  <text x="522" y="143" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">V*(x₀) = ?</text>
+
+  <!-- t=1 box -->
+  <rect x="578" y="165" width="88" height="52" rx="5" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="622" y="185" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">State xₜ₊₁</text>
+  <text x="622" y="200" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">t = 1</text>
+  <text x="622" y="213" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">V*(x₁) = ?</text>
+
+  <!-- t=T (terminal) box -->
+  <rect x="678" y="235" width="88" height="52" rx="5" fill="#5C3D1E" opacity="0.15" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="722" y="255" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Terminal</text>
+  <text x="722" y="270" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">t = T</text>
+  <text x="722" y="283" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">V*(xT) = φ(xT)</text>
+
+  <!-- Arrows between boxes (forward) -->
+  <line x1="566" y1="125" x2="578" y2="175" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="558" y="157" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">u*</text>
+
+  <line x1="666" y1="195" x2="678" y2="245" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="660" y="227" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">u*</text>
+
+  <!-- Backward arrows (recursion) -->
+  <path d="M678,258 C650,250 600,230 566,143" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+  <text x="600" y="218" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">backward</text>
+  <text x="600" y="229" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">induction</text>
+
+  <!-- Bellman equation box -->
+  <rect x="472" y="305" width="298" height="62" rx="5" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="621" y="323" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Bellman Equation</text>
+  <text x="621" y="341" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">V*(xₜ) = min_u [ L(xₜ,u) + V*(xₜ₊₁) ]</text>
+  <text x="621" y="358" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">current cost + optimal future cost</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

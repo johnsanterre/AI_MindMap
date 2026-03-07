@@ -1,0 +1,157 @@
+Passage name: Gradient Checkpointing
+
+<<include "Header">>
+! Gradient Checkpointing
+<img src="assets/gradient_checkpointing.svg" alt="Diagram comparing standard backpropagation (all activations stored) with gradient checkpointing (only checkpoint activations kept, rest recomputed)" style="max-width:100%; margin:1em 0;">
+
+When hiking, you can carry a photo of every viewpoint so you can retrace your steps precisely — fast, but a heavy backpack. Or you can photograph only key landmarks and re-walk sub-paths from memory — lighter pack, some extra steps. Gradient checkpointing chooses the lighter pack: it saves only a subset of intermediate computations and recomputes the rest during backpropagation.
+
+!! The Core Insight
+
+Chen et al. (2016) observed that during backpropagation, the backward pass needs the activations produced during the forward pass. Standard training stores ''all'' activations — O(N) memory for N layers. Gradient checkpointing saves activations only at "checkpoint" layers (every √N layers) and recomputes intermediate activations on-the-fly during the backward pass.
+
+The result: memory drops from O(N) to O(√N). The cost: roughly 33% additional compute (one extra forward pass through half the network on average). This makes training very large models feasible on limited hardware. Related: [[Backpropagation and Chain Rule]], [[Deep Learning]], [[Hardware Lottery]], [[Batch Normalization]], [[Gradient Descent Quiz]].
+
+!! The Algorithm
+
+''Forward pass:'' Run the full network normally, but only ''store'' activations at designated checkpoint layers (every k layers). Discard all other intermediate activations immediately after each layer.
+
+''Backward pass:'' When the gradient computation needs the activation of a non-checkpoint layer, recompute it from the nearest checkpoint upstream by running a mini forward pass through just that segment. Then compute the gradient and discard again.
+
+''Optimal k:'' Setting k = √N minimises peak memory (derived by minimising M(k) = k·B + N/k · C over k, where B is per-layer activation size and C is checkpoint size). In practice, you manually specify checkpoint layers or use PyTorch's built-in utility:
+
+{{{torch.utils.checkpoint.checkpoint(function, *inputs)}}}
+
+Wrapping any module or sequence of layers activates checkpointing for that segment.
+
+!! What the Math Is Actually Doing
+
+Let N = number of layers, B = memory per activation (batch × sequence length × hidden dim).
+
+''Standard storage:'' $M_{\text{full}} = O(N \cdot B)$
+
+''Checkpointing at interval k:'' At any moment during the backward pass you hold at most k consecutive activations (from the current recompute segment) plus the N/k checkpoint activations:
+
+$$M_{\text{ck}}(k) = k \cdot B + \frac{N}{k} \cdot B$$
+
+Minimise over k: $\frac{d}{dk}M_{\text{ck}} = B - \frac{N}{k^2} = 0 \Rightarrow k^* = \sqrt{N}$
+
+Substituting: $M_{\text{ck}}(k^*) = 2\sqrt{N} \cdot B = O(\sqrt{N})$
+
+''Compute overhead:'' Each non-checkpoint segment (length ~√N) is computed twice — once in the original forward pass and once during recompute. For k = √N, the total recomputed work ≈ one full forward pass through half the network. Since training normally does one forward + one backward ≈ two forward-equivalent passes, the overhead is ~0.5 / 2 ≈ 25–33% depending on backward-pass cost.
+
+!! Practical Usage
+
+''PyTorch API:''
+
+{{{
+import torch.utils.checkpoint as ckpt
+
+output = ckpt.checkpoint(my_transformer_block, hidden_states)
+}}}
+
+''Typical strategy:'' checkpoint every Transformer block (attention + MLP together). Tradeoff: attention is expensive to recompute; MLP is cheap. Some practitioners checkpoint only attention to balance cost.
+
+''Flash Attention synergy:'' Flash Attention already recomputes attention scores during its backward pass (to avoid storing the N×N attention matrix). Combining gradient checkpointing with Flash Attention gives additive memory savings.
+
+''LoRA + gradient checkpointing:'' Together they make fine-tuning 70B-parameter models feasible on a single GPU — LoRA reduces trainable parameters, checkpointing cuts activation memory.
+
+''Activation offloading:'' A complementary technique — move checkpoint activations to CPU RAM instead of discarding them, at the cost of PCIe transfer latency. Slower than recompute for cheap layers, faster for expensive ones.
+
+!! When Gradient Checkpointing Breaks Down
+
+''Non-deterministic layers:'' If a layer uses Dropout and the RNG state differs between the original forward pass and the recompute, gradients are incorrect. Fix: PyTorch's checkpoint utility automatically saves and restores the RNG state, but custom implementations must do this explicitly.
+
+''Custom CUDA kernels:'' The recomputed result must be bit-identical to the original. Kernels that use non-associative floating-point reductions or depend on launch-time state can produce different values, silently corrupting gradients.
+
+''Excessive recompute overhead:'' If checkpoint intervals are too small (k ≪ √N), compute overhead grows without bound. For very deep networks or when each layer is extremely expensive (e.g., mixture-of-experts routing), the 33% overhead assumption breaks down and wall-clock time can double.
+
+!! Technical Details
+
+''Foundational papers:''
+- Chen et al. 2016 — "Training Deep Nets with Sublinear Memory Cost" — introduced the √N checkpoint scheme.
+- Gruslys et al. 2016 — "Memory-Efficient Backpropagation Through Time" — extended to RNNs with dynamic programming for optimal checkpoint placement.
+
+''PyTorch implementation notes:'' `torch.utils.checkpoint` works with `torch.autograd` by registering a custom backward function that triggers recompute. Supports `use_reentrant=False` (recommended in PyTorch ≥ 2.0) for better compatibility with `torch.compile`.
+
+''Mixed precision:'' Recomputed activations use the same dtype as the original forward pass. If training in bf16, recomputed values are also bf16 — no precision mismatch.
+
+''Distributed training:'' DeepSpeed ZeRO combines gradient checkpointing with parameter sharding across GPUs. ZeRO-3 shards parameters, gradients, and optimizer states; gradient checkpointing reduces per-GPU activation memory independently.
+
+''Selective checkpointing:'' Research (e.g., Selective Activation Recomputation, Korthikanti et al. 2022) identifies which layers are cheapest to recompute and checkpoints only the expensive ones, reducing overhead below the 33% baseline.
+
+!! Quiz
+
+<span id="gc-q1">
+''1. What does gradient checkpointing primarily trade off against memory savings?''
+
+<<button "A. Reduced batch size">><<replace "#gc-q1">>Incorrect. Batch size is a separate hyperparameter; gradient checkpointing does not change it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Additional compute (recomputation)">><<replace "#gc-q1">>✓ Correct. Non-checkpoint activations are recomputed during the backward pass, adding ~33% compute overhead.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Gradient accuracy">><<replace "#gc-q1">>Incorrect. Gradients are mathematically identical to standard backprop (assuming deterministic layers).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Learning rate stability">><<replace "#gc-q1">>Incorrect. Gradient checkpointing has no effect on the learning rate or optimizer stability.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q2">
+''2. For a network with N = 100 layers, what is the optimal checkpoint interval k* and the resulting memory complexity?''
+
+<<button "A. k* = 10, memory O(√N)">><<replace "#gc-q2">>✓ Correct. k* = √100 = 10, giving $M = 2\sqrt{N} \cdot B = O(\sqrt{N})$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. k* = 50, memory O(N/2)">><<replace "#gc-q2">>Incorrect. k* = N/2 would give O(N) memory, not the optimal O(√N).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. k* = 1, memory O(1)">><<replace "#gc-q2">>Incorrect. k* = 1 means every layer is a checkpoint — that is standard backprop with O(N) memory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. k* = 100, memory O(1)">><<replace "#gc-q2">>Incorrect. k* = N means only the first and last layers are checkpointed; intermediate recompute cost would be enormous.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q3">
+''3. Why can Dropout cause incorrect gradients when used with naive gradient checkpointing?''
+
+<<button "A. Dropout changes the learning rate during recompute">><<replace "#gc-q3">>Incorrect. Dropout has no effect on learning rates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Dropout is not differentiable">><<replace "#gc-q3">>Incorrect. Dropout has a well-defined (sub-)gradient; the issue is randomness, not differentiability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The RNG state may differ between original forward and recompute, giving different dropped units">><<replace "#gc-q3">>✓ Correct. If the random seed is not saved and restored, recomputed activations differ from originals, corrupting gradients.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Dropout doubles the memory of checkpointed layers">><<replace "#gc-q3">>Incorrect. Dropout does not change activation memory size.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q4">
+''4. Which PyTorch API enables gradient checkpointing for a module?''
+
+<<button "A. torch.autograd.grad(checkpoint=True)">><<replace "#gc-q4">>Incorrect. There is no checkpoint argument in torch.autograd.grad.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. torch.utils.checkpoint.checkpoint(function, *inputs)">><<replace "#gc-q4">>✓ Correct. This wraps any callable and applies gradient checkpointing to it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. model.enable_checkpointing()">><<replace "#gc-q4">>Incorrect. No such method exists in standard PyTorch (though some HuggingFace models add a convenience wrapper).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. torch.nn.DataParallel(checkpoint=True)">><<replace "#gc-q4">>Incorrect. DataParallel handles multi-GPU data splitting, not gradient checkpointing.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q5">
+''5. Flash Attention and gradient checkpointing have a synergistic relationship because:''
+
+<<button "A. Flash Attention eliminates the need for any gradient checkpointing">><<replace "#gc-q5">>Incorrect. Flash Attention reduces attention memory, but activation memory for MLP and other layers still benefits from checkpointing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Flash Attention already recomputes attention scores during its backward pass, so their memory savings combine additively">><<replace "#gc-q5">>✓ Correct. Flash Attention avoids storing the N×N attention matrix by recomputing it; gradient checkpointing handles the remaining activation memory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Flash Attention requires gradient checkpointing to function correctly">><<replace "#gc-q5">>Incorrect. Flash Attention is self-contained and does not depend on gradient checkpointing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Both techniques increase memory usage to improve speed">><<replace "#gc-q5">>Incorrect. Both reduce memory; Flash Attention also improves speed via IO-awareness.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q6">
+''6. The formula $M_{\text{ck}}(k) = k \cdot B + \frac{N}{k} \cdot B$ represents:''
+
+<<button "A. Total training time as a function of checkpoint interval">><<replace "#gc-q6">>Incorrect. This is a memory formula, not a time formula.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Peak activation memory as a function of checkpoint interval k">><<replace "#gc-q6">>✓ Correct. The first term is memory for one recompute segment (k layers); the second is memory for all checkpoints (N/k of them).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Gradient norm as a function of depth">><<replace "#gc-q6">>Incorrect. This formula involves memory quantities, not gradient magnitudes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Loss as a function of batch size">><<replace "#gc-q6">>Incorrect. The formula has no relation to loss or batch size directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q7">
+''7. How does DeepSpeed ZeRO interact with gradient checkpointing?''
+
+<<button "A. ZeRO replaces gradient checkpointing entirely, making it unnecessary">><<replace "#gc-q7">>Incorrect. ZeRO and gradient checkpointing target different sources of memory (parameters/gradients/optimizer states vs. activations) and are complementary.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. ZeRO shards parameters and optimizer states across GPUs; gradient checkpointing reduces per-GPU activation memory — they combine for maximum memory savings">><<replace "#gc-q7">>✓ Correct. The two techniques address orthogonal memory components and are routinely used together.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. ZeRO requires disabling gradient checkpointing to function">><<replace "#gc-q7">>Incorrect. DeepSpeed explicitly supports both features simultaneously.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. ZeRO automatically determines optimal checkpoint intervals">><<replace "#gc-q7">>Incorrect. ZeRO does not manage activation checkpointing intervals.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="gc-q8">
+''8. Activation offloading to CPU differs from gradient checkpointing in that:''
+
+<<button "A. Activation offloading recomputes activations; gradient checkpointing moves them to CPU RAM">><<replace "#gc-q8">>Incorrect. This has the two techniques reversed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Activation offloading moves checkpoint activations to CPU RAM (trading PCIe bandwidth for GPU memory); gradient checkpointing discards and recomputes them (trading compute for memory)">><<replace "#gc-q8">>✓ Correct. Both save GPU memory but via different mechanisms: transfer vs. discard-and-recompute.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. They are identical techniques with different names">><<replace "#gc-q8">>Incorrect. They use fundamentally different mechanisms: data movement vs. recomputation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Activation offloading is only applicable to convolutional networks">><<replace "#gc-q8">>Incorrect. Activation offloading applies to any network architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

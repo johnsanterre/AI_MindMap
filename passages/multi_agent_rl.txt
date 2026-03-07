@@ -1,0 +1,171 @@
+<<include "Header">>
+
+! Multi-Agent RL
+
+<img src="assets/multi_agent_rl.svg" alt="Diagram showing multiple agents interacting with a shared environment under the CTDE paradigm" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a group of jazz musicians improvising together. Each player chooses notes based on what they hear from the others, and the quality of the performance depends on everyone simultaneously. No single musician controls the outcome — the music ''emerges'' from their collective, interdependent decisions. ''Multi-Agent Reinforcement Learning (MARL)'' studies exactly this kind of problem: multiple agents learning to act in a shared environment where every agent's behaviour shapes the experience of every other agent.
+
+---
+
+!! The Core Insight
+
+In single-agent RL, the environment is stationary — the transition dynamics do not change as the agent learns. The moment you add a second learning agent, this guarantee evaporates. From any one agent's perspective, the environment now includes other agents whose policies are //also// changing, making the effective dynamics non-stationary. This is the fundamental challenge of MARL: each agent is chasing a moving target because every other agent is simultaneously adapting.
+
+MARL settings fall into three broad categories. In ''cooperative'' games all agents share a common reward and must coordinate to maximise it — think of robot swarm navigation or cooperative packet routing. In ''competitive'' (zero-sum) games one agent's gain is another's loss, as in Go, poker, or adversarial cybersecurity. ''Mixed'' (general-sum) games blend cooperation and competition: autonomous vehicles at an intersection each want to reach their destination quickly but must avoid collisions.
+
+The field draws heavily on <<link "Game Theory" "Game Theory">><</link>> because the solution concept shifts from a single optimal policy to a <<link "Nash Equilibrium" "Nash Equilibrium">><</link>> — a joint policy profile where no agent can unilaterally improve by deviating. Finding or approximating Nash equilibria in high-dimensional continuous spaces is vastly harder than solving a single MDP, and much of MARL research is devoted to algorithms that converge to useful equilibria despite the non-stationarity.
+
+---
+
+!! Cooperative Frameworks: CTDE, Value Decomposition, and Communication
+
+The dominant paradigm for cooperative MARL is ''Centralised Training with Decentralised Execution'' (CTDE). During training, a centralised mechanism has access to the observations and actions of all agents, enabling it to compute global value estimates or provide richer gradient signals. At deployment time, each agent acts using only its own local observations — no communication channel or central coordinator is required.
+
+''QMIX'' (Rashid et al., 2018) is the landmark value-decomposition method within the CTDE framework. It factors the joint action-value function $Q_{tot}$ into per-agent utilities $Q_i$ combined through a learned monotonic mixing network. The monotonicity constraint — $\frac{\partial Q_{tot}}{\partial Q_i} \geq 0$ — ensures that the greedy action for each agent's local $Q_i$ is consistent with the greedy action for $Q_{tot}$, enabling decentralised execution by argmax on local utilities alone.
+
+Other approaches include ''MAPPO'' (Multi-Agent PPO), which extends <<link "Policy Gradient" "Policy Gradient">><</link>> methods by giving each agent a centralised critic that conditions on global state, and ''CommNet'' / ''TarMAC'', which allow agents to learn explicit communication protocols as differentiable message-passing channels.
+
+---
+
+!! Competitive Settings and Self-Play
+
+In competitive MARL, the goal is to learn policies robust to intelligent adversaries. ''Self-play'' — training an agent against copies of itself — is the most successful paradigm. AlphaGo and AlphaZero used self-play to reach superhuman performance in Go, chess, and shogi. OpenAI Five applied self-play at massive scale to Dota 2, and Pluribus used it for six-player no-limit Texas Hold'em.
+
+Self-play works because it provides a curriculum of increasingly strong opponents: as the agent improves, so does its opponent, preventing the policy from overfitting to a static strategy. However, naive self-play can cycle — policy A beats B, B beats C, C beats A — without converging. ''Population-based training'' and ''league training'' (as in AlphaStar) address this by maintaining a diverse population of past and current agents, ensuring the learned policy is robust to a wide distribution of opponents rather than just the latest one.
+
+These competitive dynamics connect directly to <<link "Emergent Behaviors" "Emergent Behaviors">><</link>>: agents trained against each other often discover sophisticated strategies — feints, deception, coordination — that were never explicitly programmed.
+
+---
+
+!! What the Math Is Actually Doing
+
+A multi-agent system is formalised as a ''Markov Game'' (also called a stochastic game). For $n$ agents, the tuple is $(S, A_1, \ldots, A_n, T, R_1, \ldots, R_n, \gamma)$ where $S$ is the state space, $A_i$ is agent $i$'s action space, $T: S \times A_1 \times \cdots \times A_n \to \Delta(S)$ is the joint transition function, and $R_i: S \times A_1 \times \cdots \times A_n \to \mathbb{R}$ is agent $i$'s reward.
+
+Each agent $i$ seeks to maximise its own expected return:
+
+$$J_i(\pi_1, \ldots, \pi_n) = \mathbb{E}\!\left[\sum_{t=0}^{\infty} \gamma^t R_i(s_t, a_t^1, \ldots, a_t^n)\right]$$
+
+A ''Nash equilibrium'' is a joint policy $(\pi_1^*, \ldots, \pi_n^*)$ such that no agent can unilaterally improve:
+
+$$J_i(\pi_1^*, \ldots, \pi_i^*, \ldots, \pi_n^*) \geq J_i(\pi_1^*, \ldots, \pi_i, \ldots, \pi_n^*) \quad \forall \pi_i, \forall i$$
+
+In the cooperative case with shared reward $R$, QMIX decomposes the joint value:
+
+$$Q_{tot}(\boldsymbol{s}, \boldsymbol{a}) = f_\text{mix}\!\bigl(Q_1(o_1, a_1), \ldots, Q_n(o_n, a_n); \boldsymbol{s}\bigr)$$
+
+where $f_\text{mix}$ is a hypernetwork-parameterised mixing function with non-negative weights, guaranteeing $\arg\max_{\boldsymbol{a}} Q_{tot} = \bigl(\arg\max_{a_1} Q_1, \ldots, \arg\max_{a_n} Q_n\bigr)$.
+
+Independent learners (IQL) simply run standard <<link "Reinforcement Learning" "Reinforcement Learning">><</link>> per agent, treating other agents as part of the environment. This ignores non-stationarity but is surprisingly effective in practice as a baseline.
+
+---
+
+!! Scaling and Real-World Applications
+
+MARL has been deployed across a remarkable range of domains. In ''robotics'', multi-robot warehouse systems use cooperative MARL to coordinate hundreds of pick-and-place robots without centralized scheduling. In ''autonomous driving'', MARL trains intersection negotiation policies where each vehicle is an agent. In ''network routing'', agents at each node learn forwarding policies that collectively optimise throughput. In ''game AI'', self-play has produced superhuman agents in Go, StarCraft II, Dota 2, and poker.
+
+The scaling challenge is severe: the joint action space grows exponentially with the number of agents ($|A_1| \times |A_2| \times \cdots \times |A_n|$). Mean-field approaches approximate the effect of all other agents as a single average agent, reducing the problem to two-player interactions. Parameter sharing — using one neural network with agent-specific inputs — dramatically cuts memory and computation when agents are homogeneous.
+
+---
+
+!! When Multi-Agent RL Breaks Down
+
+''Non-stationarity overwhelms learning:'' When many agents update simultaneously, the effective environment changes faster than any single agent can adapt. Gradient-based methods oscillate or diverge because the loss landscape shifts each iteration. This is especially severe in competitive settings without stabilisation techniques like opponent modelling or experience replay with importance correction.
+
+''Credit assignment in large teams:'' In cooperative tasks with dozens or hundreds of agents sharing a single team reward, it becomes nearly impossible to determine which agent's action caused a reward change. QMIX's monotonicity constraint helps but is restrictive — it cannot represent joint value functions where one agent's contribution is negatively correlated with another's. Methods like QTRAN and QPLEX relax this constraint at the cost of optimisation difficulty.
+
+''Equilibrium selection and convergence:'' Most interesting games have multiple Nash equilibria, and there is no guarantee that independent learners will converge to the same one — or to any equilibrium at all. Cyclic dynamics, where agents perpetually chase each other through strategy space, are common in general-sum games and require population-based methods or regularisation to break.
+
+---
+
+!! Technical Details
+
+''Key algorithms:'' IQL (Independent Q-Learning, Tan 1993), VDN (Value Decomposition Networks, Sunehag et al. 2018), QMIX (Rashid et al. 2018), QTRAN (Son et al. 2019), MAPPO (Yu et al. 2022), MADDPG (Lowe et al. 2017). Self-play milestones: AlphaGo (Silver et al. 2016), OpenAI Five (Berner et al. 2019), AlphaStar (Vinyals et al. 2019).
+
+''CTDE principle:'' Train with global state information; execute with local observations only. This resolves the tension between needing rich information for stable training and requiring decentralised policies for deployment.
+
+''Partially observable settings:'' Most real MARL problems are Dec-POMDPs (Decentralised Partially Observable MDPs), where each agent sees only a local observation. Solving Dec-POMDPs optimally is NEXP-complete, motivating all the approximation methods above.
+
+''Communication learning:'' CommNet (Sukhbaatar et al. 2016), TarMAC (Das et al. 2019), and DIAL (Foerster et al. 2016) let agents learn to send continuous or discrete messages. Emergent communication protocols often develop task-specific "languages" that are surprisingly interpretable.
+
+''Benchmark environments:'' StarCraft Multi-Agent Challenge (SMAC), Google Research Football, Multi-Agent Particle Environment (MPE), Hanabi, Melting Pot. SMAC micromanagement tasks are the standard benchmark for cooperative MARL.
+
+''Relationship to single-agent RL:'' MARL reduces to standard RL when $n = 1$. Many MARL algorithms are direct extensions of single-agent methods — MAPPO extends PPO, MADDPG extends DDPG, IQL applies DQN independently.
+
+---
+
+!! Quiz
+
+<span id="ma2-q1">What is the fundamental challenge that distinguishes multi-agent RL from single-agent RL?</span>
+
+A. The action space is always continuous in multi-agent settings
+B. Other learning agents make the environment non-stationary from each agent's perspective
+C. Multi-agent problems cannot use neural network function approximators
+D. Rewards are always sparse in multi-agent environments
+
+<<button "A">><<replace "#ma2-q1">>Wrong. Multi-agent settings can have discrete or continuous action spaces. The key challenge is non-stationarity, not action space type.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q1">>Correct! When multiple agents learn simultaneously, each agent's environment effectively changes as the others update their policies, violating the stationarity assumption of single-agent RL.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q1">>Wrong. Neural networks are widely used in MARL — QMIX, MAPPO, and MADDPG all rely on deep networks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q1">>Wrong. Reward sparsity is a challenge in single-agent RL too. The defining multi-agent challenge is non-stationarity from concurrent learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q2">What does CTDE stand for, and what problem does it solve?</span>
+
+A. Continuous Training with Discrete Execution — bridging continuous and discrete action spaces
+B. Centralised Training with Decentralised Execution — using global info for training while deploying local policies
+C. Cooperative Training with Distributed Evaluation — splitting evaluation across multiple GPUs
+D. Conditional Training with Deterministic Execution — removing stochasticity at test time
+
+<<button "A">><<replace "#ma2-q2">>Wrong. CTDE is about information access, not action space types.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q2">>Correct! CTDE allows a centralised critic or mixer to access global state during training, while each agent executes using only its local observations at deployment.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q2">>Wrong. CTDE is about the information asymmetry between training and execution, not about computational distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q2">>Wrong. CTDE policies can remain stochastic at execution time. The key distinction is centralised vs decentralised information access.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q3">In QMIX, what does the monotonicity constraint on the mixing network ensure?</span>
+
+A. That the joint Q-value always increases over training episodes
+B. That each agent's local greedy action is consistent with the global greedy joint action
+C. That the mixing network has fewer parameters than the individual agent networks
+D. That agents cannot communicate during execution
+
+<<button "A">><<replace "#ma2-q3">>Wrong. Monotonicity refers to the relationship between local and global Q-values, not to improvement over time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q3">>Correct! With non-negative mixing weights, argmax of Q_tot equals the combination of each agent's local argmax of Q_i, enabling decentralised greedy action selection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q3">>Wrong. The monotonicity constraint is about value factorisation correctness, not parameter count.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q3">>Wrong. Communication is a separate design choice. Monotonicity ensures consistent decentralised argmax, not the absence of communication.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q4">Why can naive self-play fail to converge in competitive settings?</span>
+
+A. Self-play always converges but requires exponentially more compute
+B. The agent cannot learn from games against itself because the data is too correlated
+C. Policies can cycle: A beats B, B beats C, C beats A, without reaching a stable equilibrium
+D. Self-play only works for two-player games and fails with more players
+
+<<button "A">><<replace "#ma2-q4">>Wrong. Self-play can genuinely fail to converge — cycling is a real phenomenon, not just a compute issue.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q4">>Wrong. Self-play does generate useful training signal. The problem is strategic cycling, not data correlation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q4">>Correct! Rock-paper-scissors-like dynamics cause the policy to cycle through strategies without settling. Population-based training and league play address this by maintaining diverse opponents.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q4">>Wrong. Self-play has been successfully applied to multi-player games like poker (Pluribus). The convergence issue is about cycling, not player count.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q5">What is a Nash equilibrium in the context of a Markov game?</span>
+
+A. The policy profile that maximises the sum of all agents' rewards
+B. A joint policy where no agent can unilaterally improve its expected return by changing its own policy
+C. The unique optimal policy that all agents converge to given sufficient training
+D. A state from which no agent can transition to a higher-reward state
+
+<<button "A">><<replace "#ma2-q5">>Wrong. That describes a socially optimal solution. A Nash equilibrium need not maximise total welfare — it only requires no unilateral deviation improves any agent.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q5">>Correct! A Nash equilibrium is a fixed point where each agent's policy is a best response to the other agents' policies. No agent benefits from unilaterally deviating.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q5">>Wrong. Nash equilibria are often non-unique, and convergence is not guaranteed. Multiple equilibria with different payoffs can coexist.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q5">>Wrong. That describes a local optimum in state space. Nash equilibrium is about policy profiles, not individual states.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q6">Why does the joint action space create a scaling problem in MARL?</span>
+
+A. Joint actions require more memory to store in replay buffers than single actions
+B. The joint action space grows exponentially with the number of agents
+C. Joint actions cannot be represented as tensors in standard deep learning frameworks
+D. Each agent must observe all other agents' actions before choosing its own
+
+<<button "A">><<replace "#ma2-q6">>Wrong. While storage increases, the fundamental problem is the exponential growth of the space itself, not memory for replay buffers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q6">>Correct! With $n$ agents each having $|A|$ actions, the joint space has $|A|^n$ elements. This combinatorial explosion makes naive enumeration impossible for even moderate agent counts.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q6">>Wrong. Joint actions are easily represented as tuples or multi-dimensional tensors. The issue is exponential size, not representability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q6">>Wrong. In many MARL settings agents act simultaneously without observing each other's current actions. The scaling issue is about space size, not observation timing.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q7">What advantage does population-based training offer over vanilla self-play?</span>
+
+A. It requires fewer total environment interactions to reach convergence
+B. It guarantees finding the unique Nash equilibrium of any game
+C. It maintains diverse opponents, preventing cycling and producing more robust policies
+D. It eliminates the need for neural network function approximation
+
+<<button "A">><<replace "#ma2-q7">>Wrong. Population-based training typically requires more total compute, not less. Its advantage is robustness, not sample efficiency.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q7">>Wrong. No method guarantees finding a unique Nash equilibrium in general games — many games have multiple equilibria.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q7">>Correct! By training against a league of diverse past and current agents, the learned policy cannot overfit to one opponent's style and is forced to develop general, robust strategies.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q7">>Wrong. Population-based training still uses neural networks. It changes the training regime, not the function approximation method.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma2-q8">In cooperative MARL, what makes credit assignment particularly difficult?</span>
+
+A. Cooperative agents cannot share parameters, so each must learn from scratch
+B. A single team reward makes it hard to determine which agent's action caused the outcome
+C. Cooperative settings always have continuous action spaces that are harder to optimise
+D. Agents in cooperative games cannot use replay buffers due to non-stationarity
+
+<<button "A">><<replace "#ma2-q8">>Wrong. Parameter sharing is commonly used in cooperative MARL and actually helps. Credit assignment is hard because of shared rewards, not parameter isolation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma2-q8">>Correct! When all agents receive the same team reward, it is ambiguous which agent contributed positively or negatively. Value decomposition methods like QMIX address this by factoring the joint value into per-agent components.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma2-q8">>Wrong. Cooperative settings can have discrete or continuous actions. Credit assignment difficulty stems from shared rewards, not action space type.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma2-q8">>Wrong. Replay buffers are used in cooperative MARL (e.g., QMIX uses one). Non-stationarity is a challenge but does not prevent replay buffer use entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

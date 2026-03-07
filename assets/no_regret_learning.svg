@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">No-Regret Learning: Converging to the Best Fixed Strategy</text>
+
+  <!-- Time axis -->
+  <line x1="80" y1="320" x2="720" y2="320" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="716,315 726,320 716,325" fill="#C4A87A"/>
+  <text x="400" y="345" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle">Rounds t = 1, 2, 3, ...</text>
+
+  <!-- Cumulative loss lines -->
+  <!-- Algorithm's cumulative loss (red, higher) -->
+  <path d="M100,280 L200,240 L300,195 L400,155 L500,120 L600,90 L700,65" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="700" cy="65" r="5" fill="#7C2530"/>
+  <text x="715" y="60" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="start">Algorithm</text>
+
+  <!-- Best fixed action (blue, lower) -->
+  <path d="M100,290 L200,258 L300,220 L400,180 L500,148 L600,118 L700,85" fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <circle cx="700" cy="85" r="5" fill="#2D5A8E"/>
+  <text x="715" y="90" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="start">Best fixed</text>
+  <text x="715" y="102" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="start">action</text>
+
+  <!-- Regret gap annotation -->
+  <line x1="500" y1="120" x2="500" y2="148" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="495" y1="120" x2="505" y2="120" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="495" y1="148" x2="505" y2="148" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="515" y="138" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" font-style="italic">Regret</text>
+
+  <!-- Key insight box -->
+  <rect x="60" y="55" width="260" height="50" rx="5" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="190" y="73" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">No-Regret Guarantee:</text>
+  <text x="190" y="90" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Regret / T  -->  0 as T --> infinity</text>
+
+  <!-- Game theory connection box -->
+  <rect x="400" y="55" width="280" height="50" rx="5" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="540" y="73" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Game Theory Connection:</text>
+  <text x="540" y="90" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle">All players no-regret --> correlated equilibrium</text>
+
+  <!-- Algorithm labels along bottom -->
+  <rect x="100" y="355" width="100" height="24" rx="4" fill="#7C2530" opacity="0.15"/>
+  <text x="150" y="371" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-weight="bold">Hedge / EWA</text>
+
+  <rect x="260" y="355" width="120" height="24" rx="4" fill="#2D5A8E" opacity="0.15"/>
+  <text x="320" y="371" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Follow the Leader</text>
+
+  <rect x="440" y="355" width="130" height="24" rx="4" fill="#5C3D1E" opacity="0.15"/>
+  <text x="505" y="371" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Online Mirror Descent</text>
+
+  <rect x="620" y="355" width="100" height="24" rx="4" fill="#C4A87A" opacity="0.4"/>
+  <text x="670" y="371" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Regret Matching</text>
+
+  <!-- Sublinear regret annotation -->
+  <text x="400" y="380" font-family="Georgia,serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">All achieve sublinear regret: O(sqrt(T)) in the adversarial setting</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Large Deviations: Rate Functions and Rare Events</text>
+
+  <!-- LEFT PANEL: Probability decay illustration -->
+  <rect x="20" y="48" width="380" height="310" rx="6" fill="#FAF7EF" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="210" y="70" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">Exponential Decay of P(S_n/n &gt; a)</text>
+
+  <!-- Axes -->
+  <line x1="55" y1="295" x2="375" y2="295" stroke="#9B8C70" stroke-width="1.5"/>
+  <line x1="55" y1="85" x2="55" y2="310" stroke="#9B8C70" stroke-width="1.5"/>
+
+  <!-- Axis labels -->
+  <text x="380" y="299" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">n</text>
+  <text x="30" y="89" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">log P</text>
+  <text x="55" y="312" font-family="Georgia, serif" font-size="10" fill="#9B8C70" text-anchor="middle">0</text>
+
+  <!-- CLT Gaussian region (shaded band near mean) -->
+  <rect x="56" y="88" width="318" height="40" rx="4" fill="#2D5A8E" fill-opacity="0.08" stroke="none"/>
+  <text x="215" y="104" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">CLT regime: O(1/sqrt(n)) fluctuations</text>
+
+  <!-- Rate function curve: log P ~ -n*I(a), steep linear decay -->
+  <polyline
+    points="55,140 85,155 115,172 145,189 175,206 205,223 235,240 265,257 295,274 325,291 355,295"
+    fill="none" stroke="#7C2530" stroke-width="2.5" stroke-linejoin="round"/>
+  <text x="290" y="248" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" transform="rotate(-33,290,248)">slope = -I(a)</text>
+
+  <!-- Second rate for different a -->
+  <polyline
+    points="55,160 85,184 115,208 145,232 175,256 205,280 235,295"
+    fill="none" stroke="#C4A87A" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6,4"/>
+  <text x="180" y="270" font-family="Georgia, serif" font-size="10" fill="#C4A87A" transform="rotate(-40,180,270)">slope = -I(a'), steeper</text>
+
+  <!-- Legend -->
+  <line x1="65" y1="332" x2="95" y2="332" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="100" y="336" font-family="Georgia, serif" font-size="10" fill="#7C2530">a near mean</text>
+  <line x1="195" y1="332" x2="225" y2="332" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="230" y="336" font-family="Georgia, serif" font-size="10" fill="#C4A87A">a far from mean</text>
+
+  <!-- Key formula -->
+  <text x="210" y="352" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">P(S_n/n in A) ~ exp(-n inf I(x))</text>
+
+  <!-- RIGHT PANEL: Rate function shape -->
+  <rect x="418" y="48" width="362" height="310" rx="6" fill="#FAF7EF" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="599" y="70" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">Rate Function I(x)</text>
+
+  <!-- Axes for rate function -->
+  <line x1="448" y1="280" x2="750" y2="280" stroke="#9B8C70" stroke-width="1.5"/>
+  <line x1="448" y1="90" x2="448" y2="295" stroke="#9B8C70" stroke-width="1.5"/>
+  <text x="755" y="284" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">x</text>
+  <text x="436" y="94" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">I(x)</text>
+
+  <!-- Rate function: convex bowl, minimum at mean mu -->
+  <path d="M460,260 Q500,250 540,220 Q570,190 590,140 Q599,115 599,110 Q599,115 608,140 Q628,190 658,220 Q698,250 738,260"
+    fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Minimum point marker -->
+  <circle cx="599" cy="280" r="4" fill="#2D5A8E"/>
+  <text x="599" y="298" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">mu</text>
+  <text x="599" y="274" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">I(mu)=0</text>
+
+  <!-- Annotation: deviation point a -->
+  <circle cx="670" cy="228" r="4" fill="#7C2530"/>
+  <line x1="670" y1="232" x2="670" y2="280" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="670" y="296" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">a</text>
+  <text x="706" y="222" font-family="Georgia, serif" font-size="10" fill="#7C2530">I(a) &gt; 0</text>
+
+  <!-- Legendre transform connection -->
+  <rect x="458" y="310" width="302" height="40" rx="4" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="609" y="328" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">I(x) = sup_t [tx - log M(t)]</text>
+  <text x="609" y="344" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">Legendre-Fenchel transform of log-MGF</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="386" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#9B8C70" text-anchor="middle">Cramer 1938: rare events decay exponentially, governed by a convex rate function</text>
+</svg>

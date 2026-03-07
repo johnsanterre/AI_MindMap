@@ -1,0 +1,143 @@
+<<include "Header">>
+
+! In-Context Learning
+
+<img src="assets/in_context_learning.svg" alt="Diagram illustrating In-Context Learning without weight updates" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine it is your first week at a new job and your manager hands you three completed expense reports before asking you to fill out a fourth. You do not attend a training seminar; you simply read the examples, infer the format, and produce a correct report. That is in-context learning in a nutshell. A large language model is shown a handful of (input, output) pairs directly inside the prompt, and it adapts its behaviour for the new task //on the spot// — no gradient descent, no weight updates, no retraining of any kind. The model's parameters are completely frozen; the only thing that changes is what appears in the context window.
+
+---
+
+!! The Core Insight
+
+''In-context learning (ICL)'' is the ability of a language model to perform a new task when a description of that task — optionally accompanied by worked examples — is prepended to the input at inference time. It burst into public view with the 2020 release of [[GPT Architecture|GPT Architecture]] (Brown et al., 2020), which demonstrated that a sufficiently large model could rival or beat fine-tuned baselines on dozens of benchmarks using only a handful of prompt examples.
+
+The contrast with ''[[Fine-tuning]]'' is stark. Fine-tuning updates the model's weights using a task-specific dataset and a loss function; it requires labelled data, GPU time, and produces a new model checkpoint specialised for one task. ICL requires none of that. The same [[Large Language Models|large language model]] serves every task simultaneously, switching between sentiment classification, translation, arithmetic, and code generation simply by swapping the prompt. The cost is paid at training time — the model must be large and well-pre-trained — but the marginal cost of adapting to any new task is essentially zero.
+
+ICL also differs from ''zero-shot'' prompting, where no examples are given and the model relies entirely on its pre-training knowledge. Zero-shot works surprisingly well for tasks the model has seen during pre-training, but ICL's few-shot examples provide a reliable signal about the task format, output vocabulary, and expected style. Critically, ICL is not the same as [[Prompt Engineering]] in the narrow sense of instruction tuning; it is specifically the in-weights capability that emerges at scale, allowing the model to use examples as implicit demonstrations rather than explicit instructions. Links to related topics: [[Transformers]], [[Prompt Engineering]], [[Large Language Models]], [[GPT Architecture]], [[Fine-tuning]].
+
+---
+
+!! Zero-Shot, One-Shot, Few-Shot
+
+The ICL spectrum is defined by how many labelled examples appear in the prompt. ''Zero-shot'' means only a task description is provided — no examples at all. The model must rely entirely on knowledge acquired during pre-training to interpret what is being asked and produce an appropriate response. Zero-shot performance is often surprisingly strong for tasks that resemble natural text, but it degrades sharply on unusual formats or highly specialised domains.
+
+''One-shot'' adds a single (input, output) example before the test query. Even one example dramatically reduces format ambiguity: the model can see exactly what kind of answer is expected, how it should be delimited, and what vocabulary is appropriate. ''Few-shot'' typically means 4–32 examples, though the original GPT-3 paper used up to 100 for some tasks. GPT-3's headline result was that few-shot prompting with 175 billion parameters matched or exceeded fine-tuned models of smaller scales on SuperGLUE benchmarks, without any gradient updates.
+
+One of the most counter-intuitive findings in the ICL literature comes from Min et al. (2022), who showed that //randomly flipping the labels// in few-shot examples barely hurts performance — sometimes causing less than a 5% drop. What the model actually learns from the examples is not the correct label for each input, but rather: what the input distribution looks like, what the output space is (i.e., which tokens are legal answers), and that there is a correspondence structure between inputs and outputs. This suggests ICL may be less about "learning" from examples in the human sense and more about //format retrieval// — recognising a task template and instantiating it correctly.
+
+---
+
+!! What the Math Is Actually Doing
+
+One interpretive lens is ''Bayesian inference''. Viewing the pre-trained model as encoding a prior over tasks, the in-context examples act as observed evidence that updates beliefs about which task is being requested:
+
+$$p(\text{task} \mid \text{examples}) \propto p(\text{examples} \mid \text{task}) \cdot p(\text{task})$$
+
+Under this view, the model has implicitly learned a rich distribution over tasks during pre-training, and each example shifts probability mass toward the task most consistent with the observed (input, output) pairs. This interpretation correctly predicts that more examples help (more evidence), that example quality matters less than example quantity, and that the pre-training distribution heavily shapes what tasks are accessible via ICL.
+
+A more mechanistic explanation comes from Akyürek et al. (2022), who proposed the ''implicit gradient descent hypothesis'': transformer [[Transformers|attention]] heads can implement linear regression updates in their forward pass. More precisely, a single attention layer operating on a context of $(x_1, y_1), \ldots, (x_k, y_k), x_{k+1}$ can compute a least-squares solution $\hat{y}_{k+1} = x_{k+1}^\top (X^\top X)^{-1} X^\top y$ — equivalent to one step of gradient descent on a linear model — purely through the key-query-value attention mechanism. This suggests that [[Transformers]] may have learned, during pre-training, to simulate learning algorithms inside their forward pass.
+
+The connection to ''attention as a key-value store'' is direct: each in-context example contributes a key (the input representation) and a value (the output representation) to the attention memory. The test query retrieves a weighted combination of values whose keys are most similar, effectively performing a soft nearest-neighbour lookup over the demonstration set. This is not a metaphor — the linear algebra works out precisely in idealised cases.
+
+---
+
+!! Why Label Correctness Barely Matters
+
+The Min et al. (2022) paper "Rethinking the Role of Demonstrations" ran a systematic ablation: take standard few-shot benchmarks, randomly permute or flip the labels in the prompt examples, and measure the drop in accuracy. For most tasks and models, the drop was surprisingly small — often under 10 percentage points — even when //every// label was wrong.
+
+What //does// matter, as revealed by further ablations, is threefold. First, the ''input distribution'': seeing inputs drawn from the correct domain (e.g., movie reviews for a sentiment task) tells the model what kind of text to expect and activates relevant pre-trained representations. Second, the ''output space'': the set of labels that appear in the examples (even if wrongly assigned) tells the model which tokens are valid candidates for the final answer — effectively constraining the output vocabulary. Third, the ''input-output correspondence structure'': showing that //some// pairing relationship exists between inputs and outputs cues the model that it should produce one of the demonstrated output tokens, not free-form text.
+
+The implications are significant. ICL appears to be less a mechanism for //learning correct mappings// from examples and more a mechanism for //identifying the task format//. Larger models are somewhat better at using label content correctly (Wei et al. 2023 showed that models above a certain scale //can// override wrong labels when they conflict strongly with pre-training knowledge), but even frontier models retain a strong prior toward format over semantics. This has practical consequences: if you are designing few-shot prompts, choosing representative input examples from the right domain matters more than ensuring each label is individually correct.
+
+---
+
+!! When In-Context Learning Breaks Down
+
+''Context length saturation:'' ICL is bounded by the model's maximum context window. Once the number of examples — plus the test input — exceeds the context limit, examples must be truncated. This is especially problematic for tasks with long inputs (e.g., document summarisation or code generation) where even a handful of examples fills the entire window. Retrieval-augmented approaches that dynamically select the most relevant examples from a large pool can partially mitigate this, but the fundamental constraint remains: ICL cannot scale to the thousands of examples that supervised fine-tuning can leverage.
+
+''Sensitivity to example order and selection:'' The order in which few-shot examples appear in the prompt can cause accuracy swings of up to 20 percentage points on the same task, even with identical example content (Lu et al. 2022). Similarly, which specific examples are chosen — even randomly from the same dataset — causes high variance. This makes ICL brittle in production: a prompt that works well on a development set may perform poorly on deployment if the example pool is refreshed. Calibration methods and majority-vote ensembling over multiple orderings can reduce but not eliminate this sensitivity.
+
+''Tasks requiring genuine novel learning:'' ICL cannot teach the model facts or skills that were absent from pre-training. If a task requires knowledge of a private codebase, a new scientific domain, or a language that was underrepresented in training data, a few in-prompt examples cannot compensate for a missing pre-training signal. Similarly, tasks requiring precise arithmetic, multi-step symbolic reasoning, or strict rule-following often exhibit sharp ICL failure even with many examples, because the model's pre-trained priors overwhelm the demonstration signal. For these cases, fine-tuning on domain-specific data — or retrieval augmentation — is substantially more reliable.
+
+---
+
+!! Technical Details
+
+''Foundational paper:'' Brown et al. (2020), "Language Models are Few-Shot Learners" (GPT-3, 175B parameters). Introduced the zero/one/few-shot taxonomy and demonstrated ICL across 24 NLP benchmarks. Key finding: few-shot ICL improved roughly log-linearly with model scale.
+
+''Label semantics:'' Min et al. (2022), "Rethinking the Role of Demonstrations for Few-Shot Language Models." Ablation showing that ground-truth labels contribute little; input distribution and output space are the dominant signals.
+
+''Mechanistic explanation:'' Akyürek et al. (2022), "What Learning Algorithm is In-Context Learning? Investigations with Linear Models." Proved that linear [[Transformers|transformers]] can implement least-squares regression via ICL, supporting the implicit gradient descent hypothesis. Related: Dai et al. (2023) drew parallels between ICL and meta-gradient descent.
+
+''Scale and semantics:'' Wei et al. (2023), "Larger Language Models Do In-Context Learning Differently." Found that large models (>100B) can override semantically incorrect labels in few-shot prompts, while smaller models cannot — suggesting qualitatively different ICL mechanisms emerge at scale.
+
+''Context sensitivity:'' Lu et al. (2022), "Fantastically Ordered Prompts and Where to Find Them." Documented up to 20% accuracy variance from example ordering alone on GPT-3. Proposed entropy-minimisation heuristics for ordering.
+
+''Context length limits:'' As of 2024, frontier models support 128K–1M token contexts (GPT-4o, Gemini 1.5, Claude 3). This substantially expands the practical upper bound on few-shot example count, but long contexts introduce their own attention dilution issues ("lost in the middle," Liu et al. 2023).
+
+''Calibration:'' Zhao et al. (2021), "Calibrate Before Use." Showed that ICL predictions are miscalibrated toward majority-class labels in the prompt; contextual calibration using content-free inputs (e.g., "N/A") as a baseline substantially improves reliability.
+
+''Relationship to meta-learning:'' ICL can be viewed as a form of ''meta-learning'' — the model has been trained on a distribution of tasks such that adapting to new tasks at inference time is a natural generalisation. The pre-training objective (next-token prediction on diverse text) implicitly trains the model to be a fast task-adaptor.
+
+---
+
+!! Quiz
+
+<span id="icl-q1">What distinguishes in-context learning from fine-tuning?</span>
+A. ICL requires a separate training loop after deployment.
+B. ICL updates only the final layer's weights, not the full model.
+C. ICL adapts model behaviour through prompt examples without updating any weights.
+D. ICL requires a larger labelled dataset than fine-tuning.
+<<button "A">><<replace "#icl-q1">>✗ Wrong. ICL requires no training loop at all — adaptation happens entirely within the forward pass at inference time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q1">>✗ Wrong. No layers are updated in ICL. The model's weights remain completely frozen.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q1">>✓ Correct! ICL provides examples in the prompt and the model responds appropriately — all at inference time, with zero weight updates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q1">>✗ Wrong. ICL requires no labelled training data at all; examples appear only in the prompt.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q2">According to Min et al. (2022), what matters most for few-shot ICL performance?</span>
+A. That every label in the prompt examples is correct.
+B. That the input distribution and output space are appropriate, regardless of label correctness.
+C. That the model has been previously fine-tuned on the same task.
+D. That at least 32 examples are included in the prompt.
+<<button "A">><<replace "#icl-q2">>✗ Wrong. Min et al. showed that randomly flipping labels causes only a small drop, so label correctness is not the primary factor.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q2">>✓ Correct! The input distribution (domain) and output space (which label tokens appear) are the dominant signals, not whether individual labels are right.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q2">>✗ Wrong. ICL is specifically valued because it works without any prior fine-tuning on the task.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q2">>✗ Wrong. Even one-shot ICL can work well; the minimum example count is not fixed at 32.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q3">The Bayesian interpretation of ICL frames in-context examples as which of the following?</span>
+A. Gradient updates applied to the key-value attention cache.
+B. Evidence that updates a prior over possible tasks: $p(\text{task} \mid \text{examples}) \propto p(\text{examples} \mid \text{task}) \cdot p(\text{task})$.
+C. A retrieval mechanism that fetches matching training examples from parametric memory.
+D. A calibration signal that shifts the output distribution toward the majority class.
+<<button "A">><<replace "#icl-q3">>✗ Wrong. No gradients are computed; the Bayesian view treats examples as probabilistic evidence, not parameter updates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q3">>✓ Correct! The Bayesian framing says examples update beliefs about which task is being requested, shifting probability mass accordingly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q3">>✗ Wrong. The Bayesian view is about belief updating, not nearest-neighbour retrieval from training data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q3">>✗ Wrong. That describes calibration methods (Zhao et al. 2021), not the Bayesian interpretation of ICL.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q4">Akyürek et al. (2022) proposed that transformer attention heads can implement which algorithm during ICL?</span>
+A. K-means clustering over the demonstration inputs.
+B. A nearest-neighbour lookup using cosine similarity in embedding space.
+C. Gradient descent on a linear model, computed entirely in the forward pass.
+D. Expectation-maximisation over a latent task variable.
+<<button "A">><<replace "#icl-q4">>✗ Wrong. The paper focuses on gradient descent mechanics, not clustering.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q4">>✗ Wrong. While attention does resemble key-value lookup, Akyürek et al.'s specific claim is about implementing gradient descent steps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q4">>✓ Correct! Akyürek et al. showed that a single attention layer can compute least-squares regression — equivalent to a gradient descent step — over the in-context examples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q4">>✗ Wrong. EM is not the mechanism proposed; the paper focuses on linear regression via attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q5">What is "zero-shot" prompting?</span>
+A. Prompting the model with zero tokens — an empty string.
+B. Providing a task description but no labelled examples.
+C. Using a model that has been fine-tuned zero times.
+D. Providing exactly one input-output example before the test query.
+<<button "A">><<replace "#icl-q5">>✗ Wrong. Zero-shot refers to zero examples, not zero tokens; a task description is typically included.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q5">>✓ Correct! Zero-shot means the prompt contains a task instruction or description but no worked examples for the model to learn from.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q5">>✗ Wrong. Zero-shot refers to the number of in-prompt examples, not the number of fine-tuning runs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q5">>✗ Wrong. One example before the test query is one-shot prompting, not zero-shot.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q6">Lu et al. (2022) found that changing the order of few-shot examples can affect accuracy by how much?</span>
+A. Less than 1% — order is negligible.
+B. Around 5% on average across all tasks.
+C. Up to 20 percentage points on the same task with identical examples.
+D. More than 50% in all tested configurations.
+<<button "A">><<replace "#icl-q6">>✗ Wrong. Order sensitivity is a real and significant problem documented in the literature.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q6">>✗ Wrong. The measured variance was substantially higher — up to 20 percentage points in some cases.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q6">>✓ Correct! Lu et al. showed up to 20% accuracy swings purely from reordering identical examples, making ICL brittle to prompt construction choices.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q6">>✗ Wrong. While order matters a lot, a 50%+ swing on all tasks would imply near-random performance, which was not the finding.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q7">Which of the following tasks is most likely to cause ICL to fail even with many examples?</span>
+A. Classifying sentiment of English movie reviews.
+B. Translating between two well-represented languages.
+C. Precise arithmetic on large numbers requiring exact symbolic computation.
+D. Identifying the topic of a news article.
+<<button "A">><<replace "#icl-q7">>✗ Wrong. Sentiment classification is a natural fit for ICL — it resembles patterns abundant in pre-training data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q7">>✗ Wrong. Translation between well-represented languages is one of ICL's stronger domains.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q7">>✓ Correct! Tasks requiring precise symbolic reasoning or arithmetic often exceed what ICL can reliably provide, because the model's pre-trained priors are not strong enough to guarantee exact computation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q7">>✗ Wrong. Topic classification is a well-structured categorisation task that ICL handles relatively well.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="icl-q8">Wei et al. (2023) found that very large models (above ~100B parameters) behave differently from smaller models in ICL. What distinguishes them?</span>
+A. Large models require fewer examples to reach peak performance.
+B. Large models can override semantically incorrect labels when they conflict with pre-training knowledge.
+C. Large models ignore the output space defined by prompt examples entirely.
+D. Large models perform worse on ICL because they over-rely on pre-training priors.
+<<button "A">><<replace "#icl-q8">>✗ Wrong. While large models are generally stronger, Wei et al.'s key finding was specifically about semantic override, not sample efficiency alone.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#icl-q8">>✓ Correct! Large models can detect when prompt labels conflict with strong pre-training knowledge and override those wrong labels — a qualitatively different behaviour from smaller models that always follow prompt labels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#icl-q8">>✗ Wrong. Large models still use the output space from examples; they simply are better at weighting pre-training semantics against that signal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#icl-q8">>✗ Wrong. Large models generally perform better on ICL, not worse, even though they do rely more on pre-training priors in semantic conflict cases.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

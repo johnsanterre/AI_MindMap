@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Direct Preference Optimization — RLHF vs DPO Pipeline</text>
+
+  <!-- ===== LEFT SIDE: RLHF Pipeline ===== -->
+  <rect x="18" y="52" width="350" height="22" rx="3" fill="#7C2530"/>
+  <text x="193" y="67" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Standard RLHF (3 Steps)</text>
+
+  <!-- Step 1: Preference Data -->
+  <rect x="50" y="90" width="130" height="50" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="115" y="111" font-family="Georgia, serif" font-size="10.5" font-weight="bold" fill="#7C2530" text-anchor="middle">Preference Data</text>
+  <text x="115" y="126" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">(y_w, y_l) pairs</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="180" y1="115" x2="205" y2="115" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowR)"/>
+
+  <!-- Step 2: Reward Model -->
+  <rect x="208" y="90" width="130" height="50" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="273" y="111" font-family="Georgia, serif" font-size="10.5" font-weight="bold" fill="#7C2530" text-anchor="middle">Reward Model</text>
+  <text x="273" y="126" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">learn r(x, y)</text>
+
+  <!-- Arrow 2→3 (down) -->
+  <line x1="273" y1="140" x2="273" y2="165" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowD)"/>
+
+  <!-- Step 3: PPO -->
+  <rect x="208" y="168" width="130" height="50" rx="4" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="273" y="189" font-family="Georgia, serif" font-size="10.5" font-weight="bold" fill="#7C2530" text-anchor="middle">PPO Training</text>
+  <text x="273" y="204" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">RL policy update</text>
+
+  <!-- Complexity labels -->
+  <text x="193" y="240" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">3 models, unstable RL loop</text>
+
+  <!-- ===== CENTER DIVIDER ===== -->
+  <line x1="400" y1="52" x2="400" y2="340" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="400" y="280" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C4A87A" text-anchor="middle">vs.</text>
+
+  <!-- ===== RIGHT SIDE: DPO Pipeline ===== -->
+  <rect x="432" y="52" width="350" height="22" rx="3" fill="#2D5A8E"/>
+  <text x="607" y="67" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">DPO (1 Step)</text>
+
+  <!-- Step 1: Preference Data -->
+  <rect x="480" y="90" width="130" height="50" rx="4" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="545" y="111" font-family="Georgia, serif" font-size="10.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Preference Data</text>
+  <text x="545" y="126" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">(y_w, y_l) pairs</text>
+
+  <!-- Arrow down -->
+  <line x1="545" y1="140" x2="545" y2="165" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowNav)"/>
+
+  <!-- Step 2: Direct Policy Optimization -->
+  <rect x="480" y="168" width="250" height="60" rx="4" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="605" y="189" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Direct Policy Optimization</text>
+  <text x="605" y="206" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">closed-form reward in terms of policy</text>
+  <text x="605" y="220" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">no separate reward model needed</text>
+
+  <!-- Complexity label -->
+  <text x="607" y="250" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">1 model, stable supervised training</text>
+
+  <!-- ===== BOTTOM: Key Equation ===== -->
+  <rect x="80" y="296" width="640" height="60" rx="6" fill="#FFF8E7" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="316" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">DPO Key Insight</text>
+  <text x="400" y="334" font-family="Georgia, serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">The optimal reward can be expressed analytically as a function of the policy itself:</text>
+  <text x="400" y="349" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">r*(x, y) = beta * log[ pi(y|x) / pi_ref(y|x) ] + C(x)</text>
+
+  <!-- Legend -->
+  <rect x="18" y="370" width="12" height="12" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="34" y="381" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">RLHF pipeline</text>
+  <rect x="120" y="370" width="12" height="12" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="136" y="381" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">DPO pipeline</text>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowD" markerWidth="8" markerHeight="8" refX="3" refY="6" orient="auto">
+      <path d="M0,0 L6,0 L3,8 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowNav" markerWidth="8" markerHeight="8" refX="3" refY="6" orient="auto">
+      <path d="M0,0 L6,0 L3,8 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6" ry="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="1.5" rx="6" ry="6"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Information Geometry: The Statistical Manifold</text>
+
+  <!-- ===================== LEFT PANEL: Curved Manifold ===================== -->
+  <!-- Panel label -->
+  <text x="195" y="52" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Statistical Manifold</text>
+
+  <!-- Manifold surface (curved shape using path) -->
+  <path d="M 40 310 Q 100 260 160 230 Q 230 200 300 210 Q 350 215 380 250" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+  <path d="M 40 280 Q 100 230 165 205 Q 235 175 305 185 Q 355 190 385 225" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+  <path d="M 40 250 Q 100 200 168 178 Q 240 150 308 160 Q 358 165 388 198" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+  <path d="M 40 220 Q 100 172 170 152 Q 242 126 312 136 Q 362 141 390 172" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+
+  <!-- Iso-lines (perpendicular direction) -->
+  <path d="M 40 220 Q 40 265 40 310" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.5"/>
+  <path d="M 100 172 Q 100 215 100 260" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.5"/>
+  <path d="M 168 150 Q 168 192 168 233" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.5"/>
+  <path d="M 240 126 Q 240 168 240 210" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.5"/>
+  <path d="M 312 136 Q 312 176 312 215" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.5"/>
+  <path d="M 385 172 Q 385 208 385 245" fill="none" stroke="#C4A87A" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <!-- Geodesic path on manifold (curved) -->
+  <path d="M 85 243 Q 160 205 240 175 Q 310 155 360 178" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Arrow head for geodesic -->
+  <polygon points="360,178 348,170 350,183" fill="#7C2530"/>
+
+  <!-- Distribution nodes on manifold -->
+  <!-- Node A: narrow Gaussian -->
+  <circle cx="85" cy="243" r="6" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <!-- Node B: medium Gaussian -->
+  <circle cx="240" cy="175" r="6" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <!-- Node C: wide Gaussian -->
+  <circle cx="360" cy="178" r="6" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
+
+  <!-- Mini distribution curves at each node -->
+  <!-- Narrow Gaussian at A -->
+  <path d="M 58 335 Q 68 335 72 315 Q 76 295 79 285 Q 82 295 85 335 Q 88 295 91 285 Q 94 295 98 315 Q 102 335 112 335" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Medium Gaussian at B -->
+  <path d="M 210 345 Q 220 345 225 325 Q 230 305 235 290 Q 240 280 245 290 Q 250 305 255 325 Q 260 345 270 345" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Wide Gaussian at C -->
+  <path d="M 325 350 Q 335 350 340 338 Q 347 320 355 308 Q 360 300 365 308 Q 373 320 380 338 Q 385 350 395 350" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Labels -->
+  <text x="58" y="376" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">p(x; θ₁)</text>
+  <text x="58" y="388" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">narrow</text>
+  <text x="240" y="376" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">p(x; θ₂)</text>
+  <text x="240" y="388" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">medium</text>
+  <text x="360" y="376" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">p(x; θ₃)</text>
+  <text x="360" y="388" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">wide</text>
+
+  <!-- Geodesic label -->
+  <text x="205" y="155" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">geodesic</text>
+  <text x="205" y="167" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">(shortest path)</text>
+
+  <!-- Fisher metric label -->
+  <text x="150" y="98" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Fisher metric:</text>
+  <text x="150" y="112" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">g = I(θ)</text>
+
+  <!-- Divider -->
+  <line x1="408" y1="42" x2="408" y2="395" stroke="#D4C5A9" stroke-width="1.2"/>
+
+  <!-- ===================== RIGHT PANEL: Gradient Comparison ===================== -->
+  <text x="604" y="52" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Gradient vs. Natural Gradient</text>
+
+  <!-- Parameter space axes -->
+  <line x1="440" y1="330" x2="760" y2="330" stroke="#5C3D1E" stroke-width="1.2"/>
+  <line x1="440" y1="330" x2="440" y2="70" stroke="#5C3D1E" stroke-width="1.2"/>
+  <!-- Axis labels -->
+  <text x="763" y="334" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">θ₁</text>
+  <text x="430" y="65" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">θ₂</text>
+
+  <!-- Loss contours (ellipses — anisotropic loss) -->
+  <ellipse cx="610" cy="205" rx="120" ry="60" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.8"/>
+  <ellipse cx="610" cy="205" rx="90" ry="44" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.7"/>
+  <ellipse cx="610" cy="205" rx="60" ry="28" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+  <ellipse cx="610" cy="205" rx="30" ry="14" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.5"/>
+  <!-- Loss minimum -->
+  <circle cx="610" cy="205" r="3" fill="#5C3D1E"/>
+  <text x="614" y="200" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">min</text>
+
+  <!-- Starting point -->
+  <circle cx="530" cy="265" r="5" fill="#5C3D1E" stroke="#FDFAF4" stroke-width="1.5"/>
+  <text x="517" y="280" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">θ₀</text>
+
+  <!-- Ordinary gradient step (straight in param space, goes to wrong place) -->
+  <line x1="530" y1="265" x2="568" y2="225" stroke="#7C2530" stroke-width="2" stroke-dasharray="5,3"/>
+  <polygon points="568,225 558,228 562,217" fill="#7C2530"/>
+  <text x="520" y="220" font-family="Georgia, serif" font-size="10" fill="#7C2530">∇L</text>
+  <text x="518" y="232" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">(ordinary)</text>
+
+  <!-- Natural gradient step (follows manifold geometry, goes more directly to minimum) -->
+  <path d="M 530 265 Q 562 242 590 220" fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="590,220 578,218 582,230" fill="#2D5A8E"/>
+  <text x="606" y="238" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">I(θ)⁻¹∇L</text>
+  <text x="608" y="250" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">(natural)</text>
+
+  <!-- KL divergence annotation -->
+  <path d="M 530 265 Q 548 265 568 265" fill="none" stroke="#5C3D1E" stroke-width="1" stroke-dasharray="2,2"/>
+  <path d="M 568 265 Q 568 245 568 225" fill="none" stroke="#5C3D1E" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="614" y="272" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">KL(pθ ‖ pθ+dθ)</text>
+  <text x="614" y="284" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">≈ ½ dθᵀ I(θ) dθ</text>
+
+  <!-- Legend -->
+  <line x1="448" y1="360" x2="470" y2="360" stroke="#7C2530" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="474" y="364" font-family="Georgia, serif" font-size="10" fill="#7C2530">Ordinary gradient (parameter space)</text>
+  <line x1="448" y1="378" x2="470" y2="378" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="474" y="382" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Natural gradient (manifold geodesic)</text>
+
+  <!-- Contour label -->
+  <text x="736" y="162" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="middle">loss</text>
+  <text x="736" y="174" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="middle">contours</text>
+</svg>

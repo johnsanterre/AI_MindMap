@@ -1,0 +1,165 @@
+<<include "Header">>
+
+! Masked Autoencoders
+
+<img src="assets/masked_autoencoders.svg" alt="MAE pipeline: image patches → 75% masked → ViT encoder (visible only) → lightweight decoder → MSE reconstruction loss" style="max-width:100%; height:auto; display:block; margin:1em auto;">
+
+Think of fill-in-the-blank exercises versus multiple-choice tests. Multiple choice lets you recognise the right answer without deeply understanding the material. Fill-in-the-blank forces retrieval from scratch. Masked Autoencoders apply this logic to images: hide 75% of the patches and make the model reconstruct the missing pixels. If you can do that reliably, you must have learned something deep about what images look like — without any human labels.
+
+!! The Core Insight
+
+''He et al. 2022 (MAE)'' brought BERT-style masked pretraining to vision. The recipe is deliberately simple. Divide an image into a grid of non-overlapping 16×16 pixel patches. Randomly mask 75% of them. Feed only the remaining 25% of visible patches to a standard [[Vision Transformer]] encoder — crucially, no mask tokens enter the encoder, which keeps computation low. A lightweight decoder then receives the encoded visible tokens plus learnable [MASK] tokens for every missing position, and reconstructs the pixel values of the masked patches. The training objective is mean squared error on those masked patches only. After pretraining, the decoder is discarded and the encoder is fine-tuned on downstream tasks, reaching 87.8% top-1 accuracy on ImageNet with ViT-H.
+
+Key connections: [[Bert]], [[Vision Transformer]], [[Autoencoders]], [[Self-supervised Learning]].
+
+!! Why 75% Masking and an Asymmetric Encoder-Decoder
+
+The 75% figure is not arbitrary. Natural images are spatially redundant: neighbouring patches share colour, texture, and structure, so a low masking ratio (like the 15% used in [[Bert]]) is far too easy — the model can interpolate across the gap without learning anything semantic. Raising the ratio to 75% makes the task genuinely hard and forces the model to reason about the global structure of the image.
+
+The //asymmetric// encoder-decoder design is the engineering insight that makes MAE practical. The encoder only touches visible patches — 25% of the total — so its self-attention computation is roughly 16× cheaper per image than a symmetric design where the encoder also processes masked positions. The decoder handles all N positions but is kept shallow (a few transformer blocks), so the extra cost is small. Together, the asymmetry makes MAE pretraining roughly 3× faster in wall-clock time compared to symmetric masked prediction architectures.
+
+!! What the Math Is Actually Doing
+
+Let an image be divided into $N$ non-overlapping patches $\{x_1, \dots, x_N\}$, each of size $16 \times 16 = 256$ pixels. Sample a random masking subset $M \subset \{1, \dots, N\}$ with $|M| = 0.75 N$.
+
+''Encoder'' — a ViT processes only the visible set $\{x_i : i \notin M\}$, producing encoded representations $\{z_i : i \notin M\}$.
+
+''Decoder'' — receives a full-length sequence: encoded visible tokens at their original positions and a shared learnable [MASK] embedding at every masked position. Positional embeddings are added to both so the decoder knows where each token belongs. The decoder outputs a reconstruction $\hat{x}_i$ for each patch.
+
+''Loss'' — computed only over the masked patches, with each patch's pixels normalised by their own mean and standard deviation:
+
+$$\mathcal{L} = \frac{1}{|M|} \sum_{i \in M} \left\| x_i - \hat{x}_i \right\|^2$$
+
+Per-patch normalisation shifts the loss away from predicting low-frequency colour and luminance (easy) and towards predicting high-frequency texture and structure (hard and semantically meaningful).
+
+!! MAE vs BERT vs Contrastive Methods
+
+|                    | MAE              | BERT             | SimCLR / MoCo        |
+| ''Prediction target'' | Raw pixels     | Discrete tokens  | Embedding similarity  |
+| ''Masking ratio''   | 75%              | 15%              | N/A (augmentation)    |
+| ''Decoder use''     | Discarded after pretraining | Same as encoder | No decoder |
+| ''Scaling''         | Excellent (ViT-H wins) | Good         | Saturates earlier     |
+
+[[Bert]] predicts discrete token IDs (from a visual tokeniser in BEiT, or a vocabulary in NLP). MAE predicts raw normalised pixel values — a simpler target that nevertheless works better at large scale. Contrastive methods like SimCLR and MoCo learn by pulling augmented views of the same image together in embedding space; they are powerful but require careful design of augmentation pairs and negative samples. MAE sidesteps this entirely. On linear probe evaluations (freezing the encoder, training only a linear head), contrastive methods can outperform MAE, but with fine-tuning, MAE's representations are stronger — particularly at ViT-L and ViT-H scale.
+
+!! When MAE Breaks Down
+
+''Pixel reconstruction is low-level.'' Even with patch normalisation, the model may learn to reproduce texture statistics and low-frequency structure without building truly object-centric representations. Methods like I-JEPA (LeCun's group) address this by predicting in representation space rather than pixel space, aiming for higher-level targets.
+
+''Spatial redundancy assumption.'' High masking ratios work because natural images are spatially correlated. For data types with less spatial regularity — irregular point clouds, sparse tabular data, or structured text — the same masking ratio may not force the right inductive bias.
+
+''Fine-tuning gap on linear probe.'' MAE's pretrained representations sometimes score noticeably lower than contrastive methods on linear probe benchmarks (no fine-tuning). This suggests the representations, while rich, may not be linearly separable without adaptation. If the downstream setting requires frozen features (e.g., fast retrieval), contrastive pretraining may be preferable.
+
+!! Technical Details
+
+''Original paper:'' He, K., Chen, X., Xie, S., Li, Y., Dollár, P., Girshick, R. (2022). Masked Autoencoders Are Scalable Vision Learners. CVPR 2022.
+
+''Related work:''
+- ''BEiT'' (Bao et al. 2022) — predicts discrete visual tokens from a dVAE tokeniser rather than raw pixels; closer in spirit to BERT.
+- ''SimMIM'' (Xie et al. 2022) — simpler masked image modelling without the asymmetric encoder-decoder; uses a single linear head to predict pixels.
+- ''VideoMAE'' — extends MAE to video with tube masking across frames; 90%+ masking ratios work because video is even more redundant than images.
+- ''I-JEPA'' (Assran et al. 2023, Meta FAIR) — Joint-Embedding Predictive Architecture; predicts target representations in embedding space rather than pixel space, avoiding low-level reconstruction.
+
+''Architectures used:'' ViT-B (86M params), ViT-L (307M), ViT-H (632M). Pretrained on ImageNet-1K. Evaluated on ImageNet classification, COCO object detection, ADE20K segmentation. MAE backbone with a Mask R-CNN head achieves strong detection performance, showing the representations transfer well beyond classification.
+
+''Implementation note:'' Masking is implemented by random shuffling of patch indices followed by keeping the first 25%; no special masking mechanism is needed. The decoder is typically 8 transformer blocks with smaller width (512 dimensions vs. 1024 for ViT-L encoder).
+
+!! Quiz
+
+<span id="mae-q1">
+''1. What fraction of image patches does MAE mask during pretraining?''
+
+<<button "A. 15%">><<replace "#mae-q1">>A. 15% — Incorrect. 15% is BERT's masking ratio. Images are more spatially redundant than text, so a much higher ratio is needed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. 50%">><<replace "#mae-q1">>B. 50% — Incorrect. 50% was tested but found insufficient; at 50% the task remains too easy given image spatial redundancy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. 75%">><<replace "#mae-q1">>C. 75% ✓ — Correct. 75% masking makes the reconstruction task hard enough to force semantic understanding, rather than simple local interpolation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. 90%">><<replace "#mae-q1">>D. 90% — Incorrect for images. 90%+ masking is used in VideoMAE for video, where temporal redundancy makes very high masking ratios appropriate.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q2">
+''2. Why does MAE's encoder process only the visible patches, not the masked positions?''
+
+<<button "A. To predict discrete tokens instead of pixels">><<replace "#mae-q2">>A. Incorrect. Predicting discrete tokens is BEiT's approach, not MAE's. MAE predicts raw normalised pixel values.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. To reduce encoder computation and speed up pretraining">><<replace "#mae-q2">>B. ✓ — Correct. Excluding 75% of patches from the encoder cuts self-attention cost dramatically, making pretraining roughly 3× faster than symmetric designs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Because the decoder cannot handle encoded tokens">><<replace "#mae-q2">>C. Incorrect. The decoder receives encoded visible tokens together with learnable mask tokens — it handles both types.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. To prevent overfitting to the visible patches">><<replace "#mae-q2">>D. Incorrect. Overfitting prevention is not the motivation; the goal is computational efficiency via the asymmetric encoder-decoder design.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q3">
+''3. What is MAE's training loss, and over which patches is it computed?''
+
+<<button "A. Cross-entropy over all patches">><<replace "#mae-q3">>A. Incorrect. Cross-entropy applies to discrete token prediction (BEiT). MAE uses MSE on pixel values, not a classification loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. MSE over visible patches only">><<replace "#mae-q3">>B. Incorrect. Computing loss on visible patches would make the task trivial — the model already sees them. Loss is on the masked patches.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. MSE over masked patches only">><<replace "#mae-q3">>C. ✓ — Correct. $\mathcal{L} = \frac{1}{|M|}\sum_{i \in M}\|x_i - \hat{x}_i\|^2$, computed only on the patches the encoder never saw.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Contrastive loss between augmented views">><<replace "#mae-q3">>D. Incorrect. Contrastive loss (pulling augmented views together) is used by SimCLR and MoCo, not MAE.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q4">
+''4. What does MAE's decoder receive as input?''
+
+<<button "A. The raw visible patches only">><<replace "#mae-q4">>A. Incorrect. The decoder needs the full positional sequence to reconstruct all patches, not just the visible ones.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Encoded visible tokens plus learnable [MASK] tokens at masked positions">><<replace "#mae-q4">>B. ✓ — Correct. The decoder assembles a full-length sequence: encoded representations for visible positions and shared learnable mask embeddings for missing positions, with positional embeddings throughout.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Only the learnable [MASK] tokens">><<replace "#mae-q4">>C. Incorrect. Without the encoded visible tokens, the decoder would have no information about the image content to condition on.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The full image including masked pixels (zeroed out)">><<replace "#mae-q4">>D. Incorrect. Providing zeroed-out masked pixels would leak positional structure. MAE uses learnable mask tokens, not zero-filled patches.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q5">
+''5. Why does MAE apply per-patch pixel normalisation before computing the loss?''
+
+<<button "A. To make the loss scale-invariant across different image sizes">><<replace "#mae-q5">>A. Incorrect. Patch normalisation operates within each individual patch, not across image sizes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. To focus learning on texture and structure rather than low-frequency colour">><<replace "#mae-q5">>B. ✓ — Correct. Subtracting per-patch mean and dividing by std removes easy-to-predict colour/luminance signals, so the loss emphasises harder high-frequency structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. To match the normalisation used in contrastive learning">><<replace "#mae-q5">>C. Incorrect. Per-patch normalisation is specific to MAE's pixel reconstruction objective and unrelated to contrastive learning normalisation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. To ensure gradient magnitudes stay below 1.0">><<replace "#mae-q5">>D. Incorrect. Gradient clipping serves that purpose. Patch normalisation is a target-shaping choice, not a gradient stability mechanism.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q6">
+''6. How does MAE compare to contrastive methods (SimCLR, MoCo) on linear probe vs. fine-tuning?''
+
+<<button "A. MAE wins on both linear probe and fine-tuning">><<replace "#mae-q6">>A. Incorrect. MAE representations are not always linearly separable without adaptation; contrastive methods often edge ahead on linear probe.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Contrastive methods win on both">><<replace "#mae-q6">>B. Incorrect. With fine-tuning — especially at large scale (ViT-L, ViT-H) — MAE outperforms contrastive methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Contrastive methods often win on linear probe; MAE wins with fine-tuning">><<replace "#mae-q6">>C. ✓ — Correct. This reflects MAE's representations being rich but requiring adaptation; contrastive representations are more linearly separable but scale less effectively.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. They perform identically on both evaluations">><<replace "#mae-q6">>D. Incorrect. There are meaningful differences — particularly the linear probe gap and MAE's superior fine-tuning performance at large scale.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q7">
+''7. What does I-JEPA change relative to MAE?''
+
+<<button "A. It increases the masking ratio to 90%">><<replace "#mae-q7">>A. Incorrect. I-JEPA's key distinction is its prediction target, not the masking ratio.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It predicts in representation space rather than pixel space">><<replace "#mae-q7">>B. ✓ — Correct. I-JEPA (LeCun's group) predicts target //representations// of masked regions rather than their raw pixels, aiming for higher-level, more semantic targets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. It uses a symmetric encoder-decoder like BERT">><<replace "#mae-q7">>C. Incorrect. I-JEPA uses a joint-embedding architecture with context and target encoders, which is different from both symmetric and asymmetric autoencoder designs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It replaces MSE with cross-entropy loss">><<replace "#mae-q7">>D. Incorrect. I-JEPA minimises distance in embedding space, not a cross-entropy loss over discrete tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mae-q8">
+''8. What happens to MAE's decoder after pretraining is complete?''
+
+<<button "A. It is fine-tuned jointly with the encoder on downstream tasks">><<replace "#mae-q8">>A. Incorrect. The decoder's purpose is reconstruction during pretraining only. Keeping it would add unnecessary parameters for downstream classification or detection.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It is distilled into the encoder">><<replace "#mae-q8">>B. Incorrect. No distillation step is performed. MAE's workflow is simpler: pretrain, discard decoder, fine-tune encoder.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. It is discarded; only the encoder is fine-tuned">><<replace "#mae-q8">>C. ✓ — Correct. The decoder is a pretraining scaffold. After pretraining, it is thrown away and the encoder alone is fine-tuned for downstream tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It is converted into a classification head">><<replace "#mae-q8">>D. Incorrect. A new task-specific head (e.g., linear classifier or detection head) is attached to the encoder. The decoder is not repurposed.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

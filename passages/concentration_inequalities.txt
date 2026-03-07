@@ -1,0 +1,147 @@
+<<include "Header">>
+
+! Concentration Inequalities
+
+<img src="assets/concentration_inequalities.svg" alt="Diagram showing the hierarchy of concentration inequalities from Markov to sub-Gaussian bounds" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you flip a fair coin 1,000 times. You expect about 500 heads, but how surprised should you be if you see 600? ''Concentration inequalities'' answer exactly this question: they provide quantitative upper bounds on the probability that a random variable deviates from its expected value by more than a specified amount. They are the mathematical engine behind guarantees in machine learning — from bounding the gap between training and test error to certifying that a randomized algorithm will work. Without concentration inequalities, the <<link "Law of Large Numbers" "Law of Large Numbers">><</link>> tells you convergence //happens// but not //how fast//. Concentration inequalities supply the speed.
+
+---
+
+!! The Core Insight
+
+The <<link "Law of Large Numbers" "Law of Large Numbers">><</link>> says that the sample average converges to the population mean as $n \to \infty$. But practitioners do not have infinite samples. Concentration inequalities convert this asymptotic promise into a finite-sample guarantee: for any fixed $n$ and any tolerance $t$, they bound $P(|\bar{X} - \mu| > t)$ from above. The tighter the bound, the fewer samples you need to be confident.
+
+The key tradeoff is between assumptions and tightness. ''Markov's inequality'' assumes almost nothing — just that the random variable is nonnegative — and gives a correspondingly loose bound. ''Chebyshev's inequality'' adds a finite variance assumption and tightens the bound to $1/t^2$ decay. ''Chernoff bounds'' and ''Hoeffding's inequality'' assume bounded or sub-Gaussian random variables and achieve exponential decay $e^{-ct^2}$. ''McDiarmid's inequality'' extends exponential concentration to functions of independent random variables that satisfy a bounded-differences condition. Each step up the ladder demands more structure from the problem but rewards you with a dramatically sharper guarantee.
+
+This hierarchy is not academic bookkeeping. In <<link "PAC Learning" "PAC Learning">><</link>>, the sample complexity — how many training examples you need to guarantee generalization — is directly determined by which concentration inequality applies to your loss function. Tighter concentration means fewer samples, which means faster, cheaper learning.
+
+---
+
+!! The Ladder of Bounds
+
+The concentration inequalities form a strict hierarchy, each one a refinement of the previous.
+
+''Markov's inequality'' is the foundation. For a nonnegative random variable $X$ and $t > 0$: $P(X \geq t) \leq E[X] / t$. It follows from a single line of measure theory and requires no moment assumptions beyond existence of the mean. Its weakness is that it only gives $1/t$ decay, which is nearly useless for large deviations.
+
+''Chebyshev's inequality'' applies Markov to the squared deviation $(X - \mu)^2$: $P(|X - \mu| \geq t) \leq \text{Var}(X) / t^2$. This is a significant improvement — quadratic rather than linear decay — and it uses both the mean and variance. For $n$ i.i.d. copies with variance $\sigma^2$, Chebyshev gives $P(|\bar{X} - \mu| \geq t) \leq \sigma^2 / (nt^2)$. Still polynomial, still often too loose for ML applications, but a genuine step forward.
+
+''Chernoff bounds'' introduce the moment-generating function (MGF). For any $s > 0$: $P(X \geq t) = P(e^{sX} \geq e^{st}) \leq E[e^{sX}] / e^{st}$. Optimizing over $s$ yields exponentially decaying tail bounds whenever the MGF is well-behaved. For sums of independent Bernoulli or bounded random variables, Chernoff bounds give multiplicative error guarantees that are essentially optimal.
+
+''Hoeffding's inequality'' is a workhorse specialization. If $X_1, \ldots, X_n$ are independent with $X_i \in [a_i, b_i]$, then: $$P\left(\bar{X} - \mu \geq t\right) \leq \exp\left(\frac{-2n^2 t^2}{\sum_{i=1}^n (b_i - a_i)^2}\right)$$. For identically bounded variables with range $R = b - a$, this simplifies to $\exp(-2nt^2 / R^2)$. The exponential decay in $n$ is what makes finite-sample guarantees practical.
+
+''McDiarmid's inequality'' (the bounded-differences inequality) generalizes Hoeffding from sums to arbitrary functions. If $f(X_1, \ldots, X_n)$ satisfies $\sup_{x_i, x_i'} |f(\ldots, x_i, \ldots) - f(\ldots, x_i', \ldots)| \leq c_i$ for each coordinate, then: $$P\left(f - E[f] \geq t\right) \leq \exp\left(\frac{-2t^2}{\sum_{i=1}^n c_i^2}\right)$$. This is the inequality that directly powers <<link "Generalization Bounds" "Generalization Bounds">><</link>> in statistical learning theory: the empirical risk is a function of $n$ independent training examples, and changing one example changes the empirical risk by at most $1/n$ (for bounded loss), so McDiarmid immediately yields exponential concentration of the empirical risk around its expectation.
+
+---
+
+!! What the Math Is Actually Doing
+
+The Chernoff method — the engine behind Hoeffding, Bernstein, and McDiarmid — works by exponential tilting. To bound $P(S_n \geq t)$ where $S_n = \sum X_i$, you introduce an exponential: $$P(S_n \geq t) = P(e^{sS_n} \geq e^{st}) \leq \frac{E[e^{sS_n}]}{e^{st}}$$ by Markov's inequality applied to the nonnegative random variable $e^{sS_n}$. When the $X_i$ are independent, the MGF factors: $E[e^{sS_n}] = \prod_{i=1}^n E[e^{sX_i}]$. Each factor is bounded using the specific distributional assumption (boundedness, sub-Gaussianity, etc.). The parameter $s > 0$ is free, and the final step is to optimize: $\inf_{s > 0} e^{-st} \prod E[e^{sX_i}]$.
+
+For a ''sub-Gaussian'' random variable with parameter $\sigma$, the defining property is: $$E[e^{s(X - \mu)}] \leq e^{s^2 \sigma^2 / 2} \quad \text{for all } s \in \mathbb{R}$$. This says the MGF is dominated by that of a Gaussian with variance $\sigma^2$. Optimizing the Chernoff bound with this MGF gives: $P(X - \mu \geq t) \leq e^{-t^2/(2\sigma^2)}$, which is the ''sub-Gaussian tail bound''. Any bounded random variable on $[a, b]$ is sub-Gaussian with parameter $\sigma = (b-a)/2$ (Hoeffding's lemma), which is why Hoeffding's inequality is a consequence of the sub-Gaussian framework.
+
+''Bernstein's inequality'' provides a sharper alternative when you know the variance. For independent zero-mean random variables with $|X_i| \leq M$ and $\sum E[X_i^2] = V$: $$P\left(\sum X_i \geq t\right) \leq \exp\left(\frac{-t^2/2}{V + Mt/3}\right)$$. For small $t$ (relative to $M$), this behaves like $e^{-t^2/(2V)}$, recovering a variance-dependent Gaussian-like tail. For large $t$, it transitions to $e^{-t/(2M)}$, an exponential tail. Bernstein is tighter than Hoeffding whenever $V \ll nM^2$, i.e., when the variance is much smaller than the worst case implied by boundedness alone.
+
+The <<link "Central Limit Theorem" "Central Limit Theorem">><</link>> provides the asymptotic benchmark: $\sqrt{n}(\bar{X} - \mu) \to N(0, \sigma^2)$ in distribution, so tail probabilities decay like $e^{-t^2/(2\sigma^2/n)}$ for large $n$. Concentration inequalities give //non-asymptotic// versions of this fact, valid for any finite $n$, at the cost of slightly worse constants.
+
+---
+
+!! Applications in Machine Learning
+
+Concentration inequalities are not abstract tools — they are the foundation of nearly every generalization guarantee in ML.
+
+''Generalization bounds:'' The <<link "Generalization Bounds" "Generalization Bounds">><</link>> that relate empirical risk to true risk are direct applications of McDiarmid or Hoeffding. If the loss function $\ell$ is bounded in $[0, 1]$, then with probability at least $1 - \delta$: $$|R_{\text{emp}}(h) - R(h)| \leq \sqrt{\frac{\ln(2/\delta)}{2n}}$$ for any fixed hypothesis $h$. Extending this to a uniform bound over a hypothesis class $\mathcal{H}$ requires a union bound (for finite $\mathcal{H}$) or covering numbers / Rademacher complexity (for infinite $\mathcal{H}$), but the core probabilistic engine is still concentration.
+
+''PAC learning:'' The <<link "PAC Learning" "PAC Learning">><</link>> framework asks: how many samples $n$ suffice to ensure that, with probability $\geq 1 - \delta$, the learned hypothesis has error $\leq \epsilon$? The answer is obtained by inverting a concentration inequality: $n \geq \frac{\ln(|\mathcal{H}|/\delta)}{2\epsilon^2}$ for finite hypothesis classes, directly from Hoeffding.
+
+''Randomized algorithms:'' Random projections (Johnson-Lindenstrauss), hashing, and sketching algorithms all rely on concentration to guarantee that random dimensionality reduction preserves distances or inner products. The JL lemma is fundamentally a sub-Gaussian concentration result.
+
+''Bandit algorithms:'' Upper confidence bound (UCB) methods in multi-armed bandits use Hoeffding or Bernstein bounds to construct confidence intervals around estimated rewards. Tighter concentration translates directly to lower regret.
+
+---
+
+!! When Concentration Inequalities Break Down
+
+''Heavy-tailed distributions:'' When the random variable lacks a finite MGF — for example, Pareto or Cauchy-distributed data — the Chernoff method does not apply. You are stuck with Chebyshev (if the variance exists) or Markov (if only the mean exists). In these regimes, deviations from the mean are common, not rare, and exponential concentration is simply false. Robust mean estimation under heavy tails is an active research area precisely because the standard concentration toolkit fails. Using Hoeffding on unbounded data produces vacuous or incorrect bounds.
+
+''Dependent random variables:'' All the standard inequalities (Hoeffding, Chernoff, McDiarmid) assume independence. When training examples are correlated — as in time series, graph-structured data, or data collected via an adaptive policy in reinforcement learning — these bounds do not hold as stated. Extensions exist (martingale concentration, mixing conditions, Azuma-Hoeffding for martingale differences), but they require different assumptions and often produce weaker bounds. Blindly applying Hoeffding to dependent data gives false confidence in generalization guarantees.
+
+''Loose bounds from worst-case assumptions:'' Hoeffding bounds depend on the range $[a, b]$ of the random variable, not on the actual variance. If the variable is bounded in $[0, 100]$ but has variance $0.01$, Hoeffding treats it as if the variance were $(100-0)^2/4 = 2500$, which is absurdly conservative. In these cases, Bernstein or empirical Bernstein bounds are dramatically tighter. Many ML papers cite Hoeffding bounds that are orders of magnitude looser than necessary because the authors did not account for the actual variance structure of their loss.
+
+---
+
+!! Technical Details
+
+''Hoeffding's lemma'' is the key technical ingredient: if $X \in [a, b]$ with $E[X] = 0$, then $E[e^{sX}] \leq \exp(s^2(b-a)^2/8)$ for all $s$. The proof uses convexity of $e^{sx}$: since $X \in [a, b]$, the function $e^{sX}$ is bounded above by its chord, and the expectation of the chord is bounded by $\exp(s^2(b-a)^2/8)$ via a Taylor expansion of $\ln E[e^{sX}]$ around $s=0$, retaining the first non-trivial term.
+
+''Sub-Gaussian random variables'' form a class closed under addition and linear transformation. If $X$ is $\sigma$-sub-Gaussian, then $cX$ is $|c|\sigma$-sub-Gaussian. If $X_1, \ldots, X_n$ are independent and $\sigma_i$-sub-Gaussian, then $\sum X_i$ is $(\sum \sigma_i^2)^{1/2}$-sub-Gaussian. This algebraic closure is why the sub-Gaussian framework is so powerful: it reduces concentration for sums to concentration for individual terms.
+
+''Sub-exponential'' random variables satisfy $E[e^{s(X-\mu)}] \leq e^{s^2 v^2 / 2}$ only for $|s| < 1/\alpha$ (not all $s$). Chi-squared random variables and products of sub-Gaussians are sub-exponential. Bernstein's inequality is the natural concentration result for sub-exponential sums, producing Gaussian tails for small deviations and exponential tails for large deviations.
+
+''Matrix concentration'' extends scalar inequalities to random matrices. The matrix Chernoff bound (Tropp, 2012) states that for independent random positive semidefinite matrices $X_i$ with $\|X_i\| \leq R$: $P(\|\sum X_i - E[\sum X_i]\| \geq t) \leq d \cdot \exp(-t^2 / (2\|\sum E[X_i^2]\| + Rt/3))$, where $d$ is the matrix dimension. This is essential for random matrix theory applications in compressed sensing and dimensionality reduction.
+
+''Talagrand's concentration inequality'' is the deepest result in the hierarchy: it shows that any convex Lipschitz function of independent random variables concentrates around its median with sub-Gaussian tails. McDiarmid can be derived as a special case. Talagrand's inequality is the go-to tool for proving concentration of suprema of empirical processes, which underlies uniform convergence in <<link "Statistical Learning Theory" "Statistical Learning Theory">><</link>>.
+
+The ''empirical Bernstein bound'' (Maurer & Pontil, 2009) replaces the unknown population variance with the sample variance, giving a fully data-dependent confidence interval. With probability $\geq 1 - \delta$: $|\bar{X} - \mu| \leq \sqrt{\frac{2\hat{V}\ln(3/\delta)}{n}} + \frac{3\ln(3/\delta)}{n}$, where $\hat{V}$ is the sample variance. This is the practical version of Bernstein that is used in adaptive algorithms.
+
+---
+
+!! Quiz
+
+<span id="ci-q1">Markov's inequality requires which assumption about the random variable $X$?</span>
+A. $X$ has finite variance
+B. $X$ is nonnegative (and has finite mean)
+C. $X$ is bounded in a known interval $[a, b]$
+D. $X$ has a moment-generating function that is finite everywhere
+<<button "A">><<replace "#ci-q1">>Wrong. Finite variance is the assumption for Chebyshev's inequality, not Markov's. Markov only needs $X \geq 0$ and a finite mean.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q1">>Correct! Markov's inequality states $P(X \geq t) \leq E[X]/t$ for nonnegative $X$. It is the weakest but most general concentration inequality, requiring only nonnegativity and a finite expectation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q1">>Wrong. Boundedness in $[a, b]$ is the assumption for Hoeffding's inequality. Markov only requires nonnegativity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q1">>Wrong. A finite MGF is the assumption for Chernoff-type bounds. Markov's inequality does not involve the MGF at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q2">Why does the Chernoff method produce exponentially decaying tail bounds while Chebyshev only gives polynomial decay?</span>
+A. Chernoff uses the median instead of the mean, which is more robust
+B. Chernoff applies Markov's inequality to the exponential $e^{sX}$ and optimizes over $s$, leveraging the full MGF
+C. Chernoff assumes the data is Gaussian, which automatically gives exponential tails
+D. Chernoff uses higher-order moments like skewness and kurtosis
+<<button "A">><<replace "#ci-q2">>Wrong. The Chernoff method has nothing to do with medians. It applies an exponential transformation and optimizes a free parameter.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q2">>Correct! The Chernoff trick transforms $P(X \geq t)$ into $P(e^{sX} \geq e^{st})$ and applies Markov to the nonnegative variable $e^{sX}$. Optimizing over $s > 0$ produces the tightest exponential bound the MGF allows.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q2">>Wrong. The Chernoff method does not assume Gaussianity. It works for any random variable with a well-defined moment-generating function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q2">>Wrong. The Chernoff method uses the MGF, which encodes all moments, but it does not explicitly separate skewness and kurtosis. The key is the exponential transformation, not individual higher moments.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q3">In Hoeffding's inequality for $n$ i.i.d. variables bounded in $[0, 1]$, the tail probability $P(|\bar{X} - \mu| \geq t)$ is bounded by:</span>
+A. $\sigma^2 / (nt^2)$
+B. $E[X] / t$
+C. $2\exp(-2nt^2)$
+D. $\exp(-nt / 2)$
+<<button "A">><<replace "#ci-q3">>Wrong. That is Chebyshev's bound for the sample mean. Hoeffding gives an exponential bound, not a polynomial one.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q3">>Wrong. That is Markov's inequality. Hoeffding provides a much tighter exponential bound.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q3">>Correct! For i.i.d. variables in $[0,1]$, Hoeffding's inequality gives $P(|\bar{X} - \mu| \geq t) \leq 2\exp(-2nt^2)$. The factor of 2 comes from the two-sided bound, and the range $R = 1$ simplifies the denominator.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q3">>Wrong. The exponent in Hoeffding is quadratic in $t$ (i.e., $-2nt^2$), not linear. Linear decay in $t$ would correspond to a sub-exponential rather than sub-Gaussian tail.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q4">McDiarmid's inequality generalizes Hoeffding by applying to:</span>
+A. Random variables with infinite variance
+B. Dependent random variables with known covariance structure
+C. Any function of independent variables satisfying a bounded-differences condition
+D. Continuous random variables only, not discrete ones
+<<button "A">><<replace "#ci-q4">>Wrong. McDiarmid still requires bounded differences, which implicitly constrains the tails. It does not handle infinite-variance settings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q4">>Wrong. McDiarmid's inequality assumes independence. Extensions to dependent data (e.g., martingale methods) require different tools.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q4">>Correct! McDiarmid's inequality applies to $f(X_1, \ldots, X_n)$ where changing any single $X_i$ changes $f$ by at most $c_i$. This generalizes Hoeffding from sums to arbitrary functions with bounded sensitivity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q4">>Wrong. McDiarmid applies to both discrete and continuous random variables. The key requirement is bounded differences, not continuity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q5">When is Bernstein's inequality substantially tighter than Hoeffding's?</span>
+A. When the random variables are Gaussian
+B. When the actual variance is much smaller than the worst-case variance implied by the range
+C. When the sample size $n$ is very large
+D. When the random variables are identically distributed
+<<button "A">><<replace "#ci-q5">>Wrong. Bernstein and Hoeffding give similar results for Gaussians. The advantage of Bernstein appears when variance is small relative to the range, regardless of the distribution shape.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q5">>Correct! Hoeffding uses only the range $[a, b]$, implying worst-case variance $(b-a)^2/4$. Bernstein uses the actual variance $V$. When $V \ll (b-a)^2$, Bernstein produces a much tighter bound, especially for small deviations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q5">>Wrong. Both bounds improve with larger $n$, but the relative advantage of Bernstein over Hoeffding depends on the variance-to-range ratio, not on $n$ directly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q5">>Wrong. Both inequalities can handle non-identically distributed variables. The advantage of Bernstein is about exploiting variance information, not distributional identity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q6">A random variable $X$ is $\sigma$-sub-Gaussian if:</span>
+A. $P(|X - \mu| > t) \leq 2\exp(-t^2/(2\sigma^2))$ for all $t > 0$
+B. $E[e^{s(X-\mu)}] \leq e^{s^2\sigma^2/2}$ for all $s \in \mathbb{R}$
+C. $X$ is normally distributed with variance $\sigma^2$
+D. Both A and B are correct characterizations (though B is the standard definition)
+<<button "A">><<replace "#ci-q6">>Partially correct, but this is a consequence of the sub-Gaussian property, not the definition. The standard definition uses the MGF condition. Moreover, the tail bound alone is not equivalent to the MGF condition in full generality. The best answer is D.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q6">>This is the standard definition, but A is also a valid characterization (the tail bound follows from and, under mild conditions, implies the MGF condition). The best answer is D.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q6">>Wrong. Sub-Gaussian is a much broader class than Gaussian. Any bounded random variable is sub-Gaussian. The term means the tails decay at least as fast as a Gaussian, not that the distribution is Gaussian.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q6">>Correct! The MGF condition (B) is the standard definition, and the tail bound (A) is an equivalent characterization (up to constants). Both capture the same property: tails that decay at least as fast as a Gaussian with variance $\sigma^2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q7">In PAC learning with a finite hypothesis class $|\mathcal{H}|$, what sample complexity does Hoeffding's inequality (plus a union bound) yield?</span>
+A. $n = O(\ln(|\mathcal{H}|/\delta) / \epsilon^2)$
+B. $n = O(|\mathcal{H}| / \epsilon)$
+C. $n = O(\sqrt{|\mathcal{H}|} \cdot \ln(1/\delta))$
+D. $n = O(1/\epsilon)$ regardless of $|\mathcal{H}|$
+<<button "A">><<replace "#ci-q7">>Correct! Hoeffding gives $P(|R_{\text{emp}}(h) - R(h)| \geq \epsilon) \leq 2e^{-2n\epsilon^2}$ for each $h$. A union bound over $|\mathcal{H}|$ hypotheses gives $2|\mathcal{H}|e^{-2n\epsilon^2} \leq \delta$, which inverts to $n = O(\ln(|\mathcal{H}|/\delta)/\epsilon^2)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q7">>Wrong. This would be a polynomial dependence on $|\mathcal{H}|$, but Hoeffding plus a union bound gives a logarithmic dependence $\ln|\mathcal{H}|$, which is much more favorable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q7">>Wrong. The dependence on $|\mathcal{H}|$ is logarithmic, not a square root, and the dependence on $\epsilon$ is $1/\epsilon^2$, which is missing here.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q7">>Wrong. The sample complexity must depend on $|\mathcal{H}|$ (via the union bound) and on $\delta$ (the confidence parameter). A bound independent of these would be too good to be true.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ci-q8">Why do standard concentration inequalities (Hoeffding, McDiarmid) fail for heavy-tailed distributions?</span>
+A. Heavy-tailed distributions have infinite means, so no inequality can apply
+B. The moment-generating function does not exist (is infinite) for heavy-tailed distributions, so the Chernoff method cannot be used
+C. Heavy-tailed distributions are always dependent, violating the independence assumption
+D. The sample mean is biased for heavy-tailed distributions
+<<button "A">><<replace "#ci-q8">>Wrong. Many heavy-tailed distributions (e.g., Pareto with shape $> 1$) have finite means. The issue is not the mean but the MGF.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ci-q8">>Correct! Heavy-tailed distributions like Pareto or log-normal have $E[e^{sX}] = \infty$ for all $s > 0$. Since Hoeffding and McDiarmid are derived via the Chernoff method (which requires a finite MGF), they simply do not apply. You are left with weaker polynomial bounds like Chebyshev.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ci-q8">>Wrong. Heavy-tailed random variables can be perfectly independent. The issue is the tail behavior, not the dependence structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ci-q8">>Wrong. The sample mean is unbiased for any distribution with a finite mean, heavy-tailed or not. The problem is that concentration around the mean is much slower (polynomial, not exponential).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

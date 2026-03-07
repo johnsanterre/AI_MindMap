@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <title>System Identification: From Input-Output Data to Model</title>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">System Identification: Learning a Model from Data</text>
+
+  <!-- ── Left: True System (black box) ── -->
+  <rect x="40" y="100" width="180" height="100" rx="10" fill="#5C3D1E" stroke="#3a2510" stroke-width="1.5"/>
+  <text x="130" y="135" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FDFAF4" text-anchor="middle">True System</text>
+  <text x="130" y="155" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">(Unknown Dynamics)</text>
+  <text x="130" y="175" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle" font-style="italic">y(t) = f(u(t), x(t))</text>
+
+  <!-- Input arrow to True System -->
+  <line x1="10" y1="150" x2="38" y2="150" stroke="#7C2530" stroke-width="2"/>
+  <polygon points="38,150 28,145 28,155" fill="#7C2530"/>
+  <text x="8" y="140" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="start">u(t)</text>
+
+  <!-- Output arrow from True System -->
+  <line x1="220" y1="150" x2="268" y2="150" stroke="#2D5A8E" stroke-width="2"/>
+  <polygon points="268,150 258,145 258,155" fill="#2D5A8E"/>
+  <text x="250" y="140" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="start">y(t)</text>
+
+  <!-- ── Center: Data Collection ── -->
+  <rect x="280" y="100" width="140" height="100" rx="10" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="350" y="130" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Data</text>
+  <text x="350" y="148" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">{u(1), y(1)}</text>
+  <text x="350" y="162" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">{u(2), y(2)}</text>
+  <text x="350" y="176" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">...</text>
+  <text x="350" y="190" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">{u(N), y(N)}</text>
+
+  <!-- Arrow from Data down to Identification Algorithm -->
+  <line x1="350" y1="200" x2="350" y2="248" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="350,248 345,238 355,238" fill="#5C3D1E"/>
+
+  <!-- ── Bottom Center: Identification Algorithm ── -->
+  <rect x="270" y="250" width="160" height="70" rx="10" fill="#7C2530" stroke="#4d151e" stroke-width="1.5"/>
+  <text x="350" y="275" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Identification</text>
+  <text x="350" y="293" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Algorithm</text>
+  <text x="350" y="310" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle" font-style="italic">min ||y - y_hat||</text>
+
+  <!-- Arrow from Algorithm right to Learned Model -->
+  <line x1="430" y1="285" x2="488" y2="285" stroke="#7C2530" stroke-width="2"/>
+  <polygon points="488,285 478,280 478,290" fill="#7C2530"/>
+
+  <!-- ── Right: Learned Model ── -->
+  <rect x="500" y="240" width="180" height="90" rx="10" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="590" y="268" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Learned Model</text>
+  <text x="590" y="288" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle" font-style="italic">y_hat = g(u; theta)</text>
+  <text x="590" y="308" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">Approximates true system</text>
+
+  <!-- Arrow from Learned Model up to Prediction comparison -->
+  <line x1="590" y1="240" x2="590" y2="200" stroke="#2D5A8E" stroke-width="2"/>
+  <polygon points="590,200 585,210 595,210" fill="#2D5A8E"/>
+
+  <!-- ── Right Top: Validation / Prediction ── -->
+  <rect x="510" y="120" width="160" height="70" rx="8" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="590" y="145" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Validation</text>
+  <text x="590" y="163" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Compare y vs y_hat</text>
+  <text x="590" y="178" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">on unseen data</text>
+
+  <!-- ── Bottom panel: Model Types ── -->
+  <line x1="40" y1="355" x2="760" y2="355" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- ARX -->
+  <rect x="50" y="365" width="130" height="26" rx="6" fill="#7C2530"/>
+  <text x="115" y="383" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#FDFAF4" text-anchor="middle">ARX / ARMAX</text>
+
+  <!-- State Space -->
+  <rect x="200" y="365" width="130" height="26" rx="6" fill="#2D5A8E"/>
+  <text x="265" y="383" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#FDFAF4" text-anchor="middle">State-Space</text>
+
+  <!-- Subspace -->
+  <rect x="350" y="365" width="130" height="26" rx="6" fill="#5C3D1E"/>
+  <text x="415" y="383" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Subspace (N4SID)</text>
+
+  <!-- Neural -->
+  <rect x="500" y="365" width="130" height="26" rx="6" fill="#C4A87A"/>
+  <text x="565" y="383" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Neural Networks</text>
+
+  <!-- Nonparametric -->
+  <rect x="650" y="365" width="110" height="26" rx="6" fill="#7C2530"/>
+  <text x="705" y="383" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Nonparametric</text>
+
+  <!-- Label for bottom row -->
+  <text x="400" y="348" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Model Structures</text>
+
+  <!-- ── Far right: feedback loop arrow from Learned Model back to input ── -->
+  <path d="M 700,285 Q 740,285 740,80 Q 740,60 400,60 Q 60,60 60,80 L 60,100"
+        fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="60,100 55,90 65,90" fill="#C4A87A"/>
+  <text x="740" y="50" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="end" font-style="italic">Use model for control design</text>
+</svg>

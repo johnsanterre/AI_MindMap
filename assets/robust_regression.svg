@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia,serif">
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-size="14" fill="#5C3D1E" text-anchor="middle" letter-spacing="1">ROBUST REGRESSION: RESISTING OUTLIERS</text>
+
+  <!-- LEFT PANEL: Loss curves comparison -->
+  <text x="200" y="55" font-size="11" fill="#5C3D1E" text-anchor="middle" letter-spacing="0.5">LOSS FUNCTIONS</text>
+
+  <!-- Axes -->
+  <line x1="50" y1="320" x2="370" y2="320" stroke="#1C1713" stroke-width="1"/>
+  <line x1="50" y1="320" x2="50" y2="70" stroke="#1C1713" stroke-width="1"/>
+  <polygon points="370,317 376,320 370,323" fill="#1C1713"/>
+  <polygon points="47,70 50,64 53,70" fill="#1C1713"/>
+
+  <!-- Zero residual line -->
+  <line x1="200" y1="320" x2="200" y2="75" stroke="#D4C5A9" stroke-width="0.75" stroke-dasharray="3,3"/>
+  <text x="200" y="335" font-size="8" fill="#6B5D4F" text-anchor="middle">0</text>
+  <text x="200" y="348" font-size="9" fill="#6B5D4F" text-anchor="middle">residual</text>
+  <text x="35" y="195" font-size="9" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,35,195)">loss</text>
+
+  <!-- Squared loss (OLS) - parabola, steep -->
+  <path d="M60,100 C90,180 130,260 165,300 C180,315 190,320 200,320 C210,320 220,315 235,300 C270,260 310,180 340,100"
+        fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="345" y="95" font-size="9" fill="#7C2530">Squared (OLS)</text>
+
+  <!-- Huber loss - parabolic center, linear tails -->
+  <path d="M60,155 C80,180 120,230 155,275 C170,295 185,312 200,318 C215,312 230,295 245,275 C280,230 320,180 340,155"
+        fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="345" y="150" font-size="9" fill="#2D5A8E">Huber</text>
+
+  <!-- Tukey bisquare - redescending, goes back to constant -->
+  <path d="M60,200 C80,200 110,200 140,210 C160,230 180,280 200,318 C220,280 240,230 260,210 C290,200 320,200 340,200"
+        fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="345" y="198" font-size="9" fill="#5C3D1E">Tukey bisquare</text>
+
+  <!-- Delta markers for Huber -->
+  <line x1="155" y1="275" x2="155" y2="285" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="245" y1="275" x2="245" y2="285" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="155" y="295" font-size="7.5" fill="#2D5A8E" text-anchor="middle">-delta</text>
+  <text x="245" y="295" font-size="7.5" fill="#2D5A8E" text-anchor="middle">+delta</text>
+
+  <!-- RIGHT PANEL: RANSAC illustration -->
+  <text x="600" y="55" font-size="11" fill="#5C3D1E" text-anchor="middle" letter-spacing="0.5">RANSAC FIT vs OLS FIT</text>
+
+  <!-- Axes -->
+  <line x1="430" y1="320" x2="770" y2="320" stroke="#1C1713" stroke-width="1"/>
+  <line x1="430" y1="320" x2="430" y2="70" stroke="#1C1713" stroke-width="1"/>
+
+  <!-- Inlier data points (roughly linear) -->
+  <circle cx="460" cy="290" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="480" cy="275" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="500" cy="258" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="520" cy="248" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="545" cy="230" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="565" cy="218" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="590" cy="200" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="610" cy="190" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="635" cy="175" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="660" cy="160" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="685" cy="148" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="710" cy="133" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="735" cy="120" r="4" fill="#2D5A8E" opacity="0.7"/>
+
+  <!-- Outlier data points -->
+  <circle cx="490" cy="100" r="5" fill="#7C2530" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="550" cy="85" r="5" fill="#7C2530" stroke="#7C2530" stroke-width="1"/>
+  <circle cx="620" cy="95" r="5" fill="#7C2530" stroke="#7C2530" stroke-width="1"/>
+
+  <!-- OLS fit line (pulled toward outliers) -->
+  <line x1="440" y1="310" x2="750" y2="100" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="752" y="96" font-size="9" fill="#7C2530">OLS</text>
+
+  <!-- RANSAC fit line (ignoring outliers, through inliers) -->
+  <line x1="440" y1="305" x2="750" y2="112" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="752" y="116" font-size="9" fill="#2D5A8E">RANSAC</text>
+
+  <!-- Legend -->
+  <circle cx="460" cy="355" r="4" fill="#2D5A8E" opacity="0.7"/>
+  <text x="470" y="358" font-size="8.5" fill="#2D5A8E">Inliers</text>
+  <circle cx="520" cy="355" r="4" fill="#7C2530"/>
+  <text x="530" y="358" font-size="8.5" fill="#7C2530">Outliers</text>
+
+  <!-- Caption -->
+  <text x="400" y="385" font-size="9.5" fill="#6B5D4F" text-anchor="middle">Robust methods down-weight or exclude outliers, recovering the true signal that OLS distorts</text>
+</svg>

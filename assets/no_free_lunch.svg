@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="14" fill="#7C2530" letter-spacing="1.5">NO FREE LUNCH THEOREMS</text>
+
+  <!-- Left panel: Algorithm performance across problems -->
+  <text x="200" y="58" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">AVERAGED OVER ALL PROBLEMS</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="340" x2="370" y2="340" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="60" y1="340" x2="60" y2="75" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="215" y="365" text-anchor="middle" font-size="9" fill="#6B5D4F">Algorithm</text>
+  <text x="40" y="210" font-size="9" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,40,210)">Average Performance</text>
+
+  <!-- Bars for different algorithms, all same height -->
+  <rect x="85" y="150" width="40" height="190" fill="#7C2530" rx="2" opacity="0.85"/>
+  <text x="105" y="145" text-anchor="middle" font-size="8" fill="#7C2530">SVM</text>
+
+  <rect x="140" y="150" width="40" height="190" fill="#2D5A8E" rx="2" opacity="0.85"/>
+  <text x="160" y="145" text-anchor="middle" font-size="8" fill="#2D5A8E">NN</text>
+
+  <rect x="195" y="150" width="40" height="190" fill="#5C3D1E" rx="2" opacity="0.85"/>
+  <text x="215" y="145" text-anchor="middle" font-size="8" fill="#5C3D1E">Tree</text>
+
+  <rect x="250" y="150" width="40" height="190" fill="#C4A87A" rx="2" opacity="0.85"/>
+  <text x="270" y="145" text-anchor="middle" font-size="8" fill="#5C3D1E">kNN</text>
+
+  <rect x="305" y="150" width="40" height="190" fill="#7C2530" rx="2" opacity="0.6"/>
+  <text x="325" y="145" text-anchor="middle" font-size="8" fill="#7C2530">LR</text>
+
+  <!-- Equal line -->
+  <line x1="75" y1="150" x2="355" y2="150" stroke="#6B5D4F" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <text x="362" y="153" font-size="8" fill="#6B5D4F">equal!</text>
+
+  <!-- Annotation -->
+  <text x="215" y="385" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">All algorithms tie when averaged over every possible problem</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="50" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Right panel: On a SPECIFIC problem -->
+  <text x="600" y="58" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">ON A SPECIFIC PROBLEM</text>
+
+  <!-- Axes -->
+  <line x1="460" y1="340" x2="770" y2="340" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="460" y1="340" x2="460" y2="75" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="615" y="365" text-anchor="middle" font-size="9" fill="#6B5D4F">Algorithm</text>
+  <text x="440" y="210" font-size="9" fill="#6B5D4F" text-anchor="middle" transform="rotate(-90,440,210)">Performance</text>
+
+  <!-- Bars at different heights -->
+  <rect x="485" y="240" width="40" height="100" fill="#7C2530" rx="2" opacity="0.85"/>
+  <text x="505" y="235" text-anchor="middle" font-size="8" fill="#7C2530">SVM</text>
+
+  <rect x="540" y="110" width="40" height="230" fill="#2D5A8E" rx="2" opacity="0.85"/>
+  <text x="560" y="105" text-anchor="middle" font-size="8" fill="#2D5A8E">NN</text>
+  <text x="560" y="92" text-anchor="middle" font-size="8" fill="#2D5A8E" font-weight="bold">winner!</text>
+
+  <rect x="595" y="180" width="40" height="160" fill="#5C3D1E" rx="2" opacity="0.85"/>
+  <text x="615" y="175" text-anchor="middle" font-size="8" fill="#5C3D1E">Tree</text>
+
+  <rect x="650" y="270" width="40" height="70" fill="#C4A87A" rx="2" opacity="0.85"/>
+  <text x="670" y="265" text-anchor="middle" font-size="8" fill="#5C3D1E">kNN</text>
+
+  <rect x="705" y="200" width="40" height="140" fill="#7C2530" rx="2" opacity="0.6"/>
+  <text x="725" y="195" text-anchor="middle" font-size="8" fill="#7C2530">LR</text>
+
+  <!-- Annotation -->
+  <text x="600" y="385" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">Assumptions about the problem determine which algorithm wins</text>
+</svg>

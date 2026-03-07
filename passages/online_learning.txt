@@ -1,0 +1,153 @@
+<<include "Header">>
+
+! Online Learning
+
+<img src="assets/online_learning.svg" alt="Diagram illustrating online learning with sequential prediction, regret curves, and the three main algorithm families" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are betting on horse races, one race at a time, with no chance to study the full season's results before placing your next wager. You pick a horse, the race runs, you see how you did, and you adjust your strategy for the next race. ''Online learning'' is the mathematical framework for exactly this situation: a learner makes predictions sequentially, suffers a loss after each prediction, and updates its strategy — all without ever seeing the full dataset at once. The fundamental question is not whether the learner makes mistakes, but whether its cumulative mistakes grow much slower than the number of rounds played. If so, the learner achieves ''no regret'': its average performance converges to that of the best fixed strategy in hindsight.
+
+---
+
+!! The Core Insight
+
+Batch machine learning assumes you have all the data up front: you optimize a loss function over the entire training set, then deploy the model. Online learning abandons this assumption entirely. Data arrives one example at a time, possibly chosen adversarially, and the learner must commit to a prediction //before// seeing the outcome. The natural performance measure is ''regret'' — the gap between the learner's cumulative loss and the cumulative loss of the single best fixed action in hindsight:
+
+$$R_T = \sum_{t=1}^{T} \ell_t(w_t) - \min_{w^*} \sum_{t=1}^{T} \ell_t(w^*)$$
+
+A good online algorithm ensures $R_T$ grows sublinearly in $T$, typically as $O(\sqrt{T})$. This means the average regret $R_T / T \to 0$: the learner's per-round performance converges to that of the best expert, even though it never knew which expert was best. Crucially, this guarantee holds against //adversarial// data sequences — no probabilistic assumptions are needed. This adversarial robustness is what separates online learning from classical statistical learning, where data is assumed to be drawn i.i.d. from some distribution.
+
+The framework connects directly to game theory: online learning can be viewed as a repeated game between the learner and an adversary, and no-regret algorithms provide approximate equilibrium strategies. This connection is why online learning has become central to [[Reinforcement Learning]], mechanism design, and algorithm design far beyond traditional prediction tasks.
+
+---
+
+!! Algorithms: From Experts to Bandits
+
+The simplest online learning setting is the ''experts problem''. You have $N$ experts who each give advice. Each round, you choose a distribution over experts, the adversary reveals losses for all experts, and you suffer the expected loss under your distribution. The ''Multiplicative Weights Update'' (MWU) algorithm maintains a weight for each expert, multiplicatively downweighting experts that perform poorly:
+
+$$w_{i,t+1} = w_{i,t} \cdot (1 - \eta \cdot \ell_{i,t})$$
+
+where $\eta$ is the learning rate. After normalization, this yields a distribution that shifts probability mass toward historically better experts. MWU achieves regret $O(\sqrt{T \ln N})$, which is optimal for the experts setting. This algorithm is remarkably general — it appears in boosting (AdaBoost is MWU in disguise), zero-sum game solvers, and online portfolio selection.
+
+''Follow the Regularized Leader'' (FTRL) generalizes this to continuous decision spaces. Instead of maintaining weights, the learner picks the action that minimizes cumulative past loss plus a regularization term:
+
+$$w_{t+1} = \arg\min_{w \in \mathcal{W}} \left( \sum_{s=1}^{t} \ell_s(w) + R(w) \right)$$
+
+The regularizer $R(w)$ prevents wild oscillations between rounds. When $R$ is the negative entropy, FTRL recovers MWU. When $R$ is the squared $\ell_2$ norm, FTRL recovers ''Online Gradient Descent'' (OGD), which connects directly to [[Gradient Descent]] in the online setting. The choice of regularizer determines the geometry of the updates and the resulting regret bound.
+
+The ''bandit'' setting is harder: after each round, the learner observes only the loss of its //chosen// action, not the losses of alternatives. This is the [[Explore-Exploit Tradeoff]] in its purest form. The EXP3 algorithm solves the adversarial [[Multi-Armed Bandit]] problem with regret $O(\sqrt{TN \ln N})$ — worse than the full-information case by a factor of $\sqrt{N}$, which is the information-theoretic price of partial feedback.
+
+---
+
+!! What the Math Is Actually Doing
+
+The regret analysis of MWU reveals a clean mathematical structure. Define the ''potential function'' $\Phi_t = \ln\left(\sum_i w_{i,t}\right)$. Each round, the potential drops by approximately $\eta \cdot \hat{\ell}_t$ (the learner's loss) but increases by at most $\eta^2$ due to the multiplicative update. Telescoping over $T$ rounds:
+
+$$\sum_{t=1}^T \hat{\ell}_t - \min_i \sum_{t=1}^T \ell_{i,t} \leq \frac{\ln N}{\eta} + \eta T$$
+
+Setting $\eta = \sqrt{\ln N / T}$ balances the two terms, giving the optimal regret $O(\sqrt{T \ln N})$.
+
+For FTRL with a general convex regularizer $R$, the regret bound involves the ''Bregman divergence'' $D_R$ associated with $R$:
+
+$$R_T \leq D_R(w^*, w_1) + \sum_{t=1}^{T} D_R(w_t, w_{t+1})$$
+
+The first term measures how far the best action is from the initial point; the sum of divergences measures the ''stability'' of the algorithm's iterates. A good regularizer keeps iterates stable (small step-to-step divergence) while covering the full action space (bounded initial divergence). This is why the regularizer must be ''strongly convex'' with respect to the norm used to measure gradient size — a requirement from [[Convex Optimization]] that directly controls the regret.
+
+Online Gradient Descent uses the update $w_{t+1} = \Pi_{\mathcal{W}}(w_t - \eta \nabla \ell_t(w_t))$, projecting back onto the feasible set $\mathcal{W}$ after each gradient step. For convex losses, it achieves regret $O(\sqrt{T})$. For strongly convex losses, the regret improves to $O(\log T)$ — nearly as good as knowing the best action in advance.
+
+In the bandit setting, the key trick is ''importance-weighted estimation''. Since the learner only observes one loss, it constructs an unbiased estimate of the full loss vector: $\hat{\ell}_{i,t} = \ell_{i,t} / p_{i,t}$ if action $i$ was chosen (with probability $p_{i,t}$), and 0 otherwise. This estimator is unbiased ($\mathbb{E}[\hat{\ell}_{i,t}] = \ell_{i,t}$) but has high variance — the variance scales as $1/p_{i,t}$, which is why exploration (keeping $p_{i,t}$ away from zero) is essential.
+
+---
+
+!! Applications in Practice
+
+Online learning algorithms power many production systems. ''Online advertising'' is the canonical example: ad platforms must decide which ad to show each user, observe whether the user clicks, and update their strategy — a classic bandit problem at enormous scale. The [[Explore-Exploit Tradeoff]] is literal: showing a known-good ad exploits current knowledge, while trying a new ad explores for potentially better options.
+
+''Online portfolio selection'' applies MWU-style algorithms to financial asset allocation. The Cover universal portfolio algorithm, which uses FTRL with log-barrier regularization, achieves wealth that grows at the same exponential rate as the best constant-rebalanced portfolio in hindsight. This is a direct application of no-regret learning to sequential investment.
+
+''Online convex optimization'' (OCO) is the general framework that subsumes most online learning settings. At each round, the learner picks a point $w_t$ in a convex set, then a convex loss function $\ell_t$ is revealed. OCO with appropriate algorithms provides the foundation for streaming data analysis, adaptive control, and online versions of nearly every batch optimization algorithm used in machine learning. The connection to [[Gradient Descent]] is tight: stochastic gradient descent on a fixed dataset can be analyzed as an online learning algorithm where the data order is the adversary.
+
+---
+
+!! When Online Learning Breaks Down
+
+''Non-stationary environments with fast drift:'' Standard regret compares against the single best //fixed// action in hindsight. If the best action changes frequently, the fixed-comparator regret bound becomes vacuous — even $O(\sqrt{T})$ regret may be terrible if the optimal action shifts every round. ''Adaptive regret'' and ''dynamic regret'' formulations address this by comparing against time-varying sequences, but the bounds degrade with the number of shifts, and the algorithms require tuning a drift rate that is rarely known in advance. When the environment is genuinely non-stationary, online learning's worst-case guarantees lose their bite.
+
+''Delayed or batched feedback:'' Online learning theory assumes the learner observes the loss immediately after each prediction. In practice — ad click attribution, medical treatment outcomes, supply chain effects — feedback may arrive days or weeks late. Delayed feedback inflates regret by a factor proportional to the delay. If the delay exceeds the effective horizon, the learner cannot adapt quickly enough and degenerates to near-random guessing. Batched variants exist but sacrifice the fine-grained adaptivity that makes online learning attractive in the first place.
+
+''Combinatorial or structured action spaces:'' When the action space is exponentially large (e.g., choosing a path in a network, a ranking of items, or a schedule), even constructing importance-weighted loss estimates becomes computationally intractable. The EXP3 regret bound of $O(\sqrt{TN \ln N})$ is meaningless when $N$ is exponential. Efficient algorithms exist for special structures (e.g., online shortest paths, online linear optimization), but for general combinatorial bandits, computation — not information — becomes the bottleneck, and the clean regret bounds of basic online learning no longer apply.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Littlestone and Warmuth (1994), //The Weighted Majority Algorithm//, introduced the multiplicative weights method and proved its $O(\sqrt{T \ln N})$ regret bound. Freund and Schapire (1997), //A Decision-Theoretic Generalization of On-Line Learning//, connected multiplicative weights to boosting and game-theoretic equilibria. Zinkevich (2003), //Online Convex Optimization and Generalized Infinitesimal Gradient Ascent//, established online gradient descent for online convex optimization with $O(\sqrt{T})$ regret. Auer et al. (2002), //The Nonstochastic Multiarmed Bandit Problem//, introduced the EXP3 algorithm for adversarial bandits. Shalev-Shwartz (2012), //Online Learning and Online Convex Optimization//, provides the standard survey unifying the field.
+
+''Minimax optimality:'' The $O(\sqrt{T \ln N})$ regret for the experts setting and $O(\sqrt{T})$ for online convex optimization with bounded gradients are minimax optimal — no algorithm can achieve better worst-case regret. For bandits, the minimax rate is $\Theta(\sqrt{TN})$, and EXP3 nearly matches it (up to $\sqrt{\ln N}$). These lower bounds are proved via information-theoretic arguments and game-theoretic minimax duality.
+
+''Connection to equilibria:'' If both players in a zero-sum game use no-regret algorithms, their average strategies converge to a Nash equilibrium. This is the basis for modern game solvers, including the Counterfactual Regret Minimization (CFR) algorithm used to solve poker. The rate of convergence to equilibrium is determined by the regret bound: $O(\sqrt{T \ln N})$ regret implies $O(1/\sqrt{T})$ convergence to the equilibrium value.
+
+''FTRL vs. Online Mirror Descent (OMD):'' These are the two main algorithmic templates. FTRL selects $w_{t+1}$ by minimizing cumulative loss plus regularization from scratch each round. OMD takes a mirror descent step from the current iterate. For many settings they produce identical iterates, but they can differ when the feasible set has boundaries. The equivalence holds when the regularizer is a Legendre function and the loss is linear. Understanding both perspectives is necessary for advanced algorithm design in online [[Convex Optimization]].
+
+''Bandit convex optimization:'' When the loss is convex but the learner only observes the scalar loss value (not the gradient), one-point gradient estimators using random perturbations achieve $O(T^{3/4})$ regret. Two-point estimators (requiring two function evaluations per round) recover $O(\sqrt{T})$. This setting connects online learning to zeroth-order optimization and derivative-free methods.
+
+---
+
+!! Quiz
+
+<span id="ol-q1">What does "regret" measure in online learning?</span>
+A. The probability that the learner makes an incorrect prediction
+B. The cumulative loss of the learner minus the cumulative loss of the best fixed action in hindsight
+C. The difference between training loss and test loss
+D. The number of rounds before the learner identifies the best action
+<<button "A">><<replace "#ol-q1">>Incorrect. Regret is not a probability — it is a cumulative quantity measuring the total excess loss relative to the best fixed comparator over all rounds.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q1">>Correct! Regret is $R_T = \sum_{t=1}^{T} \ell_t(w_t) - \min_{w^*} \sum_{t=1}^{T} \ell_t(w^*)$: the gap between the learner's total loss and the total loss of the single best action chosen with full hindsight.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q1">>Incorrect. That describes the generalization gap in batch learning. Online learning regret compares cumulative loss against the best fixed comparator, not training vs. test performance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q1">>Incorrect. Regret does not measure a discovery time. It measures cumulative excess loss, which may never reach zero because the best action is only known in hindsight.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q2">What regret rate does the Multiplicative Weights Update algorithm achieve in the experts setting with $N$ experts over $T$ rounds?</span>
+A. $O(\ln N)$
+B. $O(\sqrt{T \ln N})$
+C. $O(T / N)$
+D. $O(N \sqrt{T})$
+<<button "A">><<replace "#ol-q2">>Incorrect. $O(\ln N)$ is too optimistic — it does not grow with $T$ at all, which is impossible in the adversarial setting.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q2">>Correct! MWU achieves regret $O(\sqrt{T \ln N})$ by setting the learning rate $\eta = \sqrt{\ln N / T}$. This is minimax optimal for the experts problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q2">>Incorrect. $O(T / N)$ would grow linearly in $T$ for fixed $N$, meaning the average regret never vanishes. MWU achieves sublinear regret.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q2">>Incorrect. $O(N \sqrt{T})$ has the wrong dependence on $N$. The correct bound is $O(\sqrt{T \ln N})$ — the dependence on $N$ is logarithmic, not linear.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q3">In Follow the Regularized Leader (FTRL), what role does the regularizer $R(w)$ play?</span>
+A. It ensures the loss function is convex
+B. It prevents the algorithm's iterates from oscillating wildly between rounds, ensuring stability
+C. It converts the online problem into a batch problem
+D. It eliminates the need for learning rate tuning
+<<button "A">><<replace "#ol-q3">>Incorrect. The regularizer does not affect the loss function's convexity — that is a property of the losses themselves. The regularizer stabilizes the learner's decisions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q3">>Correct! The regularizer penalizes large deviations from previous iterates (in a Bregman divergence sense), preventing the erratic behavior that would result from greedily following the unregularized leader. This stability is what produces sublinear regret.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q3">>Incorrect. FTRL remains an online algorithm — it updates after each round. The regularizer does not remove the sequential nature of the problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q3">>Incorrect. The learning rate and regularizer strength are closely related and still require tuning. The regularizer controls the geometry of updates, not the need for hyperparameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q4">Why does the bandit setting yield worse regret bounds than the full-information (experts) setting?</span>
+A. Bandit losses are always non-convex
+B. The learner only observes the loss of its chosen action, not alternatives, so it must explore to estimate unseen losses
+C. Bandit algorithms cannot use randomization
+D. The adversary in the bandit setting is more powerful than in the experts setting
+<<button "A">><<replace "#ol-q4">>Incorrect. The convexity of losses is a separate issue. Bandit regret is worse because of the //information// limitation — the learner sees only one loss per round, not because of non-convexity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q4">>Correct! With only partial feedback, the learner must use importance-weighted estimators to infer unseen losses, which introduces variance. This variance is the information-theoretic price of partial feedback and inflates regret by a factor of $\sqrt{N}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q4">>Incorrect. Bandit algorithms like EXP3 are inherently randomized — randomization is essential for exploration. The worse bounds come from partial information, not lack of randomization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q4">>Incorrect. The adversary has the same power in both settings (choosing arbitrary loss vectors). The difference is in what the learner //observes//, not what the adversary can do.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q5">What happens to per-round average regret $R_T / T$ as $T \to \infty$ for a no-regret algorithm?</span>
+A. It converges to a positive constant that depends on the number of experts
+B. It converges to zero
+C. It oscillates without converging
+D. It grows logarithmically
+<<button "A">><<replace "#ol-q5">>Incorrect. If $R_T = O(\sqrt{T})$, then $R_T / T = O(1/\sqrt{T}) \to 0$. The average regret vanishes, not converges to a constant.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q5">>Correct! No-regret means $R_T = o(T)$, so $R_T / T \to 0$. The learner's average per-round loss converges to the average loss of the best fixed action in hindsight.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q5">>Incorrect. For standard no-regret algorithms, convergence is monotonic in the worst case (up to lower-order terms). The average regret decreases steadily.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q5">>Incorrect. Logarithmic growth of $R_T / T$ would mean regret is superlinear ($R_T = O(T \log T)$), which is worse than linear — not a no-regret algorithm at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q6">How does online gradient descent relate to standard gradient descent?</span>
+A. They are identical algorithms applied to different problems
+B. Online gradient descent takes one gradient step per round on the current loss, rather than optimizing over the full dataset
+C. Online gradient descent uses second-order information while standard gradient descent does not
+D. Online gradient descent requires the loss to be strongly convex, while standard gradient descent does not
+<<button "A">><<replace "#ol-q6">>Incorrect. While the update step looks similar, the settings differ fundamentally: online GD processes one adversarially chosen loss per round, while batch GD minimizes a fixed objective over the full dataset.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q6">>Correct! Online GD updates $w_{t+1} = w_t - \eta \nabla \ell_t(w_t)$ using only the current round's loss. This is FTRL with squared $\ell_2$ regularization, and it connects batch SGD to online learning — SGD on a fixed dataset can be viewed as online GD where the data order is the adversary.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q6">>Incorrect. Online GD uses first-order (gradient) information, just like standard GD. Second-order methods (e.g., online Newton step) are a separate, more advanced approach.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q6">>Incorrect. Online GD works for general convex losses with $O(\sqrt{T})$ regret. Strong convexity is a bonus that improves the rate to $O(\log T)$, but it is not required.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q7">If both players in a two-player zero-sum game use no-regret algorithms, what happens to their average strategies?</span>
+A. They diverge from equilibrium because adversarial play prevents convergence
+B. They converge to a Nash equilibrium of the game
+C. They converge to a correlated equilibrium but not necessarily a Nash equilibrium
+D. One player's strategy converges but the other's does not
+<<button "A">><<replace "#ol-q7">>Incorrect. The remarkable result is the opposite: no-regret dynamics in zero-sum games do converge. The average strategies form an approximate equilibrium whose gap shrinks as $O(1/\sqrt{T})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q7">>Correct! When both players use no-regret algorithms in a zero-sum game, their time-averaged strategies converge to a Nash equilibrium. This is the foundation of algorithms like CFR used to solve poker and other large games.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q7">>Incorrect. In general games, no-regret dynamics converge to correlated equilibria. But in zero-sum games specifically, the stronger result holds: convergence to Nash equilibria.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q7">>Incorrect. The convergence is symmetric — both players' average strategies converge simultaneously. The zero-sum structure ensures this mutual convergence.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ol-q8">Which of the following is NOT a limitation of standard online learning?</span>
+A. Regret bounds become vacuous when the best action changes frequently over time
+B. Delayed feedback inflates regret proportionally to the delay
+C. The framework cannot handle convex loss functions
+D. Exponentially large action spaces make importance-weighted estimation computationally intractable
+<<button "A">><<replace "#ol-q8">>Incorrect — this IS a limitation. Standard regret compares against the best fixed action, which is meaningless when the optimal action drifts rapidly. This is a genuine weakness requiring dynamic regret formulations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ol-q8">>Incorrect — this IS a limitation. Delayed feedback is a real problem that inflates regret, degrading the learner's ability to adapt quickly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ol-q8">>Correct! This is NOT a limitation — online convex optimization is one of the most developed parts of the field. Algorithms like online gradient descent and FTRL are specifically designed for convex losses and achieve tight regret bounds.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ol-q8">>Incorrect — this IS a limitation. When the action space is combinatorial (exponential in size), standard bandit algorithms become computationally infeasible, requiring specialized structure-exploiting methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

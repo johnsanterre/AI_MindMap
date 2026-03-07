@@ -1,0 +1,162 @@
+<<include "Header">>
+
+! Brownian Motion
+
+<img src="assets/brownian_motion.svg" alt="Brownian motion sample paths and applications diagram" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+In 1827, botanist Robert Brown peered through his microscope at pollen grains suspended in water and saw something that defied explanation: the grains jiggled ceaselessly and unpredictably, never settling, never repeating. He ruled out biological activity — dried pollen did the same. It was Einstein, in 1905, who cracked the mystery: invisible water molecules were bombarding the grain from all sides in random directions, each push infinitesimally small, but their cumulative effect producing the erratic dance Brown had witnessed. This discovery unified thermodynamics, probability theory, and the long-contested //molecular hypothesis//. The mathematics that Norbert Wiener later built to describe it — now called ''Brownian motion'' or the ''Wiener process'' — turned out to be far more than a physics curiosity. It now underlies the pricing of financial derivatives, the theory of stochastic differential equations, and, remarkably, the forward noise process in modern AI image generation via <<link "Diffusion Models" "Diffusion Models">><</link>>.
+
+!! The Core Insight
+
+''Brownian motion'' $W(t)$ is the canonical continuous-time random process. It is defined by four properties: $W(0) = 0$; the paths $t \mapsto W(t)$ are continuous; ''increments are independent'' — what happens in $[s, t]$ tells you nothing about what happens in $[t, u]$; and ''increments are Gaussian'': $W(t) - W(s) \sim \mathcal{N}(0,\, t - s)$ for $s < t$.
+
+That last point is the engine of everything. The variance of the displacement grows //linearly// with time, not quadratically as in smooth motion. Walk for four times as long, and your uncertainty grows by a factor of two, not four. The standard deviation scales as $\sqrt{t}$, which is why Brownian paths spread out in a characteristic cone-shaped envelope.
+
+Despite being continuous everywhere, Brownian motion is ''nowhere differentiable'' — at no point does it have a well-defined tangent line. Its paths are fractal objects, rough at every scale. This is not a pathology to be apologized for; it is the precise mathematical signature of white-noise forcing, and it is what makes the Itô calculus necessary.
+
+!! Properties and Constructions
+
+Several structural properties make Brownian motion both tractable and surprising:
+
+''Self-similarity:'' $W(ct)$ has the same finite-dimensional distributions as $\sqrt{c}\, W(t)$. Zooming into a Brownian path produces a statistically identical path — it is fractal in a precise probabilistic sense.
+
+''Quadratic variation:'' For smooth functions, the quadratic variation $\sum (f(t_{i+1}) - f(t_i))^2 \to 0$ as the partition refines. For Brownian motion, $$[W, W]_t = t.$$ This does //not// vanish. It is this non-zero quadratic variation that forces the correction term in Itô's formula.
+
+''Lévy's dyadic construction:'' Brownian motion can be built explicitly by specifying $W(1/2)$ given $W(0)$ and $W(1)$, then $W(1/4)$ and $W(3/4)$, and so on, interpolating at each dyadic level. This construction proves existence and gives an algorithm for simulation.
+
+''Donsker's theorem:'' Let $S_n = X_1 + \cdots + X_n$ be a simple random walk with i.i.d. mean-zero, unit-variance steps. Then the rescaled process $n^{-1/2} S_{\lfloor nt \rfloor}$ converges in distribution (in the space of continuous functions) to $W(t)$. This is the functional central limit theorem — it connects the <<link "Random Walk" "Random Walk">><</link>> of discrete probability to the Wiener process. See also <<link "Stochastic Processes" "Stochastic Processes">><</link>>.
+
+''Martingale property:'' $\mathbb{E}[W(t) \mid W(s)] = W(s)$ for $s < t$. Knowing the past, your best prediction of the future is the present value. Brownian motion is a martingale, and this property powers much of the theory of stochastic calculus.
+
+!! What the Math Is Actually Doing
+
+The rigorous foundation is ''Wiener measure'': a probability measure on the path space $C([0,T])$ of continuous functions. Almost every path drawn from this measure is continuous but nowhere differentiable — a set of smooth paths has Wiener measure zero.
+
+The central computational tool is ''Itô's formula''. For a smooth function $f$ and Brownian motion $W(t)$:
+
+$$df(W(t)) = f'(W(t))\, dW(t) + \frac{1}{2} f''(W(t))\, dt$$
+
+The $\frac{1}{2} f'' dt$ term has no analogue in ordinary calculus. It arises directly from the quadratic variation $[W,W]_t = t$: when you Taylor-expand $f(W(t+dt)) - f(W(t))$, the term $(dW)^2$ is //not// negligible — it contributes $dt$ in expectation. The classic example:
+
+$$d(W^2) = 2W\, dW + dt$$
+
+In ordinary calculus, $d(x^2) = 2x\, dx$. The extra $dt$ is the Itô correction.
+
+A fundamental stochastic differential equation is the ''Ornstein-Uhlenbeck process'':
+
+$$dX_t = -\theta X_t\, dt + \sigma\, dW_t$$
+
+This is mean-reverting (the $-\theta X_t$ drift pulls $X$ back toward zero) with Gaussian stationary distribution $\mathcal{N}(0, \sigma^2 / 2\theta)$. It models velocity in Brownian motion physics, interest rates in finance, and the noise schedule in some diffusion models.
+
+!! Brownian Motion in ML
+
+''Diffusion models'' (<<link "Diffusion Models" "Diffusion Models">><</link>>) use a discretized Brownian motion as their forward process: starting from a data point $x_0$, they add Gaussian noise step by step, $$x_t = \sqrt{\bar{\alpha}_t}\, x_0 + \sqrt{1 - \bar{\alpha}_t}\, \epsilon, \quad \epsilon \sim \mathcal{N}(0, I),$$ approximating the marginals of an SDE driven by Brownian motion. Song et al. (2021) showed the reverse process is also an SDE, and that a neural network trained to estimate the ''score function'' $\nabla_x \log p_t(x)$ can run this reverse SDE to generate samples. The connection to <<link "Score Matching" "Score Matching">><</link>> is direct.
+
+''Langevin dynamics'' samples from a target distribution $p(x) \propto e^{-U(x)}$ via:
+
+$$dX_t = -\nabla U(X_t)\, dt + \sqrt{2}\, dW_t$$
+
+Under mild conditions this SDE has $p$ as its stationary distribution. Discretizing it gives a practical <<link "MCMC" "MCMC">><</link>> algorithm — gradient descent plus Brownian noise — and connects optimization to Bayesian sampling.
+
+''Neural SDEs'' replace the deterministic ODE dynamics of Neural ODEs with stochastic differential equations, adding a diffusion term driven by Brownian motion. This gives probabilistic latent trajectories for time series, useful when data is noisy or partially observed.
+
+''SGD as approximate Brownian motion:'' The mini-batch gradient noise in stochastic gradient descent has been analyzed as approximately Brownian motion in the loss landscape, with noise covariance determining the effective temperature. This framing connects learning dynamics to Langevin sampling and helps explain implicit regularization.
+
+!! When Brownian Motion Breaks Down
+
+''Heavy-tailed increments:'' Brownian motion assumes Gaussian increments with finite variance. Financial crises, earthquake magnitudes, and internet packet sizes exhibit power-law tails and occasional catastrophic jumps — phenomena that Brownian motion cannot reproduce. ''Lévy processes'' with stable distributions generalize Brownian motion to allow for infinite-variance increments and jumps, at the cost of losing the Gaussian toolkit.
+
+''Smooth physical dynamics require colored noise:'' Brownian paths are fractal and non-differentiable. Engineering and physics systems governed by smooth differential equations cannot be driven by white-noise Brownian motion directly — velocity does not exist. These systems require ''colored noise'' (correlated in time), such as the Ornstein-Uhlenbeck process as a noise source, rather than pure Brownian motion. The Brownian idealization breaks down when the timescale of noise correlation matters.
+
+''Memory and long-range dependence:'' Brownian motion has the Markov property — the future depends on the present, not the past. Many real systems exhibit ''long-range dependence'': today's stock volatility, today's network traffic, and today's river flow all correlate with conditions weeks or months ago. ''Fractional Brownian motion'' with Hurst parameter $H \neq 1/2$ captures this, but at a steep price: it is not a martingale, not Markov, and Itô's formula no longer applies. A different stochastic calculus (Malliavin calculus) is needed.
+
+!! Technical Details
+
+''Historical timeline:''
+- ''Bachelier (1900):'' Used Brownian motion to model stock prices in his Paris thesis — five years before Einstein and 23 years before Wiener's rigorous construction.
+- ''Einstein (1905):'' Derived the diffusion equation from molecular collisions and predicted the mean-squared displacement $\langle x^2 \rangle = 2Dt$, giving experimentalists a way to measure Avogadro's number.
+- ''Wiener (1923):'' Constructed Wiener measure rigorously, proving that the space of continuous paths carries a well-defined probability measure. The process is often called the Wiener process in his honor.
+- ''Itô (1944):'' Developed stochastic calculus and the Itô integral, making SDEs computable.
+
+''Related constructions:''
+- ''Brownian bridge:'' $W(t)$ conditioned on $W(T) = 0$. Used in simulation and in the construction of diffusion model training schedules.
+- ''Bessel process:'' The Euclidean norm $|W(t)|$ of $d$-dimensional Brownian motion. Appears in the study of hitting times and radial diffusions.
+- ''Geometric Brownian motion:'' $dS = \mu S\, dt + \sigma S\, dW$, the basis of the Black-Scholes model.
+
+''Key connections:'' <<link "Stochastic Processes" "Stochastic Processes">><</link>> — <<link "Random Walk" "Random Walk">><</link>> — <<link "Diffusion Models" "Diffusion Models">><</link>> — <<link "Score Matching" "Score Matching">><</link>> — <<link "MCMC" "MCMC">><</link>>
+
+!! Quiz
+
+<span id="bm-q1">What is the distribution of the increment $W(t) - W(s)$ for $s < t$ in standard Brownian motion?</span>
+
+A. $\mathcal{N}(0, t^2 - s^2)$
+B. $\mathcal{N}(0, t - s)$
+C. $\mathcal{N}(0, \sqrt{t - s})$
+D. Uniform on $[-\sqrt{t-s},\, \sqrt{t-s}]$
+
+<<button "A">><<replace "#bm-q1">>Incorrect. The variance of the increment is $t - s$, not $t^2 - s^2$. The variance grows linearly with the elapsed time, not as the difference of squares.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q1">>Correct. $W(t) - W(s) \sim \mathcal{N}(0, t - s)$. Variance grows linearly with elapsed time — the defining property of Brownian motion's Gaussian increments.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q1">>Incorrect. $\sqrt{t-s}$ is the standard deviation, not the variance. The increment is $\mathcal{N}(0, t-s)$ where $t-s$ is the variance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q1">>Incorrect. Brownian increments are Gaussian, not uniform. The uniform distribution has bounded support; Brownian increments can take any real value.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q2">Itô's formula gives $d(W^2) = 2W\, dW + dt$. The extra $dt$ term (compared to ordinary calculus) arises because:</span>
+
+A. Brownian motion has a nonzero drift
+B. The quadratic variation $[W,W]_t = t$ is nonzero
+C. $W^2$ is not a smooth function
+D. The Markov property fails for $W^2$
+
+<<button "A">><<replace "#bm-q2">>Incorrect. Standard Brownian motion has zero drift by definition ($\mathbb{E}[W(t)] = 0$). The $dt$ correction is not about drift.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q2">>Correct. Because $[W,W]_t = t \neq 0$, the second-order Taylor term $(dW)^2 \approx dt$ contributes at leading order. This is the Itô correction: $\frac{1}{2} f''(W)(dW)^2 = \frac{1}{2} f''(W)\, dt$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q2">>Incorrect. $f(x) = x^2$ is perfectly smooth. The issue lies with the roughness of $W(t)$, not of $f$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q2">>Incorrect. $W^2$ is still adapted to the Brownian filtration and the Markov property is not the source of the Itô correction.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q3">Donsker's theorem says that a rescaled simple random walk converges to Brownian motion. This result is best described as:</span>
+
+A. A law of large numbers for random walks
+B. A functional central limit theorem
+C. The strong Markov property of Brownian motion
+D. The Borel-Cantelli lemma applied to paths
+
+<<button "A">><<replace "#bm-q3">>Incorrect. The law of large numbers concerns convergence of averages to a constant. Donsker's theorem is about distributional convergence of an entire rescaled process to Brownian motion.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q3">>Correct. Donsker's theorem is the functional (or invariance-principle) CLT: instead of a single sum converging to a normal random variable, the entire rescaled path $n^{-1/2} S_{\lfloor nt \rfloor}$ converges in distribution (in path space) to $W(t)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q3">>Incorrect. The strong Markov property states that Brownian motion restarts afresh at stopping times — a different (though related) property.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q3">>Incorrect. The Borel-Cantelli lemma is a tool about tail events and almost-sure convergence; it is not the substance of Donsker's theorem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q4">In diffusion models, the forward process approximates which stochastic process?</span>
+
+A. A Poisson process with exponential jumps
+B. A discretized SDE driven by Brownian motion, adding Gaussian noise at each step
+C. Fractional Brownian motion with Hurst parameter $H = 0.7$
+D. An Ornstein-Uhlenbeck process with fixed reversion speed
+
+<<button "A">><<replace "#bm-q4">>Incorrect. Poisson processes have discrete jumps; the forward process in diffusion models adds continuous Gaussian noise, not jumps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q4">>Correct. The forward process adds Gaussian noise step by step, approximating the marginals of an SDE driven by Brownian motion. Song et al. (2021) formalized this as a continuous-time SDE framework.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q4">>Incorrect. Standard diffusion models use ordinary (not fractional) Brownian motion with $H = 1/2$, which gives independent Gaussian increments.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q4">>Incorrect. While the OU process appears in some noise schedules, the canonical forward process is better described as a variance-preserving or variance-exploding SDE, not a fixed-parameter OU process.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q5">The Ornstein-Uhlenbeck process $dX_t = -\theta X_t\, dt + \sigma\, dW_t$ has stationary distribution:</span>
+
+A. $\text{Uniform}(-\sigma, \sigma)$
+B. $\text{Exponential}(\theta/\sigma)$
+C. $\mathcal{N}(0,\, \sigma^2 / 2\theta)$
+D. $\mathcal{N}(\theta,\, \sigma^2)$
+
+<<button "A">><<replace "#bm-q5">>Incorrect. The stationary distribution of the OU process is Gaussian, not uniform. The mean-reverting drift and Brownian forcing balance to give a normal distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q5">>Incorrect. The exponential distribution has support on $(0,\infty)$; the OU process ranges over all reals and has a symmetric Gaussian stationary distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q5">>Correct. The OU process is mean-reverting with stationary distribution $\mathcal{N}(0,\, \sigma^2/2\theta)$. Stronger reversion (larger $\theta$) or weaker noise (smaller $\sigma$) concentrates the distribution near zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q5">>Incorrect. The stationary mean is zero (the drift pulls toward zero), and the variance is $\sigma^2/2\theta$, not $\sigma^2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q6">Why is standard Brownian motion //not// suitable for modeling systems with long-range dependence (e.g., network traffic that is bursty across many timescales)?</span>
+
+A. Brownian motion has non-Gaussian increments
+B. Brownian motion has the Markov property, so its increments are independent — it cannot capture memory
+C. Brownian motion paths are too smooth to model bursty traffic
+D. Brownian motion is only defined on finite time intervals
+
+<<button "A">><<replace "#bm-q6">>Incorrect. Brownian motion has Gaussian increments, not non-Gaussian ones. The issue with long-range dependence is about independence of increments, not their distributional form.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q6">>Correct. Standard Brownian motion has independent increments — knowing past increments gives no information about future increments. Long-range dependence requires positive autocorrelation across large time lags, which fractional Brownian motion (with $H > 1/2$) can model at the cost of losing the Markov property and Itô calculus.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q6">>Incorrect. Brownian motion paths are //not// smooth — they are nowhere differentiable. The limitation for long-range dependence is the independence of increments, not path smoothness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q6">>Incorrect. Brownian motion is defined on $[0, \infty)$ and has no finite-horizon restriction.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q7">Who first applied Brownian motion mathematics to model financial prices, and when?</span>
+
+A. Einstein, 1905
+B. Wiener, 1923
+C. Bachelier, 1900
+D. Itô, 1944
+
+<<button "A">><<replace "#bm-q7">>Incorrect. Einstein's 1905 paper explained Brownian motion physically (molecular bombardment) and predicted mean-squared displacement — it was a physics paper, not a financial application.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q7">>Incorrect. Wiener's 1923 contribution was the rigorous mathematical construction of Brownian motion (Wiener measure). He did not apply it to finance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q7">>Correct. Louis Bachelier's 1900 Paris thesis ''Théorie de la spéculation'' modeled stock prices using what we now call Brownian motion — five years before Einstein's physics paper and 23 years before Wiener's rigorous construction. He is the unsung pioneer of mathematical finance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q7">>Incorrect. Kiyosi Itô's 1944 contribution was the development of stochastic calculus and the Itô integral — the mathematical machinery for computing with Brownian motion, not its financial application.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bm-q8">Langevin dynamics adds Brownian noise to gradient descent: $dX_t = -\nabla U(X_t)\, dt + \sqrt{2}\, dW_t$. The stationary distribution of this SDE is:</span>
+
+A. $\mathcal{N}(0, I)$ regardless of $U$
+B. The uniform distribution on the level sets of $U$
+C. The Boltzmann distribution $p(x) \propto e^{-U(x)}$
+D. The distribution that minimizes $U$ pointwise
+
+<<button "A">><<replace "#bm-q8">>Incorrect. The stationary distribution depends on $U$ through the Boltzmann factor $e^{-U(x)}$. Only if $U = \|x\|^2/2$ would the stationary distribution be standard Gaussian.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bm-q8">>Incorrect. The stationary distribution is not uniform on level sets. The gradient drift actively pushes the process toward lower values of $U$, creating a non-uniform distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bm-q8">>Correct. The Langevin SDE has stationary distribution $p(x) \propto e^{-U(x)}$, the Boltzmann distribution. This connects gradient-based optimization to Bayesian sampling: if $U(x) = -\log p(x)$, then sampling from the Langevin SDE samples from the target posterior $p$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bm-q8">>Incorrect. Pure gradient descent ($dX = -\nabla U\, dt$) converges to a minimizer of $U$. The Brownian noise term prevents collapse to a point mass, spreading probability according to $e^{-U(x)}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

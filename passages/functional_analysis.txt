@@ -1,0 +1,150 @@
+<<include "Header">>
+
+! Functional Analysis
+
+<img src="assets/functional_analysis.svg" alt="Diagram showing finite vs infinite dimensional spaces, Banach-Hilbert hierarchy, operators and kernels, and foundational theorems" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a spreadsheet with a column of numbers — a vector in $\mathbb{R}^n$. Now imagine that column has //infinitely// many rows. Better yet, imagine each "vector" is an entire //function// — a continuous curve, a signal, a probability density. You can still add them, scale them, and measure their length. ''Functional analysis'' is the mathematics that makes all of this rigorous: it studies infinite-dimensional vector spaces and the operators (transformations) that act on them. Every time a kernel method implicitly maps data into "feature space," it is working inside a structure that functional analysis built.
+
+!! The Core Insight
+
+In finite dimensions, all norms are equivalent and every linear map is continuous. In infinite dimensions, //none of this is true//. A sequence of functions can converge in one sense but diverge wildly in another. An operator can be linear yet unbounded. Functional analysis identifies the precise conditions — ''completeness'', ''boundedness'', ''compactness'' — under which the familiar tools of linear algebra survive the jump to infinity.
+
+The key hierarchy of spaces:
+- A ''normed space'' has a notion of length: $\|f\|$.
+- A ''Banach space'' is a normed space that is ''complete'' — every Cauchy sequence converges within the space.
+- A ''Hilbert space'' is a Banach space whose norm comes from an ''inner product'': $\|f\| = \sqrt{\langle f, f \rangle}$.
+
+Hilbert spaces are the "nicest" infinite-dimensional spaces because the inner product gives you geometry — angles, orthogonality, and projections — just like in $\mathbb{R}^n$.
+
+!! Spaces, Norms, and Inner Products
+
+The most important concrete example is $L^2$, the space of square-integrable functions:
+
+$$L^2([a,b]) = \left\{ f : \int_a^b |f(x)|^2 \, dx < \infty \right\}$$
+
+with inner product $\langle f, g \rangle = \int_a^b f(x) g(x) \, dx$. This is a Hilbert space: complete, with a geometry that lets you decompose functions into orthogonal components (Fourier series, wavelets, eigenfunctions).
+
+Other key spaces:
+- $L^1$: integrable functions (Banach, not Hilbert — no inner product)
+- $L^\infty$: essentially bounded functions (Banach, not Hilbert)
+- $\ell^2$: square-summable sequences $\{x_n\}$ with $\sum |x_n|^2 < \infty$ (Hilbert)
+- ''Sobolev spaces'' $H^k$: functions whose derivatives up to order $k$ are in $L^2$ (Hilbert, used in PDE theory and finite element methods)
+
+The ''Riesz representation theorem'' states that in a Hilbert space, every bounded linear functional $\phi: H \to \mathbb{R}$ has the form $\phi(f) = \langle f, g \rangle$ for a unique $g \in H$. This means the dual space $H^*$ is isomorphic to $H$ itself — a property that fails in general Banach spaces and is what makes Hilbert spaces so tractable.
+
+!! What the Math Is Actually Doing
+
+An ''operator'' $T: V \to W$ between function spaces is the infinite-dimensional analog of a matrix. Key types:
+
+''Bounded (continuous) operators'': $T$ is bounded if there exists $C$ such that $\|Tf\| \leq C\|f\|$ for all $f$. The ''operator norm'' is:
+
+$$\|T\| = \sup_{\|f\|=1} \|Tf\|$$
+
+This is the direct generalization of the largest singular value of a matrix.
+
+''Compact operators'' map bounded sets to sets with compact closure — they are the "nearly finite-dimensional" operators. Every compact operator on a Hilbert space has a ''singular value decomposition'':
+
+$$Tf = \sum_{n=1}^{\infty} \sigma_n \langle f, u_n \rangle v_n$$
+
+where $\sigma_n \to 0$. This is the infinite-dimensional SVD.
+
+The ''spectral theorem'' for self-adjoint compact operators states:
+
+$$Tf = \sum_{n=1}^{\infty} \lambda_n \langle f, e_n \rangle e_n$$
+
+where $\{e_n\}$ are orthonormal eigenfunctions and $\lambda_n \to 0$. This underpins PCA on function spaces (functional PCA) and the Mercer expansion of kernels.
+
+''Reproducing Kernel Hilbert Spaces (RKHS)'': A Hilbert space $H$ of functions on a set $X$ is an RKHS if point evaluation $f \mapsto f(x)$ is a bounded linear functional for every $x$. By Riesz representation, there exists $k_x \in H$ such that $f(x) = \langle f, k_x \rangle$. The ''kernel function'' is:
+
+$$k(x, y) = \langle k_x, k_y \rangle$$
+
+''Mercer's theorem'' says that any continuous positive-definite kernel $k(x,y)$ admits the expansion:
+
+$$k(x, y) = \sum_{n=1}^{\infty} \lambda_n e_n(x) e_n(y)$$
+
+This is the spectral decomposition that makes kernel methods work: the kernel implicitly computes inner products in a (potentially infinite-dimensional) feature space without ever constructing that space explicitly.
+
+!! Functional Analysis in Machine Learning
+
+''Kernel methods'': Support vector machines, Gaussian processes, and kernel PCA all operate in an RKHS. The <<link "Kernel Methods" "Kernel Methods">><</link>> page covers the algorithmic side; functional analysis provides the theoretical guarantee that these spaces are well-behaved Hilbert spaces where optimization is tractable.
+
+''Representer theorem'': In an RKHS, the minimizer of any regularized empirical risk functional lies in the span of the kernel evaluations at training points: $f^* = \sum_{i=1}^n \alpha_i k(\cdot, x_i)$. This reduces an infinite-dimensional optimization to a finite one.
+
+''Neural tangent kernel (NTK)'': In the infinite-width limit, a neural network's training dynamics are governed by a fixed kernel — placing deep learning inside the functional analysis framework.
+
+''Integral operators'' appear throughout: the kernel integral operator $(T_k f)(x) = \int k(x,y) f(y) \, dy$ connects kernel functions to spectral theory, and its eigendecomposition determines the effective dimensionality of the RKHS.
+
+!! When Functional Analysis Breaks Down
+
+''Not all operators have eigenvalues.'' The spectral theorem for compact self-adjoint operators is clean, but general bounded operators on infinite-dimensional spaces can have ''continuous spectrum'' — values that are "almost eigenvalues" but lack actual eigenvectors. The shift operator on $\ell^2$ has no eigenvalues at all, yet its spectrum is the entire unit disk. Naively searching for eigenvectors in such cases leads nowhere.
+
+''Weak and strong topologies diverge.'' In infinite dimensions, a sequence can converge ''weakly'' ($\langle f_n, g \rangle \to \langle f, g \rangle$ for all $g$) without converging in norm. The unit ball in an infinite-dimensional Hilbert space is weakly compact but //not// norm-compact. This causes subtle errors when convergence arguments from finite dimensions are applied carelessly — an optimization algorithm may "converge" in one topology while failing in another.
+
+''Unbounded operators are unavoidable.'' The most important operators in physics (momentum $-i\frac{d}{dx}$, Hamiltonians) and in PDEs (the Laplacian $\nabla^2$) are unbounded — they are not defined on all of $H$, only on dense subdomains. Their spectral theory requires the machinery of ''unbounded self-adjoint operators'', including domain questions that have no finite-dimensional analog. Getting the domain wrong can produce physically meaningless or mathematically inconsistent results.
+
+!! Technical Details
+
+The four pillars of functional analysis are the ''Hahn-Banach theorem'' (extending linear functionals), the ''Banach-Steinhaus theorem'' (uniform boundedness principle), the ''open mapping theorem'' (surjective bounded operators map open sets to open sets), and the ''closed graph theorem'' (a closed linear operator between Banach spaces is bounded).
+
+''Weak-* topology'': On the dual space $X^*$, the weak-* topology is the coarsest topology making evaluation maps continuous. The ''Banach-Alaoglu theorem'' states the closed unit ball of $X^*$ is weak-* compact — a crucial tool for existence proofs in optimization and PDE theory.
+
+''Fredholm theory'': A bounded operator $T$ is ''Fredholm'' if it has finite-dimensional kernel and cokernel. The ''Fredholm index'' $\text{ind}(T) = \dim\ker T - \dim\text{coker}\, T$ is a topological invariant. Fredholm operators arise in integral equations and regularization theory.
+
+''Sobolev embedding theorems'' give conditions under which Sobolev spaces embed into spaces of continuous functions: $H^k(\mathbb{R}^d) \hookrightarrow C^0(\mathbb{R}^d)$ when $k > d/2$. This determines when an RKHS consists of pointwise-evaluable functions.
+
+The ''trace class'' and ''Hilbert-Schmidt operators'' are operator analogs of $\ell^1$ and $\ell^2$ sequences: $\sum \sigma_n < \infty$ (trace class) or $\sum \sigma_n^2 < \infty$ (Hilbert-Schmidt). Kernel integral operators with $\int\!\int |k(x,y)|^2 \, dx\, dy < \infty$ are Hilbert-Schmidt.
+
+Connected topics: <<link "Kernel Methods" "Kernel Methods">><</link>>, <<link "Inner Product" "Inner Product">><</link>>, <<link "Norms" "Norms">><</link>>, <<link "Measure Theory" "Measure Theory">><</link>>, <<link "Topology" "Topology">><</link>>, <<link "Eigenvalues and Eigenvectors" "Eigenvalues and Eigenvectors">><</link>>, <<link "Singular Value Decomposition" "Singular Value Decomposition">><</link>>, <<link "Convex Optimization" "Convex Optimization">><</link>>.
+
+!! Quiz
+
+<span id="fa-q1">''Question 1:'' What distinguishes a Hilbert space from a Banach space?
+<<button "A. A Hilbert space is always finite-dimensional">><<replace "#fa-q1">>Incorrect. Hilbert spaces can be (and usually are, in functional analysis) infinite-dimensional. $L^2$ is the canonical example.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A Hilbert space has an inner product that induces its norm">><<replace "#fa-q1">>Correct. Every Hilbert space is a Banach space, but the norm must come from an inner product: $\|f\| = \sqrt{\langle f, f \rangle}$. This gives the space geometric structure — angles, orthogonality, and projections — that general Banach spaces lack.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A Hilbert space is not complete">><<replace "#fa-q1">>Incorrect. Hilbert spaces are complete by definition. Completeness (every Cauchy sequence converges) is inherited from the Banach space definition.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A Hilbert space requires a finite basis">><<replace "#fa-q1">>Incorrect. Hilbert spaces have orthonormal bases, but these are typically countably infinite (e.g., the Fourier basis for $L^2$).<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q2">''Question 2:'' The Riesz representation theorem for Hilbert spaces states that every bounded linear functional $\phi: H \to \mathbb{R}$ has what form?
+<<button "A. $\phi(f) = \|f\|$ for some norm">><<replace "#fa-q2">>Incorrect. The norm $\|f\|$ is not a linear functional (it satisfies the triangle inequality, not additivity in general for all $f$).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $\phi(f) = \langle f, g \rangle$ for a unique $g \in H$">><<replace "#fa-q2">>Correct. This is the Riesz representation theorem: every bounded linear functional on a Hilbert space is an inner product with a fixed element. This is what makes RKHS theory work — point evaluation $f \mapsto f(x)$ is a bounded functional, so $f(x) = \langle f, k_x \rangle$ for a unique representer $k_x$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $\phi(f) = \int f \, d\mu$ for some probability measure $\mu$">><<replace "#fa-q2">>Incorrect. This describes a specific class of linear functionals on function spaces, but the Riesz representation theorem says something more general about all Hilbert spaces.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $\phi(f) = Tf$ for some compact operator $T$">><<replace "#fa-q2">>Incorrect. A compact operator maps $H$ to $H$, not to the scalars. A bounded linear functional maps $H$ to $\mathbb{R}$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q3">''Question 3:'' In a reproducing kernel Hilbert space (RKHS), what property defines the kernel function $k(x, y)$?
+<<button "A. $k(x,y) = \|x - y\|^2$, the squared distance">><<replace "#fa-q3">>Incorrect. That is a distance function, not a reproducing kernel. The kernel is defined via the inner product of representers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $k(x,y) = \langle k_x, k_y \rangle_H$ where $f(x) = \langle f, k_x \rangle$ for all $f \in H$">><<replace "#fa-q3">>Correct. The reproducing property says point evaluation is a bounded linear functional represented by $k_x$. The kernel function is then the inner product of these representers: $k(x,y) = \langle k_x, k_y \rangle$. This is why kernel evaluations are inner products in feature space.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $k(x,y)$ is any positive function satisfying $k(x,x) = 1$">><<replace "#fa-q3">>Incorrect. Kernels need not be normalized, and the defining property is the reproducing property $f(x) = \langle f, k_x \rangle$, not a normalization condition.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $k(x,y)$ is the inverse of the Gram matrix">><<replace "#fa-q3">>Incorrect. The Gram matrix $K_{ij} = k(x_i, x_j)$ is constructed from the kernel, not the other way around.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q4">''Question 4:'' Why does the spectral theorem for compact self-adjoint operators matter for kernel methods?
+<<button "A. It proves that all kernels are polynomial">><<replace "#fa-q4">>Incorrect. Kernels can be Gaussian, polynomial, or many other types. The spectral theorem does not constrain them to be polynomial.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It provides the eigenfunction expansion $k(x,y) = \sum \lambda_n e_n(x) e_n(y)$, the Mercer decomposition">><<replace "#fa-q4">>Correct. Mercer's theorem is a consequence of the spectral theorem: the kernel integral operator is compact and self-adjoint, so it admits an eigendecomposition. The resulting expansion reveals the implicit feature map and the effective dimensionality of the RKHS.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It guarantees that kernel matrices are always invertible">><<replace "#fa-q4">>Incorrect. Kernel (Gram) matrices are positive semi-definite but can be singular, especially with repeated or nearly-identical data points.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It shows that kernel methods always converge in finite steps">><<replace "#fa-q4">>Incorrect. Convergence of kernel methods depends on optimization and sample complexity, not directly on the spectral theorem.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q5">''Question 5:'' What does the representer theorem guarantee for regularized learning in an RKHS?
+<<button "A. The optimal solution is always a single kernel evaluation">><<replace "#fa-q5">>Incorrect. The solution is a //linear combination// of kernel evaluations at all training points, not a single one.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The minimizer lies in the span of kernel evaluations at training points: $f^* = \sum_i \alpha_i k(\cdot, x_i)$">><<replace "#fa-q5">>Correct. Despite the RKHS being infinite-dimensional, the optimal regularized solution is a finite linear combination of $n$ kernel functions centered at the training data. This reduces an infinite-dimensional problem to solving for $n$ coefficients.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The optimal solution is unique only if the kernel is Gaussian">><<replace "#fa-q5">>Incorrect. Uniqueness follows from strict convexity of the regularized objective, which holds for any positive-definite kernel, not just Gaussian.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Regularization is unnecessary in RKHS">><<replace "#fa-q5">>Incorrect. Without regularization, the representer theorem does not apply in general, and overfitting remains a concern even in RKHS.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q6">''Question 6:'' What goes wrong with the notion of compactness in infinite-dimensional spaces?
+<<button "A. Nothing — the unit ball is compact in every Banach space">><<replace "#fa-q6">>Incorrect. This is precisely what fails. By Riesz's lemma, the closed unit ball is compact if and only if the space is finite-dimensional. This is one of the most important differences between finite and infinite dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The closed unit ball is not norm-compact in infinite dimensions">><<replace "#fa-q6">>Correct. In any infinite-dimensional normed space, the closed unit ball fails to be compact in the norm topology. You can always extract a sequence with no convergent subsequence (e.g., orthonormal sequences in Hilbert space). This forces the use of weak topologies and compact operators as substitutes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Compact operators do not exist in infinite dimensions">><<replace "#fa-q6">>Incorrect. Compact operators exist and are extremely important — they are the operators that //do// have well-behaved spectral theory in infinite dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Every bounded sequence converges in infinite dimensions">><<replace "#fa-q6">>Incorrect. This would mean the unit ball is sequentially compact, which is false in infinite dimensions. Bounded sequences need not converge.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q7">''Question 7:'' Which of these is NOT one of the four classical pillars of functional analysis?
+<<button "A. Hahn-Banach theorem">><<replace "#fa-q7">>Incorrect — Hahn-Banach is one of the four pillars. It guarantees extension of bounded linear functionals.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Open mapping theorem">><<replace "#fa-q7">>Incorrect — the open mapping theorem is one of the four pillars. It states that surjective bounded operators between Banach spaces map open sets to open sets.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Stone-Weierstrass theorem">><<replace "#fa-q7">>Correct. Stone-Weierstrass is an important approximation theorem (any continuous function can be uniformly approximated by polynomials on a compact set), but it is not counted among the four classical pillars. The four are: Hahn-Banach, Banach-Steinhaus (uniform boundedness), open mapping, and closed graph theorems.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Banach-Steinhaus (uniform boundedness) theorem">><<replace "#fa-q7">>Incorrect — Banach-Steinhaus is one of the four pillars. It states that a pointwise-bounded family of bounded operators is uniformly bounded.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="fa-q8">''Question 8:'' What is the operator norm $\|T\|$ of a bounded linear operator?
+<<button "A. The sum of all eigenvalues of $T$">><<replace "#fa-q8">>Incorrect. The sum of eigenvalues relates to the trace (for trace-class operators), not the operator norm. The operator norm is a supremum, not a sum.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The determinant of $T$">><<replace "#fa-q8">>Incorrect. Determinants are not generally well-defined for operators on infinite-dimensional spaces (except for operators of the form $I + \text{trace class}$).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $\sup_{\|f\|=1} \|Tf\|$ — the maximum stretching factor">><<replace "#fa-q8">>Correct. The operator norm measures the worst-case stretching: the supremum of $\|Tf\|$ over all unit vectors $f$. In finite dimensions, this equals the largest singular value of the matrix. Boundedness of $T$ means $\|T\| < \infty$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $\inf_{\|f\|=1} \|Tf\|$ — the minimum stretching factor">><<replace "#fa-q8">>Incorrect. The infimum over unit vectors relates to invertibility (it is positive iff $T$ is bounded below), not to the operator norm.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

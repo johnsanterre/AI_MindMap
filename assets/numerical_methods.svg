@@ -1,0 +1,219 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- ===== Panel 1: ODE Solver Comparison ===== -->
+  <!-- Panel background -->
+  <rect x="16" y="16" width="340" height="310" fill="#F5EFE0" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="186" y="38" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">ODE Solver Comparison</text>
+  <text x="186" y="52" text-anchor="middle" font-size="10" fill="#5C3D1E">dy/dx = y, y(0) = 1 (exact: eˣ)</text>
+
+  <!-- Axes -->
+  <line x1="55" y1="290" x2="340" y2="290" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="55" y1="290" x2="55" y2="68" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Axis labels -->
+  <text x="197" y="308" text-anchor="middle" font-size="10" fill="#5C3D1E">x</text>
+  <text x="36" y="182" text-anchor="middle" font-size="10" fill="#5C3D1E" transform="rotate(-90,36,182)">y</text>
+
+  <!-- Tick marks x-axis: 0, 0.5, 1.0, 1.5, 2.0 -->
+  <!-- x domain [0,2], y domain [1, 7.4] mapped to plot area x:[55,335] y:[290,75] -->
+  <!-- x scale: (335-55)/2 = 140 per unit; y scale: (290-75)/(7.4-1) = 215/6.4 ≈ 33.6 per unit -->
+  <line x1="55" y1="290" x2="55" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="55" y="304" text-anchor="middle" font-size="9" fill="#5C3D1E">0</text>
+  <line x1="125" y1="290" x2="125" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="125" y="304" text-anchor="middle" font-size="9" fill="#5C3D1E">0.5</text>
+  <line x1="195" y1="290" x2="195" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="195" y="304" text-anchor="middle" font-size="9" fill="#5C3D1E">1.0</text>
+  <line x1="265" y1="290" x2="265" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="265" y="304" text-anchor="middle" font-size="9" fill="#5C3D1E">1.5</text>
+  <line x1="335" y1="290" x2="335" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="335" y="304" text-anchor="middle" font-size="9" fill="#5C3D1E">2.0</text>
+
+  <!-- Tick marks y-axis -->
+  <line x1="50" y1="290" x2="55" y2="290" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="46" y="293" text-anchor="end" font-size="9" fill="#5C3D1E">1</text>
+  <line x1="50" y1="223" x2="55" y2="223" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="46" y="226" text-anchor="end" font-size="9" fill="#5C3D1E">3</text>
+  <line x1="50" y1="157" x2="55" y2="157" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="46" y="160" text-anchor="end" font-size="9" fill="#5C3D1E">5</text>
+  <line x1="50" y1="90" x2="55" y2="90" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="46" y="93" text-anchor="end" font-size="9" fill="#5C3D1E">7</text>
+
+  <!-- Exact solution: y = e^x, points at x=0,0.25,...,2.0 -->
+  <!-- y values: 1, 1.284, 1.649, 2.117, 2.718, 3.490, 4.482, 5.755, 7.389 -->
+  <!-- pixel x = 55 + x*140; pixel y = 290 - (y-1)*33.59 -->
+  <polyline points="
+    55,290
+    89.9,280.5
+    124.9,267.5
+    159.8,247.8
+    194.8,218.7
+    229.7,173.9
+    264.7,108.4
+    299.6,0
+    334.5,0
+  " fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="none"/>
+  <!-- clip the exact curve properly — use path for clipping -->
+  <!-- Exact: x=0→1, 0.5→1.649, 1→2.718, 1.5→4.482, 2→7.389 -->
+  <polyline points="
+    55,290
+    125,268
+    195,219
+    265,108
+    299,38
+  " fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Euler method (h=0.5): steps at x=0,0.5,1,1.5,2 -->
+  <!-- Euler: y0=1; y1=y0+h*y0=1+0.5*1=1.5; y2=1.5+0.5*1.5=2.25; y3=2.25+0.5*2.25=3.375; y4=3.375+0.5*3.375=5.0625 -->
+  <!-- pixel y: 1→290, 1.5→273, 2.25→249, 3.375→216, 5.0625→155 -->
+  <polyline points="
+    55,290
+    125,273
+    195,249
+    265,216
+    335,155
+  " fill="none" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3"/>
+  <!-- Euler dots -->
+  <circle cx="55" cy="290" r="4" fill="#7C2530"/>
+  <circle cx="125" cy="273" r="4" fill="#7C2530"/>
+  <circle cx="195" cy="249" r="4" fill="#7C2530"/>
+  <circle cx="265" cy="216" r="4" fill="#7C2530"/>
+  <circle cx="335" cy="155" r="4" fill="#7C2530"/>
+
+  <!-- RK4 (h=0.5) — much closer to exact; approximate values -->
+  <!-- RK4 for y'=y: y1=y0*e^0.5 almost exactly ≈ 1.6487, y2≈2.7183, y3≈4.4817, y4≈7.389 -->
+  <!-- pixel y: 1.6487→272.3, 2.7183→240.7, 4.4817→188.9, 7.389→101.5 -->
+  <polyline points="
+    55,290
+    125,272
+    195,241
+    265,189
+    310,101
+  " fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="3,2"/>
+  <!-- RK4 dots -->
+  <circle cx="55" cy="290" r="3.5" fill="#5C3D1E"/>
+  <circle cx="125" cy="272" r="3.5" fill="#5C3D1E"/>
+  <circle cx="195" cy="241" r="3.5" fill="#5C3D1E"/>
+  <circle cx="265" cy="189" r="3.5" fill="#5C3D1E"/>
+
+  <!-- Error annotation for Euler -->
+  <!-- At x=2: exact≈7.389 (pixel y≈101), Euler=5.0625 (pixel y≈155) -->
+  <line x1="335" y1="155" x2="335" y2="101" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <text x="340" y="128" font-size="9" fill="#7C2530">Euler</text>
+  <text x="340" y="139" font-size="9" fill="#7C2530">error</text>
+
+  <!-- Legend -->
+  <line x1="62" y1="78" x2="88" y2="78" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="92" y="81" font-size="10" fill="#2D5A8E">Exact (eˣ)</text>
+  <line x1="62" y1="94" x2="88" y2="94" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3"/>
+  <circle cx="75" cy="94" r="3.5" fill="#7C2530"/>
+  <text x="92" y="97" font-size="10" fill="#7C2530">Euler h=0.5</text>
+  <line x1="62" y1="110" x2="88" y2="110" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="3,2"/>
+  <circle cx="75" cy="110" r="3" fill="#5C3D1E"/>
+  <text x="92" y="113" font-size="10" fill="#5C3D1E">RK4 h=0.5</text>
+
+  <!-- ===== Panel 2: Convergence Rate Chart ===== -->
+  <rect x="372" y="16" width="270" height="310" fill="#F5EFE0" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="507" y="38" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">Convergence Rates</text>
+  <text x="507" y="52" text-anchor="middle" font-size="10" fill="#5C3D1E">Error vs. Step Size h (log–log)</text>
+
+  <!-- Axes -->
+  <line x1="410" y1="280" x2="625" y2="280" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="410" y1="280" x2="410" y2="65" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Axis labels -->
+  <text x="517" y="298" text-anchor="middle" font-size="10" fill="#5C3D1E">Step size h →</text>
+  <text x="393" y="175" text-anchor="middle" font-size="10" fill="#5C3D1E" transform="rotate(-90,393,175)">Error →</text>
+  <text x="410" y="60" font-size="9" fill="#5C3D1E">large</text>
+  <text x="600" y="293" font-size="9" fill="#5C3D1E">large</text>
+  <text x="410" y="290" font-size="9" fill="#5C3D1E">small</text>
+
+  <!-- Log-log: h axis left=small, right=large; error axis bottom=small, top=large -->
+  <!-- Forward Euler O(h): slope 1 in log-log -->
+  <!-- x: 410(small h) to 625(large h); y: 270(small error) to 75(large error) -->
+  <line x1="420" y1="270" x2="615" y2="95" stroke="#7C2530" stroke-width="2"/>
+  <text x="617" y="92" font-size="10" fill="#7C2530">O(h)</text>
+  <text x="617" y="103" font-size="9" fill="#7C2530">Euler</text>
+
+  <!-- Trapezoidal O(h²): slope 2 in log-log — steeper -->
+  <line x1="420" y1="275" x2="615" y2="108" stroke="#C4A87A" stroke-width="2"/>
+  <!-- wait, steeper slope means more error reduction per h reduction -->
+  <!-- Steeper in log-log = lower error for same h = better -->
+  <!-- Let's draw it with a steeper slope (more vertical = bigger error at large h but drops faster) -->
+  <!-- Actually in log-log with x=log(h), y=log(err): slope p means O(h^p). Bigger slope = error drops faster as h decreases (move left). At large h (right) all methods are bad, at small h higher order = much better. -->
+  <!-- Let's just show lines fanning out from the right. At large h they're all similar; as h decreases higher-order methods get much smaller errors. -->
+  <!-- Let me redo: lines converge at top-right (large h, large error) and fan out as h decreases (moving left) -->
+
+  <!-- Reposition: rightmost point (large h) ≈ (610, 100) all similar, then fan out to left -->
+  <!-- Forward Euler O(h) — moderate slope -->
+  <line x1="420" y1="255" x2="612" y2="100" stroke="#7C2530" stroke-width="2.2"/>
+  <text x="624" y="100" font-size="10" fill="#7C2530">O(h)</text>
+
+  <!-- Trapezoidal O(h²) — steeper -->
+  <line x1="420" y1="235" x2="612" y2="103" stroke="#C4A87A" stroke-width="2.2"/>
+  <text x="624" y="115" font-size="10" fill="#C4A87A">O(h²)</text>
+
+  <!-- RK4 O(h⁴) — very steep -->
+  <line x1="420" y1="210" x2="612" y2="106" stroke="#5C3D1E" stroke-width="2.2"/>
+  <text x="624" y="130" font-size="10" fill="#5C3D1E">O(h⁴)</text>
+
+  <!-- Gauss quad O(h^2n) — nearly vertical -->
+  <line x1="420" y1="175" x2="612" y2="108" stroke="#2D5A8E" stroke-width="2.2"/>
+  <text x="624" y="145" font-size="10" fill="#2D5A8E">O(h²ⁿ)</text>
+
+  <!-- Small h label and large error label -->
+  <text x="412" y="270" font-size="9" fill="#5C3D1E">small h →</text>
+  <text x="412" y="280" font-size="9" fill="#5C3D1E">small error</text>
+
+  <!-- Arrow showing "higher order = faster convergence" -->
+  <text x="440" y="190" font-size="9" fill="#5C3D1E" font-style="italic">higher order</text>
+  <text x="440" y="201" font-size="9" fill="#5C3D1E" font-style="italic">→ faster</text>
+  <text x="440" y="212" font-size="9" fill="#5C3D1E" font-style="italic">convergence</text>
+  <line x1="435" y1="195" x2="425" y2="215" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- ===== Panel 3: Condition Number ===== -->
+  <rect x="658" y="16" width="126" height="310" fill="#F5EFE0" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="721" y="34" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Condition</text>
+  <text x="721" y="47" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Number</text>
+  <text x="721" y="60" text-anchor="middle" font-size="9" fill="#5C3D1E">κ(A) = ‖A‖·‖A⁻¹‖</text>
+
+  <!-- Visual bar for condition number impact -->
+  <!-- κ = 1 (perfect) -->
+  <rect x="668" y="76" width="96" height="22" fill="#2D5A8E" rx="3"/>
+  <text x="716" y="91" text-anchor="middle" font-size="10" fill="white" font-weight="bold">κ = 1</text>
+  <text x="716" y="110" text-anchor="middle" font-size="9" fill="#2D5A8E">16 correct digits</text>
+  <text x="716" y="121" text-anchor="middle" font-size="9" fill="#2D5A8E">(perfect)</text>
+
+  <!-- κ = 10^4 -->
+  <rect x="668" y="132" width="96" height="22" fill="#C4A87A" rx="3"/>
+  <text x="716" y="147" text-anchor="middle" font-size="10" fill="white" font-weight="bold">κ = 10⁴</text>
+  <text x="716" y="166" text-anchor="middle" font-size="9" fill="#5C3D1E">12 correct digits</text>
+  <text x="716" y="177" text-anchor="middle" font-size="9" fill="#5C3D1E">(caution)</text>
+
+  <!-- κ = 10^10 -->
+  <rect x="668" y="188" width="96" height="22" fill="#7C2530" rx="3"/>
+  <text x="716" y="203" text-anchor="middle" font-size="10" fill="white" font-weight="bold">κ = 10¹⁰</text>
+  <text x="716" y="222" text-anchor="middle" font-size="9" fill="#7C2530">6 correct digits</text>
+  <text x="716" y="233" text-anchor="middle" font-size="9" fill="#7C2530">(poor)</text>
+
+  <!-- κ = 10^16 -->
+  <rect x="668" y="244" width="96" height="22" fill="#3a0a10" rx="3"/>
+  <text x="716" y="259" text-anchor="middle" font-size="10" fill="white" font-weight="bold">κ = 10¹⁶</text>
+  <text x="716" y="278" text-anchor="middle" font-size="9" fill="#7C2530">0 correct digits</text>
+  <text x="716" y="289" text-anchor="middle" font-size="9" fill="#7C2530">(catastrophic)</text>
+
+  <!-- rule: lose log10(κ) digits -->
+  <text x="721" y="308" text-anchor="middle" font-size="8.5" fill="#5C3D1E">lose log₁₀(κ) digits</text>
+
+  <!-- Bottom caption row -->
+  <text x="400" y="346" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">
+    Numerical methods: discretize → compute → control error
+  </text>
+  <text x="400" y="363" text-anchor="middle" font-size="10" fill="#5C3D1E">
+    accuracy · stability · efficiency
+  </text>
+  <text x="400" y="381" text-anchor="middle" font-size="9.5" fill="#7C2530">
+    Neural ODEs · Diffusion Models · Graph Neural Networks · Natural Gradient
+  </text>
+
+</svg>

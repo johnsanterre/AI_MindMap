@@ -1,0 +1,158 @@
+<<include "Header">>
+
+! Fixed Point Theorems
+
+<img src="assets/fixed_point_theorems.svg" alt="Diagram showing Brouwer, Banach, and Kakutani fixed point theorems with geometric illustrations" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a paper map of a city and you are standing somewhere in that city. If you lay the map flat on the ground and align it perfectly with the real streets, there must be exactly one point on the map sitting directly above the real-world location it represents. That point is a ''fixed point'' — a place that the mapping function sends to itself. Fixed point theorems guarantee that under the right conditions, every function from a set to itself must have at least one such point where $f(x) = x$. These theorems are not just mathematical curiosities: they underpin the existence of <<link "Nash Equilibrium" "Nash Equilibrium">><</link>> in game theory, the convergence of the <<link "Bellman Equation" "Bellman Equation">><</link>> in reinforcement learning, and the solvability of countless optimisation problems.
+
+!! The Core Insight
+
+A ''fixed point'' of a function $f$ is a point $x^*$ such that $f(x^*) = x^*$. The function maps the point to itself — it does not move. The central question of fixed point theory is: //under what conditions must a function have at least one fixed point?// Three landmark theorems answer this for different settings:
+
+''Brouwer's Fixed Point Theorem'' (1911): every continuous function from a compact convex set to itself has at least one fixed point. Stir your coffee however you like — some particle of liquid will end up in the exact position it started. No escape is possible from a compact convex world under continuous motion.
+
+''Banach's Contraction Mapping Theorem'' (1922): if $f$ is a ''contraction'' on a complete metric space — meaning it pulls points closer together — then $f$ has exactly //one// fixed point, and repeated application of $f$ from any starting point converges to it. This is the engine behind iterative algorithms.
+
+''Kakutani's Fixed Point Theorem'' (1941): extends Brouwer to ''set-valued maps'' (correspondences). If a correspondence from a compact convex set to itself has closed graph and convex values, it has a fixed point. This is the theorem John Nash used to prove the existence of equilibria in non-cooperative games.
+
+!! The Three Theorems in Depth
+
+''Brouwer'' is a pure existence result. It tells you a fixed point //exists// but gives no way to find it. The proof is topological: any continuous self-map of a disk (or ball, or cube, or any compact convex set in $\mathbb{R}^n$) must have a fixed point because the alternative — that every point moves — would imply the existence of a continuous retraction from the disk to its boundary, which contradicts the fact that the disk and its boundary have different <<link "Topology" "Topology">><</link>>.
+
+''Banach'' is constructive. Start anywhere, apply $f$ repeatedly, and you converge to the unique fixed point. The rate of convergence is geometric: after $n$ iterations, the error shrinks by a factor of $k^n$, where $k < 1$ is the contraction constant. This is why ''value iteration'' in reinforcement learning converges: the Bellman operator is a contraction under the supremum norm with factor $\gamma$ (the discount factor).
+
+''Kakutani'' handles the case where the function returns a //set// of values rather than a single point. In a game, each player's best-response function maps the opponents' strategies to a set of optimal strategies. Kakutani guarantees a strategy profile exists where every player's strategy is simultaneously a best response — a <<link "Nash Equilibrium" "Nash Equilibrium">><</link>>.
+
+!! What the Math Is Actually Doing
+
+''Brouwer:'' let $D \subset \mathbb{R}^n$ be compact and convex, and $f: D \to D$ continuous. Then there exists $x^* \in D$ such that:
+$$f(x^*) = x^*$$
+
+The standard proof uses the ''no-retraction theorem'': there is no continuous map $r: D^n \to \partial D^n$ that fixes the boundary. Assuming $f$ has no fixed point lets us construct such a retraction (by drawing a ray from $f(x)$ through $x$ to the boundary), giving a contradiction.
+
+''Banach:'' let $(X, d)$ be a complete metric space and $f: X \to X$ a contraction, meaning there exists $0 \le k < 1$ such that for all $x, y \in X$:
+$$d(f(x), f(y)) \le k \cdot d(x, y)$$
+
+Then $f$ has a unique fixed point $x^*$, and for any $x_0 \in X$, the sequence $x_{n+1} = f(x_n)$ satisfies:
+$$d(x_n, x^*) \le \frac{k^n}{1 - k} \cdot d(x_0, f(x_0))$$
+
+This gives an explicit error bound. In reinforcement learning, the <<link "Bellman Equation" "Bellman Equation">><</link>> defines the operator $T$ on value functions:
+$$[TV](s) = \max_a \left[ R(s, a) + \gamma \sum_{s'} P(s'|s,a) V(s') \right]$$
+
+Under the $\ell^\infty$ norm, $\|TV_1 - TV_2\|_\infty \le \gamma \|V_1 - V_2\|_\infty$, so $T$ is a $\gamma$-contraction, and value iteration converges to the unique optimal value function $V^*$.
+
+''Kakutani:'' let $S \subset \mathbb{R}^n$ be compact and convex, and $\Phi: S \rightrightarrows S$ a set-valued map with closed graph and non-empty convex values. Then there exists $x^* \in S$ such that:
+$$x^* \in \Phi(x^*)$$
+
+Nash applied this with $S = \Delta_1 \times \cdots \times \Delta_n$ (the product of mixed-strategy simplices for $n$ players) and $\Phi$ = the best-response correspondence.
+
+!! Applications in ML and Optimisation
+
+''Value iteration and policy iteration'' in reinforcement learning are direct applications of Banach's theorem. The discount factor $\gamma < 1$ ensures contraction, and the theorem guarantees both convergence and a unique solution. Without the contraction property (e.g., undiscounted problems), convergence may fail.
+
+''Gradient descent as fixed point iteration:'' the update $x_{n+1} = x_n - \eta \nabla f(x_n)$ can be written as $x_{n+1} = g(x_n)$ where $g(x) = x - \eta \nabla f(x)$. A fixed point of $g$ satisfies $\nabla f(x^*) = 0$ — a stationary point of $f$. When $g$ is a contraction (strong convexity + appropriate step size), Banach's theorem guarantees convergence to the unique minimum.
+
+''<<link "Convex Optimization" "Convex Optimization">><</link>>:'' the KKT conditions of a convex program can be reformulated as finding a fixed point of the projection operator onto the feasible set composed with a gradient step. The ''proximal point algorithm'' and ADMM both rely on fixed point iterations.
+
+''Existence theorems in economics:'' the existence of competitive equilibria (Arrow-Debreu) relies on Kakutani's theorem applied to the excess demand correspondence. This mathematical machinery carries over to multi-agent ML systems.
+
+''<<link "Contraction Mapping" "Contraction Mapping">><</link>>'' is the algorithmic workhorse: whenever you can show your iterative procedure is a contraction, Banach's theorem immediately gives you uniqueness of the solution and guaranteed convergence with a computable error bound.
+
+!! When Fixed Point Theorems Break Down
+
+''(1) Loss of compactness or convexity (Brouwer fails):'' Brouwer requires the domain to be both compact and convex. On a non-compact set (like all of $\mathbb{R}^n$), the translation $f(x) = x + 1$ has no fixed point. On a non-convex set (like an annulus), a rotation can move every point. In practice, many ML optimisation landscapes are non-compact, which is why Brouwer alone cannot guarantee convergence — you need additional structure like contraction.
+
+''(2) Non-contractive maps (Banach fails):'' if the contraction constant $k$ equals or exceeds 1, the theorem provides no guarantees. A rotation of the unit circle satisfies $d(f(x), f(y)) = d(x, y)$ (isometry, $k = 1$) and either has every point as a fixed point or has none. In reinforcement learning, setting $\gamma = 1$ (undiscounted) breaks the contraction property, and value iteration may diverge. Many practical iterative algorithms operate near the boundary of contraction, leading to slow convergence.
+
+''(3) Non-convex values in Kakutani (Nash existence fails):'' Kakutani requires the correspondence to return convex sets. If a player's best-response set is non-convex (which can happen in games with non-concave payoffs), the theorem does not apply and a Nash equilibrium may not exist in mixed strategies. This arises in generative adversarial networks and other min-max formulations where the game structure is not classically well-behaved.
+
+!! Technical Details
+
+''Historical context:'' L.E.J. Brouwer proved his theorem in 1911 using degree theory; simpler proofs via Sperner's lemma came later. Stefan Banach published the contraction mapping theorem in his 1922 doctoral thesis. Shizuo Kakutani generalised Brouwer to set-valued maps in 1941. John Nash used Kakutani's theorem in his 1950 proof of the existence of Nash equilibria, earning the 1994 Nobel Prize in Economics.
+
+''Schauder's theorem'' extends Brouwer to infinite-dimensional spaces: every continuous self-map of a compact convex subset of a Banach space has a fixed point. This is used in proving existence of solutions to integral equations and PDEs.
+
+''Tarski's fixed point theorem'' applies to monotone functions on complete lattices — a completely different setting from topology. It guarantees that the set of fixed points is itself a complete lattice. This is foundational in program analysis and abstract interpretation.
+
+''Computational complexity:'' finding a Brouwer fixed point is ''PPAD-complete'' — the canonical problem of the complexity class PPAD. This means that while a fixed point must exist, there is (under standard conjectures) no polynomial-time algorithm to find it. Computing Nash equilibria inherits this hardness.
+
+''Connections to dynamical systems:'' fixed points of dynamical systems $\dot{x} = f(x)$ are equilibria (where $f(x) = 0$). The ''Lefschetz fixed point theorem'' uses algebraic topology to count fixed points via the Lefschetz number $\Lambda(f) = \sum (-1)^k \text{tr}(f_{*k})$. If $\Lambda(f) \ne 0$, then $f$ has a fixed point.
+
+Cross-references: <<link "Contraction Mapping" "Contraction Mapping">><</link>> | <<link "Bellman Equation" "Bellman Equation">><</link>> | <<link "Nash Equilibrium" "Nash Equilibrium">><</link>> | <<link "Topology" "Topology">><</link>> | <<link "Convex Optimization" "Convex Optimization">><</link>>
+
+!! Quiz
+
+<span id="fp-q1">Brouwer's Fixed Point Theorem requires the domain to be:</span>
+
+A. A complete metric space with a contraction
+B. Compact and convex
+C. An open subset of Euclidean space
+D. A Banach space with a monotone operator
+
+<<button "A">><<replace "#fp-q1">>Incorrect. A complete metric space with a contraction is the setting for Banach's theorem, not Brouwer's. Brouwer requires compactness and convexity of the domain, plus continuity of the function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q1">>Correct. Brouwer's theorem states that every continuous function from a compact convex subset of $\mathbb{R}^n$ to itself has a fixed point. Both conditions are necessary — dropping either one allows counterexamples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q1">>Incorrect. Open sets are not compact, and the translation $f(x) = x + 1$ on an open interval shows that continuous maps on open sets need not have fixed points.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q1">>Incorrect. That setting relates to Schauder's theorem or Tarski's theorem. Brouwer's original theorem works in finite-dimensional Euclidean space with compactness and convexity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q2">What additional guarantee does Banach's Contraction Mapping Theorem provide beyond Brouwer's?</span>
+
+A. The fixed point exists in infinite-dimensional spaces
+B. The fixed point is unique, and iterative application converges to it
+C. The fixed point is always at the centre of the domain
+D. The function must be differentiable
+
+<<button "A">><<replace "#fp-q2">>Incorrect. While Banach's theorem does work in infinite-dimensional complete metric spaces, its key advantage over Brouwer is uniqueness and constructive convergence, not the dimensionality of the space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q2">>Correct. Banach's theorem guarantees both uniqueness of the fixed point and convergence of the iterative sequence $x_{n+1} = f(x_n)$ from any starting point, with a geometric convergence rate bounded by $k^n$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q2">>Incorrect. The fixed point's location depends on the function, not the geometry of the domain. There is no reason it should be at the centre.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q2">>Incorrect. Banach's theorem requires the map to be a contraction — it does not require differentiability. The contraction condition $d(f(x), f(y)) \le k \cdot d(x,y)$ with $k < 1$ is the essential requirement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q3">In reinforcement learning, value iteration converges because the Bellman operator is:</span>
+
+A. A linear transformation
+B. A $\gamma$-contraction under the supremum norm, where $\gamma < 1$ is the discount factor
+C. A projection onto a convex set
+D. A monotone operator on a complete lattice
+
+<<button "A">><<replace "#fp-q3">>Incorrect. The Bellman optimality operator involves a $\max$ over actions, making it nonlinear. Convergence relies on the contraction property, not linearity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q3">>Correct. The Bellman operator satisfies $\|TV_1 - TV_2\|_\infty \le \gamma \|V_1 - V_2\|_\infty$ with discount factor $\gamma < 1$. By Banach's theorem, value iteration converges to the unique optimal value function $V^*$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q3">>Incorrect. The Bellman operator is not a projection. It combines reward and discounted future value via a max over actions, which is a contraction but not a projection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q3">>Incorrect. While monotone operator theory can be applied to MDPs, the standard convergence proof for value iteration uses Banach's contraction mapping theorem, not Tarski's lattice-theoretic result.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q4">Kakutani's Fixed Point Theorem extends Brouwer's by allowing:</span>
+
+A. Non-continuous functions
+B. Non-convex domains
+C. Set-valued maps (correspondences) instead of single-valued functions
+D. Infinite-dimensional spaces
+
+<<button "A">><<replace "#fp-q4">>Incorrect. Kakutani still requires regularity — specifically, the correspondence must have a closed graph. It does not relax continuity in the usual sense.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q4">>Incorrect. Kakutani still requires the domain to be compact and convex, just like Brouwer. The extension is in the type of mapping, not the domain.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q4">>Correct. Kakutani's key generalisation is allowing the map to return a set of values $\Phi(x) \subseteq S$ rather than a single point. The fixed point condition becomes $x^* \in \Phi(x^*)$. This is exactly what is needed for best-response correspondences in game theory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q4">>Incorrect. The infinite-dimensional extension of Brouwer is Schauder's theorem. Kakutani's contribution was handling set-valued maps, which is crucial for game theory.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q5">Finding a Brouwer fixed point is computationally:</span>
+
+A. Solvable in polynomial time by gradient descent
+B. NP-hard
+C. PPAD-complete — guaranteed to exist but (likely) hard to find efficiently
+D. Undecidable in general
+
+<<button "A">><<replace "#fp-q5">>Incorrect. Gradient descent finds stationary points of differentiable functions, but a Brouwer fixed point of a general continuous function cannot be found in polynomial time under standard complexity assumptions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q5">>Incorrect. NP-hard problems may have no solution, but Brouwer guarantees a fixed point always exists. The correct class is PPAD, which captures problems with guaranteed existence but no known efficient algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q5">>Correct. Finding a Brouwer fixed point is the canonical PPAD-complete problem. The class PPAD captures existence proofs based on parity arguments — a solution must exist, but no polynomial-time algorithm is known. Computing Nash equilibria inherits this hardness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q5">>Incorrect. The problem is decidable — we know a fixed point exists and can approximate it. The issue is computational efficiency: it is PPAD-complete, meaning likely no polynomial-time algorithm exists.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q6">If the contraction constant $k = 1$ (isometry), Banach's theorem:</span>
+
+A. Still guarantees a unique fixed point
+B. Guarantees existence but not uniqueness
+C. Provides no guarantees — the map may have zero, one, or infinitely many fixed points
+D. Guarantees convergence but at a slower rate
+
+<<button "A">><<replace "#fp-q6">>Incorrect. Banach's theorem strictly requires $k < 1$. A rotation of the unit circle is an isometry ($k = 1$) with no fixed points at all, showing the theorem fails at the boundary.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q6">>Incorrect. An isometry may have no fixed points (e.g., a non-trivial rotation of a circle), so existence is not guaranteed. Banach's theorem simply does not apply when $k = 1$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q6">>Correct. When $k = 1$, Banach's theorem gives no guarantees. A rotation can have no fixed points, the identity map fixes every point, and a reflection fixes exactly a subspace. The strict inequality $k < 1$ is essential.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q6">>Incorrect. There is no convergence guarantee at all when $k = 1$. The iterates $x_{n+1} = f(x_n)$ of a rotation simply cycle forever without approaching any fixed point.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q7">Nash used Kakutani's theorem to prove Nash equilibria exist by showing that the best-response correspondence:</span>
+
+A. Is a contraction on the strategy space
+B. Maps the product of strategy simplices to itself with closed graph and convex values
+C. Is continuous and differentiable on all strategy profiles
+D. Has a unique fixed point for every finite game
+
+<<button "A">><<replace "#fp-q7">>Incorrect. The best-response correspondence is not a contraction — it is a set-valued map, and Kakutani's theorem (not Banach's) is the relevant tool. No metric contraction property is needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q7">>Correct. Nash verified that the best-response correspondence maps the compact convex product of mixed-strategy simplices to itself, has a closed graph, and returns convex sets (since any mixture of best responses is also a best response). Kakutani's theorem then guarantees a fixed point — a Nash equilibrium.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q7">>Incorrect. The best-response correspondence is generally not single-valued and certainly not differentiable. It is a set-valued map — exactly the setting Kakutani's theorem was designed for.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q7">>Incorrect. Kakutani guarantees existence of at least one fixed point, not uniqueness. Many games have multiple Nash equilibria, so uniqueness does not hold in general.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fp-q8">Setting the discount factor $\gamma = 1$ in reinforcement learning breaks value iteration because:</span>
+
+A. The reward function becomes undefined
+B. The Bellman operator is no longer a contraction, so Banach's theorem does not apply
+C. The state space becomes infinite
+D. The policy becomes deterministic
+
+<<button "A">><<replace "#fp-q8">>Incorrect. The reward function is independent of the discount factor. Setting $\gamma = 1$ does not affect reward definitions; it affects the contraction property of the Bellman operator.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fp-q8">>Correct. With $\gamma = 1$, the Bellman operator satisfies $\|TV_1 - TV_2\|_\infty \le 1 \cdot \|V_1 - V_2\|_\infty$, which is not a strict contraction ($k = 1$). Banach's theorem no longer applies, and value iteration may diverge or fail to converge to a unique solution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fp-q8">>Incorrect. The state space is determined by the environment, not the discount factor. Setting $\gamma = 1$ affects the mathematical properties of the Bellman operator, not the size of the state space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fp-q8">>Incorrect. The discount factor does not determine whether the policy is deterministic or stochastic. The issue with $\gamma = 1$ is that the contraction property is lost.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

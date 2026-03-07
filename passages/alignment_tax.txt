@@ -1,0 +1,145 @@
+<<include "Header">>
+! Alignment Tax
+<img src="assets/alignment_tax.svg" alt="Pareto frontier diagram showing capability vs. alignment tradeoff, with base model, over-aligned model, ideal model, and RLHF/CAI/DPO arrows" style="max-width:100%;margin:1em 0;">
+
+Safety regulations make cars more expensive and sometimes slower — that's the "safety tax." The alignment tax is the same tradeoff for AI: making a model safer, more honest, and less harmful may reduce its raw capability or helpfulness on some tasks. The question is not whether this tax exists, but how large it is and whether it can be minimized.
+
+!! The Core Insight
+
+The ''alignment tax'' is the cost in capability or helpfulness incurred by making an AI system safer or more aligned with human values. It manifests as: reduced benchmark performance after RLHF, over-refusal (declining legitimate requests), sycophancy (telling users what they want to hear), and capability loss from safety training. Whether the tax is inevitable or reducible is a central question in AI alignment.
+
+Links: [[RLHF]], [[Constitutional AI]], [[Reward Modeling]], [[Instruction Tuning]], [[Large Language Models]], [[Goodharts law]]
+
+!! Forms of the Alignment Tax
+
+''Over-refusal:'' a safety-trained model declines too many legitimate requests — a helpfulness tax paid by every user who gets a refusal they didn't deserve.
+
+''Capability regression:'' fine-tuning on preference data may degrade performance on coding, math, or reasoning benchmarks. The model has been nudged away from its base distribution, and some of that distribution was useful.
+
+''Sycophancy:'' RLHF reward models may prefer agreeable responses, training the model to flatter rather than be accurate. The tax is paid in truthfulness.
+
+''Specification gaming:'' the model optimizes the reward model's criteria rather than the underlying human intent. The tax is paid in reliability and trust rather than raw benchmark performance.
+
+!! What the Math Is Actually Doing
+
+The RLHF objective creates an explicit tradeoff between reward maximization and staying close to the base model:
+
+$$\max_\pi \mathbb{E}[r(x,y)] - \beta\,\text{KL}(\pi \| \pi_{\text{ref}})$$
+
+The KL penalty coefficient $\beta$ directly controls the alignment tax:
+
+- High $\beta$: stay close to the base model — preserves capability but limits alignment gains
+- Low $\beta$: optimize reward aggressively — more aligned but risks reward hacking and over-optimization
+
+The ''Pareto frontier'' formalizes the tradeoff: there exists a set of models such that no model can improve on both capability and alignment simultaneously. Moving along the frontier trades one for the other. The central empirical question is: how far is current practice from the frontier, and can better methods push the frontier itself outward?
+
+Direct Preference Optimization (DPO) reparameterizes this objective, potentially reducing over-optimization artifacts by avoiding a separately trained reward model entirely.
+
+!! Evidence For and Against a Large Tax
+
+//Evidence that the tax is small://
+
+- ''InstructGPT'' (Ouyang et al. 2022): RLHF-trained model was rated significantly more helpful and less harmful than GPT-3 — and scored comparably on most capability benchmarks. Human evaluators preferred it $>$70% of the time with no major capability regression.
+- ''Constitutional AI'' (Bai et al. 2022): harmlessness scores improved substantially without hurting helpfulness scores — suggesting the tax can be reduced with better methodology.
+- ''Anthropic's Claude'' models: alignment training designed to improve measured helpfulness, framing safety and helpfulness as complementary.
+
+//Evidence that the tax is real://
+
+- RLHF-trained models sometimes score worse on technical benchmarks (GSM8K, HumanEval) relative to base models of the same size.
+- Over-refusal is a documented, persistent problem across safety-trained models.
+- Sycophancy increases after RLHF (Perez et al. 2022 — models agree with users' stated positions even when wrong).
+
+Whether the tax is large or small depends heavily on training methodology, data quality, and reward model accuracy.
+
+!! Reducing the Alignment Tax
+
+''Better reward models:'' more accurate measurement of true human values reduces proxy reward gaming. If the reward model is wrong, you're optimizing the wrong thing regardless of $\beta$.
+
+''Iterative RLHF:'' collect preference data from the already-aligned model to catch new failure modes. The base model's distribution and the aligned model's distribution differ, so preference data collected on one may not cover the other.
+
+''Constitutional AI:'' uses written principles rather than pure human preference labels — scales better, may reduce the specific failure mode of reward model inaccuracy.
+
+''DPO:'' simpler optimization without a separately trained reward model. By directly optimizing on preference pairs, it may reduce the over-optimization artifacts that cause capability regression.
+
+The optimistic view: with better methodology, capability and alignment are more complementary than opposed. The alignment tax is a measurement of current imperfections, not a fundamental physical law.
+
+!! When the Alignment Tax Is Worst
+
+''Misspecified reward:'' when the reward model systematically misrepresents human values, aggressive optimization creates large capability losses while providing little alignment gain. The model moves away from the frontier rather than along it.
+
+''Low $\beta$ (over-optimization):'' below a critical $\beta$ threshold, aggressive RL training causes the reward to increase while true quality degrades — the classic Goodhart's Law failure applied to RLHF.
+
+''Domain-specific capability loss:'' coding and math benchmarks show more degradation than conversational tasks after RLHF, because the preference data is heavily conversational and the KL penalty can't perfectly protect all capability dimensions equally.
+
+!! Technical Details
+
+Key papers:
+- Ouyang et al. 2022 — ''Training language models to follow instructions with human feedback'' (InstructGPT; minimal capability loss finding)
+- Bai et al. 2022 — ''Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback'' (Anthropic; harmlessness without helpfulness loss)
+- Bai et al. 2022 — ''Constitutional AI: Harmlessness from AI Feedback'' (CAI; reduced human labeling dependency)
+- Perez et al. 2022 — ''Sycophancy paper'' (RLHF increases sycophantic behavior)
+- Casper et al. 2023 — ''Open Problems and Fundamental Limitations of Reinforcement Learning from Human Feedback'' (alignment tax survey)
+- Askell et al. 2021 — ''A General Language Assistant as a Laboratory for Alignment''
+- Rafailov et al. 2023 — ''Direct Preference Optimization'' (DPO; alternative to RLHF reward model)
+
+Key concepts: [[RLHF]], [[Constitutional AI]], [[Reward Modeling]], [[Goodharts law]], [[Instruction Tuning]], [[Large Language Models]], [[Direct Preference Optimization]]
+
+!! Quiz
+
+<span id="at-q1">''1. What does the "alignment tax" primarily refer to?''
+
+<<button "A. The financial cost of hiring human labelers for RLHF">><<replace "#at-q1">>A. The financial cost of hiring human labelers for RLHF — Incorrect. The alignment tax is about capability or helpfulness costs, not monetary cost.<<br>><<br>><<button "Try again">><<replace "#at-q1">>''1. What does the "alignment tax" primarily refer to?''<<br>><<br>>A. The financial cost of hiring human labelers for RLHF<<br>>B. The reduction in capability or helpfulness that may result from safety training<<br>>C. The computational overhead of running safety filters at inference time<<br>>D. The legal liability tax imposed on AI companies<<br>><<br>><<button "A">><<replace "#at-q1">>A — Incorrect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#at-q1">>✓ B — Correct. The alignment tax is the cost in capability or helpfulness incurred by making a model safer or more aligned with human values.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#at-q1">>C — Incorrect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#at-q1">>D — Incorrect.<</replace>><<script>>typesetMath();<</script>><</button>><</replace>><<script>>typesetMath();<</script>><</button>><</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The reduction in capability or helpfulness that may result from safety training">><<replace "#at-q1">>✓ B — Correct. The alignment tax is the cost in capability or helpfulness incurred by making a model safer or more aligned with human values.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The computational overhead of running safety filters at inference time">><<replace "#at-q1">>C. Incorrect. That would be an inference cost, not the alignment tax as the term is used.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The legal liability tax imposed on AI companies for unsafe models">><<replace "#at-q1">>D. Incorrect. The alignment tax is a technical concept about model capability, not a legal one.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q2">''2. In the RLHF objective $\max_\pi \mathbb{E}[r(x,y)] - \beta\,\text{KL}(\pi \| \pi_{\text{ref}})$, what happens when $\beta$ is very low?''
+
+<<button "A. The model stays very close to the base model">><<replace "#at-q2">>A. Incorrect. A high $\beta$ keeps the model close to the base model; low $\beta$ does the opposite.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The reward is ignored entirely">><<replace "#at-q2">>B. Incorrect. At low $\beta$ the reward term dominates — it is not ignored.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The model aggressively optimizes the reward, risking over-optimization and capability loss">><<replace "#at-q2">>✓ C — Correct. Low $\beta$ reduces the KL penalty, allowing aggressive reward optimization. This can cause reward hacking and capability regression — a key mechanism of the alignment tax.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The KL divergence becomes negative">><<replace "#at-q2">>D. Incorrect. KL divergence is always non-negative; changing $\beta$ scales its contribution but does not make it negative.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q3">''3. Which finding from InstructGPT was notable with respect to the alignment tax?''
+
+<<button "A. RLHF caused a 30% drop in GSM8K scores">><<replace "#at-q3">>A. Incorrect. InstructGPT's notable finding was the absence of large capability regression, not a documented 30% drop.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Human evaluators preferred InstructGPT over GPT-3 with minimal capability regression on benchmarks">><<replace "#at-q3">>✓ B — Correct. InstructGPT (Ouyang et al. 2022) was preferred >70% of the time while showing comparable performance on most capability benchmarks — suggesting the alignment tax can be small.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. RLHF completely eliminated sycophancy">><<replace "#at-q3">>C. Incorrect. Research by Perez et al. found that RLHF tends to increase, not eliminate, sycophancy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. InstructGPT required no human preference labels">><<replace "#at-q3">>D. Incorrect. InstructGPT was trained using human preference labels; that is a defining feature of the RLHF approach it used.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q4">''4. What is "sycophancy" in the context of the alignment tax?''
+
+<<button "A. A model that refuses all requests to avoid harm">><<replace "#at-q4">>A. Incorrect. That describes over-refusal, a different form of the alignment tax.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A model trained to flatter users and agree with their stated views rather than be accurate">><<replace "#at-q4">>✓ B — Correct. Sycophancy occurs when RLHF reward models prefer agreeable responses, training the model to tell users what they want to hear at the expense of accuracy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A model that copies training data verbatim to maximize reward">><<replace "#at-q4">>C. Incorrect. That describes memorization or data regurgitation, not sycophancy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A model that always generates very long responses to appear thorough">><<replace "#at-q4">>D. Incorrect. Length gaming is a related but distinct reward hacking behavior.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q5">''5. How does Constitutional AI attempt to reduce the alignment tax?''
+
+<<button "A. By removing the KL penalty term entirely from the RLHF objective">><<replace "#at-q5">>A. Incorrect. CAI does not remove the KL penalty; it changes how preference signals are generated.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. By using written principles rather than pure human preference labels to generate training signal">><<replace "#at-q5">>✓ B — Correct. Constitutional AI uses a set of written principles for the model to critique and revise its own outputs, reducing dependence on human preference labels and potentially reducing reward model misspecification.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. By training only on math and coding data to preserve capability">><<replace "#at-q5">>C. Incorrect. CAI is a method for harmlessness training using AI feedback, not a domain-specific training approach.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. By increasing model size until capability loss becomes negligible">><<replace "#at-q5">>D. Incorrect. CAI addresses the training methodology, not model scale.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q6">''6. What does the Pareto frontier represent in the capability–alignment tradeoff?''
+
+<<button "A. The set of models that are both maximally capable and maximally aligned">><<replace "#at-q6">>A. Incorrect. No single model achieves both maxima; the frontier is the boundary of achievable tradeoffs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The set of models where no improvement in one dimension is possible without a cost in the other">><<replace "#at-q6">>✓ B — Correct. The Pareto frontier is the efficiency boundary: models on it cannot gain more capability without losing alignment, and vice versa. The goal of better methodology is to push the frontier outward.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The minimum model size needed to achieve safe behavior">><<replace "#at-q6">>C. Incorrect. The Pareto frontier is a concept from multi-objective optimization, not a size threshold.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The training loss curve during RLHF fine-tuning">><<replace "#at-q6">>D. Incorrect. The Pareto frontier is a conceptual diagram of capability vs. alignment outcomes, not a training curve.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q7">''7. On which types of benchmarks is the alignment tax typically largest?''
+
+<<button "A. Open-ended conversational benchmarks">><<replace "#at-q7">>A. Incorrect. Conversational tasks are where RLHF preference data is most plentiful, so capability loss there tends to be smaller.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Coding and mathematical reasoning benchmarks">><<replace "#at-q7">>✓ B — Correct. Coding and math benchmarks (e.g., HumanEval, GSM8K) tend to show more degradation after RLHF, because the preference data is heavily conversational and the KL penalty cannot protect all capability dimensions equally.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Sentiment classification benchmarks">><<replace "#at-q7">>C. Incorrect. Simple classification tasks are not typically where the alignment tax manifests most strongly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Translation benchmarks">><<replace "#at-q7">>D. Incorrect. Translation is not a primary domain where the alignment tax has been documented as largest.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="at-q8">''8. How does Direct Preference Optimization (DPO) differ from standard RLHF in relation to the alignment tax?''
+
+<<button "A. DPO uses a larger reward model to get more accurate preference signals">><<replace "#at-q8">>A. Incorrect. DPO eliminates the separately trained reward model rather than making it larger.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. DPO requires more human preference labels than RLHF">><<replace "#at-q8">>B. Incorrect. DPO uses the same preference pairs; it changes the optimization procedure, not the data volume.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. DPO removes the KL penalty entirely, allowing unlimited optimization">><<replace "#at-q8">>C. Incorrect. DPO has an implicit KL constraint built into its derivation — it does not remove the regularization, it reparameterizes it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. DPO directly optimizes on preference pairs without a separately trained reward model, potentially reducing over-optimization artifacts">><<replace "#at-q8">>✓ D — Correct. DPO reparameterizes the RLHF objective so the policy is optimized directly on human preference pairs. By avoiding a separately trained reward model, it may reduce the reward hacking and over-optimization that contribute to the alignment tax.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

@@ -1,0 +1,161 @@
+<<include "Header">>
+
+! Flash Attention
+
+<img src="assets/flash_attention.svg" alt="Diagram illustrating Flash Attention tiled computation vs standard attention" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine doing a jigsaw puzzle with ten thousand pieces. The standard approach lays every single piece out across an enormous table — you can see everything, but the table is in a cold warehouse a block away, and every time you need a piece you have to run and fetch it. Flash Attention is like keeping a small, fast tray at your elbow: you work through the puzzle in small batches, carrying only the tiles you need right now, and never once dragging the whole pile into the slow warehouse. The puzzle comes out identical either way — but one approach takes hours and the other takes minutes.
+
+---
+
+!! The Core Insight
+
+Flash Attention is an //IO-aware// algorithm: its central insight is that the bottleneck for computing [[scaled dot-product attention]] on modern GPUs is not the number of floating-point operations, but the number of times data must travel between fast on-chip memory (SRAM) and slow off-chip memory (HBM). Standard attention materialises a full $N \times N$ matrix of attention scores in HBM, reads it back for the softmax, writes the softmax output, reads it again for the weighted sum — an avalanche of round-trips that swamps the arithmetic units while they wait.
+
+Flash Attention, introduced by Dao et al. (2022), restructures the [[Attention]] computation so that tiles of the query, key, and value matrices are loaded once into SRAM, all arithmetic for that tile is done in place, and only the final output tile is written back. The $N \times N$ score matrix is //never// fully materialised. This is possible because softmax can be computed incrementally using an online algorithm that tracks a running maximum and a running normalisation constant — merging tiles exactly as though the whole matrix had been available at once.
+
+The practical consequence is that Flash Attention matches the numerical output of standard [[Transformers]] attention to floating-point precision, while reducing memory reads and writes from $O(N^2)$ to $O(N^2 / M)$, where $M$ is the SRAM size. For [[Multi-head Attention]] on long sequences this is the difference between fitting in memory and running out, and between waiting minutes and waiting seconds. This algorithmic efficiency is a direct illustration of the [[Hardware Lottery]]: researchers who understood the hardware won; those who ignored it lost.
+
+---
+
+!! The Memory Hierarchy Problem
+
+A modern GPU like the NVIDIA A100 has three relevant memory tiers. ''Registers'' are the fastest but hold only a handful of values per thread. ''SRAM'' (also called shared memory or L2 cache depending on context) sits on-chip, delivers roughly 19 TB/s bandwidth, and totals around 20 MB on the A100 (50 MB on the H100). ''HBM'' (High Bandwidth Memory) is the large DRAM attached to the GPU — 80 GB on the A100 — but despite the name its bandwidth (~2 TB/s) is ten times slower than SRAM and it has orders-of-magnitude higher latency.
+
+Standard attention allocates the $N \times N$ attention score matrix in HBM. At sequence length $N = 4096$ with 32-bit floats, that matrix is already 64 MB — larger than the entire A100 SRAM. Every softmax operation, every masking step, every multiply with $V$ requires loading that matrix from HBM. The GPU's arithmetic units are fast enough to finish a tile computation in nanoseconds; the HBM fetch takes microseconds. The result is that the GPU spends the vast majority of wall-clock time //waiting// for data, not computing.
+
+Memory bandwidth, not FLOPs, is therefore the true bottleneck for attention at long sequences. Standard attention is //memory-bound//: the number of HBM reads and writes is $\Theta(N^2)$ regardless of the arithmetic. Flash Attention is also memory-bound, but its HBM access pattern is $\Theta(N^2 d / M)$, where $d$ is head dimension — a factor of $M/d$ fewer round-trips. For typical values ($M \approx 20\text{ MB}$, $d = 64$) this is roughly a 5–10× reduction in HBM traffic.
+
+---
+
+!! What the Math Is Actually Doing
+
+The obstacle to tiling attention is softmax. The standard formula $\text{softmax}(x)_i = e^{x_i} / \sum_j e^{x_j}$ requires the full row of logits $x$ before a single output can be produced, which is why naive tiling fails — you cannot normalise until you have seen everything.
+
+The ''online softmax trick'' breaks this dependency. For a row $x = [x_1, \dots, x_N]$, we track two running scalars: the current maximum $m_i = \max(x_1, \dots, x_i)$ and the current sum $\ell_i = \sum_{j=1}^{i} e^{x_j - m_i}$. When a new tile $x_{i+1}, \dots, x_{i+B}$ arrives, we update:
+
+$$m_{\text{new}} = \max(m_i,\; m_{\text{tile}})$$
+
+$$\ell_{\text{new}} = e^{m_i - m_{\text{new}}} \cdot \ell_i + e^{m_{\text{tile}} - m_{\text{new}}} \cdot \ell_{\text{tile}}$$
+
+The rescaling factor $e^{m_i - m_{\text{new}}}$ corrects the previously accumulated sum for the revised maximum. This relies on the identity:
+
+$$\text{softmax}(x)_i = \frac{e^{x_i - m}}{\sum_j e^{x_j - m}}$$
+
+where $m = \max(x)$. Subtracting the maximum before exponentiating prevents numerical overflow and cancels out of numerator and denominator — the value of $m$ is irrelevant to the final result, only the relative differences matter.
+
+The output accumulator $O$ is similarly rescaled tile by tile:
+
+$$O_{\text{new}} = \frac{\ell_i \cdot e^{m_i - m_{\text{new}}} \cdot O_{\text{old}} + e^{m_{\text{tile}} - m_{\text{new}}} \cdot O_{\text{tile}}}{\ell_{\text{new}}}$$
+
+At the end of the pass, $O$ equals the exact output of standard attention. The algorithm uses $O(N d)$ HBM memory (linear in sequence length) rather than $O(N^2)$, enabling sequences that would otherwise exhaust GPU memory entirely.
+
+---
+
+!! Practical Impact
+
+Flash Attention delivers ''2–4× wall-clock speedup'' over standard attention on typical transformer workloads — not because it does fewer FLOPs (it actually does slightly more due to recomputation during the backward pass) but because it is no longer starved of data. Benchmarks on GPT-style models show end-to-end training throughput improvements of 15–45% when replacing standard attention.
+
+The ''sub-quadratic memory'' footprint is arguably more important than raw speed. Standard attention at $N = 32768$ requires ~4 GB for the attention matrix alone at 16-bit precision; Flash Attention holds only a few MB of tile buffers. This directly enabled practical training of models with 32K, 64K, and 128K context windows that were previously impossible to fit in a single GPU.
+
+Flash Attention is now ''standard in major frameworks'': PyTorch 2.0 uses it by default via `torch.nn.functional.scaled_dot_product_attention`; JAX and TensorFlow have equivalent fused kernels; Hugging Face Transformers exposes it through the `attn_implementation="flash_attention_2"` flag.
+
+''Flash Attention 2'' (Dao, 2023) improved parallelism by partitioning work across the sequence dimension in addition to the batch and head dimensions, achieving better GPU utilisation and roughly 2× the throughput of FA1 on long sequences. ''Flash Attention 3'' (Shah et al., 2024) targeted H100 hardware specifically, exploiting asynchronous memory copies (TMA instructions), warp-specialisation, and FP8 arithmetic to push utilisation past 75% of theoretical H100 peak — approximately 1.5–2× faster than FA2.
+
+---
+
+!! When Flash Attention Breaks Down
+
+''Variable-length sequences with heavy padding:'' Flash Attention processes attention in tiles of fixed block size. When a batch contains sequences of wildly varying lengths padded to the same maximum, the tiling scheme performs redundant computation on padding tokens. The FA2 varlen API mitigates this by packing multiple sequences into a single flat buffer and using a cumulative sequence-length array to skip padding, but this complicates batching logic and is not universally supported in higher-level libraries.
+
+''Custom attention patterns and sparse masks:'' Flash Attention's tiling is most efficient for dense or simple-structured masks (causal, sliding window). Arbitrary sparse attention masks — as used in some retrieval-augmented or graph-structured models — require per-tile mask evaluation that can break the regular memory access pattern, reducing or eliminating the IO advantage. Implementing a novel sparse pattern with Flash Attention typically requires writing a custom CUDA or Triton kernel, which is a significant engineering investment.
+
+''Very short sequences or small batch sizes:'' The IO-bandwidth savings of Flash Attention are most pronounced when the $N \times N$ matrix would be large enough to cause significant HBM traffic. At short sequence lengths (below ~512 tokens) or with very small batch sizes, the overhead of the fused kernel and the reduced parallelism can make Flash Attention slower than a well-tuned unfused implementation. Standard benchmarks show that for $N \leq 128$, cuBLAS-backed naive attention is sometimes faster on certain hardware configurations.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Dao et al. (2022) "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness" (NeurIPS 2022) introduced the tiling algorithm and online softmax. Dao (2023) "FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning" presented the sequence-parallel decomposition. Shah et al. (2024) "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision" targeted H100 with TMA and FP8.
+
+''SRAM block size tuning:'' The tile size $B_r \times B_c$ must satisfy $B_r \cdot B_c \leq M / 4$ (four arrays — Q tile, K tile, V tile, O tile — must fit simultaneously in SRAM). Optimal block sizes are hardware-specific; FA2 autotuning searches over common sizes (64, 128) at runtime.
+
+''IO complexity:'' Standard attention performs $\Theta(N d + N^2)$ HBM reads/writes. Flash Attention performs $\Theta(N^2 d / M)$ reads/writes. For $d = 128$, $M = 20\text{ MB}$, $N = 4096$: standard ~268 MB of HBM traffic, Flash ~104 MB — roughly 2.6× less.
+
+''Causal masking within tiles:'' The backward half of each tile (where column index exceeds row index) is masked to $-\infty$ before the softmax, which zeroes those exponentials. Tiles that lie entirely below the diagonal (all entries masked) are skipped, giving roughly 2× speedup for causal models on top of the IO savings.
+
+''Grouped Query Attention (GQA) with Flash Attention:'' GQA reduces the number of KV heads relative to Q heads. FA2 implements this by having multiple Q tiles share the same K/V tile, reducing the number of K/V loads from HBM proportionally. For a 4:1 GQA ratio, KV HBM traffic is quartered with no loss of numerical precision.
+
+''Hardware specifics:'' A100 SRAM = ~20 MB shared memory; H100 SRAM = ~50 MB; RTX 4090 SRAM = ~72 MB (consumer). H100 additionally has a second-level SRAM (L2 cache) of 50 MB. Larger SRAM allows larger tile sizes and further reduces HBM round-trips.
+
+''Backward pass:'' Flash Attention avoids storing the $N \times N$ attention matrix for the backward pass by recomputing it from the saved Q, K, V tiles during backpropagation. This trades HBM memory for extra FLOPs — acceptable because the recomputation is fast and the memory saving is large.
+
+---
+
+!! Quiz
+
+<span id="fa-q1">What is the primary bottleneck that Flash Attention addresses in standard attention?</span>
+A. Too many floating-point multiplications
+B. Insufficient GPU core count
+C. Excessive reads and writes between SRAM and HBM
+D. The softmax function being mathematically unstable
+
+<<button "A">><<replace "#fa-q1">>✗ Wrong. Standard attention is not FLOP-bound; arithmetic units sit idle waiting for data. The bottleneck is memory bandwidth, not compute.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q1">>✗ Wrong. Core count is not the limiting factor — the cores are underutilised precisely because they are waiting on memory, not lacking in number.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q1">>✓ Correct! Flash Attention is IO-aware: it eliminates the repeated reads and writes of the N×N attention matrix to slow HBM by keeping computation in fast SRAM.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q1">>✗ Wrong. Softmax instability is handled by subtracting the row maximum, but that is a numerical trick, not the primary bottleneck Flash Attention was designed to solve.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q2">What is the memory complexity of standard attention with respect to sequence length N?</span>
+A. $O(N)$
+B. $O(N \log N)$
+C. $O(N^2)$
+D. $O(N^3)$
+
+<<button "A">><<replace "#fa-q2">>✗ Wrong. Linear memory is what Flash Attention achieves; standard attention materialises the full N×N score matrix, not a linear structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q2">>✗ Wrong. Some approximate attention methods approach O(N log N) memory, but the exact standard algorithm is fully quadratic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q2">>✓ Correct! Standard attention stores the full N×N matrix of attention scores, requiring O(N²) memory — which becomes enormous at long sequence lengths.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q2">>✗ Wrong. O(N³) would be the cost if you also factored in the computation naively, but memory alone is O(N²) due to the score matrix.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q3">What does the online softmax trick track to allow tile-by-tile computation?</span>
+A. A sorted list of all logits seen so far
+B. The running maximum and running normalisation sum
+C. The cumulative gradient from previous tiles
+D. The entropy of the attention distribution
+
+<<button "A">><<replace "#fa-q3">>✗ Wrong. Sorting all logits would require O(N) storage and a full pass — exactly what we are trying to avoid. The online trick uses only two scalar accumulators.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q3">>✓ Correct! The algorithm tracks m_i (running max) and ℓ_i (running sum of shifted exponentials). Each new tile rescales the accumulators, producing exact softmax output without seeing all values at once.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q3">>✗ Wrong. Gradients are relevant to the backward pass, not to the forward online softmax trick, which operates purely on logit values.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q4">>✗ Wrong. Entropy is not tracked; the algorithm only needs the maximum and the exponential sum to reconstruct exact softmax values.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q4">Why does Flash Attention subtract the row maximum before computing softmax?</span>
+A. To make the softmax output sum to exactly 1.0 in finite precision
+B. To prevent numerical overflow when exponentiating large logit values
+C. To speed up the division step on GPU hardware
+D. To enforce that attention weights are non-negative
+
+<<button "A">><<replace "#fa-q4">>✗ Wrong. Subtracting the maximum does not affect whether the outputs sum to 1 — that is ensured by dividing by the sum of exponentials regardless.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q4">>✓ Correct! Large logits can cause exp(x) to overflow to infinity in float16 or float32. Subtracting the maximum ensures all inputs to exp are ≤ 0, preventing overflow with no change to the result.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q4">>✗ Wrong. The division step is not meaningfully faster after the max shift; the motivation is numerical stability, not hardware instruction speed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q4">>✗ Wrong. Attention weights are already non-negative after softmax regardless of the input; the max subtraction is about overflow prevention, not sign enforcement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q5">How does Flash Attention handle the backward pass without storing the N×N attention matrix?</span>
+A. It approximates the gradient using a low-rank sketch of the attention matrix
+B. It recomputes the attention scores from the saved Q, K, V tiles during backpropagation
+C. It stores only the diagonal of the attention matrix and reconstructs the rest
+D. It uses automatic differentiation checkpointing at the layer level, not the operation level
+
+<<button "A">><<replace "#fa-q5">>✗ Wrong. Flash Attention computes //exact// gradients, not approximations. No low-rank sketching is involved.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q5">>✓ Correct! Flash Attention saves Q, K, V, the output O, and the softmax statistics (m, ℓ). During backpropagation it recomputes the attention scores tile-by-tile, trading extra FLOPs for dramatically reduced memory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q5">>✗ Wrong. Only the diagonal would miss the vast majority of attention interactions; this would not produce correct gradients.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q5">>✗ Wrong. Gradient checkpointing is a related but separate technique applied at a coarser granularity; Flash Attention's recomputation is specific to the tiled attention kernel itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q6">What is the approximate SRAM size on an NVIDIA A100 GPU?</span>
+A. 80 GB
+B. 2 GB
+C. 20 MB
+D. 512 KB
+
+<<button "A">><<replace "#fa-q6">>✗ Wrong. 80 GB is the A100's HBM capacity — the large, slow off-chip memory. SRAM is several orders of magnitude smaller.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q6">>✗ Wrong. 2 GB would be far too large for on-chip SRAM; that is closer to a full GPU memory segment on older discrete chips.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q6">>✓ Correct! The A100 has approximately 20 MB of on-chip SRAM (shared memory + L1 cache). The H100 has roughly 50 MB. These sizes directly constrain the maximum tile dimensions in Flash Attention.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q6">>✗ Wrong. 512 KB is too small — even for older GPUs. Modern data-centre GPUs have tens of megabytes of on-chip SRAM.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q7">Which improvement did Flash Attention 2 introduce over Flash Attention 1?</span>
+A. It replaced exact softmax with a linear approximation to reduce FLOPs
+B. It extended the algorithm to cross-attention but removed self-attention support
+C. It improved parallelism by partitioning work across the sequence dimension
+D. It required storing the N×N matrix in a compressed format
+
+<<button "A">><<replace "#fa-q7">>✗ Wrong. Flash Attention 2 still computes exact softmax; it does not approximate. Approximation is the territory of methods like Performer or Linformer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q7">>✗ Wrong. FA2 supports both self-attention and cross-attention; it did not remove any attention variant.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q7">>✓ Correct! FA2 partitions the Q matrix across thread blocks in addition to the batch and head dimensions, allowing better GPU utilisation on long sequences and achieving roughly 2× the throughput of FA1.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q7">>✗ Wrong. A core property of Flash Attention in all versions is that the N×N matrix is never materialised in any form; compression of it is contrary to the algorithm's design.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="fa-q8">When is Flash Attention least likely to provide a speedup over standard attention?</span>
+A. When processing sequences of length 32K or longer
+B. When using causal (decoder-only) attention masking
+C. When the batch size is very small and sequences are very short
+D. When running on an NVIDIA A100 or H100 GPU
+
+<<button "A">><<replace "#fa-q8">>✗ Wrong. Long sequences are exactly where Flash Attention shines most — the N×N matrix becomes enormous and HBM traffic dominates, making the IO savings most valuable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#fa-q8">>✗ Wrong. Causal masking is well-supported; FA even gains an extra ~2× from skipping tiles in the upper triangle of the attention matrix.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#fa-q8">>✓ Correct! At short sequence lengths (below ~512) and small batch sizes, the N×N matrix is small enough that HBM traffic is not the bottleneck, and the overhead of the fused Flash Attention kernel can make it slower than a standard unfused implementation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#fa-q8">>✗ Wrong. A100 and H100 are the primary target hardware for Flash Attention; it is specifically tuned for data-centre GPUs with large SRAM and high-bandwidth HBM.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

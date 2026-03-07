@@ -1,0 +1,159 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Multi-Head  vs  Multi-Query  vs  Group Query Attention</text>
+
+  <!-- ===== MHA Section ===== -->
+  <text x="133" y="62" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">MHA (G = H)</text>
+  <text x="133" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Each head has own K,V</text>
+
+  <!-- MHA Query heads -->
+  <text x="42" y="108" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Queries</text>
+  <rect x="42" y="114" width="36" height="24" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="60" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₁</text>
+  <rect x="84" y="114" width="36" height="24" rx="4" fill="#2D5A8E" opacity="0.85"/>
+  <text x="102" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₂</text>
+  <rect x="126" y="114" width="36" height="24" rx="4" fill="#C4A87A"/>
+  <text x="144" y="130" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Q₃</text>
+  <rect x="168" y="114" width="36" height="24" rx="4" fill="#5C3D1E"/>
+  <text x="186" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₄</text>
+
+  <!-- MHA KV heads -->
+  <text x="42" y="172" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">K,V</text>
+  <rect x="42" y="178" width="36" height="24" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="60" y="194" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">KV₁</text>
+  <rect x="84" y="178" width="36" height="24" rx="4" fill="#2D5A8E" opacity="0.85"/>
+  <text x="102" y="194" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">KV₂</text>
+  <rect x="126" y="178" width="36" height="24" rx="4" fill="#C4A87A"/>
+  <text x="144" y="194" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">KV₃</text>
+  <rect x="168" y="178" width="36" height="24" rx="4" fill="#5C3D1E"/>
+  <text x="186" y="194" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">KV₄</text>
+
+  <!-- MHA arrows (one-to-one) -->
+  <line x1="60" y1="138" x2="60" y2="178" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="102" y1="138" x2="102" y2="178" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="144" y1="138" x2="144" y2="178" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrow-tan)"/>
+  <line x1="186" y1="138" x2="186" y2="178" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow-brown)"/>
+
+  <!-- MHA label -->
+  <text x="133" y="226" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">4 KV heads for 4 Q heads</text>
+
+  <!-- Divider 1 -->
+  <line x1="266" y1="50" x2="266" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ===== MQA Section ===== -->
+  <text x="400" y="62" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">MQA (G = 1)</text>
+  <text x="400" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">All heads share 1 K,V</text>
+
+  <!-- MQA Query heads -->
+  <text x="309" y="108" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Queries</text>
+  <rect x="309" y="114" width="36" height="24" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="327" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₁</text>
+  <rect x="351" y="114" width="36" height="24" rx="4" fill="#2D5A8E" opacity="0.85"/>
+  <text x="369" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₂</text>
+  <rect x="393" y="114" width="36" height="24" rx="4" fill="#C4A87A"/>
+  <text x="411" y="130" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Q₃</text>
+  <rect x="435" y="114" width="36" height="24" rx="4" fill="#5C3D1E"/>
+  <text x="453" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₄</text>
+
+  <!-- MQA single KV head -->
+  <text x="370" y="172" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">K,V</text>
+  <rect x="362" y="178" width="56" height="24" rx="4" fill="#7C2530" opacity="0.9"/>
+  <text x="390" y="194" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">KV₁</text>
+
+  <!-- MQA arrows (all converge) -->
+  <line x1="327" y1="138" x2="385" y2="178" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="369" y1="138" x2="388" y2="178" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="411" y1="138" x2="393" y2="178" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrow-tan)"/>
+  <line x1="453" y1="138" x2="396" y2="178" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow-brown)"/>
+
+  <!-- MQA label -->
+  <text x="400" y="226" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">1 KV head for 4 Q heads</text>
+
+  <!-- Divider 2 -->
+  <line x1="533" y1="50" x2="533" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ===== GQA Section ===== -->
+  <text x="666" y="62" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">GQA (G = 2)</text>
+  <text x="666" y="78" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Groups of heads share K,V</text>
+
+  <!-- GQA Query heads -->
+  <text x="575" y="108" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Queries</text>
+  <!-- Group 1 (red/blue) -->
+  <rect x="575" y="114" width="36" height="24" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="593" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₁</text>
+  <rect x="617" y="114" width="36" height="24" rx="4" fill="#7C2530" opacity="0.6"/>
+  <text x="635" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₂</text>
+  <!-- Group 2 (navy/tan) -->
+  <rect x="695" y="114" width="36" height="24" rx="4" fill="#2D5A8E" opacity="0.85"/>
+  <text x="713" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₃</text>
+  <rect x="737" y="114" width="36" height="24" rx="4" fill="#2D5A8E" opacity="0.6"/>
+  <text x="755" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Q₄</text>
+
+  <!-- Group bracket labels -->
+  <rect x="575" y="142" width="78" height="14" rx="3" fill="#7C2530" opacity="0.15"/>
+  <text x="614" y="153" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Group 1</text>
+  <rect x="695" y="142" width="78" height="14" rx="3" fill="#2D5A8E" opacity="0.15"/>
+  <text x="734" y="153" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Group 2</text>
+
+  <!-- GQA KV heads -->
+  <text x="575" y="180" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">K,V</text>
+  <rect x="593" y="186" width="44" height="24" rx="4" fill="#7C2530" opacity="0.85"/>
+  <text x="615" y="202" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">KV₁</text>
+  <rect x="713" y="186" width="44" height="24" rx="4" fill="#2D5A8E" opacity="0.85"/>
+  <text x="735" y="202" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">KV₂</text>
+
+  <!-- GQA arrows -->
+  <line x1="593" y1="138" x2="610" y2="186" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="635" y1="138" x2="620" y2="186" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="713" y1="138" x2="730" y2="186" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="755" y1="138" x2="740" y2="186" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- GQA label -->
+  <text x="666" y="234" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">2 KV heads for 4 Q heads</text>
+
+  <!-- ===== Bottom Summary ===== -->
+  <rect x="40" y="260" width="720" height="120" rx="8" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="400" y="284" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">KV Cache Memory Comparison</text>
+
+  <!-- MHA bar -->
+  <rect x="100" y="298" width="360" height="22" rx="4" fill="#7C2530" opacity="0.7"/>
+  <text x="280" y="314" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">MHA: 100% KV cache</text>
+  <text x="68" y="313" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">MHA</text>
+
+  <!-- GQA bar -->
+  <rect x="100" y="326" width="90" height="22" rx="4" fill="#2D5A8E" opacity="0.8"/>
+  <text x="145" y="341" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle" font-weight="bold">GQA: 25%</text>
+  <text x="68" y="341" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">GQA</text>
+
+  <!-- MQA bar -->
+  <rect x="100" y="354" width="45" height="22" rx="4" fill="#C4A87A"/>
+  <text x="165" y="369" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">MQA: 12.5%</text>
+  <text x="68" y="369" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">MQA</text>
+
+  <!-- Quality arrow on right -->
+  <text x="560" y="310" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="start">Quality:</text>
+  <text x="620" y="310" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="start" font-weight="bold">Highest</text>
+  <line x1="620" y1="318" x2="620" y2="360" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow-brown)"/>
+  <text x="620" y="374" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="start" font-weight="bold">Lowest</text>
+  <text x="670" y="340" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="start" font-weight="bold">Sweet spot</text>
+  <line x1="656" y1="336" x2="665" y2="336" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrow-tan" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrow-brown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

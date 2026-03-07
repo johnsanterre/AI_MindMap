@@ -1,0 +1,120 @@
+<<include "Header">>
+! Mixed Precision Training
+<img src="assets/mixed_precision.svg" style="max-width:100%;margin:0.5em 0 1em;" alt="Mixed precision training loop diagram"/>
+
+A contractor keeps precise measurements in their notebook (the master record) but uses a slightly rougher tape measure for the actual cutting — faster to use, and as long as they update the notebook with the precise result, nothing is lost. Mixed precision training works the same way: precise FP32 master weights are the notebook, while the heavy matrix multiplications happen in FP16 or BF16 — faster and cheaper — with careful tricks to avoid losing numerical precision along the way.
+
+!! The Core Insight
+
+''Micikevicius et al. 2018 (NVIDIA)'' established the modern mixed precision recipe. Modern GPUs carry //Tensor Cores// — dedicated silicon that runs FP16 and BF16 matrix multiplications 2–8× faster than FP32 general-purpose cores. The recipe: store FP32 master weights; cast to FP16 (or BF16) for the forward and backward pass; accumulate gradients in FP32; update the FP32 master weights with the optimizer. Memory savings are roughly 2× for the model and gradient tensors. The tricky part: FP16 has a limited dynamic range (max ≈ 65504) and can underflow for very small gradient values. The solution is //loss scaling//. Links: [[Backpropagation and Chain Rule]], [[Deep Learning]], [[Hardware Lottery]], [[Gradient Checkpointing]], [[Large Language Models]].
+
+!! FP16 vs BF16 vs FP32
+
+''FP32'' uses 1 sign + 8 exponent + 23 mantissa bits. Range: ±3.4×10^38. Precision: ~7 decimal digits. The gold standard for numerical stability.
+
+''FP16'' uses 1+5+10 bits. Range: ±65504. Precision: ~3 decimal digits. Risk: gradient underflow when values fall below ~6×10^−8. Loss scaling (below) compensates.
+
+''BF16 (Brain Float 16)'' uses 1+8+7 bits. It keeps FP32's full 8-bit exponent (same range: ±3.4×10^38) but sacrifices mantissa precision. BF16 is numerically much safer than FP16 — gradient underflow is rare, and dynamic loss scaling is often unnecessary. A100 and later NVIDIA GPUs, and all recent TPUs, support BF16 Tensor Cores. //Modern practice:// use BF16 by default (Llama, Mistral, Gemma, etc.); use FP16 only on older hardware (V100, T4) that lacks BF16 support.
+
+''FP8'' (H100 Hopper architecture) uses 8 bits in two formats: E4M3 (4 exponent, 3 mantissa — for forward pass activations) and E5M2 (5 exponent, 2 mantissa — for gradients). Provides roughly 2× throughput over BF16 but requires per-tensor scaling and the NVIDIA Transformer Engine library.
+
+!! What the Math Is Actually Doing
+
+//Loss scaling// prevents gradient underflow. Before the backward pass, multiply the loss by a scale factor $S$; after the backward pass, divide the gradients by $S$ before the optimizer step:
+
+$$g_{\text{scaled}} = S \cdot g_{\text{true}}, \qquad \theta \leftarrow \theta - \eta \cdot \frac{g_{\text{scaled}}}{S}$$
+
+The math is equivalent to unscaled training, but gradients are shifted into FP16's representable range during computation. ''Dynamic loss scaling'' starts with a large $S$ (e.g., 65536), halves it when overflow is detected (inf or NaN in gradients), and slowly increases it again during stable steps. PyTorch's `GradScaler` automates this.
+
+//Gradient accumulation// in FP32: even when gradients are computed in FP16, partial sums are accumulated into FP32 buffers to prevent precision loss across many additions.
+
+//Memory layout for full training (e.g., Adam):// model weights 4B/param (FP32), gradients 2B/param (FP16), optimizer first moment $m$ 4B/param (FP32), optimizer second moment $v$ 4B/param (FP32) — total ~14–18B/param. For a 70B-parameter model this implies >900 GB, which is why ZeRO sharding across many GPUs is necessary.
+
+!! Practical Implementation
+
+PyTorch //Automatic Mixed Precision// (AMP, stable from PyTorch 1.6) exposes two primitives:
+
+- `torch.cuda.amp.autocast()` — a context manager that automatically casts eligible operations (matmul, conv) to FP16/BF16 while keeping numerically sensitive ops (softmax, layer norm) in FP32.
+- `torch.cuda.amp.GradScaler` — manages dynamic loss scaling and overflow detection.
+
+A minimal training step looks like: model forward under `autocast`, `scaler.scale(loss).backward()`, `scaler.step(optimizer)`, `scaler.update()`. For BF16 on A100+, `autocast(dtype=torch.bfloat16)` and no `GradScaler` needed. The NVIDIA Transformer Engine library (`import transformer_engine.pytorch as te`) enables FP8 training on H100.
+
+Tensor Core alignment: for maximum throughput, matrix dimensions should be multiples of 8 (FP16) or 16 (BF16). Misaligned shapes silently fall back to FP32 CUDA cores at lower speed.
+
+!! When Mixed Precision Breaks Down
+
+''Numerical instability in FP16:'' Softmax and layer normalization accumulate many additions; rounding errors compound and can destabilize training. The fix is to keep these specific operations in FP32 — `autocast` handles this automatically for standard PyTorch ops, but custom CUDA kernels must be annotated explicitly.
+
+''Loss spike recovery failure:'' Dynamic loss scaling can enter a cycle of repeated halving if the model is in a poor loss basin, effectively stalling training. Gradient clipping (e.g., max norm 1.0) mitigates this but does not fully eliminate it.
+
+''Legacy architectures:'' Custom or third-party operation implementations may not expose FP16 paths. Running such ops under `autocast` either silently promotes to FP32 (losing speed) or raises an error. Audit custom kernels before enabling AMP.
+
+!! Technical Details
+
+Foundational paper: Micikevicius et al. "Mixed Precision Training", ICLR 2018. Original implementation: NVIDIA Apex library (now largely superseded by PyTorch native AMP). FP8 training: Peng et al. "FP8-LM: Training FP8 Large Language Models", 2023; NVIDIA Transformer Engine.
+
+BF16 on TPUs: standard since TPUv3; Google's Bfloat16 format was designed specifically to ease the transition from FP32 by preserving exponent width.
+
+Memory math for a 70B model: weights 140 GB in FP16 (70B × 2B), optimizer states 560 GB in FP32 (70B × 4B × 2 moments) — total ~700 GB+ before activations, hence multi-node ZeRO-3 or tensor parallelism is required.
+
+Inference-only mixed precision (not training): models are often quantized to INT8 or INT4 for deployment, which is a separate but related topic covered under model compression and quantization techniques.
+
+!! Quiz
+
+''1. What is the primary motivation for using mixed precision training?''
+<span id="mp-q1">''A)'' To eliminate the need for backpropagation<br>''B)'' To exploit Tensor Core hardware for faster FP16/BF16 matrix multiplications while reducing memory<br>''C)'' To increase the precision of gradient computations beyond FP32<br>''D)'' To allow training without a GPU</span>
+<<button "A">><<replace "#mp-q1">>''A)'' Incorrect. Mixed precision does not eliminate backpropagation — gradients are still computed, just in lower precision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q1">>''B)'' ✓ Correct. Tensor Cores accelerate FP16/BF16 matmuls 2–8× vs FP32, and halving bytes per parameter cuts memory roughly 2×.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q1">>''C)'' Incorrect. Mixed precision reduces gradient precision during computation — FP32 accumulation mitigates but does not exceed FP32 precision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q1">>''D)'' Incorrect. Tensor Cores are GPU-specific hardware; mixed precision provides no benefit on CPU-only systems.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''2. Why are FP32 master weights kept separately instead of using FP16 for everything?''
+<span id="mp-q2">''A)'' FP32 is faster to load from disk<br>''B)'' FP16 does not support negative numbers<br>''C)'' FP16 lacks sufficient precision for optimizer updates, which involve small weight deltas<br>''D)'' FP32 is required by the CUDA driver</span>
+<<button "A">><<replace "#mp-q2">>''A)'' Incorrect. Memory bandwidth, not disk speed, is relevant here, and FP16 is actually faster to read from VRAM.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q2">>''B)'' Incorrect. FP16 fully supports signed values including negatives.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q2">>''C)'' ✓ Correct. Learning-rate-scaled gradient updates can be very small; FP16's ~3-digit precision causes these deltas to round to zero, freezing weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q2">>''D)'' Incorrect. CUDA supports both FP16 and FP32 arithmetic; the requirement is numerical, not a driver constraint.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''3. What problem does loss scaling solve?''
+<span id="mp-q3">''A)'' Gradient explosion in FP32<br>''B)'' FP16 gradient underflow caused by very small gradient values<br>''C)'' Slow convergence of the Adam optimizer<br>''D)'' Misaligned matrix dimensions on Tensor Cores</span>
+<<button "A">><<replace "#mp-q3">>''A)'' Incorrect. Gradient explosion is an FP32-or-higher issue; it is addressed by gradient clipping, not loss scaling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q3">>''B)'' ✓ Correct. Loss scaling shifts gradients upward into FP16's representable range, preventing them from flushing to zero during the backward pass.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q3">>''C)'' Incorrect. Loss scaling is a numerical precision technique, not an optimizer convergence strategy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q3">>''D)'' Incorrect. Tensor Core alignment is a throughput concern unrelated to loss scaling.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''4. What is the key numerical advantage of BF16 over FP16?''
+<span id="mp-q4">''A)'' BF16 has more mantissa bits, giving higher decimal precision<br>''B)'' BF16 uses the same 8-bit exponent as FP32, giving the same dynamic range and reducing underflow risk<br>''C)'' BF16 is supported on older GPUs such as the V100<br>''D)'' BF16 requires no hardware support — it runs on any GPU</span>
+<<button "A">><<replace "#mp-q4">>''A)'' Incorrect. BF16 has fewer mantissa bits than FP16 (7 vs 10); its advantage is the wider exponent, not mantissa precision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q4">>''B)'' ✓ Correct. BF16's 8-bit exponent matches FP32's, giving range ±3.4×10^38 and making gradient underflow extremely rare.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q4">>''C)'' Incorrect. V100 GPUs do not support BF16 Tensor Cores; BF16 requires A100 or newer on NVIDIA hardware.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q4">>''D)'' Incorrect. BF16 Tensor Cores are specific hardware units absent from older GPU generations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''5. In dynamic loss scaling, what triggers the scale factor S to be halved?''
+<span id="mp-q5">''A)'' The training loss increases for two consecutive steps<br>''B)'' The learning rate scheduler reduces the learning rate<br>''C)'' Inf or NaN values are detected in the scaled gradients<br>''D)'' The batch size exceeds GPU memory capacity</span>
+<<button "A">><<replace "#mp-q5">>''A)'' Incorrect. Training loss trends are unrelated to the overflow detection mechanism in GradScaler.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q5">>''B)'' Incorrect. The learning rate scheduler and loss scaling are independent systems.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q5">>''C)'' ✓ Correct. Inf/NaN signals overflow in FP16 arithmetic; GradScaler detects this, skips the optimizer step for that iteration, and halves S.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q5">>''D)'' Incorrect. Out-of-memory errors are a separate hardware issue; they do not interact with the loss scaling mechanism.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''6. For maximum Tensor Core throughput, matrix dimensions should be multiples of which number when using BF16?''
+<span id="mp-q6">''A)'' 4<br>''B)'' 8<br>''C)'' 16<br>''D)'' 32</span>
+<<button "A">><<replace "#mp-q6">>''A)'' Incorrect. Multiples of 4 are insufficient to align BF16 tensor data for Tensor Core scheduling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q6">>''B)'' Incorrect. Multiples of 8 are the FP16 alignment requirement; BF16 requires a larger alignment.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q6">>''C)'' ✓ Correct. BF16 Tensor Cores require matrix dimensions aligned to multiples of 16; FP16 requires multiples of 8.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q6">>''D)'' Incorrect. 32 is not the documented alignment requirement, though it would satisfy the 16× constraint.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''7. Which of these operations does PyTorch autocast intentionally keep in FP32?''
+<span id="mp-q7">''A)'' Large matrix multiplications (matmul)<br>''B)'' Convolution operations<br>''C)'' Softmax and layer normalization<br>''D)'' Embedding lookups</span>
+<<button "A">><<replace "#mp-q7">>''A)'' Incorrect. Matmul is exactly the operation autocast promotes to FP16/BF16 to use Tensor Cores.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q7">>''B)'' Incorrect. Convolutions are also cast to lower precision by autocast; they are primary Tensor Core candidates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q7">>''C)'' ✓ Correct. Softmax and layer norm accumulate many additions; autocast keeps these in FP32 to avoid compounding rounding errors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q7">>''D)'' Incorrect. Embedding lookups are typically cast to the autocast dtype; they are not identified as numerically sensitive by PyTorch's policy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''8. Approximately how many bytes per parameter does full Adam training require in mixed precision (FP16 compute, FP32 optimizer)?''
+<span id="mp-q8">''A)'' 4 bytes (FP32 weights only)<br>''B)'' 6 bytes (FP16 weights + FP32 gradients)<br>''C)'' 14–18 bytes (FP32 weights + FP16 gradients + FP32 Adam moments)<br>''D)'' 2 bytes (FP16 weights only)</span>
+<<button "A">><<replace "#mp-q8">>''A)'' Incorrect. This counts only the weights and ignores gradients and optimizer states, which are the majority of memory usage.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#mp-q8">>''B)'' Incorrect. This omits the two Adam moment vectors (m and v), each 4 bytes/param in FP32.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#mp-q8">>''C)'' ✓ Correct. Weights 4B + gradients 2B + Adam m 4B + Adam v 4B = 14B/param; with FP32 gradient copies the total reaches ~18B/param.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#mp-q8">>''D)'' Incorrect. This counts only the FP16 compute copy of weights and ignores gradients, optimizer states, and the FP32 master copy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

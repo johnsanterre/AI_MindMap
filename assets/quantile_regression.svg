@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Quantile Regression: Beyond the Mean</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="340" x2="750" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="80" y1="340" x2="80" y2="60" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="415" y="375" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle">x (feature)</text>
+  <text x="40" y="200" font-family="Georgia,serif" font-size="12" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,40,200)">y (response)</text>
+
+  <!-- Scatter points with heteroscedastic spread -->
+  <circle cx="120" cy="290" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="135" cy="300" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="140" cy="275" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="150" cy="310" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="160" cy="280" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="175" cy="260" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="190" cy="285" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="200" cy="250" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="220" cy="270" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="230" cy="230" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="250" cy="260" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="270" cy="210" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="280" cy="250" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="300" cy="190" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="310" cy="240" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="330" cy="170" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="340" cy="230" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="360" cy="260" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="380" cy="150" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="390" cy="220" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="410" cy="130" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="420" cy="200" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="440" cy="250" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="460" cy="110" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="470" cy="190" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="490" cy="260" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="510" cy="100" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="520" cy="170" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="540" cy="240" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="560" cy="80" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="580" cy="150" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="600" cy="250" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="620" cy="90" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="640" cy="200" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="660" cy="270" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="680" cy="70" r="3" fill="#C4A87A" opacity="0.5"/>
+  <circle cx="700" cy="160" r="3" fill="#C4A87A" opacity="0.5"/>
+
+  <!-- 90th percentile line (top) -->
+  <line x1="100" y1="270" x2="720" y2="75" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="725" y="72" font-family="Georgia,serif" font-size="11" fill="#7C2530" font-style="italic">tau = 0.90</text>
+
+  <!-- Median line (middle) -->
+  <line x1="100" y1="290" x2="720" y2="165" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="725" y="162" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" font-weight="bold">tau = 0.50</text>
+
+  <!-- 10th percentile line (bottom) -->
+  <line x1="100" y1="310" x2="720" y2="260" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="725" y="257" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" font-style="italic">tau = 0.10</text>
+
+  <!-- Annotation: shaded region between quantiles -->
+  <polygon points="100,270 720,75 720,260 100,310" fill="#2D5A8E" opacity="0.06"/>
+
+  <!-- Legend box -->
+  <rect x="100" y="52" width="220" height="70" rx="4" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="115" y1="72" x2="145" y2="72" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="152" y="76" font-family="Georgia,serif" font-size="11" fill="#2C2C2C">Median (50th percentile)</text>
+  <line x1="115" y1="92" x2="145" y2="92" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="152" y="96" font-family="Georgia,serif" font-size="11" fill="#2C2C2C">90th percentile</text>
+  <line x1="115" y1="112" x2="145" y2="112" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="152" y="116" font-family="Georgia,serif" font-size="11" fill="#2C2C2C">10th percentile</text>
+</svg>

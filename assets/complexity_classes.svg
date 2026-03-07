@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Complexity Class Hierarchy</text>
+
+  <!-- ===== LEFT PANEL: Nested ovals ===== -->
+
+  <!-- EXPTIME oval -->
+  <ellipse cx="260" cy="215" rx="235" ry="165" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="80" y="110" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">EXPTIME</text>
+  <text x="68" y="126" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">Chess on N×N board</text>
+
+  <!-- PSPACE oval -->
+  <ellipse cx="265" cy="220" rx="185" ry="128" fill="#DDD3B8" stroke="#C4A87A" stroke-width="2"/>
+  <text x="108" y="140" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">PSPACE</text>
+  <text x="96" y="156" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">QBF, game planning</text>
+
+  <!-- NP oval -->
+  <ellipse cx="272" cy="228" rx="132" ry="90" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="168" y="167" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">NP</text>
+  <text x="310" y="255" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" font-style="italic">Sudoku, SAT,</text>
+  <text x="310" y="268" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" font-style="italic">Graph Coloring,</text>
+  <text x="310" y="281" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" font-style="italic">Knapsack</text>
+
+  <!-- P oval -->
+  <ellipse cx="258" cy="238" rx="74" ry="52" fill="#B8D4B0" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="234" y="221" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">P</text>
+  <text x="224" y="237" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">Sorting,</text>
+  <text x="218" y="249" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">Shortest Path,</text>
+  <text x="218" y="261" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">Lin. Programming</text>
+
+  <!-- NP-complete label at NP boundary -->
+  <line x1="318" y1="195" x2="355" y2="180" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="357" y="178" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530">NP-complete</text>
+  <text x="357" y="191" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" font-style="italic">(SAT, TSP, 3-Color)</text>
+
+  <!-- NP-hard label outside NP, inside PSPACE -->
+  <text x="105" y="330" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530">NP-hard</text>
+  <text x="90" y="344" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" font-style="italic">(may not be in NP)</text>
+  <line x1="148" y1="326" x2="168" y2="310" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+  <!-- ===== RIGHT PANEL: P vs NP question ===== -->
+  <line x1="520" y1="55" x2="520" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <text x="660" y="72" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">The Central Question</text>
+
+  <!-- P box -->
+  <rect x="570" y="110" width="80" height="50" rx="8" fill="#B8D4B0" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="610" y="132" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">P</text>
+  <text x="610" y="150" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">solve fast</text>
+
+  <!-- NP box -->
+  <rect x="700" y="110" width="80" height="50" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="740" y="132" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">NP</text>
+  <text x="740" y="150" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">verify fast</text>
+
+  <!-- Arrow and question mark -->
+  <text x="659" y="145" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#7C2530" text-anchor="middle">?</text>
+  <line x1="653" y1="135" x2="703" y2="135" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arr)"/>
+  <line x1="647" y1="135" x2="649" y2="135" stroke="#7C2530" stroke-width="1.8"/>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Implications -->
+  <text x="545" y="200" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530">If P = NP:</text>
+  <text x="545" y="215" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">• Cryptography collapses</text>
+  <text x="545" y="229" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">• Drug discovery trivial</text>
+  <text x="545" y="243" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">• All optimization easy</text>
+
+  <text x="545" y="270" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">If P ≠ NP (believed):</text>
+  <text x="545" y="285" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">• NP-hard problems stay hard</text>
+  <text x="545" y="299" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">• Approximation is the best</text>
+  <text x="545" y="313" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">  we can do in general</text>
+  <text x="545" y="327" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">• Public-key crypto is secure</text>
+
+  <!-- Millennium Prize note -->
+  <rect x="535" y="345" width="240" height="30" rx="5" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="655" y="362" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">$1,000,000 Millennium Prize — still unsolved</text>
+
+</svg>

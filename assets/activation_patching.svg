@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" rx="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Activation Patching (Causal Tracing)</text>
+
+  <!-- Clean Run (left) -->
+  <text x="145" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Clean Run</text>
+
+  <!-- Clean layers -->
+  <rect x="60" y="85" width="170" height="32" rx="6" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="145" y="106" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">Input: "The Eiffel Tower is in"</text>
+
+  <rect x="60" y="130" width="170" height="28" rx="6" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="145" y="149" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Layer 0 activations</text>
+
+  <rect x="60" y="170" width="170" height="28" rx="6" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="145" y="189" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Layer 1 activations</text>
+
+  <rect x="60" y="210" width="170" height="28" rx="6" fill="#2D5A8E" opacity="0.18" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="145" y="229" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Layer k activations</text>
+
+  <text x="145" y="258" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" text-anchor="middle">...</text>
+
+  <rect x="60" y="270" width="170" height="28" rx="6" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="145" y="289" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Layer L activations</text>
+
+  <rect x="60" y="315" width="170" height="32" rx="6" fill="#2D5A8E" opacity="0.25" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="145" y="336" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Output: "Paris" ✓</text>
+
+  <!-- Arrows clean -->
+  <line x1="145" y1="117" x2="145" y2="130" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="145" y1="158" x2="145" y2="170" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="145" y1="198" x2="145" y2="210" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="145" y1="238" x2="145" y2="258" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="145" y1="262" x2="145" y2="270" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="145" y1="298" x2="145" y2="315" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Corrupted Run (right) -->
+  <text x="655" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">Corrupted Run</text>
+
+  <rect x="570" y="85" width="170" height="32" rx="6" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="655" y="106" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">Input: "The [noise] is in"</text>
+
+  <rect x="570" y="130" width="170" height="28" rx="6" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1"/>
+  <text x="655" y="149" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Layer 0 activations</text>
+
+  <rect x="570" y="170" width="170" height="28" rx="6" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1"/>
+  <text x="655" y="189" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Layer 1 activations</text>
+
+  <rect x="570" y="210" width="170" height="28" rx="6" fill="#C4A87A" opacity="0.5" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="655" y="229" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Layer k ← PATCHED</text>
+
+  <text x="655" y="258" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="middle">...</text>
+
+  <rect x="570" y="270" width="170" height="28" rx="6" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1"/>
+  <text x="655" y="289" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Layer L activations</text>
+
+  <rect x="570" y="315" width="170" height="32" rx="6" fill="#5C3D1E" opacity="0.2" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="655" y="336" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Output: "Paris"? ←test</text>
+
+  <!-- Arrows corrupted -->
+  <line x1="655" y1="117" x2="655" y2="130" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="655" y1="158" x2="655" y2="170" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="655" y1="198" x2="655" y2="210" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="655" y1="238" x2="655" y2="258" stroke="#7C2530" stroke-width="1"/>
+  <line x1="655" y1="262" x2="655" y2="270" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="655" y1="298" x2="655" y2="315" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Patch arrow (curved) -->
+  <path d="M 230 224 C 350 180, 450 180, 570 224" fill="none" stroke="#5C3D1E" stroke-width="2.5" stroke-dasharray="8,4" marker-end="url(#arrowBrown)"/>
+  <text x="400" y="185" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Patch clean activation</text>
+  <text x="400" y="202" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">into corrupted run</text>
+
+  <!-- Bottom annotation -->
+  <text x="400" y="378" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">If output recovers → this site is causally important for the behavior</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

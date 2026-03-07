@@ -1,0 +1,171 @@
+<<include "Header">>
+
+! Watermarking
+
+<img src="assets/watermarking.svg" alt="Diagram showing the AI watermarking pipeline: token partition into green and red lists, biased sampling, and z-score detection" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Think of how a papermaker in the 1200s pressed a wire design into wet pulp — the resulting watermark was invisible in normal use but appeared when you held the sheet to light. AI watermarking works the same way: during text generation, the model embeds a faint statistical pattern that is invisible to a casual reader but lights up under the right test. Anyone with the secret key can check whether a piece of text was produced by a particular model, enabling provenance tracking and detection of machine-generated content at scale.
+
+---
+
+!! The Core Insight
+
+''AI watermarking'' solves a fundamental attribution problem: once a language model emits a sequence of tokens, nothing inherent to the text marks it as machine-generated. A watermark changes that by //subtly biasing which tokens the model selects// during generation, creating a statistical fingerprint that a detector can recover later.
+
+The dominant approach, introduced by Kirchenbauer et al. (2023), partitions the vocabulary into a ''green list'' and a ''red list'' at each generation step. The partition is determined by hashing the preceding token with a secret key, so the split looks random to anyone without the key. During sampling, green-list tokens receive a small logit boost $\delta$, making them slightly more likely to be chosen. Over a passage of reasonable length, the excess of green tokens becomes statistically detectable — a simple z-test is enough to distinguish watermarked text from unwatermarked text with high confidence.
+
+The beauty is that this bias is //tiny per token// — the quality of any single sentence is barely affected — but //cumulative across the passage//. This is a direct application of the law of large numbers: a small per-token signal becomes overwhelmingly detectable when summed over hundreds of tokens. The approach connects deeply to <<link "Information Theory" "Information Theory">><</link>> and <<link "Shannon Entropy" "Shannon Entropy">><</link>>, because the watermark works by injecting a controlled amount of mutual information between the secret key and the generated text.
+
+---
+
+!! How Green-List Watermarking Works
+
+At each generation step $t$, the model has produced tokens $w_1, \ldots, w_{t-1}$ and is about to sample $w_t$. The watermarking algorithm proceeds in three stages:
+
+''1. Partition the vocabulary.'' A pseudorandom function seeded by a hash of the preceding token $w_{t-1}$ and the secret key $k$ splits the full vocabulary $V$ into two disjoint sets: a green list $G_t$ and a red list $R_t$, typically of equal size. Because the hash depends on $w_{t-1}$ and $k$, the partition changes at every step and is unpredictable without $k$.
+
+''2. Bias the logits.'' Before applying softmax to produce the sampling distribution, the model adds a constant $\delta > 0$ to the logits of every green-list token. This is equivalent to multiplying the probability of each green token by $e^\delta$ before renormalization. The parameter $\delta$ controls the tradeoff between watermark strength and text quality — larger $\delta$ means stronger signal but more distortion of the original distribution.
+
+''3. Sample as usual.'' After the logit bias, standard sampling (greedy, top-$k$, nucleus) proceeds normally. The token selected at step $t$ is more likely to be green than it would have been without the bias.
+
+''Detection'' requires only the secret key $k$ and the suspect text. The detector replays the hashing process to reconstruct $G_t$ at each step, counts how many tokens in the text are green, and performs a one-proportion z-test. Under the null hypothesis (human-written text), about half the tokens should be green by chance. A watermarked passage will have significantly more, and the z-score grows with $\sqrt{T}$ where $T$ is the text length.
+
+This mechanism is closely related to how a <<link "Tokenizer" "Tokenizer">><</link>> segments text — the watermark operates at the token level, not the word level, so the specific tokenization scheme directly affects the partition and detectability.
+
+---
+
+!! What the Math Is Actually Doing
+
+Let $T$ be the total number of tokens in the suspect text and $|G|$ the count of green-list tokens. Under the null hypothesis $H_0$ (no watermark), each token independently falls in the green list with probability $\gamma$ (typically $\gamma = 0.5$ for an equal split). The test statistic is:
+
+$$z = \frac{|G| - \gamma T}{\sqrt{\gamma(1-\gamma)\,T}}$$
+
+For $\gamma = 0.5$ this simplifies to:
+
+$$z = \frac{|G| - T/2}{\sqrt{T/4}}$$
+
+Under $H_0$, $z \sim \mathcal{N}(0,1)$ by the central limit theorem. A threshold such as $z > 4$ gives a false positive rate below $3 \times 10^{-5}$. This is a direct application of <<link "Hypothesis Testing" "Hypothesis Testing">><</link>>.
+
+The logit bias $\delta$ shifts the per-token green probability from $\gamma$ to an effective value $\gamma' > \gamma$. If the original distribution is approximately uniform over $V$, the expected green probability becomes:
+
+$$\gamma' = \frac{\gamma \, e^\delta}{\gamma \, e^\delta + (1 - \gamma)}$$
+
+For $\delta = 2$ and $\gamma = 0.5$, this gives $\gamma' \approx 0.88$. The expected z-score for a watermarked text of length $T$ then scales as:
+
+$$\mathbb{E}[z] = \frac{(\gamma' - \gamma)\,T}{\sqrt{\gamma(1-\gamma)\,T}} = \frac{(\gamma' - \gamma)\sqrt{T}}{\sqrt{\gamma(1-\gamma)}}$$
+
+This grows as $\sqrt{T}$, meaning watermark detectability improves with text length — a passage of 200 tokens is far more reliably classified than one of 25 tokens.
+
+The ''quality cost'' of watermarking can be quantified as the KL divergence between the original distribution $p$ and the watermarked distribution $\tilde{p}$:
+
+$$D_{\mathrm{KL}}(p \,\|\, \tilde{p}) = \sum_{w \in V} p(w) \log \frac{p(w)}{\tilde{p}(w)}$$
+
+When the model is highly confident (one token dominates the distribution), the bias $\delta$ barely changes the output and $D_{\mathrm{KL}}$ is near zero. When the model is uncertain and many tokens have similar probability (high entropy), the bias has more effect on the actual choice. This means watermarks distort text quality primarily in ''high-entropy'' generation contexts — creative writing, paraphrasing — and minimally in ''low-entropy'' contexts like factual recall or code.
+
+---
+
+!! Practical Considerations and Variants
+
+''Distortion-free watermarking'' (Christ, Gunn & Zamir, 2023; Kuditipudi et al., 2023) uses a different strategy: instead of biasing logits, it couples the randomness of the sampling process to a pseudorandom sequence derived from the secret key. From the model's perspective, the marginal distribution of each token is unchanged — so there is //zero distortion// on any single sample. Detection works by checking whether the generated tokens are correlated with the pseudorandom sequence. This approach preserves text quality perfectly in expectation but requires longer texts for the same detection power.
+
+''Multi-bit watermarks'' encode not just a binary "watermarked or not" signal but a payload — an identifier for the model version, user, or deployment context. This is analogous to steganography: hiding a message inside the generated text. Multi-bit schemes sacrifice some detection power to embed richer provenance information.
+
+''Robustness attacks'' attempt to remove watermarks by paraphrasing, synonym substitution, or passing text through a second model. Robust watermarking schemes use wider context windows (hashing on multiple preceding tokens rather than just one) or embed redundancy so that partial edits do not erase the signal entirely. The tension between robustness and imperceptibility mirrors the classic information-theoretic tradeoff in channel coding.
+
+''Connection to <<link "Differential Privacy" "Differential Privacy">><</link>>:'' watermarking and differential privacy sit at opposite ends of a spectrum. Differential privacy hides information about individuals by adding noise; watermarking //injects// detectable information by adding structured bias. Both manipulate the randomness of an algorithm's output for a specific trust goal.
+
+---
+
+!! When Watermarking Breaks Down
+
+''Short texts defeat detection.'' Because detectability scales as $\sqrt{T}$, short passages — tweets, one-line answers, brief code snippets — do not accumulate enough green-token excess to produce a statistically significant z-score. For a 25-token passage with $\delta = 2$, the expected z-score may be around 3.8, which is borderline. This is a fundamental information-theoretic limit: the watermark channel has finite capacity per token, and short messages carry too few bits.
+
+''Paraphrase and editing attacks.'' If an adversary runs watermarked text through a second model or manually rephrases enough tokens, the green-list bias is diluted because the replacement tokens are not biased toward the original green partition. Even 20–30% token replacement can push the z-score below the detection threshold. Robust watermarking mitigates this with longer context windows and error-correcting codes, but a sufficiently aggressive rewrite will always destroy the signal — at some point the text is no longer the model's output in any meaningful sense.
+
+''Spoofing and false accusations.'' If the watermarking scheme is reverse-engineered or the secret key leaks, an adversary can //add// a watermark to human-written text, framing it as AI-generated. This is the dual of the robustness problem: not only must watermarks resist removal, they must also resist //injection//. Asymmetric schemes (where only the model provider can embed but anyone can detect) partially address this, but key management and scheme secrecy remain open challenges.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Kirchenbauer et al. (2023), "A Watermark for Large Language Models" (U. Maryland) — introduced green-list/red-list logit biasing. Christ, Gunn & Zamir (2023), "Undetectable Watermarks for Language Models" — distortion-free scheme using coupled randomness. Kuditipudi et al. (2023), "Robust Distortion-free Watermarks for Language Models" (Stanford). Zhao et al. (2023), "Provable Robust Watermarking for AI-Generated Text."
+
+''Detection parameters:'' Typical $\delta$ values range from 1.0 to 2.5. Typical z-score thresholds range from 4.0 to 6.0 (corresponding to false positive rates of $\sim10^{-5}$ to $\sim10^{-9}$). Minimum reliable text length is roughly 50–200 tokens depending on $\delta$.
+
+''Image watermarking:'' Parallel work (Fernandez et al., 2023; Wen et al., 2023) embeds watermarks in diffusion model outputs by modifying the initial noise vector or latent representation. The detection principle is analogous — a statistical test checks for correlation between the image's latent representation and a secret key — but the embedding domain is continuous rather than discrete.
+
+''Regulatory relevance:'' The EU AI Act and the White House Executive Order on AI Safety (Oct 2023) both reference AI-generated content identification, making watermarking a leading technical candidate for compliance. Several major model providers (Google DeepMind SynthID, OpenAI) have deployed watermarking or content credentials in production systems.
+
+''Limitations:'' No watermarking scheme is simultaneously perfectly robust, perfectly imperceptible, and perfectly efficient. This impossibility result echoes the rate-distortion tradeoff in information theory. Open-source models can have watermarking removed by anyone with access to model weights, making watermarking most effective for API-served models.
+
+''Related topics:'' <<link "Information Theory" "Information Theory">><</link>>, <<link "Shannon Entropy" "Shannon Entropy">><</link>>, <<link "Tokenizer" "Tokenizer">><</link>>, <<link "Hypothesis Testing" "Hypothesis Testing">><</link>>, <<link "Differential Privacy" "Differential Privacy">><</link>>, <<link "Adversarial Attacks" "Adversarial Attacks">><</link>>, <<link "Constitutional AI" "Constitutional AI">><</link>>, <<link "Large Language Models" "Large Language Models">><</link>>.
+
+---
+
+!! Quiz
+
+<span id="wm-q1">What is the fundamental mechanism behind green-list watermarking for LLMs?</span>
+A. Replacing certain words with synonyms after generation
+B. Adding a small logit bias to a pseudorandomly chosen subset of tokens during generation
+C. Encrypting the entire output text with a secret key
+D. Training the model on a special dataset that causes it to produce detectable patterns
+
+<<button "A">><<replace "#wm-q1">>Wrong. Synonym replacement is a post-hoc paraphrasing technique, not a watermarking mechanism. Green-list watermarking operates during generation by biasing logits, not by modifying text afterward.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q1">>Correct! Green-list watermarking partitions the vocabulary using a secret key and adds a bias $\delta$ to the logits of green-list tokens, making them more likely to be sampled. This creates a statistical fingerprint detectable by anyone with the key.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q1">>Wrong. Encryption would make the text unreadable. Watermarking preserves readability — the output looks like normal text but carries a hidden statistical signal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q1">>Wrong. Green-list watermarking does not require retraining. It modifies the sampling process at inference time, leaving the model weights untouched.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q2">How does the green/red list partition change from one token position to the next?</span>
+A. It stays fixed for the entire generation — the same tokens are always green
+B. It rotates through a predetermined sequence of partitions
+C. It is determined by hashing the preceding token with the secret key, so it changes at every step
+D. It is randomly resampled independently at each step without using a key
+
+<<button "A">><<replace "#wm-q2">>Wrong. A fixed partition would be trivially detectable and could be reverse-engineered by comparing multiple outputs. The partition must change at each step to be secure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q2">>Wrong. A predetermined rotation would not depend on the actual generated text and could be predicted without the key. The partition must be coupled to the generated tokens.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q2">>Correct! The partition at step $t$ is computed by hashing $w_{t-1}$ with the secret key $k$. This makes the partition unpredictable without the key and different at each step, while still being reproducible by the detector.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q2">>Wrong. Without a key-dependent mechanism, the detector could not reconstruct which tokens were green at each position and detection would be impossible.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q3">The z-score for watermark detection grows as $\sqrt{T}$. What does this imply?</span>
+A. Doubling the text length doubles the z-score, making detection linearly easier
+B. Doubling the text length increases the z-score by a factor of $\sqrt{2}$, giving diminishing but still increasing returns
+C. Text length has no effect on detection confidence once $T > 100$
+D. Longer texts are harder to detect because the watermark signal dilutes over more tokens
+
+<<button "A">><<replace "#wm-q3">>Wrong. The z-score grows as $\sqrt{T}$, not linearly. Doubling $T$ multiplies the z-score by $\sqrt{2} \approx 1.41$, not by 2.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q3">>Correct! Since $\mathbb{E}[z] \propto \sqrt{T}$, doubling the text length multiplies the expected z-score by $\sqrt{2}$. Detection keeps improving with length, but with diminishing marginal returns — a classic square-root scaling from the central limit theorem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q3">>Wrong. Detection confidence continues to increase for all $T$ because $\sqrt{T}$ is a monotonically increasing function. There is no plateau.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q3">>Wrong. The signal does not dilute — each additional token independently contributes to the green-token count, and the z-statistic accumulates evidence. Longer texts are always easier to detect.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q4">When does watermarking cause the least distortion to text quality?</span>
+A. When the model is highly uncertain and many tokens have similar probability
+B. When the model is very confident and one token dominates the distribution
+C. When the logit bias $\delta$ is very large
+D. When the text is very short
+
+<<button "A">><<replace "#wm-q4">>Wrong. High-entropy contexts are exactly where watermarking causes the most distortion, because the bias $\delta$ can shift the selected token to a different choice than the model originally preferred.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q4">>Correct! When the model is confident, the top token has very high probability and the logit bias $\delta$ does not change which token is selected. The KL divergence between the original and watermarked distributions is near zero in low-entropy contexts.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q4">>Wrong. Larger $\delta$ means a stronger bias toward green tokens, which increases distortion. The quality cost is directly related to the magnitude of $\delta$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q4">>Wrong. Text length affects detection power, not per-token distortion. The quality impact per token depends on the entropy of the model's distribution at that step, not on the total length.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q5">What distinguishes "distortion-free" watermarking from green-list watermarking?</span>
+A. Distortion-free watermarking does not use a secret key
+B. Distortion-free watermarking couples the sampling randomness to a pseudorandom sequence, preserving the marginal distribution of each token exactly
+C. Distortion-free watermarking is undetectable by any statistical test
+D. Distortion-free watermarking modifies the model weights rather than the sampling process
+
+<<button "A">><<replace "#wm-q5">>Wrong. Distortion-free watermarking still requires a secret key — it uses the key to generate the pseudorandom sequence that is coupled with the sampling process.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q5">>Correct! Instead of biasing logits, distortion-free watermarking controls the random seed used during sampling. The marginal distribution of each token is unchanged — zero distortion on any single sample — but the sequence of tokens is correlated with the secret pseudorandom sequence, which the detector can check.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q5">>Wrong. Distortion-free watermarking is detectable by the holder of the secret key. "Distortion-free" refers to preserving text quality, not evading detection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q5">>Wrong. Distortion-free watermarking, like green-list watermarking, operates at inference time during sampling. Neither approach modifies the model weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q6">Why is watermarking most effective for API-served models rather than open-source models?</span>
+A. Open-source models generate lower quality text that cannot carry a watermark signal
+B. API-served models have larger vocabularies
+C. Anyone with access to open-source model weights can remove the watermarking step from the sampling code
+D. API-served models generate longer texts on average
+
+<<button "A">><<replace "#wm-q6">>Wrong. Text quality has nothing to do with whether watermarking can be circumvented. Open-source models can generate perfectly good text; the issue is access to the generation pipeline.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q6">>Wrong. Vocabulary size affects the partition but not the fundamental reason watermarking is harder to enforce on open-source models.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q6">>Correct! With open-source models, users control the entire generation pipeline. They can simply remove the logit bias or use standard sampling without the watermarking step, making the watermark voluntary rather than enforceable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q6">>Wrong. Text length affects detection power but is not the reason watermarking is more effective for API-served models. The key issue is control over the generation code.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q7">What is the "spoofing" attack on watermarking?</span>
+A. Removing the watermark from AI-generated text
+B. Adding a watermark to human-written text to falsely attribute it to an AI model
+C. Using a larger $\delta$ to make the watermark more visible
+D. Training a new model to imitate the watermarked model's outputs
+
+<<button "A">><<replace "#wm-q7">>Wrong. Removing a watermark is a robustness attack, not a spoofing attack. Spoofing is the dual problem — injecting a watermark where none should exist.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q7">>Correct! Spoofing means adding a fake watermark to human-written text, making the detector falsely classify it as AI-generated. This could be used to frame someone or undermine trust in the detection system. It requires knowledge of the watermarking scheme or a leaked key.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q7">>Wrong. Increasing $\delta$ is a parameter choice by the model provider, not an adversarial attack.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q7">>Wrong. Model imitation (distillation) is a separate concern. Spoofing specifically refers to injecting a watermark into text that was not generated by the watermarked model.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wm-q8">How does watermarking relate to differential privacy conceptually?</span>
+A. Both add noise to hide information about individuals in training data
+B. They are opposites: differential privacy hides information by adding noise, while watermarking injects detectable information by adding structured bias
+C. Watermarking is a special case of differential privacy applied to model outputs
+D. They are unrelated techniques from different fields
+
+<<button "A">><<replace "#wm-q8">>Wrong. This describes only differential privacy. Watermarking does not aim to hide information — it aims to //inject// detectable information, which is the opposite goal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#wm-q8">>Correct! Differential privacy and watermarking both manipulate the randomness of an algorithm's output, but for opposite purposes. Privacy adds noise to obscure signal; watermarking adds structured bias to create signal. They sit at opposite ends of the information-disclosure spectrum.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#wm-q8">>Wrong. Watermarking is not a special case of differential privacy. They have opposite goals — one hides information, the other embeds it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#wm-q8">>Wrong. While they originated in different communities, they are conceptually related — both involve carefully manipulating randomness in algorithmic outputs for trust-related goals.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

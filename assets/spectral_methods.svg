@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E">Spectral Methods Pipeline</text>
+
+  <!-- Step 1: Data / Matrix -->
+  <text x="130" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">1. Build Matrix</text>
+
+  <!-- Adjacency / kernel matrix grid -->
+  <rect x="75" y="90" width="110" height="110" rx="4" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <rect x="75" y="90" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.15"/>
+  <rect x="102.5" y="90" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.6"/>
+  <rect x="130" y="90" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.3"/>
+  <rect x="157.5" y="90" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.1"/>
+
+  <rect x="75" y="117.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.6"/>
+  <rect x="102.5" y="117.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.15"/>
+  <rect x="130" y="117.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.5"/>
+  <rect x="157.5" y="117.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.7"/>
+
+  <rect x="75" y="145" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.3"/>
+  <rect x="102.5" y="145" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.5"/>
+  <rect x="130" y="145" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.15"/>
+  <rect x="157.5" y="145" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.4"/>
+
+  <rect x="75" y="172.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.1"/>
+  <rect x="102.5" y="172.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.7"/>
+  <rect x="130" y="172.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.4"/>
+  <rect x="157.5" y="172.5" width="27.5" height="27.5" fill="#2D5A8E" fill-opacity="0.15"/>
+
+  <text x="130" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Graph Laplacian</text>
+  <text x="130" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">or Kernel Matrix</text>
+
+  <!-- Arrow 1 -->
+  <line x1="200" y1="145" x2="250" y2="145" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Step 2: Eigendecomposition -->
+  <text x="370" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">2. Eigendecomposition</text>
+
+  <!-- Eigenvalue spectrum bars -->
+  <rect x="280" y="180" width="18" height="12" rx="2" fill="#7C2530" fill-opacity="0.2"/>
+  <rect x="304" y="172" width="18" height="20" rx="2" fill="#7C2530" fill-opacity="0.3"/>
+  <rect x="328" y="158" width="18" height="34" rx="2" fill="#7C2530" fill-opacity="0.45"/>
+  <rect x="352" y="140" width="18" height="52" rx="2" fill="#7C2530" fill-opacity="0.6"/>
+  <rect x="376" y="118" width="18" height="74" rx="2" fill="#7C2530" fill-opacity="0.75"/>
+  <rect x="400" y="100" width="18" height="92" rx="2" fill="#7C2530" fill-opacity="0.85"/>
+  <rect x="424" y="92" width="18" height="100" rx="2" fill="#7C2530"/>
+
+  <!-- Axis line -->
+  <line x1="275" y1="192" x2="450" y2="192" stroke="#5C3D1E" stroke-width="1.2"/>
+
+  <!-- Eigenvector waves -->
+  <path d="M285,130 Q300,118 315,130 Q330,142 345,130" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+  <text x="370" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Eigenvalues (spectrum)</text>
+  <text x="370" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">+ Eigenvectors</text>
+
+  <!-- Arrow 2 -->
+  <line x1="455" y1="145" x2="505" y2="145" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Step 3: Applications (three branches) -->
+  <text x="650" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">3. Applications</text>
+
+  <!-- Clustering box -->
+  <rect x="535" y="92" width="120" height="38" rx="6" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="595" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">Clustering</text>
+
+  <!-- Dim reduction box -->
+  <rect x="535" y="142" width="120" height="38" rx="6" fill="#7C2530" fill-opacity="0.15" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="595" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Dimensionality</text>
+  <text x="595" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Reduction</text>
+
+  <!-- PDE box -->
+  <rect x="535" y="192" width="120" height="38" rx="6" fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="595" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">PDE Solving</text>
+
+  <!-- Right side labels -->
+  <rect x="670" y="92" width="110" height="38" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="725" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Fiedler vector</text>
+
+  <rect x="670" y="142" width="110" height="38" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="725" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">PCA / Laplacian Eigenmaps</text>
+
+  <rect x="670" y="192" width="110" height="38" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="725" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Fourier basis</text>
+
+  <!-- Bottom: Key equation -->
+  <rect x="120" y="270" width="560" height="60" rx="8" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">Core Idea: Decompose  A x = lambda x  and use the top-k eigenvectors</text>
+  <text x="400" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">Spectrum reveals structure invisible in the original space</text>
+
+  <!-- Bottom labels -->
+  <text x="195" y="365" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#C4A87A">Graph Laplacian: L = D - A</text>
+  <text x="400" y="365" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#C4A87A">Kernel Matrix: K(x_i, x_j)</text>
+  <text x="615" y="365" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#C4A87A">Covariance: C = X^T X / n</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

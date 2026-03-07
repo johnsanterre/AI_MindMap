@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Big O Complexity: Growth Rates of Common Algorithms</text>
+
+  <!-- Plot area -->
+  <rect x="60" y="42" width="400" height="310" fill="#F5EFE4" rx="4" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Y-axis label -->
+  <text x="28" y="200" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90, 28, 200)">Operations</text>
+
+  <!-- X-axis label -->
+  <text x="260" y="370" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Input Size N</text>
+
+  <!-- Y-axis ticks -->
+  <line x1="60" y1="42" x2="60" y2="352" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="54" y="350" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="end">0</text>
+  <text x="54" y="275" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="end">10K</text>
+  <text x="54" y="198" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="end">100K</text>
+  <text x="54" y="121" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="end">1M</text>
+  <text x="54" y="50" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="end">10M</text>
+  <!-- Y gridlines -->
+  <line x1="60" y1="275" x2="460" y2="275" stroke="#E0D8C8" stroke-width="0.5" stroke-dasharray="4,3"/>
+  <line x1="60" y1="198" x2="460" y2="198" stroke="#E0D8C8" stroke-width="0.5" stroke-dasharray="4,3"/>
+  <line x1="60" y1="121" x2="460" y2="121" stroke="#E0D8C8" stroke-width="0.5" stroke-dasharray="4,3"/>
+
+  <!-- X-axis ticks -->
+  <line x1="60" y1="352" x2="460" y2="352" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="60" y="365" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">0</text>
+  <text x="160" y="365" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">250</text>
+  <text x="260" y="365" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">500</text>
+  <text x="360" y="365" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">750</text>
+  <text x="460" y="365" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">1000</text>
+
+  <!-- Feasibility line -->
+  <line x1="60" y1="90" x2="460" y2="90" stroke="#7C2530" stroke-width="2" stroke-dasharray="8,4" opacity="0.7"/>
+  <text x="265" y="83" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#7C2530" text-anchor="middle">Feasibility Limit</text>
+
+  <!-- O(1) - flat line near bottom -->
+  <line x1="60" y1="345" x2="460" y2="345" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="462" y="348" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="start">O(1)</text>
+
+  <!-- O(log N) - very gentle curve (log scale mapped) -->
+  <polyline points="60,352 100,335 140,325 180,318 220,313 260,309 300,306 340,303 380,301 420,299 460,297" stroke="#5C8A2D" stroke-width="2.5" fill="none"/>
+  <text x="462" y="300" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C8A2D" text-anchor="start">O(log N)</text>
+
+  <!-- O(N) - straight diagonal -->
+  <polyline points="60,352 120,328 180,304 240,280 300,256 360,232 420,208 460,192" stroke="#C4A87A" stroke-width="2.5" fill="none"/>
+  <text x="462" y="195" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#C4A87A" text-anchor="start">O(N)</text>
+
+  <!-- O(N log N) - slightly steeper curve -->
+  <polyline points="60,352 120,320 180,285 240,248 300,210 360,170 420,128 460,105" stroke="#8E5A2D" stroke-width="2.5" fill="none"/>
+  <text x="462" y="108" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#8E5A2D" text-anchor="start">O(N log N)</text>
+
+  <!-- O(N^2) - parabolic curve, steep -->
+  <polyline points="60,352 100,346 140,333 180,312 220,283 260,248 300,205 340,155 380,97 400,65 420,52" stroke="#7C2530" stroke-width="2.5" fill="none"/>
+  <text x="422" y="48" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="start">O(N²)</text>
+
+  <!-- O(2^N) - shoots up almost immediately -->
+  <polyline points="60,352 70,348 80,340 90,325 100,295 110,240 120,155 130,60 135,42" stroke="#A0306A" stroke-width="2.5" fill="none"/>
+  <text x="138" y="46" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#A0306A" text-anchor="start">O(2^N)</text>
+  <!-- Arrow showing it goes off chart -->
+  <polygon points="133,42 137,50 129,50" fill="#A0306A"/>
+
+  <!-- ===== RIGHT TABLE ===== -->
+  <rect x="485" y="42" width="298" height="310" fill="#F5EFE4" rx="4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="634" y="62" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">ML Algorithm Examples</text>
+
+  <!-- Table header line -->
+  <line x1="495" y1="70" x2="773" y2="70" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="545" y="85" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Complexity</text>
+  <text x="680" y="85" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Example</text>
+  <line x1="495" y1="92" x2="773" y2="92" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- O(1) row -->
+  <rect x="495" y="96" width="100" height="32" fill="#2D5A8E" rx="2" opacity="0.12"/>
+  <text x="545" y="116" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">O(1)</text>
+  <text x="680" y="110" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Hash table lookup,</text>
+  <text x="680" y="123" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">embedding index</text>
+
+  <!-- O(log N) row -->
+  <rect x="495" y="132" width="100" height="32" fill="#5C8A2D" rx="2" opacity="0.12"/>
+  <text x="545" y="152" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C8A2D" text-anchor="middle">O(log N)</text>
+  <text x="680" y="146" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Binary search,</text>
+  <text x="680" y="159" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">KD-tree query</text>
+
+  <!-- O(N) row -->
+  <rect x="495" y="168" width="100" height="32" fill="#C4A87A" rx="2" opacity="0.2"/>
+  <text x="545" y="188" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#C4A87A" text-anchor="middle">O(N)</text>
+  <text x="680" y="182" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Linear scan,</text>
+  <text x="680" y="195" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">single SGD epoch</text>
+
+  <!-- O(N log N) row -->
+  <rect x="495" y="204" width="100" height="32" fill="#8E5A2D" rx="2" opacity="0.12"/>
+  <text x="545" y="224" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#8E5A2D" text-anchor="middle">O(N log N)</text>
+  <text x="680" y="218" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Sorting, FFT,</text>
+  <text x="680" y="231" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">KD-tree build</text>
+
+  <!-- O(N^2) row -->
+  <rect x="495" y="240" width="100" height="32" fill="#7C2530" rx="2" opacity="0.12"/>
+  <text x="545" y="260" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">O(N²)</text>
+  <text x="680" y="254" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Self-attention,</text>
+  <text x="680" y="267" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">pairwise distances</text>
+
+  <!-- O(2^N) row -->
+  <rect x="495" y="276" width="100" height="32" fill="#A0306A" rx="2" opacity="0.12"/>
+  <text x="545" y="296" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#A0306A" text-anchor="middle">O(2^N)</text>
+  <text x="680" y="290" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Brute-force search,</text>
+  <text x="680" y="303" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">exact subset selection</text>
+
+  <!-- Bottom note -->
+  <text x="634" y="335" font-family="Georgia, serif" font-size="9" font-style="italic" fill="#5C3D1E" text-anchor="middle">Doubling N: O(N) doubles work,</text>
+  <text x="634" y="347" font-family="Georgia, serif" font-size="9" font-style="italic" fill="#5C3D1E" text-anchor="middle">O(N²) quadruples, O(2^N) squares</text>
+</svg>

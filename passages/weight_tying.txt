@@ -1,0 +1,155 @@
+<<include "Header">>
+! Weight Tying
+<img src="assets/weight_tying.svg" alt="Weight tying diagram showing shared parameters between embedding and output layers" style="max-width:100%;margin:1em 0;">
+
+Imagine a translator who uses the same phrasebook to understand incoming sentences and to compose outgoing ones. Rather than maintaining two separate dictionaries — one for reading, one for writing — she keeps a single reference that serves both purposes. Weight tying does the same thing inside neural networks: it forces two or more layers to share the exact same parameter matrix, cutting memory in half while imposing a structural prior that the "understanding" and "producing" steps should use the same representation.
+
+!! The Core Insight
+
+In a standard language model, the ''embedding layer'' maps each token in a vocabulary of size $V$ to a dense vector of dimension $d$, using a matrix $W_e \in \mathbb{R}^{V \times d}$. The ''output projection'' maps the final hidden state back to vocabulary-sized logits using a separate matrix $W_o \in \mathbb{R}^{d \times V}$. Weight tying (Press & Wolf, 2017; Inan et al., 2017) sets $W_o = W_e^T$, so a single $V \times d$ matrix handles both embedding lookup and output prediction. Since vocabulary matrices dominate parameter count in language models (often 30-50% of total parameters), this nearly halves model size with no loss — and often a gain — in performance.
+
+See also: <<link "Embeddings" "Embeddings">><</link>>, <<link "Transformers" "Transformers">><</link>>, <<link "Regularization" "Regularization">><</link>>, <<link "Model Compression" "Model Compression">><</link>>, <<link "Language Models" "Language Models">><</link>>.
+
+!! Sharing Beyond Input and Output
+
+Weight tying is not limited to embedding-output sharing. The concept applies wherever two components should learn the same representation:
+
+''Encoder-decoder tying:'' In sequence-to-sequence models (Sutskever et al., 2014), the source and target languages often share a vocabulary. Tying the encoder and decoder embeddings forces a common representation space across languages, improving cross-lingual transfer and reducing parameters.
+
+''Siamese networks:'' Twin branches processing two inputs (e.g., image pairs for similarity, sentence pairs for entailment) share all weights by design. This guarantees that the same function is applied to both inputs, producing comparable representations in the same embedding space.
+
+''Cross-layer tying:'' ALBERT (Lan et al., 2020) ties weights across all transformer layers — every layer uses the same attention and feed-forward parameters. A 12-layer ALBERT has roughly the parameters of a single layer, achieving 18x compression relative to BERT with only modest accuracy loss.
+
+!! What the Math Is Actually Doing
+
+The embedding lookup for token $i$ extracts row $i$ of the weight matrix:
+
+$$\mathbf{e}_i = W_e[i, :] \in \mathbb{R}^d$$
+
+The output logit for token $j$ given hidden state $\mathbf{h}$ is the dot product with column $j$ of $W_o$:
+
+$$z_j = \mathbf{h}^T W_o[:, j]$$
+
+With weight tying, $W_o = W_e^T$, so:
+
+$$z_j = \mathbf{h}^T W_e[j, :]^T = \mathbf{h} \cdot \mathbf{e}_j$$
+
+The output logit for token $j$ is the ''cosine-like similarity'' between the final hidden state and token $j$'s embedding. This imposes a geometric constraint: the model must arrange embeddings so that nearby points in embedding space correspond to tokens that are likely next-token predictions of each other.
+
+The gradient with respect to $W_e$ now receives signal from both the embedding path and the output path:
+
+$$\frac{\partial \mathcal{L}}{\partial W_e} = \frac{\partial \mathcal{L}_{\text{embed}}}{\partial W_e} + \frac{\partial \mathcal{L}_{\text{output}}}{\partial W_e}$$
+
+This dual gradient acts as implicit regularization, ensuring the embedding space is shaped by both input context and output prediction simultaneously.
+
+!! Practical Considerations
+
+''Parameter savings:'' For GPT-2 Small ($V = 50{,}257$, $d = 768$), the embedding matrix is $50{,}257 \times 768 \approx 38.6M$ parameters. Without tying, the output projection adds another $38.6M$. Tying saves $38.6M$ parameters — roughly 31% of the model's $124M$ total.
+
+''Training dynamics:'' Weight tying typically improves perplexity on language modeling benchmarks, not just matches it. Press & Wolf 2017 showed consistent gains across LSTM and transformer language models. The shared gradient provides a richer learning signal than either path alone.
+
+''Implementation:'' In PyTorch, tying is a single line — `model.output.weight = model.embedding.weight` — making the two layers reference the same tensor. Frameworks like Hugging Face Transformers enable this with `tie_word_embeddings=True`.
+
+''Scaling behavior:'' As models grow larger, the vocabulary matrix becomes a smaller fraction of total parameters (GPT-3's 175B parameters make the $50K \times 12{,}288$ embedding just 0.35% of the model). Weight tying remains standard practice but yields diminishing relative savings at scale.
+
+!! When Weight Tying Breaks Down
+
+''Asymmetric input/output distributions:'' When the model's input vocabulary serves a fundamentally different role than its output vocabulary — for instance, in multi-task models where inputs are natural language but outputs span different label spaces — forcing shared representations degrades both the input encoding and output decoding quality.
+
+''Cross-layer tying too aggressively:'' ALBERT's full cross-layer tying achieves impressive compression but sacrifices accuracy. Each transformer layer ideally learns different abstractions (syntax in early layers, semantics in later ones). Forcing identical weights across all layers collapses this hierarchy, losing 2-3 accuracy points on GLUE benchmarks compared to BERT.
+
+''Dimension mismatch:'' Weight tying requires the embedding dimension to equal the output projection dimension. Architectures where these differ (e.g., models with a narrower embedding bottleneck or wider output head) cannot directly tie weights without adding adapter layers, which partially negates the parameter savings.
+
+!! Technical Details
+
+- ''Press & Wolf 2017'' — Using the Output Embedding to Improve Language Models; demonstrated embedding-output tying for LSTMs and transformers
+- ''Inan, Khosravi & Socher 2017'' — Tying Word Vectors and Word Classifiers; independent concurrent work, theoretical justification via mutual information
+- ''ALBERT (Lan et al. 2020)'' — cross-layer parameter sharing; 18x fewer parameters than BERT-large with ~1-2% accuracy drop on downstream tasks
+- ''Siamese networks (Bromley et al. 1993)'' — original twin-network architecture for signature verification with shared weights
+- All major LLMs (GPT-2, LLaMA, PaLM, Mistral) use embedding-output weight tying by default
+- The technique is also called ''weight sharing'' or ''tied embeddings'' in the literature
+- Related to [[Regularization]]: tying constrains the hypothesis space, acting as an implicit prior that input and output representations should be aligned
+
+!! Quiz
+
+<span id="wty-q1">''1. In embedding-output weight tying, what relationship holds between the embedding matrix $W_e$ and the output projection $W_o$?''
+
+A) $W_o = W_e$
+B) $W_o = W_e^T$
+C) $W_o = W_e^{-1}$
+D) $W_o = 2W_e$</span>
+<<button "Show answer">><<replace "#wty-q1">>''1. In embedding-output weight tying, what relationship holds between the embedding matrix $W_e$ and the output projection $W_o$?''
+
+$\checkmark$ B) $W_o = W_e^T$ — the output projection is the transpose of the embedding matrix, so output logits become dot products between hidden states and embedding vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q2">''2. Approximately what fraction of GPT-2 Small's parameters are saved by weight tying?''
+
+A) ~5%
+B) ~15%
+C) ~31%
+D) ~50%</span>
+<<button "Show answer">><<replace "#wty-q2">>''2. Approximately what fraction of GPT-2 Small's parameters are saved by weight tying?''
+
+$\checkmark$ C) ~31% — the embedding matrix is ~38.6M out of 124M total parameters; tying eliminates a duplicate output matrix of the same size.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q3">''3. What does ALBERT's cross-layer weight tying accomplish?''
+
+A) It ties only the embedding and output layers
+B) It shares attention and feed-forward parameters across all transformer layers
+C) It removes the feed-forward layers entirely
+D) It ties only the key and value matrices in attention</span>
+<<button "Show answer">><<replace "#wty-q3">>''3. What does ALBERT's cross-layer weight tying accomplish?''
+
+$\checkmark$ B) It shares attention and feed-forward parameters across all transformer layers — achieving ~18x compression relative to BERT with modest accuracy loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q4">''4. With weight tying, the output logit for token $j$ given hidden state $\mathbf{h}$ equals:''
+
+A) $\|\mathbf{h} - \mathbf{e}_j\|^2$
+B) $\mathbf{h} \cdot \mathbf{e}_j$
+C) $\sigma(\mathbf{h}^T \mathbf{e}_j)$
+D) $\log \mathbf{e}_j$</span>
+<<button "Show answer">><<replace "#wty-q4">>''4. With weight tying, the output logit for token $j$ given hidden state $\mathbf{h}$ equals:''
+
+$\checkmark$ B) $\mathbf{h} \cdot \mathbf{e}_j$ — the logit is the dot product between the hidden state and the embedding vector, measuring their similarity in the shared space.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q5">''5. Why does weight tying act as implicit regularization?''
+
+A) It adds an L2 penalty to the loss function
+B) It constrains the hypothesis space by forcing input and output representations to align
+C) It applies dropout to the embedding layer
+D) It reduces the learning rate for tied parameters</span>
+<<button "Show answer">><<replace "#wty-q5">>''5. Why does weight tying act as implicit regularization?''
+
+$\checkmark$ B) It constrains the hypothesis space by forcing input and output representations to align — the embedding must serve dual roles, preventing either from overfitting to its specific task.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q6">''6. In Siamese networks, what is the purpose of weight sharing between twin branches?''
+
+A) To reduce training time by half
+B) To guarantee both inputs are processed by the same function, producing comparable representations
+C) To enable backpropagation through two paths
+D) To double the effective batch size</span>
+<<button "Show answer">><<replace "#wty-q6">>''6. In Siamese networks, what is the purpose of weight sharing between twin branches?''
+
+$\checkmark$ B) To guarantee both inputs are processed by the same function, producing comparable representations — this is essential for meaningful similarity comparisons in the shared embedding space.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q7">''7. Why do diminishing returns from weight tying occur at very large model scales?''
+
+A) The vocabulary size shrinks for larger models
+B) The embedding matrix becomes a smaller fraction of total parameters
+C) Larger models do not use embedding layers
+D) Weight tying becomes numerically unstable at scale</span>
+<<button "Show answer">><<replace "#wty-q7">>''7. Why do diminishing returns from weight tying occur at very large model scales?''
+
+$\checkmark$ B) The embedding matrix becomes a smaller fraction of total parameters — for GPT-3 (175B params), the embedding is only ~0.35% of the model, so tying saves proportionally less.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="wty-q8">''8. Which of the following is a failure mode of aggressive cross-layer weight tying?''
+
+A) It causes gradient explosion in all cases
+B) It collapses the layer-wise abstraction hierarchy, losing accuracy
+C) It prevents the model from learning any useful representations
+D) It doubles the memory footprint</span>
+<<button "Show answer">><<replace "#wty-q8">>''8. Which of the following is a failure mode of aggressive cross-layer weight tying?''
+
+$\checkmark$ B) It collapses the layer-wise abstraction hierarchy, losing accuracy — different layers ideally learn different abstractions (syntax vs. semantics), but shared weights force identical transformations at every depth.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

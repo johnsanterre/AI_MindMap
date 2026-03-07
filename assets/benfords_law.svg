@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Benford's Law: Leading Digit Frequencies</text>
+
+  <!-- Y-axis -->
+  <line x1="80" y1="60" x2="80" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- X-axis -->
+  <line x1="80" y1="320" x2="750" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="72" y="324" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="end">0%</text>
+  <text x="72" y="246" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="end">10%</text>
+  <text x="72" y="168" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="end">20%</text>
+  <text x="72" y="90" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="end">30%</text>
+
+  <!-- Y-axis gridlines -->
+  <line x1="80" y1="242" x2="750" y2="242" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,3"/>
+  <line x1="80" y1="164" x2="750" y2="164" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,3"/>
+  <line x1="80" y1="86" x2="750" y2="86" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,3"/>
+
+  <!-- Y-axis title -->
+  <text x="24" y="200" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,24,200)">Frequency (%)</text>
+
+  <!-- Bars: Benford predicted (deep red) -->
+  <!-- d=1: 30.1% → height=234.78 -->
+  <rect x="100" y="85.2"  width="28" height="234.8" fill="#7C2530" rx="2"/>
+  <!-- d=2: 17.6% → height=137.3 -->
+  <rect x="170" y="182.7" width="28" height="137.3" fill="#7C2530" rx="2"/>
+  <!-- d=3: 12.5% → height=97.5 -->
+  <rect x="240" y="222.5" width="28" height="97.5" fill="#7C2530" rx="2"/>
+  <!-- d=4: 9.7% → height=75.7 -->
+  <rect x="310" y="244.3" width="28" height="75.7" fill="#7C2530" rx="2"/>
+  <!-- d=5: 7.9% → height=61.6 -->
+  <rect x="380" y="258.4" width="28" height="61.6" fill="#7C2530" rx="2"/>
+  <!-- d=6: 6.7% → height=52.3 -->
+  <rect x="450" y="267.7" width="28" height="52.3" fill="#7C2530" rx="2"/>
+  <!-- d=7: 5.8% → height=45.2 -->
+  <rect x="520" y="274.8" width="28" height="45.2" fill="#7C2530" rx="2"/>
+  <!-- d=8: 5.1% → height=39.8 -->
+  <rect x="590" y="280.2" width="28" height="39.8" fill="#7C2530" rx="2"/>
+  <!-- d=9: 4.6% → height=35.9 -->
+  <rect x="660" y="284.1" width="28" height="35.9" fill="#7C2530" rx="2"/>
+
+  <!-- Uniform reference line at 11.1% -->
+  <line x1="90" y1="233.4" x2="740" y2="233.4" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="746" y="230" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="start" font-style="italic">uniform</text>
+  <text x="746" y="242" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="start" font-style="italic">11.1%</text>
+
+  <!-- Percentage labels on bars -->
+  <text x="114" y="78"  font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">30.1%</text>
+  <text x="184" y="176" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">17.6%</text>
+  <text x="254" y="216" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">12.5%</text>
+  <text x="324" y="238" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">9.7%</text>
+  <text x="394" y="252" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">7.9%</text>
+  <text x="464" y="261" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">6.7%</text>
+  <text x="534" y="268" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">5.8%</text>
+  <text x="604" y="274" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">5.1%</text>
+  <text x="674" y="278" font-family="Georgia,serif" font-size="9"  fill="#7C2530" text-anchor="middle">4.6%</text>
+
+  <!-- Digit labels -->
+  <text x="114" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">1</text>
+  <text x="184" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">2</text>
+  <text x="254" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">3</text>
+  <text x="324" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">4</text>
+  <text x="394" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">5</text>
+  <text x="464" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">6</text>
+  <text x="534" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">7</text>
+  <text x="604" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">8</text>
+  <text x="674" y="338" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">9</text>
+
+  <!-- X-axis label -->
+  <text x="400" y="360" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Leading Digit</text>
+
+  <!-- Formula box -->
+  <text x="400" y="382" font-family="Georgia,serif" font-size="11" fill="#2C2C2C" text-anchor="middle" font-style="italic">P(d) = log10(1 + 1/d) -- naturally occurring data spans orders of magnitude</text>
+</svg>

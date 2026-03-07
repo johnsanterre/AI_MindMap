@@ -1,0 +1,157 @@
+<<include "Header">>
+
+! Model Compression
+
+<img src="assets/model_compression.svg" alt="Diagram showing four model compression techniques: pruning, quantization, distillation, and low-rank factorization" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a massive encyclopaedia — fifty volumes, thousands of pages — and you need to carry it on a plane. You could tear out the blank pages and appendices nobody reads (pruning). You could photocopy every page at lower resolution so each volume is thinner (quantization). You could have a brilliant friend read the whole thing and dictate a concise summary into a single notebook (distillation). Or you could notice that most chapters repeat the same patterns and rewrite them in compressed shorthand (low-rank factorization). Each strategy shrinks the load differently, and in practice you combine several at once. ''Model compression'' applies exactly these ideas to neural networks: making them smaller, faster, and cheaper to deploy while keeping their predictions as accurate as possible.
+
+---
+
+!! The Core Insight
+
+Modern neural networks are massively overparameterized. A model with hundreds of millions of weights typically has far more capacity than the task actually requires. The excess capacity helps during training — it smooths the loss landscape and makes optimization easier — but once training is finished, most of that capacity is redundant. Model compression exploits this redundancy after the fact, stripping away what the model does not truly need.
+
+The four main compression techniques attack different sources of redundancy. ''Pruning'' removes individual weights or entire structures (neurons, filters, attention heads) that contribute little to the output. <<link "Quantization" "Quantization">><</link>> reduces the numerical precision of each weight — from 32-bit floats down to 8-bit integers or even 4-bit representations. <<link "Knowledge Distillation" "Knowledge Distillation">><</link>> trains a smaller ''student'' network to mimic the outputs of the large ''teacher'' network, transferring the teacher's learned knowledge into a compact architecture. <<link "Low-rank factorization" "Low-Rank Approximation">><</link>> replaces large weight matrices with products of smaller matrices, exploiting the fact that weight matrices often have low effective rank.
+
+The key insight unifying all four: the information content of a trained model is much smaller than its parameter count would suggest. Compression recovers the gap between //representational capacity// and //actual information used//.
+
+---
+
+!! The Four Pillars of Compression
+
+'''Pruning''' zeroes out weights that are small in magnitude (unstructured pruning) or removes entire computational units like filters or attention heads (structured pruning). Unstructured pruning can achieve extreme sparsity — 90%+ of weights removed — but sparse matrices are hard to accelerate on standard GPUs. Structured pruning produces smaller dense models that run faster on existing hardware. The <<link "Lottery Ticket Hypothesis" "Lottery Ticket Hypothesis">><</link>> provides a theoretical lens: inside every large network is a small sparse subnetwork that could have trained to the same accuracy from the start.
+
+'''Quantization''' replaces 32-bit floating-point weights with lower-precision representations. Post-training quantization (PTQ) converts a trained model without retraining — fast but lossy. Quantization-aware training (QAT) simulates low-precision arithmetic during training so the model learns to be robust to rounding errors. Going from FP32 to INT8 typically cuts model size by 4x with minimal accuracy loss; INT4 doubles the savings but requires careful calibration.
+
+'''Knowledge distillation''' trains a compact student network using the soft probability outputs of a larger teacher as supervision. The teacher's softmax outputs carry richer information than hard labels — they reveal which classes the teacher considers similar, providing a form of structured regularization. Temperature scaling softens the outputs further, amplifying the signal from low-probability classes.
+
+'''Low-rank factorization''' decomposes a weight matrix $W \in \mathbb{R}^{m \times n}$ into the product of two smaller matrices $W \approx UV$ where $U \in \mathbb{R}^{m \times r}$ and $V \in \mathbb{R}^{r \times n}$ with $r \ll \min(m, n)$. This reduces the parameter count from $mn$ to $r(m + n)$ and can also speed up inference. SVD and related matrix decompositions identify the dominant modes of the weight matrix and discard the rest.
+
+---
+
+!! What the Math Is Actually Doing
+
+'''Pruning''' applies a binary mask $m \in \{0, 1\}^d$ to weights $\theta \in \mathbb{R}^d$. The compressed model computes $f(x;\, m \odot \theta)$. Magnitude pruning sets $m_i = 0$ when $|\theta_i| < \tau$ for threshold $\tau$. The optimization problem underlying optimal pruning is:
+
+$$\min_{m} \; \mathcal{L}(f(x;\, m \odot \theta)) \quad \text{s.t.} \quad \|m\|_0 \leq k$$
+
+This is NP-hard in general, so magnitude pruning serves as a greedy heuristic. Second-order methods approximate the loss change from removing weight $i$ using the Hessian: $\Delta \mathcal{L}_i \approx \frac{1}{2} \theta_i^2 \, H_{ii}$.
+
+'''Quantization''' maps a continuous weight $w$ to a discrete value: $\hat{w} = s \cdot \text{round}(w / s)$ where $s$ is the step size (scale factor). For $b$-bit quantization with range $[\alpha, \beta]$:
+
+$$s = \frac{\beta - \alpha}{2^b - 1}, \qquad \hat{w} = s \cdot \text{clamp}\!\left(\text{round}\!\left(\frac{w - \alpha}{s}\right),\, 0,\, 2^b - 1\right) + \alpha$$
+
+The quantization error $\|W - \hat{W}\|_F^2$ grows as precision decreases. QAT uses the ''straight-through estimator'' (STE) to backpropagate through the non-differentiable rounding operation.
+
+'''Distillation''' minimizes a combination of the standard cross-entropy loss and a KL-divergence between student and teacher softmax outputs at temperature $T$:
+
+$$\mathcal{L} = \alpha \cdot H(y,\, \sigma(z_s)) + (1 - \alpha) \cdot T^2 \cdot D_{\text{KL}}\!\left(\sigma\!\left(\frac{z_t}{T}\right) \;\bigg\|\; \sigma\!\left(\frac{z_s}{T}\right)\right)$$
+
+where $z_t, z_s$ are teacher and student logits, $\sigma$ is softmax, and $T > 1$ softens the distribution. The $T^2$ factor compensates for the reduced gradient magnitude at higher temperatures.
+
+'''Low-rank factorization''' finds the best rank-$r$ approximation via SVD. For $W = U \Sigma V^T$, the optimal rank-$r$ approximation is $W_r = U_r \Sigma_r V_r^T$ (Eckart-Young theorem), minimizing $\|W - W_r\|_F$. The fraction of variance retained is:
+
+$$\frac{\sum_{i=1}^{r} \sigma_i^2}{\sum_{i=1}^{n} \sigma_i^2}$$
+
+where $\sigma_i$ are singular values. If the spectrum decays quickly, small $r$ captures most of the matrix's effect.
+
+---
+
+!! Compression in Practice
+
+The four techniques are not mutually exclusive — production deployments typically stack several. A common pipeline: (1) train a large teacher, (2) distill into a smaller student architecture, (3) apply quantization-aware training on the student, (4) prune remaining redundant weights. Each step compounds the savings.
+
+''Hardware matters.'' Structured pruning and quantization map well to GPU and TPU architectures. Unstructured <<link "sparsity" "Sparsity">><</link>> requires specialized sparse matrix hardware (like NVIDIA's Ampere structured sparsity, which supports 2:4 sparsity natively). Low-rank factorization reduces FLOPs but may not speed up wall-clock time if the decomposed operations are memory-bound rather than compute-bound.
+
+''Calibration data.'' Post-training quantization and some pruning methods require a small calibration set — a few hundred examples from the training distribution — to set scale factors, identify important weights, or measure activation ranges. The quality of this calibration set directly affects compression quality.
+
+''Layer sensitivity.'' Not all layers compress equally. Early layers and the final classification head are often more sensitive to pruning and quantization than middle layers. Sensitivity analysis — measuring accuracy degradation as each layer is independently compressed — guides non-uniform compression strategies where fragile layers keep higher precision or density.
+
+---
+
+!! When Model Compression Breaks Down
+
+''Accuracy collapse at high compression:'' Every compression technique has a knee in its accuracy-vs-size curve. Beyond a certain compression ratio, accuracy degrades sharply and non-linearly. Pruning past 95% sparsity, quantizing below 4 bits, or distilling into a student that is too small all risk catastrophic accuracy loss. The safe compression ratio depends heavily on the task, dataset, and architecture — there is no universal threshold, and the failure mode is often sudden rather than gradual.
+
+''Distribution shift vulnerability:'' Compressed models are calibrated to the training distribution. When inputs shift — new domains, adversarial examples, or out-of-distribution data — compressed models degrade faster than their uncompressed counterparts. Quantization clips activation ranges tuned to calibration data; pruning removes weights that might have been important for rare inputs; distillation transfers only the teacher's behavior on seen data. The robustness margin that overparameterization provides is exactly what compression removes.
+
+''Fairness and bias amplification:'' Compression can disproportionately degrade performance on underrepresented subgroups. If a model's accuracy on minority classes depends on a small number of specialized weights, pruning those weights or quantizing them aggressively can widen the accuracy gap between majority and minority groups. Studies have shown that pruned language models exhibit larger performance drops on African American English than on Standard American English — compression is not accuracy-neutral across populations.
+
+---
+
+!! Technical Details
+
+''Pruning granularity:'' Weight-level (unstructured), neuron/filter-level, block-level, layer-level. NVIDIA 2:4 structured sparsity: in every group of 4 consecutive weights, exactly 2 must be zero — gives 50% sparsity with hardware acceleration. SparseGPT (Frantar & Alistarh, 2023) prunes large language models to 50-60% unstructured sparsity with minimal accuracy loss in one shot using approximate second-order information.
+
+''Quantization formats:'' INT8 (most mature, universally supported), INT4 (emerging for LLMs via GPTQ, AWQ), FP8 (E4M3, E5M2 — new in H100 GPUs), binary/ternary (extreme but rarely practical). Mixed-precision: keep sensitive layers at higher precision while aggressively quantizing robust layers.
+
+''Distillation variants:'' Feature-level distillation (match intermediate representations, not just final outputs), attention transfer (match attention maps), self-distillation (model distills into itself at lower layers), online distillation (teacher and student train simultaneously).
+
+''Low-rank methods:'' SVD-based decomposition, Tucker decomposition for convolution tensors, LoRA (<<link "Low-Rank Adaptation" "Low-Rank Approximation">><</link>>) as a parameter-efficient fine-tuning method that constrains weight updates to a low-rank subspace.
+
+''Benchmark compression ratios:'' ResNet-50 on ImageNet: 4x pruning with <1% accuracy loss; 8x quantization (INT4) with ~1% loss. BERT: 40% pruning + INT8 quantization yields ~3x speedup with <0.5% accuracy drop. LLaMA-65B distilled to 7B parameters retains ~85% of original benchmark performance.
+
+''Theoretical bounds:'' The minimum description length (MDL) principle provides an information-theoretic lower bound on compression: a model cannot be compressed beyond its Kolmogorov complexity on the data. In practice, we are far from these bounds.
+
+---
+
+!! Quiz
+
+<span id="mc-q1">What is the primary reason large trained neural networks can be compressed significantly?</span>
+A. Training always produces random weights that can be safely removed
+B. Large networks are massively overparameterized relative to the task — most capacity is redundant after training
+C. GPU memory limitations force compression regardless of accuracy impact
+D. Smaller models always generalize better than larger ones
+<<button "A">><<replace "#mc-q1">>Incorrect. Training produces structured, learned weights — not random ones. The reason for compressibility is redundancy, not randomness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q1">>Correct! Overparameterization helps during training but leaves significant redundancy afterward. Compression removes this redundancy while preserving the model's learned behavior.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q1">>Incorrect. GPU memory is a practical motivation for compression, but the //reason// compression works is that the models contain redundant capacity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q1">>Incorrect. Smaller models do not always generalize better — they sometimes underfit. Compression works because large models have more capacity than the task requires.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q2">In knowledge distillation, what does the temperature parameter $T$ control?</span>
+A. The learning rate of the student network
+B. The softness of the teacher's softmax output distribution — higher $T$ spreads probability mass more evenly
+C. The number of training epochs for the student
+D. The dropout rate applied during distillation
+<<button "A">><<replace "#mc-q2">>Incorrect. Temperature modifies the softmax distribution, not the learning rate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q2">>Correct! Higher temperature $T$ produces softer probability distributions, revealing more information about inter-class relationships. This "dark knowledge" is the key advantage of distillation over training on hard labels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q2">>Incorrect. Temperature is a parameter of the softmax function, not a training schedule parameter.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q2">>Incorrect. Temperature has nothing to do with dropout — it controls how peaked or spread out the predicted probability distribution is.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q3">Why does the distillation loss include a factor of $T^2$?</span>
+A. To penalize larger student networks more heavily
+B. To compensate for the reduced gradient magnitude when using high-temperature softmax
+C. To ensure the loss is always positive
+D. To normalize for the number of classes in the dataset
+<<button "A">><<replace "#mc-q3">>Incorrect. The $T^2$ factor is a gradient magnitude correction, not a size penalty.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q3">>Correct! When softmax outputs are computed at temperature $T > 1$, the gradients with respect to the logits are scaled down by $1/T^2$. Multiplying the loss by $T^2$ restores the gradient magnitude to an appropriate scale.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q3">>Incorrect. KL-divergence is already non-negative. The $T^2$ factor serves a gradient-scaling purpose.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q3">>Incorrect. The number of classes does not factor into this correction — $T^2$ compensates for how temperature affects gradient magnitudes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q4">What distinguishes structured pruning from unstructured pruning?</span>
+A. Structured pruning removes entire computational units (filters, heads, neurons) producing dense subnetworks; unstructured pruning zeroes individual weights producing sparse matrices
+B. Structured pruning is always more accurate than unstructured pruning
+C. Unstructured pruning requires retraining while structured pruning does not
+D. Structured pruning only works on convolutional networks
+<<button "A">><<replace "#mc-q4">>Correct! Structured pruning removes whole units, yielding smaller dense models that run efficiently on standard hardware. Unstructured pruning removes individual weights, achieving higher sparsity but requiring sparse matrix support for actual speedups.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q4">>Incorrect. Unstructured pruning typically achieves //better// accuracy at the same compression ratio because it has finer-grained control over which weights to remove.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q4">>Incorrect. Both structured and unstructured pruning generally benefit from retraining (fine-tuning) after pruning to recover accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q4">>Incorrect. Structured pruning applies to any architecture — attention heads in transformers, neurons in MLPs, filters in CNNs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q5">In quantization, what is the straight-through estimator (STE) used for?</span>
+A. Estimating the optimal bit-width for each layer
+B. Approximating gradients through the non-differentiable rounding operation during quantization-aware training
+C. Computing the quantization scale factor $s$
+D. Measuring the accuracy drop caused by quantization
+<<button "A">><<replace "#mc-q5">>Incorrect. Bit-width selection is a design choice, not what STE addresses. STE handles the gradient flow problem during QAT.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q5">>Correct! The rounding operation has zero gradient almost everywhere, which would block backpropagation. The STE passes the gradient through the rounding step unchanged, enabling quantization-aware training to work with standard optimizers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q5">>Incorrect. The scale factor $s$ is computed from the weight range, not via STE. STE addresses gradient flow through rounding.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q5">>Incorrect. Accuracy measurement is done by evaluation, not by STE. The STE solves a training-time gradient problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q6">Why does the Eckart-Young theorem matter for low-rank compression?</span>
+A. It proves that neural networks can always be compressed to rank 1
+B. It guarantees that the truncated SVD gives the optimal rank-$r$ approximation minimizing Frobenius norm error
+C. It shows that low-rank matrices always train faster than full-rank ones
+D. It provides a bound on how many layers can be removed from a network
+<<button "A">><<replace "#mc-q6">>Incorrect. Rank 1 is almost never sufficient — the theorem says the truncated SVD is optimal for //any// choice of $r$, not that $r = 1$ works.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q6">>Correct! The Eckart-Young theorem guarantees that keeping the top $r$ singular values/vectors gives the closest rank-$r$ matrix in Frobenius norm. This makes SVD-based compression principled rather than heuristic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q6">>Incorrect. The theorem is about approximation quality, not training speed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q6">>Incorrect. The theorem concerns matrix approximation, not network depth or layer removal.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q7">How can model compression amplify bias against underrepresented groups?</span>
+A. Compression always removes the same percentage of accuracy across all subgroups equally
+B. Weights specialized for minority subgroups may be pruned or degraded first since they appear unimportant on aggregate metrics
+C. Compressed models are always retrained on more balanced datasets
+D. Quantization specifically targets demographic features in the weight matrices
+<<button "A">><<replace "#mc-q7">>Incorrect. This is precisely the dangerous assumption — compression is //not// accuracy-neutral across subgroups. Minority-group performance often degrades more.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q7">>Correct! Weights that handle rare or minority-group inputs may have small magnitude or low aggregate importance scores, causing pruning and quantization to remove them preferentially. This widens accuracy gaps between majority and minority groups.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q7">>Incorrect. Compressed models typically use the original training data or a small calibration set — there is no automatic rebalancing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q7">>Incorrect. Quantization is not aware of demographic features. The bias amplification is an indirect consequence of aggregate importance metrics, not targeted removal.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mc-q8">What is NVIDIA's 2:4 structured sparsity pattern?</span>
+A. Every 2 out of 4 layers are completely removed from the network
+B. In every group of 4 consecutive weights, exactly 2 must be zero — achieving 50% sparsity with dedicated hardware acceleration
+C. The model alternates between 2-bit and 4-bit quantization across layers
+D. 2 out of every 4 training epochs use sparse gradients
+<<button "A">><<replace "#mc-q8">>Incorrect. 2:4 sparsity operates at the weight level within layers, not at the layer level.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q8">>Correct! The 2:4 pattern enforces that exactly 2 of every 4 consecutive weights are zero. This structured constraint enables hardware-accelerated sparse matrix multiplication on Ampere and later GPUs, giving real speedups unlike arbitrary unstructured sparsity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q8">>Incorrect. 2:4 sparsity refers to weight sparsity patterns, not mixed-precision quantization bit widths.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q8">>Incorrect. 2:4 sparsity is an inference-time weight pattern, not a training schedule.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

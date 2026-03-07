@@ -1,0 +1,151 @@
+<<include "Header">>
+
+! Message Passing Neural Networks
+
+<img src="assets/message_passing_nn.svg" alt="Message Passing Neural Networks: gather messages from neighbors, aggregate, update node representations" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a neighborhood meeting where every household sends a note to each of its neighbors describing what it knows. Each household reads all the notes it received, summarizes them, and then updates its own understanding of the world. After several rounds, every household knows something about the entire neighborhood — even houses that never directly communicated. ''Message Passing Neural Networks'' (MPNNs) formalize exactly this process on graphs: nodes exchange ''messages'' with their neighbors, aggregate incoming information, and update their own representations. This framework, introduced by Gilmer et al. (2017), unifies virtually all spatial <<link "Graph Neural Networks" "Graph Neural Networks">><</link>> — including <<link "Graph Convolutional Networks" "Graph Convolutional Networks">><</link>>, GraphSAGE, GATs, and GINs — under a single mathematical umbrella.
+
+!! The Core Insight
+
+Every MPNN layer performs three operations for each node $v$ in the graph:
+
+1. ''Message computation:'' For each neighbor $u \in \mathcal{N}(v)$, compute a message $m_{u \to v}$ that depends on the sender's features $h_u$, the receiver's features $h_v$, and optionally the edge features $e_{uv}$.
+
+2. ''Aggregation:'' Combine all incoming messages into a single fixed-size summary $M_v$ using a permutation-invariant function — sum, mean, or max — because the neighbors have no natural ordering.
+
+3. ''Update:'' Combine the aggregated message $M_v$ with the node's current state $h_v$ to produce a new representation $h_v'$.
+
+After $K$ layers of message passing, each node's representation encodes information from its $K$-hop neighborhood. This is the graph analog of expanding a receptive field in a CNN: each additional layer lets information travel one more hop across the graph.
+
+!! The Message Passing Framework
+
+Gilmer et al. showed that many existing GNN architectures are special cases of a single framework. The differences lie in how each architecture defines its message function, aggregation, and update.
+
+''GCN'' (Kipf & Welling, 2017): The message is simply the neighbor's features scaled by degree — $m_{u \to v} = \frac{1}{\sqrt{d_u d_v}} W h_u$. Aggregation is summation. This corresponds to a first-order Chebyshev approximation of spectral graph convolution, connecting spatial message passing to the <<link "Graph Laplacian" "Graph Laplacian">><</link>>.
+
+''GraphSAGE'' (Hamilton et al., 2017): Samples a fixed number of neighbors and aggregates via mean, LSTM, or max pooling. The update concatenates the aggregated neighborhood with the node's own features, then applies a linear layer. Designed for inductive learning on large, evolving graphs.
+
+''GAT'' (Velickovic et al., 2018): Introduces learned <<link "Attention" "Attention">><</link>> weights between neighbors. The message from $u$ to $v$ is weighted by an attention coefficient $\alpha_{uv}$ computed via a shared attention mechanism. Different neighbors contribute differently — the graph equivalent of self-attention in Transformers.
+
+''GIN'' (Xu et al., 2019): Proves that sum aggregation with an injective update function is maximally expressive among MPNNs, matching the power of the Weisfeiler-Lehman graph isomorphism test. Mean and max aggregation lose information about multiset structure.
+
+!! What the Math Is Actually Doing
+
+The general MPNN layer is:
+
+$$m_{u \to v}^{(k)} = \text{MSG}^{(k)}\!\left(h_u^{(k-1)},\, h_v^{(k-1)},\, e_{uv}\right)$$
+
+$$M_v^{(k)} = \bigoplus_{u \in \mathcal{N}(v)} m_{u \to v}^{(k)}$$
+
+$$h_v^{(k)} = \text{UPD}^{(k)}\!\left(h_v^{(k-1)},\, M_v^{(k)}\right)$$
+
+where $\bigoplus$ is a permutation-invariant aggregation (sum, mean, max). In the simplest GCN case, this reduces to:
+
+$$h_v^{(k)} = \sigma\!\left(\sum_{u \in \mathcal{N}(v) \cup \{v\}} \frac{1}{\sqrt{d_u d_v}}\, W^{(k)} h_u^{(k-1)}\right)$$
+
+For graph-level tasks (molecular property prediction, graph classification), a ''readout'' function pools all node representations into a single graph vector:
+
+$$h_G = \text{READOUT}\!\left(\{h_v^{(K)} \mid v \in V\}\right)$$
+
+Common readouts include sum, mean, or attention-weighted pooling. The readout must also be permutation invariant — the graph representation should not depend on how nodes are numbered.
+
+The ''Weisfeiler-Lehman (WL) connection:'' Xu et al. proved that no MPNN can distinguish graphs that the 1-WL test cannot distinguish. The 1-WL test iteratively refines node labels by hashing multisets of neighbor labels — exactly what message passing does. GIN matches 1-WL power; GCN and GraphSAGE are strictly weaker because mean/max aggregation fails to distinguish certain multisets.
+
+!! Edge Features and Heterogeneous Graphs
+
+Real-world graphs often carry rich edge information. In molecular graphs, edges encode bond types (single, double, aromatic). In <<link "Knowledge Graphs" "Knowledge Graphs">><</link>>, edges represent different relation types (''born_in'', ''works_at'', ''is_a''). The MPNN framework naturally incorporates edge features $e_{uv}$ into the message function, allowing the network to produce different messages depending on the relationship between nodes.
+
+''Heterogeneous message passing'' extends the framework to graphs with multiple node types and edge types. Each (source_type, edge_type, target_type) triple can have its own message function and weight matrices. This is critical for real-world applications: citation networks have papers and authors; biological networks have genes, proteins, and diseases; social networks have users, posts, and groups.
+
+''Edge updates:'' Some architectures (e.g., MPNN for molecules, PaiNN for 3D point clouds) also update edge representations alongside node representations, enabling bidirectional information flow between node and edge features.
+
+!! When Message Passing Breaks Down
+
+''(1) Over-smoothing: deep MPNNs make all nodes look identical.'' Each message-passing layer mixes a node's features with its neighbors'. After $K$ layers, every node's representation is influenced by its entire $K$-hop neighborhood. For small-diameter graphs, even 5-6 layers cause all node representations to converge to a single vector — the graph equivalent of blurring an image until everything is the same gray. Residual connections (as in DeepGCN) and normalization help, but fundamentally limit practical MPNN depth to 2-4 layers for most tasks.
+
+''(2) Over-squashing: long-range information gets exponentially compressed.'' When a node needs information from a distant node, that information must travel through a chain of intermediate nodes, each of which aggregates messages from //all// its neighbors. The distant signal gets diluted exponentially with distance. Alon and Yahav (2021) showed this is related to the graph's Cheeger constant — bottleneck edges create information chokepoints. Graph rewiring (adding virtual edges) and graph Transformers partially address this.
+
+''(3) Limited expressiveness: MPNNs cannot distinguish all non-isomorphic graphs.'' The 1-WL limitation means standard MPNNs fail on graphs with symmetric local structure. For example, they cannot count triangles or detect certain subgraph patterns. Higher-order GNNs (k-WL), subgraph GNNs, and equivariant architectures break past this barrier but at significantly higher computational cost.
+
+!! Technical Details
+
+''Original paper:'' Gilmer, Schoenholz, Riley, Vinyals, Dahl (ICML 2017) — "Neural Message Passing for Quantum Chemistry." Applied to molecular property prediction on the QM9 dataset, achieving state-of-the-art results by unifying prior GNN variants.
+
+''Complexity:'' One message-passing layer costs $O(|E| \cdot d^2)$ where $|E|$ is the number of edges and $d$ is the feature dimension. The $d^2$ factor comes from the linear transformation $W h_u$. For sparse graphs, this is efficient; for dense graphs, it approaches $O(N^2 d^2)$.
+
+''Mini-batching:'' Unlike images, graphs vary in size and structure. Mini-batching requires either (a) padding to a maximum size (wasteful), (b) block-diagonal adjacency matrices combining multiple graphs, or (c) neighborhood sampling (GraphSAGE). Libraries like PyTorch Geometric and DGL implement efficient batching.
+
+''Relation to Transformers:'' A Transformer's self-attention layer is message passing on a //fully connected// graph where the attention weights serve as learned edge weights. Graph Transformers add structural encodings (e.g., Laplacian eigenvectors, random walk features) to inject graph topology into the attention mechanism.
+
+''Virtual nodes:'' Adding a virtual node connected to all real nodes gives every pair of nodes a 2-hop path, mitigating over-squashing. The virtual node acts as a global memory that all nodes read from and write to during message passing.
+
+See also: <<link "Graph Neural Networks" "Graph Neural Networks">><</link>>, <<link "Graph Convolutional Networks" "Graph Convolutional Networks">><</link>>, <<link "Graph Laplacian" "Graph Laplacian">><</link>>, <<link "Attention" "Attention">><</link>>, <<link "Knowledge Graphs" "Knowledge Graphs">><</link>>.
+
+!! Quiz
+
+<span id="mp-q1">In the MPNN framework, what are the three operations performed at each layer?</span>
+A. Encode, decode, reconstruct
+B. Message, aggregate, update
+C. Forward, backward, optimize
+D. Embed, cluster, classify
+
+<<button "A">><<replace "#mp-q1">>Incorrect. Encode-decode-reconstruct describes autoencoders, not message passing. MPNNs compute messages, aggregate them, and update node states.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q1">>Correct. Each MPNN layer (1) computes messages from neighbors, (2) aggregates them with a permutation-invariant function, and (3) updates the node's representation using the aggregated message and its current state.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q1">>Incorrect. Forward-backward-optimize describes gradient-based training, which applies to all neural networks — not the specific operations within a message-passing layer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q1">>Incorrect. Embed-cluster-classify describes a general pipeline, but message passing specifically involves message computation, aggregation, and state updates at each layer.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q2">Why must the aggregation function in an MPNN be permutation invariant?</span>
+A. To reduce computational cost compared to attention mechanisms
+B. To ensure the output is independent of how neighbors are ordered
+C. To guarantee convergence during training
+D. To enable backpropagation through the graph structure
+
+<<button "A">><<replace "#mp-q2">>Incorrect. Permutation invariance is not primarily about cost — attention mechanisms are permutation invariant too. The requirement comes from the fact that graph neighbors have no natural ordering.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q2">>Correct. Graph nodes have no canonical ordering, so the aggregation must produce the same result regardless of how the neighbors are enumerated. Sum, mean, and max all satisfy this property. An order-dependent function would produce different representations for the same graph under different node labelings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q2">>Incorrect. Training convergence depends on learning rate, loss landscape, and optimization — not on whether aggregation is permutation invariant.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q2">>Incorrect. Backpropagation works through any differentiable function, regardless of permutation invariance. The requirement is about graph structure, not gradient flow.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q3">What theoretical limit constrains the expressiveness of all standard MPNNs?</span>
+A. They cannot process graphs with more than 10,000 nodes
+B. They are limited to undirected graphs only
+C. They cannot distinguish graphs that the 1-WL test cannot distinguish
+D. They require edge features to function correctly
+
+<<button "A">><<replace "#mp-q3">>Incorrect. MPNNs can process graphs of arbitrary size — scalability is a practical issue, not a theoretical expressiveness limit.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q3">>Incorrect. MPNNs handle directed graphs by defining separate message functions for incoming and outgoing edges. The expressiveness limit is about graph distinguishability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q3">>Correct. Xu et al. (2019) proved that no MPNN can be more powerful than the 1-dimensional Weisfeiler-Lehman graph isomorphism test. This means certain pairs of non-isomorphic graphs with identical local structure will always receive the same representation from any standard MPNN.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q3">>Incorrect. Edge features are optional in the MPNN framework. Many architectures (GCN, GraphSAGE) work without them. The expressiveness limit concerns structural distinguishability.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q4">How does GIN (Graph Isomorphism Network) achieve maximum expressiveness among MPNNs?</span>
+A. By using attention weights instead of fixed aggregation
+B. By using sum aggregation with an injective update function
+C. By computing higher-order message passing between node triples
+D. By adding positional encodings to each node
+
+<<button "A">><<replace "#mp-q4">>Incorrect. Attention-weighted aggregation (as in GAT) is expressive but does not provably match 1-WL power. GIN's key insight is about the aggregation and update functions specifically.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q4">>Correct. GIN uses sum aggregation (which preserves multiset information, unlike mean or max) combined with an injective update function (an MLP). This combination provably matches the power of the 1-WL test — the theoretical maximum for any MPNN.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q4">>Incorrect. Higher-order message passing goes //beyond// standard MPNNs and exceeds 1-WL power. GIN operates within the standard MPNN framework and matches, but does not exceed, 1-WL.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q4">>Incorrect. Positional encodings can enhance GNNs but are not what gives GIN its maximal expressiveness. The key is the choice of sum aggregation and injective update.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q5">What causes over-smoothing in deep message-passing networks?</span>
+A. The weight matrices lose rank after many layers
+B. Repeated neighbor aggregation makes all node representations converge to the same vector
+C. The learning rate must be reduced for deeper networks
+D. Activation functions saturate when inputs grow too large
+
+<<button "A">><<replace "#mp-q5">>Incorrect. Weight matrix rank is a separate issue. Over-smoothing occurs even with full-rank weights because each layer mixes node features with their neighborhoods, progressively averaging out local distinctions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q5">>Correct. Each message-passing layer averages a node's features with its neighbors'. After many layers, every node aggregates information from the entire graph, and all representations converge to a common vector — like blurring an image until every pixel is the same color. This limits practical MPNN depth to 2-4 layers for most tasks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q5">>Incorrect. Learning rate scheduling is a general training concern and is not the cause of over-smoothing, which is a structural property of repeated neighborhood aggregation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q5">>Incorrect. Activation saturation relates to vanishing gradients, a training problem. Over-smoothing is about the //representations// becoming indistinguishable, which happens even with non-saturating activations like ReLU.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q6">How does over-squashing differ from over-smoothing?</span>
+A. Over-squashing affects edges while over-smoothing affects nodes
+B. Over-squashing is about long-range information being exponentially compressed through bottleneck paths
+C. Over-squashing only occurs in directed graphs
+D. Over-squashing happens during training while over-smoothing happens at inference
+
+<<button "A">><<replace "#mp-q6">>Incorrect. Both phenomena affect node representations. The distinction is about whether the problem is //averaging out local differences// (over-smoothing) or //compressing distant signals// (over-squashing).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q6">>Correct. Over-squashing occurs when information from distant nodes must pass through bottleneck edges, getting exponentially diluted at each hop. Over-smoothing makes nearby nodes indistinguishable. They are related but distinct problems: over-smoothing is about local averaging, over-squashing is about long-range information loss through graph topology.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q6">>Incorrect. Over-squashing occurs in any graph with bottleneck topology, whether directed or undirected. It is related to the graph's Cheeger constant.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q6">>Incorrect. Both phenomena occur during the forward pass (inference or training). They are structural properties of message-passing architectures, not specific to one phase.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q7">How does the GAT architecture modify the standard message-passing framework?</span>
+A. It replaces sum aggregation with a learned attention-weighted aggregation over neighbors
+B. It removes the update function and uses only aggregation
+C. It uses fixed positional encodings instead of learned weights
+D. It computes messages only from second-hop neighbors
+
+<<button "A">><<replace "#mp-q7">>Correct. GAT computes attention coefficients $\alpha_{uv}$ for each neighbor pair, allowing different neighbors to contribute different amounts to the aggregated message. This is the graph analog of self-attention in Transformers — the graph topology determines //which// nodes attend to each other, while the attention weights determine //how much//.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q7">>Incorrect. GAT still has an update step. The innovation is in how messages are weighted during aggregation via learned attention, not in removing architectural components.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q7">>Incorrect. GAT uses //learned// attention weights, not fixed encodings. The attention mechanism dynamically determines how much each neighbor contributes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q7">>Incorrect. GAT, like all standard MPNNs, computes messages from direct (one-hop) neighbors. Multi-hop information is obtained by stacking multiple layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mp-q8">Why is a Transformer's self-attention layer equivalent to message passing on a fully connected graph?</span>
+A. Because Transformers use the same weight-sharing scheme as GCNs
+B. Because every token attends to every other token, with attention weights serving as learned edge weights
+C. Because Transformers use sum aggregation like GIN
+D. Because Transformers operate on graph-structured input by default
+
+<<button "A">><<replace "#mp-q8">>Incorrect. Transformers and GCNs have different parameterizations. The connection is structural: both compute pairwise interactions and aggregate — the difference is the graph topology.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mp-q8">>Correct. In self-attention, every token sends a message (value vector) to every other token, weighted by an attention score (the edge weight). This is exactly message passing on a complete graph. Standard GNNs restrict message passing to edges defined by the input graph; Transformers allow every pair to interact.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mp-q8">>Incorrect. Transformers use attention-weighted aggregation, not simple sum aggregation. The connection to fully connected message passing is about the graph topology (all pairs interact), not the specific aggregation function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mp-q8">>Incorrect. Standard Transformers operate on sequences, not graphs. The insight is that self-attention //can be viewed as// message passing on an implicit fully connected graph, connecting the two frameworks theoretically.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

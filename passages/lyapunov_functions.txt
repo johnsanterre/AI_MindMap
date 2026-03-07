@@ -1,0 +1,172 @@
+<<include "Header">>
+
+! Lyapunov Functions
+
+<img src="assets/lyapunov_functions.svg" alt="Lyapunov function contour plot with spiraling trajectories converging to stable equilibrium" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Push a pendulum and it swings, but eventually it stops — not because you solved any differential equation, but because energy can only drain away, never accumulate. ''Lyapunov functions'' generalize this insight: if you can find a mathematical "energy" that never increases along the system's trajectories, you've //proven// the system must settle down, no matter how complicated the equations look. The proof is energetic, not analytic.
+
+!! The Core Insight
+
+The power of Lyapunov's approach is that it sidesteps the need to solve differential equations explicitly — which is almost always impossible for nonlinear systems. Instead, you construct a scalar function $V(x)$ — the "generalized energy" — and check two properties: the function is //positive// (like real energy, it's always non-negative and zero only at rest), and its value //decreases// along every trajectory of the system.
+
+If those two conditions hold, the system cannot escape to infinity or oscillate forever, because that would require $V$ to stay large or increase. The state must be drawn toward the region where $V$ is small, which means toward the equilibrium. The entire stability argument lives in the scalar function, not in the vector field of the dynamics.
+
+This is ''energy-based reasoning'' applied to mathematics: you don't track the trajectory itself, you track a quantity that the trajectory cannot increase.
+
+!! Lyapunov's Direct Method
+
+''Lyapunov's stability theorem'' (1892) states: given a dynamical system $\dot{x} = f(x)$ with equilibrium at the origin, if there exists a continuously differentiable function $V(x)$ satisfying the Lyapunov conditions, then the equilibrium is //stable// in the sense of Lyapunov.
+
+The strength of the conclusion depends on the strength of the decay condition:
+
+- If $\dot{V}(x) \leq 0$ along trajectories: the equilibrium is ''stable'' (trajectories stay nearby)
+- If $\dot{V}(x) < 0$ strictly for $x \neq 0$: the equilibrium is ''asymptotically stable'' (trajectories converge to it)
+- If $V$ also satisfies a radial unboundedness condition ($V(x) \to \infty$ as $\|x\| \to \infty$): stability is ''global''
+
+''LaSalle's invariance principle'' handles the tricky case where $\dot{V} \leq 0$ but not strictly negative — a common situation in mechanical systems with no damping term in some coordinates. LaSalle's principle says: trajectories converge to the //largest invariant set// contained in the region where $\dot{V} = 0$. If that set is just the origin, asymptotic stability is recovered even without strict decrease everywhere. This is the tool that handles, for instance, proving a robot arm with joint damping converges despite having no explicit damping in the position equations.
+
+!! What the Math Is Actually Doing
+
+''Formal definition.'' A Lyapunov function for the system $\dot{x} = f(x)$ on a domain $\mathcal{D} \ni 0$ is a function $V: \mathbb{R}^n \to \mathbb{R}$ satisfying:
+
+$$V(0) = 0, \quad V(x) > 0 \text{ for } x \neq 0$$
+
+$$\dot{V}(x) = \nabla V(x) \cdot f(x) \leq 0 \text{ for all } x \in \mathcal{D}$$
+
+The time derivative $\dot{V}$ is computed via the chain rule — no integration needed. For a trajectory $x(t)$:
+
+$$\dot{V}(x(t)) = \frac{d}{dt} V(x(t)) = \sum_{i} \frac{\partial V}{\partial x_i} \dot{x}_i = \nabla V(x) \cdot f(x)$$
+
+''The LQR quadratic Lyapunov function.'' For a linear system $\dot{x} = Ax$, the natural Lyapunov candidate is a quadratic form:
+
+$$V(x) = x^T P x$$
+
+where $P$ is a symmetric positive definite matrix. Then $\dot{V}(x) = x^T(A^T P + PA)x$. For this to be negative definite, we need $A^T P + PA \prec 0$, which is the ''Lyapunov equation''. In optimal control, $P$ arises as the solution to the ''algebraic Riccati equation'':
+
+$$A^T P + PA - PBR^{-1}B^T P + Q = 0$$
+
+The solution $P$ simultaneously certifies stability and encodes the optimal LQR cost. This is the deep connection between Lyapunov theory and <<link "Optimal Control" "Optimal Control">>: the value function of an optimal control problem is often a Lyapunov function for the closed-loop system.
+
+''Sum-of-squares relaxation.'' For polynomial systems, finding $V$ reduces to checking if $-\dot{V}$ can be written as a sum of squared polynomials — a semidefinite program. This is the SOS programming approach, making Lyapunov search computationally tractable for low-dimensional polynomial dynamics.
+
+!! Neural Lyapunov Functions
+
+Classical Lyapunov analysis requires the user to //guess// a valid $V$ — easy for linear systems (use quadratics), hard for nonlinear ones. ''Neural Lyapunov functions'' automate this search by parameterizing $V$ as a neural network $V_\theta(x)$ and training it to satisfy the Lyapunov conditions.
+
+''Training objective.'' The network is trained to minimize a loss that penalizes violations of the two conditions:
+
+$$\mathcal{L}(\theta) = \mathbb{E}_x\left[\max(0,\, -V_\theta(x)) + \max(0,\, \dot{V}_\theta(x) + \epsilon)\right]$$
+
+The first term penalizes $V \leq 0$, the second penalizes $\dot{V} \geq 0$. Positivity of $V$ is sometimes enforced by architecture (e.g., $V_\theta(x) = \|g_\theta(x)\|^2 + \epsilon\|x\|^2$) rather than by loss.
+
+''Applications in safe RL.'' Neural Lyapunov functions are a key tool for verifying and training safe policies in <<link "Reinforcement Learning" "Reinforcement Learning">>:
+
+- ''Stability verification:'' Given a learned policy $\pi_\theta$, find $V$ certifying that the closed-loop system $\dot{x} = f(x, \pi_\theta(x))$ is stable
+- ''Safe RL training:'' Use $V$ as a safety critic; penalize policy updates that would increase $\dot{V}$
+- ''Control barrier functions (CBFs):'' A related concept where a barrier function $h(x) \geq 0$ defines a safe set, and $\dot{h}(x) \geq -\alpha h(x)$ ensures trajectories never leave it — effectively a "one-sided Lyapunov" condition for safety rather than stability
+
+CBFs can be combined with Lyapunov functions to produce controllers that are //simultaneously// stable (converge to goal) and safe (never enter forbidden regions), a central challenge in robotics and autonomous systems.
+
+!! When Lyapunov Analysis Breaks Down
+
+''Finding a Lyapunov function is undecidable in general.'' For nonlinear systems beyond polynomial or specific structured classes, there is no algorithm guaranteed to find a Lyapunov function if one exists. The search is heuristic. SOS works for polynomials; neural methods work approximately; but for general nonlinear dynamics, stability may be true yet unprovable by any Lyapunov function you can construct computationally. The //existence// of $V$ is equivalent to stability, but constructing it is a separate, harder problem.
+
+''Learned neural Lyapunov functions generalize poorly.'' A neural $V_\theta$ trained on a finite set of sample points may satisfy the Lyapunov conditions everywhere in the training distribution but fail in untested regions of the state space. The certified region of attraction — the set where $V$ has been verified — may be much smaller than the true basin of attraction. Formal verification (e.g., via satisfiability modulo theories, SMT solvers) is needed to close this gap, but scales poorly to high dimensions.
+
+''Lyapunov stability says nothing about performance or speed.'' A system can be asymptotically stable — guaranteed to converge — while taking arbitrarily long to do so. Lyapunov analysis gives qualitative convergence guarantees, not quantitative ones (unless augmented with exponential or input-to-state stability conditions). A robot controller certified as stable may still be useless in practice if it takes an hour to reach the goal. Performance and stability are separate questions requiring separate tools.
+
+!! Technical Details
+
+''Historical origin.'' Aleksandr Lyapunov introduced these methods in his 1892 doctoral thesis //The General Problem of the Stability of Motion//, which remained largely unknown in the West until translated in the 1950s. The thesis introduced both the "direct method" (Lyapunov functions) and the "indirect method" (linearization).
+
+''Connections to other frameworks.'' Lyapunov theory is the foundation of modern <<link "Control Theory" "Control Theory">> stability analysis. It connects to:
+
+- ''Input-to-state stability (ISS):'' Extends Lyapunov to systems with external inputs; $V$ must satisfy $\dot{V} \leq -\alpha(\|x\|) + \gamma(\|u\|)$ for class-K functions $\alpha, \gamma$
+- ''Contraction theory:'' Studies differential Lyapunov functions on the tangent bundle; certifies incremental stability (convergence between trajectories, not just to equilibrium)
+- ''Dissipativity theory:'' Generalizes Lyapunov to input-output systems; storage functions satisfy a supply rate inequality $\dot{V} \leq w(u, y)$
+- ''Stochastic Lyapunov functions:'' For <<link "Stochastic Processes" "Stochastic Processes">>, the condition becomes $\mathcal{L}V(x) \leq 0$ where $\mathcal{L}$ is the infinitesimal generator of the process
+
+''Region of attraction estimation.'' Given $V$, the set $\{x : V(x) \leq c\}$ for some $c > 0$ where $\dot{V} < 0$ is a certified region of attraction. Maximizing $c$ (finding the largest certified level set) is a key problem in nonlinear control, solvable via SOS programming for polynomial systems.
+
+''Neural network verification.'' Lyapunov conditions can be used to formally verify that neural network controllers are stable — an active research area connecting deep learning to formal methods.
+
+''Key references.'' Khalil's //Nonlinear Systems// (3rd ed.) is the standard graduate text. Tedrake's //Underactuated Robotics// covers computational Lyapunov methods. Chang et al. (2019) "Neural Lyapunov Control" introduced the neural approach.
+
+!! Quiz
+
+''Test your understanding of Lyapunov functions.''
+
+''Question 1.'' What two properties must a Lyapunov function $V(x)$ satisfy to prove stability?
+
+<span id="lf-q1">
+<<button "A. V(x) > 0 and dV/dt ≤ 0">><<replace "#lf-q1">>''Correct.'' Positive definiteness ($V(x) > 0$ for $x \neq 0$, $V(0) = 0$) ensures V acts like energy; non-increasing ($\dot{V} \leq 0$) ensures the energy cannot grow. Together they prove stability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. V(x) > 0 and dV/dt > 0">><<replace "#lf-q1">>''Incorrect.'' If $\dot{V} > 0$, the Lyapunov function is //increasing// along trajectories — that would suggest instability, not stability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. V(x) = 0 and dV/dt < 0">><<replace "#lf-q1">>''Incorrect.'' $V(x) = 0$ everywhere would make $V$ trivial and uninformative. The function must be positive definite.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. V(x) < 0 and dV/dt ≤ 0">><<replace "#lf-q1">>''Incorrect.'' A Lyapunov function must be positive definite ($V(x) > 0$), not negative. Negative functions cannot serve as generalized energy.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 2.'' What does LaSalle's invariance principle allow you to conclude when $\dot{V}(x) \leq 0$ but not strictly negative?
+
+<span id="lf-q2">
+<<button "A. The system is unstable">><<replace "#lf-q2">>''Incorrect.'' Non-strict decrease does not imply instability. LaSalle's principle actually recovers an asymptotic stability conclusion in many cases.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Trajectories converge to the largest invariant set where dV/dt = 0">><<replace "#lf-q2">>''Correct.'' LaSalle's principle: even when $\dot{V} \leq 0$ only, trajectories converge to the largest invariant subset of $\{x : \dot{V}(x) = 0\}$. If that set is just the origin, asymptotic stability follows.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. V must be recomputed with a stricter condition">><<replace "#lf-q2">>''Incorrect.'' LaSalle's principle works directly with the non-strict condition — you don't need to find a new $V$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Nothing can be concluded without strict decrease">><<replace "#lf-q2">>''Incorrect.'' LaSalle's principle was developed precisely to handle this case. Much can be concluded from $\dot{V} \leq 0$ combined with invariance arguments.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 3.'' In the LQR setting, the matrix $P$ in $V(x) = x^T P x$ comes from solving what equation?
+
+<span id="lf-q3">
+<<button "A. The Bellman equation">><<replace "#lf-q3">>''Partially related.'' The Riccati equation is essentially the continuous-time Bellman equation for the LQR problem, but the specific equation is called the algebraic Riccati equation, not the Bellman equation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The algebraic Riccati equation">><<replace "#lf-q3">>''Correct.'' $P$ solves $A^T P + PA - PBR^{-1}B^T P + Q = 0$. The solution simultaneously certifies closed-loop stability and encodes the optimal cost-to-go.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The Lyapunov equation A^T P + PA + Q = 0">><<replace "#lf-q3">>''Close but incomplete.'' The Lyapunov equation $A^T P + PA + Q = 0$ certifies stability of $A$ and is a special case (the Riccati equation without the $PBR^{-1}B^T P$ term). LQR requires the full Riccati equation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The Fokker-Planck equation">><<replace "#lf-q3">>''Incorrect.'' The Fokker-Planck equation describes the evolution of probability densities in stochastic systems — unrelated to LQR.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 4.'' How is $\dot{V}(x)$ computed for a system $\dot{x} = f(x)$?
+
+<span id="lf-q4">
+<<button "A. By integrating f(x) over time">><<replace "#lf-q4">>''Incorrect.'' Integration is exactly what Lyapunov's method avoids. $\dot{V}$ is computed algebraically using the chain rule, not by integrating trajectories.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. By taking the Hessian of V">><<replace "#lf-q4">>''Incorrect.'' The Hessian of $V$ is a matrix of second derivatives — useful for checking positive definiteness, but not for computing $\dot{V}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Via the chain rule: ∇V(x) · f(x)">><<replace "#lf-q4">>''Correct.'' By the chain rule, $\dot{V}(x(t)) = \nabla V(x) \cdot \dot{x} = \nabla V(x) \cdot f(x)$. This is a purely algebraic computation — no simulation needed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. By solving the Hamilton-Jacobi equation">><<replace "#lf-q4">>''Incorrect.'' The Hamilton-Jacobi equation is used to find optimal value functions, not to evaluate $\dot{V}$ for a given $V$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 5.'' What is a control barrier function (CBF) used for, compared to a Lyapunov function?
+
+<span id="lf-q5">
+<<button "A. CBFs prove convergence to equilibrium; Lyapunov functions prove safety">><<replace "#lf-q5">>''Reversed.'' It's the other way: Lyapunov functions prove convergence/stability, while CBFs enforce safety by ensuring trajectories stay in a safe set $\{x : h(x) \geq 0\}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. CBFs enforce safety (staying in a safe set); Lyapunov functions enforce stability (convergence)">><<replace "#lf-q5">>''Correct.'' A CBF $h(x)$ certifies that if $h(x_0) \geq 0$, then $h(x(t)) \geq 0$ for all future time — the system stays safe. Lyapunov functions certify that the state converges to equilibrium.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. CBFs and Lyapunov functions are identical concepts with different names">><<replace "#lf-q5">>''Incorrect.'' They are related but distinct. CBFs use a one-sided condition ($\dot{h} \geq -\alpha h$) to keep states inside a set, whereas Lyapunov functions use a decrease condition to drive states toward a point.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. CBFs are used only for stochastic systems">><<replace "#lf-q5">>''Incorrect.'' CBFs apply to deterministic systems as well. Stochastic extensions exist, but CBFs originated in deterministic nonlinear control.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 6.'' Why is finding a Lyapunov function for a general nonlinear system difficult?
+
+<span id="lf-q6">
+<<button "A. Lyapunov functions only exist for linear systems">><<replace "#lf-q6">>''Incorrect.'' Lyapunov functions exist for many nonlinear systems — the challenge is //finding// them algorithmically, not their existence. Many nonlinear stable systems have valid Lyapunov functions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The search is undecidable in general — no algorithm always finds one if it exists">><<replace "#lf-q6">>''Correct.'' For general nonlinear systems, there is no algorithm guaranteed to find a Lyapunov function even when one exists. The search is heuristic; SOS programming works for polynomials, but the general problem is undecidable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. dV/dt is always positive for nonlinear systems">><<replace "#lf-q6">>''Incorrect.'' This is not true. Many nonlinear systems are stable and have Lyapunov functions with $\dot{V} \leq 0$. The difficulty is finding $V$, not that $\dot{V}$ is necessarily positive.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Nonlinear systems have no equilibria">><<replace "#lf-q6">>''Incorrect.'' Nonlinear systems commonly have equilibria (fixed points). The difficulty with Lyapunov analysis is constructing the certificate function, not finding equilibria.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 7.'' In neural Lyapunov methods, how is the condition $V(x) > 0$ typically enforced?
+
+<span id="lf-q7">
+<<button "A. By using a ReLU output activation">><<replace "#lf-q7">>''Partially.'' ReLU gives non-negativity but not strict positivity away from zero. More common approaches include squaring a network output or using $\|g_\theta(x)\|^2 + \epsilon\|x\|^2$ to guarantee strict positivity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. By architecture (e.g., V = ||g(x)||² + ε||x||²) or loss penalties">><<replace "#lf-q7">>''Correct.'' Positive definiteness is enforced either through network architecture (outputs that are inherently positive) or through loss terms penalizing $V(x) \leq 0$. The architectural approach gives hard guarantees; the loss approach gives soft ones.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. By normalizing the network outputs to sum to 1">><<replace "#lf-q7">>''Incorrect.'' Normalization to sum to 1 would make $V$ a probability distribution, not a Lyapunov function. Positivity requires the output to be bounded below by zero with equality only at the origin.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Positivity is automatically satisfied by any neural network">><<replace "#lf-q7">>''Incorrect.'' Neural networks with standard activations can output negative values anywhere. Positivity must be explicitly designed or enforced.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''Question 8.'' A controller is certified as asymptotically stable by a Lyapunov function. What can you //not// conclude from this?
+
+<span id="lf-q8">
+<<button "A. That trajectories converge to the equilibrium">><<replace "#lf-q8">>''Incorrect.'' Asymptotic stability directly implies convergence to equilibrium — that is exactly what asymptotic stability means.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. That the system will never leave a neighborhood of the equilibrium">><<replace "#lf-q8">>''Incorrect.'' Stability (Lyapunov sense) guarantees the system stays near the equilibrium if it starts near it. This is part of the stability conclusion.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. That convergence will be fast enough to be practically useful">><<replace "#lf-q8">>''Correct.'' Lyapunov stability proves //qualitative// convergence but gives no bound on //rate// unless exponential stability conditions are added. A system can be asymptotically stable yet converge so slowly it is useless in practice.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. That the equilibrium is unique">><<replace "#lf-q8">>''This is tricky.'' Local Lyapunov analysis proves local stability of //one// equilibrium, not that others don't exist. However, this limitation is real and separate from the performance question, making C the most directly illustrative answer about Lyapunov's scope.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

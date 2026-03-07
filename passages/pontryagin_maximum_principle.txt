@@ -1,0 +1,188 @@
+<<include "Header">>
+
+! Pontryagin's Maximum Principle
+
+<img src="assets/pontryagin_maximum_principle.svg" alt="Diagram showing state and costate trajectories with the Hamiltonian maximization condition" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine navigating a ship through arctic ice to reach port in minimum time, with fuel constraints and changing currents. At every moment, you must choose the optimal heading — but that optimal heading depends not just on where you are, but on all future ice conditions and your remaining fuel. ''Pontryagin's Maximum Principle'' (PMP) gives the necessary conditions for optimal control: a set of differential equations that any optimal trajectory must satisfy, including an auxiliary "costate" variable that tracks the value of small changes to the state — a backward-propagating //shadow price// that tells you how much each unit of state is worth at every instant along the journey.
+
+!! The Core Insight
+
+The PMP provides necessary conditions for optimal control //without solving a partial differential equation//. Unlike the Hamilton-Jacobi-Bellman equation, which requires computing a value function over the entire state space, PMP works locally along a trajectory.
+
+It introduces a ''costate'' (or adjoint) variable $\lambda(t)$ that satisfies its own ordinary differential equation, integrated //backward in time// from a terminal condition. At each instant, the ''optimal control maximizes the Hamiltonian'' $H(x, u, \lambda)$ — a scalar function that combines the running cost, the dynamics, and the shadow price of the state.
+
+This separation — forward state dynamics, backward costate dynamics, pointwise maximization — is the structure that makes PMP computationally tractable and, as it turns out, mathematically identical to backpropagation through continuous-time systems.
+
+!! The Principle
+
+Consider the canonical optimal control problem: minimize the cost functional
+
+$$J = \int_0^T L(x(t), u(t))\, dt + \phi(x(T))$$
+
+subject to the state equation $\dot{x} = f(x, u)$, with $x(0) = x_0$ given.
+
+Define the ''Hamiltonian'':
+
+$$H(x, u, \lambda) = L(x, u) + \lambda^\top f(x, u)$$
+
+where $\lambda(t) \in \mathbb{R}^n$ is the costate vector. The PMP states that along any optimal trajectory $(x^*, u^*)$, there exists a costate $\lambda^*$ such that:
+
+''(1) State equation'' (forward):
+$$\dot{x}^* = \frac{\partial H}{\partial \lambda} = f(x^*, u^*)$$
+
+''(2) Costate equation'' (backward):
+$$\dot{\lambda}^* = -\frac{\partial H}{\partial x} = -\frac{\partial L}{\partial x} - \left(\frac{\partial f}{\partial x}\right)^\top \lambda^*$$
+
+with terminal condition $\lambda^*(T) = \frac{\partial \phi}{\partial x}(x^*(T))$.
+
+''(3) Optimality condition'' (pointwise maximization):
+$$u^*(t) = \operatorname{argmax}_{u \in \mathcal{U}}\, H(x^*(t), u, \lambda^*(t)) \quad \text{for all } t \in [0, T]$$
+
+The costate $\lambda(t)$ is the gradient of the value function with respect to the state: $\lambda(t) = \frac{\partial V}{\partial x}(x(t), t)$ — the //shadow price// of being in state $x$ at time $t$.
+
+!! What the Math Is Actually Doing
+
+PMP is a ''first-order necessary condition'' for optimality — analogous to setting a derivative to zero. It rules out trajectories that cannot be optimal, but does not guarantee that a trajectory satisfying PMP conditions is globally optimal.
+
+The Hamilton-Jacobi-Bellman (HJB) equation provides sufficient conditions, but requires solving:
+
+$$-\frac{\partial V}{\partial t} = \min_u\left[L(x,u) + \frac{\partial V}{\partial x} f(x,u)\right]$$
+
+over the full state space — a PDE that is intractable in high dimensions. PMP avoids this by working trajectory-by-trajectory.
+
+''Why the Hamiltonian?'' The structure mirrors classical mechanics. The Hamiltonian governs the evolution of both position (state $x$) and momentum (costate $\lambda$), giving a canonical system of $2n$ first-order ODEs.
+
+''Bang-bang controls'' arise naturally when $H$ is linear in $u$: the maximizing control jumps between boundary values, switching at times determined by the sign of $\frac{\partial H}{\partial u}$. PMP handles these discontinuous controls; HJB would require a viscosity solution.
+
+''Transversality conditions'' at the terminal time couple the terminal costate to the terminal cost: $\lambda(T) = \nabla_x \phi(x(T))$. When $x(T)$ is free, this is the only boundary condition on $\lambda$.
+
+The adjoint system is:
+
+$$\dot{\lambda} = -\left(\frac{\partial f}{\partial x}\right)^\top \lambda - \frac{\partial L}{\partial x}$$
+
+This is a //linear// ODE for $\lambda$ given $x^*$ — which is what makes numerical shooting methods feasible.
+
+!! PMP and Backpropagation
+
+This is one of the deepest connections in machine learning: the ''adjoint method for neural ODEs is exactly PMP applied to a continuous-time dynamical system used as a model''.
+
+In a ''neural ODE'', the hidden state evolves as:
+
+$$\dot{x}(t) = f_\theta(x(t), t)$$
+
+where $f_\theta$ is a neural network with parameters $\theta$. The forward pass integrates this ODE from $t=0$ to $t=T$. The loss is $L = \phi(x(T))$.
+
+To compute gradients, define the adjoint/costate $\lambda(t) = \frac{\partial L}{\partial x(t)}$. By PMP, it satisfies the backward ODE:
+
+$$\dot{\lambda} = -\lambda^\top \frac{\partial f_\theta}{\partial x}$$
+
+with terminal condition $\lambda(T) = \frac{\partial \phi}{\partial x(T)}$.
+
+The gradient with respect to parameters is:
+
+$$\frac{dL}{d\theta} = \int_0^T \lambda^\top(t) \frac{\partial f_\theta}{\partial \theta}(x(t), t)\, dt$$
+
+This is //exactly// Pontryagin's Maximum Principle: the neural ODE is the controlled system, the parameters $\theta$ are the controls, and the adjoint variable is the costate.
+
+''Chen et al. (2018)'' — the Neural ODE paper — made this connection explicit and showed that the adjoint method produces gradients with $O(1)$ memory (constant in depth), compared to $O(T)$ for naive backpropagation through the ODE solver.
+
+''BPTT for RNNs'' is the discrete-time analogue: the backward pass computes $\delta_t = \frac{\partial L}{\partial h_t}$ via the recurrence $\delta_t = \delta_{t+1} \frac{\partial h_{t+1}}{\partial h_t}$, which is the discrete version of the costate equation.
+
+!! When PMP Breaks Down
+
+''(1) Necessary but not sufficient.'' PMP conditions are necessary for optimality but not sufficient. Multiple trajectories may satisfy all PMP conditions, some of which are local minima, saddle points, or even maxima of $J$ rather than global minima. Identifying the true global optimum requires additional analysis — either checking second-order conditions, comparing candidate trajectories, or invoking convexity arguments. In nonlinear control problems with multiple equilibria, the PMP candidates can be numerous and difficult to rank.
+
+''(2) Singular arcs.'' When $\frac{\partial H}{\partial u} = 0$ identically along an interval (not just at isolated times), the pointwise maximization condition gives no information about the optimal control — the Hamiltonian is flat in $u$. These //singular arcs// require higher-order necessary conditions (the Legendre-Clebsch condition and its generalizations). Singular controls appear in fuel-optimal rocket problems and some biomedical dosing problems, and their computation is significantly more involved than regular bang-bang arcs.
+
+''(3) State-constrained and discontinuous problems.'' When the state must satisfy path constraints $g(x(t)) \leq 0$, additional multipliers (measure-valued) attach to the constraint boundary, and the costate $\lambda(t)$ can have jumps at constraint entry/exit points. The theory extends via the Dubovitskii-Milyutin framework, but numerical solution becomes highly sensitive to the constraint structure — small perturbations in the constraint can drastically alter the switching times and arc sequence.
+
+!! Technical Details
+
+''History:'' Lev Pontryagin, Vladimir Boltyansky, Revaz Gamkrelidze, and Yevgeny Mishchenko developed PMP in the Soviet Union in 1956, published in full in //The Mathematical Theory of Optimal Processes// (1962). The result was partly motivated by time-optimal rocket control problems.
+
+''Relation to Lagrange multipliers:'' The costate $\lambda$ is the continuous-time analogue of Lagrange multipliers for equality constraints. The Hamiltonian $H = L + \lambda^\top f$ is the Lagrangian for the constrained optimization, with $\dot{x} = f$ as the constraint.
+
+''Hamiltonian mechanics:'' The state-costate system $(\dot{x}, \dot{\lambda}) = (\partial H/\partial \lambda, -\partial H/\partial x)$ has the same canonical form as Hamilton's equations in classical mechanics, with $\lambda$ playing the role of conjugate momentum.
+
+''Numerical methods:'' The ''shooting method'' guesses $\lambda(0)$, integrates the coupled state-costate system forward (or uses the two-point boundary value structure), and adjusts $\lambda(0)$ until the terminal condition $\lambda(T) = \nabla \phi(x(T))$ is satisfied. Multiple shooting and collocation methods improve numerical stability.
+
+''Reinforcement learning connection:'' The REINFORCE policy gradient algorithm can be derived as a stochastic, discrete-time PMP. The value function $V^\pi(s)$ plays the role of the costate, and the policy gradient $\nabla_\theta J = \mathbb{E}[\nabla_\theta \log \pi_\theta(a|s) \cdot A(s,a)]$ is the stochastic analogue of the optimality condition.
+
+Related topics: <<link "Optimal Control" "Optimal Control">><</link>> | <<link "Control Theory" "Control Theory">><</link>> | <<link "Variational Calculus" "Variational Calculus">><</link>> | <<link "Neural ODEs" "Neural ODEs">><</link>> | <<link "Reinforcement Learning" "Reinforcement Learning">><</link>> | <<link "Backpropagation" "Backpropagation">><</link>>
+
+!! Quiz
+
+''1. What does the costate variable λ(t) represent in Pontryagin's Maximum Principle?''
+
+<span id="pmp-q1">
+<<button "A. The optimal control signal at time t">><<replace "#pmp-q1">>Incorrect. The control is u(t); λ(t) is the adjoint/costate variable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The gradient of the value function with respect to the state">><<replace "#pmp-q1">>Correct! λ(t) = ∂V/∂x — the shadow price of the state, tracking how much a small change in x(t) affects the total cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The second derivative of the Hamiltonian">><<replace "#pmp-q1">>Incorrect. λ(t) is a first-order gradient, not a second derivative.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The Lagrange multiplier for the terminal constraint">><<replace "#pmp-q1">>Partially related, but more precisely λ(t) is the continuous-time adjoint/costate satisfying its own backward ODE, not just a terminal multiplier.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''2. In which direction is the costate equation integrated?''
+
+<span id="pmp-q2">
+<<button "A. Forward in time, from t=0 to t=T">><<replace "#pmp-q2">>Incorrect. The state equation integrates forward; the costate integrates backward.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Backward in time, from t=T to t=0">><<replace "#pmp-q2">>Correct! The costate ODE λ̇ = −∂H/∂x is integrated backward with terminal condition λ(T) = ∇φ(x(T)).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Both forward and backward simultaneously">><<replace "#pmp-q2">>Incorrect. The coupled system forms a two-point boundary value problem, but the costate itself is integrated backward.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The costate does not require integration">><<replace "#pmp-q2">>Incorrect. The costate satisfies a differential equation and must be integrated (numerically or analytically).<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''3. How does PMP differ from the Hamilton-Jacobi-Bellman (HJB) equation?''
+
+<span id="pmp-q3">
+<<button "A. PMP requires solving a PDE over the full state space; HJB does not">><<replace "#pmp-q3">>Reversed. HJB requires solving a PDE; PMP works along a single trajectory without solving a PDE.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. PMP provides sufficient conditions; HJB provides necessary conditions">><<replace "#pmp-q3">>Reversed. PMP gives necessary conditions; HJB (with smooth value function) gives sufficient conditions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. PMP works trajectory-by-trajectory without solving a PDE; HJB requires a PDE over the full state space">><<replace "#pmp-q3">>Correct! PMP avoids the curse of dimensionality inherent in HJB by working locally along optimal trajectories.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. PMP and HJB are equivalent in all respects">><<replace "#pmp-q3">>Incorrect. They are related but differ in computational approach and conditions (necessary vs sufficient).<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''4. What is a "bang-bang" control and when does it arise?''
+
+<span id="pmp-q4">
+<<button "A. A control that oscillates sinusoidally, arising from periodic systems">><<replace "#pmp-q4">>Incorrect. Bang-bang refers to switching between extreme values, not sinusoidal oscillation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A control that switches between boundary values, arising when H is linear in u">><<replace "#pmp-q4">>Correct! When H is linear in u, the maximizing control is at an extreme of the admissible set, switching between boundaries — e.g., full thrust or zero thrust.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A control that smoothly varies, arising when H is quadratic in u">><<replace "#pmp-q4">>Incorrect. Quadratic H in u gives a smooth interior maximizer; bang-bang arises from linear H in u.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A control that remains constant throughout, arising from time-invariant systems">><<replace "#pmp-q4">>Incorrect. Constant controls are a special case; bang-bang specifically refers to switching discontinuously.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''5. In the Neural ODE adjoint method, what plays the role of Pontryagin's costate λ(t)?''
+
+<span id="pmp-q5">
+<<button "A. The neural network parameters θ">><<replace "#pmp-q5">>Incorrect. The parameters θ play the role of the control u; the costate is the gradient of the loss with respect to the hidden state.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The hidden state x(t)">><<replace "#pmp-q5">>Incorrect. x(t) is the state variable, not the costate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The gradient of the loss with respect to the hidden state, ∂L/∂x(t)">><<replace "#pmp-q5">>Correct! The adjoint a(t) = ∂L/∂x(t) in the Neural ODE paper is exactly the PMP costate, satisfying a backward ODE analogous to the costate equation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The ODE solver's step size">><<replace "#pmp-q5">>Incorrect. The step size is a numerical parameter, not the costate.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''6. What is a "singular arc" and why is it problematic for PMP?''
+
+<span id="pmp-q6">
+<<button "A. A trajectory that crosses itself, violating uniqueness of the ODE">><<replace "#pmp-q6">>Incorrect. Singular arcs refer to intervals where ∂H/∂u = 0 identically, not self-crossing trajectories.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. An interval where ∂H/∂u = 0 identically, making the standard optimality condition uninformative">><<replace "#pmp-q6">>Correct! On a singular arc, the Hamiltonian is flat in u, so pointwise maximization gives no information. Higher-order conditions (Legendre-Clebsch) are required.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A trajectory that reaches the boundary of the state constraint">><<replace "#pmp-q6">>Incorrect. That describes a state-constrained arc, which is a different complication.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A solution where the costate diverges to infinity">><<replace "#pmp-q6">>Incorrect. Singular arcs are characterized by the degeneracy of the optimality condition, not costate blow-up.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''7. What is the memory advantage of the Neural ODE adjoint method over naive backpropagation through an ODE solver?''
+
+<span id="pmp-q7">
+<<button "A. O(1) memory (constant in integration steps) vs O(T) for storing all intermediate states">><<replace "#pmp-q7">>Correct! The adjoint method reintegrates the state backward rather than storing all forward states, requiring only O(1) memory in the number of function evaluations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. O(log T) memory vs O(T²) for naive backpropagation">><<replace "#pmp-q7">>Incorrect. The comparison is O(1) vs O(T), not O(log T) vs O(T²).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. No memory advantage; the adjoint method is preferred for accuracy, not memory">><<replace "#pmp-q7">>Incorrect. Memory efficiency is a key advantage of the adjoint method cited in Chen et al. (2018).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. O(n) memory where n is the state dimension, vs O(n²) for backpropagation">><<replace "#pmp-q7">>Incorrect. The memory advantage is over the number of time steps T, not the state dimension n.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''8. What are "transversality conditions" in PMP?''
+
+<span id="pmp-q8">
+<<button "A. Conditions that the state must satisfy at all interior points of the trajectory">><<replace "#pmp-q8">>Incorrect. Transversality conditions are boundary conditions at the terminal (or initial) time, not interior conditions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Conditions ensuring the control stays within the admissible set">><<replace "#pmp-q8">>Incorrect. Control constraints are enforced by the maximization condition; transversality concerns the terminal costate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Boundary conditions on the costate at terminal time, linking λ(T) to the terminal cost gradient">><<replace "#pmp-q8">>Correct! Transversality conditions specify λ(T) = ∇φ(x(T)) when x(T) is free, or the complementary slackness conditions when x(T) is constrained to a manifold.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Stability conditions ensuring the costate does not diverge">><<replace "#pmp-q8">>Incorrect. Transversality is about boundary values, not stability of the costate dynamics.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

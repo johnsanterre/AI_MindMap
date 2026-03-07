@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" font-weight="bold">Zipf's Law: Log-Log Rank vs. Frequency</text>
+
+  <!-- Axes -->
+  <line x1="100" y1="340" x2="720" y2="340" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="100" y1="340" x2="100" y2="60" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- X-axis label -->
+  <text x="410" y="375" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">log(Rank)</text>
+
+  <!-- Y-axis label -->
+  <text x="30" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E" transform="rotate(-90, 30, 200)">log(Frequency)</text>
+
+  <!-- Axis tick marks and labels -->
+  <!-- X-axis ticks -->
+  <line x1="100" y1="340" x2="100" y2="348" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="100" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">0</text>
+
+  <line x1="255" y1="340" x2="255" y2="348" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="255" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">1</text>
+
+  <line x1="410" y1="340" x2="410" y2="348" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="410" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">2</text>
+
+  <line x1="565" y1="340" x2="565" y2="348" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="565" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">3</text>
+
+  <line x1="720" y1="340" x2="720" y2="348" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="720" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">4</text>
+
+  <!-- Y-axis ticks -->
+  <line x1="92" y1="340" x2="100" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="85" y="344" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">0</text>
+
+  <line x1="92" y1="270" x2="100" y2="270" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="85" y="274" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">1</text>
+
+  <line x1="92" y1="200" x2="100" y2="200" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="85" y="204" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">2</text>
+
+  <line x1="92" y1="130" x2="100" y2="130" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="85" y="134" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">3</text>
+
+  <line x1="92" y1="60" x2="100" y2="60" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="85" y="64" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">4</text>
+
+  <!-- Grid lines (subtle) -->
+  <line x1="100" y1="270" x2="720" y2="270" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="100" y1="200" x2="720" y2="200" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="100" y1="130" x2="720" y2="130" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="255" y1="60" x2="255" y2="340" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="410" y1="60" x2="410" y2="340" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="565" y1="60" x2="565" y2="340" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- Ideal Zipf line (slope = -1): straight line on log-log from (0,4) to (4,0) -->
+  <line x1="100" y1="60" x2="720" y2="340" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="8,4"/>
+
+  <!-- Empirical data points (scattered near the line) -->
+  <circle cx="110" cy="68" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="145" cy="100" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="180" cy="118" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="210" cy="140" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="240" cy="155" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="275" cy="172" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="310" cy="190" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="340" cy="198" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="370" cy="215" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="400" cy="225" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="430" cy="238" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="460" cy="250" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="490" cy="260" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="520" cy="272" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="550" cy="282" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="580" cy="290" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="610" cy="302" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="640" cy="310" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="670" cy="322" r="5" fill="#7C2530" opacity="0.85"/>
+  <circle cx="700" cy="330" r="5" fill="#7C2530" opacity="0.85"/>
+
+  <!-- Word annotations near top data points -->
+  <text x="125" y="62" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">"the"</text>
+  <text x="158" y="94" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">"of"</text>
+  <text x="195" y="114" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">"and"</text>
+  <text x="225" y="136" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">"to"</text>
+
+  <!-- Legend -->
+  <circle cx="560" cy="85" r="5" fill="#7C2530" opacity="0.85"/>
+  <text x="572" y="90" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Empirical word counts</text>
+
+  <line x1="545" y1="110" x2="575" y2="110" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <text x="582" y="115" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Ideal: f(r) = C / r</text>
+
+  <!-- Equation box -->
+  <rect x="530" y="130" width="180" height="40" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="620" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">slope = -1</text>
+  <text x="620" y="164" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">(characteristic of Zipf)</text>
+</svg>

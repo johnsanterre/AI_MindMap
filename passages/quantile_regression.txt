@@ -1,0 +1,164 @@
+<<include "Header">>
+! Quantile Regression
+<img src="assets/quantile_regression.svg" alt="Quantile regression showing conditional quantile lines through a scatter plot" style="max-width:100%;margin:1em 0;">
+
+Imagine you are a weather forecaster. Saying "tomorrow's high will be 75 degrees" is useful, but saying "there is a 90% chance it stays below 85 and a 10% chance it drops below 60" is far more informative. Ordinary regression gives you the single average prediction. ''Quantile regression'' gives you the full picture: separate predictions for the median, the 10th percentile, the 90th percentile, or any quantile you choose. Instead of summarizing uncertainty with one number, it maps out the entire conditional distribution of the response.
+
+!! The Core Insight
+
+Standard <<link "Linear Regression" "Linear Regression">><</link>> minimizes squared error, which estimates the ''conditional mean'' $E[Y|X]$. But the mean is just one summary of a distribution. Quantile regression, introduced by Roger Koenker and Gilbert Bassett in 1978, estimates the ''conditional quantile function'' $Q_\tau(Y|X)$ for any $\tau \in (0,1)$. Setting $\tau = 0.5$ gives the conditional median; $\tau = 0.9$ gives the value below which 90% of responses fall.
+
+The key trick is replacing squared loss with an asymmetric loss function that penalizes over-predictions and under-predictions differently. This asymmetry "tilts" the fitted line toward the desired quantile.
+
+See also: <<link "Loss Functions" "Loss Functions">><</link>>, <<link "Robust Regression" "Robust Regression">><</link>>, <<link "Confidence Intervals" "Confidence Intervals">><</link>>, <<link "Distributions" "Distributions">><</link>>.
+
+!! Asymmetric Loss and Conditional Quantiles
+
+The genius of quantile regression lies in its loss function. For a given quantile $\tau$, the ''check function'' (also called ''pinball loss'') is:
+
+$$\rho_\tau(u) = u \cdot (\tau - \mathbf{1}(u < 0))$$
+
+where $u = y - \hat{y}$ is the residual. Expanding this:
+
+- If the residual is positive (under-prediction), the penalty is $\tau \cdot |u|$
+- If the residual is negative (over-prediction), the penalty is $(1-\tau) \cdot |u|$
+
+For $\tau = 0.9$, under-predictions are penalized 9 times more heavily than over-predictions. This forces the fitted line upward so that roughly 90% of observations fall below it. For $\tau = 0.1$, the reverse: over-predictions are penalized 9 times more, pushing the line down.
+
+Unlike ordinary least squares, quantile regression does not assume homoscedasticity. Different quantile lines can fan out or converge, revealing how the spread of the response changes with the predictors — a phenomenon called ''heteroscedasticity''.
+
+!! What the Math Is Actually Doing
+
+The quantile regression estimator solves:
+
+$$\hat{\beta}(\tau) = \arg\min_{\beta} \sum_{i=1}^{n} \rho_\tau(y_i - x_i^\top \beta)$$
+
+This is a linear programming problem (the check function is piecewise linear), typically solved using simplex or interior point methods rather than the closed-form solution available for OLS.
+
+The ''conditional quantile function'' for a linear model is:
+
+$$Q_\tau(Y|X=x) = x^\top \beta(\tau)$$
+
+Note that ''$\beta$ depends on $\tau$'' — each quantile has its own set of coefficients. The intercept shifts the level, and the slopes can change across quantiles, capturing how the effect of predictors varies across the distribution.
+
+For inference, the asymptotic distribution of $\hat{\beta}(\tau)$ is:
+
+$$\sqrt{n}(\hat{\beta}(\tau) - \beta(\tau)) \xrightarrow{d} N\left(0, \frac{\tau(1-\tau)}{f_\varepsilon(F_\varepsilon^{-1}(\tau))^2}(X^\top X)^{-1}\right)$$
+
+where $f_\varepsilon$ is the density of the error term evaluated at the $\tau$-th quantile. This depends on the unknown error density, so standard errors are typically estimated via bootstrap or kernel density methods.
+
+The connection to <<link "Maximum Likelihood" "Maximum Likelihood">><</link>>: minimizing pinball loss is equivalent to maximum likelihood under an ''asymmetric Laplace distribution'', just as minimizing squared error corresponds to a Gaussian likelihood and minimizing absolute error corresponds to a symmetric Laplace.
+
+!! Practical Applications
+
+''Finance and risk management:'' Value-at-Risk (VaR) estimation uses the lower quantiles ($\tau = 0.01$ or $0.05$) to estimate worst-case portfolio losses. Quantile regression models VaR as a function of market conditions rather than assuming a fixed distribution.
+
+''Ecology and environmental science:'' species range boundaries are better described by extreme quantiles (the 95th percentile of growth as a function of temperature) than by the mean response.
+
+''Economics and wage studies:'' Koenker's original applications examined how education affects wages differently at different points of the income distribution — the return to education may be larger at the 90th percentile than at the 10th.
+
+''Prediction intervals:'' fitting $\tau = 0.05$ and $\tau = 0.95$ simultaneously produces a 90% prediction interval that adapts to heteroscedasticity, unlike standard confidence bands from OLS which assume constant variance.
+
+!! When X Breaks Down
+
+''Quantile crossing:'' separately estimated quantile lines can cross — the 90th percentile prediction can fall below the 50th percentile for some $x$ values. This violates the logical requirement that higher quantiles produce higher predictions. Solutions include simultaneous quantile regression, monotone rearrangement, or constrained optimization that enforces non-crossing.
+
+''Sparse data in tails:'' extreme quantiles like $\tau = 0.01$ or $\tau = 0.99$ have very few observations influencing the fit. The estimates become highly variable and unreliable. With $n = 100$ observations, the 1st percentile line is essentially determined by a single data point.
+
+''Computational cost at scale:'' each quantile requires solving a separate linear program. Fitting a dense grid of quantiles (e.g., 99 quantiles for the full conditional distribution) on large datasets is substantially more expensive than a single OLS fit. Modern implementations use interior point methods, but the cost still scales with both sample size and the number of quantiles requested.
+
+!! Technical Details
+
+- ''Koenker and Bassett (1978)'' — "Regression Quantiles," the foundational paper introducing quantile regression
+- ''Koenker (2005)'' — //Quantile Regression//, the comprehensive monograph covering theory, computation, and applications
+- ''Chernozhukov et al. (2010)'' — quantile regression for panel data and instrumental variables settings
+- The check function $\rho_\tau$ is convex but not differentiable at zero; subgradient methods or linear programming are required
+- ''Quantile regression forests'' (Meinshausen 2006): extend random forests to estimate conditional quantiles by retaining the full distribution of training responses in each leaf
+- In deep learning, ''pinball loss'' is used as a training objective for neural networks that output conditional quantiles; multiple quantile heads can share a common feature backbone
+- ''Expectile regression'' (Newey and Powell 1987) uses an asymmetric squared loss instead of asymmetric absolute loss, yielding a differentiable alternative that estimates conditional expectiles rather than quantiles
+- The dual of the quantile regression linear program connects to ''optimal transport'' and the Wasserstein distance
+- Bayesian quantile regression places an asymmetric Laplace likelihood and obtains posterior distributions over $\beta(\tau)$
+
+!! Quiz
+
+<span id="qr-q1">''1. What does quantile regression estimate that ordinary least squares does not?''
+
+A) The conditional mean $E[Y|X]$
+B) The conditional quantile function $Q_\tau(Y|X)$
+C) The marginal distribution of $Y$
+D) The joint density $f(X, Y)$</span>
+<<button "Show answer">><<replace "#qr-q1">>''1. What does quantile regression estimate that ordinary least squares does not?''
+
+Correct: B) The conditional quantile function $Q_\tau(Y|X)$ — OLS estimates only the conditional mean, while quantile regression estimates any conditional quantile.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q2">''2. In the pinball loss for $\tau = 0.9$, how are under-predictions penalized relative to over-predictions?''
+
+A) Equally
+B) 9 times less heavily
+C) 9 times more heavily
+D) Not penalized at all</span>
+<<button "Show answer">><<replace "#qr-q2">>''2. In the pinball loss for $\tau = 0.9$, how are under-predictions penalized relative to over-predictions?''
+
+Correct: C) 9 times more heavily — the penalty for under-prediction is $\tau \cdot |u| = 0.9|u|$ versus $(1-\tau) \cdot |u| = 0.1|u|$ for over-prediction, a ratio of 9:1.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q3">''3. Who introduced quantile regression, and when?''
+
+A) Fisher, 1925
+B) Tibshirani, 1996
+C) Koenker and Bassett, 1978
+D) Huber, 1964</span>
+<<button "Show answer">><<replace "#qr-q3">>''3. Who introduced quantile regression, and when?''
+
+Correct: C) Koenker and Bassett, 1978 — their paper "Regression Quantiles" laid the theoretical and computational foundation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q4">''4. Minimizing pinball loss is equivalent to maximum likelihood under which distribution?''
+
+A) Gaussian
+B) Student's t
+C) Symmetric Laplace
+D) Asymmetric Laplace</span>
+<<button "Show answer">><<replace "#qr-q4">>''4. Minimizing pinball loss is equivalent to maximum likelihood under which distribution?''
+
+Correct: D) Asymmetric Laplace — just as squared loss corresponds to Gaussian MLE and absolute loss to symmetric Laplace MLE.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q5">''5. What is the "quantile crossing" problem?''
+
+A) Quantile lines intersect the x-axis
+B) Separately estimated quantile lines can violate monotonicity, e.g., the 90th percentile falls below the 50th
+C) The check function is non-differentiable at zero
+D) Extreme quantiles have biased estimates</span>
+<<button "Show answer">><<replace "#qr-q5">>''5. What is the "quantile crossing" problem?''
+
+Correct: B) Separately estimated quantile lines can violate monotonicity — for some $x$ values, a higher quantile prediction can be lower than a lower quantile prediction, which is logically inconsistent.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q6">''6. How is quantile regression typically solved computationally?''
+
+A) Closed-form matrix inversion like OLS
+B) Gradient descent with momentum
+C) Linear programming (simplex or interior point methods)
+D) Expectation-Maximization</span>
+<<button "Show answer">><<replace "#qr-q6">>''6. How is quantile regression typically solved computationally?''
+
+Correct: C) Linear programming — the piecewise linear check function makes the optimization a linear program, unlike the quadratic problem in OLS.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q7">''7. What advantage does quantile regression have over OLS for heteroscedastic data?''
+
+A) It runs faster
+B) It assumes constant variance
+C) Different quantile lines can fan out, revealing how spread changes with predictors
+D) It always produces narrower confidence intervals</span>
+<<button "Show answer">><<replace "#qr-q7">>''7. What advantage does quantile regression have over OLS for heteroscedastic data?''
+
+Correct: C) Different quantile lines can fan out, revealing how spread changes with predictors — OLS assumes constant variance, but quantile regression naturally captures changing dispersion.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="qr-q8">''8. In finance, quantile regression at $\tau = 0.05$ is commonly used to estimate which risk measure?''
+
+A) Expected return
+B) Sharpe ratio
+C) Value-at-Risk (VaR)
+D) Beta coefficient</span>
+<<button "Show answer">><<replace "#qr-q8">>''8. In finance, quantile regression at $\tau = 0.05$ is commonly used to estimate which risk measure?''
+
+Correct: C) Value-at-Risk (VaR) — the 5th percentile of the loss distribution estimates the worst-case loss exceeded only 5% of the time.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

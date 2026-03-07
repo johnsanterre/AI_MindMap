@@ -1,0 +1,124 @@
+<<include "Header">>
+! Capsule Networks
+<img src="assets/capsule_networks.svg" style="width:100%;max-width:800px;display:block;margin:0.5em auto 1em;">
+
+A standard neuron tells you ''there is an eye here'' — a single number expressing presence. A capsule tells you ''there is an eye here, tilted 15 degrees, at position (0.3, 0.7), with scale 0.8'' — a whole vector of properties. Because capsules carry pose information, a network built from them can recognize a face even when it is rotated or viewed from an unfamiliar angle, something that routinely trips up standard CNNs whose pooling layers discard exactly this information.
+
+!! The Core Insight
+
+Introduced by Sabour, Frosst, and Hinton (2017), capsule networks replace scalar neuron activations with ''activity vectors''. The magnitude of the vector encodes the probability that an entity is present; the direction encodes its instantiation parameters — pose, position, scale, orientation. A higher-level capsule is active only when its constituent lower-level capsules reach ''agreement'' about the pose of a shared parent entity. This encodes part-whole relationships explicitly rather than learning them implicitly through millions of training examples. Connections: [[CNN]], [[Deep Learning]], [[Vision Transformer]], [[Object Detection]], [[Semantic Segmentation]].
+
+!! Dynamic Routing by Agreement
+
+Each lower-level capsule $i$ predicts the pose of every higher-level capsule $j$ via a learned transformation matrix:
+
+$$\hat{\mathbf{u}}_{j|i} = \mathbf{W}_{ij} \mathbf{u}_i$$
+
+Routing then proceeds iteratively. Initialize log prior coupling scores $b_{ij} = 0$. For a fixed number of iterations (typically 3):
+
+1. Compute coupling coefficients via softmax: $c_{ij} = \exp(b_{ij}) / \sum_k \exp(b_{ik})$
+2. Compute weighted prediction sum: $\mathbf{s}_j = \sum_i c_{ij} \hat{\mathbf{u}}_{j|i}$
+3. Apply squash non-linearity to get output vector $\mathbf{v}_j$
+4. Update agreement score: $b_{ij} \leftarrow b_{ij} + \hat{\mathbf{u}}_{j|i} \cdot \mathbf{v}_j$
+
+Lower-level capsules whose predictions align with the final output vote are given higher coupling weight; disagreeing capsules are down-weighted. The routing is performed at inference time — it is not gradient descent.
+
+!! What the Math Is Actually Doing
+
+The ''squash'' function acts as the non-linearity, ensuring the output vector magnitude stays in $[0, 1)$ so it can be interpreted as a probability:
+
+$$\mathbf{v}_j = \frac{\|\mathbf{s}_j\|^2}{1+\|\mathbf{s}_j\|^2} \cdot \frac{\mathbf{s}_j}{\|\mathbf{s}_j\|}$$
+
+Short input vectors are squashed toward zero; long input vectors are squashed toward unit length. Training uses a ''margin loss'' per output class $k$, with $T_k = 1$ if class $k$ is present:
+
+$$\mathcal{L}_k = T_k \max(0,\, m^+ - \|\mathbf{v}_k\|)^2 + \lambda(1-T_k)\max(0,\, \|\mathbf{v}_k\| - m^-)^2$$
+
+where $m^+ = 0.9$, $m^- = 0.1$, $\lambda = 0.5$. The key distinction from invariance is ''equivariance'': if the input rotates by 30 degrees, the capsule vector direction rotates predictably. The network does not ignore the transformation — it tracks it.
+
+!! EM Routing and Later Developments
+
+Hinton, Sabour, and Frosst (2018) extended capsules to use 4×4 ''pose matrices'' (representing full affine transforms) rather than simple vectors, and replaced routing-by-agreement with an ''expectation-maximization'' algorithm to cluster votes. EM routing achieved better viewpoint generalization on the SmallNorb benchmark. Kosiorek et al. (2019) introduced stacked capsule autoencoders, learning part-whole hierarchies in an unsupervised setting. A conceptual parallel: [[Vision Transformer]] patch tokens are philosophically similar — each patch token carries spatial and appearance information — but the routing is replaced by learned attention, which is more scalable. Capsule ideas have influenced thinking about ''compositional generalization'', the ability to recognize novel combinations of known parts.
+
+!! When Capsule Networks Break Down
+
+''Scalability:'' routing-by-agreement is run at inference time and is $O(L^2)$ in the number of capsule pairs per layer, making deep capsule networks slow. In practice, capsule models have been applied mainly to small images (MNIST, SmallNorb, CIFAR-10). ''Benchmark performance:'' despite strong theoretical motivations, capsule networks have not matched CNNs or Vision Transformers on large-scale benchmarks like ImageNet. The routing algorithm adds significant compute without delivering proportional gains at scale. ''Crowded scenes:'' the original routing algorithm assumes at most one instance of each entity type per region, so it degrades when many instances of the same class overlap — the ''crowding problem''. Stacked capsule autoencoders partially address this, but it remains an active research challenge.
+
+!! Technical Details
+
+''Key papers:'' Sabour, Frosst, Hinton (NeurIPS 2017) — dynamic routing between capsules; Hinton, Sabour, Frosst (ICLR 2018) — matrix capsules with EM routing; Kosiorek, Sabour, Teh, Hinton (NeurIPS 2019) — stacked capsule autoencoders. ''Results:'' 0.25% test error on MNIST (competitive with best CNNs at the time), modest gains on SmallNorb viewpoint generalization, limited results on CIFAR-10, no competitive ImageNet results. ''Routing iterations:'' typically 3; more iterations give diminishing returns and increase cost. ''Vector dimension:'' 8D for lower capsules, 16D for higher capsules in the original paper. ''Reconstruction regularizer:'' the original paper added a decoder that reconstructs the input from the winning capsule vector; this regularizer encourages the vector to encode genuine pose information. ''Relation to attention:'' dot-product self-attention can be viewed as a differentiable, gradient-trained form of soft routing, which may explain why Transformers capture some of the same representational benefits with better scalability.
+
+!! Quiz
+
+''1. What does the magnitude of a capsule's activity vector represent?''
+
+<span id="cap-q1">
+<<button "A. The rotation angle of the detected entity">><<replace "#cap-q1">>A. The rotation angle of the detected entity — ''Incorrect.'' Rotation angle is encoded in the vector direction, not its magnitude.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The probability that the entity is present">><<replace "#cap-q1">>B. ✓ The probability that the entity is present — ''Correct.'' The squash function ensures the magnitude stays in [0,1), giving a probability-like quantity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The number of routing iterations completed">><<replace "#cap-q1">>C. The number of routing iterations completed — ''Incorrect.'' Routing iterations are a hyperparameter, not encoded in the vector.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The depth of the layer in the network">><<replace "#cap-q1">>D. The depth of the layer in the network — ''Incorrect.'' Layer depth is architectural, not reflected in capsule vector magnitudes.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''2. What is the purpose of the squash function in a capsule network?''
+
+<span id="cap-q2">
+<<button "A. To apply dropout regularization to capsule vectors">><<replace "#cap-q2">>A. To apply dropout regularization to capsule vectors — ''Incorrect.'' Squash is a deterministic non-linearity, not a regularizer.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To normalize the vector to exactly unit length">><<replace "#cap-q2">>B. To normalize the vector to exactly unit length — ''Incorrect.'' Squash shrinks short vectors toward 0 and long vectors toward 1, it does not produce exactly unit-length output.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To keep vector magnitude in [0,1) for probability interpretation">><<replace "#cap-q2">>C. ✓ To keep vector magnitude in [0,1) for probability interpretation — ''Correct.'' The squash formula ensures short vectors compress toward 0 and long vectors compress toward 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To convert the vector into a scalar class score">><<replace "#cap-q2">>D. To convert the vector into a scalar class score — ''Incorrect.'' Squash preserves the vector; only the magnitude is used as a class score at the output layer.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''3. In dynamic routing, what does the agreement score $b_{ij}$ track?''
+
+<span id="cap-q3">
+<<button "A. The cosine similarity between input image patches">><<replace "#cap-q3">>A. The cosine similarity between input image patches — ''Incorrect.'' Agreement scores measure alignment between capsule predictions, not raw image patches.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. How well capsule i's vote for capsule j aligns with j's actual output">><<replace "#cap-q3">>B. ✓ How well capsule i's vote for capsule j aligns with j's actual output — ''Correct.'' $b_{ij}$ is updated by $\hat{u}_{j|i} \cdot v_j$; high dot product means the prediction agreed with the result.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The gradient of the margin loss with respect to capsule j">><<replace "#cap-q3">>C. The gradient of the margin loss with respect to capsule j — ''Incorrect.'' Routing-by-agreement is not gradient descent; $b_{ij}$ is updated by dot-product agreement during the forward pass.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The number of training examples that activated capsule i">><<replace "#cap-q3">>D. The number of training examples that activated capsule i — ''Incorrect.'' $b_{ij}$ is a per-inference routing score, reset for each new input.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''4. What distinguishes equivariance from invariance in the context of capsules?''
+
+<span id="cap-q4">
+<<button "A. Equivariant networks use more layers than invariant networks">><<replace "#cap-q4">>A. Equivariant networks use more layers than invariant networks — ''Incorrect.'' The distinction is about how transformations are handled, not network depth.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Invariance ignores a transformation; equivariance tracks it predictably">><<replace "#cap-q4">>B. ✓ Invariance ignores a transformation; equivariance tracks it predictably — ''Correct.'' A rotated input produces the same output in an invariant model, but shifts the capsule vector direction predictably in an equivariant model.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Equivariance applies only to translation, invariance to rotation">><<replace "#cap-q4">>C. Equivariance applies only to translation, invariance to rotation — ''Incorrect.'' Both properties can apply to any transformation; the distinction is whether the representation changes predictably or not at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Invariant models require data augmentation; equivariant models do not">><<replace "#cap-q4">>D. Invariant models require data augmentation; equivariant models do not — ''Incorrect.'' Both types of models may benefit from augmentation; this is not the defining distinction.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''5. What is the main scalability problem with routing-by-agreement?''
+
+<span id="cap-q5">
+<<button "A. The weight matrices W_{ij} require too much GPU memory">><<replace "#cap-q5">>A. The weight matrices W_{ij} require too much GPU memory — ''Incorrect.'' Memory for weights is manageable; the bottleneck is the iterative routing computation at inference time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Routing is run at inference time and scales as O(L²) per layer">><<replace "#cap-q5">>B. ✓ Routing is run at inference time and scales as O(L²) per layer — ''Correct.'' Each pair of capsules across adjacent layers requires agreement iterations, making deep capsule networks slow.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The squash function requires numerical integration">><<replace "#cap-q5">>C. The squash function requires numerical integration — ''Incorrect.'' Squash is a closed-form formula with no integration.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Capsules require separate forward passes for each class">><<replace "#cap-q5">>D. Capsules require separate forward passes for each class — ''Incorrect.'' All class capsules are computed in a single forward pass.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''6. How does EM routing (Hinton et al. 2018) differ from the original routing-by-agreement?''
+
+<span id="cap-q6">
+<<button "A. EM routing uses gradient descent instead of dot-product agreement">><<replace "#cap-q6">>A. EM routing uses gradient descent instead of dot-product agreement — ''Incorrect.'' EM routing still operates as a forward-pass iterative procedure, not gradient descent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. EM routing replaces vectors with 4×4 pose matrices and clusters votes via EM">><<replace "#cap-q6">>B. ✓ EM routing replaces vectors with 4×4 pose matrices and clusters votes via EM — ''Correct.'' Pose matrices represent full affine transforms; EM finds which higher capsule each lower capsule most likely belongs to.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. EM routing removes the squash function entirely">><<replace "#cap-q6">>C. EM routing removes the squash function entirely — ''Incorrect.'' EM routing changes the representation and clustering mechanism; squash-like normalization is replaced by the EM framework's activation function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. EM routing applies only to recurrent capsule networks">><<replace "#cap-q6">>D. EM routing applies only to recurrent capsule networks — ''Incorrect.'' EM routing was proposed for feedforward capsule networks, applied to the SmallNorb benchmark.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''7. Why do capsule networks struggle with crowded scenes?''
+
+<span id="cap-q7">
+<<button "A. The squash function saturates when too many entities activate the same capsule">><<replace "#cap-q7">>A. The squash function saturates when too many entities activate the same capsule — ''Partially related, but the crowding problem is more fundamental.'' The original routing architecture assumes at most one instance per location.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Original routing assumes at most one instance of each entity type per region">><<replace "#cap-q7">>B. ✓ Original routing assumes at most one instance of each entity type per region — ''Correct.'' When multiple instances of the same class overlap, the routing algorithm cannot separate their votes, causing interference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Capsule vectors have too few dimensions to encode multiple entities">><<replace "#cap-q7">>C. Capsule vectors have too few dimensions to encode multiple entities — ''Incorrect.'' Dimensionality is not the core issue; the routing mechanism itself does not support multiple simultaneous instances.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Dynamic routing requires one routing pass per object in the scene">><<replace "#cap-q7">>D. Dynamic routing requires one routing pass per object in the scene — ''Incorrect.'' Routing is run once per layer regardless of scene complexity, which is precisely why overlapping instances cause problems.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''8. Which aspect of Vision Transformers is most analogous to capsule routing?''
+
+<span id="cap-q8">
+<<button "A. The use of layer normalization before each block">><<replace "#cap-q8">>A. The use of layer normalization before each block — ''Incorrect.'' Layer norm is a generic stabilization technique, not related to the part-whole communication that characterizes routing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Positional encodings added to patch embeddings">><<replace "#cap-q8">>B. Positional encodings added to patch embeddings — ''Incorrect.'' Positional encodings inject spatial information but are not a routing or agreement mechanism.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Dot-product self-attention as a learned form of soft routing between patches">><<replace "#cap-q8">>C. ✓ Dot-product self-attention as a learned form of soft routing between patches — ''Correct.'' Like capsule routing, attention computes agreement (dot products) between representations and uses it to weight how information flows between tokens, but learns the routing through gradient descent rather than running it iteratively at inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The MLP feed-forward sublayer that processes each token independently">><<replace "#cap-q8">>D. The MLP feed-forward sublayer that processes each token independently — ''Incorrect.'' The per-token MLP applies a fixed transformation and does not implement any agreement-based routing between tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

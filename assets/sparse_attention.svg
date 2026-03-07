@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Sparse Attention Patterns</text>
+
+  <!-- Grid parameters -->
+  <!-- Each matrix is 80x80, cells are 10x10, 8x8 grid -->
+
+  <!-- === FULL ATTENTION === -->
+  <g transform="translate(60, 60)">
+    <text x="40" y="-8" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Full</text>
+    <rect x="0" y="0" width="80" height="80" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+    <!-- All cells filled -->
+    <g fill="#7C2530" opacity="0.75">
+      <rect x="0" y="0" width="10" height="10"/><rect x="10" y="0" width="10" height="10"/><rect x="20" y="0" width="10" height="10"/><rect x="30" y="0" width="10" height="10"/><rect x="40" y="0" width="10" height="10"/><rect x="50" y="0" width="10" height="10"/><rect x="60" y="0" width="10" height="10"/><rect x="70" y="0" width="10" height="10"/>
+      <rect x="0" y="10" width="10" height="10"/><rect x="10" y="10" width="10" height="10"/><rect x="20" y="10" width="10" height="10"/><rect x="30" y="10" width="10" height="10"/><rect x="40" y="10" width="10" height="10"/><rect x="50" y="10" width="10" height="10"/><rect x="60" y="10" width="10" height="10"/><rect x="70" y="10" width="10" height="10"/>
+      <rect x="0" y="20" width="10" height="10"/><rect x="10" y="20" width="10" height="10"/><rect x="20" y="20" width="10" height="10"/><rect x="30" y="20" width="10" height="10"/><rect x="40" y="20" width="10" height="10"/><rect x="50" y="20" width="10" height="10"/><rect x="60" y="20" width="10" height="10"/><rect x="70" y="20" width="10" height="10"/>
+      <rect x="0" y="30" width="10" height="10"/><rect x="10" y="30" width="10" height="10"/><rect x="20" y="30" width="10" height="10"/><rect x="30" y="30" width="10" height="10"/><rect x="40" y="30" width="10" height="10"/><rect x="50" y="30" width="10" height="10"/><rect x="60" y="30" width="10" height="10"/><rect x="70" y="30" width="10" height="10"/>
+      <rect x="0" y="40" width="10" height="10"/><rect x="10" y="40" width="10" height="10"/><rect x="20" y="40" width="10" height="10"/><rect x="30" y="40" width="10" height="10"/><rect x="40" y="40" width="10" height="10"/><rect x="50" y="40" width="10" height="10"/><rect x="60" y="40" width="10" height="10"/><rect x="70" y="40" width="10" height="10"/>
+      <rect x="0" y="50" width="10" height="10"/><rect x="10" y="50" width="10" height="10"/><rect x="20" y="50" width="10" height="10"/><rect x="30" y="50" width="10" height="10"/><rect x="40" y="50" width="10" height="10"/><rect x="50" y="50" width="10" height="10"/><rect x="60" y="50" width="10" height="10"/><rect x="70" y="50" width="10" height="10"/>
+      <rect x="0" y="60" width="10" height="10"/><rect x="10" y="60" width="10" height="10"/><rect x="20" y="60" width="10" height="10"/><rect x="30" y="60" width="10" height="10"/><rect x="40" y="60" width="10" height="10"/><rect x="50" y="60" width="10" height="10"/><rect x="60" y="60" width="10" height="10"/><rect x="70" y="60" width="10" height="10"/>
+      <rect x="0" y="70" width="10" height="10"/><rect x="10" y="70" width="10" height="10"/><rect x="20" y="70" width="10" height="10"/><rect x="30" y="70" width="10" height="10"/><rect x="40" y="70" width="10" height="10"/><rect x="50" y="70" width="10" height="10"/><rect x="60" y="70" width="10" height="10"/><rect x="70" y="70" width="10" height="10"/>
+    </g>
+    <!-- Grid lines -->
+    <g stroke="#FDFAF4" stroke-width="0.5">
+      <line x1="10" y1="0" x2="10" y2="80"/><line x1="20" y1="0" x2="20" y2="80"/><line x1="30" y1="0" x2="30" y2="80"/><line x1="40" y1="0" x2="40" y2="80"/><line x1="50" y1="0" x2="50" y2="80"/><line x1="60" y1="0" x2="60" y2="80"/><line x1="70" y1="0" x2="70" y2="80"/>
+      <line x1="0" y1="10" x2="80" y2="10"/><line x1="0" y1="20" x2="80" y2="20"/><line x1="0" y1="30" x2="80" y2="30"/><line x1="0" y1="40" x2="80" y2="40"/><line x1="0" y1="50" x2="80" y2="50"/><line x1="0" y1="60" x2="80" y2="60"/><line x1="0" y1="70" x2="80" y2="70"/>
+    </g>
+    <text x="40" y="100" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">O(L²)</text>
+  </g>
+
+  <!-- === LOCAL WINDOW === -->
+  <g transform="translate(240, 60)">
+    <text x="40" y="-8" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Local Window</text>
+    <rect x="0" y="0" width="80" height="80" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+    <!-- Diagonal band, width ~3 -->
+    <g fill="#2D5A8E" opacity="0.75">
+      <rect x="0" y="0" width="10" height="10"/><rect x="10" y="0" width="10" height="10"/>
+      <rect x="0" y="10" width="10" height="10"/><rect x="10" y="10" width="10" height="10"/><rect x="20" y="10" width="10" height="10"/>
+      <rect x="0" y="20" width="10" height="10"/><rect x="10" y="20" width="10" height="10"/><rect x="20" y="20" width="10" height="10"/><rect x="30" y="20" width="10" height="10"/>
+      <rect x="10" y="30" width="10" height="10"/><rect x="20" y="30" width="10" height="10"/><rect x="30" y="30" width="10" height="10"/><rect x="40" y="30" width="10" height="10"/>
+      <rect x="20" y="40" width="10" height="10"/><rect x="30" y="40" width="10" height="10"/><rect x="40" y="40" width="10" height="10"/><rect x="50" y="40" width="10" height="10"/>
+      <rect x="30" y="50" width="10" height="10"/><rect x="40" y="50" width="10" height="10"/><rect x="50" y="50" width="10" height="10"/><rect x="60" y="50" width="10" height="10"/>
+      <rect x="40" y="60" width="10" height="10"/><rect x="50" y="60" width="10" height="10"/><rect x="60" y="60" width="10" height="10"/><rect x="70" y="60" width="10" height="10"/>
+      <rect x="50" y="70" width="10" height="10"/><rect x="60" y="70" width="10" height="10"/><rect x="70" y="70" width="10" height="10"/>
+    </g>
+    <g stroke="#FDFAF4" stroke-width="0.5">
+      <line x1="10" y1="0" x2="10" y2="80"/><line x1="20" y1="0" x2="20" y2="80"/><line x1="30" y1="0" x2="30" y2="80"/><line x1="40" y1="0" x2="40" y2="80"/><line x1="50" y1="0" x2="50" y2="80"/><line x1="60" y1="0" x2="60" y2="80"/><line x1="70" y1="0" x2="70" y2="80"/>
+      <line x1="0" y1="10" x2="80" y2="10"/><line x1="0" y1="20" x2="80" y2="20"/><line x1="0" y1="30" x2="80" y2="30"/><line x1="0" y1="40" x2="80" y2="40"/><line x1="0" y1="50" x2="80" y2="50"/><line x1="0" y1="60" x2="80" y2="60"/><line x1="0" y1="70" x2="80" y2="70"/>
+    </g>
+    <text x="40" y="100" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">O(LW)</text>
+  </g>
+
+  <!-- === STRIDED === -->
+  <g transform="translate(420, 60)">
+    <text x="40" y="-8" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Strided</text>
+    <rect x="0" y="0" width="80" height="80" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+    <!-- Diagonal + every 4th column stripes -->
+    <g fill="#C4A87A" opacity="0.8">
+      <!-- Diagonal -->
+      <rect x="0" y="0" width="10" height="10"/><rect x="10" y="10" width="10" height="10"/><rect x="20" y="20" width="10" height="10"/><rect x="30" y="30" width="10" height="10"/><rect x="40" y="40" width="10" height="10"/><rect x="50" y="50" width="10" height="10"/><rect x="60" y="60" width="10" height="10"/><rect x="70" y="70" width="10" height="10"/>
+      <!-- Adjacent diagonal -->
+      <rect x="10" y="0" width="10" height="10"/><rect x="0" y="10" width="10" height="10"/>
+      <rect x="20" y="10" width="10" height="10"/><rect x="10" y="20" width="10" height="10"/>
+      <rect x="30" y="20" width="10" height="10"/><rect x="20" y="30" width="10" height="10"/>
+      <rect x="40" y="30" width="10" height="10"/><rect x="30" y="40" width="10" height="10"/>
+      <rect x="50" y="40" width="10" height="10"/><rect x="40" y="50" width="10" height="10"/>
+      <rect x="60" y="50" width="10" height="10"/><rect x="50" y="60" width="10" height="10"/>
+      <rect x="70" y="60" width="10" height="10"/><rect x="60" y="70" width="10" height="10"/>
+    </g>
+    <!-- Strided columns (every 4th) -->
+    <g fill="#5C3D1E" opacity="0.5">
+      <rect x="0" y="0" width="10" height="10"/><rect x="0" y="10" width="10" height="10"/><rect x="0" y="20" width="10" height="10"/><rect x="0" y="30" width="10" height="10"/><rect x="0" y="40" width="10" height="10"/><rect x="0" y="50" width="10" height="10"/><rect x="0" y="60" width="10" height="10"/><rect x="0" y="70" width="10" height="10"/>
+      <rect x="40" y="0" width="10" height="10"/><rect x="40" y="10" width="10" height="10"/><rect x="40" y="20" width="10" height="10"/><rect x="40" y="30" width="10" height="10"/><rect x="40" y="40" width="10" height="10"/><rect x="40" y="50" width="10" height="10"/><rect x="40" y="60" width="10" height="10"/><rect x="40" y="70" width="10" height="10"/>
+    </g>
+    <g stroke="#FDFAF4" stroke-width="0.5">
+      <line x1="10" y1="0" x2="10" y2="80"/><line x1="20" y1="0" x2="20" y2="80"/><line x1="30" y1="0" x2="30" y2="80"/><line x1="40" y1="0" x2="40" y2="80"/><line x1="50" y1="0" x2="50" y2="80"/><line x1="60" y1="0" x2="60" y2="80"/><line x1="70" y1="0" x2="70" y2="80"/>
+      <line x1="0" y1="10" x2="80" y2="10"/><line x1="0" y1="20" x2="80" y2="20"/><line x1="0" y1="30" x2="80" y2="30"/><line x1="0" y1="40" x2="80" y2="40"/><line x1="0" y1="50" x2="80" y2="50"/><line x1="0" y1="60" x2="80" y2="60"/><line x1="0" y1="70" x2="80" y2="70"/>
+    </g>
+    <text x="40" y="100" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">O(L√L)</text>
+  </g>
+
+  <!-- === LONGFORMER (Combined) === -->
+  <g transform="translate(600, 60)">
+    <text x="40" y="-8" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Longformer</text>
+    <rect x="0" y="0" width="80" height="80" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+    <!-- Diagonal band (local window) -->
+    <g fill="#2D5A8E" opacity="0.65">
+      <rect x="0" y="0" width="10" height="10"/><rect x="10" y="0" width="10" height="10"/>
+      <rect x="0" y="10" width="10" height="10"/><rect x="10" y="10" width="10" height="10"/><rect x="20" y="10" width="10" height="10"/>
+      <rect x="0" y="20" width="10" height="10"/><rect x="10" y="20" width="10" height="10"/><rect x="20" y="20" width="10" height="10"/><rect x="30" y="20" width="10" height="10"/>
+      <rect x="10" y="30" width="10" height="10"/><rect x="20" y="30" width="10" height="10"/><rect x="30" y="30" width="10" height="10"/><rect x="40" y="30" width="10" height="10"/>
+      <rect x="20" y="40" width="10" height="10"/><rect x="30" y="40" width="10" height="10"/><rect x="40" y="40" width="10" height="10"/><rect x="50" y="40" width="10" height="10"/>
+      <rect x="30" y="50" width="10" height="10"/><rect x="40" y="50" width="10" height="10"/><rect x="50" y="50" width="10" height="10"/><rect x="60" y="50" width="10" height="10"/>
+      <rect x="40" y="60" width="10" height="10"/><rect x="50" y="60" width="10" height="10"/><rect x="60" y="60" width="10" height="10"/><rect x="70" y="60" width="10" height="10"/>
+      <rect x="50" y="70" width="10" height="10"/><rect x="60" y="70" width="10" height="10"/><rect x="70" y="70" width="10" height="10"/>
+    </g>
+    <!-- Global token: first row and first column -->
+    <g fill="#7C2530" opacity="0.75">
+      <!-- First row (global token attends to all) -->
+      <rect x="0" y="0" width="10" height="10"/><rect x="10" y="0" width="10" height="10"/><rect x="20" y="0" width="10" height="10"/><rect x="30" y="0" width="10" height="10"/><rect x="40" y="0" width="10" height="10"/><rect x="50" y="0" width="10" height="10"/><rect x="60" y="0" width="10" height="10"/><rect x="70" y="0" width="10" height="10"/>
+      <!-- First column (all attend to global token) -->
+      <rect x="0" y="10" width="10" height="10"/><rect x="0" y="20" width="10" height="10"/><rect x="0" y="30" width="10" height="10"/><rect x="0" y="40" width="10" height="10"/><rect x="0" y="50" width="10" height="10"/><rect x="0" y="60" width="10" height="10"/><rect x="0" y="70" width="10" height="10"/>
+    </g>
+    <g stroke="#FDFAF4" stroke-width="0.5">
+      <line x1="10" y1="0" x2="10" y2="80"/><line x1="20" y1="0" x2="20" y2="80"/><line x1="30" y1="0" x2="30" y2="80"/><line x1="40" y1="0" x2="40" y2="80"/><line x1="50" y1="0" x2="50" y2="80"/><line x1="60" y1="0" x2="60" y2="80"/><line x1="70" y1="0" x2="70" y2="80"/>
+      <line x1="0" y1="10" x2="80" y2="10"/><line x1="0" y1="20" x2="80" y2="20"/><line x1="0" y1="30" x2="80" y2="30"/><line x1="0" y1="40" x2="80" y2="40"/><line x1="0" y1="50" x2="80" y2="50"/><line x1="0" y1="60" x2="80" y2="60"/><line x1="0" y1="70" x2="80" y2="70"/>
+    </g>
+    <text x="40" y="100" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">O(L(W+g))</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(60, 210)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">Legend</text>
+    <rect x="0" y="12" width="14" height="14" fill="#7C2530" opacity="0.75" rx="2"/>
+    <text x="22" y="24" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Full / Global attention</text>
+    <rect x="200" y="12" width="14" height="14" fill="#2D5A8E" opacity="0.75" rx="2"/>
+    <text x="222" y="24" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Local window attention</text>
+    <rect x="420" y="12" width="14" height="14" fill="#C4A87A" opacity="0.8" rx="2"/>
+    <text x="442" y="24" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Local + diagonal</text>
+    <rect x="600" y="12" width="14" height="14" fill="#5C3D1E" opacity="0.5" rx="2"/>
+    <text x="622" y="24" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Strided columns</text>
+  </g>
+
+  <!-- Axes labels -->
+  <g transform="translate(60, 280)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Each matrix shows which token pairs (i, j) can attend to each other.</text>
+    <text x="0" y="22" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Rows = query tokens, Columns = key tokens. Filled cells = allowed attention.</text>
+  </g>
+
+  <!-- Complexity comparison -->
+  <g transform="translate(60, 330)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">Complexity at L = 16,384:</text>
+    <text x="0" y="22" font-family="Georgia, serif" font-size="12" fill="#7C2530">Full: 268M ops</text>
+    <text x="160" y="22" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">Local (W=256): 4.2M ops</text>
+    <text x="390" y="22" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Strided: 2.1M ops</text>
+    <text x="580" y="22" font-family="Georgia, serif" font-size="12" fill="#7C2530">Longformer: 4.4M ops</text>
+  </g>
+</svg>

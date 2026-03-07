@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="26" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Measure Theory: Core Structures</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL 1: Sample Space / Sigma-Algebra / RV
+       Left panel x: 18–280
+  ════════════════════════════════════════════════ -->
+  <rect x="18" y="38" width="262" height="322" rx="8" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="149" y="58" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Measurable Space</text>
+
+  <!-- Omega ellipse (sample space) -->
+  <ellipse cx="115" cy="185" rx="90" ry="110" fill="#E8E0D0" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="115" y="82" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#5C3D1E" text-anchor="middle">Ω</text>
+  <text x="115" y="96" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">sample space</text>
+
+  <!-- Measurable set A1 -->
+  <ellipse cx="100" cy="160" rx="42" ry="30" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="1.5" opacity="0.85"/>
+  <text x="100" y="157" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#2D5A8E" text-anchor="middle">A₁</text>
+  <text x="100" y="170" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">∈ ℱ</text>
+
+  <!-- Measurable set A2 -->
+  <ellipse cx="108" cy="225" rx="38" ry="24" fill="#D4B8C0" stroke="#7C2530" stroke-width="1.5" opacity="0.85"/>
+  <text x="108" y="222" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#7C2530" text-anchor="middle">A₂</text>
+  <text x="108" y="235" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle">∈ ℱ</text>
+
+  <!-- sigma-algebra label -->
+  <text x="115" y="275" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">ℱ = σ-algebra</text>
+  <text x="115" y="288" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E" text-anchor="middle">closed under ∁, countable ∪</text>
+
+  <!-- Arrow: X maps Omega to R -->
+  <line x1="210" y1="185" x2="258" y2="185" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <defs>
+    <marker id="arrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="234" y="178" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#5C3D1E" text-anchor="middle">X</text>
+  <text x="234" y="200" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">measurable</text>
+
+  <!-- R line on right side of panel -->
+  <line x1="268" y1="120" x2="268" y2="260" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="268" y="108" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#2D5A8E" text-anchor="middle">ℝ</text>
+  <text x="268" y="275" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">(ℬ(ℝ))</text>
+  <!-- Tick marks on R -->
+  <line x1="263" y1="150" x2="273" y2="150" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="263" y1="185" x2="273" y2="185" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="263" y1="220" x2="273" y2="220" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Pushforward label -->
+  <text x="149" y="318" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Pushforward: P_X(A) = P(X⁻¹(A))</text>
+  <text x="149" y="332" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Random variable = measurable fn</text>
+  <text x="149" y="346" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">P(Ω) = 1  →  probability measure</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL 2: Riemann vs Lebesgue Integration
+       Middle panel x: 290–590
+  ════════════════════════════════════════════════ -->
+  <rect x="290" y="38" width="300" height="322" rx="8" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="440" y="58" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Riemann vs Lebesgue Integration</text>
+
+  <!-- Riemann sub-panel -->
+  <rect x="300" y="65" width="130" height="185" rx="5" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1"/>
+  <text x="365" y="82" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Riemann</text>
+  <text x="365" y="94" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" text-anchor="middle">Partition the domain</text>
+
+  <!-- Riemann axes -->
+  <line x1="310" y1="218" x2="422" y2="218" stroke="#333" stroke-width="1.2"/>
+  <line x1="310" y1="218" x2="310" y2="105" stroke="#333" stroke-width="1.2"/>
+  <text x="424" y="221" font-family="Georgia, serif" font-size="9" fill="#333">x</text>
+  <text x="307" y="102" font-family="Georgia, serif" font-size="9" fill="#333">y</text>
+
+  <!-- Riemann curve (smooth hump) -->
+  <path d="M315,210 C325,180 335,120 355,110 C375,100 390,130 405,160 C415,180 418,210 418,210" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Riemann vertical strips -->
+  <rect x="315" y="145" width="17" height="65" fill="#D4B8C0" stroke="#7C2530" stroke-width="0.8" opacity="0.7"/>
+  <rect x="332" y="118" width="17" height="92" fill="#D4B8C0" stroke="#7C2530" stroke-width="0.8" opacity="0.7"/>
+  <rect x="349" y="112" width="17" height="98" fill="#D4B8C0" stroke="#7C2530" stroke-width="0.8" opacity="0.7"/>
+  <rect x="366" y="116" width="17" height="94" fill="#D4B8C0" stroke="#7C2530" stroke-width="0.8" opacity="0.7"/>
+  <rect x="383" y="140" width="17" height="70" fill="#D4B8C0" stroke="#7C2530" stroke-width="0.8" opacity="0.7"/>
+  <rect x="400" y="168" width="16" height="42" fill="#D4B8C0" stroke="#7C2530" stroke-width="0.8" opacity="0.7"/>
+
+  <!-- Riemann x-axis label -->
+  <text x="365" y="232" font-family="Georgia, serif" font-size="8" fill="#7C2530" text-anchor="middle">↕ vertical slices on x-axis</text>
+
+  <!-- Riemann label under -->
+  <text x="365" y="245" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" text-anchor="middle">Fails for: indicator of ℚ</text>
+
+  <!-- Lebesgue sub-panel -->
+  <rect x="450" y="65" width="130" height="185" rx="5" fill="#EDE8DE" stroke="#C4A87A" stroke-width="1"/>
+  <text x="515" y="82" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Lebesgue</text>
+  <text x="515" y="94" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" text-anchor="middle">Partition the range</text>
+
+  <!-- Lebesgue axes -->
+  <line x1="460" y1="218" x2="572" y2="218" stroke="#333" stroke-width="1.2"/>
+  <line x1="460" y1="218" x2="460" y2="105" stroke="#333" stroke-width="1.2"/>
+  <text x="574" y="221" font-family="Georgia, serif" font-size="9" fill="#333">x</text>
+  <text x="457" y="102" font-family="Georgia, serif" font-size="9" fill="#333">y</text>
+
+  <!-- Lebesgue curve -->
+  <path d="M465,210 C475,180 485,120 505,110 C525,100 540,130 555,160 C565,180 568,210 568,210" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Lebesgue horizontal strips (range partition) -->
+  <rect x="462" y="195" width="106" height="15" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="0.8" opacity="0.65"/>
+  <rect x="462" y="178" width="106" height="15" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="0.8" opacity="0.65"/>
+  <rect x="462" y="161" width="106" height="15" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="0.8" opacity="0.65"/>
+  <rect x="462" y="144" width="106" height="15" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="0.8" opacity="0.65"/>
+  <rect x="462" y="127" width="106" height="15" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="0.8" opacity="0.65"/>
+  <rect x="462" y="110" width="106" height="15" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="0.8" opacity="0.65"/>
+
+  <!-- Arrow on y-axis showing range partition -->
+  <text x="455" y="160" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="end">←</text>
+  <text x="515" y="232" font-family="Georgia, serif" font-size="8" fill="#2D5A8E" text-anchor="middle">↔ horizontal slices on y-axis</text>
+  <text x="515" y="245" font-family="Georgia, serif" font-size="7.5" fill="#5C3D1E" text-anchor="middle">μ(f⁻¹([y, y+dy])) · y</text>
+
+  <!-- Key theorems box -->
+  <rect x="300" y="265" width="280" height="82" rx="5" fill="#E8E0D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="440" y="280" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Key Theorems</text>
+  <text x="310" y="296" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">• Dominated Convergence: lim ∫fₙ = ∫lim fₙ (if |fₙ|≤g)</text>
+  <text x="310" y="311" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">• Radon-Nikodym: ν≪μ ⟹ dν/dμ exists</text>
+  <text x="310" y="326" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">• Fubini: ∫∫f dμ dν = ∫∫f dν dμ</text>
+  <text x="310" y="341" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">• Kolmogorov extension: consistent marginals → unique measure</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL 3: Probability as a Measure
+       Right panel x: 602–782
+  ════════════════════════════════════════════════ -->
+  <rect x="602" y="38" width="182" height="322" rx="8" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="693" y="58" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Probability = Measure</text>
+  <text x="693" y="72" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">with P(Ω) = 1</text>
+
+  <!-- Big circle = Omega with P=1 -->
+  <ellipse cx="693" cy="160" rx="72" ry="72" fill="#E8E0D0" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="693" y="98" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E" text-anchor="middle">Ω</text>
+
+  <!-- Event A slice (pie-like arc) -->
+  <path d="M693,160 L693,100 A60,60 0 0,1 745,180 Z" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="1.5" opacity="0.85"/>
+  <text x="726" y="142" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#2D5A8E" text-anchor="middle">A</text>
+
+  <!-- Event B slice -->
+  <path d="M693,160 L620,175 A60,60 0 0,1 660,105 Z" fill="#D4B8C0" stroke="#7C2530" stroke-width="1.5" opacity="0.85"/>
+  <text x="648" y="148" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#7C2530" text-anchor="middle">B</text>
+
+  <!-- Measure labels -->
+  <text x="693" y="175" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">P(Ω) = 1</text>
+  <text x="693" y="190" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">P(A) = 0.35</text>
+  <text x="693" y="205" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">P(B) = 0.25</text>
+
+  <!-- Convergence modes -->
+  <rect x="612" y="248" width="162" height="100" rx="5" fill="#E8E0D0" stroke="#C4A87A" stroke-width="1"/>
+  <text x="693" y="263" font-family="Georgia, serif" font-size="9.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Convergence Modes</text>
+  <text x="618" y="278" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E">a.s.: P(lim Xₙ = X) = 1</text>
+  <text x="618" y="292" font-family="Georgia, serif" font-size="8.5" fill="#7C2530">prob: P(|Xₙ−X|&gt;ε) → 0</text>
+  <text x="618" y="306" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">Lᵖ: E[|Xₙ−X|ᵖ] → 0</text>
+  <text x="618" y="320" font-family="Georgia, serif" font-size="8.5" fill="#5C3D1E">dist: weakest mode</text>
+  <text x="618" y="334" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">a.s. ⟹ prob ⟹ dist</text>
+
+  <!-- Bottom credit -->
+  <text x="400" y="392" font-family="Georgia, serif" font-size="9" fill="#A09080" text-anchor="middle">Kolmogorov (1933): axiomatic probability via measure theory</text>
+</svg>

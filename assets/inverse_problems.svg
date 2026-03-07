@@ -1,0 +1,79 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="32" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Inverse Problems: Recovering Causes from Observations</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowback" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="10 0,0 3.5,10 7" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Forward Problem (left) -->
+  <rect x="40" y="60" width="200" height="130" rx="10" fill="#2D5A8E" fill-opacity="0.1" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="140" y="85" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">Cause (Unknown)</text>
+  <text x="140" y="108" text-anchor="middle" fill="#5C3D1E" font-size="12">Internal organ</text>
+  <text x="140" y="125" text-anchor="middle" fill="#5C3D1E" font-size="12">Sharp image</text>
+  <text x="140" y="142" text-anchor="middle" fill="#5C3D1E" font-size="12">Source signal</text>
+  <text x="140" y="175" text-anchor="middle" fill="#2D5A8E" font-size="12" font-style="italic">x</text>
+
+  <!-- Forward arrow -->
+  <line x1="250" y1="105" x2="330" y2="105" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="290" y="97" text-anchor="middle" fill="#5C3D1E" font-size="11" font-weight="bold">Forward</text>
+  <text x="290" y="120" text-anchor="middle" fill="#5C3D1E" font-size="11">A x = y</text>
+
+  <!-- Observation (center) -->
+  <rect x="340" y="60" width="200" height="130" rx="10" fill="#7C2530" fill-opacity="0.1" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="440" y="85" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">Observation (Known)</text>
+  <text x="440" y="108" text-anchor="middle" fill="#5C3D1E" font-size="12">CT projection data</text>
+  <text x="440" y="125" text-anchor="middle" fill="#5C3D1E" font-size="12">Blurry photograph</text>
+  <text x="440" y="142" text-anchor="middle" fill="#5C3D1E" font-size="12">Sensor readings</text>
+  <text x="440" y="175" text-anchor="middle" fill="#7C2530" font-size="12" font-style="italic">y</text>
+
+  <!-- Inverse arrow (below forward, going back) -->
+  <line x1="330" y1="155" x2="250" y2="155" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowback)" stroke-dasharray="6,3"/>
+  <text x="290" y="170" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">Inverse</text>
+
+  <!-- Ill-posed box (right) -->
+  <rect x="580" y="55" width="195" height="140" rx="10" fill="#C4A87A" fill-opacity="0.2" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="678" y="78" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Why Ill-Posed?</text>
+  <text x="678" y="100" text-anchor="middle" fill="#7C2530" font-size="11">1. No solution exists</text>
+  <text x="678" y="120" text-anchor="middle" fill="#7C2530" font-size="11">2. Solution not unique</text>
+  <text x="678" y="140" text-anchor="middle" fill="#7C2530" font-size="11">3. Solution unstable</text>
+  <text x="678" y="170" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">(Hadamard conditions)</text>
+
+  <!-- Arrow from observation to ill-posed -->
+  <line x1="545" y1="120" x2="575" y2="120" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Regularization strategies (bottom row) -->
+  <rect x="40" y="230" width="170" height="90" rx="8" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="125" y="253" text-anchor="middle" fill="#2D5A8E" font-size="12" font-weight="bold">Tikhonov / L2</text>
+  <text x="125" y="273" text-anchor="middle" fill="#5C3D1E" font-size="11">min ||Ax - y||&#xB2;</text>
+  <text x="125" y="290" text-anchor="middle" fill="#5C3D1E" font-size="11">+ &#x3BB;||x||&#xB2;</text>
+  <text x="125" y="310" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Smooth solutions</text>
+
+  <rect x="230" y="230" width="170" height="90" rx="8" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="315" y="253" text-anchor="middle" fill="#7C2530" font-size="12" font-weight="bold">SVD Truncation</text>
+  <text x="315" y="273" text-anchor="middle" fill="#5C3D1E" font-size="11">Keep top k singular</text>
+  <text x="315" y="290" text-anchor="middle" fill="#5C3D1E" font-size="11">values, discard noise</text>
+  <text x="315" y="310" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Low-rank approximation</text>
+
+  <rect x="420" y="230" width="170" height="90" rx="8" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="505" y="253" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">Bayesian Approach</text>
+  <text x="505" y="273" text-anchor="middle" fill="#5C3D1E" font-size="11">Prior p(x) encodes</text>
+  <text x="505" y="290" text-anchor="middle" fill="#5C3D1E" font-size="11">beliefs about cause</text>
+  <text x="505" y="310" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Posterior inference</text>
+
+  <rect x="610" y="230" width="170" height="90" rx="8" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="695" y="253" text-anchor="middle" fill="#2D5A8E" font-size="12" font-weight="bold">Learned Priors</text>
+  <text x="695" y="273" text-anchor="middle" fill="#5C3D1E" font-size="11">Diffusion models as</text>
+  <text x="695" y="290" text-anchor="middle" fill="#5C3D1E" font-size="11">implicit regularizers</text>
+  <text x="695" y="310" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Data-driven priors</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="355" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">The cure for ill-posedness: constrain the solution space</text>
+  <text x="400" y="380" text-anchor="middle" fill="#C4A87A" font-size="11">Every regularizer is an assumption about what good solutions look like</text>
+</svg>

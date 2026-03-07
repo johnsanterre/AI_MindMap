@@ -1,0 +1,115 @@
+<<include "Header">>
+! NeRF
+<img src="assets/nerf.svg" alt="NeRF pipeline diagram: camera ray sampling, MLP query, and volume rendering" style="max-width:100%;margin:1em 0;">
+
+Take 20 photos of a sculpture from different angles and you can mentally visualize it in 3D. NeRF does the same computationally — given a set of photographs of a scene, it learns an implicit 3D model stored entirely in a neural network's weights, then renders that scene from any new viewpoint you choose.
+
+!! The Core Insight
+
+''Neural Radiance Fields'' (Mildenhall et al., 2020) represent a 3D scene not as a mesh or voxel grid, but as a function: an MLP $f_\theta : (x, y, z, \theta, \phi) \to (r, g, b, \sigma)$. Given any 3D position and a viewing direction, the network outputs an RGB color and a volume density $\sigma$. Novel views are synthesized by casting camera rays through every pixel, sampling 3D points along each ray, querying the MLP at every point, and compositing the results with volume rendering. No explicit 3D structure is ever constructed — the entire scene is implicit in the weights $\theta$. Related topics: [[CNN]], [[Deep Learning]], [[Embeddings]], [[Autoencoders]].
+
+!! Volume Rendering
+
+The expected color $C(\mathbf{r})$ along a ray $\mathbf{r}(t) = \mathbf{o} + t\mathbf{d}$ is:
+
+$$C(\mathbf{r}) = \int_{t_n}^{t_f} T(t)\,\sigma\!\left(\mathbf{r}(t)\right)\mathbf{c}\!\left(\mathbf{r}(t), \mathbf{d}\right) dt$$
+
+where $T(t) = \exp\!\left(-\int_{t_n}^{t} \sigma(\mathbf{r}(s))\,ds\right)$ is the ''accumulated transmittance'' — the probability that the ray travels from $t_n$ to $t$ without hitting any surface. In practice the integral is discretized: the ray is divided into $N$ stratified bins and colors and densities are summed with quadrature weights. Training minimizes the mean-squared error between rendered pixel colors and ground-truth pixel colors across all training views and rays.
+
+!! Positional Encoding
+
+Raw $(x, y, z)$ coordinates fed directly to an MLP produce blurry results. MLPs have a ''spectral bias'': they preferentially learn low-frequency functions, missing fine geometric and texture detail. The fix is ''positional encoding'', which lifts each coordinate to a higher-dimensional space via sinusoids:
+
+$$\gamma(p) = \left(\sin(2^0\pi p),\, \cos(2^0\pi p),\, \ldots,\, \sin(2^{L-1}\pi p),\, \cos(2^{L-1}\pi p)\right)$$
+
+NeRF uses $L=10$ for position (adding 60 dimensions per coordinate) and $L=4$ for viewing direction. This encoding lets the MLP represent high-frequency geometry and view-dependent shading such as specular highlights.
+
+!! Extensions and Speed
+
+Vanilla NeRF is a proof of concept, not a practical system: training takes 1–2 days per scene, and rendering a single image takes ~30 seconds.
+
+''Instant NGP'' (Müller et al., 2022) replaces the MLP's input with a multi-resolution hash encoding over a compact lookup table, reducing training to minutes and rendering to 60 FPS.
+
+''3D Gaussian Splatting'' (Kerbl et al., 2023) abandons the implicit MLP entirely in favor of explicit 3D Gaussians, achieving real-time rendering at high quality.
+
+Further extensions address other limitations: ''NeRF-W'' handles unconstrained in-the-wild photos with varying lighting and transient occluders; ''D-NeRF'' extends the framework to dynamic scenes with a deformation field; ''Mip-NeRF 360'' handles unbounded 360° scenes with anti-aliasing via cone casting. Downstream applications include AR/VR asset creation, robotic scene understanding, SLAM, and text-to-3D generation (DreamFusion, which distills a NeRF from a 2D diffusion model).
+
+!! When NeRF Breaks Down
+
+''Training time and per-scene optimization:'' vanilla NeRF must train a separate MLP for every new scene, taking hours. Generalizable NeRFs (IBRNet, pixelNeRF) amortize this with a learned prior but sacrifice quality.
+
+''Dynamic and moving scenes:'' the core formulation assumes a static world. A person walking through the frame or a flag waving in the wind violates the model's assumptions, causing blurring or ghost artifacts.
+
+''Extrapolation beyond the training cameras:'' NeRF interpolates well but does not extrapolate. Attempting to render from a viewpoint far outside the convex hull of training cameras produces hallucinated, incoherent geometry.
+
+!! Technical Details
+
+''Key papers:'' Mildenhall et al., "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis," ECCV 2020. Müller et al., "Instant Neural Graphics Primitives," SIGGRAPH 2022. Kerbl et al., "3D Gaussian Splatting for Real-Time Radiance Field Rendering," SIGGRAPH 2023. Barron et al., "Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields," CVPR 2022.
+
+''Architecture:'' two-stage MLP — a density network taking only $(x,y,z)$ (view-independent), followed by a color network that additionally takes $\mathbf{d}$ (view-dependent). Encourages geometry to be consistent across views.
+
+''Hierarchical sampling:'' two networks trained simultaneously — a coarse network sampled uniformly, and a fine network sampled proportionally to the coarse density estimate (importance sampling).
+
+''Datasets:'' Realistic Synthetic 360 (Blender objects), Local Light Field Fusion (LLFF, forward-facing scenes), Tanks and Temples.
+
+''Representations compared:'' NeRF vs voxel grids (explicit, memory-heavy, fixed resolution) vs triangle meshes (efficient but hard to optimize from images) vs point clouds (no surface normals or density).
+
+!! Quiz
+
+What does NeRF store the 3D scene representation in?
+<span id="nerf-q1">&nbsp;</span>
+<<button "A. A voxel grid">><<replace "#nerf-q1">>A. A voxel grid — Incorrect. Voxel grids are explicit 3D structures. NeRF stores the scene implicitly in MLP weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The weights of an MLP">><<replace "#nerf-q1">>&#10003; B. The weights of an MLP — Correct. The MLP $f_\theta$ is the scene representation; no explicit 3D structure is built.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A triangle mesh">><<replace "#nerf-q1">>C. A triangle mesh — Incorrect. Meshes are explicit and require manual topology. NeRF avoids this entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A point cloud">><<replace "#nerf-q1">>D. A point cloud — Incorrect. Point clouds are explicit discrete samples. NeRF is a continuous implicit function.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+What are the two outputs of the NeRF MLP for each query point?
+<span id="nerf-q2">&nbsp;</span>
+<<button "A. Position and normal">><<replace "#nerf-q2">>A. Position and normal — Incorrect. NeRF does not output surface normals; it outputs color and density.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. RGB color and volume density σ">><<replace "#nerf-q2">>&#10003; B. RGB color and volume density σ — Correct. Color is view-dependent; density is view-independent and encodes opacity/occupancy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Depth and albedo">><<replace "#nerf-q2">>C. Depth and albedo — Incorrect. Depth can be derived from density but is not a direct output; albedo is not an explicit output.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Reflectance and transmittance">><<replace "#nerf-q2">>D. Reflectance and transmittance — Incorrect. Transmittance $T(t)$ is computed from density during volume rendering, not output directly by the MLP.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+What does the accumulated transmittance $T(t)$ represent in the volume rendering equation?
+<span id="nerf-q3">&nbsp;</span>
+<<button "A. The total light emitted by the scene">><<replace "#nerf-q3">>A. The total light emitted by the scene — Incorrect. Transmittance is about light reaching a point, not total scene emission.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The probability that the ray reaches point t without being absorbed">><<replace "#nerf-q3">>&#10003; B. The probability that the ray reaches point t without being absorbed — Correct. $T(t) = \exp(-\int_{t_n}^t \sigma\, ds)$ decays as the ray passes through dense matter.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The fraction of light reflected at the surface">><<replace "#nerf-q3">>C. The fraction of light reflected at the surface — Incorrect. That describes a BRDF, not transmittance in volume rendering.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The sampling density of points along the ray">><<replace "#nerf-q3">>D. The sampling density of points along the ray — Incorrect. Sampling density is a separate algorithmic choice; $T(t)$ is a physical quantity derived from $\sigma$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+Why is positional encoding used in NeRF?
+<span id="nerf-q4">&nbsp;</span>
+<<button "A. To reduce the number of MLP parameters">><<replace "#nerf-q4">>A. To reduce the number of MLP parameters — Incorrect. Positional encoding increases the input dimensionality; it does not compress the network.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To convert world coordinates into camera coordinates">><<replace "#nerf-q4">>B. To convert world coordinates into camera coordinates — Incorrect. That is a geometric transformation, not the purpose of positional encoding.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To overcome the MLP's spectral bias toward low-frequency functions">><<replace "#nerf-q4">>&#10003; C. To overcome the MLP's spectral bias toward low-frequency functions — Correct. Mapping inputs to high-frequency sinusoids allows the MLP to represent fine detail.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To encode the camera extrinsics into the network">><<replace "#nerf-q4">>D. To encode the camera extrinsics into the network — Incorrect. Viewing direction $(\theta, \phi)$ is also encoded, but positional encoding's purpose is frequency lifting, not camera parameterization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+What loss function is used to train NeRF?
+<span id="nerf-q5">&nbsp;</span>
+<<button "A. Cross-entropy between predicted and true class labels">><<replace "#nerf-q5">>A. Cross-entropy between predicted and true class labels — Incorrect. NeRF is not a classification task.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Mean squared error between rendered and ground-truth pixel colors">><<replace "#nerf-q5">>&#10003; B. Mean squared error between rendered and ground-truth pixel colors — Correct. The photometric MSE loss is backpropagated through the volume rendering integral to optimize $\theta$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Perceptual loss from a pretrained VGG network">><<replace "#nerf-q5">>C. Perceptual loss from a pretrained VGG network — Incorrect. Perceptual losses are used in some extensions but not in the original NeRF paper.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Contrastive loss between different camera viewpoints">><<replace "#nerf-q5">>D. Contrastive loss between different camera viewpoints — Incorrect. Contrastive learning is a self-supervised paradigm; NeRF supervises directly on pixel values.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+What does hierarchical sampling in NeRF accomplish?
+<span id="nerf-q6">&nbsp;</span>
+<<button "A. It trains multiple NeRFs in parallel on different scenes">><<replace "#nerf-q6">>A. It trains multiple NeRFs in parallel on different scenes — Incorrect. Hierarchical sampling is a ray-sampling strategy within a single scene.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It allocates more samples to regions of high density estimated by a coarse network">><<replace "#nerf-q6">>&#10003; B. It allocates more samples to regions of high density estimated by a coarse network — Correct. The coarse network produces a density estimate; the fine network importance-samples from it, focusing capacity near surfaces.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It divides the scene into a multi-resolution voxel hierarchy">><<replace "#nerf-q6">>C. It divides the scene into a multi-resolution voxel hierarchy — Incorrect. That describes Instant NGP's hash encoding, not NeRF's hierarchical sampling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It reduces the MLP depth by splitting it into shallow subnetworks">><<replace "#nerf-q6">>D. It reduces the MLP depth by splitting it into shallow subnetworks — Incorrect. Two separate networks (coarse and fine) are trained, but the motivation is sample efficiency, not depth reduction.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+Which advance dramatically accelerated NeRF training and rendering?
+<span id="nerf-q7">&nbsp;</span>
+<<button "A. Replacing volume rendering with rasterization">><<replace "#nerf-q7">>A. Replacing volume rendering with rasterization — Incorrect. Rasterization is a different rendering paradigm; removing volume rendering would change the core method.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Using a recurrent network instead of an MLP">><<replace "#nerf-q7">>B. Using a recurrent network instead of an MLP — Incorrect. RNNs are not used in NeRF or its main accelerations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Instant NGP's multi-resolution hash encoding">><<replace "#nerf-q7">>&#10003; C. Instant NGP's multi-resolution hash encoding — Correct. Instant NGP (Müller et al., 2022) reduced training from days to minutes and rendering to real-time by replacing MLP inputs with a compact hash table.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Precomputing all ray-scene intersections analytically">><<replace "#nerf-q7">>D. Precomputing all ray-scene intersections analytically — Incorrect. Analytic intersections require an explicit scene representation, which NeRF does not use.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+Which scenario is a fundamental failure mode of vanilla NeRF?
+<span id="nerf-q8">&nbsp;</span>
+<<button "A. Rendering under a point light source">><<replace "#nerf-q8">>A. Rendering under a point light source — Incorrect. Lighting conditions affect quality but are not the defining failure mode of the static-scene assumption.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Scenes with more than 100 input images">><<replace "#nerf-q8">>B. Scenes with more than 100 input images — Incorrect. More training images generally improve NeRF quality; this is not a failure mode.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Dynamic scenes with moving objects">><<replace "#nerf-q8">>&#10003; C. Dynamic scenes with moving objects — Correct. NeRF assumes a static world. Moving elements violate the consistency across views required by the photometric loss, producing blurring or ghosting.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Scenes captured with a wide-angle lens">><<replace "#nerf-q8">>D. Scenes captured with a wide-angle lens — Incorrect. Lens distortion can be calibrated; it is not an inherent limitation of the NeRF formulation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

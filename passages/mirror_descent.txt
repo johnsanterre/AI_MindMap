@@ -1,0 +1,167 @@
+<<include "Header">>
+
+! Mirror Descent
+
+<img src="assets/mirror_descent.svg" alt="Diagram comparing Euclidean gradient descent leaving the simplex versus mirror descent staying on the simplex via the entropic mirror map" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are walking downhill on a curved landscape, but the ground beneath your feet is not flat Euclidean space — it is the surface of a sphere, or a triangular region representing probability distributions. If you walk in a straight line (the Euclidean direction), you immediately step off the surface. You need a compass that respects the shape of the ground. ''Mirror descent'' is that compass: it generalizes <<link "Gradient Descent" "Gradient Descent">><</link>> by replacing the squared Euclidean distance with a ''Bregman divergence'' — a distance measure that bends and stretches to match the geometry of whatever constrained set you are optimizing over. On the probability simplex, the natural Bregman divergence is the <<link "KL Divergence" "KL Divergence">><</link>>, and the resulting algorithm is multiplicative weights update, one of the most important algorithms in <<link "Online Learning" "Online Learning">><</link>> and game theory.
+
+---
+
+!! The Core Insight
+
+Standard gradient descent updates parameters by subtracting the gradient scaled by a step size: $x_{t+1} = x_t - \eta \nabla f(x_t)$. This works beautifully in unconstrained Euclidean space. But many optimization problems live on constrained domains — the probability simplex (all components non-negative, summing to one), the positive orthant, or the set of positive definite matrices. In these settings, a Euclidean gradient step can fly right off the feasible set. The standard fix is ''projected gradient descent'': take the Euclidean step, then project back onto the constraint set. But Euclidean projection can be expensive, and more fundamentally, it ignores the natural geometry of the constraint set. Walking in a straight line and then snapping back to the boundary is not how you should navigate a curved space.
+
+Mirror descent, introduced by Nemirovski and Yudin in 1983, solves this by rethinking what "distance" means. Instead of measuring proximity with $\|x - y\|^2$, it uses a ''Bregman divergence'' $D_\phi(x, y) = \phi(x) - \phi(y) - \langle \nabla \phi(y), x - y \rangle$, where $\phi$ is a strictly convex function called the ''mirror map'' (or distance-generating function). The Bregman divergence is the gap between $\phi$ and its tangent plane — it measures how curved $\phi$ is between two points. Different choices of $\phi$ encode different geometries: the squared norm $\phi(x) = \frac{1}{2}\|x\|^2$ recovers standard gradient descent, while the negative entropy $\phi(x) = \sum_i x_i \log x_i$ produces an algorithm perfectly adapted to the simplex.
+
+The key theoretical result is that mirror descent achieves optimal convergence rates for <<link "Convex Optimization" "Convex Optimization">><</link>> when the mirror map is chosen to match the problem geometry. On the simplex, entropic mirror descent achieves regret that scales with $\sqrt{\log d}$ rather than $\sqrt{d}$, an exponential improvement over projected gradient descent in high dimensions. This is not a minor technical tweak — it is the difference between algorithms that work in 10 dimensions and algorithms that work in 10,000.
+
+---
+
+!! Bregman Divergences and the Mirror Map
+
+A ''Bregman divergence'' is defined by any strictly convex, differentiable function $\phi$:
+
+$$D_\phi(x, y) = \phi(x) - \phi(y) - \langle \nabla \phi(y), x - y \rangle$$
+
+This always satisfies $D_\phi(x, y) \geq 0$ with equality if and only if $x = y$, but it is //not// symmetric: $D_\phi(x, y) \neq D_\phi(y, x)$ in general. This asymmetry is a feature, not a bug — it reflects the fact that the geometry of the constraint set may look different depending on where you stand.
+
+The three most important Bregman divergences in optimization are:
+
+''Squared Euclidean distance:'' $\phi(x) = \frac{1}{2}\|x\|^2$ gives $D_\phi(x, y) = \frac{1}{2}\|x - y\|^2$. This recovers ordinary gradient descent.
+
+''KL divergence (negative entropy):'' $\phi(x) = \sum_i x_i \log x_i$ gives $D_\phi(x, y) = \sum_i x_i \log(x_i / y_i) - x_i + y_i$, which is the KL divergence. On the simplex, this produces the ''multiplicative weights'' or ''exponentiated gradient'' algorithm.
+
+''Log-determinant divergence:'' $\phi(X) = -\log \det X$ on positive definite matrices gives $D_\phi(X, Y) = \text{tr}(XY^{-1}) - \log \det(XY^{-1}) - n$. This is the natural geometry for matrix optimization and is closely connected to the <<link "Natural Gradient" "Natural Gradient">><</link>>.
+
+The mirror map $\nabla \phi$ sends points from the ''primal space'' (the constrained domain) to a ''dual space'' (typically unconstrained), where a standard gradient step is safe. The inverse map $(\nabla \phi)^{-1} = \nabla \phi^*$ (the gradient of the convex conjugate) sends the updated dual point back to the primal space, automatically landing on the feasible set if $\phi$ is chosen correctly.
+
+---
+
+!! What the Math Is Actually Doing
+
+The mirror descent update has three steps. Start at primal point $x_t$ on the constraint set $\mathcal{X}$:
+
+''Step 1 (Mirror):'' Map to dual space: $\theta_t = \nabla \phi(x_t)$
+
+''Step 2 (Gradient):'' Take a gradient step in the dual space: $\theta_{t+1} = \theta_t - \eta \nabla f(x_t)$
+
+''Step 3 (Inverse mirror):'' Map back to primal space:
+
+$$x_{t+1} = \arg\min_{x \in \mathcal{X}} \left\{ D_\phi(x, x_t) + \eta \langle \nabla f(x_t), x \rangle \right\}$$
+
+Equivalently: $x_{t+1} = \arg\min_{x \in \mathcal{X}} D_\phi(x, (\nabla \phi)^{-1}(\theta_{t+1}))$.
+
+For the entropic mirror map on the simplex, the inverse mirror map is the ''softmax'':
+
+$$[x_{t+1}]_i = \frac{x_{t,i} \cdot \exp(-\eta [\nabla f(x_t)]_i)}{\sum_j x_{t,j} \cdot \exp(-\eta [\nabla f(x_t)]_j)}$$
+
+This is the ''multiplicative weights update'' — each coordinate is multiplied by an exponential factor, then renormalized. Components with large gradients are suppressed exponentially; components with small gradients grow. The update automatically stays on the simplex without any projection step.
+
+The convergence guarantee for mirror descent on convex functions is:
+
+$$f\left(\frac{1}{T}\sum_{t=1}^T x_t\right) - f(x^*) \leq \frac{D_\phi(x^*, x_1) + \eta \sum_{t=1}^T \|\nabla f(x_t)\|_*^2}{2\eta T}$$
+
+where $\|\cdot\|_*$ is the dual norm. The key insight: the numerator contains $D_\phi(x^*, x_1)$, the Bregman divergence from the optimum to the starting point, not the Euclidean distance. When the constraint set has favorable geometry under $D_\phi$ (e.g., the simplex has diameter $\log d$ under KL divergence instead of $\sqrt{d}$ under Euclidean distance), the bound tightens dramatically.
+
+---
+
+!! Mirror Descent in Online Learning and Bandits
+
+Mirror descent is not merely a batch optimization algorithm — it is the foundational framework for <<link "Online Learning" "Online Learning">><</link>>. In the online convex optimization setting, an adversary selects a loss function $f_t$ at each round, and the learner must choose $x_t$ before seeing $f_t$. The ''regret'' measures how much worse the learner performs compared to the best fixed decision in hindsight:
+
+$$\text{Regret}_T = \sum_{t=1}^T f_t(x_t) - \min_{x \in \mathcal{X}} \sum_{t=1}^T f_t(x)$$
+
+Mirror descent with appropriate step size achieves $\text{Regret}_T = O(\sqrt{T \log d})$ on the simplex, which is optimal. The famous ''Hedge algorithm'' (or multiplicative weights method) for expert prediction is exactly entropic mirror descent applied to linear losses over the simplex.
+
+In multi-armed bandits, mirror descent with the log-barrier mirror map $\phi(x) = -\sum_i \log x_i$ yields the ''EXP3'' algorithm variant with improved dependence on the number of arms. The choice of mirror map encodes prior knowledge about the geometry: negative entropy for sparse solutions, log-barrier for keeping all coordinates bounded away from zero.
+
+The connection to the <<link "Natural Gradient" "Natural Gradient">><</link>> is deep: when the Bregman divergence is the KL divergence between parameterized distributions, mirror descent reduces to natural gradient descent with the Fisher information metric. Both algorithms adapt to the intrinsic geometry of the problem, but mirror descent is the more general framework.
+
+---
+
+!! When Mirror Descent Breaks Down
+
+''Wrong mirror map for the geometry:'' Mirror descent's advantage depends entirely on choosing a mirror map that matches the problem structure. Using the squared Euclidean norm on the simplex wastes the exponential dimension improvement; using negative entropy on an unconstrained problem adds unnecessary complexity with no benefit. If the constraint set has no exploitable structure (e.g., an arbitrary polytope), there may be no mirror map that significantly outperforms projected gradient descent. The mirror map is a modeling choice, and a bad choice can make convergence worse, not better.
+
+''Non-convex objectives:'' The convergence guarantees for mirror descent assume convex (or at least online-convex) loss functions. For non-convex optimization — which dominates modern deep learning — mirror descent does not provide the same clean regret bounds. While mirror descent can still be applied as an update rule, its theoretical advantages evaporate. In practice, adaptive methods like Adam, which can be viewed as diagonal approximations inspired by mirror descent ideas, have largely supplanted pure mirror descent in non-convex settings.
+
+''Step size sensitivity near boundaries:'' On domains like the simplex, mirror descent with the entropic map pushes coordinates toward zero exponentially fast. If the step size $\eta$ is too large, coordinates can become numerically indistinguishable from zero and never recover — the algorithm effectively reduces the dimensionality irreversibly. This is especially problematic in stochastic settings where gradient noise can prematurely kill coordinates. Unlike projected gradient descent, which clips at the boundary and can recover, the multiplicative structure of entropic mirror descent makes recovery from near-zero coordinates extremely difficult.
+
+---
+
+!! Technical Details
+
+''Origins:'' Mirror descent was introduced by Nemirovski and Yudin (1983) in //Problem Complexity and Method Efficiency in Optimization//. The modern treatment connecting it to Bregman divergences is due to Beck and Teboulle (2003). The online learning perspective was crystallized by Shalev-Shwartz (2007) and Hazan (2016) in the online convex optimization framework.
+
+''Bregman divergence properties:'' $D_\phi$ is non-negative, equals zero only when $x = y$, is convex in its first argument, but is //not// a metric — it violates symmetry and the triangle inequality. For $\phi$ that is $\alpha$-strongly convex with respect to norm $\|\cdot\|$, the Bregman divergence satisfies $D_\phi(x, y) \geq \frac{\alpha}{2}\|x - y\|^2$, which is the key property used in convergence proofs.
+
+''Strong convexity matching:'' The optimal choice of mirror map satisfies $\phi$ being 1-strongly convex with respect to the norm $\|\cdot\|$ that makes $\|\nabla f\|_*$ small. On the simplex with $\ell_\infty$-bounded gradients, $\phi(x) = \sum x_i \log x_i$ is 1-strongly convex with respect to $\|\cdot\|_1$, and the dual norm $\|\cdot\|_\infty$ keeps the gradient term bounded. This matching principle — strong convexity of $\phi$ in the primal norm, boundedness of gradients in the dual norm — is the central design principle for mirror descent.
+
+''Lazy vs. greedy mirror descent:'' The "lazy" (or "dual averaging") variant, due to Nesterov (2009), accumulates gradients in the dual space: $\theta_{t+1} = \theta_t - \eta \nabla f(x_t)$ followed by $x_{t+1} = \arg\min_{x \in \mathcal{X}} \{\langle \theta_{t+1}, x \rangle + \frac{1}{\eta} \phi(x)\}$. The "greedy" (or "mirror descent proper") variant performs a proximal step at each iteration. Both achieve the same regret bounds but differ in practice: lazy mirror descent tends to produce sparser iterates and is preferred in high-dimensional online learning.
+
+''Connection to proximal methods:'' Mirror descent is a special case of the ''Bregman proximal point method''. The proximal operator $\text{prox}_{\eta f}^{D_\phi}(y) = \arg\min_x \{f(x) + \frac{1}{\eta} D_\phi(x, y)\}$ generalizes the Euclidean proximal operator. When $f$ is linearized (replaced by its gradient), the Bregman proximal step becomes mirror descent. This places mirror descent within the broader family of proximal splitting algorithms used in <<link "Convex Optimization" "Convex Optimization">><</link>>.
+
+''Dimension-free rates:'' On the $d$-dimensional simplex, projected gradient descent achieves $O(\sqrt{d/T})$ convergence, while entropic mirror descent achieves $O(\sqrt{\log d / T})$. For $d = 10{,}000$, this is the difference between a factor of 100 and a factor of 9 — roughly a $10\times$ improvement. This gap is the primary practical motivation for mirror descent in high-dimensional constrained problems.
+
+---
+
+!! Quiz
+
+<span id="md-q1">What does the mirror map $\nabla \phi$ do in mirror descent?</span>
+A. Projects the gradient onto the constraint set
+B. Maps points from the primal (constrained) space to a dual (unconstrained) space where gradient steps are safe
+C. Computes the Hessian of the objective function
+D. Normalizes the gradient to unit length
+<<button "A">><<replace "#md-q1">>Wrong. Projection onto the constraint set is what projected gradient descent does. The mirror map sends points to a dual space, which is a fundamentally different operation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q1">>Correct! The mirror map $\nabla \phi$ sends primal points to a dual space where a standard gradient step can be taken without violating constraints. The inverse map $\nabla \phi^*$ sends the updated point back to the primal space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q1">>Wrong. The mirror map involves the gradient of $\phi$ (the distance-generating function), not the Hessian of the objective $f$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q1">>Wrong. The mirror map has nothing to do with normalizing the gradient. It is a nonlinear coordinate transformation defined by the distance-generating function.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q2">On the probability simplex, which mirror map produces the multiplicative weights update?</span>
+A. $\phi(x) = \frac{1}{2}\|x\|^2$ (squared Euclidean norm)
+B. $\phi(x) = -\sum_i \log x_i$ (log-barrier)
+C. $\phi(x) = \sum_i x_i \log x_i$ (negative entropy)
+D. $\phi(x) = \|x\|_1$ (L1 norm)
+<<button "A">><<replace "#md-q2">>Wrong. The squared Euclidean norm recovers standard projected gradient descent, not multiplicative weights.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q2">>Wrong. The log-barrier is used in interior point methods and produces a different update. It is useful for keeping coordinates bounded away from zero, but does not give multiplicative weights.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q2">>Correct! The negative entropy $\phi(x) = \sum_i x_i \log x_i$ produces the KL divergence as its Bregman divergence, and the resulting mirror descent update is the multiplicative weights (exponentiated gradient) algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q2">>Wrong. The L1 norm is not strictly convex, so it does not define a valid Bregman divergence for mirror descent.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q3">Why does entropic mirror descent achieve $O(\sqrt{\log d})$ regret on the $d$-dimensional simplex instead of $O(\sqrt{d})$?</span>
+A. Because the entropic mirror map compresses the simplex into a lower-dimensional space
+B. Because the KL divergence diameter of the simplex is $\log d$, not $d$, so the regret bound's numerator shrinks exponentially
+C. Because the entropic update ignores most coordinates, effectively reducing dimensionality
+D. Because the gradient is projected onto the top $\log d$ coordinates
+<<button "A">><<replace "#md-q3">>Wrong. The simplex still has $d$ dimensions. The improvement comes from the Bregman divergence measuring distances differently, not from dimensionality reduction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q3">>Correct! The convergence bound depends on $D_\phi(x^*, x_1)$, and the maximum KL divergence on the simplex is $\log d$ (from the uniform distribution to a vertex). This replaces the Euclidean diameter $\sqrt{d}$ in the bound, yielding an exponential improvement.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q3">>Wrong. Entropic mirror descent updates all coordinates at every step via the softmax. It does not ignore or prune coordinates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q3">>Wrong. There is no coordinate selection or projection onto top coordinates. All $d$ coordinates are updated multiplicatively at each step.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q4">Which property does a Bregman divergence $D_\phi(x, y)$ violate compared to a true metric?</span>
+A. Non-negativity
+B. Identity of indiscernibles ($D_\phi(x, y) = 0 \iff x = y$)
+C. Symmetry and the triangle inequality
+D. Continuity
+<<button "A">><<replace "#md-q4">>Wrong. Bregman divergences are always non-negative by the convexity of $\phi$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q4">>Wrong. Bregman divergences do satisfy identity of indiscernibles: $D_\phi(x, y) = 0$ if and only if $x = y$ when $\phi$ is strictly convex.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q4">>Correct! Bregman divergences are generally asymmetric ($D_\phi(x, y) \neq D_\phi(y, x)$) and do not satisfy the triangle inequality. This asymmetry reflects the curved geometry of the underlying space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q4">>Wrong. Bregman divergences are continuous whenever $\phi$ is differentiable, which is required by definition.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q5">What is the relationship between mirror descent and the natural gradient?</span>
+A. They are unrelated methods that happen to work on similar problems
+B. Mirror descent with KL divergence between parameterized distributions reduces to natural gradient descent with the Fisher information metric
+C. Natural gradient is a special case of projected gradient descent, not mirror descent
+D. Mirror descent approximates the natural gradient using diagonal matrices
+<<button "A">><<replace "#md-q5">>Wrong. The two methods are deeply connected — both adapt optimization to the intrinsic geometry of the problem, and one can be derived from the other in the right setting.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q5">>Correct! When the Bregman divergence is the KL divergence between distributions in an exponential family, the mirror descent update becomes the natural gradient update $\theta_{t+1} = \theta_t - \eta F(\theta)^{-1} \nabla f(\theta)$, where $F(\theta)$ is the Fisher information matrix.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q5">>Wrong. Natural gradient is not projected gradient descent. It uses the Fisher information metric to precondition the gradient, which is a mirror descent operation, not a projection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q5">>Wrong. This describes adaptive methods like Adam more than it describes the mirror descent / natural gradient connection. The full relationship involves the exact Fisher metric, not a diagonal approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q6">In the entropic mirror descent update on the simplex, what happens to a coordinate $x_{t,i}$ when $[\nabla f(x_t)]_i$ is large and positive?</span>
+A. It increases proportionally to the gradient magnitude
+B. It is set to zero and removed from future updates
+C. It is multiplied by $\exp(-\eta [\nabla f]_i)$, which shrinks it exponentially
+D. It is clipped to a minimum threshold value
+<<button "A">><<replace "#md-q6">>Wrong. The update is multiplicative with a negative exponential, so a large positive gradient causes the coordinate to shrink, not grow.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q6">>Wrong. The coordinate is never set exactly to zero — it is multiplied by a positive exponential factor, so it shrinks toward but never reaches zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q6">>Correct! The multiplicative weights update sets $x_{t+1,i} \propto x_{t,i} \exp(-\eta [\nabla f]_i)$. A large positive gradient means a large negative exponent, exponentially suppressing that coordinate. This is the mechanism by which mirror descent "downweights" bad experts or actions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q6">>Wrong. There is no clipping in mirror descent. The multiplicative structure keeps coordinates strictly positive but can make them arbitrarily small.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q7">What distinguishes "lazy" mirror descent (dual averaging) from "greedy" mirror descent?</span>
+A. Lazy mirror descent uses a smaller step size
+B. Lazy mirror descent accumulates all past gradients in the dual space before mapping back, while greedy performs a proximal step from the current iterate
+C. Lazy mirror descent skips gradient computation on some rounds
+D. Lazy mirror descent only updates a subset of coordinates at each step
+<<button "A">><<replace "#md-q7">>Wrong. Both variants can use the same step size schedule. The distinction is in how they use past gradient information, not the step size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q7">>Correct! Lazy mirror descent (Nesterov 2009) maintains a running sum of gradients in the dual space and maps this cumulative dual vector back to the primal space at each step. Greedy mirror descent performs a local Bregman proximal step from the current iterate. Both achieve the same theoretical regret, but lazy tends to produce sparser solutions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q7">>Wrong. Both variants compute gradients at every round. "Lazy" refers to how gradient information is aggregated, not to skipping computations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q7">>Wrong. Both variants update all coordinates. "Lazy" refers to aggregating gradients in dual space before a single map-back, not to partial coordinate updates.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="md-q8">Which of the following is a valid Bregman divergence for optimization over positive definite matrices?</span>
+A. Frobenius norm: $\|X - Y\|_F^2$
+B. Log-determinant divergence: $\text{tr}(XY^{-1}) - \log\det(XY^{-1}) - n$
+C. Spectral norm: $\|X - Y\|_2$
+D. Nuclear norm: $\|X - Y\|_*$
+<<button "A">><<replace "#md-q8">>Wrong. The Frobenius norm is a Euclidean distance that ignores the positive definite cone structure. It is a valid Bregman divergence (from $\phi(X) = \frac{1}{2}\|X\|_F^2$) but does not respect the geometry of positive definite matrices.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#md-q8">>Correct! The log-determinant divergence arises from $\phi(X) = -\log\det X$ and is the natural Bregman divergence for the positive definite cone. It is invariant under congruence transformations and connects to the natural gradient on Gaussian distributions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#md-q8">>Wrong. The spectral norm is not derived from any strictly convex generating function and is not a Bregman divergence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#md-q8">>Wrong. The nuclear norm is a norm, not a Bregman divergence. Norms can appear in Bregman divergence bounds but are not themselves Bregman divergences.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

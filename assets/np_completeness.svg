@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="400" rx="18" ry="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+
+  <!-- Title -->
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" font-weight="bold">NP-Completeness: The Reduction Chain</text>
+
+  <!-- Row 1: SAT -> 3-SAT -> Clique -> Vertex Cover -->
+  <!-- SAT -->
+  <rect x="30" y="75" width="130" height="50" rx="10" ry="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="95" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">SAT</text>
+
+  <!-- Arrow SAT -> 3-SAT -->
+  <line x1="160" y1="100" x2="210" y2="100" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="185" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- 3-SAT -->
+  <rect x="210" y="75" width="130" height="50" rx="10" ry="10" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="275" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">3-SAT</text>
+
+  <!-- Arrow 3-SAT -> Clique -->
+  <line x1="340" y1="100" x2="390" y2="100" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="365" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- Clique -->
+  <rect x="390" y="75" width="130" height="50" rx="10" ry="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="455" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">Clique</text>
+
+  <!-- Arrow Clique -> Vertex Cover -->
+  <line x1="520" y1="100" x2="570" y2="100" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="545" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- Vertex Cover -->
+  <rect x="570" y="75" width="200" height="50" rx="10" ry="10" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="670" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">Vertex Cover</text>
+
+  <!-- Connector: Vertex Cover down to Hamiltonian Cycle -->
+  <line x1="670" y1="125" x2="670" y2="175" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="685" y="155" text-anchor="start" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- Row 2: Subset Sum <- Knapsack <- TSP <- Hamiltonian Cycle -->
+  <!-- Hamiltonian Cycle -->
+  <rect x="570" y="175" width="200" height="50" rx="10" ry="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="670" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" font-weight="bold">Hamiltonian Cycle</text>
+
+  <!-- Arrow Ham -> TSP -->
+  <line x1="570" y1="200" x2="520" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="545" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- TSP -->
+  <rect x="390" y="175" width="130" height="50" rx="10" ry="10" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="455" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">TSP</text>
+
+  <!-- Arrow TSP -> Graph Coloring -->
+  <line x1="390" y1="200" x2="340" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="365" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- Graph Coloring -->
+  <rect x="170" y="175" width="170" height="50" rx="10" ry="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="255" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#FDFAF4" font-weight="bold">Graph Coloring</text>
+
+  <!-- Connector: Graph Coloring down to Subset Sum -->
+  <line x1="255" y1="225" x2="255" y2="275" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="270" y="255" text-anchor="start" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- Row 3: Subset Sum -> Knapsack -->
+  <!-- Subset Sum -->
+  <rect x="170" y="275" width="170" height="50" rx="10" ry="10" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="255" y="305" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#FDFAF4" font-weight="bold">Subset Sum</text>
+
+  <!-- Arrow Subset Sum -> Knapsack -->
+  <line x1="340" y1="300" x2="390" y2="300" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="365" y="292" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">&le;&#x209A;</text>
+
+  <!-- Knapsack -->
+  <rect x="390" y="275" width="130" height="50" rx="10" ry="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="455" y="305" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">Knapsack</text>
+
+  <!-- Legend box -->
+  <rect x="570" y="270" width="200" height="65" rx="8" ry="8" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="670" y="292" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">Key Insight</text>
+  <text x="670" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Solve ANY one in poly-time</text>
+  <text x="670" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">&#x21D2; solve ALL in poly-time</text>
+
+  <!-- Caption -->
+  <text x="400" y="375" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A" font-style="italic">Each arrow represents a polynomial-time reduction (Cook 1971, Karp 1972)</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,160 @@
+<<include "Header">>
+
+! Category Theory
+
+<img src="assets/category_theory.svg" alt="Diagram showing categories with objects and morphisms, functors mapping between categories, and natural transformations between functors" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a city map that shows only roads and intersections — no buildings, no terrain, no street names. You lose detail, but you gain something powerful: you can now compare //any// two cities purely by their connectivity patterns. Category theory does this for all of mathematics. It strips away the internal details of mathematical objects (numbers, spaces, groups, types) and studies only the ''arrows'' between them — the structure-preserving maps. This extreme abstraction turns out to be astonishingly useful: patterns that seem unrelated across algebra, topology, logic, and computer science are revealed as instances of the same categorical structure. In ML, category theory provides the language for understanding type systems in programming languages, compositional reasoning in neural networks, and the algebraic structure behind automatic differentiation.
+
+!! The Core Insight
+
+A ''category'' $\mathcal{C}$ consists of just two things: a collection of ''objects'' and a collection of ''morphisms'' (arrows) between them. Every object has an identity morphism, and morphisms compose associatively. That is the entire definition — and it is enough to unify vast stretches of mathematics.
+
+The key insight is that //you learn more about an object from its relationships than from its internals//. A vector space is fully characterised by the linear maps into and out of it. A topological space is characterised by the continuous functions it participates in. Category theory makes this relational perspective systematic: an object is defined, up to isomorphism, by its pattern of morphisms — its ''universal property''.
+
+''Functors'' are morphisms between categories: they map objects to objects and morphisms to morphisms while preserving composition and identities. ''Natural transformations'' are morphisms between functors: they provide a coherent way to transform one functor into another, component by component. This layered structure — categories, functors, natural transformations — is what Saunders Mac Lane called "the mathematics of mathematics."
+
+!! Objects, Morphisms, and Functors
+
+A ''morphism'' $f: A \to B$ is an arrow from object $A$ to object $B$. Given $f: A \to B$ and $g: B \to C$, their ''composition'' $g \circ f: A \to C$ must exist and be associative. Every object $A$ has an ''identity morphism'' $\text{id}_A: A \to A$ satisfying $f \circ \text{id}_A = f$ and $\text{id}_B \circ f = f$.
+
+Familiar categories include:
+- ''Set'': objects are sets, morphisms are functions
+- ''Grp'': objects are groups, morphisms are group homomorphisms
+- ''Top'': objects are topological spaces, morphisms are continuous maps
+- ''Vect'': objects are vector spaces, morphisms are linear maps
+
+A ''functor'' $F: \mathcal{C} \to \mathcal{D}$ maps each object $A$ in $\mathcal{C}$ to an object $F(A)$ in $\mathcal{D}$, and each morphism $f: A \to B$ to a morphism $F(f): F(A) \to F(B)$, preserving composition:
+$$F(g \circ f) = F(g) \circ F(f), \quad F(\text{id}_A) = \text{id}_{F(A)}$$
+
+A ''natural transformation'' $\eta: F \Rightarrow G$ between functors $F, G: \mathcal{C} \to \mathcal{D}$ assigns to each object $A$ a morphism $\eta_A: F(A) \to G(A)$ such that for every morphism $f: A \to B$:
+$$\eta_B \circ F(f) = G(f) \circ \eta_A$$
+This ''naturality square'' ensures the transformation is coherent — it does not depend on arbitrary choices.
+
+!! What the Math Is Actually Doing
+
+The power of category theory lies in ''universal properties'' — definitions of objects via their relationship to all other objects, rather than by internal construction.
+
+A ''product'' $A \times B$ is an object with projection morphisms $\pi_1: A \times B \to A$ and $\pi_2: A \times B \to B$ such that for //any// object $C$ with morphisms $f: C \to A$ and $g: C \to B$, there exists a unique morphism $\langle f, g \rangle: C \to A \times B$ satisfying:
+$$\pi_1 \circ \langle f, g \rangle = f, \quad \pi_2 \circ \langle f, g \rangle = g$$
+
+A ''coproduct'' (dual of product) generalises disjoint union. A ''limit'' generalises product to arbitrary diagrams. A ''colimit'' generalises coproduct. These universal constructions exist across all of mathematics — the same definition gives Cartesian products of sets, direct products of groups, and product topologies.
+
+The ''Yoneda lemma'' is perhaps the deepest result in basic category theory. For a locally small category $\mathcal{C}$ and a functor $F: \mathcal{C}^{op} \to \textbf{Set}$, natural transformations from the representable functor $\text{Hom}(-, A)$ to $F$ are in bijection with $F(A)$:
+$$\text{Nat}(\text{Hom}(-, A), F) \cong F(A)$$
+
+This says an object is completely determined by its web of relationships — the "Yoneda perspective" that underpins much of modern mathematics.
+
+''Adjunctions'' formalise the notion of "best approximation" between categories. Functors $F: \mathcal{C} \to \mathcal{D}$ and $G: \mathcal{D} \to \mathcal{C}$ form an adjunction $F \dashv G$ if:
+$$\text{Hom}_\mathcal{D}(F(A), B) \cong \text{Hom}_\mathcal{C}(A, G(B))$$
+naturally in $A$ and $B$. Free/forgetful functor pairs, currying, and existential/universal quantifier dualities are all adjunctions.
+
+!! Category Theory in Practice
+
+''Type theory and programming:'' functional programming languages like Haskell are essentially applied category theory. Types are objects, functions are morphisms, type constructors (List, Maybe) are functors, and polymorphic functions are natural transformations. ''Monads'' — endofunctors with unit and multiplication satisfying coherence laws — model side effects (IO, state, exceptions) compositionally. The Curry-Howard-Lambek correspondence links categories, type theories, and logics.
+
+''Automatic differentiation:'' the chain rule $D(g \circ f) = Dg \circ Df$ is a functor from a category of smooth maps to a category of linear maps. Categorical formulations of AD (e.g., Fong, Spivak, Tuyéras 2019) clarify backpropagation as a reverse-mode functor and enable correctness proofs for gradient computation.
+
+''Compositional ML:'' category theory provides a framework for building complex systems from simpler components with guaranteed properties. ''String diagrams'' visualise morphism composition in monoidal categories and have been applied to tensor network representations of quantum circuits and neural network architectures.
+
+''Databases and knowledge representation:'' Spivak's work models databases as functors from schema categories to Set, giving a principled framework for data migration and integration.
+
+Cross-references: <<link "Topology" "Topology">><</link>> | <<link "Functional Analysis" "Functional Analysis">><</link>> | <<link "Graph Neural Networks" "Graph Neural Networks">><</link>> | <<link "Algebra" "Algebra">><</link>>
+
+!! When Category Theory Breaks Down
+
+''(1) Abstraction without grounding:'' category theory operates at such a high level of abstraction that it can become untethered from concrete computation. Knowing that a construction satisfies a universal property tells you it //exists// and is //unique//, but not how to //compute// it efficiently. In ML, where wall-clock time and memory matter, categorical elegance often fails to translate into practical algorithms. A beautifully abstract categorical framework for neural networks may offer no advantage over a straightforward PyTorch implementation — and may obscure the engineering details that determine whether the model actually trains.
+
+''(2) Size issues and foundational paradoxes:'' categories can be "large" — the category of all sets, for instance, is not itself a set. Working with functor categories, presheaf categories, or higher categories requires careful handling of set-theoretic foundations (Grothendieck universes, or alternatives like type-theoretic foundations). These technicalities are more than pedantic: they determine which constructions are well-defined. For ML practitioners borrowing categorical ideas, this foundational complexity can be a minefield of subtle errors.
+
+''(3) The compositionality gap:'' category theory excels at describing how components compose, but real ML systems are rarely cleanly compositional. Training dynamics, weight sharing, skip connections, stochastic gradient noise, and batch-level statistics create dependencies that defy neat categorical decomposition. The gap between the compositional ideal and the messy reality of deep learning limits the practical applicability of categorical methods to ML system design.
+
+!! Technical Details
+
+''Historical roots:'' Samuel Eilenberg and Saunders Mac Lane introduced category theory in 1945 to formalise natural transformations in algebraic topology. Alexander Grothendieck revolutionised algebraic geometry in the 1960s by recasting it in categorical language (schemes, sheaves, topoi). William Lawvere connected category theory to logic and foundations. The standard reference is Mac Lane, //Categories for the Working Mathematician// (1971).
+
+''Monoidal categories:'' a category $\mathcal{C}$ equipped with a bifunctor $\otimes: \mathcal{C} \times \mathcal{C} \to \mathcal{C}$, a unit object $I$, and coherence isomorphisms (associator, unitors) satisfying Mac Lane's coherence theorem. ''Symmetric monoidal categories'' add a braiding $A \otimes B \cong B \otimes A$. These model tensor products, parallel composition, and resource management.
+
+''Enriched categories:'' instead of hom-sets, one has hom-objects in a monoidal category $\mathcal{V}$. A category enriched over $\textbf{Met}$ (metric spaces) gives quantitative notions of "distance" between morphisms — the basis for Lawvere's categorical formulation of metric spaces as enriched categories.
+
+''Higher category theory:'' $n$-categories have morphisms between morphisms up to level $n$. An $\infty$-category (Lurie 2009) has morphisms at all levels with composition defined up to coherent homotopy. Higher categories unify homotopy theory and category theory and appear in topological quantum field theory. Connections to ML remain largely theoretical.
+
+''Applied category theory:'' Fong and Spivak, //An Invitation to Applied Category Theory// (2019), surveys applications to databases, dynamical systems, signal flow graphs, and collaborative design. The ACT community (conferences since 2018) actively develops categorical tools for science and engineering.
+
+Connections: <<link "Topology" "Topology">><</link>> | <<link "Functional Analysis" "Functional Analysis">><</link>> | <<link "Type Theory" "Type Theory">><</link>> | <<link "Graph Neural Networks" "Graph Neural Networks">><</link>> | <<link "Algebra" "Algebra">><</link>>
+
+!! Quiz
+
+<span id="ct-q1">A category consists of which two fundamental components?</span>
+
+A. Sets and elements
+B. Objects and morphisms (arrows)
+C. Groups and subgroups
+D. Vertices and edges
+
+<<button "A">><<replace "#ct-q1">>Incorrect. Sets and elements describe the category Set from the inside, but category theory abstracts away internal structure. A category is defined by its objects and the morphisms between them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q1">>Correct. A category has objects and morphisms (arrows) between them, with composition of morphisms that is associative and identity morphisms for each object. This minimal structure is the foundation of the entire theory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q1">>Incorrect. Groups and subgroups are algebraic structures. A group can be viewed as a category with one object, but categories in general have many objects and morphisms that need not be invertible.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q1">>Incorrect. Vertices and edges describe a graph. A category is like a graph with additional structure: composition of arrows and identity arrows. Not every graph is a category.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q2">A functor $F: \mathcal{C} \to \mathcal{D}$ must preserve which of the following?</span>
+
+A. Only objects — morphisms are mapped arbitrarily
+B. Composition and identities: $F(g \circ f) = F(g) \circ F(f)$ and $F(\text{id}_A) = \text{id}_{F(A)}$
+C. Only the number of objects in each category
+D. The internal structure of each object
+
+<<button "A">><<replace "#ct-q2">>Incorrect. A functor maps both objects and morphisms. The key requirement is that it preserves the categorical structure — composition and identities — not that it maps morphisms arbitrarily.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q2">>Correct. A functor is a structure-preserving map between categories. It sends objects to objects and morphisms to morphisms while preserving composition ($F(g \circ f) = F(g) \circ F(f)$) and identity morphisms ($F(\text{id}_A) = \text{id}_{F(A)}$).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q2">>Incorrect. A functor need not preserve the number of objects — different objects in $\mathcal{C}$ can map to the same object in $\mathcal{D}$. The key preservation requirement is composition and identities.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q2">>Incorrect. Category theory deliberately ignores internal structure. A functor preserves the //relational// structure — how objects are connected by morphisms — not what objects "contain."<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q3">The Yoneda lemma states that an object in a category is completely determined by:</span>
+
+A. Its internal elements
+B. Its size relative to other objects
+C. Its pattern of morphisms to and from all other objects
+D. The number of morphisms it has
+
+<<button "A">><<replace "#ct-q3">>Incorrect. Category theory does not look inside objects. The Yoneda lemma says that the representable functor $\text{Hom}(-, A)$ — which encodes all morphisms //into// $A$ — determines $A$ up to isomorphism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q3">>Incorrect. "Size" is not a categorical concept. The Yoneda lemma is about the complete pattern of morphisms, not any single numerical measure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q3">>Correct. The Yoneda lemma shows that $\text{Nat}(\text{Hom}(-, A), F) \cong F(A)$: an object is fully characterised by its web of relationships with all other objects. This is the formal justification for the relational perspective at the heart of category theory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q3">>Incorrect. Merely counting morphisms loses too much information. The Yoneda lemma requires the full //structure// of morphisms — how they compose — not just their count.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q4">In functional programming, a monad is categorically defined as:</span>
+
+A. A functor that reverses all arrows
+B. An endofunctor equipped with unit and multiplication satisfying coherence laws
+C. A natural transformation between two unrelated categories
+D. A category with exactly one object
+
+<<button "A">><<replace "#ct-q4">>Incorrect. A functor that reverses arrows is a contravariant functor, not a monad. A monad is an endofunctor $T: \mathcal{C} \to \mathcal{C}$ with natural transformations $\eta: \text{Id} \Rightarrow T$ (unit) and $\mu: T^2 \Rightarrow T$ (multiplication).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q4">>Correct. A monad is an endofunctor $T$ on a category together with natural transformations $\eta: \text{Id} \Rightarrow T$ (unit/return) and $\mu: T^2 \Rightarrow T$ (multiplication/join) satisfying associativity and unit laws. In Haskell, this models sequenced computations with side effects.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q4">>Incorrect. A natural transformation connects two functors between the //same// pair of categories. A monad involves natural transformations, but specifically between an endofunctor and the identity functor on a single category.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q4">>Incorrect. A category with exactly one object is a monoid (viewed categorically). A monad is a "monoid in the category of endofunctors" — related but different.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q5">An adjunction $F \dashv G$ between categories $\mathcal{C}$ and $\mathcal{D}$ means:</span>
+
+A. $F$ and $G$ are inverse functors: $G \circ F = \text{Id}$
+B. $\text{Hom}_\mathcal{D}(F(A), B) \cong \text{Hom}_\mathcal{C}(A, G(B))$ naturally in $A$ and $B$
+C. $F$ and $G$ map all objects to the same object
+D. There is no natural transformation between $F$ and $G$
+
+<<button "A">><<replace "#ct-q5">>Incorrect. Inverse functors give an equivalence of categories, which is much stronger than an adjunction. In an adjunction, $G \circ F$ need not equal the identity — it comes equipped with a unit $\eta: \text{Id} \Rightarrow G \circ F$ that is generally not an isomorphism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q5">>Correct. An adjunction $F \dashv G$ is a natural bijection between hom-sets: $\text{Hom}_\mathcal{D}(F(A), B) \cong \text{Hom}_\mathcal{C}(A, G(B))$. This captures the idea that $F$ is the "best approximation from the left" and $G$ from the right. Examples include free/forgetful pairs, currying, and quantifier dualities.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q5">>Incorrect. Adjoint functors generally map objects to different objects. The key property is the natural bijection between hom-sets, not any collapsing of objects.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q5">>Incorrect. An adjunction actually //produces// natural transformations: the unit $\eta: \text{Id} \Rightarrow G \circ F$ and counit $\varepsilon: F \circ G \Rightarrow \text{Id}$ are essential parts of the adjunction data.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q6">The naturality condition for a natural transformation $\eta: F \Rightarrow G$ requires that:</span>
+
+A. $\eta$ maps objects to objects
+B. The square $\eta_B \circ F(f) = G(f) \circ \eta_A$ commutes for every morphism $f: A \to B$
+C. $F$ and $G$ must be identity functors
+D. $\eta$ is invertible
+
+<<button "A">><<replace "#ct-q6">>Incorrect. A natural transformation assigns to each object a //morphism//, not an object. $\eta_A: F(A) \to G(A)$ is a morphism in the target category for each object $A$ in the source category.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q6">>Correct. The naturality condition says that for every morphism $f: A \to B$, the square commutes: applying $F(f)$ then $\eta_B$ gives the same result as applying $\eta_A$ then $G(f)$. This ensures the transformation is "coherent" — it does not depend on arbitrary choices at each component.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q6">>Incorrect. Natural transformations can exist between any pair of parallel functors $F, G: \mathcal{C} \to \mathcal{D}$. Neither needs to be the identity functor.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q6">>Incorrect. A natural transformation whose components are all isomorphisms is called a //natural isomorphism//, but invertibility is not required in general. Many important natural transformations are not invertible.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q7">How does category theory relate to automatic differentiation in ML?</span>
+
+A. It provides a way to avoid computing gradients entirely
+B. The chain rule is a functorial property: $D(g \circ f) = Dg \circ Df$ maps composition to composition
+C. Categories replace tensors in backpropagation
+D. It proves that gradient descent always converges
+
+<<button "A">><<replace "#ct-q7">>Incorrect. Category theory does not eliminate the need for gradients. It provides a structural framework for understanding //why// the chain rule works and how to build correct AD systems — but the gradients themselves must still be computed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q7">>Correct. The derivative operator $D$ acts as a functor: it sends smooth maps to linear maps while preserving composition ($D(g \circ f) = Dg \circ Df$) and identities. This functorial perspective clarifies backpropagation as reverse-mode composition and enables correctness proofs for AD implementations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q7">>Incorrect. Categories do not replace tensors. Categorical AD formalises the //structure// of differentiation (composition-preserving maps) but still operates on the same underlying tensor computations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q7">>Incorrect. Convergence of gradient descent depends on the loss landscape, learning rate, and other factors. Category theory can formalise the structure of differentiation, but it does not provide convergence guarantees for optimisation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ct-q8">Which of the following is a genuine limitation of applying category theory to ML?</span>
+
+A. Category theory cannot describe neural networks at all
+B. Real ML systems have messy dependencies (weight sharing, skip connections, stochastic noise) that resist clean compositional decomposition
+C. Category theory only works for linear models
+D. Functors cannot map between different types of mathematical structures
+
+<<button "A">><<replace "#ct-q8">>Incorrect. Category theory //can// describe neural networks — as morphisms in appropriate categories. The limitation is not inability but the gap between the clean categorical description and the messy engineering reality of training.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ct-q8">>Correct. Category theory excels at compositional reasoning, but real deep learning systems involve weight sharing across components, skip connections, batch normalisation, stochastic gradient noise, and other dependencies that break clean compositional structure. This "compositionality gap" limits the practical utility of categorical frameworks for ML system design.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ct-q8">>Incorrect. Category theory is not restricted to linearity. It can describe nonlinear maps, topological spaces, groups, and essentially any mathematical structure with a notion of structure-preserving maps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ct-q8">>Incorrect. Functors are precisely //designed// to map between different categories (different types of mathematical structures). For example, the fundamental group functor maps from topological spaces to groups.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

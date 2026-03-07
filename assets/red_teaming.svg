@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" rx="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2.5"/>
+
+  <!-- Title -->
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#7C2530" font-weight="bold">Red Teaming an AI System</text>
+
+  <!-- Central model box -->
+  <rect x="310" y="140" width="180" height="70" rx="12" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" font-weight="bold">AI Model</text>
+  <text x="400" y="194" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">Under Evaluation</text>
+
+  <!-- Red team attackers (left) -->
+  <rect x="40" y="80" width="170" height="50" rx="10" fill="#7C2530" opacity="0.13" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="125" y="103" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Prompt Injection</text>
+  <text x="125" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">"Ignore instructions..."</text>
+
+  <rect x="40" y="155" width="170" height="50" rx="10" fill="#7C2530" opacity="0.13" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="125" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Jailbreak Attempts</text>
+  <text x="125" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Bypass safety filters</text>
+
+  <rect x="40" y="230" width="170" height="50" rx="10" fill="#7C2530" opacity="0.13" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="125" y="253" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Edge-Case Probing</text>
+  <text x="125" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Ambiguous / rare inputs</text>
+
+  <!-- Arrows from attacks to model -->
+  <line x1="210" y1="105" x2="308" y2="165" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+  <line x1="210" y1="180" x2="308" y2="175" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+  <line x1="210" y1="255" x2="308" y2="190" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+
+  <!-- Outputs (right) -->
+  <rect x="590" y="80" width="170" height="50" rx="10" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="675" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">Safe Response</text>
+  <text x="675" y="118" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Refusal / guardrail</text>
+
+  <rect x="590" y="155" width="170" height="50" rx="10" fill="#C4A87A" opacity="0.35" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="675" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Partial Failure</text>
+  <text x="675" y="193" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Leaked info / bias</text>
+
+  <rect x="590" y="230" width="170" height="50" rx="10" fill="#7C2530" opacity="0.13" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="675" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Full Bypass</text>
+  <text x="675" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Harmful output</text>
+
+  <!-- Arrows from model to outputs -->
+  <line x1="492" y1="165" x2="588" y2="105" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arrowBlue)"/>
+  <line x1="492" y1="175" x2="588" y2="180" stroke="#C4A87A" stroke-width="1.8" marker-end="url(#arrowTan)"/>
+  <line x1="492" y1="190" x2="588" y2="255" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+
+  <!-- Feedback loop arrow -->
+  <path d="M 675 282 L 675 340 Q 675 360 655 360 L 145 360 Q 125 360 125 340 L 125 282" fill="none" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowBrown)"/>
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Findings feed back into model improvement</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowTan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowBrown" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

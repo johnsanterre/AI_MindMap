@@ -1,0 +1,169 @@
+<<include "Header">>
+
+! Itô Calculus
+
+<img src="assets/ito_calculus.svg" alt="Itô's lemma formula and applications diagram" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Ordinary calculus works on smooth curves — functions that, when you zoom in far enough, look like straight lines. But ''Brownian motion'' is not smooth: it jiggles infinitely fast at every scale, and no amount of zooming reveals a tangent. If you try to apply ordinary calculus to a function of Brownian motion, you get the //wrong answer// — systematically, not randomly. Kiyosi Itô in 1944 invented the correction: an extra term that accounts for the roughness, transforming stochastic differential equations from a formal trick into a rigorous mathematical tool. This correction — ''Itô's lemma'' — is what makes diffusion models mathematically principled.
+
+!! The Core Insight
+
+The heart of Itô calculus is ''Itô's lemma'', the stochastic analogue of the chain rule. For a smooth function $f(W(t), t)$ of Brownian motion $W(t)$, the ordinary chain rule would give $df = \frac{\partial f}{\partial t} dt + \frac{\partial f}{\partial x} dW$. But this is wrong. The correct answer is:
+
+$$df = \left(\frac{\partial f}{\partial t} + \frac{1}{2}\frac{\partial^2 f}{\partial x^2}\right) dt + \frac{\partial f}{\partial x}\, dW$$
+
+The extra $\frac{1}{2}\frac{\partial^2 f}{\partial x^2}\, dt$ is the ''Itô correction''. It arises because Brownian motion has nonzero ''quadratic variation'': informally, $(dW)^2 = dt$. In ordinary calculus, $(dx)^2 \approx 0$ and we discard it. In stochastic calculus, $(dW)^2$ is //first-order in time// and cannot be discarded. Without this correction, every stochastic calculation that involves a change of variables is systematically wrong. The correction is not small — for the Black-Scholes equation, omitting it produces wildly incorrect option prices.
+
+!! Stochastic Differential Equations
+
+''Stochastic differential equations'' (SDEs) describe the evolution of a process $X(t)$ driven by randomness:
+
+$$dX = \mu(X, t)\, dt + \sigma(X, t)\, dW$$
+
+The ''drift'' $\mu$ is the deterministic part — the average direction of motion. The ''diffusion coefficient'' $\sigma$ controls the noise amplitude. Together they specify a process that is simultaneously predictable on average and uncertain at each step.
+
+Key examples:
+
+- ''Geometric Brownian Motion'' (GBM): $dS = \mu S\, dt + \sigma S\, dW$. Used in Black-Scholes. Prices stay positive and grow exponentially on average, but with log-normal fluctuations.
+
+- ''Ornstein-Uhlenbeck process'': $dX = \theta(\mu - X)\, dt + \sigma\, dW$. Mean-reverting: the drift pulls $X$ back toward $\mu$. Used in interest rate models and as a building block for diffusion model noise schedules.
+
+- ''Langevin dynamics'': $dX = \frac{1}{2}\nabla \log p(X)\, dt + dW$. Gradient ascent on a log-density plus noise. At equilibrium, the stationary distribution is exactly $p(X)$ — making this the engine of <<link "MCMC" "MCMC">><</link>> samplers.
+
+The ''Fokker-Planck equation'' describes how the probability density $p(x, t)$ of a diffusion process evolves over time, translating the SDE into a deterministic PDE for the distribution. This PDE connection is what allows mathematical analysis of where diffusion processes end up.
+
+!! What the Math Is Actually Doing
+
+The ''Itô integral'' $\int_0^T H(t)\, dW(t)$ is defined as a limit of left-endpoint Riemann sums:
+
+$$\int_0^T H(t)\, dW(t) = \lim_{n \to \infty} \sum_{k=0}^{n-1} H(t_k)\left[W(t_{k+1}) - W(t_k)\right]$$
+
+The left-endpoint convention is crucial: $H(t_k)$ is evaluated //before// the increment $dW$ is observed, so $H(t)$ is adapted to the current information — it cannot peek into the future. This is what makes the Itô integral a ''martingale'', which has clean probabilistic properties.
+
+The ''Itô isometry'' is the fundamental tool for computing variances of stochastic integrals:
+
+$$\mathbb{E}\!\left[\left|\int_0^T H\, dW\right|^2\right] = \mathbb{E}\!\left[\int_0^T H^2\, dt\right]$$
+
+This converts the hard problem of computing a variance of a stochastic integral into the easier problem of computing an ordinary expectation. For a general SDE $dX = \mu\, dt + \sigma\, dW$, Itô's lemma for $f(X(t), t)$ is:
+
+$$df = \left(\frac{\partial f}{\partial x}\mu + \frac{\partial f}{\partial t} + \frac{1}{2}\sigma^2 \frac{\partial^2 f}{\partial x^2}\right)dt + \left(\frac{\partial f}{\partial x}\sigma\right)dW$$
+
+Applying this to $f(S) = \log S$ with GBM $dS = \mu S\, dt + \sigma S\, dW$ yields $d(\log S) = (\mu - \frac{1}{2}\sigma^2)\, dt + \sigma\, dW$ — the Itô correction produces the $-\frac{1}{2}\sigma^2$ term that shifts the drift of log-price. This is how Black-Scholes derives its option pricing formula. The same connection yields the ''Feynman-Kac formula'', which represents the solution of certain PDEs as expectations over diffusion processes.
+
+!! Itô Calculus in ML and Diffusion Models
+
+The modern resurgence of Itô calculus in ML was catalyzed by the ''score-based diffusion model'' framework (Song et al. 2021). The key insight: the forward process that gradually destroys data by adding noise is an SDE:
+
+$$dX = f(X, t)\, dt + g(t)\, dW$$
+
+The ''reverse-time SDE'' (Anderson 1982) removes noise and reconstructs data:
+
+$$dX = \left[f(X, t) - g(t)^2 \nabla_x \log p_t(X)\right]dt + g(t)\, d\bar{W}$$
+
+The reversal formula requires Itô's lemma and Girsanov's theorem to derive rigorously. The term $\nabla_x \log p_t(X)$ is the ''score function'' — learned by a neural network in <<link "Score Matching" "Score Matching">><</link>>. This is why <<link "Diffusion Models" "Diffusion Models">><</link>> are not just heuristic: the entire generative process rests on a mathematically exact time-reversal of a well-defined SDE.
+
+''Langevin MCMC'' uses the Langevin SDE directly:
+
+$$dX = \frac{1}{2}\nabla \log p(X)\, dt + dW$$
+
+At convergence, the stationary distribution is $p(X)$. Discretizing this SDE gives the unadjusted Langevin algorithm (ULA). With a Metropolis-Hastings correction step it becomes MALA — a practical <<link "MCMC" "MCMC">><</link>> sampler for Bayesian inference.
+
+''Neural SDEs'' parameterize the drift and diffusion of an SDE with neural networks, producing a continuous-time analog of recurrent networks with rigorous uncertainty quantification for time-series data.
+
+''Continuous normalizing flows'' (CNFs) use the ODE limit of SDEs (setting $\sigma = 0$) to construct invertible transformations with exact log-likelihoods, computed via the instantaneous change-of-variables formula — itself a consequence of Itô's lemma.
+
+!! When Itô Calculus Breaks Down
+
+''Stratonovich vs. Itô convention.'' There are two different ways to define the stochastic integral, giving two different calculi. Itô uses left endpoints; Stratonovich uses midpoints. The Stratonovich integral obeys the ordinary chain rule (no correction term), which is natural for physical systems derived as limits of smooth noise. Financial models use Itô because it gives martingale properties. Converting between conventions requires adding a correction drift term $\frac{1}{2}\sigma \frac{\partial \sigma}{\partial x}$. Confusing the two — using an Itô-derived formula in a Stratonovich context or vice versa — produces wrong answers with no obvious error signal.
+
+''Non-Markovian diffusions.'' Itô calculus is built for Markov processes: the future depends only on the present state, not the history. ''Fractional Brownian motion'' (with Hurst exponent $H \neq \frac{1}{2}$) has long-range memory and is not Markovian. Extending stochastic calculus to this setting requires fractional calculus, and many of Itô's clean properties — the martingale property, the isometry, the simple form of Itô's lemma — break down or require substantial modification. Some diffusion model noise schedules implicitly assume Markovian structure that fails for correlated data.
+
+''Infinite-dimensional state spaces.'' Rigorous Itô calculus extends to Hilbert-space-valued SDEs (stochastic PDEs), but the extension requires careful regularity conditions. The noise operator must be trace-class, cylindrical Wiener processes require renormalization, and many operations that are trivial in finite dimensions (such as pointwise products of functions) require additional technical care. Neural network training viewed as an SDE in weight space involves millions of dimensions and poorly understood geometry, making the formal SDE analysis of SGD an approximation whose validity is rarely verified.
+
+!! Technical Details
+
+- ''Itô (1944)'': Original construction of the stochastic integral and Itô's lemma.
+- ''Stratonovich (1966)'': Alternative convention where chain rule holds; preferred for physics.
+- ''Girsanov's theorem'': Change of measure for SDEs. If $dX = \mu\, dt + dW$ under $P$, then under a new measure $Q$ defined by the Radon-Nikodym derivative $\frac{dQ}{dP} = \exp\!\left(-\int \mu\, dW - \frac{1}{2}\int \mu^2\, dt\right)$, the process $X$ is a Brownian motion. Fundamental to importance sampling, <<link "MCMC" "MCMC">><</link>>, and risk-neutral pricing.
+- ''Feynman-Kac formula'': The solution $u(x, t) = \mathbb{E}[g(X_T) \mid X_t = x]$ of the PDE $\frac{\partial u}{\partial t} + \mu \frac{\partial u}{\partial x} + \frac{1}{2}\sigma^2 \frac{\partial^2 u}{\partial x^2} = 0$ is the expected value of $g$ along diffusion trajectories. Connects PDE theory to Monte Carlo simulation.
+- ''Black-Scholes (1973)'': GBM $dS = \mu S\, dt + \sigma S\, dW$. Itô's lemma on $\log S$ gives $\log S(T) \sim \mathcal{N}\!\left((\mu - \frac{\sigma^2}{2})T,\, \sigma^2 T\right)$.
+- ''Anderson (1982)'': Time-reversal formula for diffusions, foundational to score-based generative models.
+- ''Song et al. (2021)'': Score-Based Generative Modeling through Stochastic Differential Equations — unified framework for diffusion models as SDEs.
+
+Related passages: <<link "Stochastic Processes" "Stochastic Processes">><</link>> · <<link "Brownian Motion" "Brownian Motion">><</link>> · <<link "Diffusion Models" "Diffusion Models">><</link>> · <<link "Score Matching" "Score Matching">><</link>> · <<link "MCMC" "MCMC">><</link>> · <<link "Random Walk" "Random Walk">><</link>>
+
+!! Quiz
+
+<span id="ic-q1">What is the Itô correction term in Itô's lemma for $f(W(t), t)$, and why does it appear?</span>
+
+A. $\frac{\partial f}{\partial x} dt$ — because Brownian increments have nonzero mean
+B. $\frac{1}{2}\frac{\partial^2 f}{\partial x^2} dt$ — because Brownian motion has quadratic variation $(dW)^2 = dt$
+C. $\frac{\partial^2 f}{\partial x^2} dW$ — because the second derivative captures curvature in the noise direction
+D. $\frac{\partial f}{\partial t} dW$ — because time and the Wiener process interact at every step
+
+<<button "A">><<replace "#ic-q1">>Incorrect. The Itô correction is not related to the mean of Brownian increments (which is zero). It comes from the nonzero quadratic variation $(dW)^2 = dt$, which forces second-order terms to survive in the Taylor expansion.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q1">>Correct. In ordinary calculus $(dx)^2 \approx 0$. For Brownian motion, $(dW)^2 = dt$ is first-order in time, so the second-order Taylor term $\frac{1}{2}\frac{\partial^2 f}{\partial x^2}(dW)^2$ survives as $\frac{1}{2}\frac{\partial^2 f}{\partial x^2}\, dt$. This is the Itô correction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q1">>Incorrect. The correction term is in $dt$, not $dW$. The extra term $\frac{1}{2}\frac{\partial^2 f}{\partial x^2}\, dt$ is deterministic (no noise), arising because $(dW)^2 = dt$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q1">>Incorrect. The $\frac{\partial f}{\partial t}$ term is the standard time-derivative part of the chain rule, not the correction. The Itô correction specifically involves the second spatial derivative times $dt$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q2">In the SDE $dX = \mu(X,t)\, dt + \sigma(X,t)\, dW$, what do $\mu$ and $\sigma$ represent?</span>
+
+A. Mean and standard deviation of the stationary distribution
+B. Forward and backward transition rates
+C. Drift (deterministic direction) and diffusion coefficient (noise amplitude)
+D. Prior and likelihood in a Bayesian update
+
+<<button "A">><<replace "#ic-q2">>Incorrect. $\mu$ and $\sigma$ are not properties of the stationary distribution — they are the instantaneous drift and diffusion. The stationary distribution, if it exists, is determined by the Fokker-Planck equation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q2">>Incorrect. Forward/backward rates are concepts from Markov chains, not the SDE formulation. Here $\mu$ is the deterministic drift and $\sigma$ scales the noise at each point and time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q2">>Correct. The drift $\mu$ determines the average direction of motion (the deterministic component), while $\sigma$ is the diffusion coefficient controlling how much Brownian noise is injected at each instant. Together they fully specify the SDE.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q2">>Incorrect. Prior and likelihood are Bayesian concepts. In the SDE, $\mu$ and $\sigma$ are the drift and diffusion coefficient — one deterministic, one stochastic.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q3">Why does the Itô integral use left-endpoint sums rather than midpoint sums?</span>
+
+A. Left endpoints are computationally easier to implement in simulations
+B. Left endpoints ensure the integrand is adapted — it cannot use future information
+C. Left endpoints produce smaller variance and are therefore more stable
+D. Left endpoints correspond to the physical Stratonovich convention
+
+<<button "A">><<replace "#ic-q3">>Incorrect. Computational convenience is not the reason. The choice has deep mathematical consequences: left endpoints ensure the integral is a martingale, which is essential for probabilistic analysis.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q3">>Correct. Using left endpoints $H(t_k)$ means the integrand is evaluated //before// the Brownian increment $W(t_{k+1}) - W(t_k)$ is observed. This non-anticipating (adapted) property makes the Itô integral a martingale, with zero mean and clean variance formulas.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q3">>Incorrect. The choice of endpoints does not primarily affect variance stability. The reason is probabilistic: left endpoints make the integrand non-anticipating, giving the integral its martingale property.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q3">>Incorrect. This is backwards. Midpoint sums correspond to the Stratonovich convention (where the ordinary chain rule holds), while left-endpoint sums define the Itô integral.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q4">Applying Itô's lemma to $f(S) = \log S$ where $dS = \mu S\, dt + \sigma S\, dW$ gives $d(\log S) = ?$</span>
+
+A. $\mu\, dt + \sigma\, dW$
+B. $(\mu - \sigma^2)\, dt + \sigma\, dW$
+C. $(\mu - \frac{1}{2}\sigma^2)\, dt + \sigma\, dW$
+D. $(\mu + \frac{1}{2}\sigma^2)\, dt + \sigma\, dW$
+
+<<button "A">><<replace "#ic-q4">>Incorrect. This omits the Itô correction. For $f(S) = \log S$, $f'' = -1/S^2$, so the Itô term $\frac{1}{2}\sigma^2 S^2 \cdot (-1/S^2)\, dt = -\frac{1}{2}\sigma^2\, dt$ must be included.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q4">>Incorrect. The correction is $-\frac{1}{2}\sigma^2$, not $-\sigma^2$. Itô's lemma gives $\frac{1}{2}\sigma^2 S^2 \cdot f''(S) = \frac{1}{2}\sigma^2 S^2 \cdot (-1/S^2) = -\frac{1}{2}\sigma^2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q4">>Correct. Itô's lemma: $d(\log S) = \frac{1}{S}\mu S\, dt + \frac{1}{2}(-\frac{1}{S^2})\sigma^2 S^2\, dt + \frac{1}{S}\sigma S\, dW = (\mu - \frac{1}{2}\sigma^2)\, dt + \sigma\, dW$. The $-\frac{1}{2}\sigma^2$ is the Itô correction, and it's why geometric Brownian motion has log-normal returns.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q4">>Incorrect. The correction is negative, not positive. The second derivative of $\log S$ is $-1/S^2$, making the Itô term $-\frac{1}{2}\sigma^2\, dt$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q5">What is the role of the score function $\nabla_x \log p_t(X)$ in the reverse-time SDE for diffusion models?</span>
+
+A. It measures the entropy of the noisy distribution at time $t$
+B. It provides the gradient direction for the deterministic drift that reverses the noise-adding process
+C. It replaces the diffusion coefficient $g(t)$ in the reverse SDE
+D. It computes the Fokker-Planck correction to the forward SDE
+
+<<button "A">><<replace "#ic-q5">>Incorrect. The score function is not an entropy measure. It is the gradient of the log-density, and it points in the direction of increasing probability mass — giving the reverse SDE its "denoising" direction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q5">>Correct. The reverse-time SDE (Anderson 1982) replaces the forward drift $f(X,t)$ with $f(X,t) - g(t)^2 \nabla_x \log p_t(X)$. The score function $\nabla_x \log p_t(X)$ points toward regions of higher density, guiding the process to undo the forward noise and reconstruct data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q5">>Incorrect. The diffusion coefficient $g(t)$ is a scalar noise schedule that multiplies $d\bar{W}$ in the reverse SDE. The score function modifies the drift, not the noise amplitude.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q6">>Incorrect. The Fokker-Planck equation is a PDE for the density evolution derived from the SDE. The score function appears in the reverse SDE drift, not as a correction to the Fokker-Planck equation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q6">Which failure mode of Itô calculus affects fractional Brownian motion with $H \neq \frac{1}{2}$?</span>
+
+A. The Stratonovich–Itô conversion formula breaks down
+B. Fractional Brownian motion is non-Markovian, so Itô's clean properties (martingale, isometry) fail
+C. The quadratic variation of fractional BM is infinite, making the Itô integral undefined
+D. The Fokker-Planck equation has no solution for $H \neq \frac{1}{2}$
+
+<<button "A">><<replace "#ic-q6">>Incorrect. The Stratonovich–Itô conversion is about convention choice for standard Brownian motion. The issue with fractional BM is its non-Markovian memory structure, not the Stratonovich convention.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q6">>Correct. Standard Itô calculus requires the Markov property: the future depends only on the present. Fractional Brownian motion with $H \neq \frac{1}{2}$ has long-range dependence (memory). This breaks the martingale property and the isometry, and requires fractional calculus extensions that are substantially more complex.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q6">>Incorrect. Fractional Brownian motion has finite quadratic variation for $H = \frac{1}{2}$ (standard BM) and zero quadratic variation for $H > \frac{1}{2}$. The issue is memory/non-Markovianness, not infinite variation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q6">>Incorrect. Fokker-Planck equations can sometimes be extended to non-Markovian settings, though with difficulty. The core problem with fractional BM is the loss of the Markov property and the clean Itô structure that depends on it.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q7">The Itô isometry states $\mathbb{E}\!\left[\left|\int_0^T H\, dW\right|^2\right] = \mathbb{E}\!\left[\int_0^T H^2\, dt\right]$. What is its main practical value?</span>
+
+A. It proves that the Itô integral converges almost surely
+B. It converts variance computations on stochastic integrals into ordinary Lebesgue integrals
+C. It shows the Itô integral equals the Stratonovich integral for square-integrable processes
+D. It provides a bound on the drift term in the Fokker-Planck equation
+
+<<button "A">><<replace "#ic-q7">>Incorrect. Almost-sure convergence is a separate result. The isometry is primarily a tool for computing $L^2$ norms (variances) of stochastic integrals, converting them into ordinary integrals that are easier to evaluate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q7">>Correct. Computing the variance of a stochastic integral directly is hard. The isometry converts $\mathbb{E}[|\int H\, dW|^2]$ into $\mathbb{E}[\int H^2\, dt]$, which is an ordinary integral over time. This is the workhorse for variance analysis in financial mathematics and ML.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q7">>Incorrect. The Itô and Stratonovich integrals are generally different (they differ by a correction term). The isometry is about computing the $L^2$ norm of the Itô integral, not about equality with Stratonovich.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q7">>Incorrect. The isometry does not bound Fokker-Planck terms. It is a variance identity specifically for stochastic integrals of adapted processes with respect to Brownian motion.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ic-q8">Girsanov's theorem changes the probability measure so that a diffusion with drift $\mu$ becomes a standard Brownian motion. Why is this useful for diffusion models and MCMC?</span>
+
+A. It proves that all diffusions have the same long-run distribution
+B. It enables importance sampling and likelihood ratio estimation by reweighting trajectories
+C. It eliminates the need to solve the Fokker-Planck equation
+D. It shows that the score function is always bounded
+
+<<button "A">><<replace "#ic-q8">>Incorrect. Different diffusions have different stationary distributions. Girsanov's theorem does not equate them — it provides a formula for how probabilities change when the drift changes, which is used for reweighting, not equating distributions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ic-q8">>Correct. Girsanov's theorem gives an explicit Radon-Nikodym derivative (likelihood ratio) relating two diffusion measures. In MCMC, this enables importance sampling between distributions. In diffusion models, it underpins the derivation of the reverse SDE and training objectives, allowing the log-likelihood of trajectories to be computed and optimized.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ic-q8">>Incorrect. Girsanov's theorem is a measure-change result, not a PDE-elimination tool. The Fokker-Planck equation remains relevant; Girsanov provides a complementary probabilistic perspective.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ic-q8">>Incorrect. Girsanov's theorem says nothing about boundedness of the score function. It concerns the relationship between probability measures on path space when the drift of a diffusion is changed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

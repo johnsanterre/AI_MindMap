@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Martingales: Fair Games and Conditional Expectation</text>
+
+  <!-- LEFT PANEL: Martingale sample paths -->
+  <rect x="20" y="48" width="370" height="310" rx="6" fill="#FAF7EF" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="205" y="70" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">Martingale Sample Paths: E[X_n+1 | X_n] = X_n</text>
+
+  <!-- Axes -->
+  <line x1="50" y1="200" x2="370" y2="200" stroke="#9B8C70" stroke-width="1.5"/>
+  <line x1="50" y1="85" x2="50" y2="310" stroke="#9B8C70" stroke-width="1.5"/>
+
+  <!-- Axis labels -->
+  <text x="375" y="204" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">n</text>
+  <text x="35" y="89" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">X</text>
+  <text x="50" y="218" font-family="Georgia, serif" font-size="10" fill="#9B8C70" text-anchor="middle">0</text>
+
+  <!-- Dashed line at starting value -->
+  <line x1="50" y1="200" x2="370" y2="200" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Path 1: deep red - fair random walk going up -->
+  <polyline
+    points="50,200 70,192 90,185 110,193 130,180 150,172 170,180 190,168 210,175 230,163 250,170 270,158 290,165 310,152 330,160 350,148"
+    fill="none" stroke="#7C2530" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Path 2: navy - fair random walk going down -->
+  <polyline
+    points="50,200 70,208 90,215 110,207 130,218 150,226 170,218 190,230 210,222 230,235 250,228 270,240 290,232 310,245 330,238 350,250"
+    fill="none" stroke="#2D5A8E" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Path 3: warm brown - fair random walk staying near center -->
+  <polyline
+    points="50,200 70,194 90,202 110,196 130,204 150,198 170,206 190,200 210,194 230,202 250,196 270,204 290,198 310,206 330,200 350,194"
+    fill="none" stroke="#5C3D1E" stroke-width="1.6" stroke-linejoin="round"/>
+
+  <!-- Starting point marker -->
+  <circle cx="50" cy="200" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="62" y="196" font-family="Georgia, serif" font-size="10" fill="#C4A87A">X_0</text>
+
+  <!-- Legend -->
+  <line x1="60" y1="290" x2="85" y2="290" stroke="#7C2530" stroke-width="2"/>
+  <text x="90" y="294" font-family="Georgia, serif" font-size="10" fill="#7C2530">Path 1</text>
+  <line x1="140" y1="290" x2="165" y2="290" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="170" y="294" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Path 2</text>
+  <line x1="220" y1="290" x2="245" y2="290" stroke="#5C3D1E" stroke-width="1.6"/>
+  <text x="250" y="294" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Path 3</text>
+
+  <!-- Key formula -->
+  <text x="205" y="330" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">E[X_n+1 | F_n] = X_n</text>
+  <text x="205" y="348" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">paths diverge, but expected future = present</text>
+
+  <!-- RIGHT PANEL: Concepts hub -->
+  <rect x="408" y="48" width="372" height="310" rx="6" fill="#FAF7EF" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="594" y="70" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">Key Concepts</text>
+
+  <!-- Central hub circle -->
+  <circle cx="594" cy="195" r="44" fill="#5C3D1E" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="594" y="191" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Martingale</text>
+  <text x="594" y="207" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">"Fair Game"</text>
+
+  <!-- Spoke: Optional Stopping (top) -->
+  <line x1="594" y1="151" x2="594" y2="110" stroke="#7C2530" stroke-width="1.8"/>
+  <rect x="530" y="86" width="128" height="26" rx="5" fill="#7C2530" stroke="none"/>
+  <text x="594" y="104" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Optional Stopping</text>
+
+  <!-- Spoke: Convergence (top-right) -->
+  <line x1="628" y1="161" x2="680" y2="115" stroke="#2D5A8E" stroke-width="1.8"/>
+  <rect x="660" y="86" width="110" height="26" rx="5" fill="#2D5A8E" stroke="none"/>
+  <text x="715" y="104" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Convergence</text>
+
+  <!-- Spoke: Submartingale (right) -->
+  <line x1="638" y1="195" x2="700" y2="195" stroke="#C4A87A" stroke-width="1.8"/>
+  <rect x="698" y="182" width="72" height="28" rx="5" fill="#C4A87A" stroke="none"/>
+  <text x="734" y="194" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Sub-</text>
+  <text x="734" y="207" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">martingale</text>
+
+  <!-- Spoke: Supermartingale (bottom-right) -->
+  <line x1="628" y1="229" x2="680" y2="275" stroke="#7C2530" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <rect x="660" y="270" width="72" height="28" rx="5" fill="#FAF7EF" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="696" y="283" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Super-</text>
+  <text x="696" y="295" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">martingale</text>
+
+  <!-- Spoke: Random Walk (bottom-left) -->
+  <line x1="560" y1="229" x2="508" y2="275" stroke="#2D5A8E" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <rect x="438" y="270" width="100" height="26" rx="5" fill="#FAF7EF" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="488" y="288" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Random Walk</text>
+
+  <!-- Spoke: Brownian Motion (left) -->
+  <line x1="550" y1="195" x2="488" y2="195" stroke="#5C3D1E" stroke-width="1.8"/>
+  <rect x="418" y="182" width="72" height="28" rx="5" fill="#FAF7EF" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="454" y="194" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Brownian</text>
+  <text x="454" y="207" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Motion</text>
+
+  <!-- Spoke: Finance (top-left) -->
+  <line x1="560" y1="161" x2="508" y2="115" stroke="#C4A87A" stroke-width="1.8"/>
+  <rect x="438" y="86" width="90" height="26" rx="5" fill="#C4A87A" stroke="none"/>
+  <text x="483" y="104" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Finance</text>
+
+  <!-- Key text at bottom -->
+  <text x="594" y="335" font-family="Georgia, serif" font-size="10" fill="#9B8C70" text-anchor="middle">Doob 1953 | Levy 1934 | Ville 1939</text>
+  <text x="594" y="350" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">no system beats a fair game</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="386" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#9B8C70" text-anchor="middle">A stochastic process where the best prediction of the future is the present value</text>
+</svg>

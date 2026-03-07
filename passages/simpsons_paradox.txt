@@ -1,0 +1,152 @@
+<<include "Header">>
+
+! Simpson's Paradox
+
+<img src="assets/simpsons_paradox.svg" alt="Scatter plot showing Simpson's Paradox: subgroup trends reverse when data is combined" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine two hospitals. Hospital A treats mostly mild cases and has a 90% survival rate. Hospital B treats mostly severe cases and has an 80% survival rate. You conclude Hospital A is better. But when you look at severe cases alone, Hospital B beats Hospital A — and when you look at mild cases alone, Hospital B //also// beats Hospital A. Hospital A only looked better overall because it treated an easier population. ''Simpson's paradox'' is this exact phenomenon: a trend that holds in every subgroup can reverse or vanish when the subgroups are combined. The reversal is not a statistical anomaly — it is the predictable consequence of a ''confounding variable'' that simultaneously influences both the grouping and the outcome.
+
+---
+
+!! The Core Insight
+
+Simpson's paradox arises whenever a lurking variable is unevenly distributed across the groups being compared. The classic example comes from the 1973 UC Berkeley admissions study: overall, men were admitted at a higher rate than women, suggesting gender bias. But when broken down by department, women were admitted at equal or higher rates in nearly every department. The reversal occurred because women disproportionately applied to departments with low admission rates (like English), while men applied to departments with high admission rates (like engineering). The ''confounding variable'' — department choice — explained the entire apparent disparity.
+
+The paradox forces a critical question that raw data alone cannot answer: should we look at the aggregate or the subgroups? This is not a mathematical question — it is a ''causal'' question. The right level of analysis depends on the causal structure of the problem. If the confounding variable is a common cause of both the treatment and the outcome, then subgroup analysis is correct and the aggregate is misleading. If the confounding variable is a mediator (caused by the treatment), then conditioning on it introduces bias and the aggregate is correct. Without a <<link "Causal Inference" "Causal Inference">><</link>> framework, Simpson's paradox is unresolvable from the data alone.
+
+This is why the paradox is so dangerous in practice: it demonstrates that data can tell opposite stories depending on how it is sliced, and the correct slicing requires domain knowledge about the causal relationships between variables.
+
+---
+
+!! Confounders, Colliders, and Causal Structure
+
+The paradox dissolves once you draw the ''causal diagram''. Consider three variables: treatment $T$, outcome $Y$, and a third variable $Z$. There are two fundamentally different causal structures:
+
+''Confounder:'' $Z$ causes both $T$ and $Y$ (e.g., disease severity determines both which treatment patients receive and how likely they are to recover). Here, the aggregate data is confounded, and you //must// condition on $Z$ to see the true effect. The subgroup analysis is correct.
+
+''Collider:'' $T$ and $Y$ both cause $Z$ (e.g., a patient is selected for a study only if they either received treatment or had a good outcome). Here, conditioning on $Z$ //creates// a <<link "Spurious Correlations" "Spurious Correlations">><</link>> between $T$ and $Y$ that does not exist in the population. The aggregate is correct, and the subgroup analysis is misleading.
+
+The mathematical machinery that resolves this ambiguity is ''do-calculus'', developed by Judea Pearl. The causal effect of $T$ on $Y$ is $P(Y \mid do(T))$, not $P(Y \mid T)$. The ''do'' operator represents an intervention (forcing $T$ to a value) rather than passive observation (seeing $T$ take a value). When $Z$ is a confounder, the adjustment formula gives:
+
+$$P(Y \mid do(T)) = \sum_z P(Y \mid T, Z=z) \, P(Z=z)$$
+
+This is a weighted average of subgroup effects — exactly the subgroup analysis. When $Z$ is a collider, the formula says //do not condition on $Z$// and the aggregate $P(Y \mid T)$ equals $P(Y \mid do(T))$ directly. The causal graph determines which formula is correct, and no amount of data alone can tell you which graph is right.
+
+---
+
+!! What the Math Is Actually Doing
+
+The algebraic core of Simpson's paradox is the failure of a simple inequality to be preserved under marginalization. Suppose we have binary treatment ($T \in \{0,1\}$), binary outcome ($Y \in \{0,1\}$), and a confounder ($Z \in \{0,1\}$). It is entirely possible that:
+
+$$P(Y=1 \mid T=1, Z=0) < P(Y=1 \mid T=0, Z=0)$$
+$$P(Y=1 \mid T=1, Z=1) < P(Y=1 \mid T=0, Z=1)$$
+
+yet simultaneously:
+
+$$P(Y=1 \mid T=1) > P(Y=1 \mid T=0)$$
+
+The reversal happens because the marginal $P(Y=1 \mid T=1)$ is a ''weighted'' average of the conditional probabilities, and the weights differ between the treatment and control groups:
+
+$$P(Y=1 \mid T=1) = P(Y=1 \mid T=1, Z=0) \, P(Z=0 \mid T=1) + P(Y=1 \mid T=1, Z=1) \, P(Z=1 \mid T=1)$$
+
+The weights $P(Z \mid T=1)$ and $P(Z \mid T=0)$ are different precisely because $Z$ and $T$ are associated — the confounder unevenly distributes subjects across groups. This asymmetry in weights can flip the direction of the inequality even though every subgroup effect points the same way. The paradox is really about ''weighted averages with different weights producing a different ranking than the components''.
+
+In the language of <<link "Conditional Probability" "Conditional Probability">><</link>>, the paradox is a violation of the naive expectation that $P(Y \mid T) = E_Z[P(Y \mid T, Z)]$. This equality //does// hold — but only when $Z$ is independent of $T$. When $Z$ depends on $T$, the marginal mixes the subgroup effects with confounded weights, and the ranking can reverse.
+
+---
+
+!! Simpson's Paradox in Practice
+
+The paradox appears with startling frequency in real-world data analysis. In medicine, treatment-outcome studies are vulnerable whenever doctors assign treatments based on patient severity — a textbook confounder. Randomized controlled trials avoid the paradox by breaking the link between confounders and treatment assignment, which is precisely why randomization is the gold standard.
+
+In <<link "A/B Testing" "A/B Testing">><</link>>, Simpson's paradox arises when the user population shifts between segments. A website change might decrease conversion in every user segment (mobile, desktop, tablet) but increase the overall conversion rate if the change also shifts traffic toward the highest-converting segment. The correct analysis depends on whether the segment shift is a desired effect of the change or a confound.
+
+In machine learning, the paradox manifests in model evaluation. A model might outperform a baseline on every subpopulation but underperform overall if it is disproportionately tested on harder subpopulations. Disaggregated evaluation — breaking metrics down by subgroup — is essential for detecting this. Fairness auditing in ML relies heavily on subgroup analysis precisely because aggregate accuracy can hide subgroup-level failures.
+
+The key practical takeaway: ''never trust an aggregate comparison without checking subgroups, and never trust a subgroup comparison without checking the causal structure.'' Both the aggregate and the subgroup analysis can be the wrong answer depending on the problem.
+
+---
+
+!! When Simpson's Paradox Breaks Down
+
+''No confounding variable exists:'' Simpson's paradox requires a third variable that is unevenly distributed across groups. If the treatment and control groups are balanced on all relevant covariates — as in a properly randomized experiment — the paradox cannot occur. The aggregate and subgroup analyses agree. This is the strongest argument for randomized controlled trials: they eliminate the confounding that makes the paradox possible.
+
+''Conditioning on a mediator instead of a confounder:'' A common error is to treat every third variable as a confounder and always stratify. If the variable is a ''mediator'' (caused by the treatment, causing the outcome), conditioning on it blocks part of the causal pathway and introduces bias. For example, if a drug improves recovery by reducing inflammation, conditioning on inflammation level makes the drug look ineffective — but that is wrong because inflammation reduction //is// the mechanism. Applying the Simpson's paradox framework without a causal model can create the very problem it is supposed to solve.
+
+''Continuous confounders with nonlinear effects:'' The textbook Simpson's paradox involves discrete, clearly separable subgroups. In reality, <<link "Confounding Variables" "Confounding Variables">><</link>> are often continuous and interact with treatment in complex, nonlinear ways. Simple stratification into two or three groups may not resolve the confounding — it merely reduces it. In these settings, more sophisticated methods like propensity score matching, inverse probability weighting, or instrumental variable analysis are required. The clean "reversal" story of Simpson's paradox becomes a messier, partial-confounding problem that defies simple subgroup tables.
+
+---
+
+!! Technical Details
+
+''Named after'' Edward Simpson's 1951 paper, though the phenomenon was described earlier by Karl Pearson (1899) and Udny Yule (1903). Simpson himself noted that the paradox could not be resolved without understanding the causal structure — an insight that was largely ignored for decades until Judea Pearl formalized it.
+
+''Judea Pearl's resolution'' uses directed acyclic graphs (DAGs) and the ''back-door criterion'': a set of variables $Z$ satisfies the back-door criterion relative to treatment $T$ and outcome $Y$ if (1) no node in $Z$ is a descendant of $T$, and (2) $Z$ blocks every path between $T$ and $Y$ that contains an arrow into $T$. If $Z$ satisfies the back-door criterion, the causal effect is identifiable via the adjustment formula: $P(Y \mid do(T)) = \sum_z P(Y \mid T, Z=z) P(Z=z)$.
+
+''The sure-thing principle'' from decision theory states: if action $A$ is preferred to $B$ in every possible state of the world, then $A$ should be preferred to $B$ overall. Simpson's paradox appears to violate this principle, but the resolution is that the "states of the world" must be causally meaningful partitions. Conditioning on a collider creates states that are not causally meaningful, so the principle does not apply.
+
+''Numerical example:'' Consider a drug trial. Among 200 mild patients: 100 treated, 90 recovered (90%); 100 untreated, 95 recovered (95%). Among 200 severe patients: 100 treated, 30 recovered (30%); 100 untreated, 40 recovered (40%). In both subgroups, the untreated do better. But if 180 of the treated patients were severe (vs. 20 mild) and 180 of the untreated were mild (vs. 20 severe): treated overall = $(0.9 \times 20 + 0.3 \times 180)/200 = 31.5\%$ recovery; untreated overall = $(0.95 \times 180 + 0.4 \times 20)/200 = 89.5\%$. The treated still look worse overall — no reversal here because the weights reinforce the subgroup effects. For reversal, you need the weights to favor the better-performing subgroup disproportionately in the aggregate for one of the comparison groups.
+
+''Connection to causal inference:'' Simpson's paradox is the single most compelling argument for why purely observational data without causal assumptions cannot determine treatment effects. It is the motivating example for the entire field of <<link "Causal Inference" "Causal Inference">><</link>> and a cornerstone of Pearl's //Causality// (2000).
+
+---
+
+!! Quiz
+
+<span id="sp2-q1">What is Simpson's paradox?</span>
+A. A statistical test that fails when sample sizes are unequal
+B. A trend present in subgroups that reverses or disappears when the subgroups are combined
+C. A paradox in which two different statistical tests give contradictory results on the same data
+D. A situation where the mean of a combined group always equals the average of subgroup means
+<<button "A">><<replace "#sp2-q1">>Incorrect. Simpson's paradox is not about statistical test failure. It is about trends reversing upon aggregation due to confounding variables.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q1">>Correct! Simpson's paradox occurs when a trend that holds in every subgroup reverses when the data is pooled, caused by a confounding variable that is unevenly distributed across groups.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q1">>Incorrect. Contradictory statistical tests are a different issue. Simpson's paradox is specifically about aggregation reversing subgroup trends.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q1">>Incorrect. The combined mean is a weighted average of subgroup means, but Simpson's paradox is about the //direction// of a trend reversing, not about means being equal.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q2">In the UC Berkeley admissions example, what was the confounding variable?</span>
+A. The gender of the applicants
+B. The total number of applicants per year
+C. The department to which applicants applied
+D. The GPA of the applicants
+<<button "A">><<replace "#sp2-q2">>Incorrect. Gender was the variable being studied, not the confounder. The confounder must be a third variable associated with both the grouping variable and the outcome.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q2">>Incorrect. The total number of applicants is not what created the reversal. The key was that men and women applied to different departments with different admission rates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q2">>Correct! Women disproportionately applied to competitive departments with low admission rates, while men applied to departments with high admission rates. Department choice was the confounding variable that created the apparent aggregate gender bias.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q2">>Incorrect. GPA was not the relevant confounding variable in this study. The reversal was driven by department choice, not academic performance.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q3">When a third variable $Z$ is a confounder (common cause of treatment and outcome), what is the correct analysis?</span>
+A. Ignore $Z$ and use the aggregate data
+B. Condition on $Z$ and use the subgroup analysis
+C. Remove all data points where $Z$ varies
+D. Average the aggregate and subgroup results
+<<button "A">><<replace "#sp2-q3">>Incorrect. The aggregate data is confounded precisely because $Z$ influences both treatment and outcome. Ignoring the confounder gives a biased estimate of the causal effect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q3">>Correct! When $Z$ is a confounder, the back-door criterion tells us to condition on $Z$. The adjustment formula $P(Y \mid do(T)) = \sum_z P(Y \mid T, Z=z)P(Z=z)$ gives the causal effect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q3">>Incorrect. Removing data points where $Z$ varies would destroy most of the dataset. The correct approach is to stratify by $Z$, not remove variation in it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q3">>Incorrect. Averaging aggregate and subgroup results has no statistical justification. The causal structure determines which analysis is correct — it is one or the other, not a blend.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q4">When a third variable $Z$ is a collider (caused by both treatment and outcome), should you condition on it?</span>
+A. Yes, always condition on every available variable to reduce bias
+B. No — conditioning on a collider introduces spurious associations between treatment and outcome
+C. Yes, but only if the sample size is large enough
+D. It does not matter whether $Z$ is a collider or confounder; the analysis is the same
+<<button "A">><<replace "#sp2-q4">>Incorrect. Conditioning on every available variable can introduce collider bias. The decision to condition must be guided by the causal structure, not by a blanket rule.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q4">>Correct! Conditioning on a collider opens a spurious path between treatment and outcome, creating a false association. When $Z$ is a collider, the aggregate analysis (without conditioning on $Z$) gives the correct causal estimate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q4">>Incorrect. Sample size does not determine whether conditioning on a collider is appropriate. Collider bias is a structural problem, not a finite-sample problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q4">>Incorrect. The distinction between confounders and colliders is critical. Conditioning is correct for confounders but harmful for colliders. This is exactly why causal structure matters.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q5">Why does the paradox occur algebraically?</span>
+A. Because subgroup sample sizes are always unequal
+B. Because weighted averages with different weights can reverse the ranking of the components
+C. Because the arithmetic mean is not a robust statistic
+D. Because conditional probabilities do not obey the laws of probability
+<<button "A">><<replace "#sp2-q5">>Incorrect. Unequal sample sizes are common but not sufficient. The paradox requires the //weights// in the marginal average to differ between comparison groups due to confounding.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q5">>Correct! The marginal probability is a weighted average of subgroup probabilities, but the weights $P(Z \mid T)$ differ between treatment groups. These asymmetric weights can reverse the ranking even though every subgroup effect points the same way.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q5">>Incorrect. The paradox has nothing to do with robustness of the mean. It arises from confounded weighting in marginal probabilities.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q5">>Incorrect. Conditional probabilities fully obey probability axioms. The paradox arises from the interaction between conditioning and marginalization, not from any violation of probability laws.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q6">How do randomized controlled trials prevent Simpson's paradox?</span>
+A. By ensuring equal sample sizes in all subgroups
+B. By breaking the association between confounders and treatment assignment through random allocation
+C. By eliminating all confounding variables from the study
+D. By using only aggregate data and ignoring subgroups
+<<button "A">><<replace "#sp2-q6">>Incorrect. Equal sample sizes do not prevent confounding. Randomization works by making the treatment assignment independent of confounders, not by balancing group sizes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q6">>Correct! Randomization makes $T$ independent of $Z$, so $P(Z \mid T=1) = P(Z \mid T=0)$. With equal weights, the aggregate and subgroup analyses agree, and the paradox cannot arise.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q6">>Incorrect. Confounding variables still exist in randomized trials — people still have different severities, ages, etc. Randomization does not eliminate them; it makes them independent of treatment assignment.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q6">>Incorrect. Using only aggregate data does not prevent confounding. In a randomized trial, both aggregate and subgroup analyses are valid because randomization eliminates the confounding.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q7">In the context of A/B testing, how can Simpson's paradox mislead?</span>
+A. By making the test take longer than expected to reach significance
+B. By causing a variant that decreases conversion in every segment to appear to increase overall conversion due to traffic shifts
+C. By inflating the p-value of the test beyond the significance threshold
+D. By causing the control and treatment groups to have different sizes
+<<button "A">><<replace "#sp2-q7">>Incorrect. The time to significance is a power issue, not a Simpson's paradox issue. The paradox is about the direction of the effect reversing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q7">>Correct! If a website change shifts traffic toward a high-converting segment while hurting conversion within every segment, the aggregate conversion can go up. The segment-level decrease is masked by the traffic redistribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q7">>Incorrect. P-value inflation is a multiple testing or distributional issue, not related to Simpson's paradox. The paradox concerns the direction of an effect, not statistical significance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q7">>Incorrect. Different group sizes are common in A/B tests and do not cause Simpson's paradox. The paradox requires a confounding variable that shifts the composition of the groups.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sp2-q8">What does Pearl's back-door criterion determine?</span>
+A. Whether a randomized controlled trial is ethical to conduct
+B. Which set of variables to condition on in order to identify the causal effect from observational data
+C. Whether the sample size is large enough to detect a causal effect
+D. Whether the treatment variable is binary or continuous
+<<button "A">><<replace "#sp2-q8">>Incorrect. The back-door criterion is a mathematical condition on causal graphs, not an ethical test. It determines which variables to adjust for in observational studies.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sp2-q8">>Correct! The back-door criterion identifies a set of variables $Z$ such that conditioning on $Z$ blocks all spurious (non-causal) paths between treatment and outcome, allowing the causal effect to be estimated from observational data via the adjustment formula.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sp2-q8">>Incorrect. Sample size determination is a power analysis question. The back-door criterion is about the causal graph structure, not sample size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sp2-q8">>Incorrect. The back-door criterion applies regardless of whether variables are binary or continuous. It concerns the causal structure encoded in a DAG, not variable types.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

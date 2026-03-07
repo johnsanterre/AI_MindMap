@@ -1,0 +1,139 @@
+<<include "Header">>
+
+! Double Descent
+
+<img src="assets/double_descent.svg" alt="Diagram illustrating the Double Descent risk curve with classical and modern regimes" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Your statistics professor told you: more parameters means more overfitting. Your deep learning codebase uses a model with more parameters than training examples and it works beautifully. Both of you are right — but about different regimes. ''Double descent'' is the discovery that the test error curve has two humps separated by a dangerous valley. Classical models live to the left of the valley; modern overparameterized models live to the right of it. The peril is not at either extreme — it is exactly at the middle, the point where your model just barely squeezes to fit the training data.
+
+---
+
+!! The Core Insight
+
+For decades, the [[Bias-Variance tradeoff]] told a clear story: as model complexity grows, training error falls monotonically while test error traces a U-shape — first falling as the model escapes underfitting, then rising as [[Overfitting]] takes hold. The prescription was to stop at the bottom of the U. [[Regularization]] was the tool to push that bottom lower. This is classical statistical wisdom, and it is correct for the classical regime.
+
+In 2019, Belkin et al. published //Reconciling Modern Machine Learning Practice and the Bias-Variance Trade-Off//, showing that the U-shaped curve is only half the story. Past a critical model size — the ''interpolation threshold'' — test error begins to fall again, eventually reaching levels well below the classical optimum. This second descent means that ''the most dangerous place to park a model is at the interpolation threshold itself'', not in the overparameterized zone. [[Deep Learning]] and [[Statistical Learning Theory]] are still actively working out the theoretical basis for why benign overfitting occurs.
+
+The double descent phenomenon is not limited to neural networks. It appears in random forests, kernel machines, and even plain linear regression. It arises whenever a model transitions from the underdetermined regime (more constraints than parameters) into the overdetermined regime (more parameters than constraints). The shape of the curve is a fundamental feature of how learning interacts with model capacity, not an artifact of any particular architecture.
+
+---
+
+!! The Interpolation Threshold
+
+The ''interpolation threshold'' is the point at which model capacity equals the size of the training set — where the model can achieve exactly zero training loss by interpolating every training point. At this exact point, the situation is at its worst: there is essentially //one// interpolating solution, and it is the solution that memorizes every label, including any label noise. The model has just enough freedom to fit the data, but no freedom to be choosy about //how// it fits.
+
+Crucially, just past the threshold something changes qualitatively. Now there are infinitely many solutions that achieve zero training loss. The fitting algorithm — typically gradient descent — must implicitly choose among them. It turns out that gradient descent on overparameterized models has a systematic preference: it gravitates toward the ''minimum-norm'' solution, the interpolating function that is as simple as possible in a precise algebraic sense. This is //implicit regularization// at work. The minimum-norm interpolant can generalize well because it does not overfit in the directions that matter for prediction, even while memorizing noise in harmless high-dimensional directions.
+
+This connection to implicit regularization is one reason why the choice of optimizer, initialization, and architecture all affect generalization in overparameterized models. They all influence which minimum-norm-like solution gradient descent finds. Understanding the interpolation threshold is therefore central to understanding why modern neural networks generalize at all without explicit [[Regularization]].
+
+---
+
+!! What the Math Is Actually Doing
+
+The cleanest theoretical case is ''benign overfitting in linear regression''. Suppose you have $n$ training examples and $p$ features with $p \gg n$. The ordinary least-squares problem is underdetermined; there are infinitely many $\hat{\beta}$ satisfying $X\hat{\beta} = y$. Among all solutions, gradient descent from the origin converges to the minimum Euclidean norm solution:
+
+$$\hat{\beta} = X^T(XX^T)^{-1}y$$
+
+This is the Moore-Penrose pseudoinverse solution. It perfectly interpolates the training data. Whether it generalizes depends on the spectrum of $XX^T$. If the signal lives in directions corresponding to large eigenvalues of $XX^T$, while noise is spread over many small-eigenvalue directions, then the minimum-norm interpolant suppresses the noise implicitly — it assigns tiny coefficients in the noise-dominated subspace. The ''effective degrees of freedom'' actually shrink as $p$ grows far past $n$, which is why test error falls in the modern regime rather than continuing to rise.
+
+''Epoch-wise double descent'' is a related phenomenon: for a fixed model, test error can trace a double-descent curve over training time. Early in training the model is effectively small; as it grows more expressive, test error may spike before falling again. This means early stopping at the wrong epoch can strand the model at the worst point on the curve, not the best. The interaction between model size, training time, and dataset size creates a three-dimensional landscape of risk that the simple U-curve does not capture.
+
+The theoretical framework of the ''neural tangent kernel'' (NTK) gives one lens on the overparameterized regime: infinitely wide networks trained with gradient descent behave like kernel regression with a specific kernel. The NTK analysis predicts benign overfitting and second descent under appropriate conditions, connecting the phenomenon to classical kernel learning theory.
+
+---
+
+!! Implications for Practice
+
+Double descent reshapes several practical intuitions. ''First'': if your model's validation loss is stuck and you are near the interpolation threshold, the correct response may be to //add more parameters or more data//, not to regularize or reduce capacity. Moving past the threshold, not away from it, is often the path to better generalization.
+
+''Second'': early stopping requires care. Stopping when training loss first hits zero may place the model exactly at its worst generalization point. If possible, train long enough to enter the overparameterized regime where the second descent takes hold, or use explicit [[Regularization]] to shift the threshold to a safer location on the curve.
+
+''Third'': regularization techniques like weight decay and dropout do not eliminate double descent — they shift the interpolation threshold. A heavily regularized model effectively has lower capacity, moving the threshold to a higher model-size. This can be beneficial (avoiding the spike) but can also prevent the model from reaching the modern low-error regime. Understanding where your model sits relative to the threshold is more useful than blindly applying regularization.
+
+''Fourth'': label noise dramatically sharpens the spike at the interpolation threshold. A dataset with even modest label noise produces a much steeper and higher peak. Data augmentation can smooth the curve by effectively increasing the training set size, pushing the threshold to a larger model size. These empirical observations follow directly from the theory and give practitioners actionable handles on the shape of their risk curve.
+
+---
+
+!! When Double Descent Breaks Down
+
+''Clean data with strong signal:'' Double descent is most dramatic when training labels contain noise. In a nearly noiseless, high-signal setting, the classical U-shaped regime can dominate: the minimum-norm interpolant does not help much because there is little noise to suppress in harmless directions. In these cases, classical model selection at the bottom of the U remains sound, and the second descent either does not appear or offers only marginal improvement over the classical optimum.
+
+''Finite compute and wrong optimizer:'' The second descent relies on gradient descent finding a minimum-norm-like solution. If training is stopped too early, if a poorly conditioned optimizer is used, or if the learning rate schedule is inappropriate, the implicit regularization effect may not materialize. The model may interpolate training data without finding the minimum-norm interpolant, producing a solution that generalizes no better than the spike. The theory assumes the optimizer converges to a specific class of solutions that practical training may not always reach.
+
+''Structured or low-dimensional data:'' When the feature space is genuinely low-dimensional — for example, tabular data where only a handful of predictors are informative — adding millions of parameters provides no useful additional directions for noise absorption. The minimum-norm interpolant in a high-dimensional irrelevant feature space is still irrelevant. Double descent theory relies on the data and noise having certain spectral properties; when the data violates those assumptions (e.g., strongly correlated features, very low intrinsic dimension), the second descent can flatten or disappear entirely.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Belkin et al. (2019), //Reconciling Modern Machine Learning Practice and the Bias-Variance Trade-Off//, PNAS — the paper that named and empirically established double descent across multiple model classes including linear models, random forests, and neural networks. Nakkiran et al. (2020), //Deep Double Descent: Where Bigger Models and More Data Hurt//, ICLR — demonstrated double descent in modern deep neural networks (ResNets, transformers) as a function of model size, dataset size, and training epochs, coining the term ''epoch-wise double descent''. Bartlett, Montanari, and Rakhlin (2020), //Benign Overfitting in Linear Regression//, PNAS — provided the first rigorous theoretical characterization of when minimum-norm interpolation generalizes, identifying the spectral conditions on the data covariance matrix required for benign overfitting.
+
+''Random matrix theory'' provides the primary technical toolkit for analyzing the double-descent transition in linear models. The behavior of the test error near the interpolation threshold is governed by the empirical spectral distribution of $XX^T / n$ as $p/n \to 1$: the spectrum develops a gap at zero that determines the spike height, and the Marchenko-Pastur law describes the spectral density in the overparameterized limit.
+
+''Label noise'' enters the minimum-norm solution directly: $\hat{\beta} = X^T(XX^T)^{-1}(f^* + \epsilon)$ where $\epsilon$ is the noise vector. The noise component $X^T(XX^T)^{-1}\epsilon$ determines the generalization penalty. When $p \gg n$, the norm of this noise term shrinks because the pseudoinverse spreads the noise over many dimensions, each receiving a small coefficient. This is the precise algebraic mechanism behind benign overfitting.
+
+The ''neural tangent kernel'' regime connects double descent to kernel methods: an infinitely wide network trained with gradient descent converges to the kernel regression solution with the NTK as kernel. The NTK is a minimum-norm interpolant in the associated RKHS. This connection implies that double descent in infinite-width networks is exactly kernel double descent, which is amenable to the random matrix theory analysis. Finite-width corrections and feature learning (where the NTK changes during training) are active research areas.
+
+Data augmentation effectively increases $n$ without adding parameters, shifting the interpolation threshold to a larger $p/n$ ratio. This smooths and right-shifts the double-descent spike. [[Regularization]] (e.g., ridge regression with parameter $\lambda$) moves the effective threshold by shrinking the effective model capacity, converting the spike into a smoother transition. Both interventions are consistent with the theory and have been verified empirically.
+
+---
+
+!! Quiz
+
+<span id="dd-q1">What does the interpolation threshold represent in the double descent framework?</span>
+A. The point at which training error first reaches its minimum
+B. The model complexity at which training loss first reaches zero (model capacity equals training set size)
+C. The optimal model size according to classical bias-variance theory
+D. The point at which test error is minimized in the modern regime
+<<button "A">><<replace "#dd-q1">>✗ Wrong. The interpolation threshold is not about minimizing training error in general — it is the specific point where training loss hits exactly zero because capacity matches training set size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q1">>✓ Correct! The interpolation threshold is the point at which model capacity equals the training set size, allowing the model to achieve zero training loss by exactly fitting every training point.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q1">>✗ Wrong. The classical optimum is the bottom of the U-shape in the classical regime, well before the interpolation threshold.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q1">>✗ Wrong. Test error is minimized deep in the overparameterized regime, far past the interpolation threshold, not at it.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q2">Why does test error fall again in the overparameterized regime, past the interpolation threshold?</span>
+A. The model has fewer effective parameters once it is overparameterized
+B. Gradient descent finds the minimum-norm interpolating solution, which implicitly suppresses noise in low-variance directions
+C. The training data is effectively regularized by the extra parameters
+D. Overparameterized models ignore label noise entirely
+<<button "A">><<replace "#dd-q2">>✗ Wrong. The model does not literally have fewer parameters — the effective degrees of freedom shrink, which is a consequence of the minimum-norm solution, not a reduction in parameter count.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q2">>✓ Correct! Gradient descent has an implicit bias toward minimum-norm solutions. In high dimensions this solution spreads noise over many harmless directions, each receiving a tiny coefficient, producing benign overfitting.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q2">>✗ Wrong. The training data is not regularized — the model fully interpolates it. It is the //choice// of interpolating solution (minimum-norm) that provides implicit regularization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q2">>✗ Wrong. Overparameterized models still memorize label noise; they just assign the noise to directions that are harmless for prediction on new data.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q3">The minimum-norm least-squares solution for an overparameterized linear model ($p > n$) is:</span>
+A. $\hat{\beta} = (X^TX)^{-1}X^Ty$
+B. $\hat{\beta} = X^T(XX^T)^{-1}y$
+C. $\hat{\beta} = (X^TX + \lambda I)^{-1}X^Ty$
+D. $\hat{\beta} = \arg\min \|y - X\beta\|^2 + \lambda\|\beta\|^2$
+<<button "A">><<replace "#dd-q3">>✗ Wrong. This is the ordinary least-squares formula for the underdetermined case ($n > p$), where $X^TX$ is invertible. When $p > n$, $X^TX$ is not invertible.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q3">>✓ Correct! When $p > n$, the minimum Euclidean norm solution is $\hat{\beta} = X^T(XX^T)^{-1}y$, using the right pseudoinverse. This perfectly interpolates training data and is what gradient descent from the origin converges to.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q3">>✗ Wrong. This is the ridge regression solution, which adds explicit $\ell_2$ regularization. The minimum-norm interpolant uses no explicit regularization ($\lambda = 0$).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q3">>✗ Wrong. This is the ridge regression objective. The minimum-norm interpolant is a specific unregularized solution selected by the pseudoinverse.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q4">What is "epoch-wise double descent"?</span>
+A. Training the same model twice, once with and once without regularization
+B. A double-descent curve in test error observed over training epochs for a fixed model and dataset
+C. The phenomenon where validation loss decreases, increases, then decreases again as batch size grows
+D. Running two separate descent phases with different learning rates
+<<button "A">><<replace "#dd-q4">>✗ Wrong. Epoch-wise double descent refers to how test error evolves during training of a single model, not a comparison between regularized and unregularized training.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q4">>✓ Correct! For a fixed model size and dataset, test error can spike during training before eventually falling again. This means early stopping at the wrong epoch can leave the model at its worst generalization point.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q4">>✗ Wrong. Epoch-wise double descent concerns training epochs, not batch size. The phenomenon is about the temporal trajectory of learning, not the data batching strategy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q4">>✗ Wrong. Epoch-wise double descent is a single training run phenomenon, not a multi-phase learning rate schedule.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q5">Which model classes exhibit double descent (select the most accurate answer)?</span>
+A. Only deep neural networks, because they are the only models with enough parameters
+B. Only neural networks and kernel methods, due to their nonlinearity
+C. Linear models, kernel machines, decision trees, and neural networks — essentially any sufficiently flexible model
+D. Only models trained with gradient descent, because other optimizers find different solutions
+<<button "A">><<replace "#dd-q5">>✗ Wrong. Double descent was demonstrated in linear regression and random forests by Belkin et al. 2019 — it is not unique to deep neural networks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q5">>✗ Wrong. Double descent has been observed in linear models, which have no nonlinearity. The mechanism is about the ratio of parameters to data, not nonlinearity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q5">>✓ Correct! Belkin et al. demonstrated double descent in linear regression, random forests, neural networks, and kernel methods. It is a general phenomenon tied to the interpolation threshold, not a feature of any particular model class.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q5">>✗ Wrong. Double descent is observed with various optimizers. The gradient descent implicit bias helps explain //why// the second descent produces good generalization, but the double-descent shape itself is more general.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q6">What effect does label noise have on the double descent curve?</span>
+A. Label noise smooths the spike at the interpolation threshold, making training safer
+B. Label noise eliminates the second descent entirely, leaving only the classical U-shape
+C. Label noise sharpens and heightens the spike at the interpolation threshold
+D. Label noise shifts the interpolation threshold to larger model sizes
+<<button "A">><<replace "#dd-q6">>✗ Wrong. It is data augmentation, not label noise, that tends to smooth the spike. Label noise does the opposite — it makes the spike sharper and more dangerous.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q6">>✗ Wrong. Label noise does not eliminate the second descent. The overparameterized regime can still generalize well even with label noise, because minimum-norm solutions suppress noise in low-variance directions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q6">>✓ Correct! Label noise directly enters the minimum-norm solution and concentrates at the interpolation threshold. More noise means the single interpolating solution at the threshold memorizes more harmful noise, sharply raising the test error peak.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q6">>✗ Wrong. It is regularization and data augmentation that shift the interpolation threshold. Label noise affects the height of the spike, not the position of the threshold.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q7">According to double descent theory, if your model is stuck at the interpolation threshold with high validation loss, what is often the right move?</span>
+A. Increase regularization to prevent overfitting
+B. Reduce model size to return to the classical underfitting regime
+C. Add more parameters or more training data to move past the threshold into the overparameterized regime
+D. Switch to a different loss function to avoid the spike
+<<button "A">><<replace "#dd-q7">>✗ Wrong. Adding regularization shifts the threshold but does not guarantee escape from the spike — and it may prevent the model from reaching the low-error overparameterized regime.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q7">>✗ Wrong. Returning to the classical regime means settling for a higher classical optimum. The double-descent insight is that the modern regime can generalize //better// than the classical optimum, so retreating is suboptimal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q7">>✓ Correct! The interpolation threshold is the worst place to be. Moving past it — by scaling up model capacity or training data — can drop test error below the classical optimum. This is counterintuitive but well-supported empirically and theoretically.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q7">>✗ Wrong. The spike is not an artifact of the loss function; it arises from the structure of the solution space at the interpolation threshold. Changing the loss function does not resolve the fundamental issue of being at the most constrained point.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dd-q8">The neural tangent kernel (NTK) connects double descent to which classical framework?</span>
+A. Bayesian inference, because the NTK defines a prior over functions
+B. Kernel regression, because infinitely wide networks trained with gradient descent converge to minimum-norm kernel regression with the NTK
+C. Decision tree theory, because the NTK describes how trees partition feature space
+D. Principal component analysis, because the NTK decomposes the data covariance matrix
+<<button "A">><<replace "#dd-q8">>✗ Wrong. While Gaussian processes (a Bayesian framework) are related to the NTK, the primary connection for double descent is to kernel regression and minimum-norm interpolation, not Bayesian inference per se.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dd-q8">>✓ Correct! In the infinite-width limit, gradient descent on neural networks converges to the minimum-norm interpolant in the RKHS defined by the NTK — exactly kernel regression. This reduces double descent in infinite-width networks to kernel double descent, which is tractable with random matrix theory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dd-q8">>✗ Wrong. The NTK has nothing to do with decision trees. It characterizes linearized neural network dynamics around initialization, not recursive partitioning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dd-q8">>✗ Wrong. The NTK does not decompose the data covariance matrix. It is a kernel defined by the inner product of neural network Jacobians, and its eigenspectrum determines learning dynamics.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

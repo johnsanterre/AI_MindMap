@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect width="800" height="400" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" font-weight="bold">network science: structure determines function</text>
+
+  <!-- ===== RANDOM (Erdos-Renyi) ===== -->
+  <text x="135" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Random (Erdos-Renyi)</text>
+
+  <!-- Nodes - uniformly distributed connections -->
+  <circle cx="90" cy="110" r="6" fill="#7C2530"/>
+  <circle cx="140" cy="95" r="6" fill="#7C2530"/>
+  <circle cx="180" cy="115" r="6" fill="#7C2530"/>
+  <circle cx="100" cy="150" r="6" fill="#7C2530"/>
+  <circle cx="155" cy="145" r="6" fill="#7C2530"/>
+  <circle cx="130" cy="175" r="6" fill="#7C2530"/>
+  <circle cx="175" cy="165" r="6" fill="#7C2530"/>
+  <circle cx="80" cy="180" r="6" fill="#7C2530"/>
+  <circle cx="190" cy="145" r="5" fill="#7C2530"/>
+
+  <!-- Edges - roughly uniform degree -->
+  <line x1="90" y1="110" x2="140" y2="95" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="140" y1="95" x2="180" y2="115" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="100" y1="150" x2="155" y2="145" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="155" y1="145" x2="175" y2="165" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="130" y1="175" x2="80" y2="180" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="90" y1="110" x2="100" y2="150" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="180" y1="115" x2="190" y2="145" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="130" y1="175" x2="155" y2="145" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="80" y1="180" x2="100" y2="150" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+  <line x1="140" y1="95" x2="155" y2="145" stroke="#7C2530" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- Degree distribution: Poisson -->
+  <text x="135" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Degree Distribution</text>
+  <!-- Axes -->
+  <line x1="70" y1="310" x2="200" y2="310" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="70" y1="310" x2="70" y2="235" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="135" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">k (degree)</text>
+  <text x="62" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" transform="rotate(-90, 62, 270)">P(k)</text>
+  <!-- Poisson bell curve -->
+  <path d="M 75,308 Q 95,306 110,280 Q 125,248 135,250 Q 150,260 165,290 Q 180,306 195,308" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="135" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">Poisson</text>
+
+  <!-- ===== SMALL-WORLD (Watts-Strogatz) ===== -->
+  <text x="400" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">Small-World (Watts-Strogatz)</text>
+
+  <!-- Ring lattice with shortcuts -->
+  <!-- Nodes in a ring -->
+  <circle cx="360" cy="100" r="6" fill="#2D5A8E"/>
+  <circle cx="395" cy="88" r="6" fill="#2D5A8E"/>
+  <circle cx="430" cy="100" r="6" fill="#2D5A8E"/>
+  <circle cx="440" cy="135" r="6" fill="#2D5A8E"/>
+  <circle cx="430" cy="168" r="6" fill="#2D5A8E"/>
+  <circle cx="395" cy="182" r="6" fill="#2D5A8E"/>
+  <circle cx="360" cy="168" r="6" fill="#2D5A8E"/>
+  <circle cx="350" cy="135" r="6" fill="#2D5A8E"/>
+
+  <!-- Regular lattice edges (nearest neighbors) -->
+  <line x1="360" y1="100" x2="395" y2="88" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="395" y1="88" x2="430" y2="100" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="430" y1="100" x2="440" y2="135" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="440" y1="135" x2="430" y2="168" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="430" y1="168" x2="395" y2="182" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="395" y1="182" x2="360" y2="168" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="360" y1="168" x2="350" y2="135" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="350" y1="135" x2="360" y2="100" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- Long-range shortcut edges (dashed) -->
+  <line x1="360" y1="100" x2="430" y2="168" stroke="#C4A87A" stroke-width="2" stroke-dasharray="4,3"/>
+  <line x1="395" y1="88" x2="360" y2="168" stroke="#C4A87A" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="400" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#C4A87A" font-style="italic">shortcuts</text>
+
+  <!-- Degree distribution: narrow/peaked -->
+  <text x="400" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Degree Distribution</text>
+  <line x1="335" y1="310" x2="465" y2="310" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="335" y1="310" x2="335" y2="235" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="400" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">k (degree)</text>
+  <text x="327" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" transform="rotate(-90, 327, 270)">P(k)</text>
+  <!-- Narrow peaked distribution -->
+  <path d="M 345,308 Q 370,307 385,300 Q 395,260 400,242 Q 405,260 415,300 Q 430,307 455,308" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">Narrow / peaked</text>
+
+  <!-- ===== SCALE-FREE (Barabasi-Albert) ===== -->
+  <text x="655" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Scale-Free (Barabasi-Albert)</text>
+
+  <!-- Hub node (large) -->
+  <circle cx="655" cy="135" r="12" fill="#5C3D1E"/>
+  <!-- Secondary hub -->
+  <circle cx="610" cy="110" r="8" fill="#5C3D1E" opacity="0.8"/>
+  <!-- Peripheral nodes (small) -->
+  <circle cx="700" cy="95" r="5" fill="#C4A87A"/>
+  <circle cx="720" cy="130" r="5" fill="#C4A87A"/>
+  <circle cx="710" cy="165" r="5" fill="#C4A87A"/>
+  <circle cx="670" cy="180" r="5" fill="#C4A87A"/>
+  <circle cx="630" cy="175" r="5" fill="#C4A87A"/>
+  <circle cx="590" cy="155" r="5" fill="#C4A87A"/>
+  <circle cx="580" cy="100" r="5" fill="#C4A87A"/>
+  <circle cx="620" cy="85" r="5" fill="#C4A87A"/>
+  <circle cx="690" cy="80" r="4" fill="#C4A87A"/>
+
+  <!-- Edges from main hub -->
+  <line x1="655" y1="135" x2="700" y2="95" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="655" y1="135" x2="720" y2="130" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="655" y1="135" x2="710" y2="165" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="655" y1="135" x2="670" y2="180" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="655" y1="135" x2="630" y2="175" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="655" y1="135" x2="610" y2="110" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="655" y1="135" x2="690" y2="80" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- Edges from secondary hub -->
+  <line x1="610" y1="110" x2="580" y2="100" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="610" y1="110" x2="590" y2="155" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="610" y1="110" x2="620" y2="85" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+  <line x1="610" y1="110" x2="630" y2="175" stroke="#5C3D1E" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- One peripheral-to-peripheral edge -->
+  <line x1="700" y1="95" x2="720" y2="130" stroke="#5C3D1E" stroke-width="1" opacity="0.25"/>
+  <text x="655" y="198" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">hubs</text>
+
+  <!-- Degree distribution: power law -->
+  <text x="655" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Degree Distribution</text>
+  <line x1="590" y1="310" x2="720" y2="310" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="590" y1="310" x2="590" y2="235" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="655" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">k (degree)</text>
+  <text x="582" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" transform="rotate(-90, 582, 270)">P(k)</text>
+  <!-- Power-law curve: steep drop then long tail -->
+  <path d="M 598,242 Q 605,270 615,290 Q 630,303 650,306 Q 680,308 715,308" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="655" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">Power law: P(k) ~ k^-y</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="385" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Random: no structure | Small-world: clustering + shortcuts | Scale-free: preferential attachment creates hubs</text>
+</svg>

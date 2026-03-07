@@ -1,0 +1,177 @@
+<<include "Header">>
+
+! Model Auditing
+
+<img src="assets/model_auditing.svg" alt="Diagram showing the model auditing pipeline: bias testing, performance audit, safety probes, audit report, and pass/fail decision" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Think of a restaurant health inspection. The inspector does not design the kitchen or write the menu — they arrive with a checklist, test specific things (food temperature, hand-washing stations, pest evidence), and issue a rating. Model auditing works the same way: an independent evaluator systematically probes an AI system against a set of criteria — bias, fairness, safety, calibration, regulatory compliance — and produces a structured report that says where the system passes, where it fails, and what must change before deployment.
+
+---
+
+!! The Core Insight
+
+''Model auditing'' is the practice of systematically evaluating a trained AI system to determine whether it behaves acceptably across dimensions that matter to stakeholders: affected communities, regulators, and the organization deploying the model. Unlike standard model evaluation, which asks "how accurate is this?", auditing asks "is this //fair//? Is it //safe//? Does it //comply// with the law?"
+
+The core tension in auditing is that no single metric captures "acceptable." A model can be highly accurate overall while exhibiting wildly different error rates for different demographic groups. A hiring model might have 90% accuracy overall but reject qualified women at twice the rate of qualified men. Standard aggregate metrics hide this. Auditing forces disaggregated evaluation — slicing performance by protected attributes like race, gender, age, and socioeconomic status — so that hidden harms become visible.
+
+Modern auditing draws from three traditions: algorithmic fairness research (Barocas & Selbst, 2016), software testing and verification, and financial/regulatory audit practice. The EU AI Act (2024) and the NIST AI Risk Management Framework (2023) now formalize auditing requirements for high-risk AI systems, making this a legal obligation in many jurisdictions, not merely a best practice. Connections to <<link "Red Teaming" "Red Teaming">><</link>>, <<link "Evaluation Metrics" "Evaluation Metrics">><</link>>, and <<link "Model Calibration" "Model Calibration">><</link>> are direct.
+
+---
+
+!! Fairness Criteria and the Impossibility Landscape
+
+The first challenge any auditor faces is choosing which fairness criterion to evaluate. The three most common are:
+
+''Demographic parity'' (also called statistical parity) requires that the model's positive prediction rate be equal across groups: $P(\hat{Y}=1 \mid A=0) = P(\hat{Y}=1 \mid A=1)$, where $A$ is a protected attribute. This is the simplest criterion but the most controversial — it ignores base rates and can require accepting less-qualified candidates in one group over more-qualified candidates in another.
+
+''Equalized odds'' (Hardt et al., 2016) requires that the true positive rate //and// false positive rate be equal across groups: $P(\hat{Y}=1 \mid Y=1, A=a)$ and $P(\hat{Y}=1 \mid Y=0, A=a)$ are the same for all values of $a$. This is stronger than demographic parity because it conditions on the true label.
+
+''Predictive parity'' requires that the positive predictive value be equal across groups: $P(Y=1 \mid \hat{Y}=1, A=a)$ is the same for all $a$. A model that passes this criterion is equally trustworthy when it says "yes" regardless of group membership.
+
+The ''impossibility theorem'' (Chouldechova, 2017; Kleinberg et al., 2016) proves that when base rates differ across groups, a model //cannot// simultaneously satisfy equalized odds and predictive parity (except in trivial cases). This means every audit involves a normative choice about which fairness criterion matters most in a given context — a decision that is ethical and political, not purely technical. Auditors must document which criterion they selected and why.
+
+Beyond individual fairness metrics, audits also examine ''disparate impact'': the ratio of positive outcome rates between groups. The "four-fifths rule" from US employment law states that a selection rate for a protected group below 80% of the highest group's rate constitutes evidence of adverse impact. For a model: $\text{DI} = \frac{P(\hat{Y}=1 \mid A=0)}{P(\hat{Y}=1 \mid A=1)} \geq 0.8$. Related: <<link "Class Imbalance" "Class Imbalance">><</link>>, <<link "Differential Privacy" "Differential Privacy">><</link>>.
+
+---
+
+!! What the Math Is Actually Doing
+
+An audit computes fairness metrics by partitioning the test set into demographic slices and measuring performance within each slice. For a binary classifier with predictions $\hat{Y}$, true labels $Y$, and protected attribute $A \in \{0, 1\}$:
+
+''Equalized odds gap:''
+
+$$\Delta_{\text{EO}} = \max\!\Big(\big|TPR_{A=0} - TPR_{A=1}\big|,\; \big|FPR_{A=0} - FPR_{A=1}\big|\Big)$$
+
+where $TPR_a = P(\hat{Y}=1 \mid Y=1, A=a)$ and $FPR_a = P(\hat{Y}=1 \mid Y=0, A=a)$.
+
+''Expected calibration error'' (ECE) measures whether the model's predicted probabilities match observed frequencies, disaggregated by group:
+
+$$\text{ECE}_a = \sum_{b=1}^{B} \frac{|B_b^{(a)}|}{n_a} \left|\text{acc}(B_b^{(a)}) - \text{conf}(B_b^{(a)})\right|$$
+
+where $B_b^{(a)}$ is the set of predictions in confidence bin $b$ for group $a$, $\text{acc}$ is the observed accuracy, and $\text{conf}$ is the mean predicted probability.
+
+''Disparate impact ratio:''
+
+$$\text{DI} = \frac{P(\hat{Y}=1 \mid A=0)}{P(\hat{Y}=1 \mid A=1)}$$
+
+Values below 0.8 or above 1.25 are red flags under the four-fifths rule.
+
+For regression tasks, audits replace classification metrics with group-disaggregated ''mean absolute error'' or ''quantile loss'':
+
+$$\Delta_{\text{MAE}} = \left|\frac{1}{n_0}\sum_{i:A_i=0}|y_i - \hat{y}_i| - \frac{1}{n_1}\sum_{i:A_i=1}|y_i - \hat{y}_i|\right|$$
+
+Statistical significance of disparities is assessed using permutation tests or bootstrap confidence intervals rather than relying on point estimates alone.
+
+---
+
+!! Conducting an Audit in Practice
+
+A model audit typically follows a structured protocol:
+
+''Step 1 — Scope definition.'' The auditor identifies which model, which version, which deployment context, and which stakeholders are in scope. A credit-scoring model deployed in the US has different regulatory requirements than a content-recommendation model in the EU.
+
+''Step 2 — Data collection.'' The auditor obtains a representative test dataset with demographic annotations. If the deployment data lacks demographic labels (common in practice), the auditor may use proxy variables, synthetic data, or name/zip-code-based imputation — each with known limitations. The test set must be //independent// of the training data.
+
+''Step 3 — Metric computation.'' The auditor computes disaggregated performance metrics (accuracy, precision, recall, AUC, calibration) for each demographic slice, plus the fairness metrics appropriate to the context. Visualization tools like calibration curves, ROC curves per group, and confusion matrix heatmaps are standard deliverables.
+
+''Step 4 — Red teaming and stress testing.'' Beyond statistical metrics, the auditor probes the model with adversarial and edge-case inputs to test safety and robustness. This overlaps with <<link "Red Teaming" "Red Teaming">><</link>> and <<link "Adversarial Examples" "Adversarial Examples">><</link>>.
+
+''Step 5 — Report and remediation.'' The auditor produces a structured report documenting findings, severity ratings, and recommended mitigations — which may include retraining with balanced data, applying post-hoc threshold adjustments, or declining to deploy. The report is a governance artifact that regulators, legal teams, and affected communities can inspect.
+
+Tools commonly used: Aequitas, Fairlearn, Google What-If Tool, IBM AI Fairness 360. For LLM audits: HELM (Stanford), DecodingTrust, and custom red-team frameworks.
+
+---
+
+!! When Model Auditing Breaks Down
+
+''Missing demographic data:'' The most common failure mode. If the test set has no demographic labels, the auditor cannot compute group-disaggregated metrics. Proxy methods (inferring race from zip codes, gender from names) introduce their own biases and legal risks. Without ground-truth group membership, the audit is measuring proxies of proxies, and genuine disparities can be hidden or fabricated. Organizations that do not collect demographic data — sometimes out of well-intentioned privacy concerns — make meaningful auditing impossible.
+
+''Metric selection bias:'' Because multiple fairness criteria are mathematically incompatible (the impossibility theorem), a dishonest or naive auditor can choose the one metric the model happens to pass and ignore the ones it fails. A model that satisfies demographic parity may violate equalized odds; reporting only the former gives a misleading picture. Without clear regulatory guidance on which metric applies, audit shopping — choosing the most favorable evaluation framework — is a real risk.
+
+''Static audit, dynamic deployment:'' An audit evaluates the model at a point in time on a fixed test set. But deployed models encounter distributional shift: the population changes, user behavior adapts, feedback loops alter the data pipeline. A model that passed an audit six months ago may now exhibit significant bias due to <<link "Concept Drift" "Concept Drift">><</link>>. Continuous monitoring — not just one-time auditing — is necessary but rarely mandated.
+
+---
+
+!! Technical Details
+
+''Key references:'' Raji et al. (2020), "Closing the AI Accountability Gap: Defining an End-to-End Framework for Internal Algorithmic Auditing." Barocas & Selbst (2016), "Big Data's Disparate Impact." Chouldechova (2017), "Fair prediction with disparate impact." Kleinberg, Mullainathan & Raghavan (2016), "Inherent Trade-Offs in the Fair Determination of Risk Scores." Mitchell et al. (2019), "Model Cards for Model Reporting."
+
+''Regulatory landscape (2024-2025):'' The EU AI Act requires conformity assessments for high-risk AI systems, including bias testing and documentation. The NIST AI RMF provides a voluntary framework widely adopted in the US. NYC Local Law 144 requires annual bias audits of automated employment decision tools. The EEOC has issued guidance applying Title VII disparate impact analysis to AI hiring tools.
+
+''Model cards and datasheets:'' Model Cards (Mitchell et al., 2019) and Datasheets for Datasets (Gebru et al., 2021) are standardized documentation formats that audits can reference and populate. A model card reports intended use, performance across demographic groups, and known limitations.
+
+''Post-hoc fairness adjustments:'' When an audit reveals disparities, common mitigations include threshold adjustment (different classification thresholds per group to equalize error rates), reweighting training examples, and adversarial debiasing. Each has trade-offs: threshold adjustment may reduce overall accuracy; reweighting may not address representation gaps in features.
+
+''Intersectionality:'' Auditing by single attributes (race alone, gender alone) can miss harms concentrated at intersections (e.g., Black women). Buolamwini & Gebru (2018) demonstrated that facial recognition error rates were highest for dark-skinned women — a disparity invisible when analyzing race and gender separately. Thorough audits must examine intersectional subgroups despite the combinatorial explosion in slice count.
+
+''Connection to interpretability:'' Auditors often need to explain //why// a model produces disparate outcomes, not just that it does. Techniques from <<link "Mechanistic Interpretability" "Mechanistic Interpretability">><</link>> and feature attribution methods (SHAP, LIME) are used to identify which features drive disparities.
+
+---
+
+!! Quiz
+
+<span id="ma-q1">What distinguishes model auditing from standard model evaluation?</span>
+A. Auditing uses a larger test set than standard evaluation
+B. Auditing focuses exclusively on accuracy metrics
+C. Auditing systematically evaluates fairness, bias, safety, and regulatory compliance, not just aggregate accuracy
+D. Auditing only applies to models deployed in the European Union
+
+<<button "A">><<replace "#ma-q1">>Incorrect. The size of the test set is a practical consideration, not what distinguishes auditing. An audit can be performed on a moderately sized test set — the key difference is what is measured, not how much data is used.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q1">>Incorrect. Auditing goes beyond accuracy to examine fairness, bias, calibration, safety, and legal compliance — dimensions that standard accuracy-focused evaluation ignores.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q1">>Correct! Model auditing differs from standard evaluation by systematically examining fairness, bias, safety, and regulatory compliance through disaggregated metrics and structured protocols, not just overall accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q1">>Incorrect. While the EU AI Act mandates certain audits, model auditing is a general practice applicable globally across regulatory contexts.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q2">The impossibility theorem (Chouldechova, 2017) states that when base rates differ across groups, a model cannot simultaneously satisfy which two fairness criteria?</span>
+A. Demographic parity and accuracy parity
+B. Equalized odds and predictive parity
+C. Calibration and training loss convergence
+D. Disparate impact and model interpretability
+
+<<button "A">><<replace "#ma-q2">>Incorrect. Demographic parity and accuracy parity are not the pair identified by the impossibility theorem. The fundamental trade-off is between equalized odds and predictive parity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q2">>Correct! Chouldechova (2017) and Kleinberg et al. (2016) proved that equalized odds and predictive parity cannot simultaneously hold when base rates differ across groups, except in trivial cases. Every audit must choose which criterion to prioritize.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q2">>Incorrect. Training loss convergence is a property of the optimization process, not a fairness criterion. The impossibility result concerns equalized odds and predictive parity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q2">>Incorrect. Disparate impact and interpretability are not the pair in the impossibility theorem. The fundamental trade-off is between equalized odds and predictive parity under unequal base rates.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q3">What does the disparate impact ratio measure, and what threshold is used under the four-fifths rule?</span>
+A. The ratio of false positive rates across groups; threshold of 0.5
+B. The ratio of positive prediction rates across groups; threshold of 0.8
+C. The ratio of model confidence scores across groups; threshold of 0.95
+D. The absolute difference in accuracy across groups; threshold of 0.05
+
+<<button "A">><<replace "#ma-q3">>Incorrect. Disparate impact uses the ratio of positive prediction rates (selection rates), not false positive rates, and the threshold is 0.8, not 0.5.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q3">>Correct! Disparate impact is $\text{DI} = P(\hat{Y}=1 \mid A=0) / P(\hat{Y}=1 \mid A=1)$, and the four-fifths rule flags ratios below 0.8 as evidence of adverse impact.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q3">>Incorrect. Disparate impact concerns selection rates (positive prediction rates), not confidence scores. The threshold is 0.8 under the four-fifths rule.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q3">>Incorrect. Disparate impact is a ratio, not an absolute difference, and uses the 0.8 (four-fifths) threshold, not 0.05.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q4">Why is missing demographic data the most common failure mode in model auditing?</span>
+A. Because demographic data makes models less accurate
+B. Because without group labels, auditors cannot compute disaggregated fairness metrics and genuine disparities may be hidden
+C. Because collecting demographic data is illegal in all jurisdictions
+D. Because demographic data is only relevant for image classification models
+
+<<button "A">><<replace "#ma-q4">>Incorrect. Demographic data does not inherently reduce model accuracy. The problem is that without it, auditors cannot measure whether the model treats groups equitably.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q4">>Correct! Without demographic labels on the test set, auditors cannot partition predictions by group to compute metrics like equalized odds or disparate impact. Proxy methods introduce their own biases, making the audit unreliable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q4">>Incorrect. Collecting demographic data is regulated but not universally illegal. Many jurisdictions require or permit it for anti-discrimination monitoring purposes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q4">>Incorrect. Demographic data is relevant for auditing any model that affects people — including hiring tools, credit scoring, healthcare triage, and content moderation, not just image classification.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q5">What does the equalized odds gap $\Delta_{\text{EO}}$ measure?</span>
+A. The maximum of the absolute TPR difference and the absolute FPR difference across groups
+B. The average accuracy across all demographic groups
+C. The difference in model size between a fair and unfair model
+D. The number of features correlated with the protected attribute
+
+<<button "A">><<replace "#ma-q5">>Correct! $\Delta_{\text{EO}} = \max(|TPR_{A=0} - TPR_{A=1}|, |FPR_{A=0} - FPR_{A=1}|)$, capturing the worst-case disparity in either true positive rate or false positive rate across groups.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q5">>Incorrect. Average accuracy is an aggregate metric that hides group disparities. The equalized odds gap specifically measures the maximum TPR or FPR difference between groups.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q5">>Incorrect. The equalized odds gap has nothing to do with model size. It measures disparities in error rates across demographic groups.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q5">>Incorrect. Feature correlation with protected attributes is a relevant concern in fairness, but $\Delta_{\text{EO}}$ specifically measures the gap in TPR and FPR across groups.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q6">Buolamwini & Gebru (2018) demonstrated that facial recognition error rates were highest for which subgroup, illustrating the importance of what concept?</span>
+A. Light-skinned men; illustrating accuracy parity
+B. Dark-skinned women; illustrating intersectionality
+C. All age groups equally; illustrating calibration
+D. Non-human faces; illustrating out-of-distribution detection
+
+<<button "A">><<replace "#ma-q6">>Incorrect. The study found error rates were lowest for light-skinned men and highest for dark-skinned women — the opposite of this answer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q6">>Correct! Buolamwini & Gebru showed that facial recognition systems had dramatically higher error rates for dark-skinned women — a disparity invisible when analyzing race or gender alone. This demonstrated the critical importance of intersectional auditing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q6">>Incorrect. The study found highly unequal error rates, not equal ones. The key finding was that intersectional subgroups (dark-skinned women) experienced the worst performance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q6">>Incorrect. The Gender Shades study examined human faces across skin tone and gender, not non-human faces. The concept illustrated was intersectionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q7">What is "metric selection bias" in the context of model auditing?</span>
+A. Choosing a test set that is too small to detect statistical disparities
+B. Choosing the one fairness metric the model passes while ignoring metrics it fails, giving a misleading picture
+C. Using too many metrics simultaneously, causing statistical multiple-comparisons problems
+D. Selecting only interpretable models for auditing while ignoring black-box systems
+
+<<button "A">><<replace "#ma-q7">>Incorrect. Small test sets are a practical limitation, but metric selection bias specifically refers to choosing favorable fairness criteria while ignoring unfavorable ones.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q7">>Correct! Because multiple fairness criteria are mathematically incompatible, a biased auditor can report only the metric the model satisfies. This "audit shopping" gives stakeholders a misleadingly positive picture of the model's fairness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q7">>Incorrect. Multiple comparisons is a valid statistical concern, but metric selection bias refers to strategically choosing which fairness criterion to report, not to testing too many metrics.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q7">>Incorrect. The choice between interpretable and black-box models is relevant to auditing, but metric selection bias specifically means choosing a favorable fairness metric while ignoring others the model fails.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q8">Why is a one-time audit insufficient for a deployed model?</span>
+A. Because model weights decay over time due to hardware degradation
+B. Because distributional shift means the population and data pipeline change after deployment, potentially introducing new biases
+C. Because auditors are legally required to audit models every week
+D. Because one-time audits cannot measure accuracy, only fairness
+
+<<button "A">><<replace "#ma-q8">>Incorrect. Model weights do not decay from hardware degradation. The concern is distributional shift: the data and population the model encounters change over time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q8">>Correct! Deployed models face distributional shift, feedback loops, and changing user populations. A model that passed an audit at deployment may develop significant biases months later as the data distribution evolves. Continuous monitoring is essential.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q8">>Incorrect. There is no universal legal requirement for weekly audits. The issue is that one-time evaluation misses drift, not that a specific frequency is mandated everywhere.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q8">>Incorrect. One-time audits can measure both accuracy and fairness. The problem is that all measurements are snapshots that become stale as the deployment context changes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

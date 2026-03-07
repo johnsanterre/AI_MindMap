@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Lottery Ticket Hypothesis
+
+<img src="assets/lottery_ticket.svg" alt="Diagram illustrating the Lottery Ticket Hypothesis" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine buying a lottery with millions of tickets. Most lose, but somewhere in that pile, a few tickets are winners — they were always going to win, you just had to find them. A large neural network works the same way. When you randomly initialize an overparameterized network, you are buying millions of tickets at once. Somewhere inside that tangle of weights and connections, a small sparse subnetwork happens to start in just the right configuration to learn efficiently. The Lottery Ticket Hypothesis says this winning ticket exists in //every// large enough network — you just need a way to find it.
+
+---
+
+!! The Core Insight
+
+Jonathan Frankle and Michael Carlin introduced the Lottery Ticket Hypothesis in 2019. Their claim: a randomly initialized dense neural network contains a sparse subnetwork — a ''winning ticket'' — such that, when that subnetwork is trained //in isolation// starting from its //original initialization//, it matches or exceeds the accuracy of the full network trained for the same number of steps. The subnetwork is small, often just 10–20% of the original parameter count, yet it trains just as well.
+
+The pivotal detail is the initialization. The winning ticket is not just a particular set of connections — it is those connections //paired with the specific initial weight values they were assigned at the start of training//. If you take the same sparse structure but assign fresh random values, the subnetwork fails to match the full network. The structure matters, but the initialization is what makes it a winner.
+
+This challenges the standard assumption that large networks are large because learning //requires// that many parameters. Instead, the overparameterization may serve a different purpose: ensuring that, by sheer chance, the initialization contains at least one sparse subnetwork poised to learn well. Training the full network is the process of discovering which ticket won. This connects to ideas in [[Regularization]], [[Dropout]], [[Overfitting]], [[Pruning]], and [[Deep Learning]] more broadly.
+
+---
+
+!! Finding the Winning Ticket
+
+The practical algorithm Frankle and Carlin used is ''Iterative Magnitude Pruning'' (IMP):
+
+1. Initialize the network with random weights $\theta_0$.
+2. Train the full network to convergence, obtaining trained weights $\theta_T$.
+3. Prune the $p\%$ of weights with the smallest absolute magnitude — zero them out with a binary mask $m$.
+4. ''Rewind'': reset the remaining (unmasked) weights back to their original values $\theta_0$, not to $\theta_T$.
+5. Repeat from step 2 on the now-sparser masked network.
+
+Each round finds a sparser subnetwork. After several rounds, winning tickets are typically 10–20% of original size for fully connected networks and somewhat larger for convolutional networks on harder tasks.
+
+The ''rewind step'' is the crucial insight. Resetting to $\theta_0$ (step 0) is what distinguishes IMP from ordinary fine-tuning of a pruned network. Frankle et al. (2020) later showed that for large networks, rewinding to an early training checkpoint (after $k$ steps rather than step 0) works better — this is called ''late rewinding'' or ''weight rewinding''. The network needs a few steps of gradient signal before the structure of the winning ticket is fully determined.
+
+---
+
+!! What the Math Is Actually Doing
+
+Let $\theta_0 \in \mathbb{R}^d$ be the original random initialization and $m \in \{0,1\}^d$ a binary mask selecting a sparse subnetwork. The masked network applies weights $m \odot \theta$ where $\odot$ denotes elementwise multiplication. The Lottery Ticket claim is that there exists a mask $m$ (with $\|m\|_0 \ll d$) such that:
+
+$$\mathcal{L}(f(x;\, m \odot \theta_T)) \leq \mathcal{L}(f(x;\, \theta_T))$$
+
+where $\theta_T$ are the weights obtained by training $m \odot \theta_0$ from the masked initialization, and the right-hand side is the loss of the full network trained from $\theta_0$. In other words, the sparse masked network, trained from the original init, is competitive with the full network.
+
+Magnitude pruning selects which weights to zero: remove weight $\theta_i$ if $|\theta_i| < \tau$, where threshold $\tau$ is chosen to achieve a target sparsity level $s = \|m\|_0 / d$. This is a heuristic — small magnitude after training is taken as a proxy for unimportance.
+
+''Late rewinding'' (Frankle et al. 2020): instead of rewinding to $\theta_0$, rewind to $\theta_k$ for some small $k$ (e.g., the first 0.1–1% of training steps). The authors showed this is necessary for very deep networks where $\theta_0$ is too far from a useful regime. The concept of ''linear mode connectivity'' underlies this: a winning ticket found at step $k$ lies on a linearly connected loss basin with the full network solution, while step-0 initializations often do not.
+
+---
+
+!! Implications and Connections
+
+The hypothesis has several striking implications. First, overparameterization may not be needed for //running// a network — only for //finding// the winning ticket inside it. A large network is a search space; once you find the ticket, the extra parameters can be discarded.
+
+Second, winning tickets transfer. Morcos et al. (2019) showed that tickets found on large datasets (e.g., ImageNet) transfer effectively to smaller tasks. This positions IMP as a form of unsupervised architecture discovery — the sparse structure encodes inductive biases that generalize. This connects to [[Knowledge Distillation]] and [[Neural Architecture Search]], where the goal is similarly to find small networks that perform like large ones.
+
+Third, the hypothesis offers a new lens on why [[Dropout]] works. Dropout randomly masks units during training, effectively training an exponential ensemble of subnetworks. If any of those subnetworks is a winning ticket, the ensemble finds it. Dropout may succeed partly because it explores the space of subnetworks implicit in the initialization.
+
+Fourth, IMP connects to structured sparsity and hardware efficiency. Unstructured sparse masks are hard to accelerate on standard GPUs, but structured pruning (entire filters, heads, or layers) yields dense sub-networks amenable to real speedups — linking to [[Quantization]] and model compression more broadly.
+
+---
+
+!! When the Lottery Ticket Hypothesis Breaks Down
+
+''Scale failure:'' The original IMP algorithm requires training the full network to convergence repeatedly — once per pruning round. For large modern networks (billions of parameters), this is computationally prohibitive. Late rewinding mitigates this somewhat, but finding winning tickets at GPT-scale remains impractical with IMP as described. The hypothesis may still hold in principle, but the search procedure does not scale.
+
+''Magnitude pruning is a poor proxy:'' Removing weights with small magnitude after training does not always remove the least important weights. Some small-magnitude weights participate in high-importance circuits; some large-magnitude weights are redundant. Gradient-based importance scores and second-order methods (e.g., Optimal Brain Damage) can outperform magnitude pruning, meaning IMP may not find the true winning ticket — only an approximation of one.
+
+''Winning tickets may not exist for all architectures:'' The hypothesis was established for fully connected and convolutional networks on relatively small benchmarks (MNIST, CIFAR-10). For certain architectures — particularly those with very strong inductive biases (e.g., graph networks, transformers with learned positional encodings) — it is less clear that a small sparse subnetwork from the original initialization can recover full performance. Empirical results on transformers are mixed, and the theoretical guarantees are thin.
+
+---
+
+!! Technical Details
+
+''Original paper:'' Frankle & Carlin, "The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks," ICLR 2019. Demonstrated on fully connected networks on MNIST and convolutional networks on CIFAR-10.
+
+''Follow-up — late rewinding:'' Frankle, Dziugaite, Roy & Carlin, "Linear Mode Connectivity and the Lottery Ticket Hypothesis," ICML 2020. Introduced late rewinding and linear mode connectivity as the theoretical underpinning of why the rewind matters.
+
+''Deconstructing lottery tickets:'' Zhou et al., "Deconstructing Lottery Tickets: Zeros, Signs, and the Supermask," NeurIPS 2019. Showed that even the //sign// of the initial weight, not just the magnitude after training, carries information about which tickets win. The "supermask" approach finds masks without any training.
+
+''Ticket transfer:'' Morcos, Yu, Paganini & Tian, "One ticket to win them all: Generalizing lottery ticket initializations across datasets and optimizers," NeurIPS 2019.
+
+''Sparsity levels:'' Typical winning tickets are 80–95% sparse (i.e., 5–20% of weights remain). Fully connected networks on MNIST can reach 98%+ sparsity and still match original accuracy.
+
+''Pruning variants:'' Magnitude pruning (heuristic, cheap) vs. gradient-based pruning (e.g., Taylor expansion of the loss) vs. second-order methods (Optimal Brain Surgeon). Structured pruning (filter-level, head-level) vs. unstructured (weight-level). Unstructured sparsity is difficult to accelerate without specialized sparse hardware; structured sparsity yields dense sub-networks compatible with standard accelerators.
+
+''One-shot vs. iterative:'' One-shot pruning (prune once, rewind, retrain) finds worse tickets than iterative pruning but is much cheaper. The accuracy-sparsity tradeoff curves differ substantially.
+
+---
+
+!! Quiz
+
+<span id="lth-q1">What is the "winning ticket" in the Lottery Ticket Hypothesis?</span>
+A. The largest subnetwork found by pruning
+B. A sparse subnetwork that, trained from its original initialization, matches the full network's accuracy
+C. Any subnetwork with randomly reinitialized weights that achieves high accuracy
+D. The dense network after one round of fine-tuning
+<<button "A">><<replace "#lth-q1">>✗ Wrong. The winning ticket is defined by sparsity //and// the original initialization — size alone is not the criterion.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q1">>✓ Correct! The winning ticket is the sparse subnetwork that, when retrained from its original initialization $\theta_0$, matches or exceeds the full network's accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q1">>✗ Wrong. Random reinitialization is precisely what //fails// — the original initialization is the key ingredient.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q1">>✗ Wrong. The winning ticket is a sparse subnetwork, not the full dense network.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q2">What happens when you take a winning ticket's sparse structure but assign fresh random weights instead of the original initialization?</span>
+A. Accuracy improves because fresh weights avoid local minima
+B. Accuracy is identical — only the structure matters
+C. Accuracy drops significantly; the subnetwork fails to match the full network
+D. Training becomes faster but accuracy stays the same
+<<button "A">><<replace "#lth-q2">>✗ Wrong. Fresh random weights cause the sparse subnetwork to fail, not improve.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q2">>✗ Wrong. The initialization is as important as the structure — the two together define the winning ticket.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q2">>✓ Correct! Without the original initialization $\theta_0$, the sparse subnetwork cannot match the full network. The initialization is what makes the ticket a winner.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q2">>✗ Wrong. Random reinitialization causes a significant accuracy drop, not a speed-accuracy tradeoff.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q3">What does the "rewind" step in Iterative Magnitude Pruning (IMP) do?</span>
+A. Resets all weights to zero before retraining
+B. Resets the surviving weights to their values at the original initialization (or an early checkpoint)
+C. Randomly shuffles the remaining weights to break symmetry
+D. Restores the pruned weights using gradient information
+<<button "A">><<replace "#lth-q3">>✗ Wrong. Resetting to zero would destroy all learned information. The rewind restores to the //original// values, not zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q3">>✓ Correct! The rewind resets surviving weights to $\theta_0$ (or $\theta_k$ in late rewinding). This is what makes IMP different from simply fine-tuning a pruned network.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q3">>✗ Wrong. Random shuffling would destroy the winning ticket's critical initialization values.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q3">>✗ Wrong. Pruned weights are permanently zeroed by the mask; gradients do not restore them.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q4">What heuristic does magnitude pruning use to decide which weights to remove?</span>
+A. Remove weights with the largest gradient magnitudes
+B. Remove weights that activate least frequently on the training set
+C. Remove weights with the smallest absolute value after training
+D. Remove weights whose Hessian eigenvalues are largest
+<<button "A">><<replace "#lth-q4">>✗ Wrong. Gradient magnitude is used in some pruning methods, but magnitude pruning uses weight values, not gradients.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q4">>✗ Wrong. Activation frequency is not the criterion for magnitude pruning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q4">>✓ Correct! Magnitude pruning removes weights $\theta_i$ where $|\theta_i| < \tau$ — small magnitude after training is taken as a proxy for unimportance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q4">>✗ Wrong. Hessian-based pruning (Optimal Brain Surgeon) is more sophisticated and more expensive than magnitude pruning.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q5">What is "late rewinding" and why was it introduced?</span>
+A. Rewinding to the final trained weights rather than the initialization, to preserve learned features
+B. Rewinding to an early training checkpoint (step $k$) rather than step 0, because step-0 initialization works poorly for large networks
+C. Rewinding only the biases while keeping the weight values from training
+D. Delaying the pruning step until the last few epochs of training
+<<button "A">><<replace "#lth-q5">>✗ Wrong. Rewinding to final trained weights is just fine-tuning a pruned network — not the lottery ticket approach at all.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q5">>✓ Correct! Frankle et al. (2020) found that for large networks, rewinding to $\theta_k$ (a few early steps) rather than $\theta_0$ is necessary because the network's loss basin is not linearly connected to step 0.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q5">>✗ Wrong. Late rewinding applies to all remaining weights, not just biases.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q5">>✗ Wrong. Late rewinding refers to the initialization checkpoint used after pruning, not the timing of the prune itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q6">What typical sparsity level do winning tickets achieve on standard benchmarks?</span>
+A. 1–5% of weights removed
+B. 30–50% of weights removed
+C. 80–95% of weights removed (only 5–20% remain)
+D. 99.9% of weights removed (only 0.1% remain)
+<<button "A">><<replace "#lth-q6">>✗ Wrong. Removing only 1–5% of weights is barely any pruning — winning tickets are far sparser than this.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q6">>✗ Wrong. Winning tickets are sparser than 30–50% pruning suggests; the hypothesis would not be as remarkable at this level.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q6">>✓ Correct! Typical winning tickets retain 5–20% of original weights (80–95% sparsity). On MNIST, fully connected networks can reach 98%+ sparsity and still match accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q6">>✗ Wrong. 99.9% sparsity is beyond what current IMP experiments reliably achieve while maintaining accuracy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q7">Why does the Lottery Ticket Hypothesis offer a new perspective on why Dropout works?</span>
+A. Dropout increases the magnitude of surviving weights, making pruning easier
+B. Dropout implicitly trains many subnetworks simultaneously, some of which may be winning tickets
+C. Dropout and IMP both use the same magnitude threshold $\tau$ to remove weights
+D. Dropout prevents the network from memorizing the training data, leaving only winning tickets active
+<<button "A">><<replace "#lth-q7">>✗ Wrong. While dropout does scale surviving weights (by $1/(1-p)$ at test time), this is not the connection to winning tickets.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q7">>✓ Correct! Dropout randomly masks units each step, effectively training an exponential ensemble of subnetworks. If any subnetwork in that ensemble is a winning ticket, the overall training finds it — giving a lottery-ticket interpretation of Dropout's success.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q7">>✗ Wrong. Dropout and IMP do not share the same threshold mechanism — Dropout uses a random binary mask each forward pass, not magnitude-based pruning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q7">>✗ Wrong. Dropout does regularize against memorization, but this is distinct from the winning-ticket interpretation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="lth-q8">Which finding from Zhou et al. (2019) "Deconstructing Lottery Tickets" is most surprising?</span>
+A. Winning tickets do not exist in networks trained with momentum
+B. Even the //sign// of the initial weight — not just the magnitude after training — carries information about which tickets win
+C. Magnitude pruning outperforms all gradient-based pruning methods
+D. Winning tickets are always the widest layers of the network
+<<button "A">><<replace "#lth-q8">>✗ Wrong. Winning tickets have been found with various optimizers including momentum-based ones.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#lth-q8">>✓ Correct! Zhou et al. showed that a "supermask" can be found that selects winning tickets based only on the sign of the initial weight, without any training of the weights themselves — a striking result about how much information is in the initialization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#lth-q8">>✗ Wrong. Magnitude pruning is a useful heuristic but does //not// outperform all gradient-based or second-order methods.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#lth-q8">>✗ Wrong. Winning tickets are not systematically concentrated in the widest layers; their location depends on the task and architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

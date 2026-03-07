@@ -1,0 +1,157 @@
+<<include "Header">>
+
+! Bayesian Neural Networks
+
+<img src="assets/bayesian_neural_networks.svg" alt="Diagram comparing standard neural networks with point-estimate weights to Bayesian neural networks with weight distributions and predictive uncertainty" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you ask a friend to predict tomorrow's weather. A confident friend says "72 degrees" — one number, no hedging. A more thoughtful friend says "probably around 70 to 74, but I'm less sure about the wind." The second friend is not just giving you a prediction — they are telling you //how much to trust it//. ''Bayesian neural networks'' are the second friend. Instead of learning a single fixed value for each weight in the network (a ''point estimate''), they learn an entire //probability distribution// over each weight. The result is a model that does not just say "cat" — it says "probably cat, and here is how confident I am." This ability to quantify its own uncertainty makes Bayesian neural networks invaluable in medicine, autonomous driving, and any domain where knowing //what the model does not know// matters as much as its prediction.
+
+---
+
+!! The Core Insight
+
+A standard neural network trained with <<link "backpropagation" "Neural Networks">><</link>> finds a single set of weights $w^*$ that minimizes the loss. But there may be many different weight configurations that explain the training data equally well. A point estimate picks one and throws away all the others, discarding information about which predictions are well-supported by the data and which are essentially guesses.
+
+Bayesian neural networks replace the question "what is the best weight?" with "given the data I have seen, what is the probability distribution over all possible weights?" This is the posterior distribution $p(w \mid \mathcal{D})$, computed via <<link "Bayes' theorem" "Bayes' Theorem">><</link>>. To make a prediction on a new input $x^*$, the BNN does not use a single weight vector — it //averages// over all plausible weight vectors, weighted by how probable each one is. Regions of weight space where many configurations agree produce confident predictions. Regions where they disagree produce high uncertainty — and that uncertainty is itself the output.
+
+This connects directly to <<link "Gaussian processes" "Gaussian Processes">><</link>>, which can be understood as the infinite-width limit of Bayesian neural networks. It also explains why <<link "dropout" "Dropout">><</link>> at test time (MC Dropout) works as an approximate Bayesian method — each dropout mask corresponds to sampling a different sub-network, and averaging across masks approximates averaging over the posterior.
+
+---
+
+!! From Point Estimates to Distributions
+
+In a standard neural network, training produces a single weight vector $w^* = \arg\min_w \mathcal{L}(w, \mathcal{D})$. The model's confidence is expressed only through its softmax outputs, which are notoriously //miscalibrated// — a model can output 99% confidence on an input that looks nothing like its training data. This is because the softmax score reflects how the model //ranks// classes under its single weight setting, not how robust that ranking is across plausible models.
+
+A Bayesian neural network replaces $w^*$ with a full posterior $p(w \mid \mathcal{D})$. The ''predictive distribution'' for a new input $x^*$ is:
+
+$$p(y^* \mid x^*, \mathcal{D}) = \int p(y^* \mid x^*, w) \, p(w \mid \mathcal{D}) \, dw$$
+
+This integral marginalizes out the weights — the prediction accounts for //every// plausible model, not just one. The spread of the predictive distribution captures two kinds of uncertainty. ''Aleatoric uncertainty'' is irreducible noise in the data itself (a blurry image that genuinely could be a cat or a dog). ''Epistemic uncertainty'' reflects the model's ignorance — it is high in regions far from the training data and decreases as more data is collected. Bayesian neural networks naturally decompose and report both.
+
+---
+
+!! What the Math Is Actually Doing
+
+By <<link "Bayes' theorem" "Bayes' Theorem">><</link>>, the posterior over weights given a dataset $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^N$ is:
+
+$$p(w \mid \mathcal{D}) = \frac{p(\mathcal{D} \mid w) \, p(w)}{p(\mathcal{D})} = \frac{\prod_{i=1}^N p(y_i \mid x_i, w) \, p(w)}{\int \prod_{i=1}^N p(y_i \mid x_i, w') \, p(w') \, dw'}$$
+
+The ''prior'' $p(w)$ encodes assumptions before seeing data — a common choice is $p(w) = \mathcal{N}(0, \sigma^2 I)$, which corresponds to L2 regularization in the frequentist view. The ''likelihood'' $p(\mathcal{D} \mid w)$ measures how well weights $w$ explain the observed data.
+
+The denominator $p(\mathcal{D})$, the ''marginal likelihood'' or ''model evidence'', requires integrating over //all// possible weight configurations — an integral over millions of dimensions. This is intractable for any non-trivial neural network, which is why exact Bayesian inference in deep networks is impossible and we must resort to approximations.
+
+The two dominant approximation families are:
+
+''Variational inference'' (<<link "VI" "Variational Inference">><</link>>): Posit a tractable approximate posterior $q_\phi(w)$ — often a diagonal Gaussian $q_\phi(w) = \prod_j \mathcal{N}(w_j \mid \mu_j, \sigma_j^2)$ — and optimize $\phi$ to minimize the KL divergence $\text{KL}(q_\phi(w) \| p(w \mid \mathcal{D}))$. Equivalently, maximize the evidence lower bound (ELBO):
+
+$$\mathcal{L}_{\text{ELBO}} = \mathbb{E}_{q_\phi(w)}[\log p(\mathcal{D} \mid w)] - \text{KL}(q_\phi(w) \| p(w))$$
+
+The first term encourages $q$ to explain the data; the second keeps $q$ close to the prior.
+
+''Monte Carlo dropout:'' Gal and Ghahramani (2016) showed that applying <<link "dropout" "Dropout">><</link>> at test time and averaging $T$ stochastic forward passes approximates a variational posterior. Each dropout mask $m_t$ defines a thinned network with weights $w \odot m_t$:
+
+$$p(y^* \mid x^*) \approx \frac{1}{T} \sum_{t=1}^T p(y^* \mid x^*, w \odot m_t)$$
+
+The variance across these $T$ predictions estimates epistemic uncertainty — no changes to training required.
+
+---
+
+!! Practical Deployment
+
+''Safety-critical systems:'' In medical diagnosis, a BNN can flag cases where its uncertainty is high, routing them to a human expert rather than making a potentially dangerous automated decision. The uncertainty estimate is a principled "I don't know" signal that standard networks lack.
+
+''Active learning:'' When labeling data is expensive, BNNs enable intelligent data collection. The model selects the inputs where its epistemic uncertainty is highest — precisely the points where a new label would teach it the most. This can reduce labeling costs by 50-80% compared to random sampling.
+
+''Out-of-distribution detection:'' A standard network trained on cats and dogs will confidently classify a photograph of a truck as one or the other. A BNN will assign //high epistemic uncertainty// to the truck because it is far from the training distribution, enabling the system to reject the input rather than produce a spurious classification.
+
+''Bayesian optimization:'' BNNs serve as surrogate models for expensive black-box functions (hyperparameter tuning, drug design, materials science). The uncertainty estimates guide the acquisition function, balancing exploration of uncertain regions with exploitation of promising ones.
+
+''Calibration:'' Bayesian averaging tends to produce better-calibrated probabilities than point-estimate networks. When a BNN says "80% probability of class A," the true frequency of class A among such predictions is closer to 80% — a property that is essential for decision-making under uncertainty.
+
+---
+
+!! When Bayesian Neural Networks Break Down
+
+''Computational cost is prohibitive at scale:'' The posterior over weights doubles the parameters for mean-field VI (storing both $\mu_j$ and $\sigma_j$ for each weight) and requires multiple forward passes at test time. For a network with 100 million parameters, this means storing 200 million variational parameters, and each prediction requires $T = 10$-$50$ forward passes instead of one. This makes BNNs impractical for large-scale production systems like real-time recommendation engines or language models with billions of parameters. Approximations like MC Dropout help, but they sacrifice posterior quality.
+
+''The approximate posterior is a poor fit:'' Mean-field variational inference assumes the posterior factorizes as $q(w) = \prod_j q(w_j)$ — that is, all weights are independent. In reality, neural network weight posteriors exhibit strong correlations (if one weight increases, another must decrease to compensate). The diagonal Gaussian approximation can miss entire modes of the posterior, dramatically underestimating uncertainty in precisely the regions where it matters most. More expressive posteriors (matrix-variate Gaussians, normalizing flows) improve the fit but further increase computational cost.
+
+''Priors are poorly understood:'' The standard isotropic Gaussian prior $p(w) = \mathcal{N}(0, \sigma^2 I)$ placed over weights has no clear interpretation in function space — it does not correspond to intuitive beliefs about what functions the network should compute. A weight-space prior that seems "reasonable" can imply bizarre behavior in function space (e.g., extreme sensitivity to input perturbations). Specifying meaningful priors for deep networks remains an open research problem, and misspecified priors can lead to overconfident or underconfident uncertainty estimates that defeat the purpose of going Bayesian.
+
+---
+
+!! Technical Details
+
+''Bayes by Backprop'' (Blundell et al. 2015): Reparameterizes weights as $w = \mu + \sigma \odot \epsilon$ where $\epsilon \sim \mathcal{N}(0, I)$, enabling gradient-based optimization of both $\mu$ and $\sigma$ through the standard backpropagation algorithm. This doubles the parameter count but requires only minor modifications to existing training loops.
+
+''Last-layer Bayesian methods:'' A pragmatic compromise that applies Bayesian inference only to the final layer while keeping all other layers at point estimates. The Laplace approximation fits a Gaussian around the MAP solution using the Hessian of the loss. This is computationally cheap and provides well-calibrated uncertainty for many tasks, at the cost of ignoring epistemic uncertainty in the feature extractor.
+
+''Deep ensembles'' (Lakshminarayanan et al. 2017): Train $M$ independent networks from different random initializations and average their predictions. While not formally Bayesian, deep ensembles empirically match or exceed BNNs on calibration and out-of-distribution detection benchmarks. The diversity among ensemble members captures a form of epistemic uncertainty. Typical $M = 5$-$10$.
+
+''Stochastic weight averaging - Gaussian'' (SWAG, Maddox et al. 2019): Collects weight iterates during SGD training and fits a low-rank-plus-diagonal Gaussian to the trajectory. This captures some posterior correlations at minimal additional cost beyond standard training.
+
+''Connection to <<link "Gaussian processes" "Gaussian Processes">><</link>>:'' Neal (1996) showed that a single-hidden-layer BNN with i.i.d. prior weights converges to a Gaussian process as the width approaches infinity. This GP correspondence provides theoretical grounding: the BNN prior over functions becomes a well-understood kernel machine. Matthews et al. (2018) extended this to deep networks, establishing the ''Neural Network Gaussian Process'' (NNGP) correspondence.
+
+''Key libraries:'' TyXe (PyTorch), Pyro, NumPyro, TensorFlow Probability, Laplace (for post-hoc Laplace approximations). Flipout (Wen et al. 2018) provides a low-variance gradient estimator for variational BNNs by decorrelating weight perturbations across examples in a mini-batch.
+
+---
+
+!! Quiz
+
+<span id="bnn-q1">What fundamental change do Bayesian neural networks make compared to standard neural networks?</span>
+A. They use a different activation function in each layer.
+B. They replace point-estimate weights with probability distributions over weights, enabling uncertainty quantification.
+C. They eliminate the need for backpropagation during training.
+D. They use a fixed architecture that cannot be modified.
+<<button "A">><<replace "#bnn-q1">>Incorrect. Bayesian neural networks can use any activation function — the key change is in how weights are represented, not in the architecture.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q1">>Correct! Instead of learning a single value for each weight, BNNs learn a distribution $p(w \mid \mathcal{D})$, enabling them to express uncertainty in their predictions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q1">>Incorrect. BNNs still use gradient-based optimization — variational inference methods like Bayes by Backprop rely on backpropagation to optimize the variational parameters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q1">>Incorrect. BNNs can use any neural network architecture — the Bayesian treatment applies to the weights, not the structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q2">Why is exact Bayesian inference intractable for neural networks?</span>
+A. Because neural networks have too few parameters for Bayes' theorem to apply.
+B. Because the marginal likelihood $p(\mathcal{D})$ requires integrating over all possible weight configurations — an integral over millions of dimensions.
+C. Because Bayes' theorem only works for linear models.
+D. Because neural network weights must be integers, which prevents integration.
+<<button "A">><<replace "#bnn-q2">>Incorrect. It is precisely because neural networks have so //many// parameters that the integral becomes intractable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q2">>Correct! The denominator of Bayes' theorem, $p(\mathcal{D}) = \int p(\mathcal{D} \mid w) p(w) \, dw$, is an integral over the entire weight space — millions or billions of dimensions — which cannot be computed analytically or by brute-force numerical methods.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q2">>Incorrect. Bayes' theorem applies to any parametric model. The issue is computational tractability, not theoretical applicability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q2">>Incorrect. Neural network weights are real-valued and continuous; the intractability comes from the high dimensionality, not the data type.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q3">What does the ELBO (Evidence Lower Bound) optimize in variational inference for BNNs?</span>
+A. It maximizes the training accuracy on a held-out validation set.
+B. It balances fitting the data (expected log-likelihood under $q$) against staying close to the prior (KL divergence term).
+C. It directly computes the exact posterior distribution.
+D. It minimizes the number of parameters in the network.
+<<button "A">><<replace "#bnn-q3">>Incorrect. The ELBO is not about validation accuracy — it is a bound on the log marginal likelihood that trades off data fit against prior regularization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q3">>Correct! The ELBO has two terms: $\mathbb{E}_{q_\phi(w)}[\log p(\mathcal{D} \mid w)]$ encourages the approximate posterior to explain the data, while $-\text{KL}(q_\phi \| p(w))$ prevents it from straying too far from the prior.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q3">>Incorrect. The ELBO provides an //approximation// — it optimizes a tractable lower bound because computing the exact posterior is intractable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q3">>Incorrect. The ELBO does not control architecture size; variational inference actually //doubles// the parameter count for mean-field approximations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q4">How does MC Dropout approximate Bayesian inference?</span>
+A. By removing dropout entirely at test time and using the deterministic output.
+B. By applying dropout at test time across multiple forward passes and averaging the predictions, where each dropout mask approximates a sample from the posterior.
+C. By training separate networks with different dropout rates.
+D. By using dropout only during the first epoch of training.
+<<button "A">><<replace "#bnn-q4">>Incorrect. That describes //standard// dropout usage. MC Dropout specifically //keeps// dropout active at test time to generate diverse predictions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q4">>Correct! Gal and Ghahramani (2016) showed that each stochastic dropout mask defines a different sub-network, and averaging across $T$ masks approximates the Bayesian predictive integral $\int p(y \mid x, w) p(w \mid \mathcal{D}) dw$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q4">>Incorrect. MC Dropout uses a single trained network with one dropout rate — the stochasticity comes from random masks at test time, not from training multiple networks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q4">>Incorrect. Dropout is used throughout training in MC Dropout, and critically, it is also used at //test time// — that is the key insight.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q5">What is the difference between epistemic and aleatoric uncertainty?</span>
+A. Epistemic uncertainty is about training speed; aleatoric uncertainty is about model size.
+B. They are different names for the same concept.
+C. Epistemic uncertainty reflects model ignorance (reducible with more data); aleatoric uncertainty reflects inherent noise in the data (irreducible).
+D. Epistemic uncertainty only applies to classification; aleatoric uncertainty only applies to regression.
+<<button "A">><<replace "#bnn-q5">>Incorrect. Neither type of uncertainty is related to training speed or model size — they describe different sources of predictive uncertainty.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q5">>Incorrect. They are fundamentally different: epistemic uncertainty decreases with more data; aleatoric uncertainty does not.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q5">>Correct! Epistemic uncertainty arises from limited data — the model is unsure because it has not seen enough examples. Aleatoric uncertainty is inherent randomness in the data itself (e.g., sensor noise) and cannot be reduced by collecting more data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q5">>Incorrect. Both types of uncertainty apply to both classification and regression tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q6">Why is the mean-field approximation $q(w) = \prod_j q(w_j)$ potentially problematic?</span>
+A. It requires too much memory because it stores correlations between all weight pairs.
+B. It assumes all weights are independent, missing posterior correlations that can cause it to underestimate uncertainty.
+C. It forces all weights to have the same value.
+D. It only works for networks with fewer than 1,000 parameters.
+<<button "A">><<replace "#bnn-q6">>Incorrect. The mean-field approximation is memory-efficient precisely //because// it ignores correlations — it stores only per-weight parameters. The problem is the opposite: it is too simple.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q6">>Correct! Neural network weights are typically correlated in the posterior (if one weight goes up, another must compensate). By assuming independence, mean-field VI can miss entire modes and dramatically underestimate uncertainty where it matters most.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q6">>Incorrect. Mean-field still allows each weight to have its own mean $\mu_j$ and variance $\sigma_j^2$ — the restriction is that the joint distribution factorizes, not that values are shared.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q6">>Incorrect. Mean-field VI scales to large networks — in fact it is one of the most scalable variational methods. The issue is approximation quality, not scalability.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q7">What connection did Neal (1996) establish between BNNs and Gaussian processes?</span>
+A. That Gaussian processes are always faster than BNNs.
+B. That a single-hidden-layer BNN with i.i.d. prior weights converges to a Gaussian process as the width approaches infinity.
+C. That BNNs and Gaussian processes produce identical predictions for any finite-width network.
+D. That Gaussian processes are a special case of dropout regularization.
+<<button "A">><<replace "#bnn-q7">>Incorrect. Speed is not the substance of Neal's result — it is about the mathematical equivalence in the infinite-width limit.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q7">>Correct! Neal showed that as the hidden layer width goes to infinity, the BNN prior over functions converges to a Gaussian process with a specific kernel determined by the activation function and weight prior. This is the foundation of the NNGP correspondence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q7">>Incorrect. The equivalence holds only in the //infinite-width limit//. Finite-width BNNs behave differently from GPs, and this difference is part of what makes finite BNNs interesting.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q7">>Incorrect. Gaussian processes and dropout regularization are distinct concepts; the GP connection is about the infinite-width BNN limit, not dropout.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bnn-q8">Why might a standard neural network's softmax confidence be misleading on out-of-distribution inputs?</span>
+A. Because softmax always outputs exactly 50% for every class.
+B. Because softmax reflects how the model ranks classes under a single weight setting, not how robust that ranking is — it can produce high confidence on inputs far from the training distribution.
+C. Because softmax is only computed during training, not at test time.
+D. Because softmax probabilities are always perfectly calibrated.
+<<button "A">><<replace "#bnn-q8">>Incorrect. Softmax produces different probabilities for different classes — but it always sums to 1.0, which can create false confidence when all options are equally bad.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bnn-q8">>Correct! A point-estimate network is forced to classify every input, and softmax normalizes the logits into a distribution that sums to 1.0. An input completely unlike the training data can still produce a peaked softmax distribution — high confidence with no epistemic basis. BNNs address this by showing high variance across posterior samples for such inputs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bnn-q8">>Incorrect. Softmax is computed at both training and test time — it is the standard output layer for classification in both phases.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bnn-q8">>Incorrect. Softmax probabilities from standard networks are notoriously //miscalibrated// — this is one of the primary motivations for Bayesian approaches.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

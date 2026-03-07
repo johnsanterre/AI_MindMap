@@ -1,0 +1,134 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="1" y="1" width="798" height="398" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Section dividers -->
+  <line x1="265" y1="16" x2="265" y2="384" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="530" y1="16" x2="530" y2="384" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===== SECTION 1: Bar Chart ===== -->
+  <text x="132" y="38" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Approximation Ratio</text>
+
+  <!-- Axes -->
+  <line x1="52" y1="330" x2="52" y2="60" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="52" y1="330" x2="230" y2="330" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Y-axis label -->
+  <text x="22" y="200" text-anchor="middle" font-size="11" fill="#5C3D1E" transform="rotate(-90,22,200)">Objective Value</text>
+
+  <!-- OPT bar -->
+  <rect x="75" y="170" width="50" height="160" fill="#2D5A8E" rx="3"/>
+  <text x="100" y="162" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">OPT</text>
+  <text x="100" y="350" text-anchor="middle" font-size="10" fill="#5C3D1E">Optimal</text>
+
+  <!-- ρ×OPT bar -->
+  <rect x="155" y="90" width="50" height="240" fill="#7C2530" rx="3" opacity="0.85"/>
+  <text x="180" y="82" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">ρ·OPT</text>
+  <text x="180" y="350" text-anchor="middle" font-size="10" fill="#5C3D1E">Algorithm</text>
+
+  <!-- Brace / ratio annotation -->
+  <line x1="132" y1="170" x2="132" y2="90" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="128" y1="90" x2="136" y2="90" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="128" y1="170" x2="136" y2="170" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="143" y="134" font-size="10" fill="#7C2530" font-style="italic">ratio ρ</text>
+
+  <!-- Y-axis ticks -->
+  <line x1="48" y1="330" x2="52" y2="330" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="44" y="333" text-anchor="end" font-size="9" fill="#5C3D1E">0</text>
+  <line x1="48" y1="170" x2="52" y2="170" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="44" y="173" text-anchor="end" font-size="9" fill="#5C3D1E">OPT</text>
+
+  <!-- ===== SECTION 2: Classic Problems Table ===== -->
+  <text x="397" y="38" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Classic Approximations</text>
+
+  <!-- Table header -->
+  <rect x="275" y="48" width="245" height="24" fill="#5C3D1E" rx="3"/>
+  <text x="363" y="64" font-size="10" fill="#FDFAF4" font-weight="bold">Problem</text>
+  <text x="480" y="64" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">Best Ratio</text>
+
+  <!-- Rows -->
+  <rect x="275" y="72" width="245" height="22" fill="#EEE8DA"/>
+  <text x="283" y="87" font-size="10" fill="#2D5A8E">Vertex Cover</text>
+  <text x="480" y="87" text-anchor="middle" font-size="10" fill="#7C2530">2</text>
+
+  <rect x="275" y="94" width="245" height="22" fill="#FDFAF4"/>
+  <text x="283" y="109" font-size="10" fill="#2D5A8E">Set Cover</text>
+  <text x="480" y="109" text-anchor="middle" font-size="10" fill="#7C2530">O(log n)</text>
+
+  <rect x="275" y="116" width="245" height="22" fill="#EEE8DA"/>
+  <text x="283" y="131" font-size="10" fill="#2D5A8E">Metric TSP</text>
+  <text x="480" y="131" text-anchor="middle" font-size="10" fill="#7C2530">3/2 (Christofides)</text>
+
+  <rect x="275" y="138" width="245" height="22" fill="#FDFAF4"/>
+  <text x="283" y="153" font-size="10" fill="#2D5A8E">MAX-CUT</text>
+  <text x="480" y="153" text-anchor="middle" font-size="10" fill="#7C2530">0.878 (GW SDP)</text>
+
+  <rect x="275" y="160" width="245" height="22" fill="#EEE8DA"/>
+  <text x="283" y="175" font-size="10" fill="#2D5A8E">k-means (k-means++)</text>
+  <text x="480" y="175" text-anchor="middle" font-size="10" fill="#7C2530">O(log k) expected</text>
+
+  <rect x="275" y="182" width="245" height="22" fill="#FDFAF4"/>
+  <text x="283" y="197" font-size="10" fill="#2D5A8E">Chromatic Number</text>
+  <text x="480" y="197" text-anchor="middle" font-size="10" fill="#7C2530">Inapproximable*</text>
+
+  <!-- Footnote -->
+  <text x="278" y="222" font-size="9" fill="#7C2530" font-style="italic">* No constant factor unless P=NP (PCP theorem)</text>
+
+  <!-- Complexity hierarchy -->
+  <text x="397" y="252" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Approximability Hierarchy</text>
+  <rect x="280" y="260" width="230" height="20" fill="#2D5A8E" rx="2"/>
+  <text x="395" y="274" text-anchor="middle" font-size="10" fill="#FDFAF4">FPTAS — ratio (1+ε), poly in n and 1/ε</text>
+  <rect x="285" y="282" width="220" height="20" fill="#2D5A8E" rx="2" opacity="0.75"/>
+  <text x="395" y="296" text-anchor="middle" font-size="10" fill="#FDFAF4">PTAS — ratio (1+ε), poly in n</text>
+  <rect x="290" y="304" width="210" height="20" fill="#2D5A8E" rx="2" opacity="0.55"/>
+  <text x="395" y="318" text-anchor="middle" font-size="10" fill="#FDFAF4">APX — constant factor</text>
+  <rect x="295" y="326" width="200" height="20" fill="#7C2530" rx="2" opacity="0.75"/>
+  <text x="395" y="340" text-anchor="middle" font-size="10" fill="#FDFAF4">Inapproximable (PCP lower bounds)</text>
+
+  <!-- ===== SECTION 3: LP Relaxation Pipeline ===== -->
+  <text x="665" y="38" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">LP Relaxation Workflow</text>
+
+  <!-- Step boxes -->
+  <!-- Box 1: Integer Program -->
+  <rect x="547" y="55" width="145" height="52" fill="#2D5A8E" rx="5"/>
+  <text x="619" y="76" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">Integer Program</text>
+  <text x="619" y="92" text-anchor="middle" font-size="9.5" fill="#C4A87A">x ∈ {0, 1},  minimize cᵀx</text>
+  <text x="619" y="104" text-anchor="middle" font-size="9" fill="#FDFAF4">NP-hard in general</text>
+
+  <!-- Arrow down -->
+  <line x1="619" y1="107" x2="619" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="614,127 624,127 619,135" fill="#C4A87A"/>
+  <text x="645" y="122" font-size="9" fill="#5C3D1E" font-style="italic">relax</text>
+
+  <!-- Box 2: LP Relaxation -->
+  <rect x="547" y="135" width="145" height="52" fill="#2D5A8E" rx="5" opacity="0.8"/>
+  <text x="619" y="156" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">LP Relaxation</text>
+  <text x="619" y="172" text-anchor="middle" font-size="9.5" fill="#C4A87A">x ∈ [0, 1],  minimize cᵀx</text>
+  <text x="619" y="184" text-anchor="middle" font-size="9" fill="#FDFAF4">Polynomial time (simplex/interior)</text>
+
+  <!-- Arrow down -->
+  <line x1="619" y1="187" x2="619" y2="210" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="614,207 624,207 619,215" fill="#C4A87A"/>
+  <text x="645" y="202" font-size="9" fill="#5C3D1E" font-style="italic">solve</text>
+
+  <!-- Box 3: Fractional Solution -->
+  <rect x="547" y="215" width="145" height="52" fill="#5C3D1E" rx="5"/>
+  <text x="619" y="236" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">Fractional Solution</text>
+  <text x="619" y="252" text-anchor="middle" font-size="9.5" fill="#C4A87A">x* = (0.5, 0.33, 1, 0, ...)</text>
+  <text x="619" y="264" text-anchor="middle" font-size="9" fill="#FDFAF4">LP optimum ≤ IP optimum</text>
+
+  <!-- Arrow down -->
+  <line x1="619" y1="267" x2="619" y2="290" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="614,287 624,287 619,295" fill="#C4A87A"/>
+  <text x="645" y="282" font-size="9" fill="#5C3D1E" font-style="italic">round</text>
+
+  <!-- Box 4: Integer Solution -->
+  <rect x="547" y="295" width="145" height="52" fill="#7C2530" rx="5"/>
+  <text x="619" y="316" text-anchor="middle" font-size="11" fill="#FDFAF4" font-weight="bold">Integer Solution</text>
+  <text x="619" y="332" text-anchor="middle" font-size="9.5" fill="#C4A87A">x̂ = (1, 0, 1, 0, ...)</text>
+  <text x="619" y="344" text-anchor="middle" font-size="9" fill="#FDFAF4">Cost ≤ ρ · OPT</text>
+
+  <!-- Integrality gap note -->
+  <text x="619" y="375" text-anchor="middle" font-size="9.5" fill="#7C2530" font-style="italic">Integrality gap = OPT_LP / OPT_IP</text>
+  <text x="619" y="388" text-anchor="middle" font-size="9" fill="#5C3D1E">bounds best possible LP-rounding ratio</text>
+</svg>

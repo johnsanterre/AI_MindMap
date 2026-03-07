@@ -1,0 +1,92 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="400" y1="20" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== PANEL 1: Implicit Curve & Local Graph ===== -->
+  <text x="200" y="40" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">Implicit Curve F(x,y) = 0</text>
+  <text x="200" y="58" text-anchor="middle" font-size="10" fill="#5C3D1E">When can we solve for y = g(x) locally?</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="340" x2="370" y2="340" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="60" y1="70" x2="60" y2="348" stroke="#C4A87A" stroke-width="1"/>
+  <text x="374" y="344" font-size="10" fill="#5C3D1E">x</text>
+  <text x="52" y="68" font-size="10" fill="#5C3D1E">y</text>
+
+  <!-- Implicit curve (an ellipse-like closed curve) -->
+  <ellipse cx="200" cy="210" rx="120" ry="100" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="340" y="200" font-size="11" font-weight="bold" fill="#7C2530">F(x,y) = 0</text>
+
+  <!-- Point (a,b) on the curve -->
+  <circle cx="200" cy="110" r="5" fill="#2D5A8E"/>
+  <text x="210" y="105" font-size="11" font-weight="bold" fill="#2D5A8E">(a, b)</text>
+
+  <!-- Local neighborhood box around (a,b) -->
+  <rect x="155" y="80" width="90" height="65" rx="3" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="250" y="88" font-size="9" fill="#2D5A8E">local neighborhood</text>
+
+  <!-- Arrow showing the local piece is a graph -->
+  <path d="M250,130 Q280,140 290,160" stroke="#2D5A8E" stroke-width="1.5" fill="none" marker-end="url(#bluearrow)"/>
+  <text x="290" y="178" font-size="9" fill="#2D5A8E">y = g(x)</text>
+  <text x="290" y="192" font-size="9" fill="#2D5A8E">locally!</text>
+
+  <!-- Failure point at bottom (horizontal tangent => dF/dy = 0) -->
+  <circle cx="200" cy="310" r="5" fill="#7C2530"/>
+  <text x="210" y="325" font-size="9" fill="#7C2530">dF/dy = 0</text>
+  <text x="210" y="338" font-size="9" fill="#7C2530">(cannot solve for y)</text>
+
+  <!-- Success condition box -->
+  <rect x="60" y="354" width="300" height="36" rx="5" fill="#FFF8EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="210" y="372" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Key condition: dF/dy != 0 at (a, b)</text>
+  <text x="210" y="386" text-anchor="middle" font-size="9" fill="#5C3D1E">then y = g(x) exists and is differentiable nearby</text>
+
+  <!-- ===== PANEL 2: The Theorem Statement & Derivative ===== -->
+  <text x="600" y="40" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">Implicit Function Theorem</text>
+
+  <!-- Theorem box -->
+  <rect x="420" y="60" width="360" height="90" rx="6" fill="#FFF8EE" stroke="#7C2530" stroke-width="2"/>
+  <text x="600" y="82" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Given: F(a,b) = 0 and dF/dy(a,b) != 0</text>
+  <text x="600" y="100" text-anchor="middle" font-size="10" fill="#5C3D1E">Then: there exists a smooth function y = g(x)</text>
+  <text x="600" y="116" text-anchor="middle" font-size="10" fill="#5C3D1E">defined near x = a, with g(a) = b, such that</text>
+  <text x="600" y="136" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">F(x, g(x)) = 0</text>
+
+  <!-- Derivative formula box -->
+  <rect x="420" y="166" width="360" height="55" rx="6" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="600" y="186" text-anchor="middle" font-size="11" font-weight="bold" fill="#2D5A8E">Derivative of the implicit function:</text>
+  <text x="600" y="210" text-anchor="middle" font-size="14" font-weight="bold" fill="#2D5A8E">g'(x) = -(dF/dx) / (dF/dy)</text>
+
+  <!-- Multivariate generalization -->
+  <rect x="420" y="238" width="360" height="70" rx="6" fill="#FDF5E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="600" y="258" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Multivariate Generalization</text>
+  <text x="600" y="276" text-anchor="middle" font-size="10" fill="#5C3D1E">F: R^n x R^m -> R^m,  F(a,b) = 0</text>
+  <text x="600" y="294" text-anchor="middle" font-size="10" fill="#5C3D1E">If det(dF/dy) != 0, then y = g(x) exists locally</text>
+
+  <!-- Applications boxes -->
+  <rect x="420" y="324" width="110" height="50" rx="4" fill="#FFF8EE" stroke="#7C2530" stroke-width="1"/>
+  <text x="475" y="342" text-anchor="middle" font-size="9" font-weight="bold" fill="#7C2530">Optimization</text>
+  <text x="475" y="356" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Lagrange</text>
+  <text x="475" y="368" text-anchor="middle" font-size="8.5" fill="#5C3D1E">multipliers</text>
+
+  <rect x="545" y="324" width="110" height="50" rx="4" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="600" y="342" text-anchor="middle" font-size="9" font-weight="bold" fill="#2D5A8E">Neural ODEs</text>
+  <text x="600" y="356" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Adjoint</text>
+  <text x="600" y="368" text-anchor="middle" font-size="8.5" fill="#5C3D1E">sensitivities</text>
+
+  <rect x="670" y="324" width="110" height="50" rx="4" fill="#FDF5E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="725" y="342" text-anchor="middle" font-size="9" font-weight="bold" fill="#5C3D1E">Manifolds</text>
+  <text x="725" y="356" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Coordinate</text>
+  <text x="725" y="368" text-anchor="middle" font-size="8.5" fill="#5C3D1E">charts</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="bluearrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Panel labels at bottom -->
+  <text x="200" y="396" text-anchor="middle" font-size="9" fill="#C4A87A">I. Geometric Intuition</text>
+  <text x="600" y="396" text-anchor="middle" font-size="9" fill="#C4A87A">II. Statement &amp; Applications</text>
+</svg>

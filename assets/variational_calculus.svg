@@ -1,0 +1,136 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Panel dividers -->
+  <line x1="267" y1="20" x2="267" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="533" y1="20" x2="533" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== PANEL 1: Brachistochrone ===== -->
+  <text x="133" y="44" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Brachistochrone Problem</text>
+  <text x="133" y="60" text-anchor="middle" font-size="10" fill="#5C3D1E">Fastest path between two points under gravity</text>
+
+  <!-- Axes suggestion -->
+  <line x1="38" y1="85" x2="38" y2="345" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="38" y1="345" x2="248" y2="345" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- Start and end points -->
+  <circle cx="48" cy="90" r="5" fill="#7C2530"/>
+  <circle cx="238" cy="330" r="5" fill="#7C2530"/>
+  <text x="52" y="88" font-size="10" fill="#7C2530">A</text>
+  <text x="242" y="330" font-size="10" fill="#7C2530">B</text>
+
+  <!-- Candidate curve 1: straight line (slow) -->
+  <line x1="48" y1="90" x2="238" y2="330" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="155" y="198" font-size="9" fill="#C4A87A" transform="rotate(49,155,198)">straight line</text>
+
+  <!-- Candidate curve 2: steep-then-flat -->
+  <path d="M48,90 Q58,280 238,330" stroke="#2D5A8E" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+  <text x="68" y="230" font-size="9" fill="#2D5A8E">steep-flat</text>
+
+  <!-- Candidate curve 3: cycloid (optimal) - highlighted -->
+  <path d="M48,90 Q120,340 238,330" stroke="#7C2530" stroke-width="3" fill="none"/>
+  <text x="90" y="308" font-size="10" font-weight="bold" fill="#7C2530">cycloid (optimal)</text>
+
+  <!-- Arrow indicating optimality -->
+  <polygon points="110,295 118,308 102,308" fill="#7C2530"/>
+
+  <!-- ===== PANEL 2: Euler-Lagrange Equation ===== -->
+  <text x="400" y="44" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Euler-Lagrange Equation</text>
+  <text x="400" y="60" text-anchor="middle" font-size="10" fill="#5C3D1E">Stationarity condition for J[y] = ∫F(x,y,y') dx</text>
+
+  <!-- Main equation box -->
+  <rect x="285" y="80" width="296" height="60" rx="6" fill="#FFF8EE" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="104" text-anchor="middle" font-size="15" font-weight="bold" fill="#7C2530">d  ∂F     ∂F</text>
+  <text x="400" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#7C2530">── ──── − ──── = 0</text>
+  <text x="362" y="130" text-anchor="middle" font-size="11" fill="#7C2530">dx ∂y′</text>
+  <text x="432" y="130" text-anchor="middle" font-size="11" fill="#7C2530">∂y</text>
+
+  <!-- Label: analog of f'(x)=0 -->
+  <rect x="290" y="156" width="220" height="28" rx="4" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="400" y="174" text-anchor="middle" font-size="10" fill="#2D5A8E">analog of f ′(x) = 0 in finite dimensions</text>
+
+  <!-- Three application boxes -->
+  <rect x="286" y="200" width="80" height="44" rx="4" fill="#FDF5E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="326" y="218" text-anchor="middle" font-size="9" font-weight="bold" fill="#5C3D1E">Physics</text>
+  <text x="326" y="232" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Lagrangian</text>
+  <text x="326" y="244" text-anchor="middle" font-size="8.5" fill="#5C3D1E">mechanics</text>
+
+  <rect x="380" y="200" width="80" height="44" rx="4" fill="#FDF5E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="420" y="218" text-anchor="middle" font-size="9" font-weight="bold" fill="#5C3D1E">Control</text>
+  <text x="420" y="232" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Pontryagin</text>
+  <text x="420" y="244" text-anchor="middle" font-size="8.5" fill="#5C3D1E">principle</text>
+
+  <rect x="474" y="200" width="80" height="44" rx="4" fill="#FDF5E6" stroke="#C4A87A" stroke-width="1"/>
+  <text x="514" y="218" text-anchor="middle" font-size="9" font-weight="bold" fill="#5C3D1E">ML</text>
+  <text x="514" y="232" text-anchor="middle" font-size="8.5" fill="#5C3D1E">Variational</text>
+  <text x="514" y="244" text-anchor="middle" font-size="8.5" fill="#5C3D1E">inference</text>
+
+  <!-- Arrows from equation box to application boxes -->
+  <line x1="360" y1="140" x2="326" y2="200" stroke="#C4A87A" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="400" y1="140" x2="420" y2="200" stroke="#C4A87A" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="435" y1="140" x2="514" y2="200" stroke="#C4A87A" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Action functional -->
+  <rect x="286" y="262" width="268" height="50" rx="4" fill="#FFF8EE" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="281" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Hamilton's Principle</text>
+  <text x="400" y="299" text-anchor="middle" font-size="12" fill="#5C3D1E">S[q] = ∫(T − V) dt   →   δS = 0</text>
+  <text x="400" y="312" text-anchor="middle" font-size="9" fill="#5C3D1E">physical trajectories extremize the action</text>
+
+  <!-- Noether box -->
+  <rect x="286" y="328" width="268" height="42" rx="4" fill="#EEF4FA" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="400" y="346" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Noether's Theorem</text>
+  <text x="400" y="361" text-anchor="middle" font-size="9" fill="#2D5A8E">continuous symmetry  →  conserved quantity</text>
+
+  <!-- ===== PANEL 3: Perturbation / Variation ===== -->
+  <text x="666" y="44" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">The Variation Concept</text>
+  <text x="666" y="60" text-anchor="middle" font-size="10" fill="#5C3D1E">y = y* + εη  →  dJ/dε|ε=0 = 0</text>
+
+  <!-- Coordinate axes for variation diagram -->
+  <line x1="553" y1="310" x2="780" y2="310" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="563" y1="90" x2="563" y2="318" stroke="#C4A87A" stroke-width="1"/>
+  <text x="782" y="314" font-size="9" fill="#5C3D1E">x</text>
+  <text x="555" y="88" font-size="9" fill="#5C3D1E">y</text>
+
+  <!-- Boundary points -->
+  <circle cx="573" cy="130" r="4" fill="#5C3D1E"/>
+  <circle cx="773" cy="280" r="4" fill="#5C3D1E"/>
+  <text x="558" y="129" font-size="9" fill="#5C3D1E" text-anchor="end">a</text>
+  <text x="777" y="295" font-size="9" fill="#5C3D1E">b</text>
+
+  <!-- Optimal curve y* -->
+  <path d="M573,130 Q640,320 773,280" stroke="#7C2530" stroke-width="3" fill="none"/>
+  <text x="612" y="265" font-size="11" font-weight="bold" fill="#7C2530">y*</text>
+
+  <!-- Perturbed curve y* + εη (ε small, same endpoints) -->
+  <path d="M573,130 Q630,270 703,230 Q740,210 773,280" stroke="#2D5A8E" stroke-width="1.8" fill="none" stroke-dasharray="6,3"/>
+  <text x="710" y="215" font-size="10" fill="#2D5A8E">y* + εη</text>
+
+  <!-- Variation η arrow at interior point -->
+  <line x1="668" y1="254" x2="668" y2="218" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#bluearrow)"/>
+  <text x="672" y="240" font-size="9" fill="#2D5A8E">εη(x)</text>
+
+  <!-- Boundary conditions: η=0 labels -->
+  <text x="574" y="158" font-size="8.5" fill="#5C3D1E">η=0</text>
+  <text x="754" y="270" font-size="8.5" fill="#5C3D1E">η=0</text>
+
+  <!-- Stationarity condition box -->
+  <rect x="553" y="328" width="235" height="44" rx="4" fill="#FFF8EE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="666" y="346" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Fundamental Lemma</text>
+  <text x="666" y="362" text-anchor="middle" font-size="9.5" fill="#7C2530">∫(E-L) · η dx = 0  ∀η  ⟹  E-L = 0</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+    <marker id="bluearrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Panel labels at bottom -->
+  <text x="133" y="392" text-anchor="middle" font-size="9" fill="#C4A87A">I. Brachistochrone</text>
+  <text x="400" y="392" text-anchor="middle" font-size="9" fill="#C4A87A">II. Euler-Lagrange &amp; Applications</text>
+  <text x="666" y="392" text-anchor="middle" font-size="9" fill="#C4A87A">III. Perturbation &amp; Stationarity</text>
+</svg>

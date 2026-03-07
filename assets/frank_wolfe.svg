@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Frank-Wolfe Algorithm: Projection-Free Optimization</text>
+
+  <!-- Convex feasible region (polygon) -->
+  <polygon points="120,340 80,220 160,120 320,100 380,180 350,320" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="220" y="370" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">Convex Feasible Set C</text>
+
+  <!-- Contour lines (objective function) -->
+  <ellipse cx="140" cy="190" rx="50" ry="35" fill="none" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3" transform="rotate(-20,140,190)"/>
+  <ellipse cx="140" cy="190" rx="90" ry="65" fill="none" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3" transform="rotate(-20,140,190)"/>
+  <ellipse cx="140" cy="190" rx="130" ry="95" fill="none" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3" transform="rotate(-20,140,190)"/>
+  <text x="90" y="175" font-family="Georgia, serif" font-size="10" fill="#C4A87A">f(x)*</text>
+
+  <!-- Current iterate x_t -->
+  <circle cx="300" cy="260" r="6" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="310" y="278" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">x_t</text>
+
+  <!-- Gradient arrow from x_t -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Negative gradient direction (dashed) -->
+  <line x1="300" y1="260" x2="200" y2="200" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <text x="225" y="218" font-family="Georgia, serif" font-size="10" fill="#7C2530">-nabla f(x_t)</text>
+
+  <!-- Linear minimization: vertex s_t -->
+  <circle cx="160" cy="120" r="6" fill="#5C3D1E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="170" y="112" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">s_t (vertex)</text>
+
+  <!-- Arrow from x_t to s_t (the FW direction) -->
+  <line x1="296" y1="255" x2="168" y2="126" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Next iterate x_{t+1} on the line segment -->
+  <circle cx="232" cy="192" r="6" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="242" y="188" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">x_{t+1}</text>
+
+  <!-- Step annotation -->
+  <text x="270" y="150" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">step size gamma_t</text>
+
+  <!-- Divider -->
+  <line x1="420" y1="55" x2="420" y2="370" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+  <!-- Right panel: Algorithm steps -->
+  <text x="610" y="72" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#7C2530" text-anchor="middle">Algorithm Steps</text>
+
+  <!-- Step 1 -->
+  <rect x="450" y="90" width="320" height="48" rx="5" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="460" y="108" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">1. Linear Subproblem (LMO)</text>
+  <text x="460" y="128" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">s_t = argmin  &lt;nabla f(x_t), s&gt;  over s in C</text>
+
+  <!-- Step 2 -->
+  <rect x="450" y="148" width="320" height="48" rx="5" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="460" y="166" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">2. Update Direction</text>
+  <text x="460" y="186" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">d_t = s_t - x_t  (toward vertex)</text>
+
+  <!-- Step 3 -->
+  <rect x="450" y="206" width="320" height="48" rx="5" fill="#5C3D1E" fill-opacity="0.08" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="460" y="224" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">3. Step Size</text>
+  <text x="460" y="244" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">gamma_t = 2/(t+2)  or line search</text>
+
+  <!-- Step 4 -->
+  <rect x="450" y="264" width="320" height="48" rx="5" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1"/>
+  <text x="460" y="282" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">4. Convex Combination</text>
+  <text x="460" y="302" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">x_{t+1} = x_t + gamma_t * d_t</text>
+
+  <!-- Key properties -->
+  <rect x="450" y="325" width="320" height="55" rx="5" fill="#2D5A8E" fill-opacity="0.10" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="610" y="344" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Projection-free | Sparse iterates | O(1/t) rate</text>
+  <text x="610" y="362" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Iterates are convex combos of vertices of C</text>
+  <text x="610" y="376" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Frank &amp; Wolfe, 1956</text>
+</svg>

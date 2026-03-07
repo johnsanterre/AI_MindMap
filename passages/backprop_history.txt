@@ -1,0 +1,201 @@
+&lt;&lt;include "Header"&gt;&gt;
+
+! Backprop History
+
+&lt;img src="assets/backprop_history.svg" alt="Timeline of backpropagation history from 1960 control theory through 1970 Linnainmaa, 1974 Werbos, to 1986 Rumelhart-Hinton-Williams" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;"&gt;
+
+Imagine you discover a recipe for the perfect cake, but you write it in a notebook that sits in a drawer for sixteen years. Someone else independently figures out the same recipe and puts it in a different drawer. Then a third person finds both notebooks, publishes the recipe in a major food magazine, and the whole world starts baking. That is, roughly, what happened with backpropagation — the algorithm that makes modern neural networks trainable. The math was known decades before anyone connected it to learning machines, and even then it was rediscovered multiple times before the field finally paid attention.
+
+!! The Core Insight
+
+''Backpropagation is not a single invention'' — it is the application of the &lt;&lt;link "chain rule" "Chain Rule"&gt;&gt;&lt;&lt;/link&gt;&gt; to compute gradients through a multi-layered computational graph. The core idea is ancient in calculus: if you know how the output of each layer depends on its input, you can work backward through the layers to figure out how //every// weight in the network contributes to the final error. What changed over the decades was not the math itself, but the realisation that this math could be applied to train &lt;&lt;link "neural networks" "Neural Networks"&gt;&gt;&lt;&lt;/link&gt;&gt; — and the engineering to make it practical.
+
+The history of backpropagation is a case study in how important ideas can lie dormant when the surrounding ecosystem — hardware, data, research culture — is not ready for them.
+
+!! The Chain of Rediscovery
+
+''1960 — Control Theory Roots.'' The earliest ancestor of backpropagation appeared in optimal control theory. Henry Kelley (1960) and Arthur Bryson (1961) derived gradient computation methods for continuous-time dynamical systems using adjoint equations. These methods propagated sensitivity information backward through time — exactly the same mathematical structure as backprop through layers — but they were framed in the language of control engineering, not learning.
+
+''1970 — Linnainmaa's Automatic Differentiation.'' Finnish mathematician Seppo Linnainmaa published his master's thesis describing the ''reverse mode of automatic differentiation''. This is the general algorithm for computing derivatives of a composed function by working backward from output to input. It is, in a precise mathematical sense, //the same algorithm// as backpropagation. But Linnainmaa framed it as a tool for numerical analysis, not for training neural networks. The connection to learning machines would not be made for several more years.
+
+''1974 — Werbos Bridges the Gap.'' Paul Werbos, in his Harvard PhD thesis, explicitly proposed using the chain rule to train &lt;&lt;link "neural networks" "Neural Networks"&gt;&gt;&lt;&lt;/link&gt;&gt; by propagating error signals backward through layers. This was the first clear statement that reverse-mode differentiation could be used as a //learning algorithm//. But the thesis received almost no attention — neural networks were deeply unfashionable in 1974, buried under the weight of the Minsky-Papert critique. Werbos published a more accessible version in 1982, but the field still was not listening.
+
+''1985 — Parker's Rediscovery.'' David Parker independently rediscovered the algorithm and published a technical report at MIT, bringing it closer to the mainstream AI community.
+
+''1986 — Rumelhart, Hinton, and Williams.'' The landmark //Nature// paper "Learning Representations by Back-Propagating Errors" by David Rumelhart, Geoffrey Hinton, and Ronald Williams finally broke through. They demonstrated that backpropagation could train multilayer networks to learn useful internal representations — hidden features that no human had designed. The timing was right: hardware was faster, the &lt;&lt;link "AI Winter" "AI Winter"&gt;&gt;&lt;&lt;/link&gt;&gt; was thawing, and the paper appeared in //Nature//, guaranteeing visibility. This paper is what most researchers mean when they say "backpropagation was invented."
+
+!! What the Math Is Actually Doing
+
+Consider a network with $L$ layers, where layer $\ell$ computes $a_\ell = f_\ell(W_\ell \, a_{\ell-1} + b_\ell)$ and the network produces a loss $\mathcal{L}$. Backpropagation computes $\partial \mathcal{L} / \partial W_\ell$ for every layer by applying the chain rule in reverse order.
+
+Define the error signal at the output layer $L$:
+
+$$\delta_L = \frac{\partial \mathcal{L}}{\partial a_L} \odot f'_L(z_L)$$
+
+where $z_L = W_L a_{L-1} + b_L$ is the pre-activation. Then propagate backward:
+
+$$\delta_\ell = (W_{\ell+1}^\top \delta_{\ell+1}) \odot f'_\ell(z_\ell)$$
+
+The gradient for each weight matrix is:
+
+$$\frac{\partial \mathcal{L}}{\partial W_\ell} = \delta_\ell \, a_{\ell-1}^\top$$
+
+This is reverse-mode automatic differentiation. The ''forward pass'' computes all activations $a_1, a_2, \ldots, a_L$ and stores them. The ''backward pass'' computes all $\delta$ values from $L$ down to $1$, using each layer's stored activations and the transpose of the weight matrices. The total cost is roughly twice the forward pass — a linear-time algorithm for computing gradients that would otherwise require separate perturbation of each weight.
+
+Linnainmaa's 1970 contribution was recognising that for //any// composed function $f = f_n \circ f_{n-1} \circ \cdots \circ f_1$, the full Jacobian can be accumulated by multiplying local Jacobians in reverse order. Werbos's 1974 contribution was recognising that the "composed function" could be a neural network, and the gradient could drive &lt;&lt;link "gradient descent" "Gradient Descent"&gt;&gt;&lt;&lt;/link&gt;&gt;.
+
+!! Why It Took So Long
+
+Three forces conspired to delay backpropagation's adoption by over a decade:
+
+''Disciplinary silos.'' The mathematicians who understood reverse-mode differentiation (numerical analysis, control theory) and the computer scientists who needed it (AI, connectionism) did not read each other's journals. Linnainmaa published in Finnish. Werbos wrote a PhD thesis, not a journal paper. Cross-pollination was slow before the internet.
+
+''The Minsky-Papert shadow.'' After the 1969 //Perceptrons// book, neural network research was considered a dead end by much of the AI establishment. Even when Werbos proposed backprop for neural networks in 1974, the community's response was indifference — not because the math was wrong, but because the target application (neural networks) was seen as hopeless. See &lt;&lt;link "Perceptron History" "Perceptron History"&gt;&gt;&lt;&lt;/link&gt;&gt; for the full story.
+
+''Lack of hardware and data.'' Even if the algorithm had been widely known in the 1970s, the computers of that era could not have trained networks large enough to demonstrate compelling results. The 1986 paper succeeded partly because DEC VAXes and early workstations could handle the networks Rumelhart, Hinton, and Williams used for their demonstrations.
+
+!! When Historical Understanding Breaks Down
+
+''1. Attribution becomes political.'' Backpropagation has been "invented" at least four times independently. Priority disputes are fierce and often unresolvable. Linnainmaa's automatic differentiation is the earliest formal version, but he never applied it to neural networks. Werbos was first to connect it to learning, but was largely ignored. Rumelhart, Hinton, and Williams get the most credit because they demonstrated it compellingly. There is no single inventor, and insisting on one distorts the history.
+
+''2. The algorithm alone was not enough.'' Backpropagation made deep networks //theoretically// trainable, but in practice, networks deeper than two or three layers remained difficult to train through the 1990s. The &lt;&lt;link "vanishing gradient problem" "Vanishing Gradient Problem"&gt;&gt;&lt;&lt;/link&gt;&gt; — where gradients shrink exponentially across many layers with sigmoid activations — meant that backprop needed additional innovations (ReLU, batch normalisation, residual connections, careful initialisation) to fulfil its promise. The 1986 paper opened a door, but it took another 25 years to walk through it.
+
+''3. Rediscovery is the norm, not the exception.'' The backpropagation story is often told as if the field was simply ignorant. But independent rediscovery is a structural feature of science: when the prerequisites for an idea exist, multiple people will find it. The real question is not "who invented backprop?" but "what conditions allowed it to finally take hold?" — and the answer involves hardware, data, incentives, and community readiness as much as any individual insight.
+
+!! Technical Details
+
+''Key Papers and Milestones:''
+* Kelley, "Gradient Theory of Optimal Flight Paths" (1960) — earliest adjoint-based gradient computation
+* Bryson, "A Gradient Method for Optimizing Multi-Stage Allocation Processes" (1961)
+* Linnainmaa, "The Representation of the Cumulative Rounding Error of an Algorithm as a Taylor Expansion of the Local Rounding Errors" (1970) — reverse-mode automatic differentiation
+* Werbos, "Beyond Regression: New Tools for Prediction and Analysis in the Behavioral Sciences" (1974, PhD thesis) — first application of backprop to neural networks
+* Werbos, "Applications of Advances in Nonlinear Sensitivity Analysis" (1982) — more accessible publication
+* Parker, "Learning Logic" (1985, MIT Tech Report) — independent rediscovery
+* Rumelhart, Hinton &amp; Williams, "Learning Representations by Back-Propagating Errors" (1986, //Nature//) — the paper that launched a field
+* LeCun, "A Theoretical Framework for Back-Propagation" (1988) — formalisation and connection to CNNs
+
+''Connections:''
+* &lt;&lt;link "Backpropagation and Chain Rule" "Backpropagation and Chain Rule"&gt;&gt;&lt;&lt;/link&gt;&gt; — the algorithm in technical detail
+* &lt;&lt;link "Chain Rule" "Chain Rule"&gt;&gt;&lt;&lt;/link&gt;&gt; — the mathematical foundation
+* &lt;&lt;link "Neural Networks" "Neural Networks"&gt;&gt;&lt;&lt;/link&gt;&gt; — the architectures backprop trains
+* &lt;&lt;link "Gradient Descent" "Gradient Descent"&gt;&gt;&lt;&lt;/link&gt;&gt; — the optimisation framework backprop serves
+* &lt;&lt;link "Perceptron History" "Perceptron History"&gt;&gt;&lt;&lt;/link&gt;&gt; — the crisis that delayed backprop's adoption
+* &lt;&lt;link "AI Winter" "AI Winter"&gt;&gt;&lt;&lt;/link&gt;&gt; — the funding collapse that kept neural networks dormant
+* &lt;&lt;link "Vanishing Gradient Problem" "Vanishing Gradient Problem"&gt;&gt;&lt;&lt;/link&gt;&gt; — the limitation backprop hit in deep networks
+* &lt;&lt;link "History of AI" "History of AI"&gt;&gt;&lt;&lt;/link&gt;&gt; — broader timeline
+
+!! Quiz
+
+&lt;div id="bh-q1"&gt;
+''1. Who first described reverse-mode automatic differentiation, the mathematical core of backpropagation?''
+
+(A) Rumelhart, Hinton, and Williams (1986)
+(B) Paul Werbos (1974)
+(C) Seppo Linnainmaa (1970)
+(D) Frank Rosenblatt (1958)
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q1"&gt;&gt;Incorrect. Rumelhart, Hinton, and Williams popularised backpropagation for neural networks, but reverse-mode AD was described earlier.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q1"&gt;&gt;Incorrect. Werbos was the first to apply the chain rule to neural network training, but the general reverse-mode AD algorithm was published four years earlier.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q1"&gt;&gt;Correct! Linnainmaa described reverse-mode automatic differentiation in his 1970 master's thesis — the general algorithm that backpropagation is a special case of.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q1"&gt;&gt;Incorrect. Rosenblatt invented the Perceptron, which has a simple weight update rule but does not use chain-rule-based gradient propagation through multiple layers.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q2"&gt;
+''2. What was Paul Werbos's key contribution in his 1974 PhD thesis?''
+
+(A) He proved that neural networks are universal function approximators
+(B) He explicitly proposed using the chain rule to train neural networks by backpropagating errors
+(C) He invented the Perceptron learning rule
+(D) He designed the first convolutional neural network
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q2"&gt;&gt;Incorrect. The Universal Approximation Theorem was proved by Cybenko and Hornik in 1989, fifteen years later.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q2"&gt;&gt;Correct! Werbos was the first to connect reverse-mode differentiation to neural network training — proposing that error gradients could be propagated backward through layers to update weights.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q2"&gt;&gt;Incorrect. The Perceptron learning rule was invented by Frank Rosenblatt in 1958.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q2"&gt;&gt;Incorrect. Convolutional neural networks were developed by Yann LeCun in the late 1980s.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q3"&gt;
+''3. Why did Werbos's 1974 proposal receive almost no attention?''
+
+(A) The mathematics was incorrect
+(B) Neural networks were deeply unfashionable after the Minsky-Papert critique
+(C) The algorithm was too slow to run on any existing hardware
+(D) Rumelhart had already published the same idea
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q3"&gt;&gt;Incorrect. Werbos's mathematics was correct. The problem was sociological, not technical.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q3"&gt;&gt;Correct! The 1969 Minsky-Papert critique had effectively frozen neural network research. In 1974, proposing a neural network training algorithm was like trying to sell ice in a blizzard — nobody was buying.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q3"&gt;&gt;Incorrect. While hardware was limited, the algorithm itself is computationally efficient. The real barrier was the research community's disinterest in neural networks.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q3"&gt;&gt;Incorrect. Rumelhart's paper came twelve years later, in 1986. Werbos was earlier.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q4"&gt;
+''4. In backpropagation, the error signal $\delta_\ell$ at layer $\ell$ is computed as:''
+
+(A) $\delta_\ell = W_\ell \, \delta_{\ell+1} \odot f'_\ell(z_\ell)$
+(B) $\delta_\ell = (W_{\ell+1}^\top \delta_{\ell+1}) \odot f'_\ell(z_\ell)$
+(C) $\delta_\ell = \delta_{\ell+1} \cdot a_{\ell-1}^\top$
+(D) $\delta_\ell = f_\ell(W_\ell \, a_{\ell-1})$
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q4"&gt;&gt;Incorrect. The weight matrix must be transposed ($W_{\ell+1}^\top$, not $W_\ell$) to project the downstream error back to the current layer's dimension.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q4"&gt;&gt;Correct! The error from the next layer is projected back through the transpose of its weight matrix, then multiplied element-wise by the local activation derivative. This is the chain rule applied layer by layer.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q4"&gt;&gt;Incorrect. That expression computes the weight gradient $\partial \mathcal{L}/\partial W_\ell$, not the error signal $\delta_\ell$.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q4"&gt;&gt;Incorrect. That is the forward pass computation, not the backward error propagation.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q5"&gt;
+''5. What made the 1986 Rumelhart-Hinton-Williams paper succeed where earlier work had failed?''
+
+(A) They invented a fundamentally new algorithm
+(B) They combined clear demonstrations, better hardware timing, and publication in //Nature//
+(C) They proved the algorithm converges in polynomial time
+(D) They had access to GPU computing
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q5"&gt;&gt;Incorrect. The core algorithm — reverse-mode chain rule applied to neural networks — had been described by Werbos in 1974 and by Parker in 1985. The mathematical novelty was minimal.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q5"&gt;&gt;Correct! The paper showed compelling examples of networks learning internal representations, appeared when hardware could support the demonstrations, and was published in one of the world's most visible scientific journals. Timing, presentation, and venue all aligned.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q5"&gt;&gt;Incorrect. No such convergence proof was provided — and gradient descent on non-convex loss landscapes has no general polynomial-time guarantee.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q5"&gt;&gt;Incorrect. GPU computing for neural networks did not become practical until the late 2000s. The 1986 experiments ran on conventional CPUs.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q6"&gt;
+''6. What is the relationship between backpropagation and automatic differentiation?''
+
+(A) They are completely unrelated algorithms
+(B) Backpropagation is a special case of reverse-mode automatic differentiation
+(C) Automatic differentiation is a special case of backpropagation
+(D) Backpropagation uses forward-mode automatic differentiation
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q6"&gt;&gt;Incorrect. They are deeply related — backpropagation //is// reverse-mode AD applied to a specific computational graph (a neural network with a loss function).&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q6"&gt;&gt;Correct! Reverse-mode automatic differentiation is the general algorithm for computing derivatives of composed functions by working backward. Backpropagation applies this to the specific case of a neural network's loss with respect to its weights.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q6"&gt;&gt;Incorrect. The relationship is the other way around: AD is the more general framework, and backpropagation is a specific application of it.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q6"&gt;&gt;Incorrect. Backpropagation uses //reverse//-mode AD, not forward-mode. Forward-mode would require a separate pass for each weight, making it prohibitively expensive for networks with many parameters.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q7"&gt;
+''7. Which field provided the earliest precursors to backpropagation in the 1960s?''
+
+(A) Computer graphics
+(B) Optimal control theory
+(C) Database systems
+(D) Quantum mechanics
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q7"&gt;&gt;Incorrect. Computer graphics did not contribute to the development of gradient-based training algorithms.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q7"&gt;&gt;Correct! Kelley (1960) and Bryson (1961) derived adjoint-based gradient methods for optimising dynamical systems — backward propagation of sensitivity through time, the same mathematical structure as backprop through layers.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q7"&gt;&gt;Incorrect. Database systems are unrelated to the development of gradient computation algorithms.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q7"&gt;&gt;Incorrect. While quantum mechanics uses sophisticated mathematics, it did not directly contribute to the development of backpropagation.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;div id="bh-q8"&gt;
+''8. Why did backpropagation alone not immediately enable training of very deep networks after 1986?''
+
+(A) The algorithm only works for networks with exactly two layers
+(B) Sigmoid activations caused gradients to vanish exponentially across many layers
+(C) The 1986 paper contained a mathematical error corrected only in 2006
+(D) Backpropagation requires GPUs, which were not available until 2007
+
+&lt;&lt;button "A"&gt;&gt;&lt;&lt;replace "#bh-q8"&gt;&gt;Incorrect. Backpropagation works for networks of any depth. The problem was practical, not theoretical.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "B"&gt;&gt;&lt;&lt;replace "#bh-q8"&gt;&gt;Correct! Sigmoid and tanh activations saturate, producing derivatives near zero. Multiplying many such small derivatives across layers causes gradients to shrink exponentially — the vanishing gradient problem. It took innovations like ReLU, batch normalisation, and residual connections to make deep training practical.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "C"&gt;&gt;&lt;&lt;replace "#bh-q8"&gt;&gt;Incorrect. The 1986 paper's mathematics was correct. The limitation was in the interaction between the algorithm and the activation functions used at the time.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#bh-q8"&gt;&gt;Incorrect. Backpropagation runs on CPUs perfectly well. GPU acceleration improved speed but was not a prerequisite. The real barrier was the vanishing gradient problem with sigmoid activations.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
+
+&lt;&lt;include "Footer"&gt;&gt;

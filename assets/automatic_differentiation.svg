@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="14" fill="#5C3D1E" font-weight="bold" letter-spacing="1">AUTOMATIC DIFFERENTIATION: FORWARD vs REVERSE MODE</text>
+
+  <!-- ══ COMPUTATIONAL GRAPH (center top) ══ -->
+  <text x="400" y="58" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">COMPUTATIONAL GRAPH: f(x,y) = (x + y) * y</text>
+
+  <!-- Node: x -->
+  <circle cx="200" cy="110" r="22" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="114" text-anchor="middle" font-size="12" fill="#5C3D1E" font-weight="bold">x</text>
+
+  <!-- Node: y -->
+  <circle cx="200" cy="210" r="22" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="214" text-anchor="middle" font-size="12" fill="#5C3D1E" font-weight="bold">y</text>
+
+  <!-- Node: v1 = x + y -->
+  <circle cx="370" cy="110" r="26" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+  <text x="370" y="106" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">v1</text>
+  <text x="370" y="120" text-anchor="middle" font-size="9" fill="#7C2530">x + y</text>
+
+  <!-- Node: v2 = v1 * y -->
+  <circle cx="560" cy="160" r="26" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+  <text x="560" y="156" text-anchor="middle" font-size="10" fill="#7C2530" font-weight="bold">v2</text>
+  <text x="560" y="170" text-anchor="middle" font-size="9" fill="#7C2530">v1 * y</text>
+
+  <!-- Edges -->
+  <line x1="222" y1="110" x2="344" y2="110" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <line x1="222" y1="205" x2="348" y2="118" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <line x1="396" y1="118" x2="536" y2="152" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <line x1="222" y1="215" x2="536" y2="168" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr-red)"/>
+
+  <!-- Edge labels -->
+  <text x="280" y="103" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">+</text>
+  <text x="280" y="160" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">+</text>
+  <text x="468" y="128" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">*</text>
+  <text x="385" y="200" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">*</text>
+
+  <!-- Output label -->
+  <text x="610" y="155" font-size="11" fill="#7C2530" font-weight="bold">f</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="255" x2="760" y2="255" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ══ FORWARD MODE (left bottom) ══ -->
+  <text x="200" y="278" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold" letter-spacing="1">FORWARD MODE</text>
+
+  <!-- Forward mode boxes -->
+  <rect x="60" y="290" width="120" height="40" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="120" y="306" text-anchor="middle" font-size="9" fill="#2D5A8E">Seed: dx/dx = 1</text>
+  <text x="120" y="320" text-anchor="middle" font-size="9" fill="#2D5A8E">Propagate --></text>
+
+  <line x1="180" y1="310" x2="198" y2="310" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+  <rect x="200" y="290" width="120" height="40" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="260" y="306" text-anchor="middle" font-size="9" fill="#2D5A8E">dv1/dx = 1</text>
+  <text x="260" y="320" text-anchor="middle" font-size="9" fill="#2D5A8E">(partial of +)</text>
+
+  <line x1="320" y1="310" x2="338" y2="310" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+  <rect x="340" y="290" width="120" height="40" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="400" y="306" text-anchor="middle" font-size="9" fill="#2D5A8E">df/dx = y</text>
+  <text x="400" y="320" text-anchor="middle" font-size="9" fill="#2D5A8E">(partial of *)</text>
+
+  <text x="200" y="352" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">One pass per input variable</text>
+
+  <!-- ══ REVERSE MODE (right bottom) ══ -->
+  <text x="620" y="278" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold" letter-spacing="1">REVERSE MODE</text>
+
+  <rect x="680" y="290" width="100" height="40" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="730" y="306" text-anchor="middle" font-size="9" fill="#7C2530">Seed: df/df = 1</text>
+  <text x="730" y="320" text-anchor="middle" font-size="9" fill="#7C2530"><-- Propagate</text>
+
+  <line x1="678" y1="310" x2="660" y2="310" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arr-red)"/>
+
+  <rect x="540" y="290" width="120" height="40" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="600" y="306" text-anchor="middle" font-size="9" fill="#7C2530">df/dv1 = y</text>
+  <text x="600" y="320" text-anchor="middle" font-size="9" fill="#7C2530">df/dy = v1+y</text>
+
+  <text x="620" y="352" text-anchor="middle" font-size="9" fill="#6B5D4F" font-style="italic">One pass gives ALL gradients (backprop)</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="388" text-anchor="middle" font-size="10" fill="#6B5D4F">Forward mode: efficient for few inputs, many outputs | Reverse mode: efficient for many inputs, few outputs (deep learning)</text>
+</svg>

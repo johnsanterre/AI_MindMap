@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Shannon Entropy: H(p) and Cross-Entropy Decomposition</text>
+
+  <!-- ===== LEFT PANEL: Entropy curve H(p) for binary distribution ===== -->
+  <!-- Panel label -->
+  <text x="210" y="60" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">Binary Entropy H(p) vs. p</text>
+
+  <!-- Axes -->
+  <!-- x-axis -->
+  <line x1="60" y1="320" x2="370" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- y-axis -->
+  <line x1="60" y1="320" x2="60" y2="70" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- x-axis label -->
+  <text x="215" y="350" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">p (probability of heads)</text>
+
+  <!-- y-axis label -->
+  <text x="20" y="200" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90, 20, 200)">H(p) in bits</text>
+
+  <!-- x-axis ticks and labels -->
+  <line x1="60" y1="320" x2="60" y2="326" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="60" y="338" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">0</text>
+
+  <line x1="122" y1="320" x2="122" y2="326" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="122" y="338" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">0.2</text>
+
+  <line x1="184" y1="320" x2="184" y2="326" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="184" y="338" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">0.4</text>
+
+  <line x1="215" y1="320" x2="215" y2="326" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="215" y="338" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">0.5</text>
+
+  <line x1="246" y1="320" x2="246" y2="326" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="246" y="338" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">0.6</text>
+
+  <line x1="308" y1="320" x2="308" y2="326" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="308" y="338" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">0.8</text>
+
+  <line x1="370" y1="320" x2="370" y2="326" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="370" y="338" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1.0</text>
+
+  <!-- y-axis ticks -->
+  <line x1="54" y1="320" x2="60" y2="320" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="50" y="324" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="end">0</text>
+
+  <line x1="54" y1="195" x2="60" y2="195" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="50" y="199" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="end">0.5</text>
+
+  <line x1="54" y1="70" x2="60" y2="70" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="50" y="74" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="end">1.0</text>
+
+  <!-- Entropy curve: H(p) = -p*log2(p) - (1-p)*log2(1-p)
+       Computed at key p values; axes: x in [60,370] maps p in [0,1], y in [320,70] maps H in [0,1]
+       x = 60 + p*310, y = 320 - H*250
+       Points (p, H): 0->0, 0.05->0.286, 0.1->0.469, 0.2->0.722, 0.3->0.881, 0.4->0.971, 0.5->1.0, 0.6->0.971, 0.7->0.881, 0.8->0.722, 0.9->0.469, 0.95->0.286, 1->0 -->
+  <path d="M 60,320
+           L 75.5,248.5
+           L 91,202.7
+           L 122,139.5
+           L 153,99.8
+           L 184,77.3
+           L 215,70
+           L 246,77.3
+           L 277,99.8
+           L 308,139.5
+           L 339,202.7
+           L 354.5,248.5
+           L 370,320"
+        fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Fill under curve -->
+  <path d="M 60,320
+           L 75.5,248.5
+           L 91,202.7
+           L 122,139.5
+           L 153,99.8
+           L 184,77.3
+           L 215,70
+           L 246,77.3
+           L 277,99.8
+           L 308,139.5
+           L 339,202.7
+           L 354.5,248.5
+           L 370,320 Z"
+        fill="#2D5A8E" fill-opacity="0.08"/>
+
+  <!-- Peak annotation: fair coin = 1 bit -->
+  <line x1="215" y1="70" x2="215" y2="320" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3"/>
+  <circle cx="215" cy="70" r="5" fill="#7C2530"/>
+  <text x="222" y="82" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">Fair coin</text>
+  <text x="222" y="95" font-family="Georgia, serif" font-size="11" fill="#7C2530">H = 1 bit</text>
+
+  <!-- Biased coin annotation at p=0.1 -->
+  <circle cx="91" cy="202.7" r="4" fill="#C4A87A"/>
+  <text x="96" y="197" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Biased coin</text>
+  <text x="96" y="209" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">p=0.1: H≈0.47 bits</text>
+
+  <!-- Certain outcome annotation -->
+  <circle cx="370" cy="320" r="4" fill="#5C3D1E"/>
+  <text x="355" y="315" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Certain</text>
+  <text x="355" y="307" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">H = 0</text>
+
+  <!-- ===== RIGHT PANEL: Cross-entropy decomposition bar diagram ===== -->
+  <!-- Divider -->
+  <line x1="415" y1="50" x2="415" y2="375" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+  <!-- Panel label -->
+  <text x="610" y="60" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">Cross-Entropy Decomposition</text>
+
+  <!-- Formula -->
+  <text x="610" y="84" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle">H(P, Q) = H(P) + D</text>
+  <text x="717" y="84" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="start">KL</text>
+  <text x="730" y="84" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="start">(P ‖ Q)</text>
+
+  <!-- Bar diagram showing the decomposition -->
+  <!-- Bar for H(P,Q) — total cross-entropy -->
+  <rect x="450" y="115" width="50" height="180" fill="#2D5A8E" fill-opacity="0.85" rx="2"/>
+  <text x="475" y="108" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">H(P,Q)</text>
+  <text x="475" y="303" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Total</text>
+
+  <!-- Equals sign -->
+  <text x="520" y="210" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle">=</text>
+
+  <!-- Bar for H(P) — true entropy -->
+  <rect x="540" y="185" width="50" height="110" fill="#5C3D1E" fill-opacity="0.80" rx="2"/>
+  <text x="565" y="178" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">H(P)</text>
+  <text x="565" y="232" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">True</text>
+  <text x="565" y="245" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">entropy</text>
+
+  <!-- Plus sign -->
+  <text x="608" y="210" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle">+</text>
+
+  <!-- Bar for D_KL — extra cost -->
+  <rect x="625" y="115" width="50" height="70" fill="#7C2530" fill-opacity="0.85" rx="2"/>
+  <text x="650" y="108" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">D</text>
+  <text x="660" y="103" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="start">KL</text>
+  <text x="650" y="143" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Extra</text>
+  <text x="650" y="156" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">cost of</text>
+  <text x="650" y="169" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">wrong Q</text>
+
+  <!-- Baseline -->
+  <line x1="435" y1="295" x2="690" y2="295" stroke="#5C3D1E" stroke-width="1.2"/>
+
+  <!-- Annotation: minimizing cross-entropy = minimizing KL -->
+  <rect x="430" y="310" width="275" height="52" fill="#C4A87A" fill-opacity="0.18" rx="4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="567" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Since H(P) is fixed by the data,</text>
+  <text x="567" y="342" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">minimizing H(P,Q) ≡ minimizing D</text>
+  <text x="680" y="338" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="start">KL</text>
+  <text x="567" y="356" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">→ Cross-entropy loss = KL minimization</text>
+
+  <!-- Legend dots for bar colors -->
+  <rect x="436" y="370" width="10" height="10" fill="#2D5A8E" rx="1"/>
+  <text x="450" y="379" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Cross-entropy</text>
+  <rect x="530" y="370" width="10" height="10" fill="#5C3D1E" rx="1"/>
+  <text x="544" y="379" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">True entropy</text>
+  <rect x="622" y="370" width="10" height="10" fill="#7C2530" rx="1"/>
+  <text x="636" y="379" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">KL divergence</text>
+</svg>

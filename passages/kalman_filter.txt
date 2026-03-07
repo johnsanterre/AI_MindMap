@@ -1,0 +1,182 @@
+<<include "Header">>
+
+! Kalman Filter
+
+<img src="assets/kalman_filter.svg" alt="Diagram of the Kalman filter predict-update cycle showing prior estimate, prediction, Kalman gain, and posterior update" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are navigating a ship through dense fog. You know roughly where you started and how fast you are moving, so you can //predict// where you should be now — but that estimate drifts with every wave and gust of wind. Occasionally, a lighthouse beacon cuts through the fog and gives you a noisy position fix. The ''Kalman filter'' is the mathematically optimal way to blend those two sources of information: your physics-based prediction and your imperfect sensor reading. It weights each source by how much you trust it, producing a fused estimate that is always better than either alone.
+
+!! The Core Insight
+
+The Kalman filter is an ''optimal recursive estimator'' for systems that can be described by linear equations with Gaussian (bell-curve) noise. "Optimal" means no other linear estimator can do better in the mean-squared-error sense. "Recursive" means it updates its estimate one step at a time, discarding raw measurements once they have been absorbed — making it extremely efficient for real-time systems.
+
+The filter operates in a continuous ''predict-update cycle''. During the predict step, the filter rolls its current best estimate forward in time using a model of the system's dynamics, and it tracks how uncertain that estimate is. During the update step, a new measurement arrives and is fused with the prediction. The fusion is weighted by the ''Kalman gain'': a quantity that automatically shifts trust toward whichever source — model or sensor — is currently more reliable.
+
+!! The Predict-Update Cycle
+
+''Predict step (time update):'' Starting from the current ''posterior estimate'' $\hat{x}_{t|t}$ and its covariance $P_{t|t}$, the filter projects forward:
+
+$$\hat{x}_{t+1|t} = F\hat{x}_{t|t} + Bu_t$$
+$$P_{t+1|t} = FP_{t|t}F^T + Q$$
+
+Here $F$ is the ''state transition matrix'' (the physics model), $B$ maps any known control input $u_t$, and $Q$ is the ''process noise covariance'' representing how much the model is trusted to capture reality. Uncertainty always grows during prediction.
+
+''Update step (measurement update):'' When a measurement $z_{t+1}$ arrives, the filter computes the ''Kalman gain'' $K$, which determines how much to trust the new observation relative to the prior prediction. The posterior is then a weighted blend:
+
+$$\hat{x}_{t+1|t+1} = \hat{x}_{t+1|t} + K(z_{t+1} - H\hat{x}_{t+1|t})$$
+
+The term $(z_{t+1} - H\hat{x}_{t+1|t})$ is called the ''innovation'' or residual — how surprised the filter is by the measurement. After the update, uncertainty shrinks.
+
+!! What the Math Is Actually Doing
+
+The system is described by two linear equations. The ''state equation'' models how the hidden state $x_t$ evolves:
+
+$$x_{t+1} = Fx_t + Bu_t + w_t, \quad w_t \sim \mathcal{N}(0, Q)$$
+
+The ''measurement equation'' relates the hidden state to what the sensor actually reports:
+
+$$z_t = Hx_t + v_t, \quad v_t \sim \mathcal{N}(0, R)$$
+
+Here $H$ is the ''observation matrix'' (which aspects of the state are measured), $Q$ is process noise, and $R$ is ''measurement noise covariance''. Both noise sources are assumed Gaussian and independent.
+
+The ''Kalman gain'' is the heart of the filter:
+
+$$K = PH^T(HPH^T + R)^{-1}$$
+
+Intuitively: $PH^T$ measures how much the state uncertainty maps onto measurement space; $(HPH^T + R)$ is the total variance in measurement space (model uncertainty plus sensor noise). The gain $K$ is the fraction of the innovation to incorporate. When $R \to 0$ (perfect sensor), $K \to H^{-1}$ and the filter trusts the measurement completely. When $Q \to 0$ (perfect model), $K \to 0$ and the filter ignores measurements entirely.
+
+The ''covariance update'' after the measurement step:
+
+$$P_{t+1|t+1} = (I - KH)P_{t+1|t}$$
+
+This contraction of uncertainty is what makes the Kalman filter so satisfying: every good measurement makes the estimate more precise.
+
+!! Extensions and Variants
+
+The standard Kalman filter assumes linearity and Gaussian noise — constraints that break down constantly in the real world. Three major extensions address this:
+
+The ''Extended Kalman Filter (EKF)'' handles nonlinear systems by linearizing around the current estimate using first-order Taylor expansion (Jacobian matrices). It is widely used in robotics and aerospace but can diverge if the linearization is poor.
+
+The ''Unscented Kalman Filter (UKF)'' is a more principled approach to nonlinearity. Rather than linearizing the equations, it propagates a carefully chosen set of ''sigma points'' through the true nonlinear function and reconstructs the mean and covariance from the results. It captures nonlinear effects to third order and is more robust than the EKF.
+
+''Particle filters'' (Sequential Monte Carlo methods) abandon Gaussian assumptions entirely, representing the posterior distribution as a cloud of weighted random samples. They can handle arbitrary noise distributions and highly nonlinear dynamics at the cost of much greater computational expense.
+
+Conceptually, the Kalman filter predict-update cycle has deep connections to sequence models in deep learning. The hidden state of an <<link "RNN" "Recurrent Neural Network">><<link>> and the cell/hidden state of an <<link "LSTM" "Long Short-Term Memory">><<link>> perform an analogous role: maintaining a compressed summary of past observations that is updated at each time step. The Kalman filter is the exact optimal solution when the world is linear-Gaussian; neural sequence models learn flexible approximations for more complex worlds.
+
+!! When the Kalman Filter Breaks Down
+
+''1. Non-Gaussian noise.'' The filter's optimality guarantees evaporate when noise is heavy-tailed, multimodal, or otherwise non-Gaussian. A single large outlier measurement (a sensor glitch, a GPS multipath reflection) can violently corrupt the estimate because the filter has no concept of "this reading is implausible." Robust variants use outlier-resistant update rules, but they sacrifice the clean optimality guarantees.
+
+''2. Nonlinear dynamics breaking the linearity assumption.'' The standard filter assumes that both $F$ (state transition) and $H$ (observation) are linear. Real systems — a spacecraft maneuvering, a robot arm rotating — have nonlinear dynamics. The EKF's linearization can introduce bias and cause the covariance to become inconsistent (underestimating true uncertainty), eventually leading to ''filter divergence'' where the filter confidently reports wrong answers and ignores corrective measurements.
+
+''3. Model mismatch when process or measurement matrices are wrong.'' The filter is only as good as the matrices $F$, $H$, $Q$, and $R$ used to define it. In practice these are often hand-tuned or estimated from data imperfectly. If $Q$ is set too small, the filter over-trusts its model and becomes sluggish to react to real changes. If $R$ is set too small, it over-trusts noisy sensors. Tuning these matrices — ''filter design'' — is as much art as science, and a mis-specified filter can be worse than a simpler heuristic.
+
+!! Technical Details
+
+The Kalman filter was published by Rudolf E. Kálmán in his landmark 1960 paper //A New Approach to Linear Filtering and Prediction Problems// in the ASME Journal of Basic Engineering. It was almost immediately adopted by NASA for the Apollo guidance computer — one of the most consequential applications of mathematical statistics in engineering history.
+
+''SLAM (Simultaneous Localization and Mapping)'' in robotics is a canonical application: a robot must simultaneously estimate its own pose and build a map of its environment, both of which are uncertain. EKF-SLAM and graph-based SLAM variants underpin most practical mobile robotics systems. See <<link "SLAM" "SLAM">><</link>>.
+
+The Kalman filter sits at the intersection of several mathematical fields:
+
+- ''<<link "Bayesian" "Bayesian Inference">><</link>> inference:'' The predict step is a prior, the update step is Bayes' rule applied to a Gaussian likelihood. The Kalman filter //is// the Bayes filter for linear-Gaussian systems.
+- ''<<link "Stochastic Processes" "Stochastic Processes">><</link>>:'' The state-space model is a linear dynamical system driven by Brownian-motion-like noise.
+- ''<<link "Optimal Control" "Optimal Control">><</link>> and <<link "Control Theory" "Control Theory">><</link>>:'' The Linear-Quadratic-Gaussian (LQG) controller pairs a Kalman filter (estimator) with an LQR controller (policy), and the separation principle guarantees this combination is globally optimal.
+- ''<<link "Hidden Markov Machine" "Hidden Markov Machine">><</link>>:'' The Kalman filter is a continuous-state analog of the HMM forward algorithm. Both maintain a belief state over a hidden Markov process.
+- ''<<link "Reinforcement Learning" "Reinforcement Learning">><</link>>:'' State estimation via Kalman filtering is a prerequisite for many partially-observable RL problems (POMDPs).
+
+The ''Rauch-Tung-Striebel (RTS) smoother'' is the offline companion: given a full sequence of measurements, it runs the Kalman filter forward then backward to produce optimal estimates at //every// time step, not just the current one.
+
+Computational cost per step is $O(n^3)$ in state dimension $n$ due to the matrix inversion in the Kalman gain — a bottleneck for very high-dimensional state spaces, motivating ensemble Kalman filters and sparse approximations used in weather forecasting.
+
+!! Quiz
+
+''Question 1 of 8''
+
+<span id="kf-q1">What does the Kalman gain $K$ determine?</span>
+
+A. The rate at which the state transition matrix $F$ is updated
+B. How much weight to give the new measurement relative to the prediction
+C. The number of sigma points used in the unscented transform
+D. The dimension of the hidden state vector
+
+<<button "A">><<replace "#kf-q1">>Incorrect. $K$ does not update $F$; $F$ is a fixed model of system dynamics. The Kalman gain weights the innovation (measurement surprise) when forming the posterior estimate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q1">>Correct! The Kalman gain $K = PH^T(HPH^T + R)^{-1}$ blends model prediction and new measurement optimally, shifting weight toward whichever source is more reliable at each step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q1">>Incorrect. Sigma points are specific to the Unscented Kalman Filter; the standard Kalman gain has nothing to do with them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q1">>Incorrect. State dimension is a design choice fixed when the problem is formulated. The Kalman gain is computed at every time step from current covariance and noise matrices.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 2 of 8''
+
+<span id="kf-q2">What happens to the estimate covariance $P$ during the prediction step?</span>
+
+A. It decreases because the model reduces uncertainty
+B. It stays constant if the system is time-invariant
+C. It increases because model uncertainty accumulates over time
+D. It is reset to the identity matrix
+
+<<button "A">><<replace "#kf-q2">>Incorrect. Predictions always add uncertainty — the process noise $Q$ is added to the propagated covariance $FPF^T$. Only measurements (update step) can reduce $P$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q2">>Incorrect. Even for a time-invariant system, $P$ grows during prediction because process noise $Q$ is added at every step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q2">>Correct! The predict step computes $P_{t+1|t} = FP_{t|t}F^T + Q$, which always grows by at least the process noise $Q$. Uncertainty is reduced only during the measurement update.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q2">>Incorrect. The covariance is never reset arbitrarily; it is propagated continuously through the predict-update cycle.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 3 of 8''
+
+<span id="kf-q3">The Kalman filter is the optimal Bayes filter under which two assumptions?</span>
+
+A. Nonlinear dynamics and uniform noise
+B. Linear dynamics and Gaussian noise
+C. Nonlinear dynamics and Gaussian noise
+D. Linear dynamics and Poisson noise
+
+<<button "A">><<replace "#kf-q3">>Incorrect. Nonlinear dynamics require extensions like the EKF or UKF; uniform noise violates the Gaussian assumption required for the closed-form solution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q3">>Correct! With linear state and observation equations ($F$, $H$ are matrices) and Gaussian noise ($Q$, $R$), Gaussians remain Gaussian under all operations, yielding the exact optimal Bayesian estimator in closed form.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q3">>Incorrect. Nonlinear dynamics break the closed-form solution even if noise is Gaussian. This is precisely why the EKF and UKF were developed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q3">>Incorrect. Poisson noise is not Gaussian; the Kalman filter's optimality guarantee requires Gaussian distributions throughout.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 4 of 8''
+
+<span id="kf-q4">In the Kalman gain formula $K = PH^T(HPH^T + R)^{-1}$, what does $R$ represent?</span>
+
+A. The state transition matrix
+B. The process noise covariance
+C. The measurement noise covariance
+D. The Riccati matrix solution
+
+<<button "A">><<replace "#kf-q4">>Incorrect. The state transition matrix is $F$, which governs how the hidden state evolves from one time step to the next.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q4">>Incorrect. Process noise covariance is $Q$, added during the predict step to account for model imperfections.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q4">>Correct! $R$ is the measurement noise covariance, encoding how much the sensor readings are trusted. Large $R$ means noisy sensors, causing the filter to rely more on the model prediction and less on measurements.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q4">>Incorrect. The Riccati equation is related (the steady-state Kalman gain satisfies an algebraic Riccati equation), but $R$ in the gain formula specifically denotes measurement noise covariance.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 5 of 8''
+
+<span id="kf-q5">How does the Extended Kalman Filter (EKF) handle nonlinear systems?</span>
+
+A. It uses particle sampling to represent the distribution
+B. It propagates sigma points through the nonlinear function
+C. It linearizes the nonlinear functions using Jacobian matrices
+D. It switches between multiple linear models based on the state
+
+<<button "A">><<replace "#kf-q5">>Incorrect. Particle sampling is the approach of particle filters (Sequential Monte Carlo), not the EKF.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q5">>Incorrect. Sigma point propagation is the approach of the Unscented Kalman Filter (UKF), which was designed to improve on the EKF's linearization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q5">>Correct! The EKF computes the Jacobian (matrix of first partial derivatives) of the nonlinear functions at the current estimate and uses these to linearize, then applies standard Kalman equations. This can fail when the true function is highly curved.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q5">>Incorrect. Switching between linear models describes the Interacting Multiple Model (IMM) filter, a different approach to handling changing dynamics.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 6 of 8''
+
+<span id="kf-q6">What is the ''innovation'' in the Kalman filter update step?</span>
+
+A. The new value of the Kalman gain after measurement
+B. The difference between the actual measurement and the predicted measurement
+C. The reduction in covariance after the update
+D. The process noise sample added during prediction
+
+<<button "A">><<replace "#kf-q6">>Incorrect. The Kalman gain is computed before the innovation is used; it is not itself called the innovation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q6">>Correct! The innovation (or residual) is $z_t - H\hat{x}_{t|t-1}$ — how surprised the filter is by the new measurement relative to what it expected. A consistently large innovation signals model mismatch.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q6">>Incorrect. The reduction in covariance is described by $(I - KH)P$, sometimes called the information gain, but not the innovation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q6">>Incorrect. Process noise is added during the predict step and is never directly observed — it is a modeled quantity, not a computed residual.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 7 of 8''
+
+<span id="kf-q7">Which application famously relied on the Kalman filter for its success?</span>
+
+A. The first commercial airline autopilot in the 1940s
+B. The Apollo program lunar navigation computer
+C. The first GPS satellite launched in 1978
+D. IBM's Deep Blue chess computer
+
+<<button "A">><<replace "#kf-q7">>Incorrect. Commercial autopilots predate the Kalman filter (published 1960) and used different control methods. The Kalman filter's landmark early adoption was in space navigation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q7">>Correct! NASA adopted the Kalman filter almost immediately after its 1960 publication to navigate the Apollo spacecraft to the Moon. It ran on the Apollo guidance computer to fuse inertial measurements with star-tracker observations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q7">>Incorrect. GPS receivers use Kalman filters to process satellite signals, but the filter's most celebrated early application was Apollo, not the GPS satellite hardware itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q7">>Incorrect. Deep Blue used tree search and evaluation functions, not Kalman filtering — an entirely different computational paradigm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+''Question 8 of 8''
+
+<span id="kf-q8">If the measurement noise covariance $R \to 0$ (a nearly perfect sensor), what does the Kalman gain approach?</span>
+
+A. Zero, so the filter ignores measurements entirely
+B. The identity matrix, so the state is set equal to the raw measurement
+C. $H^{-1}$, so the measurement fully replaces the prediction
+D. The process noise matrix $Q$
+
+<<button "A">><<replace "#kf-q8">>Incorrect. $K \to 0$ when the //model// is perfect ($Q \to 0$), not the sensor. A perfect sensor should receive //full// trust.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#kf-q8">>Incorrect. The identity matrix would only work if $H = I$ (measurements equal the state directly). In general, $K \to H^{-1}$ (or its pseudoinverse), mapping the measurement back to state space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#kf-q8">>Correct! As $R \to 0$, $K = PH^T(HPH^T + R)^{-1} \to PH^T(HPH^T)^{-1} = H^{-1}$, so the posterior $\hat{x} = \hat{x}_{prior} + H^{-1}(z - H\hat{x}_{prior}) = H^{-1}z$ — the filter discards its prediction and trusts only the (perfect) measurement.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#kf-q8">>Incorrect. The process noise $Q$ governs model uncertainty during prediction, not the sensor trust. These are independent matrices with different roles.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

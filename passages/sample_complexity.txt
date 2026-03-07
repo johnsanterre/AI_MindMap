@@ -1,0 +1,155 @@
+<<include "Header">>
+
+! Sample Complexity
+
+<img src="assets/sample_complexity.svg" alt="Diagram illustrating sample complexity, learning curves, and the PAC learning bound" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are learning to distinguish poisonous mushrooms from edible ones. After seeing five examples, you might have a rough guess. After five hundred, you are probably safe. After five thousand, you are confident enough to bet your life. ''Sample complexity'' is the formal study of exactly how many examples you need before your learning algorithm's guesses become reliably accurate. It is the bridge between the theoretical promise of <<link "PAC Learning" "PAC Learning">><</link>> — that learning is //possible// — and the practical question every engineer asks: how much data do I actually need?
+
+---
+
+!! The Core Insight
+
+A learning algorithm does not just need //some// data; it needs //enough// data. Too few examples and the algorithm cannot distinguish between a hypothesis that truly captures the pattern and one that merely got lucky on the training set. Sample complexity quantifies this threshold: given a hypothesis class, an accuracy target, and a confidence level, it tells you the minimum number of training examples $m$ that guarantee the learned hypothesis will generalize.
+
+The key tension is between the ''expressiveness'' of your hypothesis class and the ''data cost'' of using it. A richer hypothesis class — one that can represent more functions — can potentially fit the true pattern more closely, but it also requires more data to rule out the spurious hypotheses that happen to fit the training set by coincidence. This is the statistical price of flexibility. The <<link "VC Dimension" "VC Dimension">><</link>> was invented precisely to measure this price for hypothesis classes that may be infinite, where simply counting hypotheses is not possible.
+
+Sample complexity sits at the heart of the <<link "Bias-Variance Tradeoff" "Bias-Variance Tradeoff">><</link>>: a hypothesis class that is too small (high bias) will never fit the true concept no matter how much data you have, while one that is too large (high variance) demands an impractical amount of data to learn reliably. The sweet spot is a class just expressive enough to contain a good approximation of the target concept, because that class will have the smallest sample complexity among classes that can succeed.
+
+---
+
+!! From Finite to Infinite Hypothesis Classes
+
+For a ''finite hypothesis class'' $\mathcal{H}$ with $|\mathcal{H}|$ hypotheses, the sample complexity story is clean. If you draw $m$ i.i.d. training examples and want to guarantee that your learned hypothesis has true error at most $\epsilon$ with probability at least $1 - \delta$, the classic PAC bound gives:
+
+$$m \geq \frac{1}{2\epsilon^2} \ln \frac{2|\mathcal{H}|}{\delta}$$
+
+This says two things. First, sample complexity grows as $1/\epsilon^2$ — halving the tolerable error quadruples the data requirement. Second, it grows only ''logarithmically'' in $|\mathcal{H}|$ — doubling the number of candidate hypotheses adds only a constant number of extra samples. The logarithmic dependence is remarkably forgiving: even an astronomically large finite hypothesis space is learnable with a reasonable amount of data.
+
+But most hypothesis classes used in practice — linear classifiers, neural networks, decision boundaries parameterized by real-valued weights — are ''infinite''. You cannot take $\ln |\mathcal{H}|$ when $|\mathcal{H}|$ is uncountably infinite. This is where the <<link "VC Dimension" "VC Dimension">><</link>> enters. The VC dimension $d_{\text{vc}}$ replaces $\ln |\mathcal{H}|$ in the bound, giving:
+
+$$m = O\!\left(\frac{d_{\text{vc}} + \ln(1/\delta)}{\epsilon^2}\right)$$
+
+The VC dimension measures the largest set of points that the hypothesis class can ''shatter'' — assign all possible labelings to. It captures the effective complexity of the class in a way that is independent of any parameterization. Linear classifiers in $\mathbb{R}^d$ have VC dimension $d + 1$. This means you need roughly $O(d / \epsilon^2)$ samples to learn a good linear classifier, regardless of whether you parameterize it with weights, normal vectors, or any other representation.
+
+---
+
+!! What the Math Is Actually Doing
+
+The mathematical engine behind sample complexity is the ''uniform convergence'' argument. The core question is: after seeing $m$ training examples, can we guarantee that the empirical error $\hat{R}(h)$ of every hypothesis $h \in \mathcal{H}$ is close to its true error $R(h)$? If so, then minimizing empirical error (what training does) approximately minimizes true error (what we want).
+
+For a single hypothesis $h$, the Hoeffding bound gives:
+
+$$P\!\left(|R(h) - \hat{R}(h)| > \epsilon\right) \leq 2e^{-2m\epsilon^2}$$
+
+But we need this to hold simultaneously for //every// hypothesis in $\mathcal{H}$. For a finite class, the union bound yields:
+
+$$P\!\left(\exists\, h \in \mathcal{H}: |R(h) - \hat{R}(h)| > \epsilon\right) \leq 2|\mathcal{H}|\, e^{-2m\epsilon^2}$$
+
+Setting the right side equal to $\delta$ and solving for $m$ gives the PAC sample complexity bound. The logarithmic dependence on $|\mathcal{H}|$ comes directly from applying the union bound: each additional hypothesis contributes additively to the failure probability, and $\ln$ inverts the exponential concentration.
+
+For infinite classes, the ''growth function'' $\Pi_{\mathcal{H}}(m)$ replaces $|\mathcal{H}|$. The Sauer-Shelah lemma bounds this:
+
+$$\Pi_{\mathcal{H}}(m) \leq \left(\frac{em}{d_{\text{vc}}}\right)^{d_{\text{vc}}}$$
+
+This is polynomial in $m$ rather than exponential, which is why finite VC dimension implies learnability. The resulting <<link "Generalization Bounds" "Generalization Bounds">><</link>> take the form:
+
+$$R(h) \leq \hat{R}(h) + O\!\left(\sqrt{\frac{d_{\text{vc}} \ln(m / d_{\text{vc}}) + \ln(1/\delta)}{m}}\right)$$
+
+The generalization gap shrinks as $O(1/\sqrt{m})$, confirming the $1/\epsilon^2$ scaling: to halve the gap, you need four times the data.
+
+---
+
+!! Practical Data Requirements
+
+Theory gives you the functional form; practice fills in the constants. The PAC bounds are typically very loose — they might say you need millions of samples for a problem that deep learning solves with thousands. This gap arises because the bounds must hold for //worst-case// data distributions and //any// hypothesis in the class, while real problems have structure that makes learning easier.
+
+In practice, several strategies reduce the effective sample complexity. ''<<link "Data Augmentation" "Data Augmentation">><</link>>'' artificially expands the training set by applying label-preserving transformations, effectively multiplying $m$ without collecting new data. ''Transfer learning'' reduces the effective hypothesis class by starting from a pretrained model, shrinking the search space and thus the VC-dimension-like quantity that drives the bound. ''Regularization'' explicitly constrains the hypothesis class, trading a small increase in bias for a large decrease in sample complexity.
+
+The rule of thumb in classical supervised learning is that you need roughly $10 \times d_{\text{vc}}$ to $100 \times d_{\text{vc}}$ examples for good generalization. For a linear classifier in $\mathbb{R}^{100}$, this means thousands of examples. For a deep network with millions of parameters, the naive VC dimension is enormous, but the effective complexity is much lower due to implicit regularization, weight sharing, and the structure of gradient descent — which is why modern networks generalize despite violating classical sample complexity predictions.
+
+---
+
+!! When Sample Complexity Breaks Down
+
+''Distribution shift:'' Sample complexity guarantees assume that training and test data are drawn from the same distribution. When the deployment distribution differs from the training distribution — a nearly universal reality — the PAC bounds no longer apply. A model trained on $m$ examples from distribution $\mathcal{D}_1$ may need an entirely different sample complexity to perform well on $\mathcal{D}_2$. No amount of i.i.d. data from the wrong distribution helps, and the theory provides no guidance on how much data from the new distribution is needed without additional assumptions about the relationship between distributions.
+
+''Adversarial or structured noise:'' The concentration inequalities underlying sample complexity assume that label noise is benign (random, bounded). When labels are corrupted adversarially, or when the noise is structured and correlated with the features, the convergence rates can be dramatically slower. An adversary who controls even a small fraction of labels can force the sample complexity to scale polynomially in $1/\epsilon$ rather than logarithmically in $|\mathcal{H}|$, breaking the favorable PAC scaling. Robust learning under adversarial noise requires fundamentally different algorithms and has its own, often much larger, sample complexity.
+
+''Hypothesis class mismatch:'' The entire framework assumes the target concept is //realizable// — that some hypothesis in $\mathcal{H}$ achieves zero true error, or at least near-zero error in the agnostic case. If the hypothesis class is fundamentally incapable of representing the true relationship, no amount of data will help. The sample complexity bound happily tells you how many samples you need to find the best hypothesis in a class that may be completely wrong. This is the bias problem taken to its extreme: sample complexity theory tells you //how quickly// you can learn within your chosen class, but says nothing about whether you chose the right class.
+
+---
+
+!! Technical Details
+
+''PAC (Probably Approximately Correct) learning'' was introduced by Leslie Valiant in 1984. A concept class $\mathcal{C}$ is PAC-learnable if there exists an algorithm that, for any distribution $\mathcal{D}$ over instances and any $\epsilon, \delta > 0$, uses at most $\text{poly}(1/\epsilon, 1/\delta, n, \text{size}(c))$ examples and outputs a hypothesis with error at most $\epsilon$ with probability at least $1 - \delta$. The sample complexity of a concept class is the function $m(\epsilon, \delta)$ giving the minimum number of examples sufficient for PAC learning.
+
+The ''Fundamental Theorem of Statistical Learning'' states that for binary classification, the following are equivalent: (1) $\mathcal{H}$ has finite VC dimension, (2) $\mathcal{H}$ is PAC-learnable, (3) uniform convergence holds over $\mathcal{H}$, (4) $\mathcal{H}$ is agnostic PAC-learnable. This theorem establishes VC dimension as the //complete// characterization of learnability in the binary classification setting.
+
+''Rademacher complexity'' provides tighter, data-dependent sample complexity bounds. Instead of the worst-case VC dimension, the empirical Rademacher complexity $\hat{\mathfrak{R}}_m(\mathcal{H})$ measures how well the hypothesis class can fit random noise on the actual training sample. The generalization bound becomes $R(h) \leq \hat{R}(h) + 2\hat{\mathfrak{R}}_m(\mathcal{H}) + \sqrt{\ln(1/\delta)/(2m)}$. This is often much tighter than VC-based bounds because it adapts to the data distribution.
+
+''Minimax lower bounds'' complement the upper bounds by showing that no algorithm can learn with fewer than $\Omega(d_{\text{vc}} / \epsilon^2)$ samples in the worst case. This matches the upper bound up to logarithmic factors, proving that the PAC sample complexity is $\Theta(d_{\text{vc}} / \epsilon^2)$ for binary classification — the theory is essentially tight.
+
+For ''regression'' problems, the covering number replaces the growth function, and the ''fat-shattering dimension'' replaces the VC dimension. The sample complexity for regression with $\ell_2$ loss and a class with fat-shattering dimension $d_\gamma$ at scale $\gamma$ is $O(d_\gamma / \epsilon^2)$, preserving the same qualitative structure.
+
+---
+
+!! Quiz
+
+<span id="sc-q1">In the finite PAC learning bound, how does the required number of samples scale with the accuracy parameter $\epsilon$?</span>
+A. Linearly as $O(1/\epsilon)$
+B. Quadratically as $O(1/\epsilon^2)$
+C. Logarithmically as $O(\ln(1/\epsilon))$
+D. Exponentially as $O(2^{1/\epsilon})$
+<<button "A">><<replace "#sc-q1">>Incorrect. The Hoeffding-based concentration gives an $e^{-2m\epsilon^2}$ tail, which inverts to $m = O(1/\epsilon^2)$, not $O(1/\epsilon)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q1">>Correct! The sample complexity scales as $O(1/\epsilon^2)$. This means halving the tolerable error requires four times as much data, a direct consequence of the concentration inequality.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q1">>Incorrect. Logarithmic scaling applies to the dependence on $|\mathcal{H}|$, not on $\epsilon$. The accuracy parameter enters quadratically.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q1">>Incorrect. Exponential scaling in $1/\epsilon$ would make learning intractable for small $\epsilon$. The actual scaling is polynomial ($1/\epsilon^2$).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q2">Why does sample complexity depend only logarithmically on $|\mathcal{H}|$ for finite hypothesis classes?</span>
+A. Because most hypotheses are equivalent, so the effective number is much smaller
+B. Because the union bound adds failure probabilities linearly, and the logarithm inverts the exponential concentration
+C. Because the VC dimension is always logarithmic in $|\mathcal{H}|$
+D. Because the training algorithm only examines $\ln |\mathcal{H}|$ hypotheses
+<<button "A">><<replace "#sc-q2">>Incorrect. The bound does not assume equivalence among hypotheses. It applies to all $|\mathcal{H}|$ hypotheses simultaneously via the union bound.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q2">>Correct! The union bound sums the failure probability over all $|\mathcal{H}|$ hypotheses, giving $2|\mathcal{H}|e^{-2m\epsilon^2}$. Setting this to $\delta$ and solving for $m$ introduces $\ln |\mathcal{H}|$ because the logarithm inverts the exponential.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q2">>Incorrect. The VC dimension can be much smaller or much larger than $\ln |\mathcal{H}|$ depending on the class. The logarithmic dependence comes from the proof technique (union bound + concentration), not from the VC dimension.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q2">>Incorrect. The bound is not about how many hypotheses the algorithm examines. Even an algorithm that considers all $|\mathcal{H}|$ hypotheses benefits from the logarithmic sample complexity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q3">What role does the VC dimension play in sample complexity for infinite hypothesis classes?</span>
+A. It counts the number of parameters in the model
+B. It replaces $\ln |\mathcal{H}|$ as the measure of hypothesis class complexity, enabling bounds even when $|\mathcal{H}|$ is uncountably infinite
+C. It measures the maximum training accuracy achievable by any hypothesis
+D. It determines the optimal learning rate for gradient descent
+<<button "A">><<replace "#sc-q3">>Incorrect. VC dimension is related to the combinatorial complexity of the class, not its parameter count. A class with many parameters can have low VC dimension and vice versa.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q3">>Correct! When $|\mathcal{H}|$ is infinite, $\ln |\mathcal{H}|$ is undefined. The VC dimension captures the effective complexity via the shattering concept and replaces $\ln |\mathcal{H}|$ in the sample complexity bound.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q3">>Incorrect. VC dimension measures the largest set of points the class can shatter (assign all possible labelings to), not the maximum training accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q3">>Incorrect. VC dimension is a property of the hypothesis class and has nothing to do with the learning rate or optimization algorithm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q4">According to the Fundamental Theorem of Statistical Learning, which condition is equivalent to PAC learnability for binary classification?</span>
+A. The hypothesis class must be parameterized by a finite number of real-valued weights
+B. The hypothesis class must have finite VC dimension
+C. The hypothesis class must be convex
+D. The hypothesis class must contain the Bayes optimal classifier
+<<button "A">><<replace "#sc-q4">>Incorrect. Having finite parameters is neither necessary nor sufficient for PAC learnability. Some finitely parameterized classes have infinite VC dimension, while some non-parametric classes are PAC-learnable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q4">>Correct! The Fundamental Theorem establishes that finite VC dimension is both necessary and sufficient for PAC learnability (and agnostic PAC learnability) in binary classification.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q4">>Incorrect. Convexity is a property relevant to optimization, not learnability. Many non-convex hypothesis classes (like neural networks) are PAC-learnable if they have finite VC dimension.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q4">>Incorrect. PAC learning does not require the class to contain the Bayes optimal classifier. In the agnostic setting, the goal is to find the best hypothesis //within// the class, regardless of whether the Bayes optimal is in it.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q5">Why do practical deep learning models often generalize well despite having sample complexity predictions (from VC theory) that suggest they need vastly more data?</span>
+A. Because VC dimension does not apply to neural networks
+B. Because deep learning uses a different definition of generalization
+C. Because implicit regularization, weight sharing, and optimization structure reduce the effective complexity far below the naive VC dimension
+D. Because deep networks are always trained with enough data to satisfy the VC bound
+<<button "A">><<replace "#sc-q5">>Incorrect. VC dimension applies to neural networks (it is well-defined for any binary hypothesis class). The issue is that the VC dimension is a worst-case measure that vastly overestimates the effective complexity for structured problems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q5">>Incorrect. The definition of generalization (low gap between training and test error) is the same. The discrepancy is in the tightness of the bounds, not the definition.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q5">>Correct! The naive VC dimension based on parameter count is enormous, but gradient descent, weight sharing (as in CNNs), and implicit regularization constrain the model to a much smaller effective hypothesis class, making the true sample complexity far lower than the VC bound predicts.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q5">>Incorrect. Modern deep networks routinely have more parameters than training examples, directly violating what the naive VC bound would require. They generalize despite this, not because of satisfying it.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q6">What does data augmentation do in terms of sample complexity?</span>
+A. It increases the VC dimension of the hypothesis class
+B. It effectively increases the training set size $m$, reducing the generalization gap without collecting new data
+C. It reduces the target accuracy $\epsilon$, making the problem easier
+D. It replaces the need for a hypothesis class entirely
+<<button "A">><<replace "#sc-q6">>Incorrect. Data augmentation does not change the hypothesis class or its VC dimension. It operates on the data side of the bound, not the hypothesis side.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q6">>Correct! Data augmentation applies label-preserving transformations to create additional training examples, effectively increasing $m$. Since the generalization gap scales as $O(1/\sqrt{m})$, more (augmented) examples tighten the bound.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q6">>Incorrect. Data augmentation does not change the accuracy target $\epsilon$. It helps the algorithm achieve a given $\epsilon$ with fewer //original// data points by increasing the effective training set size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q6">>Incorrect. Data augmentation still requires a hypothesis class and a learning algorithm. It supplements the training data, not the learning framework.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q7">What happens to PAC sample complexity guarantees when training and test distributions differ?</span>
+A. The bounds still hold but become slightly looser
+B. The bounds are completely invalidated because they assume i.i.d. data from a single distribution
+C. The bounds hold if the distributions are close in KL divergence
+D. The bounds apply to the test distribution but not the training distribution
+<<button "A">><<replace "#sc-q7">>Incorrect. The bounds do not merely loosen — they are fundamentally invalid under distribution shift. The entire proof depends on the training data being representative of the test distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q7">>Correct! PAC bounds assume training and test data are drawn i.i.d. from the same distribution. When distributions differ, the concentration inequalities no longer guarantee that empirical error approximates true error on the target distribution. Domain adaptation theory provides alternative frameworks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q7">>Incorrect. Standard PAC bounds make no provision for distributional closeness. While domain adaptation theory does use divergence measures between distributions, classical PAC theory requires identical distributions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q7">>Incorrect. The bounds relate empirical error (on training data from distribution $\mathcal{D}$) to true error (on test data from the same $\mathcal{D}$). They do not apply to either distribution in isolation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sc-q8">Rademacher complexity improves on VC-dimension-based bounds primarily because:</span>
+A. It is always smaller than the VC dimension
+B. It provides bounds that adapt to the actual data distribution rather than relying on worst-case combinatorial measures
+C. It eliminates the dependence on sample size entirely
+D. It only works for linear hypothesis classes, where it is tighter
+<<button "A">><<replace "#sc-q8">>Incorrect. Rademacher complexity is not always smaller than VC-dimension-based quantities. Its advantage is adaptivity, not guaranteed tightness in every case.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#sc-q8">>Correct! Rademacher complexity measures how well the hypothesis class correlates with random noise on the //actual data sample//. This data-dependence often yields much tighter generalization bounds than the worst-case VC dimension, which ignores distribution structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#sc-q8">>Incorrect. Rademacher complexity bounds still depend on the sample size $m$. The empirical Rademacher complexity is computed from $m$ data points, and the generalization bound includes $m$-dependent terms.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#sc-q8">>Incorrect. Rademacher complexity applies to any hypothesis class, not just linear ones. Its data-dependent nature makes it useful across model types including neural networks and kernel methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

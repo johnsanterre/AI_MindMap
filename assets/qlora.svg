@@ -1,0 +1,150 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C3D1E">QLoRA &mdash; Fine-Tune 65B Parameters on a Single 48GB GPU</text>
+
+  <!-- ===== TOP: Pipeline Diagram ===== -->
+
+  <!-- Full-precision model -->
+  <rect x="20" y="55" width="140" height="70" rx="6" fill="#B0C8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="90" y="80" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">Pretrained LLM</text>
+  <text x="90" y="96" text-anchor="middle" font-size="10" fill="#2D5A8E">FP16 / BF16</text>
+  <text x="90" y="112" text-anchor="middle" font-size="10" fill="#2D5A8E">~130 GB for 65B</text>
+
+  <!-- Arrow 1 -->
+  <line x1="160" y1="90" x2="195" y2="90" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- NF4 Quantization -->
+  <rect x="197" y="55" width="130" height="70" rx="6" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="262" y="76" text-anchor="middle" font-size="11" font-weight="bold" fill="white">4-bit NF4</text>
+  <text x="262" y="92" text-anchor="middle" font-size="10" fill="#F5ECD7">Quantization</text>
+  <text x="262" y="108" text-anchor="middle" font-size="10" fill="#F5ECD7">~16 GB for 65B</text>
+
+  <!-- Arrow 2 -->
+  <line x1="327" y1="90" x2="362" y2="90" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- Frozen quantized base -->
+  <rect x="364" y="55" width="120" height="70" rx="6" fill="#E8E8E8" stroke="#999" stroke-width="2"/>
+  <text x="424" y="76" text-anchor="middle" font-size="11" font-weight="bold" fill="#555">Frozen Base</text>
+  <text x="424" y="92" text-anchor="middle" font-size="10" fill="#777">NF4 weights</text>
+  <text x="424" y="108" text-anchor="middle" font-size="10" fill="#777">&#x1F512; no updates</text>
+
+  <!-- LoRA adapter -->
+  <rect x="500" y="60" width="32" height="60" rx="4" fill="#2D5A8E"/>
+  <text x="516" y="82" text-anchor="middle" font-size="10" font-weight="bold" fill="white">B</text>
+  <text x="516" y="100" text-anchor="middle" font-size="10" font-weight="bold" fill="white">A</text>
+  <text x="516" y="48" text-anchor="middle" font-size="9" font-weight="bold" fill="#2D5A8E">LoRA</text>
+
+  <!-- Arrow 3 -->
+  <line x1="538" y1="90" x2="575" y2="90" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- BF16 compute -->
+  <rect x="578" y="55" width="100" height="70" rx="6" fill="#F5ECD7" stroke="#C4A87A" stroke-width="2"/>
+  <text x="628" y="76" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">BF16</text>
+  <text x="628" y="92" text-anchor="middle" font-size="10" fill="#5C3D1E">Compute</text>
+  <text x="628" y="108" text-anchor="middle" font-size="10" fill="#5C3D1E">&#x2207; gradients</text>
+
+  <!-- Arrow 4 -->
+  <line x1="678" y1="90" x2="708" y2="90" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- Output -->
+  <rect x="710" y="65" width="70" height="50" rx="6" fill="#EAF3E0" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="745" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">Output</text>
+
+  <!-- Key stats bar -->
+  <rect x="10" y="140" width="780" height="26" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="157" text-anchor="middle" font-size="11" fill="#5C3D1E" font-weight="bold">NF4: information-theoretically optimal 4-bit   |   Double Quantization saves 0.4 bits/param   |   Paged Optimizers prevent OOM</text>
+
+  <!-- ===== BOTTOM: Three Innovations ===== -->
+  <line x1="10" y1="178" x2="790" y2="178" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="198" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Three Key Innovations</text>
+
+  <!-- Innovation 1: NF4 -->
+  <rect x="20" y="210" width="240" height="120" rx="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="140" y="232" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">NormalFloat4 (NF4)</text>
+
+  <!-- Bell curve shape -->
+  <path d="M50,310 Q80,250 140,250 Q200,250 230,310" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="140" y="270" text-anchor="middle" font-size="10" fill="#5C3D1E">Quantile-matched</text>
+  <text x="140" y="284" text-anchor="middle" font-size="10" fill="#5C3D1E">to N(0,1)</text>
+
+  <!-- Tick marks on curve for quantization levels -->
+  <line x1="65" y1="296" x2="65" y2="306" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="90" y1="272" x2="90" y2="282" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="110" y1="258" x2="110" y2="268" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="130" y1="252" x2="130" y2="262" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="150" y1="252" x2="150" y2="262" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="170" y1="258" x2="170" y2="268" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="190" y1="272" x2="190" y2="282" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="215" y1="296" x2="215" y2="306" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="140" y="322" text-anchor="middle" font-size="9" font-style="italic" fill="#7C2530">16 levels placed at quantiles</text>
+
+  <!-- Innovation 2: Double Quantization -->
+  <rect x="280" y="210" width="240" height="120" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="232" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">Double Quantization</text>
+
+  <!-- Blocks with scale factors -->
+  <rect x="300" y="248" width="50" height="30" rx="3" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="325" y="267" text-anchor="middle" font-size="9" fill="#2D5A8E">Block 1</text>
+  <rect x="358" y="248" width="50" height="30" rx="3" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="383" y="267" text-anchor="middle" font-size="9" fill="#2D5A8E">Block 2</text>
+  <rect x="416" y="248" width="50" height="30" rx="3" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="441" y="267" text-anchor="middle" font-size="9" fill="#2D5A8E">Block 3</text>
+  <rect x="474" y="248" width="30" height="30" rx="3" fill="#D8E4F0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="489" y="267" text-anchor="middle" font-size="9" fill="#2D5A8E">...</text>
+
+  <!-- Scale factors -->
+  <text x="325" y="294" text-anchor="middle" font-size="9" fill="#5C3D1E">s1</text>
+  <text x="383" y="294" text-anchor="middle" font-size="9" fill="#5C3D1E">s2</text>
+  <text x="441" y="294" text-anchor="middle" font-size="9" fill="#5C3D1E">s3</text>
+
+  <!-- Arrow to second quant -->
+  <line x1="400" y1="300" x2="400" y2="312" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arw2)"/>
+  <rect x="340" y="314" width="120" height="18" rx="3" fill="#2D5A8E"/>
+  <text x="400" y="326" text-anchor="middle" font-size="9" font-weight="bold" fill="white">Quantize scales to FP8</text>
+
+  <!-- Innovation 3: Paged Optimizers -->
+  <rect x="540" y="210" width="240" height="120" rx="6" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="660" y="232" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">Paged Optimizers</text>
+
+  <!-- GPU box -->
+  <rect x="560" y="250" width="80" height="40" rx="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="600" y="267" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">GPU</text>
+  <text x="600" y="281" text-anchor="middle" font-size="9" fill="#5C3D1E">VRAM</text>
+
+  <!-- Double arrows -->
+  <line x1="644" y1="265" x2="674" y2="265" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arw)"/>
+  <line x1="674" y1="275" x2="644" y2="275" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arw)"/>
+
+  <!-- CPU box -->
+  <rect x="678" y="250" width="80" height="40" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
+  <text x="718" y="267" text-anchor="middle" font-size="10" font-weight="bold" fill="#555">CPU</text>
+  <text x="718" y="281" text-anchor="middle" font-size="9" fill="#555">RAM</text>
+
+  <text x="660" y="246" text-anchor="middle" font-size="9" fill="#5C3D1E">page in/out</text>
+  <text x="660" y="308" text-anchor="middle" font-size="9" font-style="italic" fill="#5C3D1E">NVIDIA unified memory</text>
+  <text x="660" y="322" text-anchor="middle" font-size="9" font-style="italic" fill="#5C3D1E">prevents OOM crashes</text>
+
+  <!-- Legend -->
+  <rect x="10" y="348" width="780" height="42" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
+  <rect x="22" y="360" width="14" height="14" rx="2" fill="#7C2530"/>
+  <text x="42" y="371" font-size="10" fill="#5C3D1E">NF4 quantized weights (frozen)</text>
+  <rect x="220" y="360" width="14" height="14" rx="2" fill="#2D5A8E"/>
+  <text x="240" y="371" font-size="10" fill="#5C3D1E">LoRA adapters (trainable, BF16)</text>
+  <rect x="430" y="360" width="14" height="14" rx="2" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
+  <text x="450" y="371" font-size="10" fill="#5C3D1E">Frozen / CPU memory</text>
+  <text x="400" y="384" text-anchor="middle" font-size="9" font-style="italic" fill="#888">Dettmers et al. 2023 &mdash; fine-tune a 65B model on a single 48GB GPU with no quality loss vs full 16-bit fine-tuning</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arw2" markerWidth="8" markerHeight="8" refX="3" refY="6" orient="auto">
+      <path d="M0,0 L6,0 L3,8 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+</svg>

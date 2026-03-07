@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="1.5" rx="6"/>
+
+  <!-- ===== SECTION 1: Brouwer Fixed Point Theorem ===== -->
+  <text x="140" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Brouwer: f(x) = x on compact convex sets</text>
+  <line x1="20" y1="33" x2="260" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Disk with mapping arrow -->
+  <circle cx="140" cy="120" r="70" fill="#C4A87A" opacity="0.2" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="140" y="200" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Compact convex set D</text>
+
+  <!-- Points and mapping -->
+  <circle cx="110" cy="100" r="4" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="98" y="96" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">x</text>
+  <line x1="114" y1="102" x2="148" y2="128" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <circle cx="152" cy="132" r="4" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="158" y="128" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">f(x)</text>
+
+  <!-- Fixed point -->
+  <circle cx="130" cy="140" r="6" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="130" y="160" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">x*</text>
+  <text x="130" y="174" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">f(x*) = x*</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrow-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Divider -->
+  <line x1="275" y1="20" x2="275" y2="340" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 2: Banach Contraction ===== -->
+  <text x="410" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Banach: Contraction Mapping</text>
+  <line x1="280" y1="33" x2="540" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Spiral converging to fixed point -->
+  <path d="M340,60 Q460,50 470,120 Q480,190 400,185 Q330,180 335,130 Q340,95 390,90 Q430,88 430,120 Q430,150 400,148 Q375,146 378,128 Q380,115 395,114 Q405,113 404,122" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- Fixed point at center of spiral -->
+  <circle cx="400" cy="122" r="6" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="145" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">x*</text>
+
+  <!-- Iteration labels -->
+  <text x="340" y="55" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">x₀</text>
+  <text x="472" y="118" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">x₁</text>
+  <text x="395" y="198" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">x₂</text>
+
+  <!-- Contraction formula -->
+  <text x="410" y="225" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">d(f(x), f(y)) ≤ k · d(x, y)</text>
+  <text x="410" y="242" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">0 ≤ k &lt; 1</text>
+
+  <!-- Divider -->
+  <line x1="550" y1="20" x2="550" y2="340" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 3: Kakutani / Game Theory ===== -->
+  <text x="675" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Kakutani: Nash Equilibrium</text>
+  <line x1="555" y1="33" x2="795" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Strategy simplex (triangle) -->
+  <polygon points="675,55 600,195 750,195" fill="#C4A87A" opacity="0.15" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="600" y="210" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Strategy 1</text>
+  <text x="750" y="210" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Strategy 2</text>
+  <text x="675" y="50" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Strategy 3</text>
+
+  <!-- Best-response correspondence arrows -->
+  <circle cx="660" cy="140" r="5" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="665" y1="140" x2="695" y2="130" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <circle cx="700" cy="128" r="5" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="700" y1="133" x2="685" y2="150" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+
+  <!-- Nash equilibrium point -->
+  <circle cx="680" cy="145" r="7" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="680" y="170" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Nash eq.</text>
+  <text x="680" y="183" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">x* ∈ BR(x*)</text>
+
+  <!-- Labels for players -->
+  <text x="655" y="235" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Mixed strategy</text>
+  <text x="655" y="248" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">simplex for each player</text>
+
+  <!-- ===== Bottom caption bar ===== -->
+  <rect x="0" y="355" width="800" height="45" fill="#F0EAD8" rx="0"/>
+  <rect x="0" y="355" width="800" height="45" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="373" font-family="Georgia, serif" font-size="11.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">
+    Fixed point theorems guarantee that certain maps have points where f(x) = x.
+  </text>
+  <text x="400" y="390" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">
+    Brouwer (existence) · Banach (uniqueness + convergence) · Kakutani (set-valued maps → Nash equilibria)
+  </text>
+</svg>

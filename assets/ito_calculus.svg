@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Itô Calculus: The Stochastic Chain Rule</text>
+
+  <!-- ===== LEFT PANEL: Chain Rule Comparison ===== -->
+  <rect x="20" y="50" width="230" height="160" rx="6" fill="#F5EFE0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="135" y="70" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Ordinary Chain Rule</text>
+  <text x="135" y="90" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(smooth functions)</text>
+  <line x1="35" y1="98" x2="235" y2="98" stroke="#C4A87A" stroke-width="1"/>
+  <text x="135" y="118" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-style="italic">df = (∂f/∂t) dt</text>
+  <text x="135" y="138" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-style="italic">   + (∂f/∂x) dx</text>
+  <text x="135" y="162" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">(dx)² ≈ 0 — discarded</text>
+  <text x="135" y="180" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Valid for smooth paths</text>
+  <text x="135" y="198" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Fails for Brownian motion</text>
+
+  <!-- Arrow pointing right -->
+  <line x1="258" y1="130" x2="292" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="292,125 302,130 292,135" fill="#C4A87A"/>
+  <text x="275" y="122" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Itô</text>
+  <text x="275" y="144" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">1944</text>
+
+  <!-- ===== CENTER PANEL: Itô's Lemma ===== -->
+  <rect x="302" y="50" width="300" height="160" rx="6" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="452" y="72" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Itô's Lemma</text>
+  <text x="452" y="89" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">for f(X(t), t) where dX = μ dt + σ dW</text>
+  <line x1="318" y1="97" x2="586" y2="97" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Main formula -->
+  <text x="452" y="118" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-style="italic">df = (∂f/∂x · μ + ∂f/∂t) dt</text>
+  <text x="452" y="138" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-style="italic">   + ∂f/∂x · σ dW</text>
+
+  <!-- Highlighted extra term -->
+  <rect x="318" y="146" width="268" height="28" rx="4" fill="#F9E8E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="452" y="157" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">+ ½ σ² (∂²f/∂x²) dt</text>
+  <text x="452" y="170" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">← Itô correction  (dW)² = dt</text>
+
+  <text x="452" y="197" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Quadratic variation: Brownian roughness adds extra curvature</text>
+
+  <!-- ===== RIGHT PANEL: Application label ===== -->
+  <rect x="618" y="50" width="162" height="160" rx="6" fill="#F5EFE0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="699" y="70" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Applications</text>
+  <line x1="632" y1="78" x2="766" y2="78" stroke="#C4A87A" stroke-width="1"/>
+  <text x="699" y="98" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Black-Scholes</text>
+  <text x="699" y="112" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">dS = μS dt + σS dW</text>
+  <text x="699" y="124" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">log-normal prices</text>
+  <line x1="640" y1="132" x2="758" y2="132" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="699" y="148" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Diffusion Models</text>
+  <text x="699" y="162" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">reverse SDE via</text>
+  <text x="699" y="174" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">score function</text>
+  <line x1="640" y1="182" x2="758" y2="182" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="699" y="198" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Langevin MCMC</text>
+
+  <!-- ===== BOTTOM ROW: Three concept boxes ===== -->
+
+  <!-- Box 1: Quadratic Variation -->
+  <rect x="20" y="230" width="230" height="110" rx="6" fill="#F5EFE0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="135" y="250" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Quadratic Variation</text>
+  <line x1="35" y1="258" x2="235" y2="258" stroke="#C4A87A" stroke-width="1"/>
+  <text x="135" y="275" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">Σ [W(tₖ₊₁)−W(tₖ)]² → T</text>
+  <text x="135" y="295" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Smooth paths: Σ(Δx)² → 0</text>
+  <text x="135" y="312" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Brownian paths: Σ(ΔW)² → T</text>
+  <text x="135" y="330" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">This is why (dW)² = dt survives</text>
+
+  <!-- Box 2: SDE and Fokker-Planck -->
+  <rect x="285" y="230" width="230" height="110" rx="6" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="400" y="250" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">SDE ↔ Fokker-Planck</text>
+  <line x1="300" y1="258" x2="500" y2="258" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="400" y="275" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">dX = μ dt + σ dW</text>
+  <text x="400" y="293" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">↕  Itô's lemma bridges both</text>
+  <text x="400" y="311" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">∂p/∂t = −∂(μp)/∂x</text>
+  <text x="400" y="327" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">       + ½ ∂²(σ²p)/∂x²</text>
+
+  <!-- Box 3: Itô Isometry -->
+  <rect x="550" y="230" width="230" height="110" rx="6" fill="#F5EFE0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="665" y="250" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Itô Isometry</text>
+  <line x1="565" y1="258" x2="765" y2="258" stroke="#C4A87A" stroke-width="1"/>
+  <text x="665" y="276" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">E[|∫H dW|²] = E[∫H² dt]</text>
+  <text x="665" y="297" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Variance of stochastic integral</text>
+  <text x="665" y="312" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">= ordinary time integral</text>
+  <text x="665" y="330" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Enables variance calculations</text>
+
+  <!-- Footer caption -->
+  <text x="400" y="380" font-family="Georgia, serif" font-size="10" fill="#8B7355" text-anchor="middle" font-style="italic">Itô (1944): stochastic integral · Stratonovich (1966): midpoint convention · Anderson (1982): time-reversal of diffusions</text>
+</svg>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <style>
+      text { font-family: Georgia, serif; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" rx="6" ry="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C3D1E">Braess's Paradox: When Adding a Road Makes Traffic Worse</text>
+
+  <!-- === Left Panel: Original Network === -->
+  <text x="200" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#7C2530">Original Network</text>
+  <text x="200" y="76" text-anchor="middle" font-size="11" fill="#5C3D1E">Equilibrium travel time: 83 min</text>
+
+  <!-- Nodes -->
+  <circle cx="200" cy="110" r="16" fill="#2D5A8E" stroke="#1A3D5C" stroke-width="1.5"/>
+  <text x="200" y="115" text-anchor="middle" font-size="12" font-weight="bold" fill="#FDFAF4">S</text>
+
+  <circle cx="100" cy="210" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="100" y="215" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">A</text>
+
+  <circle cx="300" cy="210" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="300" y="215" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">B</text>
+
+  <circle cx="200" cy="310" r="16" fill="#7C2530" stroke="#5A1A24" stroke-width="1.5"/>
+  <text x="200" y="315" text-anchor="middle" font-size="12" font-weight="bold" fill="#FDFAF4">T</text>
+
+  <!-- Edges: S->A, S->B, A->T, B->T -->
+  <line x1="188" y1="123" x2="112" y2="198" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="212" y1="123" x2="288" y2="198" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="100" y1="226" x2="188" y2="298" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="300" y1="226" x2="212" y2="298" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Edge labels -->
+  <text x="130" y="155" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">t/100</text>
+  <text x="270" y="155" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">45 min</text>
+  <text x="130" y="275" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">45 min</text>
+  <text x="270" y="275" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">t/100</text>
+
+  <!-- === Divider === -->
+  <line x1="400" y1="50" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- === Right Panel: With Shortcut === -->
+  <text x="600" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#7C2530">With Added Shortcut</text>
+  <text x="600" y="76" text-anchor="middle" font-size="11" fill="#7C2530">Equilibrium travel time: 92 min</text>
+
+  <!-- Nodes -->
+  <circle cx="600" cy="110" r="16" fill="#2D5A8E" stroke="#1A3D5C" stroke-width="1.5"/>
+  <text x="600" y="115" text-anchor="middle" font-size="12" font-weight="bold" fill="#FDFAF4">S</text>
+
+  <circle cx="500" cy="210" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="500" y="215" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">A</text>
+
+  <circle cx="700" cy="210" r="16" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="700" y="215" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C3D1E">B</text>
+
+  <circle cx="600" cy="310" r="16" fill="#7C2530" stroke="#5A1A24" stroke-width="1.5"/>
+  <text x="600" y="315" text-anchor="middle" font-size="12" font-weight="bold" fill="#FDFAF4">T</text>
+
+  <!-- Edges: S->A, S->B, A->T, B->T -->
+  <line x1="588" y1="123" x2="512" y2="198" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="612" y1="123" x2="688" y2="198" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="226" x2="588" y2="298" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="700" y1="226" x2="612" y2="298" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- New shortcut edge A->B (highlighted) -->
+  <line x1="516" y1="210" x2="684" y2="210" stroke="#7C2530" stroke-width="3" marker-end="url(#arrowhead)" stroke-dasharray="8,3"/>
+
+  <!-- Edge labels -->
+  <text x="530" y="155" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">t/100</text>
+  <text x="670" y="155" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">45 min</text>
+  <text x="530" y="275" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">45 min</text>
+  <text x="670" y="275" text-anchor="middle" font-size="11" fill="#2D5A8E" font-style="italic">t/100</text>
+  <text x="600" y="200" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">0 min (free!)</text>
+
+  <!-- Bottom annotation -->
+  <rect x="150" y="348" width="500" height="40" rx="4" ry="4" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="400" y="365" text-anchor="middle" font-size="12" fill="#5C3D1E">Selfish drivers all take the shortcut S→A→B→T, causing congestion.</text>
+  <text x="400" y="380" text-anchor="middle" font-size="12" fill="#7C2530" font-weight="bold">Nash Equilibrium ≠ Social Optimum</text>
+</svg>

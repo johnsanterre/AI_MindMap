@@ -1,0 +1,153 @@
+<<include "Header">>
+
+! SimCLR
+
+<img src="assets/simclr.svg" alt="SimCLR pipeline: image augmented into two views, passed through encoder f and projection head g, trained with NT-Xent contrastive loss" style="max-width:100%;margin:1em 0;">
+
+If you show someone a photo of a dog and a cropped, color-shifted version of the same photo, they immediately recognize them as the same dog — the pose, texture, and shape survive the transformation. SimCLR trains a neural network to do exactly that: learn visual representations purely by recognizing that augmented views of the same image should be similar, with no class labels required.
+
+!! The Core Insight
+
+''Chen et al. (2020)'' introduced SimCLR as a surprisingly simple self-supervised recipe: take each image in a batch, apply two independent random augmentations, encode both views with the same network, and pull their embeddings together while pushing them away from every other image in the batch. After pretraining, the encoder is frozen and a single linear layer trained on top reaches ''76.5% top-1 accuracy on ImageNet'' with a ResNet-50 — closing much of the gap to fully supervised learning without a single label during pretraining.
+
+Related topics: [[Contrastive Learning]], [[Self-supervised Learning]], [[Embeddings]], [[CLIP]], [[Autoencoders]].
+
+!! Data Augmentation is Everything
+
+The augmentation pipeline is the most important design decision in SimCLR. Each image is transformed twice, independently, by randomly sampling from a sequence of operations: ''random crop and resize'', random horizontal flip, ''color jitter'' (brightness, contrast, saturation, hue), random grayscale conversion, and ''Gaussian blur''. The pair of transformed images becomes the positive pair for the contrastive objective.
+
+An ablation study in the paper makes the stakes clear: using random crop alone reaches ~60% ImageNet accuracy; adding color jitter brings it to ~70%; the full stack reaches 76.5%. The intuition is that good augmentations define the invariances the model should learn — if two views of the same image look different enough to require a real understanding of content to match, the encoder is forced to extract semantically meaningful features rather than low-level textures.
+
+!! What the Math Is Actually Doing
+
+For a minibatch of $N$ images, SimCLR generates $2N$ augmented views. Each view $x_i$ is passed through the encoder $f(\cdot)$ (a ResNet) to produce representation $h_i$, then through a small MLP projection head $g(\cdot)$ to produce embedding $z_i = g(f(x_i))$.
+
+The loss for a positive pair $(i, j)$ is the ''NT-Xent'' (normalized temperature-scaled cross-entropy) loss:
+
+$$\ell_{i,j} = -\log \frac{\exp(\text{sim}(z_i, z_j)/\tau)}{\sum_{k=1}^{2N} \mathbf{1}_{[k \neq i]} \exp(\text{sim}(z_i, z_k)/\tau)}$$
+
+where $\text{sim}(u, v) = u^\top v / (\|u\| \|v\|)$ is cosine similarity and $\tau$ is a temperature hyperparameter (typically 0.07–0.5). The denominator sums over all $2(N-1)$ negatives in the batch. The full loss averages $\ell_{i,j}$ over all positive pairs.
+
+Two design choices flow from this. First, ''larger batches are better'': with $N = 4096$–$8192$, each positive pair is contrasted against thousands of negatives, giving a stronger learning signal. Second, the ''projection head $g$ is discarded'' after pretraining — downstream tasks use $h$ directly. Empirically, $h$ contains more transferable features than $z$.
+
+!! SimCLR v2 and Beyond
+
+''SimCLR v2'' (Chen et al., 2020) extended the framework in three directions: a deeper, wider projection head (3-layer MLP vs. 2-layer), semi-supervised fine-tuning on 1% or 10% of ImageNet labels after pretraining, and knowledge distillation using the pretrained model as a teacher.
+
+Subsequent work challenged the assumption that negatives are necessary. ''BYOL'' (Bootstrap Your Own Latent; Grill et al., 2020) uses two networks — an online network and a slowly-updated target network (exponential moving average) — where the online network learns to predict the target network's output. With no negatives and no labels, BYOL matches and often exceeds SimCLR's accuracy. ''MoCo'' (Momentum Contrast; He et al., 2020) takes a different approach: maintain a queue of past embeddings as a large bank of negatives, decoupling batch size from the number of negatives. ''DINO'' (Caron et al., 2021) extends self-distillation to Vision Transformers. Together, these methods show that the contrastive framework is one point in a larger design space of representation learning without labels.
+
+!! When SimCLR Breaks Down
+
+''Augmentation sensitivity:'' If the augmentation strategy is too weak (views are too similar), the model learns trivial shortcuts like matching pixel statistics. If too strong, semantically identical images may map to distant embeddings. The right augmentation set is domain-dependent — the ImageNet-tuned stack performs poorly on medical images or satellite imagery without re-tuning.
+
+''Computational cost:'' SimCLR's performance is tightly coupled to batch size. Batches of 4096–8192 require large-scale distributed training (the original paper used 128 TPU v3 cores). Methods like MoCo and BYOL were developed specifically to break this dependency, but SimCLR itself is expensive to train from scratch.
+
+''Semantic uniformity:'' The loss treats all non-paired images as negatives, including images from the same class. With enough negatives and sufficiently large models this averages out, but with small batches or narrow domains, the model can be penalized for correctly pulling together semantically similar images that happen to appear in the same batch.
+
+!! Technical Details
+
+Key references: Chen et al. 2020 "A Simple Framework for Contrastive Learning of Visual Representations" (SimCLR); Chen et al. 2020 "Big Self-Supervised Models are Strong Semi-Supervised Learners" (SimCLR v2); Grill et al. 2020 "Bootstrap Your Own Latent" (BYOL); He et al. 2020 "Momentum Contrast for Unsupervised Visual Representation Learning" (MoCo v2); Caron et al. 2021 "Emerging Properties in Self-Supervised Vision Transformers" (DINO).
+
+Evaluation protocols: ''Linear evaluation'' — freeze pretrained encoder, train a single linear layer on labeled data, report top-1 accuracy. ''Semi-supervised'' — fine-tune encoder with 1% or 10% of ImageNet labels. ''Transfer'' — evaluate frozen features on CIFAR-10, Oxford Pets, Food-101, etc.
+
+Architecture defaults: ResNet-50 encoder ($h \in \mathbb{R}^{2048}$), 2-layer MLP projection head with hidden size 2048 and output size 128, temperature $\tau = 0.07$, Adam optimizer with LARS for large batches, 100–1000 epochs pretraining.
+
+!! Quiz
+
+<span id="simclr-q1">
+''Question 1:'' What is the positive pair in SimCLR?
+
+<<button "A. Two images of the same class">><<replace "#simclr-q1">>A. Two images of the same class — Incorrect. SimCLR uses no class labels; it never knows which images share a class.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Two different augmented views of the same image">><<replace "#simclr-q1">>B. Two different augmented views of the same image — ✓ Correct. Each image is augmented twice; the two views form the positive pair.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The original image and its mirror flip">><<replace "#simclr-q1">>C. The original image and its mirror flip — Incorrect. The flip is one possible augmentation, but SimCLR applies a full random augmentation pipeline, not a fixed flip.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Two images with the same dominant color">><<replace "#simclr-q1">>D. Two images with the same dominant color — Incorrect. Color is not used to define pairs; augmentation identity is.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q2">
+''Question 2:'' Which loss function does SimCLR use?
+
+<<button "A. Binary cross-entropy">><<replace "#simclr-q2">>A. Binary cross-entropy — Incorrect. BCE is for binary classification; SimCLR uses a softmax-based contrastive loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Triplet loss">><<replace "#simclr-q2">>B. Triplet loss — Incorrect. Triplet loss uses one positive and one negative per anchor; NT-Xent uses all other batch members as negatives simultaneously.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. NT-Xent (normalized temperature-scaled cross-entropy)">><<replace "#simclr-q2">>C. NT-Xent — ✓ Correct. NT-Xent computes cosine similarity between embeddings, scales by temperature τ, and applies cross-entropy over all 2(N−1) negatives in the batch.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Mean squared error">><<replace "#simclr-q2">>D. Mean squared error — Incorrect. MSE is a regression loss; SimCLR needs a loss that contrasts pairs against many negatives.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q3">
+''Question 3:'' What happens to the projection head g(·) after SimCLR pretraining?
+
+<<button "A. It is fine-tuned with labeled data">><<replace "#simclr-q3">>A. It is fine-tuned with labeled data — Incorrect. The projection head is not used for downstream tasks at all; only the encoder representations are kept.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It is kept and used for all downstream predictions">><<replace "#simclr-q3">>B. It is kept and used for all downstream predictions — Incorrect. Empirically, the encoder output h transfers better than the projection output z.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. It is discarded; the encoder's h representations are used instead">><<replace "#simclr-q3">>C. It is discarded; the encoder's h representations are used instead — ✓ Correct. The projection head helps training but the representations just before it (h) generalize better to downstream tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It is converted into the linear classifier">><<replace "#simclr-q3">>D. It is converted into the linear classifier — Incorrect. A new, separately initialized linear layer is trained on top of the frozen encoder.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q4">
+''Question 4:'' Why does SimCLR benefit from very large batch sizes?
+
+<<button "A. Larger batches stabilize the color jitter augmentation">><<replace "#simclr-q4">>A. Larger batches stabilize the color jitter augmentation — Incorrect. Batch size affects the number of negatives, not the augmentation pipeline.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Each positive pair is contrasted against more negatives, giving a stronger learning signal">><<replace "#simclr-q4">>B. Each positive pair is contrasted against more negatives, giving a stronger learning signal — ✓ Correct. With N=4096, each positive pair has 2(N−1)=8190 negatives in the denominator of NT-Xent, providing richer gradient information.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Larger batches reduce the need for augmentation">><<replace "#simclr-q4">>C. Larger batches reduce the need for augmentation — Incorrect. The ablation study shows augmentation strength and batch size contribute independently.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Larger batches allow the projection head to be skipped">><<replace "#simclr-q4">>D. Larger batches allow the projection head to be skipped — Incorrect. The projection head is used regardless of batch size.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q5">
+''Question 5:'' What does the temperature parameter τ control in NT-Xent?
+
+<<button "A. The learning rate schedule">><<replace "#simclr-q5">>A. The learning rate schedule — Incorrect. Temperature is a loss hyperparameter, not an optimizer setting.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The sharpness of the similarity distribution — low τ makes the model more confident, high τ makes it softer">><<replace "#simclr-q5">>B. The sharpness of the similarity distribution — ✓ Correct. Low τ (e.g. 0.07) sharpens the distribution, penalizing hard negatives more; high τ smooths it, treating all negatives more equally.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of augmentation operations applied">><<replace "#simclr-q5">>C. The number of augmentation operations applied — Incorrect. τ only scales the cosine similarity values inside the loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The proportion of negatives kept per batch">><<replace "#simclr-q5">>D. The proportion of negatives kept per batch — Incorrect. All 2(N−1) negatives are always used; τ changes their weighting, not their count.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q6">
+''Question 6:'' How does BYOL differ from SimCLR?
+
+<<button "A. BYOL uses supervised labels for pretraining">><<replace "#simclr-q6">>A. BYOL uses supervised labels for pretraining — Incorrect. BYOL is also self-supervised; it uses no labels.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. BYOL requires no negative pairs — one network predicts the output of a momentum-updated target network">><<replace "#simclr-q6">>B. BYOL requires no negative pairs — ✓ Correct. BYOL eliminates negatives entirely, avoiding the large-batch requirement of SimCLR while achieving equal or better performance.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. BYOL uses a queue of cached negatives like MoCo">><<replace "#simclr-q6">>C. BYOL uses a queue of cached negatives like MoCo — Incorrect. That describes MoCo; BYOL has no negatives at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. BYOL applies stronger augmentations than SimCLR">><<replace "#simclr-q6">>D. BYOL applies stronger augmentations than SimCLR — Incorrect. BYOL uses a similar augmentation pipeline; the architectural difference (two asymmetric networks) is the key innovation.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q7">
+''Question 7:'' Which augmentation ablation result demonstrates that the augmentation stack matters most?
+
+<<button "A. Removing Gaussian blur drops accuracy from 76.5% to 70%">><<replace "#simclr-q7">>A. Removing Gaussian blur drops accuracy from 76.5% to 70% — Incorrect. Blur helps but the largest individual contribution is color jitter, not blur.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Random crop alone achieves ~60%; adding color jitter brings it to ~70%; the full stack reaches 76.5%">><<replace "#simclr-q7">>B. Random crop alone ~60%; +color jitter ~70%; full stack 76.5% — ✓ Correct. This ablation shows that each augmentation contributes incrementally, and the combination is what pushes SimCLR to competitive performance.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Using no augmentation at all still achieves 50% because the encoder is strong">><<replace "#simclr-q7">>C. No augmentation still achieves 50% — Incorrect. Without augmentation there are no positive pairs to contrast and the model cannot learn meaningful representations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Color jitter alone achieves 76.5%, making other augmentations redundant">><<replace "#simclr-q7">>D. Color jitter alone achieves 76.5% — Incorrect. Color jitter is important but insufficient alone; random cropping is equally critical for defining spatial invariance.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="simclr-q8">
+''Question 8:'' Which of the following is a fundamental failure mode of SimCLR?
+
+<<button "A. The encoder overfits to augmentation artifacts and ignores image content entirely">><<replace "#simclr-q8">>A. Encoder overfits to augmentation artifacts — Incorrect. SimCLR's contrastive objective pushes it toward content-based features precisely to distinguish views; overfitting to artifacts would make the loss trivially easy to minimize.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Negatives include same-class images, so the model is penalized for correctly grouping semantically similar images">><<replace "#simclr-q8">>B. Negatives include same-class images, penalizing correct semantic grouping — ✓ Correct. This is the "false negative" problem: images from the same class appear as negatives, creating a gradient that pushes apart representations that should be close. It averages out at large scale but hurts performance with small batches or narrow domains.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The projection head causes catastrophic forgetting in the encoder">><<replace "#simclr-q8">>C. Projection head causes catastrophic forgetting — Incorrect. The projection head is an additional module; it does not overwrite encoder weights. Forgetting is a concern in sequential fine-tuning, not SimCLR pretraining.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. NT-Xent loss always collapses to zero when τ < 1">><<replace "#simclr-q8">>D. NT-Xent collapses to zero when τ < 1 — Incorrect. Temperature below 1 sharpens the distribution but does not cause collapse; representation collapse is a separate failure mode (constant output regardless of input) guarded against by the negatives.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

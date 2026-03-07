@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Offline RL: Learning from Fixed Datasets Without Interaction</text>
+
+  <!-- ── Fixed Dataset ── -->
+  <rect x="30" y="80" width="150" height="90" rx="6" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="2"/>
+  <text x="105" y="104" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Fixed Dataset D</text>
+  <text x="105" y="122" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(s, a, r, s')</text>
+  <text x="105" y="138" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">collected by</text>
+  <text x="105" y="153" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">behavior policy π_β</text>
+
+  <!-- X over environment interaction -->
+  <rect x="30" y="200" width="150" height="52" rx="6" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.8" stroke-dasharray="5,3"/>
+  <text x="105" y="222" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">Environment</text>
+  <text x="105" y="238" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">No interaction</text>
+  <!-- Red X -->
+  <line x1="42" y1="207" x2="60" y2="245" stroke="#7C2530" stroke-width="2.5"/>
+  <line x1="60" y1="207" x2="42" y2="245" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Arrow: Dataset → Conservative Q-Learning -->
+  <line x1="180" y1="125" x2="228" y2="125" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#orl-arr)"/>
+
+  <!-- ── Distribution Shift Warning ── -->
+  <rect x="230" y="55" width="160" height="55" rx="6" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="310" y="75" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Distribution Shift</text>
+  <text x="310" y="92" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">π_learned ≠ π_β</text>
+  <text x="310" y="104" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#7C2530" text-anchor="middle">Q overestimates OOD actions</text>
+
+  <!-- ── Conservative / Pessimistic Methods ── -->
+  <rect x="230" y="125" width="160" height="65" rx="6" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="310" y="147" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Pessimistic Methods</text>
+  <text x="310" y="163" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">penalize unseen actions</text>
+  <text x="310" y="178" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">lower-bound Q-values</text>
+
+  <!-- Arrow: Distribution Shift → Pessimistic Methods -->
+  <line x1="310" y1="110" x2="310" y2="122" stroke="#7C2530" stroke-width="1.5" marker-end="url(#orl-arr2)"/>
+
+  <!-- ── Three method branches ── -->
+  <!-- CQL -->
+  <line x1="390" y1="140" x2="440" y2="100" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#orl-arr3)"/>
+  <rect x="442" y="62" width="120" height="55" rx="6" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="502" y="82" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">CQL</text>
+  <text x="502" y="96" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">penalize Q for</text>
+  <text x="502" y="109" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">out-of-dist. actions</text>
+
+  <!-- IQL -->
+  <line x1="390" y1="157" x2="440" y2="157" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#orl-arr3)"/>
+  <rect x="442" y="130" width="120" height="55" rx="6" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="502" y="150" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">IQL</text>
+  <text x="502" y="164" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">expectile regression</text>
+  <text x="502" y="177" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">avoids OOD queries</text>
+
+  <!-- Decision Transformer -->
+  <line x1="390" y1="175" x2="440" y2="215" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#orl-arr3)"/>
+  <rect x="442" y="198" width="120" height="55" rx="6" fill="#5C3D1E" fill-opacity="0.12" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="502" y="215" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Decision</text>
+  <text x="502" y="229" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Transformer</text>
+  <text x="502" y="244" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">RL as seq. modeling</text>
+
+  <!-- Arrow: methods → learned policy -->
+  <line x1="562" y1="90" x2="640" y2="145" stroke="#2D5A8E" stroke-width="1.3" marker-end="url(#orl-arr3)"/>
+  <line x1="562" y1="157" x2="640" y2="157" stroke="#2D5A8E" stroke-width="1.3" marker-end="url(#orl-arr3)"/>
+  <line x1="562" y1="225" x2="640" y2="170" stroke="#5C3D1E" stroke-width="1.3" marker-end="url(#orl-arr)"/>
+
+  <!-- ── Learned Policy ── -->
+  <rect x="645" y="125" width="130" height="65" rx="6" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="2"/>
+  <text x="710" y="148" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Learned Policy</text>
+  <text x="710" y="165" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">π* (conservative)</text>
+  <text x="710" y="180" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">safe to deploy</text>
+
+  <!-- ── Data sources row ── -->
+  <text x="105" y="290" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Data Sources</text>
+  <rect x="30" y="300" width="100" height="32" rx="4" fill="#C4A87A" fill-opacity="0.18" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="80" y="320" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Human demos</text>
+  <rect x="140" y="300" width="100" height="32" rx="4" fill="#C4A87A" fill-opacity="0.18" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="190" y="320" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Logged policies</text>
+  <rect x="250" y="300" width="100" height="32" rx="4" fill="#C4A87A" fill-opacity="0.18" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="300" y="320" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Simulators</text>
+
+  <!-- ── Key insight banner ── -->
+  <rect x="170" y="362" width="462" height="28" rx="5" fill="#7C2530" fill-opacity="0.10" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="401" y="380" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Stay pessimistic about what you haven't seen — trust only the data</text>
+
+  <!-- ── Arrowhead markers ── -->
+  <defs>
+    <marker id="orl-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="orl-arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="orl-arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+</svg>

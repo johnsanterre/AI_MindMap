@@ -1,0 +1,144 @@
+<<include "Header">>
+! Sparse Attention
+
+<img src="assets/sparse_attention.svg" alt="Sparse attention pattern matrices comparing full, local window, strided, and Longformer-style combined patterns" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you're in a conference room with 1,000 people. You don't need to listen to everyone equally -- you pay close attention to the five people sitting nearest you and the speaker at the podium, while tuning out the hundreds of murmured side conversations you can barely hear. ''Sparse attention'' applies exactly this idea to <<link "Transformers" "Transformers">><</link>>. In standard self-attention, every token attends to every other token, which costs $O(L^2)$ computation for a sequence of length $L$. Sparse attention restricts each token to attending only to a carefully chosen subset of other tokens -- nearby neighbors, periodic landmarks, or learned targets -- cutting the cost to $O(L\sqrt{L})$ or even $O(L)$. This is what makes it possible to process documents with tens of thousands of tokens where full attention would be computationally impossible.
+
+!! The Core Insight
+
+Full <<link "Attention" "Attention">><</link>> computes a dense $L \times L$ matrix of attention weights. For a sequence of 16,000 tokens, that's 256 million entries -- and it grows quadratically. Double the sequence length and you quadruple the cost. This is the fundamental bottleneck that limits how much context a transformer can see.
+
+But here's the key observation: //most of those 256 million attention weights are near-zero anyway//. Empirical studies show that the attention matrix is naturally sparse -- tokens overwhelmingly attend to nearby tokens and a handful of globally important tokens (like [CLS] or punctuation). The vast majority of token pairs have negligible attention weights.
+
+Sparse attention exploits this by defining a ''sparsity pattern'' -- a predetermined set of token pairs that are allowed to attend to each other. Everything outside the pattern is simply never computed. The art lies in choosing patterns that capture the important dependencies while discarding the irrelevant ones. The main families are local windows (nearby tokens), strided patterns (periodic long-range connections), global tokens (designated tokens that see everything), random connections, and learned routing.
+
+!! Sparse Attention Patterns
+
+''Local / sliding window attention'' is the simplest pattern: each token attends only to its $W$ nearest neighbors. This captures the intuition that most dependencies in language are local -- a word usually depends most on the words immediately around it. Mistral and Mixtral use sliding window attention as their default mechanism. Cost: $O(LW)$.
+
+''Strided attention'' adds long-range reach by having each token attend to every $k$-th token in addition to its local window. Think of it like reading a book by looking at every nearby word //plus// glancing at the first word of every paragraph. Child et al. (2019) introduced this in the original Sparse Transformer, combining local and strided heads to achieve $O(L\sqrt{L})$ complexity.
+
+''Global tokens'' are designated positions that attend to (and are attended by) every token in the sequence. <<link "Longformer" "Longformer">><</link>> (Beltagy et al. 2020) combines a local sliding window with a small number of global tokens -- for example, the [CLS] token in classification tasks. This gives every token an indirect path to every other token through the global positions.
+
+''Random attention'' supplements local and global patterns with a random subset of connections. ''BigBird'' (Zaheer et al. 2020) uses local + global + random and proves this combination is a universal approximator of sequence functions -- it is Turing-complete, matching the theoretical power of full attention.
+
+''Hash-based attention'' takes a different approach entirely. The ''Reformer'' (Kitaev et al. 2020) uses <<link "Locality-Sensitive Hashing" "Locality-Sensitive Hashing">><</link>> (LSH) to group tokens with similar query/key vectors into the same bucket, then restricts attention to within buckets. Tokens only attend to others that would have had high attention weights anyway. Cost: $O(L \log L)$.
+
+''Learned routing'' goes further by training the model to decide which tokens should attend to which. Routing Transformers learn a routing function that clusters tokens dynamically, adapting the sparsity pattern to the input rather than using a fixed pattern.
+
+!! What the Math Is Actually Doing
+
+Standard self-attention computes the full $L \times L$ attention matrix:
+
+$$A = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d}}\right)$$
+
+where $Q, K \in \mathbb{R}^{L \times d}$. The output is $\text{Attention}(Q, K, V) = AV$. Computing $QK^\top$ alone requires $O(L^2 d)$ operations.
+
+Sparse attention defines a ''sparsity pattern'' $\mathcal{S} \subseteq \{1, \ldots, L\} \times \{1, \ldots, L\}$ and computes attention weights only for pairs $(i, j) \in \mathcal{S}$:
+
+$$A_{ij} = \begin{cases} \frac{\exp(q_i^\top k_j / \sqrt{d})}{\sum_{(i,j') \in \mathcal{S}} \exp(q_i^\top k_{j'} / \sqrt{d})} & \text{if } (i,j) \in \mathcal{S} \\ 0 & \text{otherwise} \end{cases}$$
+
+For a ''local window'' of size $W$: $\mathcal{S} = \{(i, j) : |i - j| \leq W/2\}$, giving $|\mathcal{S}| = LW$, so the cost is $O(LW)$.
+
+For ''Longformer'' with window $W$ and $g$ global tokens: $|\mathcal{S}| = L(W + g)$, so cost is $O(L(W + g))$. Since $W$ and $g$ are constants independent of $L$, this is ''linear in sequence length''.
+
+For ''Reformer LSH attention'': tokens are hashed into $b$ buckets of average size $L/b$. Attention within each bucket is $O((L/b)^2)$, and there are $b$ buckets, giving total cost $O(L^2/b)$. With $b = L / \log L$, this yields $O(L \log L)$.
+
+The key mathematical result from ''BigBird'': the combination of local + global + random attention with $O(L)$ total edges can approximate any continuous sequence-to-sequence function to arbitrary precision. This is proven using the theory of random graphs -- the random edges ensure the graph has $O(\log L)$ diameter, meaning information can flow between any two tokens in logarithmically many steps.
+
+!! Sparse Attention in Practice
+
+''Longformer'' (Beltagy et al. 2020) was one of the first practical sparse attention models. It uses a sliding window of 256-512 tokens per layer, with task-specific global tokens (e.g., [CLS] for classification, question tokens for QA). It processes documents up to 4,096 tokens and achieves strong results on long-document tasks like <<link "TriviaQA" "TriviaQA">><</link>> and WikiHop.
+
+''BigBird'' (Zaheer et al. 2020) combines local windowed attention, a small number of random attention connections, and global tokens. It matches or exceeds full-attention <<link "BERT" "BERT">><</link>> on several benchmarks while handling sequences up to 4,096 tokens. Its theoretical contribution -- proving the Turing-completeness of sparse attention -- was equally influential.
+
+''Reformer'' (Kitaev et al. 2020) uses LSH attention to achieve $O(L \log L)$ complexity. It also introduces reversible residual layers to reduce memory from $O(L \cdot n_{\text{layers}})$ to $O(L)$. Reformer can handle sequences up to 64K tokens on a single accelerator.
+
+''Mistral'' and ''Mixtral'' use sliding window attention as a core architectural choice. With a window size of 4,096 tokens and 32 layers, information can theoretically propagate across $4096 \times 32 = 131,072$ tokens through successive layers, even though each individual attention operation is local. This is combined with <<link "KV Cache" "KV Cache">><</link>> rolling to keep memory bounded.
+
+Modern frontier models like GPT-4 and Claude likely employ hybrid strategies -- full attention at shorter contexts transitioning to sparse or approximate attention patterns as context length grows, combined with <<link "Flash Attention" "Flash Attention">><</link>> for hardware efficiency.
+
+!! When Sparse Attention Breaks Down
+
+''1. Information loss from missed dependencies.'' No fixed sparsity pattern is universally optimal. If a critical long-range dependency falls outside the pattern -- say, a pronoun at position 8,000 that refers to a noun at position 200, and those positions aren't connected by local, strided, or global links -- the model simply cannot learn that dependency. The pattern designer must guess which connections matter, and they will sometimes guess wrong. Tasks requiring arbitrary long-range reasoning (e.g., multi-hop QA over very long documents) are especially vulnerable.
+
+''2. Hardware inefficiency from irregular memory access.'' GPUs are optimized for dense, regular computation. Sparse attention patterns create irregular memory access that can severely underutilize hardware. The theoretical FLOP savings from sparsity often don't translate to proportional wall-clock speedups. This is why <<link "Flash Attention" "Flash Attention">><</link>> -- which keeps //dense// attention but optimizes memory access patterns -- can be //faster// than sparse attention for moderate sequence lengths (up to ~8K tokens on modern GPUs). Sparse attention only wins when sequences are genuinely very long.
+
+''3. Training-inference mismatch.'' A model trained with full attention learns to use the full attention pattern. Switching to sparse attention at inference time -- even a theoretically equivalent sparse pattern -- often causes significant quality degradation because the model has learned to rely on connections that sparse attention removes. Models must be trained with the same sparse pattern they'll use at inference, which means committing to the pattern early and accepting its limitations throughout training. Fine-tuning a full-attention model to use sparse attention requires careful adaptation.
+
+!! Technical Details
+
+The original ''Sparse Transformer'' (Child et al. 2019) introduced factorized sparse attention, splitting attention heads into local and strided patterns. This achieved $O(L\sqrt{L})$ complexity and was applied to autoregressive image and text generation with sequences up to 12,288 tokens.
+
+''Complexity comparison'' at $L = 16{,}384$, $d = 64$:
+- Full attention: $L^2 = 268M$ pairs
+- Local window ($W = 256$): $LW = 4.2M$ pairs (64x reduction)
+- Longformer ($W = 256$, $g = 8$): $L(W + g) = 4.3M$ pairs
+- Reformer LSH: $L \log L \approx 229K$ bucket operations
+
+''Connection to linear attention'': sparse attention reduces the //number// of pairs computed but still uses softmax attention within the sparse pattern. <<link "Linear Attention" "Linear Attention">><</link>> takes a different approach, replacing the softmax kernel to enable $O(Ld^2)$ computation -- linear in $L$ but quadratic in head dimension $d$.
+
+''Connection to state-space models'': <<link "Mamba" "Mamba">><</link>> and other SSMs avoid the attention matrix entirely, achieving $O(L)$ complexity through recurrent computation. They can be viewed as an extreme form of structured sparsity where the "attention pattern" is constrained to a specific parametric form.
+
+Relevant background: <<link "Transformers" "Transformers">><</link>> | <<link "Attention" "Attention">><</link>> | <<link "Flash Attention" "Flash Attention">><</link>> | <<link "KV Cache" "KV Cache">><</link>> | <<link "Mamba" "Mamba">><</link>> | <<link "Big O Examples" "Big O Examples">><</link>> | <<link "BERT" "BERT">><</link>>
+
+!! Quiz
+
+<span id="sa-q1"></span>
+''1. What is the computational complexity of standard full self-attention with respect to sequence length L?''
+<<button "A. O(L)">><<replace "#sa-q1">>A. O(L) -- Incorrect. O(L) is the goal of some sparse methods, but full attention must compute all L x L pairs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. O(L log L)">><<replace "#sa-q1">>B. O(L log L) -- Incorrect. This is the complexity of Reformer's LSH attention, not full attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. O(L²)">><<replace "#sa-q1">>C. O(L²) -- Correct! Full attention computes an L x L attention matrix, making it quadratic in sequence length.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. O(L³)">><<replace "#sa-q1">>D. O(L³) -- Incorrect. The matrix multiply is O(L²d), not cubic in L (unless d scales with L).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q2"></span>
+''2. What empirical observation motivates sparse attention?''
+<<button "A. Most attention weights are uniformly distributed">><<replace "#sa-q2">>A. Most attention weights are uniformly distributed -- Incorrect. The opposite is true; attention weights are highly concentrated.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Most attention weights are near-zero">><<replace "#sa-q2">>B. Most attention weights are near-zero -- Correct! The attention matrix is empirically sparse, with tokens concentrating attention on a small subset of positions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Tokens only need to attend to the next token">><<replace "#sa-q2">>C. Tokens only need to attend to the next token -- Incorrect. While local attention is important, tokens also need some long-range connections.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Attention matrices are always low-rank">><<replace "#sa-q2">>D. Attention matrices are always low-rank -- Incorrect. Low-rank approximation is a different approach (e.g., Linformer), not the same as sparsity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q3"></span>
+''3. Which sparse attention model uses locality-sensitive hashing to group similar tokens?''
+<<button "A. Longformer">><<replace "#sa-q3">>A. Longformer -- Incorrect. Longformer uses local windows plus global tokens, not hashing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. BigBird">><<replace "#sa-q3">>B. BigBird -- Incorrect. BigBird uses local + random + global attention, not hashing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Reformer">><<replace "#sa-q3">>C. Reformer -- Correct! Reformer uses LSH to hash queries and keys into buckets, then restricts attention to within each bucket.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Sparse Transformer">><<replace "#sa-q3">>D. Sparse Transformer -- Incorrect. The Sparse Transformer uses fixed local + strided patterns, not hashing.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q4"></span>
+''4. What theoretical property was proven for BigBird's sparse attention pattern?''
+<<button "A. It minimizes cross-entropy loss">><<replace "#sa-q4">>A. It minimizes cross-entropy loss -- Incorrect. This is a training objective, not a theoretical property of the attention pattern.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It is Turing-complete">><<replace "#sa-q4">>B. It is Turing-complete -- Correct! BigBird proved that local + global + random sparse attention can simulate any Turing machine, matching the computational power of full attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It achieves zero approximation error">><<replace "#sa-q4">>C. It achieves zero approximation error -- Incorrect. BigBird approximates full attention but does not achieve zero error for all inputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It is equivalent to a recurrent network">><<replace "#sa-q4">>D. It is equivalent to a recurrent network -- Incorrect. While both are Turing-complete, the proof does not establish equivalence to RNNs specifically.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q5"></span>
+''5. Why can Flash Attention sometimes be faster than sparse attention despite computing more FLOPs?''
+<<button "A. Flash Attention uses fewer parameters">><<replace "#sa-q5">>A. Flash Attention uses fewer parameters -- Incorrect. Flash Attention is a computation strategy, not a model with different parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Flash Attention avoids the softmax operation">><<replace "#sa-q5">>B. Flash Attention avoids the softmax operation -- Incorrect. Flash Attention still computes exact softmax attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Sparse attention creates irregular memory access patterns that hurt GPU utilization">><<replace "#sa-q5">>C. Sparse attention creates irregular memory access patterns that hurt GPU utilization -- Correct! GPUs are optimized for dense, regular computation. The irregular access patterns of sparsity can waste hardware throughput, making dense-but-IO-optimized Flash Attention faster for moderate sequence lengths.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Flash Attention uses lower precision arithmetic">><<replace "#sa-q5">>D. Flash Attention uses lower precision arithmetic -- Incorrect. While mixed precision can help, this is not the primary reason Flash Attention outperforms sparse methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q6"></span>
+''6. In Longformer, what is the complexity with window size W and g global tokens?''
+<<button "A. O(L²)">><<replace "#sa-q6">>A. O(L²) -- Incorrect. That's full attention complexity, which Longformer specifically avoids.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. O(L(W + g))">><<replace "#sa-q6">>B. O(L(W + g)) -- Correct! Each of L tokens attends to W local neighbors plus g global tokens, giving O(L(W + g)) which is linear in L since W and g are constants.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. O(LW · g)">><<replace "#sa-q6">>C. O(LW · g) -- Incorrect. Local and global attention costs add, not multiply.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. O(L log L)">><<replace "#sa-q6">>D. O(L log L) -- Incorrect. This is Reformer's complexity, not Longformer's.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q7"></span>
+''7. How does Mistral's sliding window attention achieve effective long-range context across layers?''
+<<button "A. By increasing window size in deeper layers">><<replace "#sa-q7">>A. By increasing window size in deeper layers -- Incorrect. Mistral uses a fixed window size across layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Information propagates through successive layers, expanding the effective receptive field">><<replace "#sa-q7">>B. Information propagates through successive layers, expanding the effective receptive field -- Correct! With window W and n layers, information can propagate up to W x n positions, similar to how CNN receptive fields grow with depth.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. By using full attention every 4th layer">><<replace "#sa-q7">>C. By using full attention every 4th layer -- Incorrect. Mistral uses sliding window attention in all layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. By adding random connections between distant tokens">><<replace "#sa-q7">>D. By adding random connections between distant tokens -- Incorrect. That's BigBird's approach, not Mistral's.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sa-q8"></span>
+''8. Why is switching from full attention at training to sparse attention at inference problematic?''
+<<button "A. Sparse attention changes the model's parameter count">><<replace "#sa-q8">>A. Sparse attention changes the model's parameter count -- Incorrect. Sparse attention uses the same Q, K, V parameters; it just restricts which pairs are computed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The model learned to use connections that sparse attention removes">><<replace "#sa-q8">>B. The model learned to use connections that sparse attention removes -- Correct! Models trained with full attention may rely on long-range connections that a sparse pattern eliminates, causing quality degradation at inference time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Sparse attention requires different tokenization">><<replace "#sa-q8">>C. Sparse attention requires different tokenization -- Incorrect. The tokenization is independent of the attention pattern.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Sparse attention cannot use the softmax function">><<replace "#sa-q8">>D. Sparse attention cannot use the softmax function -- Incorrect. Sparse attention uses standard softmax over the restricted set of connections.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

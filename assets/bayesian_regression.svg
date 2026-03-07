@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Bayesian Regression: From Point Estimates to Distributions</text>
+
+  <!-- Left panel: OLS point estimate -->
+  <rect x="40" y="60" width="220" height="300" rx="8" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="150" y="85" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">OLS / Point Estimate</text>
+
+  <!-- Single regression line -->
+  <line x1="70" y1="320" x2="230" y2="110" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Data points -->
+  <circle cx="85" cy="295" r="4" fill="#2D5A8E"/>
+  <circle cx="105" cy="270" r="4" fill="#2D5A8E"/>
+  <circle cx="120" cy="240" r="4" fill="#2D5A8E"/>
+  <circle cx="140" cy="230" r="4" fill="#2D5A8E"/>
+  <circle cx="155" cy="195" r="4" fill="#2D5A8E"/>
+  <circle cx="175" cy="170" r="4" fill="#2D5A8E"/>
+  <circle cx="195" cy="155" r="4" fill="#2D5A8E"/>
+  <circle cx="215" cy="125" r="4" fill="#2D5A8E"/>
+
+  <text x="150" y="350" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">One "best" line</text>
+
+  <!-- Arrow between panels -->
+  <polygon points="280,200 310,185 310,195 360,195 360,205 310,205 310,215" fill="#C4A87A"/>
+  <text x="320" y="230" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Add prior</text>
+  <text x="320" y="244" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">beliefs</text>
+
+  <!-- Right panel: Bayesian posterior distribution of lines -->
+  <rect x="380" y="60" width="380" height="300" rx="8" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="570" y="85" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Bayesian Posterior</text>
+
+  <!-- Multiple sampled regression lines (fan of uncertainty) -->
+  <line x1="410" y1="330" x2="720" y2="100" stroke="#7C2530" stroke-width="1.2" opacity="0.15"/>
+  <line x1="410" y1="320" x2="720" y2="115" stroke="#7C2530" stroke-width="1.2" opacity="0.2"/>
+  <line x1="410" y1="310" x2="720" y2="125" stroke="#7C2530" stroke-width="1.2" opacity="0.3"/>
+  <line x1="410" y1="305" x2="720" y2="130" stroke="#7C2530" stroke-width="1.2" opacity="0.45"/>
+  <line x1="410" y1="300" x2="720" y2="135" stroke="#7C2530" stroke-width="2" opacity="0.8"/>
+  <line x1="410" y1="295" x2="720" y2="140" stroke="#7C2530" stroke-width="1.2" opacity="0.45"/>
+  <line x1="410" y1="290" x2="720" y2="150" stroke="#7C2530" stroke-width="1.2" opacity="0.3"/>
+  <line x1="410" y1="280" x2="720" y2="160" stroke="#7C2530" stroke-width="1.2" opacity="0.2"/>
+  <line x1="410" y1="270" x2="720" y2="175" stroke="#7C2530" stroke-width="1.2" opacity="0.15"/>
+
+  <!-- Data points (same data) -->
+  <circle cx="425" cy="285" r="4" fill="#2D5A8E"/>
+  <circle cx="455" cy="260" r="4" fill="#2D5A8E"/>
+  <circle cx="480" cy="235" r="4" fill="#2D5A8E"/>
+  <circle cx="510" cy="220" r="4" fill="#2D5A8E"/>
+  <circle cx="545" cy="195" r="4" fill="#2D5A8E"/>
+  <circle cx="590" cy="170" r="4" fill="#2D5A8E"/>
+  <circle cx="640" cy="155" r="4" fill="#2D5A8E"/>
+  <circle cx="690" cy="140" r="4" fill="#2D5A8E"/>
+
+  <!-- Posterior bell curve at right edge -->
+  <path d="M 730,100 Q 745,120 730,140 Q 715,120 730,100 Z" fill="#2D5A8E" opacity="0.3"/>
+  <text x="748" y="124" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">p(w|D)</text>
+
+  <!-- Uncertainty band annotation -->
+  <path d="M 570,155 L 570,215" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="560" y="250" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">uncertainty</text>
+  <text x="560" y="262" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">band</text>
+
+  <text x="570" y="350" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">Distribution of plausible lines</text>
+</svg>

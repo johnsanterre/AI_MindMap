@@ -1,0 +1,172 @@
+<<include "Header">>
+
+! Variational Calculus
+
+<img src="assets/variational_calculus.svg" alt="Diagram showing the brachistochrone problem and Euler-Lagrange equation optimizing over functions" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Ordinary calculus finds the input $x$ that minimizes a function $f(x)$. ''Variational calculus'' finds the entire //function// $y(x)$ that minimizes a ''functional'' $J[y] = \int F(x, y, y')\,dx$. The classic question: what is the fastest slide between two points under gravity — the ''brachistochrone''? The answer — a cycloid — cannot be found by ordinary calculus, because you are optimizing over an infinite-dimensional space of curves, not a single number. Variational calculus is the calculus of infinite-dimensional spaces.
+
+!! The Core Insight
+
+The ''Euler-Lagrange equation'' is the analog of "derivative = 0" for functionals:
+
+$$\frac{d}{dx}\!\left(\frac{\partial F}{\partial y'}\right) - \frac{\partial F}{\partial y} = 0$$
+
+Any function $y^*$ that extremizes $J[y]$ must satisfy this ODE. This single equation is the bridge between physics (Lagrangian mechanics), control theory (Pontryagin's maximum principle), and modern ML (variational inference, neural ODEs). Just as setting $f'(x) = 0$ finds stationary points of a scalar function, the Euler-Lagrange equation finds stationary //functions// of a functional — the stationarity condition lifted into infinite dimensions.
+
+!! The Euler-Lagrange Equation
+
+The derivation proceeds by ''perturbation''. Let $y = y^* + \varepsilon\eta$ where $\eta(x)$ is any smooth test function satisfying $\eta = 0$ at the boundary points. Then $J[y^* + \varepsilon\eta]$ is an ordinary function of $\varepsilon$, and stationarity requires:
+
+$$\left.\frac{dJ}{d\varepsilon}\right|_{\varepsilon=0} = \int \left(\frac{\partial F}{\partial y}\eta + \frac{\partial F}{\partial y'}\eta'\right)dx = 0$$
+
+Integrating the second term by parts and using the boundary conditions $\eta = 0$ at the endpoints collapses this to:
+
+$$\int \left(\frac{\partial F}{\partial y} - \frac{d}{dx}\frac{\partial F}{\partial y'}\right)\eta\,dx = 0$$
+
+Since $\eta$ is arbitrary, the integrand must vanish — giving the Euler-Lagrange ODE. ''Key examples:''
+
+- ''Shortest path (geodesics):'' $F = \sqrt{1 + y'^2}$, giving $y'' = 0$ (straight lines in flat space)
+- ''Brachistochrone:'' $F = \sqrt{(1+y'^2)/y}$, giving the cycloid
+- ''Minimal surfaces (soap films):'' $F = \sqrt{1 + y_x^2 + y_z^2}$, giving the minimal surface equation
+
+''Noether's theorem'' is perhaps the deepest result in variational calculus: every continuous symmetry of the Lagrangian corresponds to a conserved quantity. Time-translation symmetry → conservation of energy. Spatial-translation symmetry → conservation of momentum. Rotational symmetry → conservation of angular momentum. The conservation laws of physics are not postulated; they are consequences of symmetry acting through the variational structure.
+
+!! What the Math Is Actually Doing
+
+The ''functional derivative'' $\delta J / \delta y(x)$ is the gradient of $J$ in function space — a function, not a number. Setting it to zero:
+
+$$\frac{\delta J}{\delta y(x)} = \frac{\partial F}{\partial y} - \frac{d}{dx}\frac{\partial F}{\partial y'} = 0$$
+
+recovers the Euler-Lagrange equation. This is gradient descent lifted to infinite dimensions.
+
+''Hamilton's principle'' states that physical trajectories extremize the ''action'':
+
+$$S[q] = \int_{t_1}^{t_2} L(q, \dot{q}, t)\,dt, \qquad L = T - V$$
+
+where $T$ is kinetic energy and $V$ is potential energy. The Euler-Lagrange equations applied to $S$ yield Newton's second law.
+
+The ''Hamiltonian formulation'' introduces conjugate momenta $p = \partial L/\partial \dot{q}$ and defines:
+
+$$H(q, p, t) = p \cdot \dot{q} - L(q, \dot{q}, t)$$
+
+This ''Legendre transform'' exchanges the velocity variable $\dot{q}$ for the momentum $p$, converting the second-order Euler-Lagrange ODE into Hamilton's equations — a pair of first-order ODEs:
+
+$$\dot{q} = \frac{\partial H}{\partial p}, \qquad \dot{p} = -\frac{\partial H}{\partial q}$$
+
+For ''constrained optimization'', Lagrange multipliers become //multiplier fields// $\lambda(x)$. The constrained functional $J[y] + \int \lambda(x) g(y, y')\,dx$ is varied freely, and the Euler-Lagrange equations for both $y$ and $\lambda$ give the solution and the constraint simultaneously.
+
+!! Variational Calculus in ML
+
+Variational calculus is not merely historical — it is the mathematical backbone of several active ML research areas:
+
+''Variational Inference:'' The goal is to approximate an intractable posterior $p(z|x)$ with a tractable family $q(z)$. The ''ELBO'' (Evidence Lower Bound) is:
+
+$$\mathcal{L}[q] = \mathbb{E}_{q}[\log p(x, z)] - \mathrm{KL}(q \,||\, p)$$
+
+Maximizing $\mathcal{L}[q]$ over the distribution $q$ is a functional optimization problem — precisely variational calculus. The name ''variational autoencoder'' (VAE) comes directly from this heritage.
+
+''Neural ODEs:'' The dynamics function $f_\theta$ in $\dot{z}(t) = f_\theta(z(t), t)$ plays the role of the Lagrangian. Training via the adjoint method is derived from Pontryagin's maximum principle, a variational result for optimal control.
+
+''Continuous Normalizing Flows:'' Change of variables is computed by integrating along trajectories of a learned vector field — a continuous-time variational structure.
+
+''Physics-Informed Neural Networks (PINNs):'' The loss is the residual of a PDE treated as a functional — the network minimizes a discretized variational problem.
+
+''Optimal Control (Pontryagin's Maximum Principle):'' For a controlled system $\dot{x} = f(x, u)$, the optimal control $u^*(t)$ maximizes the Hamiltonian pointwise. This is the variational stationarity condition applied to the control functional.
+
+!! When Variational Calculus Breaks Down
+
+''1. Non-existence of minimizers.'' Not every functional has a minimizer in the chosen function space. A minimizing sequence $\{y_n\}$ may converge to a function outside the space (e.g., a discontinuous limit when $F$ requires smoothness). Resolving this requires careful choice of Sobolev spaces $W^{k,p}$ and compactness arguments — the modern "direct method" of the calculus of variations. In ML, this manifests as variational problems whose true minimizer is not representable by the chosen network architecture.
+
+''2. Local vs. global extrema.'' The Euler-Lagrange equation gives only //necessary// conditions, not sufficient ones. A solution $y^*$ may be a saddle point, a local minimum, or a local maximum rather than the global minimizer. The ''second variation'' $\delta^2 J$ (analogous to the Hessian) must be positive definite for a true local minimum (Jacobi condition). In variational inference, the ELBO landscape has many local optima, and gradient-based methods find only local solutions.
+
+''3. Discretization errors.'' In practice, functionals are discretized: finite mini-batches approximate integrals, and finite neural networks approximate function spaces. The discrete solution can differ significantly from the true continuous variational solution — particularly when the functional is sensitive to high-frequency components of $y$ that the discretization misses. This is a fundamental tension in physics-informed ML: the PDE residual loss is a functional, but it is evaluated only at finite collocation points.
+
+!! Technical Details
+
+''Historical milestones:'' Euler (1744) — first systematic treatment of the brachistochrone class. Lagrange (1755) — first complete formulation of the variational principle via perturbation (the letter to Euler that founded the field). Hamilton (1833) — action principle and Hamiltonian mechanics. Noether (1915, published 1918) — symmetry-conservation law correspondence.
+
+''Modern analysis:'' The rigorous treatment uses ''Sobolev spaces'' $H^1(\Omega) = W^{1,2}(\Omega)$, where weak derivatives are square-integrable. The direct method of the calculus of variations (Tonelli, early 20th century) establishes existence via coercivity and lower semicontinuity of the functional.
+
+''Optimal transport'' (Monge–Kantorovich) is a variational problem: find the transport map $T$ that minimizes $\int c(x, T(x))\,d\mu(x)$. This connects to Wasserstein distances used in generative modeling.
+
+''Mean-field game theory'' combines variational calculus with game theory: each agent solves a control problem (variational), and the equilibrium is a fixed point over the population distribution (functional equation).
+
+''Connections to other pages:''
+<<link "Optimal Control" "Optimal Control">><</link>> | <<link "Stochastic Processes" "Stochastic Processes">><</link>> | <<link "Variational Inference" "Variational Inference">><</link>> | <<link "Neural ODEs" "Neural ODEs">><</link>>
+
+!! Quiz
+
+<span id="vc-q1">What is a ''functional''?</span>
+
+A. A function that maps numbers to numbers
+B. A map from a space of functions to a real number
+C. A derivative of a function with respect to a parameter
+D. A type of neural network architecture
+
+<<button "A">><<replace "#vc-q1">>Incorrect. A functional takes an entire function as input and returns a scalar — it is a map from a function space to $\mathbb{R}$, not from $\mathbb{R}$ to $\mathbb{R}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q1">>Correct. A functional $J[y]$ maps a function $y(\cdot)$ to a real number — e.g., $J[y] = \int_a^b F(x,y,y')\,dx$. Ordinary calculus optimizes over numbers; variational calculus optimizes over functions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q1">>Incorrect. That describes a partial derivative or a directional derivative, not a functional. A functional is a map whose domain is a function space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q1">>Incorrect. "Functional" in mathematics refers to a map from a function space to $\mathbb{R}$, which is the foundational object of variational calculus — not a network architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q2">The Euler-Lagrange equation $\frac{d}{dx}\!\left(\frac{\partial F}{\partial y'}\right) - \frac{\partial F}{\partial y} = 0$ is derived by requiring which condition?</span>
+
+A. The second derivative of $J$ with respect to $y$ is positive
+B. The first variation $\delta J = 0$ for all admissible perturbations $\eta$
+C. The boundary values of $y$ are fixed to zero
+D. The Hessian of $F$ is invertible
+
+<<button "A">><<replace "#vc-q2">>Incorrect. Positive second variation ($\delta^2 J > 0$) is a sufficient condition for a local minimum, but the Euler-Lagrange equation comes from setting the //first// variation to zero.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q2">>Correct. Writing $y = y^* + \varepsilon\eta$ and requiring $dJ/d\varepsilon|_{\varepsilon=0} = 0$ for all test functions $\eta$ with $\eta = 0$ at boundaries — combined with integration by parts — yields the Euler-Lagrange equation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q2">>Incorrect. Fixing boundary values is a boundary condition on the problem, not the stationarity requirement. The Euler-Lagrange equation comes from requiring the first variation vanishes for all interior perturbations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q2">>Incorrect. The invertibility of the Hessian of $F$ is unrelated to the derivation of the Euler-Lagrange equation, which relies on the fundamental lemma of calculus of variations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q3">Noether's theorem connects symmetries of the Lagrangian to which mathematical objects?</span>
+
+A. Eigenvalues of the Hessian
+B. Fixed points of the flow
+C. Conserved quantities (first integrals of motion)
+D. Boundary conditions of the variational problem
+
+<<button "A">><<replace "#vc-q3">>Incorrect. Eigenvalues of the Hessian relate to the stability of equilibria or curvature of the functional, not to Noether's theorem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q3">>Incorrect. Fixed points of the flow are equilibria of the ODE, not the content of Noether's theorem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q3">>Correct. Noether's theorem: every continuous symmetry of the Lagrangian corresponds to a conserved quantity. Time-translation → energy; spatial translation → momentum; rotation → angular momentum. Conservation laws are consequences of symmetry.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q3">>Incorrect. Boundary conditions constrain the space of admissible functions but are not what Noether's theorem is about. Noether's theorem is a correspondence between symmetries and conserved quantities.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q4">In variational inference, what is being optimized over, making it a variational calculus problem?</span>
+
+A. The weights of a neural network (finite-dimensional)
+B. The approximating distribution $q(z)$ (infinite-dimensional function)
+C. The number of latent dimensions
+D. The learning rate schedule
+
+<<button "A">><<replace "#vc-q4">>Partially true in practice (amortized VI optimizes network weights), but the //mathematical// structure is optimization over a distribution $q$ — an infinite-dimensional object — which is the variational calculus aspect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q4">>Correct. The ELBO $\mathcal{L}[q]$ is a functional of the distribution $q(z)$. Maximizing over $q$ is a functional optimization — variational calculus. The "variational" in VAE refers precisely to this structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q4">>Incorrect. The number of latent dimensions is a discrete architectural choice, not a variational optimization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q4">>Incorrect. The learning rate schedule is an optimization hyperparameter, not the object being optimized in the variational sense.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q5">What is the ''functional derivative'' $\delta J / \delta y(x)$?</span>
+
+A. The ordinary derivative of $J$ with respect to the upper limit of integration
+B. The gradient of the functional $J$ in function space — itself a function
+C. The second-order variation of $J$
+D. The Jacobian of $y$ with respect to $x$
+
+<<button "A">><<replace "#vc-q5">>Incorrect. The derivative with respect to an integration limit is a different operation (Leibniz rule). The functional derivative measures how $J$ changes under perturbations of the entire function $y(\cdot)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q5">>Correct. The functional derivative $\delta J/\delta y(x)$ is the "gradient" of $J$ in the infinite-dimensional function space. Setting it to zero, $\delta J/\delta y(x) = 0$, recovers the Euler-Lagrange equation — the stationarity condition.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q5">>Incorrect. The second variation $\delta^2 J$ is the analog of the Hessian and determines whether a stationary point is a minimum — but $\delta J/\delta y(x)$ is the first-order functional derivative.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q5">>Incorrect. The Jacobian of $y$ with respect to $x$ is just $dy/dx = y'$, an ordinary derivative. The functional derivative is a different concept operating on the space of functions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q6">Hamilton's principle states that physical trajectories extremize which quantity?</span>
+
+A. The total energy $T + V$
+B. The Lagrangian $L = T - V$ evaluated at the endpoint
+C. The action $S = \int (T - V)\,dt$
+D. The Hamiltonian $H$ evaluated along the path
+
+<<button "A">><<replace "#vc-q6">>Incorrect. $T + V$ is the total energy (conserved for time-independent systems), but Hamilton's principle is about extremizing the //time integral// of $T - V$, not the energy itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q6">>Incorrect. Evaluating $L$ at a single point gives a number but not the object that is extremized. Hamilton's principle involves the integral of $L$ over the entire trajectory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q6">>Correct. The action $S[q] = \int_{t_1}^{t_2}(T - V)\,dt$ is a functional of the trajectory $q(t)$. Hamilton's principle: physical trajectories are those for which $\delta S = 0$. Applying Euler-Lagrange to $S$ yields Newton's second law.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q6">>Incorrect. The Hamiltonian $H$ generates the dynamics via Hamilton's equations, but the quantity extremized by physical trajectories (in the Lagrangian formulation) is the action $S = \int L\,dt$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q7">Which failure mode explains why the Euler-Lagrange equation alone does not guarantee a global minimum?</span>
+
+A. The equation may not be numerically stable
+B. The equation gives only necessary, not sufficient, conditions for an extremum
+C. The equation requires the boundary conditions to be periodic
+D. The equation is only valid for linear functionals
+
+<<button "A">><<replace "#vc-q7">>Incorrect. Numerical stability is a practical concern in solving the ODE, but it is not the fundamental theoretical limitation described here.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q7">>Correct. Euler-Lagrange is a necessary condition: any minimizer must satisfy it, but not every solution is a minimizer. A solution could be a local minimum, local maximum, or saddle point. Sufficiency requires analyzing the second variation $\delta^2 J$ (Jacobi condition).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q7">>Incorrect. The derivation of the Euler-Lagrange equation uses fixed (Dirichlet) boundary conditions, not periodic ones, and the issue of local vs. global extrema is independent of the boundary type.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q7">>Incorrect. The Euler-Lagrange equation applies to general (nonlinear) functionals $J[y] = \int F(x,y,y')\,dx$. Linearity of $F$ is not required.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="vc-q8">The ''adjoint method'' used to train Neural ODEs is derived from which variational result?</span>
+
+A. Noether's theorem applied to the network symmetries
+B. The Euler-Lagrange equation for the minimal surface problem
+C. Pontryagin's maximum principle from optimal control theory
+D. The Legendre transform of the network Hamiltonian
+
+<<button "A">><<replace "#vc-q8">>Incorrect. Noether's theorem relates symmetries to conservation laws. The adjoint method for Neural ODEs is a computational technique for backpropagating through an ODE solver — derived from optimal control, not symmetry arguments.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#vc-q8">>Incorrect. The minimal surface Euler-Lagrange equation governs soap-film geometry. While conceptually related (both are variational), the adjoint method specifically comes from the optimal control formulation via Pontryagin.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#vc-q8">>Correct. The Neural ODE paper frames training as an optimal control problem. The adjoint state $a(t) = \partial L/\partial z(t)$ satisfies its own ODE derived from Pontryagin's maximum principle — a variational result. This gives memory-efficient gradient computation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#vc-q8">>Incorrect. The Legendre transform connects the Lagrangian to the Hamiltonian formulation — a mathematical relationship rather than the source of the adjoint method used in Neural ODE training.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

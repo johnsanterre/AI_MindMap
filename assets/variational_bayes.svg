@@ -1,0 +1,47 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">Variational Bayes: Approximating the Posterior</text>
+
+  <!-- True posterior (intractable, shown as complex multimodal shape) -->
+  <path d="M 80,320 C 100,310 120,280 140,240 C 155,210 160,180 175,160 C 190,140 200,155 210,175 C 220,195 225,210 235,190 C 245,170 255,130 270,110 C 285,90 295,85 310,100 C 325,115 335,150 350,200 C 365,250 380,290 400,310 C 420,320 430,320 440,320" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="220" y="80" fill="#7C2530" font-size="14" font-weight="bold">p(z|x) true posterior</text>
+  <text x="220" y="97" fill="#7C2530" font-size="12">(intractable)</text>
+
+  <!-- Arrow between -->
+  <line x1="440" y1="200" x2="480" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="460" y="185" text-anchor="middle" fill="#5C3D1E" font-size="12">minimize</text>
+  <text x="460" y="220" text-anchor="middle" fill="#5C3D1E" font-size="12">KL(q || p)</text>
+
+  <!-- Variational approximation q (clean Gaussian) -->
+  <path d="M 500,320 C 520,318 540,310 560,280 C 575,255 585,220 600,180 C 610,155 618,140 630,135 C 642,130 650,135 660,150 C 672,170 680,200 690,235 C 698,260 705,285 715,305 C 720,315 725,320 740,320" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <!-- Shaded area under q -->
+  <path d="M 500,320 C 520,318 540,310 560,280 C 575,255 585,220 600,180 C 610,155 618,140 630,135 C 642,130 650,135 660,150 C 672,170 680,200 690,235 C 698,260 705,285 715,305 C 720,315 725,320 740,320 Z" fill="#2D5A8E" fill-opacity="0.1"/>
+  <text x="620" y="115" fill="#2D5A8E" font-size="14" font-weight="bold">q(z; phi) approximation</text>
+  <text x="620" y="132" fill="#2D5A8E" font-size="12">(tractable family)</text>
+
+  <!-- ELBO box -->
+  <rect x="250" y="340" width="300" height="45" rx="8" fill="#C4A87A" fill-opacity="0.3" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="362" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Maximize ELBO = E_q[log p(x,z)] - E_q[log q(z)]</text>
+  <text x="400" y="378" text-anchor="middle" fill="#5C3D1E" font-size="11">equivalent to minimizing KL divergence</text>
+
+  <!-- Mean-field factorization label -->
+  <rect x="50" y="340" width="180" height="45" rx="8" fill="#7C2530" fill-opacity="0.1" stroke="#7C2530" stroke-width="1"/>
+  <text x="140" y="358" text-anchor="middle" fill="#7C2530" font-size="11" font-weight="bold">Mean-Field:</text>
+  <text x="140" y="375" text-anchor="middle" fill="#7C2530" font-size="11">q(z) = prod q_j(z_j)</text>
+
+  <!-- Parameter arrows on q -->
+  <text x="585" y="295" fill="#C4A87A" font-size="12" font-weight="bold">mu</text>
+  <text x="665" y="295" fill="#C4A87A" font-size="12" font-weight="bold">sigma</text>
+  <line x1="595" y1="290" x2="630" y2="270" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="670" y1="290" x2="650" y2="270" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- SVI label -->
+  <rect x="570" y="340" width="180" height="45" rx="8" fill="#2D5A8E" fill-opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="660" y="358" text-anchor="middle" fill="#2D5A8E" font-size="11" font-weight="bold">SVI:</text>
+  <text x="660" y="375" text-anchor="middle" fill="#2D5A8E" font-size="11">stochastic grad on ELBO</text>
+</svg>

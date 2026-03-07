@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="bo-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="bo-arr-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#5C3D1E" font-weight="bold">Bayesian Optimization Loop</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="38" x2="400" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- === LEFT PANEL: Surrogate + Acquisition === -->
+  <text x="200" y="50" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">SURROGATE MODEL (GP)</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="300" x2="370" y2="300" stroke="#C4A87A" stroke-width="1.4" marker-end="url(#bo-arr)"/>
+  <line x1="40" y1="304" x2="40" y2="62" stroke="#C4A87A" stroke-width="1.4" marker-end="url(#bo-arr)"/>
+  <text x="365" y="315" font-size="8.5" fill="#6B5D4F">x</text>
+  <text x="28" y="62" font-size="8.5" fill="#6B5D4F">f(x)</text>
+
+  <!-- True function (hidden, dashed gray) -->
+  <path d="M 55,230 C 90,160 120,120 155,140 C 190,160 210,240 245,200 C 270,170 290,100 320,130 C 340,150 355,190 365,210"
+        fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <text x="330" y="96" font-size="7.5" fill="#999" font-style="italic">true f(x)</text>
+
+  <!-- GP mean (solid navy) -->
+  <path d="M 55,225 C 90,168 120,128 155,145 C 190,162 210,235 245,198 C 270,174 290,108 320,135 C 340,152 355,185 365,205"
+        fill="none" stroke="#2D5A8E" stroke-width="2.2"/>
+
+  <!-- GP uncertainty band (light navy fill) -->
+  <path d="M 55,200 C 90,140 120,100 155,112 C 190,128 210,200 245,165 C 270,140 290,72 320,100 C 340,118 355,152 365,170
+           L 365,240 C 355,218 340,186 320,170 C 290,144 270,208 245,232 C 210,270 190,196 155,178 C 120,156 90,196 55,250 Z"
+        fill="#2D5A8E" fill-opacity="0.1" stroke="none"/>
+
+  <!-- Observed points (dark red dots) -->
+  <circle cx="90" cy="165" r="5" fill="#7C2530"/>
+  <circle cx="155" cy="142" r="5" fill="#7C2530"/>
+  <circle cx="245" cy="198" r="5" fill="#7C2530"/>
+  <circle cx="320" cy="132" r="5" fill="#7C2530"/>
+
+  <!-- Legend -->
+  <line x1="55" y1="72" x2="78" y2="72" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="82" y="76" font-size="8" fill="#2D5A8E">GP mean</text>
+  <rect x="55" y="82" width="23" height="8" fill="#2D5A8E" fill-opacity="0.12" stroke="none"/>
+  <text x="82" y="92" font-size="8" fill="#2D5A8E">uncertainty</text>
+  <circle cx="66" cy="104" r="4" fill="#7C2530"/>
+  <text x="82" y="108" font-size="8" fill="#7C2530">observations</text>
+
+  <!-- Next query arrow -->
+  <line x1="185" y1="300" x2="185" y2="248" stroke="#7C2530" stroke-width="1.8" stroke-dasharray="4,2" marker-end="url(#bo-arr-red)"/>
+  <text x="188" y="320" font-size="8" fill="#7C2530" font-weight="bold">next query?</text>
+
+  <!-- === RIGHT PANEL: Acquisition Function === -->
+  <text x="600" y="50" text-anchor="middle" font-size="10" fill="#6B5D4F" letter-spacing="1">ACQUISITION FUNCTION</text>
+
+  <!-- Axes -->
+  <line x1="430" y1="300" x2="770" y2="300" stroke="#C4A87A" stroke-width="1.4" marker-end="url(#bo-arr)"/>
+  <line x1="430" y1="304" x2="430" y2="62" stroke="#C4A87A" stroke-width="1.4" marker-end="url(#bo-arr)"/>
+  <text x="760" y="315" font-size="8.5" fill="#6B5D4F">x</text>
+  <text x="415" y="62" font-size="8.5" fill="#6B5D4F">a(x)</text>
+
+  <!-- EI acquisition function curve (warm brown, filled) -->
+  <path d="M 445,298 C 460,295 475,280 490,250 C 500,228 508,260 520,278 C 530,290 545,296 555,297 C 565,298 570,296 578,285 C 588,265 595,220 605,175 C 612,145 618,128 625,145 C 632,162 640,200 650,238 C 660,265 670,285 680,292 C 700,298 720,299 750,299"
+        fill="#5C3D1E" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="2.2"/>
+
+  <!-- Peak marker at acquisition max -->
+  <line x1="615" y1="125" x2="615" y2="300" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <circle cx="615" cy="125" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="622" y="118" font-size="8.5" fill="#7C2530" font-weight="bold">max a(x)</text>
+
+  <!-- Label EI -->
+  <text x="520" y="82" font-size="9" fill="#5C3D1E" font-weight="bold">Expected Improvement</text>
+  <text x="520" y="96" font-size="8" fill="#6B5D4F" font-style="italic">balances mean + uncertainty</text>
+
+  <!-- === BOTTOM: Loop diagram === -->
+  <rect x="140" y="340" width="520" height="48" rx="4" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Loop steps -->
+  <text x="180" y="360" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">1. Fit GP</text>
+  <text x="180" y="374" text-anchor="middle" font-size="7.5" fill="#6B5D4F">to observations</text>
+
+  <text x="290" y="358" text-anchor="middle" font-size="14" fill="#C4A87A">&rarr;</text>
+
+  <text x="370" y="360" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">2. Maximize a(x)</text>
+  <text x="370" y="374" text-anchor="middle" font-size="7.5" fill="#6B5D4F">acquisition function</text>
+
+  <text x="470" y="358" text-anchor="middle" font-size="14" fill="#C4A87A">&rarr;</text>
+
+  <text x="555" y="360" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">3. Evaluate f(x*)</text>
+  <text x="555" y="374" text-anchor="middle" font-size="7.5" fill="#6B5D4F">expensive query</text>
+
+  <!-- Loop-back arrow -->
+  <path d="M 620,365 C 650,365 660,345 660,335 C 660,325 650,320 630,320 C 580,320 200,320 160,320 C 140,320 130,330 130,340 C 130,345 135,352 140,355"
+        fill="none" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#bo-arr)"/>
+  <text x="400" y="332" text-anchor="middle" font-size="7.5" fill="#6B5D4F" font-style="italic">repeat until budget exhausted</text>
+</svg>

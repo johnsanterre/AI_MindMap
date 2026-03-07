@@ -1,0 +1,137 @@
+<<include "Header">>
+
+! Monte Carlo Tree Search
+
+<img src="assets/mcts.svg" alt="Diagram illustrating the four phases of Monte Carlo Tree Search" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine planning a road trip by mentally simulating thousands of random routes. You never calculate exact travel times — instead, you keep rough notes on which regions of the map tend to go well, and you focus your imagination on the most promising corridors. After enough simulations, the picture sharpens: certain paths consistently lead somewhere good, and your intuition about which way to head becomes reliable without ever solving the full problem analytically. That is Monte Carlo Tree Search in a nutshell. It samples the future rather than computing it.
+
+---
+
+!! The Core Insight
+
+''Monte Carlo Tree Search'' (MCTS) builds a search tree incrementally by running four repeating phases: select a promising node, expand it, simulate a random playout to a terminal state, and backpropagate the result. The genius of the approach is that it does not need a hand-crafted evaluation function. All it requires is a way to determine whether the game or decision process has ended and what the outcome was — a win/loss signal is enough. Given enough iterations, the tree grows in the directions that matter most.
+
+The key tension MCTS manages is the classic [[Explore and Exploit]] dilemma. A node that has been visited many times and has a high win rate deserves more attention — exploitation. But a node visited rarely might be hiding an even better line of play — exploration. MCTS resolves this tension formally with the UCB1 formula applied to tree nodes, a method known as UCT (Upper Confidence bounds applied to Trees). Nodes that are both promising and under-visited receive the highest priority.
+
+MCTS connects naturally to [[Reinforcement Learning]], [[Dynamic Programming]], and planning under uncertainty. Unlike [[Dynamic Programming]], it does not require enumerating the full state space. Unlike [[Q Learning]], it builds a partial explicit tree rather than a global value function. It is particularly powerful when the branching factor is high and the game tree is too large to search exhaustively — exactly the situation in Go, which has a branching factor around 250 and trees deeper than chess by many orders of magnitude.
+
+---
+
+!! The Four Phases in Detail
+
+''Phase 1 — Selection:'' Starting from the root of the current search tree, the algorithm traverses downward by repeatedly choosing the child node with the highest UCB1 score. This continues until reaching a node that is either a terminal state (game over) or a leaf node that has unexpanded children. The UCB1 formula balances the average reward of a node (exploitation) with a bonus for nodes visited infrequently relative to their parent (exploration). Without this structured selection, the algorithm would waste time on already-explored or already-discarded branches.
+
+''Phase 2 — Expansion:'' If the selected leaf node is not a terminal state, one or more child nodes are added to the tree representing legal moves from that position. In the simplest implementation, a single child is added per iteration. Some implementations add all legal children at once. Without expansion, the tree would never grow and MCTS would just be Monte Carlo sampling from the root — it would fail to accumulate knowledge about individual lines of play.
+
+''Phase 3 — Simulation (Rollout):'' From the newly expanded node, the algorithm plays out the game to a terminal state using some rollout policy — typically uniformly random moves, though domain-specific heuristics can improve efficiency dramatically. The outcome of this playout (win, loss, or draw) becomes the signal used for learning. Without simulation, there would be no reward signal to backpropagate; the expansion phase would create nodes but have nothing to say about their quality.
+
+''Phase 4 — Backpropagation:'' The result of the simulation is propagated back up the tree from the new node all the way to the root. Every node along the path has its visit count $N$ incremented by 1 and its total reward $W$ updated by adding the simulation result (1 for a win, 0 for a loss, or a fractional value for intermediate rewards). These updated statistics change the UCB1 scores of all nodes on the path, making the algorithm more informed on the next selection step. Without backpropagation, each simulation would be independent and the tree would never improve.
+
+---
+
+!! What the Math Is Actually Doing
+
+The selection phase is governed by the UCB1 formula applied to tree nodes:
+
+$$\text{UCB1}(v) = \frac{W(v)}{N(v)} + c\sqrt{\frac{\ln N(\text{parent})}{N(v)}}$$
+
+The first term, $W(v)/N(v)$, is the ''exploitation'' component: the empirical win rate of node $v$ across all simulations that passed through it. Nodes with high win rates score well here.
+
+The second term is the ''exploration'' bonus. When $N(v)$ is small relative to $N(\text{parent})$, the logarithm of the parent's visit count dominates and the fraction under the square root is large — giving under-visited nodes a substantial bonus. As a node accumulates visits, this bonus shrinks, and selection shifts toward the exploitation term. The constant $c$ (typically $\sqrt{2}$, derived from the original UCB analysis) controls how aggressively the algorithm explores; larger $c$ values favor breadth, smaller values favor depth.
+
+This formulation is directly connected to the theoretical work on [[Explore and Exploit]] in the multi-armed bandit literature. The UCT algorithm (Kocsis and Szepesvári, 2006) proved that applying UCB1 to tree nodes causes MCTS to converge to the minimax-optimal move as the number of simulations approaches infinity. In practice, with a finite budget of simulations, the algorithm finds strong moves without exhaustive search — which is exactly what makes it practical for games with enormous state spaces.
+
+---
+
+!! AlphaGo and AlphaZero: Neural Networks + MCTS
+
+DeepMind's AlphaGo (Silver et al., 2016) demonstrated that replacing random rollouts with a ''value network'' and guiding selection with a ''policy network'' produced a qualitative leap in strength. The value network takes a board position as input and outputs an estimate of the win probability — replacing the noisy random rollout signal with a learned, smooth approximation. The policy network outputs a probability distribution over legal moves and is used to bias selection toward moves that human experts (and later, the network's own self-play) consider promising.
+
+''AlphaZero'' (Silver et al., 2017) went further by eliminating human game data entirely. Starting from random play, AlphaZero trained both its policy and value networks purely through self-play, with MCTS used during training to generate high-quality move choices. Remarkably, AlphaZero beat Stockfish — one of the strongest classical chess engines — after only a few hours of self-play training, having developed its own opening theory, positional intuitions, and endgame technique from scratch. The key insight is that MCTS acts as a ''policy improvement operator'': the move probabilities suggested by MCTS during self-play are stronger than the raw policy network output, and training the policy network to match these MCTS probabilities bootstraps the network to ever-higher levels of play.
+
+//MuZero// (Schrittwieser et al., 2020) extended AlphaZero further by learning the environment model itself — the rules of the game — from experience, rather than being given them. This opens the door to applying the same MCTS framework to domains where the rules are not known in advance, such as video games, robotics, and planning problems.
+
+---
+
+!! When Monte Carlo Tree Search Breaks Down
+
+''Horizon Effect and Delayed Consequences:'' MCTS simulations terminate at a fixed depth or when a terminal state is reached. In games or environments where consequences are deeply delayed — where a critical mistake made early only manifests as a loss many moves later — random rollouts may fail to detect the problem. The simulation horizon masks the true value of the position. Neural value networks (as in AlphaGo) mitigate this by learning to recognize dangerous positions before the loss becomes explicit, but in domains without such learned heuristics, MCTS can be confidently wrong about positions that require very long-range reasoning.
+
+''Sparse or Deceptive Reward Signals:'' MCTS relies on the simulation reaching a terminal state that provides a meaningful signal. In environments where rewards are sparse — for example, a puzzle where only the final correct solution yields any positive reward — most random rollouts return zero regardless of where in the tree they start. The algorithm cannot distinguish good intermediate states from bad ones, and the exploration bonus in UCB1 does not help because no branch accumulates meaningful win counts. This makes MCTS poorly suited to many real-world planning problems without careful reward shaping or learned value functions.
+
+''High Branching Factor with Short Time Budgets:'' The power of MCTS scales with the number of simulations it can run within its allotted time. In games or domains with very high branching factors (many legal moves per state), the tree grows wide rather than deep, and many branches receive only a handful of visits before a decision must be made. Under these conditions, the UCB1 statistics are based on extremely small sample sizes and are highly unreliable. The algorithm may select moves based on one or two lucky or unlucky rollouts rather than genuine signal. Alpha-beta pruning based minimax search can be more effective in such regimes when a reasonable evaluation function exists.
+
+---
+
+!! Technical Details
+
+''Foundational papers:'' Coulom (2006) introduced MCTS for the game of Go, demonstrating that random playouts could produce competitive play without hand-crafted evaluation functions. Kocsis and Szepesvári (2006) introduced the UCT algorithm (UCB1 applied to Trees), proved its convergence properties, and gave the method its theoretical footing. Silver et al. (2016) published AlphaGo, combining MCTS with deep convolutional networks trained on human games and then fine-tuned with policy gradient methods. Silver et al. (2017) published AlphaZero, demonstrating that self-play alone — with no human data — suffices. Schrittwieser et al. (2020) published MuZero, which learns the environment dynamics model alongside the policy and value networks, enabling MCTS in environments where the rules are not given.
+
+''Engineering considerations:'' In practice, MCTS implementations use a //time budget// rather than a fixed iteration count — the algorithm runs as many simulations as possible within the allotted clock time. ''Transposition tables'' (hash maps from state to statistics) allow the algorithm to merge tree nodes that correspond to the same board position reached via different move sequences, dramatically improving efficiency. ''Tree reuse'' across moves (keeping the subtree rooted at the chosen move as the new root) avoids discarding work between turns.
+
+''Comparison to alpha-beta pruning:'' Classical game search with minimax and alpha-beta pruning is deterministic and guarantees finding the best move to a given depth. It requires an evaluation function for non-terminal positions and prunes branches that cannot improve the best known result. MCTS requires no evaluation function but relies on statistical sampling. In practice, neural network-guided MCTS has superseded alpha-beta in most domains, though alpha-beta engines (like Stockfish with NNUE evaluation) remain extremely competitive in chess.
+
+''Applications beyond games:'' MCTS has been applied to protein structure prediction, drug discovery (searching chemical space), combinatorial optimization, compiler optimization (instruction scheduling), and robotic planning. Any domain that can be framed as a tree search with a terminal reward signal is a candidate.
+
+---
+
+!! Quiz
+
+<span id="mcts-q1">What does the first term of the UCB1 formula, $W(v)/N(v)$, represent?</span>
+A. The exploration bonus for under-visited nodes
+B. The average reward (win rate) of node $v$ — exploitation
+C. The logarithm of the parent's visit count
+D. The total number of simulations run so far
+<<button "A">><<replace "#mcts-q1">>✗ Wrong. That is the second term — the exploration bonus. $W(v)/N(v)$ is the empirical win rate, which drives exploitation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q1">>✓ Correct! $W(v)/N(v)$ is the average reward of node $v$, representing exploitation — favoring nodes that have historically performed well.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q1">>✗ Wrong. $\ln N(\text{parent})$ appears in the exploration bonus (second term), not in $W(v)/N(v)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q1">>✗ Wrong. The total simulation count is not directly encoded in either term as a standalone quantity; $N(v)$ is visits to node $v$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q2">In which phase does MCTS add a new node to the tree?</span>
+A. Selection
+B. Simulation
+C. Expansion
+D. Backpropagation
+<<button "A">><<replace "#mcts-q2">>✗ Wrong. Selection traverses existing nodes using UCB1 scores; it does not add new nodes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q2">>✗ Wrong. Simulation runs a playout from the new node to a terminal state; the node already exists by this point.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q2">>✓ Correct! Expansion is the phase where one or more child nodes are added to the tree at the selected leaf.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q2">>✗ Wrong. Backpropagation updates $W$ and $N$ statistics up the tree; it does not add nodes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q3">What is the primary innovation of AlphaZero over the original AlphaGo?</span>
+A. It used a larger neural network with more parameters
+B. It trained entirely from self-play with no human game data
+C. It replaced MCTS with a pure policy gradient algorithm
+D. It used alpha-beta pruning instead of MCTS
+<<button "A">><<replace "#mcts-q3">>✗ Wrong. Network size is not the primary distinction; AlphaZero's key innovation was the training methodology.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q3">>✓ Correct! AlphaZero learned entirely from self-play, requiring no human expert games, demonstrating that MCTS + self-play bootstraps to superhuman performance from scratch.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q3">>✗ Wrong. AlphaZero retained MCTS as its core search mechanism; it did not replace it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q3">>✗ Wrong. AlphaZero uses MCTS, not alpha-beta pruning. It is classical engines like Stockfish that use alpha-beta.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q4">What does the exploration constant $c$ in UCB1 control?</span>
+A. The maximum depth of the simulation rollout
+B. The discount factor applied to delayed rewards
+C. The trade-off between exploiting high-win-rate nodes and exploring under-visited ones
+D. The learning rate for updating the value network
+<<button "A">><<replace "#mcts-q4">>✗ Wrong. Rollout depth is a separate hyperparameter; $c$ governs the exploration-exploitation balance in node selection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q4">>✗ Wrong. Discount factors appear in reinforcement learning value estimates; $c$ scales the exploration bonus in UCB1.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q4">>✓ Correct! A larger $c$ weights the exploration bonus more heavily, pushing the algorithm to visit under-explored nodes. A smaller $c$ focuses search on already-promising nodes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q4">>✗ Wrong. Value network learning rates are a neural network training concern, separate from the UCB1 tree search formula.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q5">Why does MCTS struggle when rewards are sparse?</span>
+A. The UCB1 formula becomes undefined when N(v) = 0
+B. Random rollouts mostly return zero, so the algorithm cannot distinguish good states from bad ones
+C. Backpropagation cannot handle negative rewards
+D. The tree grows too deep and runs out of memory
+<<button "A">><<replace "#mcts-q5">>✗ Wrong. Unvisited nodes (N=0) are handled specially — they are prioritized for selection; this is not the sparsity problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q5">>✓ Correct! When nearly all rollouts return zero regardless of starting position, the win-rate statistics are uniformly near zero and UCB1 cannot identify promising branches.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q5">>✗ Wrong. Backpropagation handles arbitrary reward values including negative ones; this is not specific to sparse rewards.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q5">>✗ Wrong. Memory is a practical concern but not the reason sparse rewards break the statistical signal in MCTS.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q6">What is backpropagation updating after each simulation in MCTS?</span>
+A. The weights of the policy and value neural networks
+B. The UCB1 exploration constant $c$
+C. The visit count $N$ and total reward $W$ for every node on the path from the new node to the root
+D. The rollout policy used during simulation
+<<button "A">><<replace "#mcts-q6">>✗ Wrong. Neural network weights are updated during training, not during the MCTS tree search backpropagation step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q6">>✗ Wrong. $c$ is a fixed hyperparameter, not updated per simulation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q6">>✓ Correct! Backpropagation increments $N$ by 1 and adds the simulation result to $W$ for every node from the newly expanded node back up to the root.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q6">>✗ Wrong. The rollout policy is fixed (or learned separately); backpropagation does not update it.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q7">Which paper introduced the UCT algorithm — UCB1 applied to trees — that gave MCTS its theoretical foundation?</span>
+A. Silver et al. (2016) — AlphaGo
+B. Coulom (2006) — original MCTS for Go
+C. Kocsis and Szepesvári (2006) — UCT
+D. Schrittwieser et al. (2020) — MuZero
+<<button "A">><<replace "#mcts-q7">>✗ Wrong. AlphaGo (2016) combined MCTS with deep neural networks but UCT was formalized a decade earlier.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q7">>✗ Wrong. Coulom (2006) introduced MCTS for Go but the formal UCT convergence proof came from a different paper.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q7">>✓ Correct! Kocsis and Szepesvári (2006) introduced UCT, proved its convergence to minimax-optimal play, and established the theoretical basis for MCTS as we know it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q7">>✗ Wrong. MuZero (2020) extended AlphaZero to learn the environment model; it did not originate UCT.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mcts-q8">What distinguishes MuZero from AlphaZero?</span>
+A. MuZero uses alpha-beta pruning instead of MCTS
+B. MuZero learns the environment dynamics model from experience, without being given the rules
+C. MuZero was trained on human game data, while AlphaZero used only self-play
+D. MuZero uses a random rollout policy instead of a neural value network
+<<button "A">><<replace "#mcts-q8">>✗ Wrong. MuZero retains MCTS as its search mechanism; it does not switch to alpha-beta.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mcts-q8">>✓ Correct! MuZero's key innovation is learning a latent model of environment dynamics, enabling it to plan via MCTS even without knowing the rules in advance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mcts-q8">>✗ Wrong. It is the original AlphaGo that used human game data. Both AlphaZero and MuZero train through self-play.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mcts-q8">>✗ Wrong. MuZero uses a learned value network, not random rollouts — that is precisely one of its strengths over earlier MCTS approaches.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

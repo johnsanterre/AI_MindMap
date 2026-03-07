@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Pontryagin's Maximum Principle</text>
+
+  <!-- ===== PANEL 1: Forward State Trajectory ===== -->
+  <rect x="20" y="40" width="230" height="110" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="135" y="58" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Forward: State x(t)</text>
+
+  <!-- Axes -->
+  <line x1="40" y1="130" x2="235" y2="130" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arrow-brown)"/>
+  <line x1="40" y1="130" x2="40" y2="68" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arrow-brown)"/>
+  <text x="237" y="134" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">t</text>
+  <text x="38" y="66" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">x</text>
+
+  <!-- State trajectory curve (forward, increasing) -->
+  <path d="M 50 120 C 80 115, 110 100, 140 90 C 165 82, 190 80, 220 75" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Start/end labels -->
+  <circle cx="50" cy="120" r="3.5" fill="#2D5A8E"/>
+  <text x="50" y="143" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">x₀</text>
+  <circle cx="220" cy="75" r="3.5" fill="#2D5A8E"/>
+  <text x="220" y="68" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">x(T)</text>
+
+  <!-- Direction arrow on curve -->
+  <text x="130" y="99" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">→</text>
+  <text x="135" y="148" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">ẋ = f(x, u)</text>
+
+  <!-- ===== PANEL 2: Backward Costate Trajectory ===== -->
+  <rect x="270" y="40" width="230" height="110" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="385" y="58" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Backward: Costate λ(t)</text>
+
+  <!-- Axes -->
+  <line x1="290" y1="130" x2="485" y2="130" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arrow-brown)"/>
+  <line x1="290" y1="130" x2="290" y2="68" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arrow-brown)"/>
+  <text x="487" y="134" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">t</text>
+  <text x="288" y="66" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">λ</text>
+
+  <!-- Costate curve (backward, shown as decreasing from right) -->
+  <path d="M 300 105 C 325 108, 355 112, 385 100 C 410 90, 440 78, 470 72" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="5,3"/>
+
+  <!-- Terminal condition dot -->
+  <circle cx="470" cy="72" r="3.5" fill="#7C2530"/>
+  <text x="470" y="65" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">λ(T)=∇φ</text>
+
+  <!-- Start dot -->
+  <circle cx="300" cy="105" r="3.5" fill="#7C2530"/>
+  <text x="300" y="143" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">λ(0)</text>
+
+  <!-- Backward arrow -->
+  <text x="375" y="116" font-family="Georgia, serif" font-size="11" fill="#7C2530">←</text>
+  <text x="385" y="148" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">λ̇ = −∂H/∂x</text>
+
+  <!-- ===== PANEL 3: Hamiltonian Maximization ===== -->
+  <rect x="520" y="40" width="260" height="110" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="650" y="58" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Pointwise: Maximize H(x,u,λ)</text>
+
+  <!-- H vs u axes -->
+  <line x1="540" y1="128" x2="765" y2="128" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arrow-brown)"/>
+  <line x1="540" y1="128" x2="540" y2="66" stroke="#5C3D1E" stroke-width="1" marker-end="url(#arrow-brown)"/>
+  <text x="767" y="132" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">u</text>
+  <text x="536" y="64" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">H</text>
+
+  <!-- H(u) curve — concave, peak at u* -->
+  <path d="M 550 120 C 570 105, 595 78, 630 72 C 660 68, 685 75, 720 100 C 735 110, 750 120, 760 124" fill="none" stroke="#5C3D1E" stroke-width="2.2"/>
+
+  <!-- u* marker -->
+  <line x1="630" y1="72" x2="630" y2="128" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <circle cx="630" cy="72" r="4" fill="#C4A87A"/>
+  <text x="630" y="143" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-weight="bold">u*</text>
+  <text x="650" y="80" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">max</text>
+
+  <!-- ===== CONNECTION BOX: Costate = Backprop Gradient ===== -->
+  <rect x="20" y="170" width="490" height="90" rx="8" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.8"/>
+  <text x="265" y="192" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Costate = Backpropagation Gradient</text>
+
+  <!-- Three columns of the connection -->
+  <!-- PMP column -->
+  <text x="90" y="215" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">PMP (Optimal Control)</text>
+  <text x="90" y="230" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">State x(t)</text>
+  <text x="90" y="244" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Costate λ(t)</text>
+  <text x="90" y="258" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Control u(t)</text>
+
+  <!-- Arrow -->
+  <text x="215" y="243" font-family="Georgia, serif" font-size="18" fill="#C4A87A" text-anchor="middle">⟺</text>
+
+  <!-- Neural ODE column -->
+  <text x="330" y="215" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">Neural ODE (Deep Learning)</text>
+  <text x="330" y="230" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Hidden state h(t)</text>
+  <text x="330" y="244" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Adjoint ∂L/∂h(t)</text>
+  <text x="330" y="258" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Parameters θ</text>
+
+  <!-- Arrow -->
+  <text x="445" y="243" font-family="Georgia, serif" font-size="18" fill="#C4A87A" text-anchor="middle">⟺</text>
+
+  <!-- RNN column (peek) -->
+  <text x="490" y="215" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#5C3D1E" text-anchor="middle"></text>
+
+  <!-- ===== BOTTOM: Gradient formula and BPTT note ===== -->
+  <rect x="520" y="170" width="260" height="90" rx="8" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="650" y="192" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Gradient via Adjoint Method</text>
+  <text x="650" y="212" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">dL/dθ = ∫ λᵀ (∂f/∂θ) dt</text>
+  <line x1="540" y1="222" x2="760" y2="222" stroke="#D4C5A9" stroke-width="0.8"/>
+  <text x="650" y="238" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Memory: O(1) vs O(T) for BPTT</text>
+  <text x="650" y="253" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Chen et al. (2018) Neural ODEs</text>
+
+  <!-- ===== BOTTOM: Summary equations ===== -->
+  <rect x="20" y="278" width="760" height="108" rx="8" fill="#FFF8EE" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="298" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">The Three PMP Conditions</text>
+
+  <!-- Column 1 -->
+  <rect x="35" y="308" width="230" height="64" rx="5" fill="#EEF3FA" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="150" y="324" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E" text-anchor="middle">① State (Forward)</text>
+  <text x="150" y="341" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">ẋ = ∂H/∂λ = f(x, u)</text>
+  <text x="150" y="362" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Integrates forward in time</text>
+
+  <!-- Column 2 -->
+  <rect x="285" y="308" width="230" height="64" rx="5" fill="#FAEAEA" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="400" y="324" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530" text-anchor="middle">② Costate (Backward)</text>
+  <text x="400" y="341" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">λ̇ = −∂H/∂x</text>
+  <text x="400" y="362" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Shadow price · backprop gradient</text>
+
+  <!-- Column 3 -->
+  <rect x="535" y="308" width="230" height="64" rx="5" fill="#F5F2E8" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="650" y="324" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">③ Optimality (Pointwise)</text>
+  <text x="650" y="341" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">u* = argmax H(x,u,λ)</text>
+  <text x="650" y="362" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">At every instant t ∈ [0, T]</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow-brown" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

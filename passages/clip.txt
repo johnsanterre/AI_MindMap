@@ -1,0 +1,268 @@
+<<include "Header">>
+! CLIP
+<img src="assets/clip.svg" alt="CLIP dual-encoder contrastive architecture" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine learning what "dog" means not from a dictionary definition but from seeing a million photos labeled "dog." You would quickly learn to connect the visual appearance of fur, four legs, and a wagging tail to the word — without anyone ever spelling out a rule. CLIP does exactly this at scale: 400 million image-text pairs scraped from the internet, training two encoders to agree on which image matches which caption.
+
+---
+!! The Core Insight
+
+''CLIP'' (Contrastive Language–Image Pre-Training), introduced by Radford et al. at OpenAI in 2021, pairs a ''visual encoder'' with a ''text encoder'' and trains them jointly using contrastive loss. The image encoder (a ViT or ResNet) and the text encoder (a transformer) each project their input into a shared 512-dimensional embedding space. For a batch of N image-text pairs, the loss pushes the N correct (matched) pairs close together in that space while pushing the N²−N incorrect pairs apart. The result is a model that understands images and language in a unified representation — enabling ''zero-shot transfer'': to classify an image into any category, simply embed text descriptions of those categories and find the nearest image embedding. No fine-tuning required.
+
+Key links: [[Transformers]], [[Embeddings]], [[Contrastive Learning]], [[Vision Transformer]], [[Word Embeddings]].
+
+---
+!! Zero-Shot Transfer and Prompt Engineering
+
+CLIP's most striking capability is zero-shot image classification. Given a set of candidate categories, you construct text prompts such as //"a photo of a {class}"// for each, embed them with the text encoder, and rank them by cosine similarity to the image embedding. No labeled examples or gradient updates are needed.
+
+''Prompt engineering'' matters significantly. The generic template //"a photo of a {class}"// already works well, but domain-specific prompts improve performance further: //"a satellite photo of a {class}"// for aerial imagery, //"a microscopy image of a {class}"// for biomedical tasks. ''Prompt ensembling'' — averaging embeddings from multiple prompt templates — further boosts accuracy.
+
+On ImageNet zero-shot, CLIP ViT-L/14 achieves 76.2% top-1 accuracy, competitive with a supervised ResNet-50 trained on 1.28 million labeled images. This is remarkable: no ImageNet labels were used, and the model generalizes from internet text-image co-occurrence alone.
+
+---
+!! What the Math Is Actually Doing
+
+CLIP optimizes a ''symmetric cross-entropy loss'' over the matrix of cosine similarities between all image embeddings $I_i$ and text embeddings $T_j$ in a batch of $N$ pairs. Embeddings are L2-normalized before computing similarities, so the dot product equals cosine similarity.
+
+$$\mathcal{L} = -\frac{1}{2N}\sum_{i=1}^N \left[\log\frac{\exp(I_i \cdot T_i / \tau)}{\sum_{j=1}^N \exp(I_i \cdot T_j / \tau)} + \log\frac{\exp(T_i \cdot I_i / \tau)}{\sum_{j=1}^N \exp(T_j \cdot I_i / \tau)}\right]$$
+
+The first term treats each image as a query and each text in the batch as a candidate: it maximizes the probability that the correct text ranks first. The second term does the same with roles reversed. The symmetry ensures both encoders are trained equally.
+
+$\tau$ is a ''learnable temperature'' parameter (initialized to 0.07) that controls the sharpness of the softmax distribution. A lower temperature makes the model more confident and the loss more discriminative.
+
+''Large batches are critical:'' the original CLIP used $N = 32{,}768$. Each image faces 32,767 negative texts, forcing the encoders to produce highly discriminative embeddings. This is why CLIP is expensive to train but can be deployed zero-shot for virtually any downstream task.
+
+---
+!! Applications and Descendants
+
+CLIP embeddings have become a foundational component across vision-language AI:
+
+''Generative models:'' DALL-E 2 uses CLIP image embeddings as conditioning signals. Stable Diffusion uses CLIP's text encoder to condition the diffusion process. The quality of CLIP representations directly affects image generation fidelity.
+
+''Open-vocabulary detection:'' Grounding DINO combines CLIP with a detection transformer to localize any object described in text, without training on those specific classes.
+
+''Multimodal LLMs:'' LLaVA, GPT-4V, and similar models use CLIP (or its descendants) as a frozen visual backbone, projecting image features into the token space of a language model.
+
+''CLIP descendants:'' OpenCLIP (open-source reproduction with LAION-400M/5B), SigLIP (sigmoid loss replacing softmax — removes the need for large batches), ALIGN (Google, 1.8B noisy pairs), and VideoCLIP (extending to video-text pairs).
+
+---
+!! When CLIP Breaks Down
+
+''Compositional reasoning failure:'' CLIP encodes entire sentences into a single vector, losing fine-grained structural information. It struggles to distinguish "a red cube on a blue sphere" from "a blue cube on a red sphere" — it recognizes the objects well but not their spatial relationships or attribute bindings. Bag-of-words behavior persists despite the transformer text encoder.
+
+''Fine-grained discrimination:'' Zero-shot CLIP underperforms supervised models on tasks requiring subtle visual distinctions, such as identifying bird species, car models, or medical imaging findings. Short text descriptions cannot capture the visual nuances that distinguish these classes, and the model has no mechanism to learn them without fine-tuning.
+
+''Distribution shift and social bias:'' CLIP is trained on 400 million internet image-text pairs without curation. It inherits the biases present in that data — geographic and cultural under-representation, racial and gender stereotypes in word-image associations, and performance disparities across demographic groups. Downstream applications that use CLIP zero-shot transfer may propagate or amplify these biases.
+
+---
+!! Technical Details
+
+''Original paper:'' Radford et al., "Learning Transferable Visual Models From Natural Language Supervision," ICML 2021 (OpenAI). Evaluated on 27 downstream datasets.
+
+''Training:'' 400M image-text pairs from the internet. Largest model: ViT-L/14 at 336px resolution. Training required approximately 400 GPU-days on V100s. Batch size: 32,768.
+
+''Architectures tested:'' ResNet-50, ResNet-101, ResNet-50x4/16/64 (EfficientNet-style scaling), ViT-B/32, ViT-B/16, ViT-L/14. ViT-L/14 is the strongest.
+
+''Open reproductions:'' LAION-400M and LAION-5B provide open training data. OpenCLIP (Cherti et al. 2023) reproduces and scales CLIP with open data and code, matching or exceeding original performance.
+
+''SigLIP'' (Zhai et al. 2023, Google): replaces softmax contrastive loss with sigmoid loss applied independently to each pair. Removes the large-batch requirement, enables more efficient training, and improves performance at smaller batch sizes.
+
+''ALIGN'' (Jia et al. 2021, Google): same dual-encoder contrastive framework trained on 1.8 billion noisy image-text pairs from the web, demonstrating that data scale can compensate for noise.
+
+---
+!! Quiz
+
+<span id="clip-q1">
+''Question 1:'' What is the primary training objective of CLIP?
+
+<<button "A. Predict the next token in a caption given an image">><<replace "#clip-q1">>
+''A. Predict the next token in a caption given an image''
+//Incorrect.// That describes image captioning with a language model head. CLIP uses contrastive loss over matched and unmatched image-text pairs, not autoregressive token prediction.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Maximize cosine similarity of matched image-text pairs and minimize it for unmatched pairs">><<replace "#clip-q1">>
+''B. Maximize cosine similarity of matched image-text pairs and minimize it for unmatched pairs'' ✓
+//Correct.// CLIP's symmetric cross-entropy loss over the $N \times N$ similarity matrix does exactly this — pulling correct pairs together and pushing all $N^2 - N$ negatives apart in the shared embedding space.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Minimize reconstruction error of images from text descriptions">><<replace "#clip-q1">>
+''C. Minimize reconstruction error of images from text descriptions''
+//Incorrect.// That describes a generative model like a VAE or diffusion model. CLIP learns discriminative embeddings via contrastive loss, not pixel-level reconstruction.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Classify images into a fixed set of 1000 ImageNet categories">><<replace "#clip-q1">>
+''D. Classify images into a fixed set of 1000 ImageNet categories''
+//Incorrect.// CLIP is trained with no fixed label set — only free-form text descriptions. Its zero-shot ability comes from this open-vocabulary training, not a fixed classification head.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q2">
+''Question 2:'' Why does CLIP use very large batch sizes (e.g., N = 32,768) during training?
+
+<<button "A. To reduce GPU memory usage through gradient accumulation">><<replace "#clip-q2">>
+''A. To reduce GPU memory usage through gradient accumulation''
+//Incorrect.// Large batches actually increase memory requirements. They are used for a different reason related to the contrastive objective.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. To provide more negative examples per image, forcing more discriminative embeddings">><<replace "#clip-q2">>
+''B. To provide more negative examples per image, forcing more discriminative embeddings'' ✓
+//Correct.// In contrastive learning, each image competes against all other texts in the batch. With $N = 32{,}768$, every image must be distinguished from 32,767 negative captions, creating a much harder and more informative training signal.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. To enable longer text sequences in the transformer encoder">><<replace "#clip-q2">>
+''C. To enable longer text sequences in the transformer encoder''
+//Incorrect.// Sequence length is independent of batch size. CLIP text encoder uses a fixed context window of 77 tokens regardless of batch size.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. To average out noise in the image augmentation pipeline">><<replace "#clip-q2">>
+''D. To average out noise in the image augmentation pipeline''
+//Incorrect.// While large batches do reduce gradient noise, the primary motivation for CLIP's enormous batch size is to supply many negatives per anchor in the contrastive loss.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q3">
+''Question 3:'' What does the learnable temperature parameter $\tau$ control in CLIP's loss?
+
+<<button "A. The learning rate schedule during training">><<replace "#clip-q3">>
+''A. The learning rate schedule during training''
+//Incorrect.// $\tau$ is a model parameter inside the loss function, not an optimizer hyperparameter. It scales the logits in the softmax, affecting the shape of the similarity distribution.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The dimension of the shared embedding space">><<replace "#clip-q3">>
+''B. The dimension of the shared embedding space''
+//Incorrect.// Embedding dimension is a fixed architectural choice (512-d in CLIP). $\tau$ operates on the similarity scores after embeddings are computed.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The sharpness of the softmax distribution over similarity scores">><<replace "#clip-q3">>
+''C. The sharpness of the softmax distribution over similarity scores'' ✓
+//Correct.// $\tau$ divides the cosine similarities before the softmax: $\exp(I_i \cdot T_j / \tau)$. A small $\tau$ makes the distribution peaky (confident), a large $\tau$ flattens it. CLIP learns $\tau$ to find the right discrimination level.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The number of transformer layers in the text encoder">><<replace "#clip-q3">>
+''D. The number of transformer layers in the text encoder''
+//Incorrect.// Architecture depth is fixed before training. $\tau$ is a scalar parameter that scales the logits in the contrastive loss function.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q4">
+''Question 4:'' How does CLIP perform zero-shot image classification on a new dataset?
+
+<<button "A. Fine-tune the image encoder on a few labeled examples from the new dataset">><<replace "#clip-q4">>
+''A. Fine-tune the image encoder on a few labeled examples from the new dataset''
+//Incorrect.// That describes few-shot fine-tuning. Zero-shot means no gradient updates on the new task at all — the model is applied directly without any dataset-specific training.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Embed text prompts for each class and find the class whose embedding is nearest to the image embedding">><<replace "#clip-q4">>
+''B. Embed text prompts for each class and find the class whose embedding is nearest to the image embedding'' ✓
+//Correct.// For each candidate class, construct a prompt like //"a photo of a {class}"//, embed it with the text encoder, then compute cosine similarity to the image embedding. The class with highest similarity is the prediction — no labels or fine-tuning needed.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Retrieve the most similar training image and use its label">><<replace "#clip-q4">>
+''C. Retrieve the most similar training image and use its label''
+//Incorrect.// That describes k-nearest-neighbor classification. CLIP's zero-shot approach uses text embeddings of class names, not stored training images.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Generate a caption for the image and parse it with a rule-based system">><<replace "#clip-q4">>
+''D. Generate a caption for the image and parse it with a rule-based system''
+//Incorrect.// CLIP does not generate text; it embeds it. Zero-shot classification compares image embeddings to text embeddings of candidate class descriptions using cosine similarity.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q5">
+''Question 5:'' Why does CLIP struggle with compositional reasoning, such as distinguishing "red cube on blue sphere" from "blue cube on red sphere"?
+
+<<button "A. The ViT image encoder cannot process more than one object at a time">><<replace "#clip-q5">>
+''A. The ViT image encoder cannot process more than one object at a time''
+//Incorrect.// ViT processes the full image via patch tokens and self-attention — it does see multiple objects. The failure is in the text-image matching, not image processing.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Both sentences share the same words and CLIP's single-vector text embedding loses word-order structure">><<replace "#clip-q5">>
+''B. Both sentences share the same words and CLIP's single-vector text embedding loses word-order structure'' ✓
+//Correct.// CLIP compresses an entire sentence into one vector. Sentences with the same words in different order (or with swapped attributes) can produce similar embeddings, causing CLIP to behave like a bag-of-words model for compositional distinctions.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. CLIP was not trained on any synthetic image datasets">><<replace "#clip-q5">>
+''C. CLIP was not trained on any synthetic image datasets''
+//Incorrect.// The training data composition is not the core issue. The fundamental limitation is the single-vector bottleneck in the contrastive objective, which discards relational structure.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The cosine similarity metric cannot represent multi-object scenes">><<replace "#clip-q5">>
+''D. The cosine similarity metric cannot represent multi-object scenes''
+//Incorrect.// Cosine similarity itself is not the problem. The issue is that both compositionally different sentences may produce nearly identical embeddings when the encoder collapses them to a single vector.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q6">
+''Question 6:'' What is the key difference between SigLIP and the original CLIP loss?
+
+<<button "A. SigLIP replaces the image encoder with a convolutional network">><<replace "#clip-q6">>
+''A. SigLIP replaces the image encoder with a convolutional network''
+//Incorrect.// SigLIP retains the dual-encoder architecture. Its innovation is in the loss function, not the encoder architecture.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. SigLIP uses a sigmoid loss applied independently to each pair instead of softmax over the full batch">><<replace "#clip-q6">>
+''B. SigLIP uses a sigmoid loss applied independently to each pair instead of softmax over the full batch'' ✓
+//Correct.// CLIP's softmax loss computes a denominator summing over all $N$ items in the batch, requiring large $N$ to be effective. SigLIP treats each pair as an independent binary classification (match or not), removing the large-batch requirement and enabling more memory-efficient training.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. SigLIP trains only the text encoder, keeping the image encoder frozen">><<replace "#clip-q6">>
+''C. SigLIP trains only the text encoder, keeping the image encoder frozen''
+//Incorrect.// SigLIP trains both encoders jointly, just like CLIP. The change is the loss function, not which components are trained.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. SigLIP uses supervised ImageNet labels instead of internet text-image pairs">><<replace "#clip-q6">>
+''D. SigLIP uses supervised ImageNet labels instead of internet text-image pairs''
+//Incorrect.// SigLIP still trains on image-text pairs with a contrastive objective. It replaces the softmax-based loss with sigmoid loss to relax the large-batch constraint.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q7">
+''Question 7:'' Which downstream system uses CLIP as a frozen visual backbone to enable a language model to understand images?
+
+<<button "A. DALL-E 2 — uses CLIP to decode image embeddings into pixels">><<replace "#clip-q7">>
+''A. DALL-E 2 — uses CLIP to decode image embeddings into pixels''
+//Incorrect.// DALL-E 2 uses CLIP image embeddings as ''conditioning'' for a diffusion decoder, not as a backbone for a language model to understand images. The question asks about multimodal LLMs.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Stable Diffusion — uses CLIP text encoder to condition the denoising process">><<replace "#clip-q7">>
+''B. Stable Diffusion — uses CLIP text encoder to condition the denoising process''
+//Incorrect.// Stable Diffusion uses CLIP's ''text encoder'' for conditioning, not as a visual backbone for a language model. The question asks about models that feed image features into an LLM.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. LLaVA — projects CLIP image features into the token space of a large language model">><<replace "#clip-q7">>
+''C. LLaVA — projects CLIP image features into the token space of a large language model'' ✓
+//Correct.// LLaVA (Large Language and Vision Assistant) uses a frozen CLIP visual encoder to extract image features, then trains a projection layer to map those features into the embedding space of an LLM (e.g., LLaMA), enabling the language model to reason about images.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Grounding DINO — uses CLIP to generate bounding box coordinates">><<replace "#clip-q7">>
+''D. Grounding DINO — uses CLIP to generate bounding box coordinates''
+//Incorrect.// Grounding DINO combines CLIP with a detection transformer for open-vocabulary object detection — it localizes objects in images. It is not a system where CLIP feeds an LLM for language understanding.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="clip-q8">
+''Question 8:'' CLIP achieves 76.2% top-1 accuracy on ImageNet zero-shot. Why is this result considered remarkable?
+
+<<button "A. It surpasses all supervised models ever trained on ImageNet">><<replace "#clip-q8">>
+''A. It surpasses all supervised models ever trained on ImageNet''
+//Incorrect.// 76.2% is competitive with a supervised ResNet-50 but well below state-of-the-art supervised models (which exceed 90%). The result is remarkable for a different reason.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It was achieved without using any ImageNet labels during training, relying only on internet text-image pairs">><<replace "#clip-q8">>
+''B. It was achieved without using any ImageNet labels during training, relying only on internet text-image pairs'' ✓
+//Correct.// No ImageNet images or labels were used in CLIP's training. Matching a supervised ResNet-50 purely through zero-shot transfer from natural language supervision demonstrates that large-scale vision-language co-training can substitute for curated labeled datasets.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. It was trained on only 10,000 image-text pairs">><<replace "#clip-q8">>
+''C. It was trained on only 10,000 image-text pairs''
+//Incorrect.// CLIP was trained on 400 million image-text pairs — a massive dataset. The remarkable aspect is not data efficiency but rather the absence of task-specific labeled data.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It achieves 76.2% with a model that has fewer than 1 million parameters">><<replace "#clip-q8">>
+''D. It achieves 76.2% with a model that has fewer than 1 million parameters''
+//Incorrect.// CLIP ViT-L/14 has hundreds of millions of parameters. The result is notable because of zero-shot transfer from natural language supervision, not parameter efficiency.
+<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

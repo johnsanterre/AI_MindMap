@@ -1,0 +1,103 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="3" y="3" width="794" height="394" rx="6" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="30" text-anchor="middle" fill="#5C3D1E" font-size="17" font-weight="bold">Models that grow in complexity with data</text>
+
+  <!-- Chinese Restaurant Process (top-left) -->
+  <text x="140" y="60" text-anchor="middle" fill="#7C2530" font-size="13" font-weight="bold">Chinese Restaurant Process</text>
+  <!-- Tables as circles with people counts -->
+  <circle cx="60" cy="115" r="28" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="60" y="112" text-anchor="middle" fill="#7C2530" font-size="10" font-weight="bold">Table 1</text>
+  <text x="60" y="126" text-anchor="middle" fill="#7C2530" font-size="11">5 people</text>
+  <circle cx="150" cy="100" r="22" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="150" y="97" text-anchor="middle" fill="#7C2530" font-size="10" font-weight="bold">Table 2</text>
+  <text x="150" y="111" text-anchor="middle" fill="#7C2530" font-size="10">3</text>
+  <circle cx="210" cy="120" r="18" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="210" y="117" text-anchor="middle" fill="#7C2530" font-size="10" font-weight="bold">T3</text>
+  <text x="210" y="130" text-anchor="middle" fill="#7C2530" font-size="10">1</text>
+  <!-- New person arriving -->
+  <text x="140" y="165" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">New customer joins popular table</text>
+  <text x="140" y="178" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">or starts a new one</text>
+  <!-- Arrow to new table -->
+  <rect x="250" y="108" width="30" height="24" rx="4" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="265" y="124" text-anchor="middle" fill="#C4A87A" font-size="9">new?</text>
+
+  <!-- Indian Buffet Process (top-right) -->
+  <text x="560" y="60" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">Indian Buffet Process</text>
+  <!-- Binary matrix -->
+  <text x="440" y="82" fill="#999" font-size="9">dishes &#8594;</text>
+  <text x="425" y="104" fill="#999" font-size="9">obj</text>
+  <text x="425" y="118" fill="#999" font-size="9">&#8595;</text>
+  <!-- Grid cells -->
+  <rect x="455" y="88" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="477" y="88" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="499" y="88" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="521" y="88" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="543" y="88" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="565" y="88" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+
+  <rect x="455" y="106" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="477" y="106" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="499" y="106" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="521" y="106" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="543" y="106" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="565" y="106" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+
+  <rect x="455" y="124" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="477" y="124" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="499" y="124" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="521" y="124" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="543" y="124" width="20" height="16" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="0.5"/>
+  <rect x="565" y="124" width="20" height="16" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="0.5"/>
+
+  <!-- New columns can appear -->
+  <rect x="590" y="88" width="22" height="52" rx="3" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="601" y="118" text-anchor="middle" fill="#C4A87A" font-size="16">?</text>
+
+  <text x="560" y="160" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Binary features; new columns grow</text>
+  <text x="560" y="173" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">with each new observation</text>
+
+  <!-- Dirichlet Process (bottom-left) -->
+  <text x="160" y="215" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Dirichlet Process</text>
+  <!-- Base distribution curve -->
+  <path d="M30,340 C60,340 80,280 120,260 C160,240 180,245 200,260 C220,275 240,340 280,340" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="285" y="338" fill="#C4A87A" font-size="9">G&#8320; (base)</text>
+  <!-- Stick-breaking spikes -->
+  <line x1="90" y1="340" x2="90" y2="295" stroke="#5C3D1E" stroke-width="3"/>
+  <line x1="130" y1="340" x2="130" y2="270" stroke="#5C3D1E" stroke-width="3"/>
+  <line x1="160" y1="340" x2="160" y2="310" stroke="#5C3D1E" stroke-width="3"/>
+  <line x1="195" y1="340" x2="195" y2="325" stroke="#5C3D1E" stroke-width="3"/>
+  <line x1="220" y1="340" x2="220" y2="332" stroke="#5C3D1E" stroke-width="3"/>
+  <line x1="240" y1="340" x2="240" y2="336" stroke="#5C3D1E" stroke-width="3"/>
+  <!-- Axis -->
+  <line x1="25" y1="340" x2="290" y2="340" stroke="#999" stroke-width="1"/>
+  <text x="160" y="365" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Discrete atoms from stick-breaking</text>
+  <text x="160" y="378" text-anchor="middle" fill="#5C3D1E" font-size="10">&#945; controls number of clusters</text>
+
+  <!-- Gaussian Process (bottom-right) -->
+  <text x="570" y="215" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">Gaussian Process</text>
+  <!-- Axes -->
+  <line x1="400" y1="355" x2="740" y2="355" stroke="#999" stroke-width="1"/>
+  <line x1="400" y1="230" x2="400" y2="355" stroke="#999" stroke-width="1"/>
+  <text x="395" y="228" fill="#999" font-size="9">f(x)</text>
+  <text x="745" y="353" fill="#999" font-size="9">x</text>
+  <!-- Confidence band -->
+  <path d="M410,310 C440,280 480,250 520,260 C560,270 600,240 640,250 C680,260 710,270 730,265" fill="none" stroke="#2D5A8E" stroke-width="0" />
+  <path d="M410,330 C440,310 480,280 520,285 C560,290 600,260 640,268 C680,276 710,284 730,280
+           L730,250 C710,256 680,244 640,232 C600,220 560,250 520,235 C480,220 440,250 410,290 Z" fill="#2D5A8E" fill-opacity="0.12" stroke="none"/>
+  <!-- Mean function -->
+  <path d="M410,310 C440,295 480,265 520,272 C560,280 600,252 640,258 C680,264 710,274 730,270" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Sample functions -->
+  <path d="M410,305 C440,285 480,258 520,268 C560,278 600,245 640,248 C680,252 710,265 730,260" fill="none" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+  <path d="M410,318 C440,302 480,275 520,278 C560,282 600,262 640,270 C680,278 710,282 730,278" fill="none" stroke="#5C3D1E" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+  <!-- Data points -->
+  <circle cx="450" cy="292" r="4" fill="#7C2530"/>
+  <circle cx="530" cy="275" r="4" fill="#7C2530"/>
+  <circle cx="620" cy="255" r="4" fill="#7C2530"/>
+  <circle cx="700" cy="272" r="4" fill="#7C2530"/>
+  <text x="570" y="378" text-anchor="middle" fill="#5C3D1E" font-size="10" font-style="italic">Posterior narrows near observed data</text>
+
+  <!-- Central label -->
+  <rect x="300" y="190" width="200" height="30" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="210" text-anchor="middle" fill="#7C2530" font-size="12" font-weight="bold">Let the data decide complexity</text>
+</svg>

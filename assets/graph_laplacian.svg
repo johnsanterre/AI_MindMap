@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Section dividers -->
+  <line x1="220" y1="20" x2="220" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="440" y1="20" x2="440" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="620" y1="20" x2="620" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 1: Graph with nodes ===== -->
+  <text x="110" y="44" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Graph G</text>
+
+  <!-- Edges -->
+  <line x1="80"  y1="120" x2="150" y2="90"  stroke="#C4A87A" stroke-width="2"/>
+  <line x1="80"  y1="120" x2="80"  y2="200" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="80"  y1="120" x2="150" y2="190" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="150" y1="90"  x2="150" y2="190" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="80"  y1="200" x2="150" y2="190" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Nodes -->
+  <circle cx="80"  cy="120" r="14" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="150" cy="90"  r="14" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="80"  cy="200" r="14" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="150" cy="190" r="14" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+
+  <text x="80"  cy="120" y="125" font-family="Georgia, serif" font-size="11" fill="white" text-anchor="middle">1</text>
+  <text x="150" cy="90"  y="95"  font-family="Georgia, serif" font-size="11" fill="white" text-anchor="middle">2</text>
+  <text x="80"  cy="200" y="205" font-family="Georgia, serif" font-size="11" fill="white" text-anchor="middle">3</text>
+  <text x="150" cy="190" y="195" font-family="Georgia, serif" font-size="11" fill="white" text-anchor="middle">4</text>
+
+  <!-- Degree labels -->
+  <text x="110" y="260" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">deg(1)=3, deg(2)=2</text>
+  <text x="110" y="276" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">deg(3)=2, deg(4)=3</text>
+
+  <!-- ===== SECTION 2: L = D - A ===== -->
+  <text x="330" y="44" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">L = D &#8722; A</text>
+
+  <!-- D matrix -->
+  <text x="245" y="80" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">D =</text>
+  <rect x="272" y="62" width="72" height="76" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <!-- left bracket line hints -->
+  <text x="280" y="84"  font-family="Georgia, serif" font-size="11" fill="#7C2530">3  0  0  0</text>
+  <text x="280" y="100" font-family="Georgia, serif" font-size="11" fill="#7C2530">0  2  0  0</text>
+  <text x="280" y="116" font-family="Georgia, serif" font-size="11" fill="#7C2530">0  0  2  0</text>
+  <text x="280" y="132" font-family="Georgia, serif" font-size="11" fill="#7C2530">0  0  0  3</text>
+
+  <!-- A matrix -->
+  <text x="245" y="178" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">A =</text>
+  <rect x="272" y="160" width="72" height="76" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="280" y="182" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">0  1  1  1</text>
+  <text x="280" y="198" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">1  0  0  1</text>
+  <text x="280" y="214" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">1  0  0  1</text>
+  <text x="280" y="230" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">1  1  1  0</text>
+
+  <!-- L matrix -->
+  <text x="245" y="278" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">L =</text>
+  <rect x="272" y="260" width="80" height="76" fill="#FFF8EC" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="280" y="282" font-family="Georgia, serif" font-size="11" fill="#5C3D1E"> 3 &#8722;1 &#8722;1 &#8722;1</text>
+  <text x="280" y="298" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">&#8722;1  2  0 &#8722;1</text>
+  <text x="280" y="314" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">&#8722;1  0  2 &#8722;1</text>
+  <text x="280" y="330" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">&#8722;1 &#8722;1 &#8722;1  3</text>
+
+  <!-- minus sign between D and A -->
+  <text x="350" y="205" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle">&#8722;</text>
+  <!-- equals sign between A and L -->
+  <text x="350" y="308" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle">=</text>
+
+  <!-- ===== SECTION 3: Eigenvalue spectrum ===== -->
+  <text x="530" y="44" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Eigenvalue Spectrum</text>
+
+  <!-- Axes -->
+  <line x1="455" y1="300" x2="615" y2="300" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="455" y1="300" x2="455" y2="80"  stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Y-axis label -->
+  <text x="448" y="82" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">&#955;</text>
+
+  <!-- Y-axis ticks -->
+  <line x1="451" y1="300" x2="455" y2="300" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="449" y="304" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">0</text>
+  <line x1="451" y1="234" x2="455" y2="234" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="449" y="238" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">2</text>
+  <line x1="451" y1="168" x2="455" y2="168" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="449" y="172" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">4</text>
+  <line x1="451" y1="101" x2="455" y2="101" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="449" y="105" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">6</text>
+
+  <!-- Bar 1: lambda_1 = 0 -->
+  <rect x="466" y="300" width="26" height="0" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1"/>
+  <rect x="466" y="299" width="26" height="2" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="479" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">&#955;&#8321;</text>
+  <text x="479" y="328" font-family="Georgia, serif" font-size="9"  fill="#7C2530" text-anchor="middle">= 0</text>
+
+  <!-- Bar 2: lambda_2 = Fiedler ~1 -->
+  <rect x="503" y="267" width="26" height="33" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="516" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">&#955;&#8322;</text>
+  <text x="516" y="328" font-family="Georgia, serif" font-size="9"  fill="#7C2530" text-anchor="middle">Fiedler</text>
+
+  <!-- Bar 3: lambda_3 ~4 -->
+  <rect x="540" y="168" width="26" height="132" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="553" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">&#955;&#8323;</text>
+
+  <!-- Bar 4: lambda_4 ~5 -->
+  <rect x="577" y="135" width="26" height="165" fill="#7C2530" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="590" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">&#955;&#8324;</text>
+
+  <!-- ===== SECTION 4: Eigenvector note ===== -->
+  <text x="710" y="44" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Graph Frequency</text>
+
+  <!-- Wavy lines representing eigenvectors at different frequencies -->
+  <!-- u1: constant (flat) -->
+  <text x="638" y="82" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">u&#8321; (&#955;=0)</text>
+  <line x1="638" y1="96" x2="778" y2="96" stroke="#D4C5A9" stroke-width="2.5"/>
+  <text x="782" y="100" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">flat</text>
+
+  <!-- u2: one half-wave (Fiedler) -->
+  <text x="638" y="132" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">u&#8322; (Fiedler)</text>
+  <path d="M638,148 Q678,132 718,148 Q758,164 778,148" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="782" y="152" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">slow</text>
+
+  <!-- u3: two half-waves -->
+  <text x="638" y="182" font-family="Georgia, serif" font-size="10" fill="#C4A87A">u&#8323;</text>
+  <path d="M638,196 Q658,180 678,196 Q698,212 718,196 Q738,180 758,196 Q768,204 778,196" fill="none" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="782" y="200" font-family="Georgia, serif" font-size="9" fill="#C4A87A">mid</text>
+
+  <!-- u4: fast oscillation -->
+  <text x="638" y="232" font-family="Georgia, serif" font-size="10" fill="#7C2530">u&#8324; (max &#955;)</text>
+  <path d="M638,248 Q648,234 658,248 Q668,262 678,248 Q688,234 698,248 Q708,262 718,248 Q728,234 738,248 Q748,262 758,248 Q768,234 778,248" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="782" y="252" font-family="Georgia, serif" font-size="9" fill="#7C2530">fast</text>
+
+  <!-- Basis note -->
+  <rect x="632" y="278" width="158" height="52" rx="4" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="711" y="296" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">L = U&#923;U&#7488;</text>
+  <text x="711" y="312" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">eigenvectors = graph</text>
+  <text x="711" y="326" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Fourier basis</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="370" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Graph Laplacian L = D &#8722; A: encodes connectivity, drives spectral GNNs and graph signal processing</text>
+</svg>

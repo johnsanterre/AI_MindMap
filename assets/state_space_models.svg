@@ -1,0 +1,75 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" rx="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2.5"/>
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#7C2530" font-weight="bold">State Space Models</text>
+
+  <!-- Input signal -->
+  <rect x="30" y="140" width="100" height="50" rx="10" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="80" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Input u(t)</text>
+
+  <!-- SSM Block -->
+  <rect x="190" y="100" width="180" height="130" rx="14" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="280" y="135" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" font-weight="bold">SSM Layer</text>
+  <text x="280" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#C4A87A">h'(t) = Ah(t) + Bu(t)</text>
+  <text x="280" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#C4A87A">y(t) = Ch(t) + Du(t)</text>
+  <text x="280" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">Linear Recurrence</text>
+
+  <!-- Arrow input to SSM -->
+  <line x1="130" y1="165" x2="190" y2="165" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Discretise block -->
+  <rect x="420" y="110" width="130" height="50" rx="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="485" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" font-weight="bold">Discretise</text>
+  <text x="485" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">ZOH / Bilinear</text>
+
+  <!-- Arrow SSM to Discretise -->
+  <line x1="370" y1="145" x2="420" y2="140" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Convolution / Scan block -->
+  <rect x="600" y="110" width="160" height="50" rx="10" fill="#5C3D1E" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="680" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" font-weight="bold">Global Conv</text>
+  <text x="680" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">O(N log N)</text>
+
+  <!-- Arrow Discretise to Conv -->
+  <line x1="550" y1="135" x2="600" y2="135" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Output -->
+  <rect x="660" y="200" width="100" height="50" rx="10" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="710" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Output y(t)</text>
+
+  <!-- Arrow Conv to Output -->
+  <line x1="680" y1="160" x2="700" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Selective Gating (Mamba) -->
+  <rect x="190" y="280" width="180" height="65" rx="14" fill="#7C2530" stroke="#D4C5A9" stroke-width="1.8"/>
+  <text x="280" y="305" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">Selective Gating</text>
+  <text x="280" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">Mamba: input-dependent</text>
+  <text x="280" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">A, B, C parameters</text>
+
+  <!-- Arrow from Selective Gating up to SSM -->
+  <line x1="280" y1="280" x2="280" y2="230" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowRed)"/>
+
+  <!-- Parallel Scan block -->
+  <rect x="420" y="280" width="130" height="50" rx="10" fill="#2D5A8E" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="485" y="302" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" font-weight="bold">Parallel Scan</text>
+  <text x="485" y="320" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">O(N) recurrence</text>
+
+  <!-- Arrow Selective Gating to Parallel Scan -->
+  <line x1="370" y1="310" x2="420" y2="305" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Labels -->
+  <text x="80" y="75" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">S4 (2021)</text>
+  <line x1="80" y1="80" x2="280" y2="100" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <text x="510" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">Mamba (2023)</text>
+  <line x1="420" y1="345" x2="480" y2="365" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBrown" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

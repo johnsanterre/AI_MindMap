@@ -1,0 +1,68 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="20" font-weight="bold">Model Auditing Pipeline</text>
+
+  <!-- Left: Model box -->
+  <rect x="40" y="80" width="140" height="100" rx="10" fill="#EDE6D6" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="110" y="120" text-anchor="middle" fill="#5C3D1E" font-size="15" font-weight="bold">AI Model</text>
+  <text x="110" y="145" text-anchor="middle" fill="#5C3D1E" font-size="12">Under Review</text>
+  <text x="110" y="165" text-anchor="middle" fill="#5C3D1E" font-size="11">f(x; θ)</text>
+
+  <!-- Arrow from model to audit stages -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+  <line x1="180" y1="130" x2="225" y2="130" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Stage 1: Bias Testing -->
+  <rect x="230" y="60" width="150" height="65" rx="8" fill="#E8EFF8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="305" y="82" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">1. Bias Testing</text>
+  <text x="305" y="100" text-anchor="middle" fill="#2D5A8E" font-size="11">Demographic parity</text>
+  <text x="305" y="115" text-anchor="middle" fill="#2D5A8E" font-size="11">Equalized odds</text>
+
+  <!-- Stage 2: Performance Audit -->
+  <rect x="230" y="140" width="150" height="65" rx="8" fill="#F5EDE0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="305" y="162" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">2. Performance</text>
+  <text x="305" y="180" text-anchor="middle" fill="#5C3D1E" font-size="11">Subgroup accuracy</text>
+  <text x="305" y="195" text-anchor="middle" fill="#5C3D1E" font-size="11">Calibration curves</text>
+
+  <!-- Stage 3: Safety Probes -->
+  <rect x="230" y="220" width="150" height="65" rx="8" fill="#F9ECEC" stroke="#7C2530" stroke-width="2"/>
+  <text x="305" y="242" text-anchor="middle" fill="#7C2530" font-size="13" font-weight="bold">3. Safety Probes</text>
+  <text x="305" y="260" text-anchor="middle" fill="#7C2530" font-size="11">Red teaming</text>
+  <text x="305" y="275" text-anchor="middle" fill="#7C2530" font-size="11">Adversarial inputs</text>
+
+  <!-- Arrows from stages to report -->
+  <line x1="380" y1="92" x2="440" y2="175" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="380" y1="172" x2="440" y2="180" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="380" y1="252" x2="440" y2="190" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrR)"/>
+
+  <!-- Report box -->
+  <rect x="445" y="130" width="150" height="110" rx="10" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="520" y="155" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">Audit Report</text>
+  <line x1="460" y1="165" x2="580" y2="165" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="520" y="183" text-anchor="middle" fill="#7C2530" font-size="11">Disparate impact: 0.78</text>
+  <text x="520" y="200" text-anchor="middle" fill="#2D5A8E" font-size="11">Calibration gap: 0.12</text>
+  <text x="520" y="217" text-anchor="middle" fill="#5C3D1E" font-size="11">Safety score: 94%</text>
+  <text x="520" y="234" text-anchor="middle" fill="#5C3D1E" font-size="11" font-weight="bold">VERDICT: Conditional</text>
+
+  <!-- Arrow to decision -->
+  <line x1="595" y1="185" x2="635" y2="185" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Decision diamond -->
+  <polygon points="710,140 760,185 710,230 660,185" fill="#E8EFF8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="710" y="180" text-anchor="middle" fill="#2D5A8E" font-size="12" font-weight="bold">Pass?</text>
+  <text x="710" y="195" text-anchor="middle" fill="#2D5A8E" font-size="11">Y / N</text>
+
+  <!-- Bottom: Fairness metrics formula bar -->
+  <rect x="40" y="320" width="720" height="60" rx="6" fill="#EDE6D6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="345" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Key Metrics</text>
+  <text x="150" y="368" text-anchor="middle" fill="#7C2530" font-size="12">DI = P(Y=1|A=0) / P(Y=1|A=1)</text>
+  <text x="420" y="368" text-anchor="middle" fill="#2D5A8E" font-size="12">EO: TPR gap across groups</text>
+  <text x="660" y="368" text-anchor="middle" fill="#5C3D1E" font-size="12">ECE = Σ |acc(b)-conf(b)|</text>
+</svg>

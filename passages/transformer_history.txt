@@ -1,0 +1,147 @@
+<<include "Header">>
+
+! Transformer History
+
+<img src="assets/transformer_history.svg" alt="Timeline of transformer architecture evolution from 2017 to modern LLMs" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a relay race where each runner not only carries the baton but redesigns it before passing it on. The original transformer was that first baton — a clean, elegant architecture for translating sentences. But within months, researchers realized the baton could be reshaped for tasks its creators never imagined. ''Transformer history'' is the story of how a single 2017 paper, "Attention Is All You Need," spawned an entire ecosystem of models — BERT, GPT, T5, and eventually today's large language models — each one inheriting the core self-attention mechanism while pushing the boundaries of scale, training strategy, and application. In fewer than seven years, the transformer went from a machine translation trick to the backbone of modern artificial intelligence.
+
+---
+
+!! The Core Insight
+
+The original transformer, introduced by Vaswani et al. at Google Brain in 2017, solved a specific problem: recurrent neural networks processed sequences one token at a time, creating a bottleneck that limited both parallelism and long-range memory. The transformer replaced recurrence entirely with ''self-attention'' — a mechanism that lets every token in a sequence attend to every other token simultaneously. This was not a minor tweak. It meant training could be massively parallelized across GPUs, and information no longer had to pass through a chain of hidden states to reach distant tokens.
+
+The key architectural innovation was ''multi-head attention''. Instead of computing a single attention pattern, the model runs several attention heads in parallel, each learning to focus on different types of relationships — syntactic structure in one head, semantic similarity in another, positional patterns in a third. Combined with <<link "Attention" "Attention">><</link>> mechanisms, residual connections, layer normalization, and learned positional encodings, the full transformer stack could be trained end-to-end with standard backpropagation.
+
+What happened next was the critical divergence. The original transformer had both an ''encoder'' (which reads the full input bidirectionally) and a ''decoder'' (which generates output left-to-right). Researchers quickly realized these two halves could be separated and specialized, creating three architectural families that would define the next era of NLP.
+
+---
+
+!! The Three Lineages
+
+''The encoder branch — BERT (2018):'' Devlin et al. at Google took the transformer encoder and trained it with a novel objective called ''masked language modeling'' (MLM). Instead of predicting the next token, <<link "BERT" "BERT">><</link>> randomly masks 15% of input tokens and trains the model to reconstruct them. Because the encoder sees the entire context bidirectionally, BERT builds deep contextual representations that capture meaning from both left and right context simultaneously. BERT-base had 110M parameters; BERT-large had 340M. The model was fine-tuned on downstream tasks — question answering, sentiment analysis, named entity recognition — and shattered benchmarks across the board. The key insight was ''pre-train once, fine-tune many times'': a single expensive pre-training run produces representations useful for dozens of tasks.
+
+''The decoder branch — GPT (2018-2023):'' Radford et al. at OpenAI took the opposite approach. <<link "GPT Architecture" "GPT Architecture">><</link>> uses only the transformer decoder, trained autoregressively: predict the next token given all previous tokens. GPT-1 (117M parameters, 2018) demonstrated that unsupervised pre-training followed by supervised fine-tuning improved NLP benchmarks. GPT-2 (1.5B parameters, 2019) showed that scaling up produced surprising zero-shot capabilities — the model could perform tasks it was never explicitly trained on, simply by conditioning on a text prompt. GPT-3 (175B parameters, 2020) was the breakthrough that proved ''in-context learning'': by providing a few examples in the prompt, GPT-3 could perform new tasks without any parameter updates. This discovery — that scale alone could unlock new capabilities — launched the era of large language models.
+
+''The encoder-decoder branch — T5 (2019):'' Raffel et al. at Google recast every NLP task as a text-to-text problem. T5 uses the full encoder-decoder transformer, where the encoder processes the input and the decoder generates the output. Classification becomes "classify: the movie was great" mapped to "positive." Translation, summarization, question answering — all become text-in, text-out. By unifying tasks under a single framework, T5 demonstrated that architectural simplicity plus scale could match or beat specialized models. T5 ranged from 60M to 11B parameters and established the encoder-decoder as a competitive alternative to decoder-only models.
+
+---
+
+!! What the Math Is Actually Doing
+
+The self-attention mechanism at the heart of every transformer variant computes:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+where $Q$, $K$, $V$ are the query, key, and value matrices projected from the input, and $d_k$ is the key dimension. The $\sqrt{d_k}$ scaling prevents the dot products from growing too large as dimensionality increases, which would push softmax into saturation.
+
+For ''multi-head attention'' with $h$ heads:
+
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$
+
+where each $\text{head}_i = \text{Attention}(XW_i^Q, XW_i^K, XW_i^V)$. Each head operates in a $d_k = d_{\text{model}}/h$ dimensional subspace, allowing the model to jointly attend to information from different representation subspaces.
+
+The computational cost of self-attention scales as $O(n^2 d)$ where $n$ is the sequence length and $d$ is the model dimension. This quadratic scaling in sequence length is the fundamental bottleneck that drove much subsequent research — from sparse attention patterns to linear attention approximations to the state-space models that challenge the transformer's dominance on very long sequences.
+
+The ''masked self-attention'' in GPT-style decoders modifies the attention matrix by setting all entries above the diagonal to $-\infty$ before softmax, ensuring that token $t$ can only attend to tokens $1, \ldots, t$. This autoregressive mask is what makes left-to-right generation possible:
+
+$$\text{MaskedAttn}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}} + M\right)V$$
+
+where $M_{ij} = 0$ if $i \geq j$ and $M_{ij} = -\infty$ otherwise. BERT's encoder omits this mask, allowing full bidirectional attention.
+
+---
+
+!! The Scaling Revolution
+
+The period from 2020 to 2024 was defined by a single hypothesis: ''make the transformer bigger and it will get smarter''. GPT-3 at 175B parameters was the proof of concept. <<link "Scaling Laws" "Scaling Laws">><</link>> discovered by Kaplan et al. (2020) showed that loss decreases as a smooth power law with model size, data, and compute — there was no ceiling in sight. This empirical regularity turned large-model training from a gamble into an engineering discipline: train small models, fit the scaling curve, predict where the big model will land.
+
+The ''Chinchilla correction'' (Hoffmann et al., 2022) refined the recipe. Most models before 2022 were undertrained — too many parameters, too few tokens. Chinchilla (70B parameters, 1.4T tokens) outperformed the much larger Gopher (280B parameters, 300B tokens) at the same compute budget, proving that data scaling matters as much as parameter scaling. This shifted the industry toward smaller models trained on vastly more data: LLaMA (65B, 1.4T tokens), LLaMA 2 (70B, 2T tokens), and Mistral (7B, optimized for efficiency).
+
+''Instruction tuning and RLHF'' (2022-2023) added a critical layer on top of pre-training. InstructGPT and ChatGPT showed that fine-tuning a pre-trained model with human feedback dramatically improved its usefulness, safety, and ability to follow instructions. This was not a new architecture — it was a new training stage applied to the same transformer backbone, demonstrating that how you train matters as much as how big you train.
+
+''Mixture of Experts'' (MoE) architectures, such as those used in Switch Transformer and reportedly in GPT-4, decouple parameter count from compute per token. A MoE model has trillions of total parameters but only activates a fraction for each input, allowing massive capacity without proportional compute cost. This architectural innovation extends the scaling curve without the linear cost increase that dense <<link "Transformers" "Transformers">><</link>> models demand.
+
+---
+
+!! When Transformer History Breaks Down
+
+''The quadratic attention bottleneck:'' Self-attention's $O(n^2)$ cost in sequence length means that naively scaling context windows is prohibitively expensive. Processing a 1-million-token document requires computing attention over a trillion token pairs per layer. Workarounds — sparse attention, sliding windows, linear attention, and state-space models like Mamba — address this, but each trades off expressiveness for efficiency. The history of transformers is increasingly a history of fighting this quadratic wall.
+
+''Diminishing returns from pure scaling:'' The smooth power-law improvements in loss do not translate linearly into task performance. Models can improve on perplexity while failing to gain new capabilities, or they can exhibit emergent abilities that appear suddenly at unpredictable scale thresholds. The assumption that "bigger is always better" faces challenges from efficiency-focused approaches (distillation, quantization, better data curation) that achieve comparable performance at a fraction of the cost. The Chinchilla insight was the first crack; the rise of small, well-trained models like Mistral and Phi widened it.
+
+''Evaluation saturation and benchmark gaming:'' As transformer models grew more capable, the benchmarks used to measure progress saturated. Models approach human performance on GLUE, SuperGLUE, and many reading comprehension tasks, making it hard to distinguish genuine capability improvements from overfitting to benchmark formats. The history of transformer progress is entangled with the history of benchmark design — each new model generation requires new, harder evaluations, and the community perpetually chases moving goalposts.
+
+---
+
+!! Technical Details
+
+''Architecture timeline:'' The original transformer (Vaswani et al., 2017) had 65M parameters and was trained on WMT English-German translation. Key architectural choices — 6 encoder layers, 6 decoder layers, 8 attention heads, $d_{\text{model}} = 512$ — became defaults that persisted across later work. GPT-1 (Radford et al., 2018) used 12 decoder layers, $d_{\text{model}} = 768$, and was trained on BooksCorpus. BERT (Devlin et al., 2018) used 12/24 encoder layers for base/large variants, trained on BooksCorpus + Wikipedia with masked language modeling and next-sentence prediction. GPT-2 (Radford et al., 2019) scaled to 48 layers, $d_{\text{model}} = 1600$, and introduced the practice of training on diverse web text (WebText). T5 (Raffel et al., 2019) explored the design space systematically, finding that encoder-decoder architectures with span corruption pre-training worked best. GPT-3 (Brown et al., 2020) scaled to 96 layers, $d_{\text{model}} = 12288$, with 175B parameters trained on 300B tokens.
+
+''Key innovations beyond scale:'' Rotary Position Embeddings (RoPE, Su et al., 2021) replaced learned positional encodings with rotation matrices encoding relative position, enabling better length generalization. Flash Attention (Dao et al., 2022) rewrote the attention computation to be memory-efficient, reducing GPU memory usage from $O(n^2)$ to $O(n)$ without approximation. Grouped Query Attention (Ainslie et al., 2023) reduced the key-value cache by sharing KV heads across query heads, cutting inference memory. These engineering innovations were as important as architectural changes in enabling the latest generation of models.
+
+''Pre-training objectives:'' Autoregressive LM (GPT family): predict $P(x_t | x_1, \ldots, x_{t-1})$. Masked LM (BERT): predict masked tokens from bidirectional context. Span corruption (T5): replace random spans with sentinel tokens and predict the original spans. Prefix LM: encode a prefix bidirectionally, then generate autoregressively. Each objective creates different inductive biases — autoregressive models excel at generation, masked models at understanding, and encoder-decoder models at conditional generation tasks like translation and summarization.
+
+''The open-source inflection:'' Meta's release of LLaMA (February 2023) democratized access to high-quality large language models. Before LLaMA, frontier models were proprietary. After LLaMA, the open-source community rapidly produced fine-tuned variants (Alpaca, Vicuna, WizardLM), pushing the boundary of what was achievable without massive compute budgets. LLaMA 2, Mistral, and Mixtral continued this trend, establishing open-weight models as competitive with proprietary systems on many tasks.
+
+---
+
+!! Quiz
+
+<span id="th-q1">What fundamental architectural change did the original 2017 transformer introduce?</span>
+A. It added more layers to existing recurrent networks
+B. It replaced recurrence entirely with self-attention, enabling full parallelization
+C. It introduced convolutional layers for sequence processing
+D. It used reinforcement learning instead of backpropagation for training
+<<button "A">><<replace "#th-q1">>Wrong. The transformer did not augment RNNs — it replaced them entirely. The key innovation was eliminating sequential processing altogether.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q1">>Correct! By replacing recurrence with self-attention, the transformer allowed every token to attend to every other token in parallel, removing the sequential bottleneck of RNNs and LSTMs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q1">>Wrong. While convolutional approaches to sequences existed (e.g., ByteNet, ConvS2S), the transformer's innovation was self-attention, not convolution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q1">>Wrong. The transformer is trained with standard backpropagation and gradient descent, just like its predecessors. The novelty was the attention-based architecture, not the training algorithm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q2">How does BERT's pre-training objective differ from GPT's?</span>
+A. BERT predicts the next token left-to-right; GPT uses masked language modeling
+B. BERT uses masked language modeling with bidirectional context; GPT predicts the next token autoregressively
+C. BERT trains on labeled data; GPT trains on unlabeled data
+D. BERT uses reinforcement learning; GPT uses supervised learning
+<<button "A">><<replace "#th-q2">>Wrong. You have it backwards. GPT is the autoregressive (left-to-right) model. BERT uses masked language modeling.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q2">>Correct! BERT masks 15% of tokens and predicts them from bidirectional context, while GPT predicts each next token from only the preceding tokens. This fundamental difference gives BERT stronger representations for understanding tasks and GPT stronger generation capabilities.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q2">>Wrong. Both BERT and GPT are pre-trained on unlabeled text. The difference is the training objective (masked vs. autoregressive), not the data labeling.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q2">>Wrong. Both models use standard gradient-based training during pre-training. RLHF was applied to later GPT variants (InstructGPT, ChatGPT) but is not part of the core GPT pre-training objective.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q3">What capability did GPT-3 demonstrate that was not present in GPT-1 or GPT-2?</span>
+A. The ability to generate coherent text
+B. Robust in-context learning — performing new tasks from a few prompt examples without parameter updates
+C. The ability to be fine-tuned on downstream tasks
+D. Multilingual translation capabilities
+<<button "A">><<replace "#th-q3">>Wrong. GPT-2 could already generate coherent text. GPT-3's breakthrough was not generation quality but the emergence of in-context learning at scale.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q3">>Correct! GPT-3 showed that a sufficiently large language model can learn to perform new tasks simply by being given a few examples in the prompt — no gradient updates needed. This "in-context learning" was a qualitative shift that emerged with scale.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q3">>Wrong. GPT-1 was already designed for fine-tuning on downstream tasks. That was its original contribution. GPT-3's innovation was performing tasks //without// fine-tuning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q3">>Wrong. While GPT-3 can do some translation, multilingual capability is not what distinguished it from its predecessors. The defining innovation was in-context learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q4">Why does the $\sqrt{d_k}$ scaling factor appear in the attention formula?</span>
+A. To normalize the output to unit variance
+B. To prevent dot products from growing too large with dimensionality, which would push softmax into saturation
+C. To make attention computationally cheaper
+D. To ensure the attention weights sum to one
+<<button "A">><<replace "#th-q4">>Wrong. While scaling does help with variance, the specific reason is about the magnitude of dot products growing with $d_k$, not about achieving unit variance in the output.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q4">>Correct! When $d_k$ is large, the dot products $q \cdot k$ tend to have magnitude proportional to $\sqrt{d_k}$. Without scaling, softmax receives very large inputs, producing near-one-hot outputs with vanishing gradients. Dividing by $\sqrt{d_k}$ keeps the inputs in a range where softmax gradients flow well.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q4">>Wrong. The scaling factor is a simple division that adds negligible compute. Its purpose is numerical stability, not computational efficiency.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q4">>Wrong. The softmax function already ensures attention weights sum to one. The $\sqrt{d_k}$ scaling addresses the magnitude of the inputs to softmax, not the normalization of its outputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q5">What was the main finding of the Chinchilla paper regarding transformer training?</span>
+A. Larger models always outperform smaller ones
+B. Most large models before 2022 were undertrained — they had too many parameters relative to their training data
+C. Training data quality does not matter if the model is large enough
+D. Encoder-decoder models are more efficient than decoder-only models
+<<button "A">><<replace "#th-q5">>Wrong. Chinchilla showed the opposite: a smaller model (70B) trained on more data outperformed a larger model (280B) trained on less data, given equal compute.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q5">>Correct! Chinchilla demonstrated that parameters and data should scale equally. Pre-2022 models like GPT-3 were too large for their token budget — the same compute could achieve lower loss with fewer parameters and more training data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q5">>Wrong. Data quality is critical at every scale. Chinchilla's finding was about the //quantity// balance between parameters and data, not about data quality being irrelevant.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q5">>Wrong. Chinchilla did not compare architecture types. Its contribution was about optimal compute allocation between model size and training data for any given transformer.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q6">What problem does Mixture of Experts (MoE) solve in the context of transformer scaling?</span>
+A. It eliminates the need for self-attention
+B. It decouples total parameter count from per-token compute, allowing massive capacity without proportional cost
+C. It replaces gradient descent with evolutionary optimization
+D. It enables training without GPUs
+<<button "A">><<replace "#th-q6">>Wrong. MoE models still use self-attention. The "experts" replace the dense feed-forward layers, not the attention mechanism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q6">>Correct! In a MoE transformer, each token is routed to only a few "expert" sub-networks out of many. This means the model can have trillions of total parameters while activating only a fraction per token, extending the scaling curve without linear compute increases.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q6">>Wrong. MoE models are still trained with standard gradient-based optimization. The innovation is in the architecture (sparse routing), not the training algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q6">>Wrong. MoE models still require GPUs (or other accelerators) for training. They reduce compute //per token// relative to a dense model of the same total size, but they still need substantial hardware.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q7">What is the computational complexity of standard self-attention with respect to sequence length $n$?</span>
+A. $O(n)$
+B. $O(n \log n)$
+C. $O(n^2)$
+D. $O(n^3)$
+<<button "A">><<replace "#th-q7">>Wrong. Linear complexity would mean each token only interacts with a constant number of others. Standard self-attention computes all-pairs interactions, which is more expensive.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q7">>Wrong. Some efficient attention approximations achieve $O(n \log n)$, but standard self-attention is more expensive than this.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q7">>Correct! Standard self-attention computes a dot product between every pair of tokens, producing an $n \times n$ attention matrix. This $O(n^2)$ cost (times $d$) is the fundamental bottleneck that limits context length in transformer models.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q7">>Wrong. $O(n^3)$ is the cost of matrix multiplication of two $n \times n$ matrices (naively). Self-attention involves multiplying $n \times d$ matrices where $d$ is fixed, giving $O(n^2 d)$, which is $O(n^2)$ in sequence length.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="th-q8">Why was Meta's release of LLaMA in 2023 considered a turning point in transformer history?</span>
+A. It was the first model to use self-attention
+B. It proved that small models could never compete with large ones
+C. It democratized access to high-quality large language models, enabling rapid open-source innovation
+D. It introduced a fundamentally new architecture that replaced the transformer
+<<button "A">><<replace "#th-q8">>Wrong. Self-attention was introduced in 2017 with the original transformer. LLaMA came six years later and used the same core mechanism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#th-q8">>Wrong. LLaMA showed the opposite — that well-trained smaller models (7B-65B) could approach the performance of much larger proprietary models, validating Chinchilla-style efficient training.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#th-q8">>Correct! Before LLaMA, frontier language models were proprietary and inaccessible. LLaMA's open release enabled the community to build fine-tuned variants (Alpaca, Vicuna, etc.) and conduct research that was previously limited to well-funded labs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#th-q8">>Wrong. LLaMA is a standard transformer-based model. Its significance was in openness and training efficiency, not architectural novelty.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

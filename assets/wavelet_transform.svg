@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <title>Wavelet Transform: Multi-Resolution Analysis</title>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Wavelet Transform: Multi-Resolution Decomposition</text>
+
+  <!-- ── Left panel: Original Signal ── -->
+  <text x="110" y="60" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Original Signal</text>
+
+  <!-- Signal waveform (composite wave) -->
+  <polyline points="20,120 30,105 40,90 50,110 60,130 70,100 80,75 90,95 100,125 110,140 120,110 130,80 140,100 150,130 160,115 170,90 180,105 190,135 200,120"
+            fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="20" y1="150" x2="200" y2="150" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="110" y="165" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Time</text>
+
+  <!-- ── Arrow from signal to decomposition ── -->
+  <line x1="210" y1="110" x2="250" y2="110" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="250,110 240,105 240,115" fill="#C4A87A"/>
+  <text x="230" y="100" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle" font-style="italic">DWT</text>
+
+  <!-- ── Center panel: Multi-Resolution Decomposition ── -->
+  <text x="400" y="60" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Multi-Resolution Levels</text>
+
+  <!-- Level 1: Low frequency (Approximation) -->
+  <rect x="260" y="75" width="280" height="50" rx="6" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="270" y="90" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#2D5A8E">A3</text>
+  <text x="270" y="102" font-family="Georgia, serif" font-size="8" fill="#2D5A8E">Low freq</text>
+  <polyline points="310,105 330,95 350,100 370,92 390,98 410,90 430,96 450,93 470,97 490,94 510,100 530,95"
+            fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Level 2: Mid frequency (Detail) -->
+  <rect x="260" y="135" width="280" height="50" rx="6" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="270" y="150" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#7C2530">D3</text>
+  <text x="270" y="162" font-family="Georgia, serif" font-size="8" fill="#7C2530">Mid freq</text>
+  <polyline points="310,160 318,150 326,165 334,148 342,162 350,155 358,160 366,152 374,163 382,147 390,160 398,155 406,162 414,150 422,163 430,155 438,160 446,148 454,162 462,155 470,160 478,150 486,163 494,155 502,160 510,148 518,158 530,155"
+            fill="none" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Level 3: High frequency (Detail) -->
+  <rect x="260" y="195" width="280" height="50" rx="6" fill="none" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="270" y="210" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E">D2</text>
+  <text x="270" y="222" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">High freq</text>
+  <polyline points="310,220 314,212 318,225 322,210 326,222 330,215 334,223 338,212 342,224 346,213 350,222 354,215 358,224 362,210 366,222 370,215 374,225 378,212 382,224 386,214 390,222 394,212 398,224 402,215 406,222 410,210 414,224 418,215 422,223 426,212 430,225 434,213 438,222 442,215 446,224 450,210 454,222 458,215 462,223 466,212 470,224 474,215 478,222 482,210 486,224 490,215 494,222 498,210 502,224 506,215 510,220 514,212 518,223 522,215 526,222 530,218"
+            fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Level 4: Highest frequency (Detail) -->
+  <rect x="260" y="255" width="280" height="50" rx="6" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="270" y="270" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#C4A87A">D1</text>
+  <text x="270" y="282" font-family="Georgia, serif" font-size="8" fill="#C4A87A">Finest</text>
+  <polyline points="310,280 312,274 314,284 316,272 318,283 320,275 322,284 324,273 326,283 328,274 330,284 332,273 334,282 336,275 338,284 340,272 342,283 344,275 346,284 348,273 350,282 352,276 354,284 356,272 358,283 360,275 362,284 364,273 366,282 368,275 370,284 372,272 374,283 376,275 378,284 380,273 382,282 384,276 386,283 388,273 390,282 392,276 394,283 396,273 398,282 400,276 402,284 404,272 406,283 408,275 410,282 412,276 414,284 416,272 418,283 420,275 422,282 424,276 426,284 428,272 430,283 432,275 434,282 436,276 438,283 440,273 442,282 444,276 446,283 448,273 450,282 452,276 454,284 456,272 458,283 460,276 462,282 464,276 466,283 468,273 470,282 472,276 474,283 476,273 478,282 480,276 482,283 484,273 486,282 488,276 490,283 492,273 494,282 496,276 498,283 500,273 502,282 504,276 506,283 508,273 510,280 512,276 514,282 516,276 518,282 520,276 522,282 524,276 526,282 528,278 530,280"
+            fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- ── Right panel: FFT vs Wavelet comparison ── -->
+  <text x="660" y="60" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">FFT vs Wavelet</text>
+
+  <!-- FFT box: full frequency, no time -->
+  <rect x="570" y="75" width="180" height="70" rx="6" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="660" y="92" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">FFT</text>
+  <text x="660" y="108" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Full frequency resolution</text>
+  <text x="660" y="122" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">No time localization</text>
+  <line x1="580" y1="130" x2="740" y2="130" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="580" y="140" font-family="Georgia, serif" font-size="8" fill="#5C3D1E">freq</text>
+
+  <!-- Wavelet box: both time and frequency -->
+  <rect x="570" y="155" width="180" height="70" rx="6" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="660" y="172" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Wavelet</text>
+  <text x="660" y="188" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Adaptive time-frequency</text>
+  <text x="660" y="202" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Multi-resolution tradeoff</text>
+  <!-- Mini tiling diagram -->
+  <!-- Low freq: wide time, narrow freq -->
+  <rect x="585" y="208" width="70" height="8" rx="1" fill="#2D5A8E" fill-opacity="0.3" stroke="#2D5A8E" stroke-width="0.5"/>
+  <rect x="660" y="208" width="70" height="8" rx="1" fill="#2D5A8E" fill-opacity="0.3" stroke="#2D5A8E" stroke-width="0.5"/>
+  <!-- Mid freq: medium -->
+  <rect x="585" y="218" width="35" height="12" rx="1" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="0.5"/>
+  <rect x="623" y="218" width="35" height="12" rx="1" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="0.5"/>
+  <rect x="661" y="218" width="35" height="12" rx="1" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="0.5"/>
+  <rect x="699" y="218" width="35" height="12" rx="1" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="0.5"/>
+
+  <!-- ── Bottom panel: Filter Bank ── -->
+  <text x="400" y="330" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Filter Bank Structure</text>
+
+  <!-- Signal box -->
+  <rect x="60" y="345" width="80" height="30" rx="5" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1.5"/>
+  <text x="100" y="364" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Signal x[n]</text>
+
+  <!-- Low-pass filter -->
+  <line x1="140" y1="352" x2="190" y2="352" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="190" y="340" width="60" height="24" rx="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="220" y="356" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">LP h[n]</text>
+
+  <!-- High-pass filter -->
+  <line x1="140" y1="370" x2="190" y2="370" stroke="#5C3D1E" stroke-width="1.5"/>
+  <rect x="190" y="362" width="60" height="24" rx="4" fill="#7C2530" fill-opacity="0.2" stroke="#7C2530" stroke-width="1"/>
+  <text x="220" y="378" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">HP g[n]</text>
+
+  <!-- Downsample arrows -->
+  <line x1="250" y1="352" x2="290" y2="352" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="270" y="348" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">↓2</text>
+  <line x1="250" y1="374" x2="290" y2="374" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="270" y="370" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">↓2</text>
+
+  <!-- Approximation coefficients -->
+  <rect x="290" y="340" width="80" height="24" rx="4" fill="#2D5A8E" stroke="#1a3a5c" stroke-width="1"/>
+  <text x="330" y="356" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Approx cA</text>
+
+  <!-- Detail coefficients -->
+  <rect x="290" y="362" width="80" height="24" rx="4" fill="#7C2530" stroke="#4d151e" stroke-width="1"/>
+  <text x="330" y="378" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Detail cD</text>
+
+  <!-- Recurse arrow -->
+  <line x1="370" y1="352" x2="410" y2="352" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="410,352 400,347 400,357" fill="#C4A87A"/>
+  <text x="390" y="345" font-family="Georgia, serif" font-size="8" fill="#C4A87A" text-anchor="middle" font-style="italic">recurse</text>
+
+  <!-- Next level LP/HP -->
+  <rect x="410" y="340" width="50" height="24" rx="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="435" y="356" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">LP</text>
+  <rect x="410" y="362" width="50" height="24" rx="4" fill="#7C2530" fill-opacity="0.2" stroke="#7C2530" stroke-width="1"/>
+  <text x="435" y="378" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">HP</text>
+
+  <!-- Final outputs -->
+  <line x1="460" y1="352" x2="490" y2="352" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="475" y="348" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">↓2</text>
+  <line x1="460" y1="374" x2="490" y2="374" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="475" y="370" font-family="Georgia, serif" font-size="8" fill="#5C3D1E" text-anchor="middle">↓2</text>
+
+  <rect x="490" y="340" width="60" height="24" rx="4" fill="#2D5A8E" fill-opacity="0.6" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="520" y="356" font-family="Georgia, serif" font-size="9" fill="#FDFAF4" text-anchor="middle">cA2</text>
+  <rect x="490" y="362" width="60" height="24" rx="4" fill="#7C2530" fill-opacity="0.6" stroke="#7C2530" stroke-width="1"/>
+  <text x="520" y="378" font-family="Georgia, serif" font-size="9" fill="#FDFAF4" text-anchor="middle">cD2</text>
+
+  <!-- Ellipsis -->
+  <text x="570" y="356" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">...</text>
+
+  <!-- ── Labels ── -->
+  <text x="660" y="352" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">Each level halves</text>
+  <text x="660" y="365" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">the frequency band</text>
+  <text x="660" y="378" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">and sample count</text>
+</svg>

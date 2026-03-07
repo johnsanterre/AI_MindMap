@@ -1,0 +1,171 @@
+<<include "Header">>
+
+! DPO
+
+<img src="assets/dpo.svg" alt="Diagram comparing RLHF and DPO training pipelines" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you want to teach someone to cook by having them taste two dishes and pick the better one. Standard RLHF is like first training a food critic to score dishes, then using that critic to guide the chef through thousands of trial-and-error cooking sessions. ''Direct Preference Optimization'' (DPO) skips the food critic entirely: it takes the same taste comparisons and rewires the chef's instincts directly in a single pass. No middleman, no unstable feedback loop — just a clean supervised update from the same preference data.
+
+---
+
+!! The Core Insight
+
+The standard <<link "RLHF" "RLHF">><</link>> pipeline has three stages: collect human preference data, train a <<link "reward model" "Reward Modeling">><</link>>, then run <<link "PPO" "Policy Gradient">><</link>> to optimize the language model against that reward model. Each stage introduces complexity — a separate reward model to maintain, an RL training loop that is notoriously unstable, and careful hyperparameter tuning to prevent reward hacking.
+
+Rafailov et al. (2023) showed that //the reward model is mathematically redundant//. Given the standard RLHF objective — maximize expected reward subject to a KL penalty against a reference policy — there exists a closed-form mapping between the optimal reward function and the optimal policy. This means you can substitute the reward directly out of the objective and optimize the policy using only the preference data, no reward model required.
+
+The result is a ''simple cross-entropy loss'' that looks like supervised learning but encodes the full RLHF objective. DPO trains a single model, uses no reinforcement learning, requires no sampling during training, and converges more stably than PPO-based RLHF. It has become the default fine-tuning method for aligning open-source language models.
+
+---
+
+!! From RLHF to a Closed-Form Solution
+
+The standard RLHF objective is:
+
+$$\max_\pi \;\mathbb{E}_{x \sim \mathcal{D},\; y \sim \pi(\cdot \mid x)}\!\left[r(x, y)\right] - \beta\, \mathrm{KL}\!\left(\pi(\cdot \mid x) \;\|\; \pi_{\mathrm{ref}}(\cdot \mid x)\right)$$
+
+where $r(x, y)$ is the reward, $\pi$ is the policy being trained, $\pi_{\mathrm{ref}}$ is the reference (usually SFT) policy, and $\beta$ controls the strength of the KL constraint.
+
+This constrained optimization has an analytical solution. The optimal policy satisfies:
+
+$$\pi^*(y \mid x) = \frac{1}{Z(x)}\, \pi_{\mathrm{ref}}(y \mid x)\, \exp\!\left(\frac{1}{\beta}\, r(x, y)\right)$$
+
+where $Z(x)$ is the partition function ensuring the distribution sums to one. Taking logs and rearranging gives the ''key reparameterization'':
+
+$$r^*(x, y) = \beta \log \frac{\pi^*(y \mid x)}{\pi_{\mathrm{ref}}(y \mid x)} + \beta \log Z(x)$$
+
+This is the core mathematical insight: the optimal reward is a //function of the policy itself//. The partition function $Z(x)$ depends only on the prompt and cancels out in any pairwise comparison.
+
+---
+
+!! What the Math Is Actually Doing
+
+Substituting the reparameterized reward into the Bradley-Terry preference model gives:
+
+$$p(y_w \succ y_l \mid x) = \sigma\!\left(\beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\mathrm{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\mathrm{ref}}(y_l \mid x)}\right)$$
+
+The DPO loss is the negative log-likelihood of the observed preferences under this model:
+
+$$\mathcal{L}_{\mathrm{DPO}}(\pi_\theta; \pi_{\mathrm{ref}}) = -\mathbb{E}_{(x,\, y_w,\, y_l)}\!\left[\log \sigma\!\left(\beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\mathrm{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\mathrm{ref}}(y_l \mid x)}\right)\right]$$
+
+Every quantity in this expression is a log-probability under either $\pi_\theta$ or $\pi_{\mathrm{ref}}$ — both are standard forward passes through transformer language models. There is no reward model, no sampling loop, no value function baseline. The gradient of this loss //increases the relative log-probability of the preferred response and decreases the relative log-probability of the dispreferred response//, weighted by how "surprising" the current preference margin is.
+
+The parameter $\beta$ controls how sharply the policy deviates from the reference. Small $\beta$ permits large policy shifts (aggressive optimization); large $\beta$ keeps the policy close to $\pi_{\mathrm{ref}}$ (conservative updates). This mirrors the role of $\beta$ in standard RLHF, but here it appears directly in the supervised loss rather than as an RL regularizer.
+
+---
+
+!! Practical Training and Variants
+
+''Data requirements:'' DPO uses the same pairwise preference datasets as RLHF — typically 10K–100K (prompt, chosen, rejected) triples. Public datasets like Anthropic-HH, UltraFeedback, and Nectar are commonly used. Because DPO is supervised, it trains in a single epoch or two — far less compute than PPO.
+
+''Reference model:'' The reference policy $\pi_{\mathrm{ref}}$ is typically the supervised fine-tuned (SFT) model checkpoint. It is frozen during DPO training and used only for computing log-probabilities. In practice, its log-probs can be precomputed and cached, reducing memory requirements.
+
+''Variants:'' Several extensions address DPO's limitations. ''IPO'' (Identity Preference Optimization) regularizes the objective to prevent overfitting when preference data is noisy. ''KTO'' (Kahneman-Tversky Optimization) removes the need for pairwise data entirely, working with binary "good/bad" labels. ''ORPO'' (Odds Ratio Preference Optimization) folds the reference model into the SFT training step. ''SimPO'' simplifies the objective further by using average log-probability rather than total log-probability. All of these are "RLHF-free" methods descended from the DPO insight.
+
+''Adoption:'' DPO is used in the training pipelines for Llama 2/3, Zephyr, Mistral, and many other open-source models. It has largely replaced PPO in the open-source ecosystem due to its simplicity and stability, though some labs still use PPO or hybrid approaches for frontier models.
+
+---
+
+!! When DPO Breaks Down
+
+''Data quality sensitivity:'' Because DPO directly fits the policy to preference labels, it is more sensitive to noisy or inconsistent labels than RLHF with a reward model. A reward model can smooth over noisy labels by learning a generalizable scoring function; DPO memorizes preference pairs more directly. When annotators disagree or when the "chosen" response is only marginally better than the "rejected" one, DPO can learn spurious patterns — amplifying surface-level features like response length or formatting rather than genuine quality differences. Careful data curation matters more for DPO than for reward-model-based approaches.
+
+''Distribution mismatch:'' The preference data is generated by some policy (often the SFT model or an earlier checkpoint), but DPO training shifts the policy away from that distribution. As the policy moves, the preference data becomes //off-policy// — the model is being trained on comparisons between responses it would no longer generate. This off-policy gap can degrade performance, especially in later training steps. Iterative DPO (collecting new preference data from the updated policy) mitigates this but adds pipeline complexity, partially negating DPO's simplicity advantage.
+
+''Lack of online exploration:'' PPO-based RLHF samples new responses during training, allowing the model to explore and receive reward feedback on its own outputs. DPO trains only on a fixed dataset. This means DPO cannot discover novel high-quality response strategies that were not represented in the preference data. For tasks where the optimal response distribution is far from the SFT model — such as complex reasoning or creative generation — DPO may converge to a local optimum near the reference policy rather than finding globally better strategies. Online DPO variants attempt to address this by interleaving generation and training steps.
+
+---
+
+!! Technical Details
+
+''Original paper:'' Rafailov et al. (2023), "Direct Preference Optimization: Your Language Model Is Secretly a Reward Model" (Stanford).
+
+''Theoretical guarantee:'' DPO optimizes //exactly// the same objective as RLHF with the Bradley-Terry preference model and KL-constrained policy optimization. It is not an approximation — under the assumed preference model, DPO and RLHF have the same global optimum.
+
+''Gradient dynamics:'' The DPO gradient upweights the preferred response and downweights the dispreferred response, with magnitude proportional to how wrong the current policy's implicit reward ranking is. When the policy already assigns higher implicit reward to the preferred response, the gradient is small; when it is wrong, the gradient is large. This is analogous to hard-example mining in classification.
+
+''Connection to <<link "contrastive learning" "Contrastive Learning">><</link>>:'' The DPO loss has the structure of a contrastive loss — it pushes apart two items (preferred vs. dispreferred) in log-probability space, using the reference model as an anchor. This connection has been formalized in follow-up work.
+
+''Computational cost:'' DPO requires two forward passes per example (one for $\pi_\theta$, one for $\pi_{\mathrm{ref}}$). PPO-based RLHF requires forward and backward passes through the policy, reward model, value model, and reference model, plus sampling from the policy. DPO is typically 2-4x cheaper in wall-clock time and requires significantly less GPU memory.
+
+''Relationship to <<link "RLHF" "RLHF">><</link>>:'' DPO is an algebraic simplification of the RLHF objective, not a replacement of the underlying goal. The same preference data, the same KL constraint, and the same Bradley-Terry model are used — DPO simply removes the intermediate reward model by substituting the closed-form solution into the loss.
+
+''Related methods:'' <<link "Constitutional AI" "Constitutional AI">><</link>>, <<link "reward modeling" "Reward Modeling">><</link>>, <<link "fine-tuning" "Fine-Tuning">><</link>>, <<link "policy gradient" "Policy Gradient">><</link>>, <<link "instruction tuning" "Instruction Tuning">><</link>>.
+
+---
+
+!! Quiz
+
+<span id="dpo-q1">What is the central mathematical insight behind DPO?</span>
+
+A. The reward model can be trained jointly with the policy using multi-task learning.
+B. The optimal reward function can be expressed in closed form as a function of the optimal policy, eliminating the need for a separate reward model.
+C. Reinforcement learning converges faster when the reward model is smaller than the policy model.
+D. KL divergence penalties are unnecessary when training with human preference data.
+
+<<button "A">><<replace "#dpo-q1">>Incorrect. DPO does not train a reward model at all — jointly or otherwise. The insight is that the reward can be //derived analytically// from the policy, making a separate reward model unnecessary.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q1">>Correct! The constrained RLHF objective has a closed-form solution: $r^*(x,y) = \beta \log \frac{\pi^*(y|x)}{\pi_{\mathrm{ref}}(y|x)} + \beta \log Z(x)$. Substituting this into the Bradley-Terry model yields a supervised loss that depends only on the policy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q1">>Incorrect. DPO's insight has nothing to do with model size relationships. It is about the mathematical redundancy of the reward model under the standard RLHF objective.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q1">>Incorrect. DPO retains the KL penalty — it is encoded in the $\beta$ parameter of the DPO loss. The penalty appears implicitly through the log-ratio terms involving the reference policy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q2">What role does the reference policy $\pi_{\mathrm{ref}}$ play in DPO training?</span>
+
+A. It generates new training examples during each epoch of DPO training.
+B. It provides the anchor distribution — log-probabilities under $\pi_{\mathrm{ref}}$ appear in the loss and implicitly enforce the KL constraint.
+C. It is fine-tuned alongside the main policy to improve preference prediction.
+D. It serves as the reward model, scoring responses before the policy update.
+
+<<button "A">><<replace "#dpo-q2">>Incorrect. DPO trains on a fixed dataset. The reference policy does not generate new examples during training — it is used only for computing log-probabilities.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q2">>Correct! The reference policy is frozen during DPO training. Its log-probabilities appear in the loss as $\log \pi_{\mathrm{ref}}(y|x)$, serving as the anchor that implicitly encodes the KL constraint from the original RLHF objective.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q2">>Incorrect. The reference policy is frozen — only $\pi_\theta$ is updated during DPO training. Updating the reference would invalidate the mathematical derivation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q2">>Incorrect. DPO has no reward model. The reference policy provides baseline log-probabilities, not reward scores. Reward is implicit in the log-ratio between the two policies.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q3">How many separate neural networks must be maintained during DPO training?</span>
+
+A. Four: policy, reward model, value function, and reference model
+B. Three: policy, reward model, and reference model
+C. Two: the policy being trained and the frozen reference policy
+D. One: only the policy model, with no reference needed
+
+<<button "A">><<replace "#dpo-q3">>Incorrect. Four models is the setup for PPO-based RLHF. DPO eliminates both the reward model and the value function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q3">>Incorrect. DPO eliminates the reward model entirely — that is its defining contribution. Only the policy and reference model are needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q3">>Correct! DPO requires only the trainable policy $\pi_\theta$ and the frozen reference policy $\pi_{\mathrm{ref}}$. In practice, the reference model's log-probabilities can be precomputed and cached, further reducing memory usage.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q3">>Incorrect. The reference model is essential — without it, the DPO loss cannot compute the log-ratios that encode the KL constraint. However, its forward passes can be precomputed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q4">Why is DPO more sensitive to noisy preference labels than reward-model-based RLHF?</span>
+
+A. DPO uses a higher learning rate, amplifying label noise in gradient updates.
+B. A reward model learns a generalizable scoring function that can smooth over label noise, while DPO fits preference pairs more directly.
+C. DPO does not use the Bradley-Terry preference model, making it unable to handle probabilistic labels.
+D. DPO requires perfectly consistent labels because its loss function has no regularization term.
+
+<<button "A">><<replace "#dpo-q4">>Incorrect. Learning rate is a hyperparameter choice, not a structural property of DPO. The sensitivity comes from the directness of the policy update, not learning rate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q4">>Correct! A reward model is trained on all preference pairs and learns a smooth scoring function that generalizes across examples. DPO updates the policy directly from each preference pair, making it more susceptible to memorizing noisy or inconsistent labels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q4">>Incorrect. DPO does use the Bradley-Terry model — the derivation explicitly substitutes the reparameterized reward into the Bradley-Terry preference probability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q4">>Incorrect. DPO does have implicit regularization via the reference policy and the $\beta$ parameter. It does not require perfect labels, but it is more sensitive to noise than a reward model approach.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q5">What does the $\beta$ parameter control in the DPO loss?</span>
+
+A. The learning rate for the policy gradient updates
+B. The weight of a length penalty applied to generated responses
+C. How sharply the policy is allowed to deviate from the reference policy — small $\beta$ permits large deviations, large $\beta$ keeps the policy conservative
+D. The number of preference pairs sampled per training batch
+
+<<button "A">><<replace "#dpo-q5">>Incorrect. $\beta$ is not the learning rate. It controls the strength of the implicit KL constraint inherited from the RLHF objective.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q5">>Incorrect. $\beta$ has nothing to do with response length. It governs the tradeoff between reward maximization and staying close to the reference policy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q5">>Correct! $\beta$ directly mirrors the KL penalty coefficient from standard RLHF. A smaller $\beta$ allows the policy to move further from $\pi_{\mathrm{ref}}$; a larger $\beta$ keeps it close, at the cost of potentially underexploiting the preference signal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q5">>Incorrect. Batch size is a separate hyperparameter. $\beta$ is specific to the KL constraint strength in the RLHF/DPO objective.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q6">What is the "off-policy" problem in DPO?</span>
+
+A. The policy is trained on preferences between responses generated by a different (earlier) policy, creating a distribution mismatch as training progresses.
+B. The reference model becomes outdated because it is retrained after every epoch.
+C. The preference annotators use a different evaluation criterion than the DPO loss function.
+D. DPO cannot be used with data collected from human annotators, only from AI judges.
+
+<<button "A">><<replace "#dpo-q6">>Correct! Preference data is generated by the SFT model or an earlier checkpoint. As DPO shifts the policy, the training data no longer reflects what the current policy would generate. This off-policy gap can degrade performance and is a key limitation compared to online RL methods.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q6">>Incorrect. The reference model is frozen during DPO training — it is never retrained. The off-policy issue concerns the data, not the reference model.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q6">>Incorrect. The annotator criterion mismatch is a general problem for preference-based training, not specific to the off-policy issue in DPO.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q6">>Incorrect. DPO works with any source of preference labels, including human annotators. The off-policy problem is about the //policy// distribution, not the label source.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q7">Which DPO variant removes the requirement for pairwise preference data?</span>
+
+A. IPO (Identity Preference Optimization)
+B. SimPO (Simple Preference Optimization)
+C. KTO (Kahneman-Tversky Optimization)
+D. ORPO (Odds Ratio Preference Optimization)
+
+<<button "A">><<replace "#dpo-q7">>Incorrect. IPO still uses pairwise data — it modifies the loss to add regularization against overfitting, not to change the data format.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q7">>Incorrect. SimPO simplifies the log-probability computation but still operates on pairwise preference data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q7">>Correct! KTO works with binary "thumbs up / thumbs down" labels on individual responses, removing the need to construct preference pairs. This is practically valuable because unpaired feedback is much cheaper to collect than pairwise comparisons.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q7">>Incorrect. ORPO folds the reference model into SFT training but still uses pairwise preference data for its odds-ratio loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dpo-q8">What is the relationship between the DPO optimum and the RLHF optimum under the Bradley-Terry preference model?</span>
+
+A. DPO converges to a different optimum that is empirically better than RLHF.
+B. DPO is an approximation that approaches the RLHF optimum only in the limit of infinite data.
+C. They share exactly the same global optimum — DPO is an algebraic rearrangement, not an approximation.
+D. DPO finds a local optimum while RLHF finds the global optimum due to online exploration.
+
+<<button "A">><<replace "#dpo-q8">>Incorrect. DPO and RLHF optimize the same objective — they cannot have different optima. Any empirical differences come from optimization dynamics and finite data, not different target solutions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dpo-q8">>Incorrect. DPO is not an approximation at all. The derivation is exact: the reward model is substituted out using an analytical identity, not a series expansion or truncation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dpo-q8">>Correct! Under the Bradley-Terry preference model with KL-constrained policy optimization, DPO and RLHF have exactly the same global optimum. DPO is a mathematically exact rearrangement of the RLHF objective — no approximation is involved.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dpo-q8">>Incorrect. The theoretical optima are identical. In practice, optimization dynamics may differ (PPO explores online while DPO trains on a fixed dataset), but the //target// optimum is the same.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

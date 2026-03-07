@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Approximation Algorithms
+
+<img src="assets/approximation_algorithms.svg" alt="Diagram showing approximation ratio guarantee versus optimal solution for NP-hard problems" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+When a problem is NP-hard, you cannot find the exact optimal solution in polynomial time (assuming P≠NP). But often you don't need perfect — you need good enough, fast. An ''approximation algorithm'' is a polynomial-time algorithm that guarantees its output is within a known factor of optimal. A 2-approximation for vertex cover means: whatever the true minimum is, you'll find a solution at most twice as large. This is the engineer's answer to intractability: trade perfection for speed, but keep a guarantee on how wrong you can be.
+
+!! The Core Insight
+
+The central concept is the ''approximation ratio'' $\rho$: for a minimization problem, an algorithm's output is guaranteed to satisfy $\text{ALG} \leq \rho \cdot \text{OPT}$, where $\text{OPT}$ is the cost of the true optimal solution. A $\rho$-approximation runs in polynomial time and provides a hard upper bound on how far from optimal you can land.
+
+A ''PTAS'' (polynomial-time approximation scheme) goes further: for any $\varepsilon > 0$, it delivers a $(1 + \varepsilon)$-approximation in time polynomial in $n$ (though possibly exponential in $1/\varepsilon$). An ''FPTAS'' (fully polynomial-time approximation scheme) is also polynomial in $1/\varepsilon$, making it tractable even for very small $\varepsilon$. The hierarchy runs: exact → FPTAS → PTAS → constant-factor → logarithmic → inapproximable.
+
+!! Classic Algorithms and Techniques
+
+''Greedy algorithms'' are the simplest source of approximations. The ''set cover'' problem — cover all elements using the fewest sets — admits a greedy algorithm that always picks the set covering the most uncovered elements. This gives an $O(\log n)$-approximation, and the PCP theorem shows no polynomial-time algorithm can do asymptotically better unless P=NP.
+
+''Vertex cover'' (find the smallest set of vertices touching every edge) yields to a simple greedy matching: repeatedly pick an edge, add both endpoints to the cover, delete all incident edges. This 2-approximation is elegant and tight — no polynomial-time $(2 - \varepsilon)$-approximation is known.
+
+''Travelling Salesman'' with the triangle inequality admits the ''Christofides algorithm'' (1976): build a minimum spanning tree, find a minimum-weight perfect matching on odd-degree vertices, Eulerianize, shortcut. Ratio: $3/2$. This remained the best known for over 40 years until Karlin et al. 2021 achieved $3/2 - \varepsilon$ for a tiny $\varepsilon$.
+
+''Semidefinite programming (SDP) relaxations'' power the ''Goemans-Williamson'' algorithm for MAX-CUT (1995): round a vector SDP solution by a random hyperplane. Approximation ratio: $\approx 0.878 \cdot \text{OPT}$. Under the Unique Games Conjecture, this is optimal.
+
+!! What the Math Is Actually Doing
+
+''LP relaxation'' is the workhorse technique. Take an integer program (combinatorial problem), relax the integrality constraints (allow $x_i \in [0,1]$ instead of $\{0,1\}$), solve the LP in polynomial time, then //round// fractional solutions back to integers. The rounding scheme determines the approximation ratio.
+
+The ''integrality gap'' of an LP relaxation is:
+
+$$\text{integrality gap} = \max_{\text{instances}} \frac{\text{OPT}_{\text{LP}}}{\text{OPT}_{\text{IP}}}$$
+
+This is a fundamental barrier: no LP-rounding algorithm can achieve a ratio better than the integrality gap, no matter how clever the rounding.
+
+''Dual fitting'' provides another proof technique: show that the dual LP solution produced implicitly by the algorithm has value close to the primal LP, bounding the algorithm's cost against $\text{OPT}$.
+
+The ''PCP theorem'' (probabilistically checkable proofs, Arora et al. 1998) revolutionized inapproximability: it implies that approximating many problems beyond a constant factor is NP-hard. For example, MAX-3SAT cannot be approximated beyond $7/8$ unless P=NP. The ''Unique Games Conjecture'' (Khot 2002) is a stronger hypothesis implying optimality of many known algorithms — the SDP-based $0.878$ for MAX-CUT, the $2$-approximation for vertex cover, and others.
+
+!! Approximation in ML
+
+Approximation ideas pervade modern machine learning, often implicitly.
+
+''k-means clustering'' is NP-hard to solve optimally. The ''k-means++'' initialization gives an $O(\log k)$-approximation in expectation. Standard Lloyd's algorithm has no worst-case guarantee but performs well in practice — approximation theory motivates the initialization.
+
+''Approximate nearest neighbors'' (HNSW, LSH) trade exactness for speed. These are explicit approximation algorithms: they return a point within $(1 + \varepsilon)$ of the true nearest neighbor's distance, in sublinear time — essential for embedding search at scale.
+
+''Approximate attention'' in transformers (Linformer, Performer, FlashAttention variants) give $\varepsilon$-approximations to full $O(n^2)$ attention, enabling linear-time sequence modeling. The approximation is to the attention matrix, not directly to model output.
+
+''Variational inference'': the exact posterior $p(\mathbf{z} \mid \mathbf{x})$ is intractable; variational methods find the best approximation $q \approx p$ within a tractable family by minimizing KL divergence. This is approximation in the information-geometric sense rather than combinatorial, but the philosophy is identical.
+
+''Pruning and quantization'' approximate a large neural network with a smaller one, trading accuracy for compute. The approximation ratio here is informal — empirical rather than guaranteed.
+
+''Greedy decoding'' in language models selects the highest-probability token at each step. This is a 1-approximation per step but globally suboptimal; beam search improves the approximation at higher cost.
+
+!! When Approximation Algorithms Break Down
+
+''Inapproximability.'' Some problems cannot be approximated within //any// constant factor (let alone a small one) unless P=NP. Graph coloring (chromatic number), shortest common superstring, and densest subgraph all have strong inapproximability lower bounds. The PCP theorem gives tight results: for MAX-3SAT, no algorithm exceeds $7/8$; for set cover, no algorithm beats $\ln n$. These are //provable// walls — not engineering failures, but mathematical limits.
+
+''Worst-case vs. average-case.'' Approximation ratios are worst-case guarantees. On the typical instances arising in ML — clustered data, low-rank structure, natural language — heuristics routinely outperform their worst-case guarantees by orders of magnitude. A poor approximation ratio in theory (say, $O(\log n)$ for set cover) may be completely irrelevant in practice, where the algorithm finds near-optimal solutions on real data. Theoretical guarantees and empirical performance are not the same thing.
+
+''The ratio doesn't capture what matters.'' Minimizing a combinatorial objective within a factor of 2 may not correspond to good ML performance. The approximation target — a combinatorial loss like vertex cover size — is often a //proxy// for the real objective (generalization error, calibration, downstream task performance). Even a 1-approximation (exact solution) to the wrong objective produces a bad model. Approximation algorithms answer the question you ask, not necessarily the question you care about.
+
+!! Technical Details
+
+''Standard reference:'' Hochbaum (1996), //Approximation Algorithms for NP-Hard Problems//. Vazirani (2001), //Approximation Algorithms// (Springer).
+
+''Key results:'' PCP theorem — Arora, Lund, Motwani, Sudan, Szegedy (1998). Unique Games Conjecture — Khot (2002). Christofides algorithm — Christofides (1976); improved — Karlin, Klein, Oveis Gharan (2021). Goemans-Williamson MAX-CUT — Goemans & Williamson (1995).
+
+''Complexity:'' PTAS and FPTAS are complexity classes. APX is the class of problems with constant-factor polynomial-time approximations. APX-hard problems (under PTAS reductions) have no PTAS unless P=NP.
+
+''LP integrality gaps:'' Vertex cover LP has integrality gap 2 (matching the best known algorithm). Metric TSP LP (Held-Karp) has gap between 4/3 (conjectured) and 3/2.
+
+''Connections:'' <<link "Complexity Classes" "Complexity Classes">><</link>> — the P vs. NP backdrop. <<link "Big O Examples" "Big O Examples">><</link>> — runtime analysis of approximation algorithms. <<link "Convex Optimization" "Convex Optimization">><</link>> — LP and SDP relaxations. <<link "Dynamic Programming" "Dynamic Programming">><</link>> — exact algorithms that approximations compete with.
+
+!! Quiz
+
+<span id="aa-q1">What does a $\rho$-approximation algorithm guarantee for a minimization problem?</span>
+
+A. The algorithm runs in time $O(\rho \cdot n)$
+B. The algorithm's output is at most $\rho$ times the optimal solution cost
+C. The algorithm finds the optimal solution with probability $1/\rho$
+D. The algorithm uses at most $\rho$ times the optimal memory
+
+<<button "A">><<replace "#aa-q1">>Incorrect. The approximation ratio $\rho$ bounds the //quality// of the solution, not the runtime. Runtime is polynomial in $n$ (that's what "polynomial-time algorithm" means), but $\rho$ itself doesn't directly parameterize it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q1">>Correct. For minimization, $\text{ALG} \leq \rho \cdot \text{OPT}$. The algorithm may find a solution worse than optimal, but never by more than a factor of $\rho$. This is a worst-case guarantee over all inputs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q1">>Incorrect. Approximation algorithms are deterministic worst-case guarantees (or, for randomized algorithms, expected-value guarantees). There is no probability of finding the exact optimum — the algorithm may //never// find it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q1">>Incorrect. The approximation ratio is about solution quality (objective value), not memory usage. Space complexity is a separate concern.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q2">The greedy set cover algorithm achieves what approximation ratio?</span>
+
+A. $2$
+B. $\sqrt{n}$
+C. $O(\log n)$
+D. $3/2$
+
+<<button "A">><<replace "#aa-q2">>Incorrect. A ratio of 2 applies to vertex cover via greedy matching, not set cover. Set cover is harder and the greedy ratio is larger.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q2">>Incorrect. $\sqrt{n}$ is not the greedy set cover ratio. The greedy algorithm is much better than this on average, and the tight bound is logarithmic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q2">>Correct. Greedy set cover (always pick the set covering the most uncovered elements) achieves an $O(\log n)$-approximation, specifically $H_n \approx \ln n$. The PCP theorem shows this is tight — no polynomial-time algorithm achieves better unless P=NP.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q2">>Incorrect. $3/2$ is the Christofides ratio for metric TSP. Set cover is harder to approximate than TSP.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q3">What is the Christofides algorithm used for, and what ratio does it achieve?</span>
+
+A. Set cover; $O(\log n)$
+B. Metric TSP; $3/2$
+C. Vertex cover; $2$
+D. MAX-CUT; $0.878$
+
+<<button "A">><<replace "#aa-q3">>Incorrect. $O(\log n)$ greedy applies to set cover, not TSP. Christofides is specifically designed for the Travelling Salesman Problem under the triangle inequality.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q3">>Correct. Christofides (1976) solves metric TSP with a $3/2$-approximation by combining a minimum spanning tree with a minimum-weight perfect matching on odd-degree vertices, then shortcutting an Eulerian tour. It held the best-known ratio for over 40 years.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q3">>Incorrect. Vertex cover with ratio 2 comes from a greedy maximal matching approach, not Christofides. These are different problems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q3">>Incorrect. The $0.878$ ratio for MAX-CUT is the Goemans-Williamson SDP algorithm, not Christofides.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q4">What is the integrality gap of an LP relaxation?</span>
+
+A. The difference between the LP runtime and the IP runtime
+B. The ratio of the LP optimum to the integer program optimum, maximized over instances
+C. The number of fractional variables in the LP solution
+D. The ratio of primal to dual LP objective values
+
+<<button "A">><<replace "#aa-q4">>Incorrect. The integrality gap is about solution //quality// (objective values), not about runtimes. LP runs in polynomial time; IP is NP-hard — but the gap concept is not about this runtime difference.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q4">>Correct. The integrality gap is $\max_{\text{instances}} \frac{\text{OPT}_{\text{LP}}}{\text{OPT}_{\text{IP}}}$ (for minimization, OPT$_\text{LP}$ $\leq$ OPT$_\text{IP}$, so the gap $\geq 1$). It is a fundamental barrier: no LP-rounding algorithm can beat this ratio.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q4">>Incorrect. The number of fractional variables is a property of a specific LP solution, not the integrality gap. The gap is a worst-case ratio over all problem instances.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q4">>Incorrect. Primal-dual duality guarantees strong duality (primal = dual at optimum for LPs), so this ratio is always 1. The integrality gap compares LP relaxation to the integer program.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q5">What does the PCP theorem imply for approximation algorithms?</span>
+
+A. All NP-hard problems can be approximated within a constant factor
+B. Some problems cannot be approximated beyond a constant factor unless P=NP
+C. Approximation algorithms are always faster than exact algorithms
+D. PTAS algorithms exist for all problems in APX
+
+<<button "A">><<replace "#aa-q5">>Incorrect. The PCP theorem proves the //opposite// — it establishes that many NP-hard problems //cannot// be approximated within constant factors unless P=NP. It is a hardness result, not a positive one.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q5">>Correct. The PCP theorem (Arora et al. 1998) implies inapproximability: for example, MAX-3SAT cannot be approximated beyond $7/8$, and set cover cannot beat $\ln n$, unless P=NP. These are provable barriers on how well any polynomial-time algorithm can do.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q5">>Incorrect. Approximation algorithms are polynomial-time, yes, but that's a definition, not a consequence of the PCP theorem. The theorem is about quality limits, not speed comparisons.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q5">>Incorrect. APX-hard problems (under PTAS reduction) are precisely those with //no// PTAS unless P=NP. The PCP theorem is used to prove APX-hardness, not PTAS existence.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q6">How does k-means++ relate to approximation algorithms?</span>
+
+A. It is an exact algorithm that solves k-means in polynomial time
+B. It gives a $2$-approximation to the k-means objective
+C. It gives an $O(\log k)$-approximation in expectation via careful initialization
+D. It is a FPTAS for k-means with ratio $(1 + \varepsilon)$
+
+<<button "A">><<replace "#aa-q6">>Incorrect. k-means is NP-hard to solve optimally; no polynomial-time exact algorithm is known (assuming P≠NP). k-means++ is an approximation approach.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q6">>Incorrect. The $2$-approximation ratio applies to vertex cover, not k-means. k-means++ achieves an $O(\log k)$ bound.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q2">>Correct. k-means++ uses $D^2$-weighted random initialization: each successive center is chosen proportional to squared distance from the nearest existing center. Arthur & Vassilvitskii (2007) proved this gives an $O(\log k)$-approximation in expectation to the optimal k-means cost.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q6">>Incorrect. k-means++ is not an FPTAS — the $O(\log k)$ factor does not shrink with a parameter $\varepsilon$. An FPTAS would need to give $(1+\varepsilon)$-approximation for any $\varepsilon$ in time polynomial in both $n$ and $1/\varepsilon$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q7">Why might a strong approximation ratio be irrelevant in ML practice?</span>
+
+A. ML datasets are always small enough that exact algorithms work fine
+B. Approximation ratios are average-case, but ML needs worst-case guarantees
+C. The combinatorial objective being approximated may be a poor proxy for the true ML goal
+D. Approximation algorithms require convex loss functions, which ML rarely has
+
+<<button "A">><<replace "#aa-q7">>Incorrect. Modern ML datasets are often massive — millions to billions of examples. Scale is precisely //why// approximation matters in ML. Exact algorithms are often infeasible.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q7">>Incorrect. This is backwards. Approximation ratios //are// worst-case guarantees; the problem is that worst-case bounds may be too pessimistic for typical ML instances, not that they are average-case.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q7">>Correct. Even a 1-approximation (exact solution) to the wrong objective produces a bad model. The combinatorial loss (e.g., minimum vertex cover size) may be a poor proxy for generalization, calibration, or downstream task performance. A good approximation ratio guarantees closeness to the //combinatorial// optimum — but that may not be what you actually want.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q7">>Incorrect. LP and SDP relaxations do require convexity, but the approximation algorithms themselves apply to combinatorial problems regardless. Many ML approximations (k-means++, ANN, pruning) don't require convexity of the original problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="aa-q8">What is the Goemans-Williamson algorithm, and what makes it notable?</span>
+
+A. A $2$-approximation for vertex cover using LP rounding
+B. A $3/2$-approximation for TSP using minimum spanning trees
+C. A $0.878$-approximation for MAX-CUT using semidefinite programming
+D. A $O(\log n)$-approximation for set cover using dual fitting
+
+<<button "A">><<replace "#aa-q8">>Incorrect. LP rounding for vertex cover gives a $2$-approximation, but this is a standard result, not Goemans-Williamson. They worked on MAX-CUT, a different problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#aa-q8">>Incorrect. The $3/2$ TSP ratio is Christofides (1976). Goemans and Williamson worked on MAX-CUT, published in 1995.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#aa-q8">>Correct. Goemans-Williamson (1995) solved MAX-CUT by relaxing the integer quadratic program to a semidefinite program (SDP), finding unit vectors in $\mathbb{R}^n$, then rounding via a random hyperplane. The ratio $\approx 0.878$ is provably optimal under the Unique Games Conjecture — arguably the best algorithm possible under standard complexity assumptions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#aa-q8">>Incorrect. The $O(\log n)$ set cover bound comes from greedy analysis, often proved via dual fitting — but this is not the Goemans-Williamson result. They used SDP for MAX-CUT.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

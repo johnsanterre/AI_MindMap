@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arr-brown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="24" text-anchor="middle" font-size="11" fill="#6B5D4F" letter-spacing="1.5">TOOL USE IN LANGUAGE MODELS</text>
+
+  <!-- ══ CENTER: LLM BLOCK ══ -->
+  <rect x="295" y="140" width="210" height="70" rx="8" fill="#EDE5D0" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="165" text-anchor="middle" font-size="14" font-weight="bold" fill="#7C2530">Language Model</text>
+  <text x="400" y="182" text-anchor="middle" font-size="9" fill="#5C3D1E">"I need to call search(query)..."</text>
+  <text x="400" y="196" text-anchor="middle" font-size="9" fill="#5C3D1E">generates structured function call</text>
+
+  <!-- ══ LEFT: USER PROMPT ══ -->
+  <rect x="30" y="50" width="170" height="50" rx="5" fill="#F5EDE0" stroke="#5C3D1E" stroke-width="1.4"/>
+  <text x="115" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">User Prompt</text>
+  <text x="115" y="88" text-anchor="middle" font-size="8.5" fill="#6B5D4F">"What is 37! in base 16?"</text>
+
+  <!-- Arrow: User → LLM -->
+  <path d="M 200 75 C 240 75, 270 120, 300 145" fill="none" stroke="#5C3D1E" stroke-width="1.6" marker-end="url(#arr-brown)"/>
+
+  <!-- ══ TOP-RIGHT: TOOL SCHEMA ══ -->
+  <rect x="540" y="42" width="230" height="68" rx="5" fill="#F5EDE0" stroke="#2D5A8E" stroke-width="1.4"/>
+  <text x="655" y="58" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2D5A8E">Tool Definitions (JSON Schema)</text>
+  <text x="655" y="73" text-anchor="middle" font-size="8" fill="#5C3D1E">name: "calculator"</text>
+  <text x="655" y="85" text-anchor="middle" font-size="8" fill="#5C3D1E">params: {expression: string}</text>
+  <text x="655" y="97" text-anchor="middle" font-size="8" fill="#5C3D1E">desc: "Evaluate math expressions"</text>
+
+  <!-- Arrow: Schema → LLM -->
+  <path d="M 540 90 C 500 110, 470 130, 505 155" fill="none" stroke="#2D5A8E" stroke-width="1.4" marker-end="url(#arr-blue)"/>
+  <text x="510" y="118" text-anchor="middle" font-size="8" fill="#2D5A8E" font-style="italic">injected into context</text>
+
+  <!-- ══ STEP 1: FUNCTION CALL OUTPUT ══ -->
+  <text x="400" y="238" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">Step 1: Structured Function Call</text>
+
+  <!-- Arrow down from LLM -->
+  <line x1="400" y1="210" x2="400" y2="228" stroke="#7C2530" stroke-width="1.6" marker-end="url(#arr-red)"/>
+
+  <!-- ══ TOOL BOXES (bottom row) ══ -->
+  <!-- Calculator -->
+  <rect x="40" y="270" width="120" height="50" rx="5" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="100" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Calculator</text>
+  <text x="100" y="308" text-anchor="middle" font-size="8" fill="#5C3D1E">exact arithmetic</text>
+
+  <!-- Search -->
+  <rect x="190" y="270" width="120" height="50" rx="5" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="250" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Web Search</text>
+  <text x="250" y="308" text-anchor="middle" font-size="8" fill="#5C3D1E">live retrieval</text>
+
+  <!-- Code Interpreter -->
+  <rect x="340" y="270" width="120" height="50" rx="5" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="400" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Code Exec</text>
+  <text x="400" y="308" text-anchor="middle" font-size="8" fill="#5C3D1E">Python sandbox</text>
+
+  <!-- API -->
+  <rect x="490" y="270" width="120" height="50" rx="5" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="550" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">APIs</text>
+  <text x="550" y="308" text-anchor="middle" font-size="8" fill="#5C3D1E">external services</text>
+
+  <!-- Database -->
+  <rect x="640" y="270" width="120" height="50" rx="5" fill="#EAF0F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="700" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#2D5A8E">Database</text>
+  <text x="700" y="308" text-anchor="middle" font-size="8" fill="#5C3D1E">SQL / vector store</text>
+
+  <!-- Arrows: LLM → tools (fan out) -->
+  <path d="M 340 230 C 300 250, 150 255, 100 270" fill="none" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr-red)"/>
+  <path d="M 370 235 C 340 255, 280 260, 250 270" fill="none" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr-red)"/>
+  <line x1="400" y1="245" x2="400" y2="270" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr-red)"/>
+  <path d="M 430 235 C 460 255, 510 260, 550 270" fill="none" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr-red)"/>
+  <path d="M 460 230 C 500 250, 640 255, 700 270" fill="none" stroke="#7C2530" stroke-width="1.2" marker-end="url(#arr-red)"/>
+
+  <!-- ══ STEP 2: RESULT RETURN ══ -->
+  <text x="400" y="350" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Step 2: Result injected back into context</text>
+
+  <!-- Return arrow (tool → LLM, dashed) -->
+  <path d="M 100 270 C 60 240, 50 180, 295 175" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-brown)"/>
+  <text x="100" y="220" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">observation</text>
+  <text x="100" y="232" text-anchor="middle" font-size="8" fill="#6B5D4F" font-style="italic">returned</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="385" text-anchor="middle" font-size="9" fill="#6B5D4F">
+    The model decides which tool to call, the runtime executes it, and the result feeds back into the next generation step
+  </text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">The Long Road to Backpropagation</text>
+
+  <!-- Timeline spine -->
+  <line x1="60" y1="210" x2="750" y2="210" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="746,205 756,210 746,215" fill="#C4A87A"/>
+
+  <!-- Era shading -->
+  <rect x="60"  y="195" width="180" height="30" fill="#DDDDDD" rx="3" opacity="0.4"/>
+  <rect x="240" y="195" width="200" height="30" fill="#AABBCC" rx="3" opacity="0.35"/>
+  <rect x="440" y="195" width="310" height="30" fill="#7788BB" rx="3" opacity="0.3"/>
+
+  <!-- Era labels -->
+  <text x="150" y="188" font-family="Georgia,serif" font-size="9" fill="#555" text-anchor="middle" font-style="italic">Foundations</text>
+  <text x="340" y="188" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-style="italic">Quiet Development</text>
+  <text x="595" y="188" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">Mainstream Adoption</text>
+
+  <!-- 1960: Kelley / Bryson control theory -->
+  <circle cx="90" cy="210" r="6" fill="#5C3D1E"/>
+  <line x1="90" y1="204" x2="90" y2="140" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="90" y="134" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-weight="bold">1960</text>
+  <text x="90" y="123" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Kelley / Bryson</text>
+  <text x="90" y="112" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Control Theory</text>
+
+  <!-- 1970: Linnainmaa -->
+  <circle cx="200" cy="210" r="8" fill="#5C3D1E"/>
+  <line x1="200" y1="218" x2="200" y2="280" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="294" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">1970</text>
+  <text x="200" y="307" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Linnainmaa</text>
+  <text x="200" y="320" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Automatic</text>
+  <text x="200" y="333" font-family="Georgia,serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Differentiation</text>
+
+  <!-- 1974: Werbos -->
+  <circle cx="310" cy="210" r="8" fill="#2D5A8E"/>
+  <line x1="310" y1="204" x2="310" y2="135" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="310" y="128" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">1974</text>
+  <text x="310" y="117" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Werbos</text>
+  <text x="310" y="106" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">PhD Thesis</text>
+  <text x="310" y="95" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">(Neural Nets)</text>
+
+  <!-- 1982: Werbos publication -->
+  <circle cx="400" cy="210" r="6" fill="#2D5A8E"/>
+  <line x1="400" y1="218" x2="400" y2="270" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="400" y="284" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-weight="bold">1982</text>
+  <text x="400" y="297" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Werbos Pub.</text>
+  <text x="400" y="310" font-family="Georgia,serif" font-size="9" fill="#2D5A8E" text-anchor="middle">+ Parker 1985</text>
+
+  <!-- 1986: Rumelhart, Hinton, Williams -->
+  <circle cx="530" cy="210" r="10" fill="#7C2530"/>
+  <line x1="530" y1="200" x2="530" y2="115" stroke="#7C2530" stroke-width="2"/>
+  <text x="530" y="108" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">1986</text>
+  <text x="530" y="95" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Rumelhart, Hinton</text>
+  <text x="530" y="82" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">& Williams</text>
+  <text x="530" y="69" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">Nature paper</text>
+
+  <!-- 1989+: Explosion -->
+  <circle cx="680" cy="210" r="8" fill="#7C2530"/>
+  <line x1="680" y1="218" x2="680" y2="275" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="680" y="289" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">1989+</text>
+  <text x="680" y="302" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">LeCun (CNNs)</text>
+  <text x="680" y="315" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">Universal Approx.</text>
+  <text x="680" y="328" font-family="Georgia,serif" font-size="9" fill="#7C2530" text-anchor="middle">Theorem</text>
+
+  <!-- Chain rule annotation -->
+  <rect x="50" y="350" width="700" height="30" rx="4" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="400" y="370" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">The chain rule was always there. It took 26 years to connect it to neural network training.</text>
+
+  <!-- Connecting arc showing "same idea, rediscovered" -->
+  <path d="M 200,195 Q 265,155 310,195" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <path d="M 310,195 Q 420,145 530,195" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="255" y="155" font-family="Georgia,serif" font-size="8" fill="#C4A87A" text-anchor="middle" font-style="italic">rediscovered</text>
+  <text x="420" y="148" font-family="Georgia,serif" font-size="8" fill="#C4A87A" text-anchor="middle" font-style="italic">popularised</text>
+</svg>

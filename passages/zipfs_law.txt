@@ -1,0 +1,144 @@
+<<include "Header">>
+! Zipf's Law
+
+<img src="assets/zipfs_law.svg" alt="Log-log rank-frequency plot showing Zipf's Law" style="max-width:100%; height:auto;">
+
+Imagine a bestseller list, but for every word in the English language. The champion — "the" — appears so often it dwarfs everything else. The runner-up, "of," shows up roughly half as much. The third-place finisher, "and," about a third. This pattern, where the frequency of a word is inversely proportional to its rank, holds with eerie consistency across languages, books, and centuries. George Kingsley Zipf didn't discover it, but he popularized it so relentlessly that the pattern bears his name. What makes it genuinely strange is that the same law governs city populations, wealth distribution, earthquake magnitudes, and website traffic — systems that seemingly have nothing in common.
+
+!! The Core Insight
+
+''Zipf's Law'' states that in a large enough corpus, the frequency of any word is inversely proportional to its rank in the frequency table. The most frequent word occurs roughly twice as often as the second most frequent, three times as often as the third, and so on. On a ''log-log plot'', this relationship appears as a straight line with slope approximately $-1$. This is not a minor statistical curiosity — it is one of the most robust empirical regularities in all of science, appearing in data sets spanning thousands of years and dozens of languages. The law belongs to a broader family of ''power law'' distributions, connecting it to phenomena in physics, economics, and biology. In NLP, Zipf's Law explains why a tiny fraction of words account for the vast majority of text, while a ''long tail'' of rare words each appear only once or twice.
+
+!! Why Language Follows a Power Law
+
+Several competing theories attempt to explain //why// Zipf's Law emerges in language:
+
+''Least Effort Principle:'' Zipf himself proposed that speakers minimize effort by reusing common words, while listeners prefer specificity. The tension between these forces produces the observed distribution. Short, easy-to-produce words like "the" and "a" get recycled constantly; longer, more precise terms like "antidisestablishmentarianism" appear rarely.
+
+''Random Typing Hypothesis:'' Benoit Mandelbrot showed that a monkey typing randomly on a keyboard — with a space bar creating word boundaries — would produce a Zipfian distribution. This suggests the law may emerge from combinatorics rather than cognition.
+
+''Preferential Attachment:'' Words that are already common attract more usage (a "rich get richer" dynamic). Once "the" becomes the default determiner, its dominance is self-reinforcing. This mechanism also explains why a few websites capture most traffic and a few cities attract most migrants.
+
+''Simon's Model:'' Herbert Simon demonstrated that any process where new items appear at a constant rate while existing items are reused proportionally to their current frequency will produce a <<link "Power Law" "Power Law">><</link>> distribution. This connects Zipf's Law to the <<link "Pareto Distribution" "Pareto Distribution">><</link>>.
+
+None of these explanations is fully satisfactory on its own. The universality of the law across wildly different systems suggests that the explanation may be more mathematical than mechanistic — a consequence of how large, complex systems with many interacting components tend to organize themselves.
+
+!! What the Math Is Actually Doing
+
+Zipf's Law in its simplest form states:
+
+$$f(r) = \frac{C}{r^{\alpha}}$$
+
+where $f(r)$ is the frequency of the word at rank $r$, $C$ is a normalization constant, and $\alpha \approx 1$ for natural language. Taking logarithms of both sides:
+
+$$\log f(r) = \log C - \alpha \log r$$
+
+This is a linear equation in log-log space with slope $-\alpha$, which is why the log-log plot produces a straight line. The exponent $\alpha$ is called the ''Zipf exponent''.
+
+The ''generalized Zipf's Law'' (Zipf-Mandelbrot law) adds a shift parameter:
+
+$$f(r) = \frac{C}{(r + \beta)^{\alpha}}$$
+
+where $\beta$ adjusts the fit for high-frequency words. When $\beta = 0$, this reduces to the standard form.
+
+The ''Heaps' Law'' corollary predicts vocabulary growth. If Zipf's Law holds, the number of distinct words $V$ in a corpus of $N$ tokens grows sublinearly:
+
+$$V(N) \propto N^{\gamma}$$
+
+where $\gamma \approx 0.4$–$0.6$ for English. This means doubling corpus size does //not// double vocabulary — a critical insight for <<link "tokenizer" "Tokenizer">><</link>> design and <<link "Byte Pair Encoding" "Byte Pair Encoding">><</link>>.
+
+The connection to <<link "Information Theory" "Information Theory">><</link>> is direct. Shannon entropy for a Zipfian distribution is:
+
+$$H = -\sum_{r=1}^{V} p(r) \log_2 p(r)$$
+
+where $p(r) = f(r) / N$. The heavy concentration of probability mass in a few common words means natural language has //lower entropy// than a uniform distribution — which is precisely why compression and prediction work.
+
+!! Zipf's Law in NLP and Machine Learning
+
+Zipf's Law has profound practical consequences for anyone building language models:
+
+''Vocabulary Truncation:'' Because the top 5,000–10,000 words cover 90–95% of most corpora, early NLP systems could ignore the long tail. Modern subword <<link "tokenizer" "Tokenizer">><</link>> approaches like <<link "Byte Pair Encoding" "Byte Pair Encoding">><</link>> handle rare words by breaking them into frequent subword units — a strategy that implicitly exploits Zipfian statistics.
+
+''Class Imbalance:'' Word prediction is inherently imbalanced. A model that simply predicts "the" for every word achieves surprisingly high accuracy. Training objectives must account for the fact that most tokens belong to a handful of types, while most //types// are rare.
+
+''Embedding Quality:'' Rare words get fewer training updates, so their embeddings are poorly estimated. This is the "cold start" problem for word vectors — and it is a direct consequence of Zipf's Law.
+
+''Smoothing and Backoff:'' Classical n-gram language models must assign nonzero probability to unseen word sequences. Techniques like Kneser-Ney smoothing are designed specifically to handle the Zipfian distribution of n-gram frequencies.
+
+''Evaluation Metrics:'' Perplexity and other evaluation measures are dominated by high-frequency words. A model that perfectly predicts "the" and "of" but fails on rare domain terms can still achieve low perplexity — a trap that Zipf's Law sets for the unwary.
+
+!! When Zipf's Law Breaks Down
+
+''Controlled and Artificial Languages:'' Constructed languages (like Esperanto or programming languages) and tightly controlled vocabularies (like Basic English) violate Zipf's Law because they lack the organic, self-organizing dynamics of natural language. The distribution tends to be flatter, with less extreme concentration at the top. Similarly, machine-generated text that samples uniformly from a vocabulary will not follow Zipfian statistics.
+
+''Very Small Corpora:'' With fewer than a few thousand tokens, statistical fluctuations dominate and the rank-frequency relationship becomes noisy. The log-log plot loses its characteristic linearity because there are too few data points in the tail. This is why Zipf's Law is an //asymptotic// property — it emerges from scale. Applying it to a single email or a short poem is meaningless.
+
+''Domain-Restricted Technical Text:'' Highly specialized corpora — patent filings, chemical nomenclature databases, DNA sequence annotations — can deviate significantly from Zipf's Law. Technical jargon creates a "bump" in the mid-frequency range, and the absence of common conversational words suppresses the head of the distribution. The exponent $\alpha$ may shift well above or below 1, and the Zipf-Mandelbrot correction becomes necessary.
+
+!! Technical Details
+
+Zipf's Law is one instance of a broader class of ''power-law distributions'' that arise in complex systems. The discrete analog is the ''zeta distribution'' (or ''Zipf distribution''), where the probability of rank $r$ is $p(r) = r^{-\alpha} / \zeta(\alpha)$ and $\zeta(\alpha) = \sum_{r=1}^{\infty} r^{-\alpha}$ is the Riemann zeta function. For $\alpha = 1$, the zeta function diverges, requiring a finite vocabulary cutoff $V$.
+
+The ''maximum likelihood estimator'' for the Zipf exponent is found by solving:
+
+$$\frac{\zeta'(\hat{\alpha})}{\zeta(\hat{\alpha})} = -\frac{1}{N}\sum_{i=1}^{N} \log r_i$$
+
+Clauset, Shalizi, and Newman (2009) established rigorous methods for testing power-law hypotheses, including the Kolmogorov-Smirnov statistic and likelihood ratio tests against alternative distributions (log-normal, stretched exponential). Naive log-log regression is //unreliable// for estimating $\alpha$ because it gives excessive weight to noisy tail observations.
+
+''Mandelbrot's derivation'' approaches Zipf's Law from <<link "Information Theory" "Information Theory">><</link>>: if a code is optimized to minimize average message length (i.e., it approaches the Shannon limit), the resulting word-frequency distribution follows the Zipf-Mandelbrot law. This connects linguistic economy to information-theoretic optimality.
+
+''Hapax legomena'' — words appearing exactly once — constitute roughly 40–60% of the //vocabulary// in a typical large corpus, even though they represent a tiny fraction of total tokens. This ratio is approximately constant across corpus sizes, a prediction of Zipf's Law confirmed empirically across dozens of languages.
+
+The ''double Pareto'' distribution provides a better fit than pure Zipf for many real-world datasets, capturing both the head (high-frequency items) and the tail (low-frequency items) more accurately. In web search query logs, for instance, the head follows Zipf but the tail decays faster, following an exponential cutoff.
+
+!! Quiz
+
+<span id="zl-q1">''Q1.'' If the most frequent word in a corpus appears 10,000 times, approximately how often does the 100th most frequent word appear under Zipf's Law?</span>
+<<button "A) 1,000 times">><<replace "#zl-q1">>Not quite. You divided by 10, but Zipf's Law divides by the //rank//, which is 100.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 100 times">><<replace "#zl-q1">>Correct! $f(100) = 10{,}000 / 100 = 100$. The frequency is inversely proportional to rank.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) 10 times">><<replace "#zl-q1">>Too low. You divided by 1,000 instead of by the rank (100).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 50 times">><<replace "#zl-q1">>Incorrect. Under Zipf's Law, $f(r) = C/r$, so $f(100) = 10{,}000/100 = 100$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q2">''Q2.'' On a log-log plot, a perfect Zipfian distribution appears as:</span>
+<<button "A) An exponential curve">><<replace "#zl-q2">>No. An exponential would appear as a curve on a log-log plot. Zipf's Law is a //power law//.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A straight line with slope -1">><<replace "#zl-q2">>Correct! $\log f = \log C - \alpha \log r$ is linear with slope $-\alpha \approx -1$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A parabola">><<replace "#zl-q2">>Incorrect. The log-log transformation of a power law yields a straight line, not a curve.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A horizontal line">><<replace "#zl-q2">>No. A horizontal line would mean all ranks have equal frequency — a uniform distribution, not Zipfian.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q3">''Q3.'' Heaps' Law states that vocabulary size $V$ grows with corpus size $N$ as $V \propto N^{\gamma}$. What does this imply?</span>
+<<button "A) Doubling the corpus doubles the vocabulary">><<replace "#zl-q3">>That would require $\gamma = 1$. In practice $\gamma \approx 0.5$, so growth is sublinear.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Vocabulary growth slows as corpus size increases">><<replace "#zl-q3">>Correct! Since $\gamma < 1$, each additional token is increasingly likely to be a word already seen.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Vocabulary is fixed regardless of corpus size">><<replace "#zl-q3">>No. Vocabulary does grow — just sublinearly. New words keep appearing, just at a decreasing rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Rare words become more frequent in larger corpora">><<replace "#zl-q3">>Not quite. Rare words //appear// more in larger corpora, but their //frequency rank// stays low.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q4">''Q4.'' What are hapax legomena?</span>
+<<button "A) Words that appear in every document">><<replace "#zl-q4">>No — those are high-frequency words. Hapax legomena are the opposite extreme.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Words that appear exactly once in a corpus">><<replace "#zl-q4">>Correct! They typically make up 40–60% of the vocabulary but a tiny fraction of total tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The top 10 most frequent words">><<replace "#zl-q4">>Incorrect. Hapax legomena are words occurring //exactly once// — the extreme tail of the distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Stop words removed during preprocessing">><<replace "#zl-q4">>No. Stop words are high-frequency words. Hapax legomena are the rarest — appearing just once.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q5">''Q5.'' Why does Zipf's Law create problems for word embeddings?</span>
+<<button "A) Common words get too many training updates">><<replace "#zl-q5">>That's part of the picture, but the bigger problem is the other end of the distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Rare words get too few training updates, yielding poor embeddings">><<replace "#zl-q5">>Correct! The Zipfian long tail means most word //types// are rare and thus poorly represented.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) All words get equal updates regardless of frequency">><<replace "#zl-q5">>This would only happen with a uniform distribution, not a Zipfian one.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Embeddings cannot represent power-law distributions">><<replace "#zl-q5">>Embeddings can represent any distribution. The issue is insufficient training data for rare words.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q6">''Q6.'' Zipf proposed the "Principle of Least Effort" to explain his law. What does it claim?</span>
+<<button "A) Listeners prefer ambiguous words to save processing effort">><<replace "#zl-q6">>The opposite — listeners prefer //specific// words. It's speakers who favor short, reusable words.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Speakers minimize production effort (reusing common words) while listeners prefer specificity">><<replace "#zl-q6">>Correct! The tension between speaker economy and listener clarity produces the Zipfian distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Language evolves to maximize entropy">><<replace "#zl-q6">>Maximizing entropy would produce a //uniform// distribution, the opposite of Zipf's Law.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Words are assigned frequencies randomly">><<replace "#zl-q6">>This is closer to the random typing hypothesis (Mandelbrot), not Zipf's own explanation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q7">''Q7.'' Which of the following does NOT typically follow a Zipfian distribution?</span>
+<<button "A) Word frequencies in English novels">><<replace "#zl-q7">>This is the canonical example of Zipf's Law.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) City population rankings">><<replace "#zl-q7">>City sizes are a classic example of Zipf's Law in action.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Uniformly distributed random numbers">><<replace "#zl-q7">>Correct! Uniform distributions are flat by definition — the exact opposite of a power-law/Zipfian pattern.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Website traffic rankings">><<replace "#zl-q7">>Web traffic follows a Zipfian pattern — a few sites dominate, most get negligible visits.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="zl-q8">''Q8.'' In the Zipf-Mandelbrot law $f(r) = C / (r + \beta)^{\alpha}$, what role does the parameter $\beta$ play?</span>
+<<button "A) It sets the total corpus size">><<replace "#zl-q8">>No. Corpus size is determined by the sum of all frequencies, not by $\beta$ directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It controls the slope of the tail">><<replace "#zl-q8">>The tail slope is governed by $\alpha$. $\beta$ affects the head of the distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It adjusts the fit for high-frequency (low-rank) words">><<replace "#zl-q8">>Correct! Adding $\beta$ flattens the curve for small $r$, better fitting the most frequent words.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It converts frequencies to probabilities">><<replace "#zl-q8">>That's the role of the normalization constant $C$, not $\beta$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>
