@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Out-of-Distribution Detection Methods</text>
+
+  <!-- Central node: OOD Detection -->
+  <rect x="300" y="150" width="200" height="50" rx="8" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="181" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#FDFAF4" text-anchor="middle">OOD Detection</text>
+
+  <!-- Left side: In-Distribution cloud -->
+  <ellipse cx="130" cy="175" rx="90" ry="60" fill="#2D5A8E" fill-opacity="0.1" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="130" y="165" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">In-Distribution</text>
+  <text x="130" y="180" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">(Training Data)</text>
+  <!-- ID data points -->
+  <circle cx="105" cy="150" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+  <circle cx="145" cy="145" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+  <circle cx="120" cy="195" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+  <circle cx="155" cy="185" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+  <circle cx="100" cy="175" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+  <circle cx="140" cy="170" r="4" fill="#2D5A8E" fill-opacity="0.6"/>
+
+  <!-- Right side: OOD cloud -->
+  <ellipse cx="670" cy="175" rx="90" ry="60" fill="#7C2530" fill-opacity="0.1" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="670" y="165" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">Out-of-Distribution</text>
+  <text x="670" y="180" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">(Unknown Data)</text>
+  <!-- OOD data points -->
+  <circle cx="645" cy="150" r="4" fill="#7C2530" fill-opacity="0.6"/>
+  <circle cx="695" cy="160" r="4" fill="#7C2530" fill-opacity="0.6"/>
+  <circle cx="660" cy="195" r="4" fill="#7C2530" fill-opacity="0.6"/>
+  <circle cx="690" cy="185" r="4" fill="#7C2530" fill-opacity="0.6"/>
+  <circle cx="650" cy="175" r="4" fill="#7C2530" fill-opacity="0.6"/>
+
+  <!-- Connecting arrows from clouds to center -->
+  <line x1="220" y1="175" x2="295" y2="175" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="295,175 283,170 283,180" fill="#C4A87A"/>
+  <line x1="505" y1="175" x2="580" y2="175" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="505,175 517,170 517,180" fill="#C4A87A"/>
+
+  <!-- Decision labels -->
+  <text x="258" y="165" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#2D5A8E" text-anchor="middle">Accept</text>
+  <text x="543" y="165" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#7C2530" text-anchor="middle">Reject</text>
+
+  <!-- Method boxes below -->
+  <!-- Softmax Score -->
+  <rect x="60" y="280" width="140" height="44" rx="6" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="130" y="299" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Softmax Score</text>
+  <text x="130" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">max p(y|x)</text>
+
+  <!-- Energy-Based -->
+  <rect x="230" y="280" width="140" height="44" rx="6" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="300" y="299" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Energy-Based</text>
+  <text x="300" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">E(x) = -log sum exp</text>
+
+  <!-- Mahalanobis -->
+  <rect x="400" y="280" width="140" height="44" rx="6" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="470" y="299" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Mahalanobis</text>
+  <text x="470" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Feature-space distance</text>
+
+  <!-- Contrastive -->
+  <rect x="570" y="280" width="150" height="44" rx="6" fill="#FDFAF4" stroke="#C4A87A" stroke-width="2"/>
+  <text x="645" y="299" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Contrastive</text>
+  <text x="645" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Representation learning</text>
+
+  <!-- Lines from center to method boxes -->
+  <line x1="350" y1="200" x2="130" y2="278" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="380" y1="200" x2="300" y2="278" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="420" y1="200" x2="470" y2="278" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="450" y1="200" x2="645" y2="278" stroke="#C4A87A" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Score threshold illustration (top right) -->
+  <text x="400" y="72" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">Score threshold separates ID from OOD</text>
+
+  <!-- Mini score bar -->
+  <rect x="250" y="84" width="300" height="18" rx="3" fill="#2D5A8E" fill-opacity="0.1" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- Threshold line -->
+  <line x1="430" y1="80" x2="430" y2="106" stroke="#7C2530" stroke-width="2"/>
+  <text x="430" y="120" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Threshold</text>
+  <!-- ID region -->
+  <rect x="252" y="86" width="176" height="14" rx="2" fill="#2D5A8E" fill-opacity="0.25"/>
+  <text x="340" y="97" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">High score (ID)</text>
+  <!-- OOD region -->
+  <rect x="432" y="86" width="116" height="14" rx="2" fill="#7C2530" fill-opacity="0.2"/>
+  <text x="490" y="97" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Low score (OOD)</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="370" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Four major families of OOD scoring functions</text>
+</svg>

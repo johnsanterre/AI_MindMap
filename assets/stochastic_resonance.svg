@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="38" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Stochastic Resonance: The Optimal Noise Sweet Spot</text>
+
+  <!-- Axes -->
+  <line x1="120" y1="320" x2="700" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="120" y1="320" x2="120" y2="70" stroke="#5C3D1E" stroke-width="2"/>
+  <!-- X-axis arrow -->
+  <polygon points="700,316 710,320 700,324" fill="#5C3D1E"/>
+  <!-- Y-axis arrow -->
+  <polygon points="116,70 120,60 124,70" fill="#5C3D1E"/>
+
+  <!-- Axis labels -->
+  <text x="415" y="355" font-family="Georgia,serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Noise Intensity</text>
+  <text x="60" y="195" font-family="Georgia,serif" font-size="14" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,60,195)">Signal-to-Noise Ratio</text>
+
+  <!-- Grid lines (subtle) -->
+  <line x1="120" y1="240" x2="700" y2="240" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="120" y1="160" x2="700" y2="160" stroke="#D4C5A9" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- The classic SR curve: rises, peaks, then falls -->
+  <path d="M 130,300 C 180,295 220,280 270,230 C 310,190 340,130 380,100 C 400,90 420,88 440,100 C 480,130 520,190 570,250 C 610,285 650,300 690,310"
+        fill="none" stroke="#7C2530" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Peak marker -->
+  <circle cx="430" cy="88" r="5" fill="#7C2530"/>
+  <line x1="430" y1="88" x2="430" y2="320" stroke="#7C2530" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+
+  <!-- Peak label -->
+  <text x="430" y="72" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Optimal Noise</text>
+
+  <!-- Zone labels -->
+  <!-- Too little noise -->
+  <rect x="145" y="260" width="110" height="36" rx="4" fill="#2D5A8E" opacity="0.12"/>
+  <text x="200" y="276" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Too Little Noise</text>
+  <text x="200" y="290" font-family="Georgia,serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">signal undetectable</text>
+
+  <!-- Resonance zone -->
+  <rect x="365" y="105" width="130" height="36" rx="4" fill="#7C2530" opacity="0.12"/>
+  <text x="430" y="121" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Resonance Zone</text>
+  <text x="430" y="135" font-family="Georgia,serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">noise boosts signal</text>
+
+  <!-- Too much noise -->
+  <rect x="565" y="260" width="110" height="36" rx="4" fill="#C4A87A" opacity="0.35"/>
+  <text x="620" y="276" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Too Much Noise</text>
+  <text x="620" y="290" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">signal drowned out</text>
+
+  <!-- Tick marks on X axis -->
+  <line x1="200" y1="320" x2="200" y2="326" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="340" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">low</text>
+  <line x1="430" y1="320" x2="430" y2="326" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="430" y="340" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">optimal</text>
+  <line x1="620" y1="320" x2="620" y2="326" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="620" y="340" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">high</text>
+</svg>

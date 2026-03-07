@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" font-weight="bold">Stochastic Variance Reduction</text>
+
+  <!-- Left: SGD noisy path -->
+  <text x="140" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-weight="bold">SGD (High Variance)</text>
+  <rect x="30" y="82" width="220" height="200" rx="8" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <!-- Contour ellipses for loss landscape -->
+  <ellipse cx="140" cy="210" rx="90" ry="60" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="140" cy="210" rx="60" ry="40" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+  <ellipse cx="140" cy="210" rx="30" ry="20" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.7"/>
+  <circle cx="140" cy="210" r="4" fill="#7C2530"/>
+  <!-- Noisy SGD path -->
+  <polyline points="60,120 85,155 70,170 100,160 120,185 105,200 130,195 150,215 135,225 160,230 140,210"
+    fill="none" stroke="#7C2530" stroke-width="2" stroke-dasharray="4,2"/>
+  <circle cx="60" cy="120" r="4" fill="#7C2530"/>
+  <text x="68" y="115" font-family="Georgia, serif" font-size="10" fill="#7C2530">start</text>
+
+  <!-- Center: SVRG corrected path -->
+  <text x="400" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">SVRG (Variance Reduced)</text>
+  <rect x="290" y="82" width="220" height="200" rx="8" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <ellipse cx="400" cy="210" rx="90" ry="60" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="400" cy="210" rx="60" ry="40" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+  <ellipse cx="400" cy="210" rx="30" ry="20" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.7"/>
+  <circle cx="400" cy="210" r="4" fill="#2D5A8E"/>
+  <!-- Smooth corrected path -->
+  <polyline points="320,120 340,145 355,165 370,180 385,195 395,205 400,210"
+    fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="320" cy="120" r="4" fill="#2D5A8E"/>
+  <text x="328" y="115" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">start</text>
+
+  <!-- Right: Control variate diagram -->
+  <text x="640" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">Control Variate Idea</text>
+  <rect x="550" y="82" width="220" height="200" rx="8" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Equation blocks -->
+  <text x="660" y="118" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Corrected gradient:</text>
+  <text x="660" y="148" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-style="italic">v = g_i(w) - g_i(w~) + mu~</text>
+
+  <line x1="580" y1="165" x2="740" y2="165" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="660" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">g_i(w~) cancels noise in g_i(w)</text>
+  <text x="660" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">mu~ anchors to full gradient</text>
+
+  <line x1="580" y1="225" x2="740" y2="225" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="660" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Var(v) -> 0 as w -> w*</text>
+  <text x="660" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">Linear convergence!</text>
+
+  <!-- Bottom: method comparison bar -->
+  <rect x="30" y="310" width="740" height="70" rx="8" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Method Variants</text>
+
+  <rect x="60" y="342" width="140" height="28" rx="6" fill="#7C2530" opacity="0.15"/>
+  <text x="130" y="361" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">SVRG</text>
+
+  <rect x="230" y="342" width="140" height="28" rx="6" fill="#2D5A8E" opacity="0.15"/>
+  <text x="300" y="361" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-weight="bold">SAGA</text>
+
+  <rect x="400" y="342" width="140" height="28" rx="6" fill="#5C3D1E" opacity="0.15"/>
+  <text x="470" y="361" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">SARAH</text>
+
+  <rect x="570" y="342" width="170" height="28" rx="6" fill="#C4A87A" opacity="0.3"/>
+  <text x="655" y="361" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">Katyusha (+ Momentum)</text>
+</svg>

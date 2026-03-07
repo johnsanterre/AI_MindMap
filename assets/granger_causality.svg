@@ -1,0 +1,46 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Granger Causality: Does X's Past Help Predict Y?</text>
+
+  <!-- Time axis -->
+  <line x1="60" y1="320" x2="740" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="750" y="325" fill="#5C3D1E" font-size="12">time</text>
+
+  <!-- Time series X (top) -->
+  <text x="45" y="115" fill="#2D5A8E" font-size="14" font-weight="bold">X</text>
+  <path d="M 80,130 C 110,100 140,140 170,110 C 200,80 230,130 260,105 C 290,80 320,120 350,95 C 380,70 410,115 440,90 C 470,65 500,110 530,85 C 560,60 590,105 620,80 C 650,55 680,100 710,75" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Time series Y (bottom) -->
+  <text x="45" y="235" fill="#7C2530" font-size="14" font-weight="bold">Y</text>
+  <path d="M 80,250 C 110,240 140,255 170,230 C 200,210 230,250 260,225 C 290,200 320,240 350,215 C 380,190 410,235 440,210 C 470,185 500,230 530,205 C 560,180 590,225 620,200 C 650,175 680,220 710,195" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Lagged arrows from X to Y -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+  <line x1="260" y1="115" x2="350" y2="205" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead)"/>
+  <line x1="350" y1="100" x2="440" y2="200" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead)"/>
+  <line x1="440" y1="95" x2="530" y2="195" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead)"/>
+
+  <!-- Lag label -->
+  <text x="330" y="170" fill="#C4A87A" font-size="12" font-style="italic" transform="rotate(-35,330,170)">lag</text>
+  <text x="420" y="160" fill="#C4A87A" font-size="12" font-style="italic" transform="rotate(-35,420,160)">lag</text>
+
+  <!-- Model comparison boxes -->
+  <rect x="80" y="345" width="280" height="40" rx="5" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="220" y="362" text-anchor="middle" fill="#2D5A8E" font-size="12" font-weight="bold">Restricted: Y ~ past Y only</text>
+  <text x="220" y="378" text-anchor="middle" fill="#2D5A8E" font-size="11">RSS_R (larger)</text>
+
+  <rect x="440" y="345" width="280" height="40" rx="5" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="580" y="362" text-anchor="middle" fill="#7C2530" font-size="12" font-weight="bold">Unrestricted: Y ~ past Y + past X</text>
+  <text x="580" y="378" text-anchor="middle" fill="#7C2530" font-size="11">RSS_U (smaller if X helps)</text>
+
+  <!-- F-test arrow -->
+  <text x="395" y="370" text-anchor="middle" fill="#5C3D1E" font-size="16" font-weight="bold">F</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="58" text-anchor="middle" fill="#5C3D1E" font-size="13" font-style="italic">"X Granger-causes Y" if past X significantly reduces prediction error for Y</text>
+</svg>

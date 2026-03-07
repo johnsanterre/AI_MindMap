@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Conformal Prediction: Guaranteed Coverage Sets</text>
+
+  <!-- X axis (feature space) -->
+  <line x1="60" y1="310" x2="740" y2="310" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="746,310 732,305 732,315" fill="#5C3D1E"/>
+  <text x="400" y="345" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">Input Space</text>
+
+  <!-- Y axis (prediction) -->
+  <line x1="60" y1="310" x2="60" y2="55" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="60,49 55,63 65,63" fill="#5C3D1E"/>
+  <text x="22" y="180" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,22,180)">Prediction / Response</text>
+
+  <!-- Model prediction line (smooth curve) -->
+  <path d="M 80,260 C 150,240 220,180 300,150 C 380,120 460,110 540,130 C 620,150 680,180 730,200"
+        fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Prediction band (conformal interval) - upper -->
+  <path d="M 80,230 C 150,208 220,145 300,112 C 380,80 460,68 540,90 C 620,112 680,144 730,165"
+        fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="6,3"/>
+
+  <!-- Prediction band (conformal interval) - lower -->
+  <path d="M 80,290 C 150,272 220,215 300,188 C 380,160 460,152 540,170 C 620,188 680,216 730,235"
+        fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="6,3"/>
+
+  <!-- Shaded band between upper and lower -->
+  <path d="M 80,230 C 150,208 220,145 300,112 C 380,80 460,68 540,90 C 620,112 680,144 730,165
+           L 730,235 C 680,216 620,188 540,170 C 460,152 380,160 300,188 C 220,215 150,272 80,290 Z"
+        fill="#7C2530" fill-opacity="0.1"/>
+
+  <!-- Calibration data points INSIDE band (covered) -->
+  <circle cx="120" cy="255" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="180" cy="215" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="240" cy="168" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="310" cy="140" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="370" cy="118" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="430" cy="105" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="490" cy="112" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="560" cy="145" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="620" cy="160" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="680" cy="185" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="150" cy="240" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="350" cy="130" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="500" cy="125" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="590" cy="148" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="650" cy="175" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="710" cy="210" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="270" cy="175" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <circle cx="460" cy="98" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+
+  <!-- One point OUTSIDE band (miscovered, expected at alpha rate) -->
+  <circle cx="400" cy="72" r="5" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Annotation: prediction set arrow -->
+  <line x1="340" y1="112" x2="340" y2="188" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="335" y1="112" x2="345" y2="112" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="335" y1="188" x2="345" y2="188" stroke="#C4A87A" stroke-width="2"/>
+  <text x="355" y="155" font-family="Georgia, serif" font-size="11" fill="#C4A87A">Prediction</text>
+  <text x="355" y="168" font-family="Georgia, serif" font-size="11" fill="#C4A87A">Interval</text>
+
+  <!-- Annotation: coverage label -->
+  <text x="400" y="380" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Coverage guarantee: P(Y in C(X)) &gt;= 1 - alpha</text>
+
+  <!-- Legend -->
+  <rect x="530" y="50" width="220" height="82" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <line x1="540" y1="68" x2="575" y2="68" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="582" y="72" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Model prediction</text>
+  <line x1="540" y1="88" x2="575" y2="88" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="582" y="92" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Conformal band</text>
+  <circle cx="557" cy="107" r="4" fill="#2D5A8E" fill-opacity="0.8"/>
+  <text x="582" y="111" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Covered point</text>
+  <circle cx="557" cy="124" r="4" fill="#7C2530"/>
+  <text x="582" y="128" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Miscovered (at rate alpha)</text>
+</svg>

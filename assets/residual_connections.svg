@@ -1,0 +1,80 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="20" font-weight="bold">Residual Connection: y = F(x) + x</text>
+
+  <defs>
+    <marker id="ar1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="ar2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="ar3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Left: Without Residual -->
+  <text x="200" y="70" text-anchor="middle" fill="#7C2530" font-size="16" font-weight="bold">Without Skip Connection</text>
+
+  <rect x="150" y="90" width="100" height="40" rx="6" fill="#2D5A8E"/>
+  <text x="200" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="bold">x</text>
+
+  <line x1="200" y1="130" x2="200" y2="148" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <rect x="140" y="150" width="120" height="36" rx="6" fill="#7C2530"/>
+  <text x="200" y="173" text-anchor="middle" fill="white" font-size="12">Layer 1</text>
+
+  <line x1="200" y1="186" x2="200" y2="204" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <rect x="140" y="206" width="120" height="36" rx="6" fill="#7C2530"/>
+  <text x="200" y="229" text-anchor="middle" fill="white" font-size="12">Layer 2</text>
+
+  <line x1="200" y1="242" x2="200" y2="260" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <rect x="150" y="262" width="100" height="40" rx="6" fill="#2D5A8E"/>
+  <text x="200" y="287" text-anchor="middle" fill="white" font-size="13" font-weight="bold">H(x)</text>
+
+  <text x="200" y="330" text-anchor="middle" fill="#7C2530" font-size="12">Gradient must flow</text>
+  <text x="200" y="348" text-anchor="middle" fill="#7C2530" font-size="12">through every layer</text>
+  <text x="200" y="370" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">Gradients vanish!</text>
+
+  <!-- Right: With Residual -->
+  <text x="580" y="70" text-anchor="middle" fill="#2D5A8E" font-size="16" font-weight="bold">With Skip Connection</text>
+
+  <rect x="530" y="90" width="100" height="40" rx="6" fill="#2D5A8E"/>
+  <text x="580" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="bold">x</text>
+
+  <line x1="580" y1="130" x2="580" y2="148" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <rect x="520" y="150" width="120" height="36" rx="6" fill="#C4A87A"/>
+  <text x="580" y="173" text-anchor="middle" fill="#5C3D1E" font-size="12">Layer 1</text>
+
+  <line x1="580" y1="186" x2="580" y2="204" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <rect x="520" y="206" width="120" height="36" rx="6" fill="#C4A87A"/>
+  <text x="580" y="229" text-anchor="middle" fill="#5C3D1E" font-size="12">Layer 2</text>
+
+  <line x1="580" y1="242" x2="580" y2="260" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <!-- Addition circle -->
+  <circle cx="580" cy="282" r="18" fill="white" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="580" y="289" text-anchor="middle" fill="#7C2530" font-size="20" font-weight="bold">+</text>
+
+  <!-- Skip connection arc -->
+  <path d="M 530,110 Q 470,110 470,282 L 560,282" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="8,4" marker-end="url(#ar2)"/>
+  <text x="448" y="200" text-anchor="middle" fill="#7C2530" font-size="12" font-weight="bold" transform="rotate(-90,448,200)">identity x</text>
+
+  <!-- F(x) label -->
+  <text x="660" y="200" text-anchor="start" fill="#C4A87A" font-size="13" font-weight="bold">F(x)</text>
+
+  <line x1="580" y1="300" x2="580" y2="318" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar1)"/>
+
+  <rect x="530" y="320" width="100" height="40" rx="6" fill="#2D5A8E"/>
+  <text x="580" y="345" text-anchor="middle" fill="white" font-size="13" font-weight="bold">F(x) + x</text>
+
+  <text x="580" y="385" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">Gradient highway!</text>
+
+  <!-- Divider -->
+  <line x1="385" y1="60" x2="385" y2="390" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+</svg>

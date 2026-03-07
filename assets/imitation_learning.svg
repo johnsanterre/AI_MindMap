@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Imitation Learning — Three Approaches</text>
+
+  <!-- ===== TOP ROW: Expert Demonstrations ===== -->
+  <rect x="290" y="52" width="220" height="44" rx="6" fill="#FFF8E7" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="72" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Expert Demonstrations</text>
+  <text x="400" y="88" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">(state, action) trajectories</text>
+
+  <!-- Three arrows down from Expert -->
+  <line x1="310" y1="96" x2="140" y2="140" stroke="#7C2530" stroke-width="1.5" marker-end="url(#ilArrow1)"/>
+  <line x1="400" y1="96" x2="400" y2="140" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#ilArrow2)"/>
+  <line x1="490" y1="96" x2="660" y2="140" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#ilArrow3)"/>
+
+  <!-- ===== LEFT: Behavioral Cloning ===== -->
+  <rect x="30" y="143" width="220" height="70" rx="6" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="140" y="165" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#7C2530" text-anchor="middle">Behavioral Cloning</text>
+  <text x="140" y="182" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Supervised learning:</text>
+  <text x="140" y="196" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">minimize L(pi(s), a_expert)</text>
+
+  <!-- LEFT: Problem label -->
+  <rect x="50" y="226" width="180" height="32" rx="4" fill="#FDFAF4" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="140" y="246" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">Suffers from distribution shift</text>
+
+  <!-- ===== CENTER: DAgger ===== -->
+  <rect x="280" y="143" width="240" height="70" rx="6" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="400" y="165" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#2D5A8E" text-anchor="middle">DAgger</text>
+  <text x="400" y="182" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Iterative data collection:</text>
+  <text x="400" y="196" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">run learner, query expert, aggregate</text>
+
+  <!-- CENTER: Feedback loop arrow -->
+  <path d="M520,178 C560,178 560,210 520,210" fill="none" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="555" y="198" font-family="Georgia, serif" font-size="8.5" fill="#2D5A8E" font-style="italic">iterate</text>
+
+  <!-- CENTER: Benefit label -->
+  <rect x="310" y="226" width="180" height="32" rx="4" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="400" y="246" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-style="italic">Fixes distribution shift</text>
+
+  <!-- ===== RIGHT: Inverse RL ===== -->
+  <rect x="550" y="143" width="220" height="70" rx="6" fill="#F0EBE1" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="660" y="165" font-family="Georgia, serif" font-size="11.5" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Inverse RL</text>
+  <text x="660" y="182" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Recover reward function R(s,a)</text>
+  <text x="660" y="196" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">then optimize policy via RL</text>
+
+  <!-- RIGHT: Benefit label -->
+  <rect x="570" y="226" width="180" height="32" rx="4" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="660" y="246" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">Generalizes beyond demos</text>
+
+  <!-- ===== BOTTOM: Shared Output ===== -->
+  <line x1="140" y1="258" x2="320" y2="296" stroke="#7C2530" stroke-width="1.2" marker-end="url(#ilArrow1)"/>
+  <line x1="400" y1="258" x2="400" y2="296" stroke="#2D5A8E" stroke-width="1.2" marker-end="url(#ilArrow2)"/>
+  <line x1="660" y1="258" x2="480" y2="296" stroke="#5C3D1E" stroke-width="1.2" marker-end="url(#ilArrow3)"/>
+
+  <rect x="250" y="298" width="300" height="50" rx="6" fill="#FFF8E7" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="318" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Learned Policy pi(a|s)</text>
+  <text x="400" y="336" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">mimics expert behavior without reward engineering</text>
+
+  <!-- Legend -->
+  <rect x="18" y="370" width="12" height="12" fill="#F5E6E8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="34" y="381" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">Behavioral Cloning</text>
+  <rect x="160" y="370" width="12" height="12" fill="#E8EEF5" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="176" y="381" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">DAgger</text>
+  <rect x="260" y="370" width="12" height="12" fill="#F0EBE1" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="276" y="381" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E">Inverse RL</text>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="ilArrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="ilArrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="ilArrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+</svg>

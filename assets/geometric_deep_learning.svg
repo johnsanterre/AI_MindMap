@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Geometric Deep Learning: Symmetry as a Unifying Principle</text>
+
+  <!-- Central node: Symmetry Group -->
+  <ellipse cx="400" cy="195" rx="90" ry="38" fill="#7C2530" opacity="0.9"/>
+  <text x="400" y="190" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Symmetry Group</text>
+  <text x="400" y="207" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">G-equivariance</text>
+
+  <!-- Left branch: Grids / CNNs -->
+  <rect x="40" y="80" width="160" height="70" fill="#2D5A8E" rx="6" opacity="0.85"/>
+  <text x="120" y="105" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Grids</text>
+  <text x="120" y="122" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Translation group</text>
+  <text x="120" y="138" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">CNNs</text>
+
+  <!-- Arrow: Grids -> Symmetry -->
+  <line x1="200" y1="130" x2="315" y2="180" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <!-- Top right branch: Sets / Transformers -->
+  <rect x="580" y="55" width="180" height="70" fill="#2D5A8E" rx="6" opacity="0.85"/>
+  <text x="670" y="80" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Sets</text>
+  <text x="670" y="97" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Permutation group S_n</text>
+  <text x="670" y="113" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Transformers</text>
+
+  <!-- Arrow: Sets -> Symmetry -->
+  <line x1="580" y1="110" x2="485" y2="180" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <!-- Right branch: Graphs / GNNs -->
+  <rect x="590" y="175" width="170" height="70" fill="#5C3D1E" rx="6" opacity="0.85"/>
+  <text x="675" y="200" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Graphs</text>
+  <text x="675" y="217" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Permutation (local)</text>
+  <text x="675" y="233" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">GNNs</text>
+
+  <!-- Arrow: Graphs -> Symmetry -->
+  <line x1="590" y1="210" x2="490" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Bottom left: Manifolds / Gauge CNNs -->
+  <rect x="40" y="255" width="175" height="70" fill="#5C3D1E" rx="6" opacity="0.85"/>
+  <text x="128" y="280" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">Manifolds</text>
+  <text x="128" y="297" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Gauge group SO(2)</text>
+  <text x="128" y="313" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Gauge-equivariant CNNs</text>
+
+  <!-- Arrow: Manifolds -> Symmetry -->
+  <line x1="215" y1="275" x2="320" y2="220" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Bottom right: Groups / Steerable CNNs -->
+  <rect x="560" y="290" width="190" height="70" fill="#C4A87A" rx="6" opacity="0.9"/>
+  <text x="655" y="315" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Homogeneous Spaces</text>
+  <text x="655" y="332" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Rotation group SO(3)</text>
+  <text x="655" y="349" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Steerable CNNs</text>
+
+  <!-- Arrow: Groups -> Symmetry -->
+  <line x1="560" y1="310" x2="475" y2="220" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowTan)"/>
+
+  <!-- Equivariance equation at bottom -->
+  <rect x="200" y="340" width="400" height="46" fill="#F5EFE4" rx="4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="360" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Equivariance: f(T_g(x)) = T'_g(f(x))</text>
+  <text x="400" y="378" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Bronstein, Bruna, Cohen, Velickovic (2021) — "Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, Gauges"</text>
+
+  <!-- Left label -->
+  <text x="120" y="195" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">weight sharing</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

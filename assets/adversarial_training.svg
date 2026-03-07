@@ -1,0 +1,69 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Adversarial Training: Min-Max Optimization</text>
+
+  <!-- Outer Minimization Box -->
+  <rect x="30" y="55" width="740" height="310" rx="12" fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <text x="400" y="80" text-anchor="middle" fill="#2D5A8E" font-size="15" font-weight="bold">Outer Minimization: min over theta</text>
+
+  <!-- Inner Maximization Box -->
+  <rect x="60" y="95" width="680" height="180" rx="10" fill="#FDF6EE" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="118" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">Inner Maximization: max over delta</text>
+
+  <!-- Clean Input -->
+  <rect x="90" y="140" width="110" height="110" rx="8" fill="#EAF0F7" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="145" y="185" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">x</text>
+  <text x="145" y="205" text-anchor="middle" fill="#2D5A8E" font-size="11">Clean</text>
+  <text x="145" y="220" text-anchor="middle" fill="#2D5A8E" font-size="11">Input</text>
+
+  <!-- Plus -->
+  <text x="220" y="200" text-anchor="middle" fill="#5C3D1E" font-size="28" font-weight="bold">+</text>
+
+  <!-- Perturbation delta -->
+  <rect x="240" y="140" width="110" height="110" rx="8" fill="#F9EEEE" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="295" y="180" text-anchor="middle" fill="#7C2530" font-size="16" font-weight="bold">delta*</text>
+  <text x="295" y="200" text-anchor="middle" fill="#7C2530" font-size="11">Worst-case</text>
+  <text x="295" y="215" text-anchor="middle" fill="#7C2530" font-size="11">Perturbation</text>
+  <text x="295" y="235" text-anchor="middle" fill="#7C2530" font-size="10">||delta|| &lt;= epsilon</text>
+
+  <!-- Arrow to model -->
+  <line x1="360" y1="195" x2="420" y2="195" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Model -->
+  <rect x="425" y="150" width="120" height="90" rx="10" fill="#F5F0E5" stroke="#C4A87A" stroke-width="2"/>
+  <text x="485" y="185" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">Model</text>
+  <text x="485" y="205" text-anchor="middle" fill="#5C3D1E" font-size="12">f(x+delta; theta)</text>
+
+  <!-- Arrow to loss -->
+  <line x1="550" y1="195" x2="600" y2="195" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+
+  <!-- Loss -->
+  <rect x="605" y="150" width="110" height="90" rx="10" fill="#F9EEEE" stroke="#7C2530" stroke-width="2"/>
+  <text x="660" y="185" text-anchor="middle" fill="#7C2530" font-size="14" font-weight="bold">L(theta)</text>
+  <text x="660" y="205" text-anchor="middle" fill="#7C2530" font-size="11">Maximize</text>
+  <text x="660" y="220" text-anchor="middle" fill="#7C2530" font-size="11">w.r.t. delta</text>
+
+  <!-- Gradient feedback arrow (outer loop) -->
+  <path d="M 660 245 L 660 320 L 145 320 L 145 255" fill="none" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowBlue)"/>
+  <text x="400" y="340" text-anchor="middle" fill="#2D5A8E" font-size="13" font-weight="bold">Update theta to minimize worst-case loss</text>
+
+  <!-- Gradient feedback arrow (inner loop) -->
+  <path d="M 660 145 Q 660 130 600 130 L 310 130 Q 295 130 295 140" fill="none" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="480" y="127" text-anchor="middle" fill="#7C2530" font-size="10">PGD steps: find worst delta</text>
+
+  <!-- Formula at bottom -->
+  <text x="400" y="385" text-anchor="middle" fill="#5C3D1E" font-size="14">min_theta  E[ max_{||delta||&lt;=eps}  L( f(x + delta; theta), y ) ]</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

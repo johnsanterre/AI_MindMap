@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="font-family:Georgia,serif;">
+  <defs>
+    <marker id="mc-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="798" height="398" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="5"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="14" fill="#5C3D1E" letter-spacing="1.5">MODE CONNECTIVITY</text>
+
+  <!-- === Loss landscape contours (center) === -->
+  <!-- Outer contour (high loss) -->
+  <ellipse cx="400" cy="220" rx="320" ry="150" fill="none" stroke="#D4C5A9" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="400" cy="220" rx="270" ry="125" fill="none" stroke="#D4C5A9" stroke-width="1" opacity="0.6"/>
+  <ellipse cx="400" cy="220" rx="220" ry="100" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+
+  <!-- Low-loss basin (inner region) -->
+  <ellipse cx="400" cy="220" rx="170" ry="75" fill="#F2EAD8" fill-opacity="0.5" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="400" y="300" text-anchor="middle" font-size="8.5" fill="#C4A87A" font-style="italic">low-loss basin</text>
+
+  <!-- Contour labels -->
+  <text x="715" y="140" font-size="7.5" fill="#D4C5A9">high loss</text>
+  <text x="615" y="175" font-size="7.5" fill="#C4A87A">medium loss</text>
+
+  <!-- === Solution A (left minimum) === -->
+  <circle cx="280" cy="200" r="14" fill="#7C2530" opacity="0.85"/>
+  <text x="280" y="204" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">A</text>
+  <text x="280" y="178" text-anchor="middle" font-size="9" fill="#7C2530" font-weight="bold">Solution A</text>
+  <text x="280" y="166" text-anchor="middle" font-size="7.5" fill="#7C2530">(trained model 1)</text>
+
+  <!-- === Solution B (right minimum) === -->
+  <circle cx="520" cy="200" r="14" fill="#2D5A8E" opacity="0.85"/>
+  <text x="520" y="204" text-anchor="middle" font-size="9" fill="#FDFAF4" font-weight="bold">B</text>
+  <text x="520" y="178" text-anchor="middle" font-size="9" fill="#2D5A8E" font-weight="bold">Solution B</text>
+  <text x="520" y="166" text-anchor="middle" font-size="7.5" fill="#2D5A8E">(trained model 2)</text>
+
+  <!-- === Naive linear path (dashed, goes through high loss) === -->
+  <line x1="294" y1="200" x2="506" y2="200" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="5,4" opacity="0.5"/>
+
+  <!-- High loss barrier on linear path -->
+  <circle cx="400" cy="195" r="5" fill="#7C2530" opacity="0.3"/>
+  <text x="400" y="185" text-anchor="middle" font-size="7.5" fill="#7C2530" opacity="0.7">loss barrier</text>
+
+  <!-- === Curved low-loss path (solid, bends through basin) === -->
+  <path d="M 294 200 C 320 250, 380 265, 400 260 C 420 255, 480 245, 506 200" fill="none" stroke="#2D5A8E" stroke-width="2.5" opacity="0.8"/>
+  <text x="400" y="278" text-anchor="middle" font-size="8.5" fill="#2D5A8E" font-weight="bold">low-loss path</text>
+
+  <!-- Small dots along the curved path -->
+  <circle cx="330" cy="235" r="3" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="365" cy="255" r="3" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="400" cy="260" r="3" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="435" cy="253" r="3" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="470" cy="237" r="3" fill="#2D5A8E" opacity="0.5"/>
+
+  <!-- === Midpoint model (on the curve) === -->
+  <circle cx="400" cy="260" r="8" fill="#5C3D1E" opacity="0.8"/>
+  <text x="400" y="263" text-anchor="middle" font-size="7" fill="#FDFAF4">M</text>
+
+  <!-- === Legend box (top left) === -->
+  <rect x="40" y="50" width="175" height="85" rx="5" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="128" y="68" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Weight Space</text>
+  <line x1="55" y1="82" x2="90" y2="82" stroke="#7C2530" stroke-width="1.2" stroke-dasharray="5,4" opacity="0.6"/>
+  <text x="100" y="85" font-size="8" fill="#5C3D1E">linear path (high loss)</text>
+  <line x1="55" y1="100" x2="90" y2="100" stroke="#2D5A8E" stroke-width="2.5" opacity="0.8"/>
+  <text x="100" y="103" font-size="8" fill="#5C3D1E">curved path (low loss)</text>
+  <circle cx="72" cy="120" r="4" fill="#5C3D1E" opacity="0.8"/>
+  <text x="100" y="123" font-size="8" fill="#5C3D1E">midpoint model M</text>
+
+  <!-- === Insight box (top right) === -->
+  <rect x="585" y="50" width="175" height="95" rx="5" fill="#F2EAD8" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="672" y="68" text-anchor="middle" font-size="9" fill="#5C3D1E" font-weight="bold">Key Idea</text>
+  <text x="672" y="85" text-anchor="middle" font-size="8" fill="#5C3D1E">Different minima are</text>
+  <text x="672" y="98" text-anchor="middle" font-size="8" fill="#5C3D1E">connected by curved</text>
+  <text x="672" y="111" text-anchor="middle" font-size="8" fill="#5C3D1E">paths where loss stays</text>
+  <text x="672" y="124" text-anchor="middle" font-size="8" fill="#7C2530" font-weight="bold">low the entire way</text>
+
+  <!-- === Bottom labels === -->
+  <text x="130" y="350" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">enables model averaging</text>
+  <text x="400" y="350" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">reveals basin structure</text>
+  <text x="670" y="350" text-anchor="middle" font-size="9" fill="#5C3D1E" font-style="italic">explains ensemble success</text>
+
+  <!-- Thin separator lines for bottom labels -->
+  <line x1="40" y1="335" x2="220" y2="335" stroke="#D4C5A9" stroke-width="0.5"/>
+  <line x1="290" y1="335" x2="510" y2="335" stroke="#D4C5A9" stroke-width="0.5"/>
+  <line x1="560" y1="335" x2="760" y2="335" stroke="#D4C5A9" stroke-width="0.5"/>
+
+  <!-- Axes hint -->
+  <line x1="60" y1="320" x2="60" y2="160" stroke="#D4C5A9" stroke-width="0.8" marker-end="url(#mc-arr)" opacity="0.4"/>
+  <line x1="60" y1="320" x2="200" y2="320" stroke="#D4C5A9" stroke-width="0.8" marker-end="url(#mc-arr)" opacity="0.4"/>
+  <text x="50" y="155" font-size="7" fill="#D4C5A9">w2</text>
+  <text x="205" y="323" font-size="7" fill="#D4C5A9">w1</text>
+</svg>

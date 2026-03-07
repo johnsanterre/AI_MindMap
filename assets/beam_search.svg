@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" font-weight="bold">Beam Search: Keeping the k Best Hypotheses</text>
+
+  <!-- Time step labels -->
+  <text x="120" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Step 1</text>
+  <text x="310" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Step 2</text>
+  <text x="500" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Step 3</text>
+  <text x="680" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Output</text>
+
+  <!-- Beam width label -->
+  <text x="30" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" writing-mode="tb" font-style="italic">k = 2</text>
+
+  <!-- Step 1: Start node -->
+  <rect x="80" y="100" width="80" height="34" rx="6" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="120" y="121" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" font-weight="bold">"The"</text>
+  <text x="120" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">p = 0.40</text>
+
+  <rect x="80" y="190" width="80" height="34" rx="6" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="120" y="211" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDFAF4" font-weight="bold">"A"</text>
+  <text x="120" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">p = 0.30</text>
+
+  <!-- Pruned candidate (greyed out) -->
+  <rect x="80" y="275" width="80" height="34" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="120" y="296" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#D4C5A9">"One"</text>
+  <text x="120" y="327" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#D4C5A9">p = 0.10</text>
+  <text x="120" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">pruned</text>
+
+  <!-- Step 2: Expansions from "The" -->
+  <rect x="270" y="82" width="80" height="34" rx="6" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="310" y="103" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" font-weight="bold">"The cat"</text>
+  <text x="310" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">p = 0.24</text>
+
+  <rect x="270" y="162" width="80" height="34" rx="6" fill="#7C2530" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="310" y="183" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" font-weight="bold">"A big"</text>
+  <text x="310" y="212" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7C2530">p = 0.18</text>
+
+  <!-- Pruned expansions -->
+  <rect x="270" y="240" width="80" height="34" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="310" y="261" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#D4C5A9">"The big"</text>
+  <text x="310" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#D4C5A9">p = 0.12</text>
+
+  <rect x="270" y="310" width="80" height="34" rx="6" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="310" y="331" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#D4C5A9">"A cat"</text>
+  <text x="310" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#D4C5A9">p = 0.09</text>
+
+  <!-- Step 3: Final expansions -->
+  <rect x="460" y="100" width="80" height="34" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="500" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">"The cat</text>
+  <text x="500" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">sat"</text>
+  <text x="500" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">p = 0.17</text>
+
+  <rect x="460" y="190" width="80" height="34" rx="6" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="500" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">"A big</text>
+  <text x="500" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-weight="bold">dog"</text>
+  <text x="500" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">p = 0.11</text>
+
+  <!-- Winner arrow -->
+  <line x1="544" y1="117" x2="630" y2="117" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Output box -->
+  <rect x="636" y="92" width="130" height="50" rx="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="701" y="114" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">"The cat sat"</text>
+  <text x="701" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">highest score</text>
+
+  <!-- Connecting lines: Step 1 to Step 2 -->
+  <line x1="160" y1="117" x2="270" y2="99" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="160" y1="117" x2="270" y2="257" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="160" y1="207" x2="270" y2="179" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="160" y1="207" x2="270" y2="327" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Connecting lines: Step 2 to Step 3 -->
+  <line x1="350" y1="99" x2="460" y2="117" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <line x1="350" y1="179" x2="460" y2="207" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Bottom annotation -->
+  <text x="400" y="388" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">At each step, expand all hypotheses, score, then keep only the top k (beam width)</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>
