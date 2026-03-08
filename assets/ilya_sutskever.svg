@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="45" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Ilya Sutskever — A Timeline</text>
+
+  <!-- Timeline axis -->
+  <line x1="80" y1="200" x2="720" y2="200" stroke="#D4C5A9" stroke-width="3"/>
+  <!-- Arrow at end -->
+  <polygon points="720,193 735,200 720,207" fill="#D4C5A9"/>
+
+  <!-- Year markers and events -->
+
+  <!-- 2012 - AlexNet -->
+  <line x1="130" y1="185" x2="130" y2="215" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="130" cy="200" r="8" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="130" y="245" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">2012</text>
+  <rect x="70" y="80" width="120" height="55" rx="6" fill="#7C2530" opacity="0.9"/>
+  <text x="130" y="100" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" text-anchor="middle" font-weight="bold">AlexNet</text>
+  <text x="130" y="118" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">ImageNet revolution</text>
+  <text x="130" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">with Hinton &amp; Krizhevsky</text>
+  <line x1="130" y1="135" x2="130" y2="192" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- 2014 - Seq2Seq -->
+  <line x1="270" y1="185" x2="270" y2="215" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="270" cy="200" r="8" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="270" y="245" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">2014</text>
+  <rect x="205" y="265" width="130" height="55" rx="6" fill="#2D5A8E" opacity="0.9"/>
+  <text x="270" y="285" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" text-anchor="middle" font-weight="bold">Seq2Seq</text>
+  <text x="270" y="303" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Encoder-decoder for</text>
+  <text x="270" y="315" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">machine translation</text>
+  <line x1="270" y1="208" x2="270" y2="265" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- 2015 - OpenAI -->
+  <line x1="400" y1="185" x2="400" y2="215" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="400" cy="200" r="8" fill="#5C3D1E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="245" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">2015</text>
+  <rect x="335" y="80" width="130" height="55" rx="6" fill="#5C3D1E" opacity="0.9"/>
+  <text x="400" y="100" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" text-anchor="middle" font-weight="bold">OpenAI</text>
+  <text x="400" y="118" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Co-founder &amp;</text>
+  <text x="400" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Chief Scientist</text>
+  <line x1="400" y1="135" x2="400" y2="192" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- 2018-2020 - GPT Series -->
+  <line x1="540" y1="185" x2="540" y2="215" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="540" cy="200" r="8" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="540" y="245" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">2018–20</text>
+  <rect x="475" y="265" width="130" height="55" rx="6" fill="#C4A87A" opacity="0.95"/>
+  <text x="540" y="285" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">GPT Series</text>
+  <text x="540" y="303" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Scaling up language</text>
+  <text x="540" y="315" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">models &amp; compute</text>
+  <line x1="540" y1="208" x2="540" y2="265" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- 2024 - SSI -->
+  <line x1="670" y1="185" x2="670" y2="215" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="670" cy="200" r="8" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="670" y="245" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">2024</text>
+  <rect x="610" y="80" width="120" height="70" rx="6" fill="#7C2530" opacity="0.9"/>
+  <text x="670" y="100" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" text-anchor="middle" font-weight="bold">SSI</text>
+  <text x="670" y="118" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Safe Super-</text>
+  <text x="670" y="130" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">intelligence Inc.</text>
+  <text x="670" y="144" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">Safety-first AGI</text>
+  <line x1="670" y1="150" x2="670" y2="192" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Subtitle -->
+  <text x="400" y="380" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle" font-style="italic">"The most important thing is to figure out what the most important thing is."</text>
+</svg>
