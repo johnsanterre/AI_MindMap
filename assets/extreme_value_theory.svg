@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" font-size="22" fill="#5C3D1E" font-weight="bold">The Three Faces of Extreme Value Theory</text>
+  <text x="400" y="62" text-anchor="middle" font-size="13" fill="#5C3D1E" font-style="italic">GEV Distribution Types by Shape Parameter &#x03BE;</text>
+
+  <!-- Axes -->
+  <line x1="100" y1="330" x2="720" y2="330" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="100" y1="330" x2="100" y2="80" stroke="#5C3D1E" stroke-width="1.5"/>
+  <!-- Axis labels -->
+  <text x="410" y="358" text-anchor="middle" font-size="13" fill="#5C3D1E">x</text>
+  <text x="80" y="200" text-anchor="middle" font-size="13" fill="#5C3D1E" transform="rotate(-90,80,200)">Density</text>
+
+  <!-- Axis ticks -->
+  <line x1="100" y1="330" x2="100" y2="335" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="250" y1="330" x2="250" y2="335" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="400" y1="330" x2="400" y2="335" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="550" y1="330" x2="550" y2="335" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="700" y1="330" x2="700" y2="335" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- Gumbel (Type I): xi = 0, light tail — classic shape, moderate right tail -->
+  <path d="M 120,328 C 140,326 160,320 200,300 Q 240,270 280,210 Q 310,155 340,120 Q 370,105 400,130 Q 430,160 460,210 Q 500,275 540,305 Q 580,320 620,325 Q 660,328 700,329" fill="none" stroke="#2D5A8E" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Frechet (Type II): xi > 0, heavy tail — shifted left, very fat right tail -->
+  <path d="M 120,328 C 140,325 160,315 190,290 Q 220,250 250,190 Q 270,145 300,115 Q 320,108 340,125 Q 370,160 400,210 Q 440,270 480,300 Q 520,315 560,322 Q 600,326 640,327 Q 670,328 700,328.5" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Weibull (Type III): xi < 0, bounded upper tail — drops to zero at finite point -->
+  <path d="M 120,328 C 150,326 180,322 220,310 Q 260,285 300,240 Q 330,195 360,145 Q 380,118 400,108 Q 420,108 440,125 Q 470,165 500,230 Q 520,280 535,310 Q 545,325 550,329 L 550,330" fill="none" stroke="#C4A87A" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Bounded endpoint marker -->
+  <circle cx="550" cy="329" r="4" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="558" y="322" font-size="10" fill="#5C3D1E" font-style="italic">finite endpoint</text>
+
+  <!-- Legend box -->
+  <rect x="555" y="85" width="195" height="115" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+
+  <!-- Gumbel legend -->
+  <line x1="565" y1="110" x2="595" y2="110" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="602" y="114" font-size="12" fill="#2D5A8E" font-weight="bold">Gumbel (&#x03BE; = 0)</text>
+  <text x="602" y="128" font-size="10" fill="#5C3D1E">Light tail (exponential)</text>
+
+  <!-- Frechet legend -->
+  <line x1="565" y1="148" x2="595" y2="148" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="602" y="152" font-size="12" fill="#7C2530" font-weight="bold">Fr&#xe9;chet (&#x03BE; &gt; 0)</text>
+  <text x="602" y="166" font-size="10" fill="#5C3D1E">Heavy tail (polynomial)</text>
+
+  <!-- Weibull legend -->
+  <line x1="565" y1="182" x2="595" y2="182" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="602" y="186" font-size="12" fill="#C4A87A" font-weight="bold">Weibull (&#x03BE; &lt; 0)</text>
+  <text x="602" y="200" font-size="10" fill="#5C3D1E">Bounded upper tail</text>
+
+  <!-- Tail behavior annotations -->
+  <text x="660" y="310" font-size="10" fill="#2D5A8E" font-style="italic">light tail &#x2192;</text>
+  <text x="660" y="295" font-size="10" fill="#7C2530" font-style="italic">heavy tail &#x2192;</text>
+
+  <!-- Footer note -->
+  <text x="400" y="388" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">Fisher&#x2013;Tippett&#x2013;Gnedenko Theorem: all maxima converge to one of these three types</text>
+</svg>

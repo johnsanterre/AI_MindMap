@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Markov Inequality</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="310" x2="740" y2="310" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="80" y1="310" x2="80" y2="60" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Axis labels -->
+  <text x="400" y="345" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">x</text>
+  <text x="55" y="185" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,55,185)">P(X = x)</text>
+
+  <!-- Distribution curve (right-skewed) -->
+  <path d="M 100,310 C 120,310 140,305 170,280 C 200,250 220,160 260,100 C 290,60 310,70 330,100 C 360,145 390,220 430,260 C 470,295 520,308 560,310 C 600,310 640,310 700,310" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+
+  <!-- Filled area under curve (distribution body) -->
+  <path d="M 100,310 C 120,310 140,305 170,280 C 200,250 220,160 260,100 C 290,60 310,70 330,100 C 360,145 390,220 430,260 C 470,295 520,308 560,310 C 600,310 640,310 700,310 L 700,310 Z" fill="#2D5A8E" fill-opacity="0.1"/>
+
+  <!-- Shaded tail area P(X >= a) -->
+  <path d="M 500,310 C 510,306 520,308 560,310 C 600,310 640,310 700,310 L 700,310 Z" fill="#7C2530" fill-opacity="0.35"/>
+  <path d="M 500,286 C 510,295 520,303 540,308 C 560,310 600,310 700,310" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <!-- More accurate shaded tail -->
+  <polygon points="500,286 510,295 520,303 540,308 560,310 700,310 700,310 500,310" fill="#7C2530" fill-opacity="0.3"/>
+
+  <!-- E[X] marker -->
+  <line x1="300" y1="310" x2="300" y2="80" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="300" y="370" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">E[X]</text>
+  <circle cx="300" cy="310" r="4" fill="#2D5A8E"/>
+
+  <!-- Threshold 'a' marker -->
+  <line x1="500" y1="310" x2="500" y2="80" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="500" y="370" font-family="Georgia, serif" font-size="15" fill="#7C2530" text-anchor="middle" font-weight="bold">a</text>
+  <circle cx="500" cy="310" r="4" fill="#7C2530"/>
+
+  <!-- Tail label -->
+  <text x="600" y="270" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-style="italic">P(X &gt;= a)</text>
+  <path d="M 600,275 L 570,295" stroke="#7C2530" stroke-width="1.5" fill="none" marker-end="url(#arrowRed)"/>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Bound box -->
+  <rect x="530" y="90" width="230" height="90" rx="8" fill="#FDFAF4" stroke="#C4A87A" stroke-width="2"/>
+  <text x="645" y="118" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Markov Bound:</text>
+  <text x="645" y="148" font-family="Georgia, serif" font-size="18" fill="#7C2530" text-anchor="middle" font-weight="bold">P(X &gt;= a) &lt;= E[X] / a</text>
+  <text x="645" y="172" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">for X &gt;= 0 and a &gt; 0</text>
+
+  <!-- Bracket showing E[X]/a ratio -->
+  <line x1="300" y1="385" x2="500" y2="385" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="300" y1="380" x2="300" y2="390" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="500" y1="380" x2="500" y2="390" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="398" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">E[X] / a = bound on tail probability</text>
+</svg>

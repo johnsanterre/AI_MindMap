@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">KKT Conditions: Optimality at the Constraint Boundary</text>
+
+  <!-- Contour lines of objective function f(x) -->
+  <ellipse cx="280" cy="220" rx="60" ry="40" fill="none" stroke="#2D5A8E" stroke-width="1.2" opacity="0.25"/>
+  <ellipse cx="280" cy="220" rx="100" ry="67" fill="none" stroke="#2D5A8E" stroke-width="1.2" opacity="0.3"/>
+  <ellipse cx="280" cy="220" rx="140" ry="93" fill="none" stroke="#2D5A8E" stroke-width="1.2" opacity="0.35"/>
+  <ellipse cx="280" cy="220" rx="180" ry="120" fill="none" stroke="#2D5A8E" stroke-width="1.2" opacity="0.4"/>
+  <ellipse cx="280" cy="220" rx="220" ry="147" fill="none" stroke="#2D5A8E" stroke-width="1.2" opacity="0.45"/>
+
+  <!-- Contour labels -->
+  <text x="225" y="215" font-size="11" fill="#2D5A8E" opacity="0.7">f = 1</text>
+  <text x="185" y="215" font-size="11" fill="#2D5A8E" opacity="0.7">f = 2</text>
+  <text x="145" y="215" font-size="11" fill="#2D5A8E" opacity="0.7">f = 3</text>
+
+  <!-- Constraint boundary g(x) <= 0 as a curve -->
+  <path d="M 340 80 Q 370 180 360 220 Q 350 280 320 350" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="375" y="120" font-size="13" font-weight="bold" fill="#7C2530">g(x) = 0</text>
+  <text x="375" y="138" font-size="11" fill="#7C2530">(constraint boundary)</text>
+
+  <!-- Feasible region indicator -->
+  <text x="420" y="260" font-size="12" fill="#7C2530" opacity="0.6" font-style="italic">feasible region</text>
+  <path d="M 410 253 L 395 240" fill="none" stroke="#7C2530" stroke-width="1" opacity="0.5" marker-end="url(#arrowTan)"/>
+
+  <!-- Optimal point x* -->
+  <circle cx="358" cy="222" r="6" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="340" y="260" font-size="13" font-weight="bold" fill="#5C3D1E">x*</text>
+
+  <!-- Gradient of f (pointing inward toward center of contours) -->
+  <defs>
+    <marker id="arrowNavy" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- -grad f arrow (pointing away from contour center = direction of increase, negated for minimization) -->
+  <line x1="358" y1="222" x2="418" y2="220" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowNavy)"/>
+  <text x="422" y="210" font-size="12" font-weight="bold" fill="#2D5A8E">-nabla f(x*)</text>
+
+  <!-- grad g arrow (pointing outward from constraint, same direction) -->
+  <line x1="358" y1="222" x2="416" y2="224" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrowRed)"/>
+  <text x="422" y="236" font-size="12" font-weight="bold" fill="#7C2530">lambda nabla g(x*)</text>
+
+  <!-- Parallel indicator -->
+  <text x="430" y="196" font-size="11" fill="#5C3D1E" font-style="italic">gradients are parallel!</text>
+
+  <!-- Right panel: Complementary Slackness -->
+  <rect x="555" y="60" width="220" height="130" rx="8" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="665" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">Complementary Slackness</text>
+  <line x1="575" y1="93" x2="755" y2="93" stroke="#C4A87A" stroke-width="1"/>
+  <text x="665" y="115" text-anchor="middle" font-size="13" fill="#7C2530" font-weight="bold">lambda_i * g_i(x*) = 0</text>
+  <text x="665" y="140" text-anchor="middle" font-size="11" fill="#5C3D1E">If constraint inactive (g_i &lt; 0):</text>
+  <text x="665" y="156" text-anchor="middle" font-size="12" fill="#2D5A8E" font-weight="bold">then lambda_i = 0</text>
+  <text x="665" y="176" text-anchor="middle" font-size="11" fill="#5C3D1E">If lambda_i &gt; 0 (active multiplier):</text>
+  <text x="665" y="192" text-anchor="middle" font-size="12" fill="#2D5A8E" font-weight="bold">then g_i(x*) = 0</text>
+
+  <!-- Right panel: KKT Summary -->
+  <rect x="555" y="210" width="220" height="150" rx="8" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="665" y="235" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">KKT Conditions</text>
+  <line x1="575" y1="243" x2="755" y2="243" stroke="#C4A87A" stroke-width="1"/>
+  <text x="575" y="264" font-size="11.5" fill="#2D5A8E" font-weight="bold">1. Stationarity</text>
+  <text x="590" y="280" font-size="10.5" fill="#5C3D1E">nabla f = sum lambda_i nabla g_i</text>
+  <text x="575" y="300" font-size="11.5" fill="#2D5A8E" font-weight="bold">2. Primal Feasibility</text>
+  <text x="590" y="314" font-size="10.5" fill="#5C3D1E">g_i(x*) &lt;= 0</text>
+  <text x="575" y="332" font-size="11.5" fill="#2D5A8E" font-weight="bold">3. Dual Feasibility</text>
+  <text x="590" y="346" font-size="10.5" fill="#5C3D1E">lambda_i &gt;= 0</text>
+  <text x="575" y="358" font-size="11.5" fill="#2D5A8E" font-weight="bold">4. Comp. Slackness</text>
+
+  <!-- Bottom label -->
+  <text x="200" y="380" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">Minimizing f(x) subject to g(x) &lt;= 0</text>
+</svg>

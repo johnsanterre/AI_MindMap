@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Cramér-Rao Bound</text>
+
+  <!-- Axes -->
+  <line x1="100" y1="320" x2="700" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="100" y1="320" x2="100" y2="60" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Axis labels -->
+  <text x="400" y="355" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Estimator value</text>
+  <text x="55" y="190" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90,55,190)">Density</text>
+
+  <!-- True parameter line -->
+  <line x1="400" y1="320" x2="400" y2="65" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="400" y="375" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">True &#x3B8;</text>
+
+  <!-- Inefficient estimator (wider, flatter) - navy -->
+  <path d="M 160,320 Q 200,318 240,310 Q 280,290 320,240 Q 350,180 370,140 Q 385,115 400,108 Q 415,115 430,140 Q 450,180 480,240 Q 520,290 560,310 Q 600,318 640,320" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <!-- Fill with transparency -->
+  <path d="M 160,320 Q 200,318 240,310 Q 280,290 320,240 Q 350,180 370,140 Q 385,115 400,108 Q 415,115 430,140 Q 450,180 480,240 Q 520,290 560,310 Q 600,318 640,320 Z" fill="#2D5A8E" fill-opacity="0.08"/>
+
+  <!-- Efficient estimator (narrower, taller) - red -->
+  <path d="M 250,320 Q 280,319 310,316 Q 335,308 355,280 Q 370,240 380,180 Q 390,120 395,85 Q 398,72 400,68 Q 402,72 405,85 Q 410,120 420,180 Q 430,240 445,280 Q 465,308 490,316 Q 520,319 550,320" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <path d="M 250,320 Q 280,319 310,316 Q 335,308 355,280 Q 370,240 380,180 Q 390,120 395,85 Q 398,72 400,68 Q 402,72 405,85 Q 410,120 420,180 Q 430,240 445,280 Q 465,308 490,316 Q 520,319 550,320 Z" fill="#7C2530" fill-opacity="0.08"/>
+
+  <!-- CRB line (variance indicator for efficient estimator) -->
+  <line x1="355" y1="280" x2="445" y2="280" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="355" y1="275" x2="355" y2="285" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="445" y1="275" x2="445" y2="285" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Variance indicator for inefficient estimator -->
+  <line x1="320" y1="240" x2="480" y2="240" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="320" y1="235" x2="320" y2="245" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="480" y1="235" x2="480" y2="245" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Labels for distributions -->
+  <text x="610" y="135" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-style="italic">Inefficient estimator</text>
+  <text x="610" y="155" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">Var &gt; 1/I(&#x3B8;)</text>
+
+  <text x="610" y="195" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-style="italic">Efficient estimator</text>
+  <text x="610" y="215" font-family="Georgia, serif" font-size="13" fill="#7C2530">Var = 1/I(&#x3B8;)</text>
+
+  <!-- Formula box -->
+  <rect x="130" y="62" width="220" height="42" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5" rx="4"/>
+  <text x="240" y="80" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Var(&#x3B8;&#x302;) &#x2265; 1 / I(&#x3B8;)</text>
+  <text x="240" y="98" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle">The Cramér-Rao Lower Bound</text>
+</svg>

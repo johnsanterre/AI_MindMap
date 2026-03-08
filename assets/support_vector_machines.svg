@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Support Vector Machines</text>
+
+  <!-- Class +1 points (navy circles) -->
+  <circle cx="520" cy="100" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="560" cy="140" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="600" cy="90" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="580" cy="200" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="620" cy="160" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="640" cy="120" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="660" cy="220" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="610" cy="250" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="550" cy="270" r="8" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="700" cy="180" r="8" fill="#2D5A8E" opacity="0.7"/>
+
+  <!-- Class -1 points (red circles) -->
+  <circle cx="180" cy="150" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="220" cy="200" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="160" cy="250" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="200" cy="300" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="250" cy="280" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="140" cy="190" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="280" cy="130" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="120" cy="300" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="240" cy="110" r="8" fill="#7C2530" opacity="0.7"/>
+  <circle cx="190" cy="340" r="8" fill="#7C2530" opacity="0.7"/>
+
+  <!-- Support vectors (highlighted with larger rings) -->
+  <!-- Class -1 support vectors -->
+  <circle cx="320" cy="170" r="8" fill="#7C2530"/>
+  <circle cx="330" cy="280" r="8" fill="#7C2530"/>
+  <circle cx="320" cy="170" r="14" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="330" cy="280" r="14" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Class +1 support vectors -->
+  <circle cx="480" cy="130" r="8" fill="#2D5A8E"/>
+  <circle cx="490" cy="240" r="8" fill="#2D5A8E"/>
+  <circle cx="480" cy="130" r="14" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="490" cy="240" r="14" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Margin line left (dashed) -->
+  <line x1="305" y1="60" x2="345" y2="370" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="8,5"/>
+
+  <!-- Decision boundary / Hyperplane (solid) -->
+  <line x1="385" y1="60" x2="425" y2="370" stroke="#5C3D1E" stroke-width="3"/>
+
+  <!-- Margin line right (dashed) -->
+  <line x1="465" y1="60" x2="505" y2="370" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="8,5"/>
+
+  <!-- Margin arrows -->
+  <line x1="345" y1="215" x2="465" y2="215" stroke="#C4A87A" stroke-width="1.5"/>
+  <polygon points="350,211 345,215 350,219" fill="#C4A87A"/>
+  <polygon points="460,211 465,215 460,219" fill="#C4A87A"/>
+  <text x="405" y="208" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">margin</text>
+
+  <!-- Labels -->
+  <text x="405" y="385" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-style="italic">Maximum-margin hyperplane</text>
+
+  <!-- Legend -->
+  <circle cx="60" cy="370" r="6" fill="#7C2530"/>
+  <text x="72" y="374" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Class -1</text>
+  <circle cx="140" cy="370" r="6" fill="#2D5A8E"/>
+  <text x="152" y="374" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Class +1</text>
+  <circle cx="220" cy="370" r="6" fill="#5C3D1E"/>
+  <circle cx="220" cy="370" r="10" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="235" y="374" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Support vector</text>
+
+  <!-- Hyperplane label -->
+  <text x="440" y="80" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">w&#183;x + b = 0</text>
+  <text x="298" y="80" font-family="Georgia, serif" font-size="11" fill="#C4A87A">w&#183;x + b = -1</text>
+  <text x="480" y="340" font-family="Georgia, serif" font-size="11" fill="#C4A87A">w&#183;x + b = 1</text>
+</svg>

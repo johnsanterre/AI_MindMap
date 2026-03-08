@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#7C2530" font-weight="bold">Lie Groups: Continuous Symmetry</text>
+
+  <!-- SO(2) — circle on the left -->
+  <text x="160" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" font-weight="bold">SO(2) — Rotations in 2D</text>
+  <circle cx="160" cy="180" r="80" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <!-- Arrow along circle showing rotation -->
+  <path d="M 238 195 A 80 80 0 0 1 220 250" fill="none" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="255" y="235" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">rotation</text>
+  <!-- Identity point -->
+  <circle cx="240" cy="180" r="5" fill="#7C2530"/>
+  <text x="252" y="177" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">e (identity)</text>
+  <!-- Tangent line at identity = Lie algebra -->
+  <line x1="240" y1="120" x2="240" y2="240" stroke="#C4A87A" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="248" y="128" font-family="Georgia, serif" font-size="11" fill="#C4A87A" font-weight="bold">T_e = Lie algebra</text>
+
+  <!-- SO(3) — sphere in the center-right -->
+  <text x="530" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" font-weight="bold">SO(3) — Rotations in 3D</text>
+  <!-- Sphere body -->
+  <ellipse cx="530" cy="200" rx="110" ry="110" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <!-- Equator ellipse -->
+  <ellipse cx="530" cy="200" rx="110" ry="30" fill="none" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <!-- Meridian ellipse -->
+  <ellipse cx="530" cy="200" rx="30" ry="110" fill="none" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <!-- Rotation arrow around sphere -->
+  <path d="M 636 220 A 110 30 0 0 1 580 230" fill="none" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="640" y="240" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-style="italic">rotation</text>
+  <!-- Identity point on sphere (top-right) -->
+  <circle cx="640" cy="200" r="5" fill="#7C2530"/>
+  <text x="648" y="196" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">e</text>
+
+  <!-- Tangent plane at identity -->
+  <polygon points="610,130 700,145 680,200 590,185" fill="#C4A87A" fill-opacity="0.2" stroke="#C4A87A" stroke-width="2"/>
+  <text x="660" y="138" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">Tangent plane</text>
+  <text x="660" y="152" font-family="Georgia, serif" font-size="11" fill="#C4A87A" font-style="italic">= Lie algebra so(3)</text>
+
+  <!-- Exponential map arrow -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- exp map from tangent plane to sphere surface -->
+  <path d="M 625,185 C 600,175 570,170 555,180" fill="none" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <text x="565" y="165" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">exp</text>
+
+  <!-- Bottom annotations -->
+  <line x1="60" y1="330" x2="740" y2="330" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">The Lie algebra (tangent space at identity) captures the group's local structure.</text>
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E">The exponential map sends algebra elements back onto the group manifold.</text>
+</svg>

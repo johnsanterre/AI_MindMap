@@ -1,0 +1,91 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="2" y="2" width="796" height="396" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Random Variables: From Sample Space to the Real Line</text>
+
+  <!-- Sample Space Omega (left blob) -->
+  <ellipse cx="120" cy="200" rx="80" ry="100" fill="#C4A87A" fill-opacity="0.2" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="120" y="90" text-anchor="middle" fill="#5C3D1E" font-size="20" font-weight="bold">&#937;</text>
+  <text x="120" y="108" text-anchor="middle" fill="#5C3D1E" font-size="11">Sample Space</text>
+  <!-- Sample points -->
+  <circle cx="100" cy="155" r="4" fill="#7C2530"/>
+  <text x="90" y="150" fill="#7C2530" font-size="11">&#969;&#8321;</text>
+  <circle cx="140" cy="180" r="4" fill="#7C2530"/>
+  <text x="149" y="177" fill="#7C2530" font-size="11">&#969;&#8322;</text>
+  <circle cx="105" cy="220" r="4" fill="#7C2530"/>
+  <text x="88" y="217" fill="#7C2530" font-size="11">&#969;&#8323;</text>
+  <circle cx="145" cy="240" r="4" fill="#7C2530"/>
+  <text x="154" y="237" fill="#7C2530" font-size="11">&#969;&#8324;</text>
+  <circle cx="110" cy="265" r="4" fill="#7C2530"/>
+  <text x="93" y="262" fill="#7C2530" font-size="11">&#969;&#8325;</text>
+
+  <!-- Arrow X(omega) mapping -->
+  <line x1="205" y1="200" x2="280" y2="200" stroke="#5C3D1E" stroke-width="2.5" marker-end="url(#arrowBrown)"/>
+  <text x="243" y="190" text-anchor="middle" fill="#5C3D1E" font-size="15" font-weight="bold">X(&#969;)</text>
+  <defs>
+    <marker id="arrowBrown" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Real line target -->
+  <line x1="290" y1="200" x2="380" y2="200" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="335" y="190" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">&#8477;</text>
+  <!-- tick marks on real line -->
+  <line x1="300" y1="195" x2="300" y2="205" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="325" y1="195" x2="325" y2="205" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="350" y1="195" x2="350" y2="205" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="375" y1="195" x2="375" y2="205" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Mapping lines from points to real line -->
+  <line x1="104" y1="155" x2="300" y2="198" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <line x1="144" y1="180" x2="325" y2="198" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <line x1="109" y1="220" x2="325" y2="202" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <line x1="149" y1="240" x2="350" y2="202" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <line x1="114" y1="265" x2="375" y2="202" stroke="#7C2530" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <!-- Divider -->
+  <line x1="400" y1="55" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="6,4"/>
+
+  <!-- DISCRETE: PMF bar chart (left-of-right side) -->
+  <text x="510" y="72" text-anchor="middle" fill="#7C2530" font-size="15" font-weight="bold">Discrete (PMF)</text>
+  <!-- Axes -->
+  <line x1="430" y1="230" x2="590" y2="230" stroke="#555" stroke-width="1.5"/>
+  <line x1="430" y1="100" x2="430" y2="230" stroke="#555" stroke-width="1.5"/>
+  <text x="425" y="95" fill="#555" font-size="11">P(X=x)</text>
+  <text x="595" y="235" fill="#555" font-size="11">x</text>
+  <!-- Bars -->
+  <rect x="447" y="200" width="18" height="30" fill="#7C2530" fill-opacity="0.7"/>
+  <rect x="477" y="155" width="18" height="75" fill="#7C2530" fill-opacity="0.85"/>
+  <rect x="507" y="120" width="18" height="110" fill="#7C2530"/>
+  <rect x="537" y="170" width="18" height="60" fill="#7C2530" fill-opacity="0.8"/>
+  <rect x="567" y="210" width="18" height="20" fill="#7C2530" fill-opacity="0.6"/>
+  <!-- x labels -->
+  <text x="456" y="245" text-anchor="middle" fill="#555" font-size="10">1</text>
+  <text x="486" y="245" text-anchor="middle" fill="#555" font-size="10">2</text>
+  <text x="516" y="245" text-anchor="middle" fill="#555" font-size="10">3</text>
+  <text x="546" y="245" text-anchor="middle" fill="#555" font-size="10">4</text>
+  <text x="576" y="245" text-anchor="middle" fill="#555" font-size="10">5</text>
+
+  <!-- CONTINUOUS: PDF curve (right side) -->
+  <text x="670" y="72" text-anchor="middle" fill="#2D5A8E" font-size="15" font-weight="bold">Continuous (PDF)</text>
+  <!-- Axes -->
+  <line x1="615" y1="230" x2="775" y2="230" stroke="#555" stroke-width="1.5"/>
+  <line x1="615" y1="100" x2="615" y2="230" stroke="#555" stroke-width="1.5"/>
+  <text x="610" y="95" fill="#555" font-size="11">f(x)</text>
+  <text x="778" y="235" fill="#555" font-size="11">x</text>
+  <!-- Shaded area under curve -->
+  <path d="M 625,228 C 640,225 660,200 680,150 C 695,118 710,115 720,120 C 735,135 745,175 755,210 C 760,222 765,228 770,228 Z" fill="#2D5A8E" fill-opacity="0.12"/>
+  <!-- PDF curve -->
+  <path d="M 625,228 C 640,225 660,200 680,150 C 695,118 710,115 720,120 C 735,135 745,175 755,210 C 760,222 765,228 770,228" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+
+  <!-- Bottom caption: CDF unifies both -->
+  <rect x="415" y="270" width="370" height="55" fill="#C4A87A" fill-opacity="0.15" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="600" y="290" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">CDF unifies both:</text>
+  <text x="600" y="310" text-anchor="middle" fill="#5C3D1E" font-size="12">F(x) = P(X &#8804; x)    &#8212;  always non-decreasing, right-continuous</text>
+
+  <!-- Bottom left: formal definition -->
+  <rect x="15" y="320" width="370" height="55" fill="#C4A87A" fill-opacity="0.15" rx="6" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="200" y="340" text-anchor="middle" fill="#5C3D1E" font-size="13" font-weight="bold">Formal definition:</text>
+  <text x="200" y="360" text-anchor="middle" fill="#5C3D1E" font-size="12">X : (&#937;, F) &#8594; (&#8477;, B(&#8477;))    a measurable function</text>
+</svg>

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <!-- Background and border -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">Low-Rank Approximation</text>
+
+  <!-- Large matrix A (m x n) -->
+  <rect x="30" y="80" width="140" height="180" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2" rx="3"/>
+  <text x="100" y="175" text-anchor="middle" font-size="28" font-weight="bold" fill="#2D5A8E">A</text>
+  <text x="100" y="200" text-anchor="middle" font-size="13" fill="#2D5A8E">m × n</text>
+  <!-- bracket labels -->
+  <text x="100" y="72" text-anchor="middle" font-size="13" fill="#5C3D1E">Original Matrix</text>
+
+  <!-- Approximation symbol -->
+  <text x="200" y="175" text-anchor="middle" font-size="30" fill="#5C3D1E">≈</text>
+
+  <!-- Thin matrix U (m x r) -->
+  <rect x="235" y="80" width="50" height="180" fill="#7C2530" fill-opacity="0.18" stroke="#7C2530" stroke-width="2" rx="3"/>
+  <text x="260" y="175" text-anchor="middle" font-size="20" font-weight="bold" fill="#7C2530">U</text>
+  <text x="260" y="200" text-anchor="middle" font-size="12" fill="#7C2530">m × r</text>
+
+  <!-- Multiplication dot -->
+  <text x="300" y="175" text-anchor="middle" font-size="22" fill="#5C3D1E">×</text>
+
+  <!-- Sigma diagonal (r x r) -->
+  <rect x="315" y="130" width="55" height="55" fill="#C4A87A" fill-opacity="0.35" stroke="#C4A87A" stroke-width="2" rx="3"/>
+  <text x="342" y="163" text-anchor="middle" font-size="18" font-weight="bold" fill="#5C3D1E">Σ</text>
+  <text x="342" y="205" text-anchor="middle" font-size="12" fill="#5C3D1E">r × r</text>
+
+  <!-- Multiplication dot -->
+  <text x="387" y="175" text-anchor="middle" font-size="22" fill="#5C3D1E">×</text>
+
+  <!-- Thin matrix V^T (r x n) -->
+  <rect x="402" y="130" width="140" height="50" fill="#2D5A8E" fill-opacity="0.18" stroke="#2D5A8E" stroke-width="2" rx="3"/>
+  <text x="472" y="162" text-anchor="middle" font-size="20" font-weight="bold" fill="#2D5A8E">V<tspan font-size="13" baseline-shift="super">T</tspan></text>
+  <text x="472" y="205" text-anchor="middle" font-size="12" fill="#2D5A8E">r × n</text>
+
+  <!-- Label: rank r << min(m,n) -->
+  <text x="342" y="250" text-anchor="middle" font-size="14" font-style="italic" fill="#7C2530">r ≪ min(m, n)</text>
+
+  <!-- Singular value spectrum chart -->
+  <text x="660" y="72" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">Singular Values</text>
+
+  <!-- Axes -->
+  <line x1="580" y1="250" x2="740" y2="250" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="580" y1="90" x2="580" y2="250" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="660" y="268" text-anchor="middle" font-size="11" fill="#5C3D1E">index i</text>
+  <text x="570" y="170" text-anchor="middle" font-size="11" fill="#5C3D1E" transform="rotate(-90,570,170)">σ_i</text>
+
+  <!-- Bars showing singular values dropping off -->
+  <rect x="590" y="100" width="14" height="150" fill="#7C2530" rx="1"/>
+  <rect x="610" y="130" width="14" height="120" fill="#7C2530" rx="1"/>
+  <rect x="630" y="160" width="14" height="90" fill="#7C2530" rx="1"/>
+  <rect x="650" y="190" width="14" height="60" fill="#C4A87A" rx="1"/>
+  <!-- Truncation line -->
+  <line x1="647" y1="85" x2="647" y2="255" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="647" y="280" text-anchor="middle" font-size="11" font-style="italic" fill="#7C2530">truncate</text>
+  <!-- Discarded small values -->
+  <rect x="670" y="220" width="14" height="30" fill="#D4C5A9" rx="1"/>
+  <rect x="690" y="235" width="14" height="15" fill="#D4C5A9" rx="1"/>
+  <rect x="710" y="242" width="14" height="8" fill="#D4C5A9" rx="1"/>
+
+  <!-- Keep / discard labels -->
+  <text x="618" y="92" text-anchor="middle" font-size="10" font-weight="bold" fill="#7C2530">keep</text>
+  <text x="700" y="215" text-anchor="middle" font-size="10" fill="#D4C5A9" stroke="#5C3D1E" stroke-width="0">discard</text>
+
+  <!-- Bottom summary boxes -->
+  <rect x="40" y="300" width="210" height="70" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.5" rx="6"/>
+  <text x="145" y="325" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">Eckart-Young Theorem</text>
+  <text x="145" y="345" text-anchor="middle" font-size="11" fill="#5C3D1E">Truncated SVD = optimal</text>
+  <text x="145" y="360" text-anchor="middle" font-size="11" fill="#5C3D1E">rank-k approximation</text>
+
+  <rect x="290" y="300" width="210" height="70" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5" rx="6"/>
+  <text x="395" y="325" text-anchor="middle" font-size="13" font-weight="bold" fill="#2D5A8E">Storage Savings</text>
+  <text x="395" y="345" text-anchor="middle" font-size="11" fill="#5C3D1E">mn → r(m + n + 1)</text>
+  <text x="395" y="360" text-anchor="middle" font-size="11" fill="#5C3D1E">parameters stored</text>
+
+  <rect x="540" y="300" width="220" height="70" fill="#C4A87A" fill-opacity="0.2" stroke="#C4A87A" stroke-width="1.5" rx="6"/>
+  <text x="650" y="325" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">ML Applications</text>
+  <text x="650" y="345" text-anchor="middle" font-size="11" fill="#5C3D1E">LoRA, PCA, Netflix Prize,</text>
+  <text x="650" y="360" text-anchor="middle" font-size="11" fill="#5C3D1E">compressed sensing</text>
+</svg>

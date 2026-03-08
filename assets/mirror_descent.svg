@@ -4,87 +4,110 @@
   <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="1.5" rx="6" ry="6"/>
 
   <!-- Title -->
-  <text x="400" y="28" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Mirror Descent: Geometry-Aware Optimization</text>
+  <text x="400" y="28" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Mirror Descent: Primal-Dual Geometry</text>
 
-  <!-- Divider -->
-  <line x1="400" y1="42" x2="400" y2="395" stroke="#D4C5A9" stroke-width="1.2"/>
+  <!-- ===================== TOP ROW: Mirror Descent Flow ===================== -->
 
-  <!-- ===================== LEFT PANEL: Euclidean vs Mirror ===================== -->
-  <text x="200" y="52" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Euclidean Gradient Descent</text>
+  <!-- Primal Space Box -->
+  <rect x="30" y="48" width="195" height="165" fill="none" stroke="#2D5A8E" stroke-width="1.5" rx="4"/>
+  <text x="128" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Primal Space</text>
+  <text x="128" y="83" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">(original parameters)</text>
 
-  <!-- Simplex triangle -->
-  <polygon points="200,340 60,200 340,200" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
-  <text x="200" y="360" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="middle">probability simplex</text>
+  <!-- Simplex in primal space -->
+  <polygon points="68,190 188,190 128,108" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="128" y="205" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">constraint set</text>
 
-  <!-- Simplex vertex labels -->
-  <text x="47" y="195" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">e₁</text>
-  <text x="343" y="195" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">e₂</text>
-  <text x="200" y="375" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">e₃</text>
+  <!-- Point x_t in primal -->
+  <circle cx="115" cy="162" r="5" fill="#7C2530" stroke="#FDFAF4" stroke-width="1"/>
+  <text x="96" y="158" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-weight="bold">x_t</text>
 
-  <!-- Euclidean gradient step leaving simplex -->
-  <circle cx="180" cy="250" r="5" fill="#7C2530" stroke="#FDFAF4" stroke-width="1.5"/>
-  <text x="155" y="268" font-family="Georgia, serif" font-size="9" fill="#7C2530">x_t</text>
+  <!-- Arrow: primal to dual (mirror map) -->
+  <line x1="235" y1="130" x2="308" y2="130" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <text x="272" y="120" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">\u2207\u03C6</text>
+  <text x="272" y="148" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">mirror map</text>
 
-  <!-- Gradient arrow pointing outside simplex -->
-  <line x1="180" y1="250" x2="130" y2="170" stroke="#7C2530" stroke-width="2" stroke-dasharray="5,3"/>
-  <polygon points="130,170 136,182 124,180" fill="#7C2530"/>
-  <text x="110" y="158" font-family="Georgia, serif" font-size="9" fill="#7C2530">-η∇f</text>
-
-  <!-- Projection arrow back to simplex -->
-  <line x1="130" y1="170" x2="148" y2="200" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <polygon points="148,200 140,192 150,190" fill="#7C2530"/>
-  <circle cx="148" cy="200" r="4" fill="#7C2530" opacity="0.5"/>
-  <text x="115" y="200" font-family="Georgia, serif" font-size="8.5" fill="#7C2530" font-style="italic">project</text>
-
-  <!-- Problem annotation -->
-  <text x="200" y="82" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Step leaves feasible set;</text>
-  <text x="200" y="96" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">needs projection back</text>
-
-  <!-- ===================== RIGHT PANEL: Mirror Descent ===================== -->
-  <text x="600" y="52" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Mirror Descent (Entropic Map)</text>
-
-  <!-- Dual space box -->
-  <rect x="430" y="68" width="150" height="100" fill="none" stroke="#2D5A8E" stroke-width="1.2" rx="4" ry="4" stroke-dasharray="4,3"/>
-  <text x="505" y="84" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-style="italic">Dual Space (unconstrained)</text>
-
-  <!-- Primal simplex -->
-  <polygon points="600,340 460,200 740,200" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
-  <text x="600" y="360" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="middle">probability simplex</text>
-
-  <!-- Primal point -->
-  <circle cx="580" cy="250" r="5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
-  <text x="555" y="268" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">x_t</text>
-
-  <!-- Mirror map arrow up to dual space -->
-  <path d="M 580 245 Q 540 180 490 130" fill="none" stroke="#5C3D1E" stroke-width="1.8"/>
-  <polygon points="490,130 496,142 486,140" fill="#5C3D1E"/>
-  <text x="520" y="175" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" transform="rotate(-50, 520, 175)">∇φ (mirror map)</text>
+  <!-- Dual Space Box -->
+  <rect x="318" y="48" width="195" height="165" fill="none" stroke="#7C2530" stroke-width="1.5" rx="4"/>
+  <text x="416" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Dual Space</text>
+  <text x="416" y="83" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">(unconstrained gradients)</text>
 
   <!-- Dual point -->
-  <circle cx="490" cy="125" r="4" fill="#5C3D1E"/>
+  <circle cx="380" cy="135" r="5" fill="#7C2530" stroke="#FDFAF4" stroke-width="1"/>
+  <text x="358" y="130" font-family="Georgia, serif" font-size="9" fill="#7C2530">\u2207\u03C6(x_t)</text>
 
   <!-- Gradient step in dual space -->
-  <line x1="490" y1="125" x2="545" y2="105" stroke="#2D5A8E" stroke-width="2"/>
-  <polygon points="545,105 533,106 537,115" fill="#2D5A8E"/>
-  <text x="520" y="98" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">-η∇f</text>
+  <line x1="385" y1="140" x2="438" y2="172" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowNavy)"/>
+  <circle cx="443" cy="176" r="5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1"/>
+  <text x="470" y="170" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-weight="bold">\u03B8_{t+1}</text>
+  <text x="470" y="185" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">\u2212\u03B7 g_t</text>
 
-  <!-- Dual updated point -->
-  <circle cx="545" cy="105" r="4" fill="#5C3D1E"/>
+  <!-- Arrow: dual back to primal (inverse mirror map) -->
+  <path d="M 523 155 Q 590 195 640 155 Q 670 130 695 135" fill="none" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <text x="615" y="210" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">(\u2207\u03C6)\u207B\u00B9</text>
+  <text x="615" y="226" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">inverse mirror map</text>
 
-  <!-- Inverse mirror map arrow back down to simplex -->
-  <path d="M 545 110 Q 595 170 620 230" fill="none" stroke="#5C3D1E" stroke-width="1.8"/>
-  <polygon points="620,230 622,218 614,224" fill="#5C3D1E"/>
-  <text x="605" y="170" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" transform="rotate(60, 605, 170)">∇φ* (softmax)</text>
+  <!-- Result back in primal -->
+  <rect x="700" y="48" width="85" height="165" fill="none" stroke="#2D5A8E" stroke-width="1.5" rx="4" stroke-dasharray="4,3"/>
+  <text x="742" y="68" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Primal</text>
+  <circle cx="742" cy="130" r="5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1"/>
+  <text x="742" y="150" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">x_{t+1}</text>
+  <text x="742" y="165" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle" font-style="italic">feasible!</text>
 
-  <!-- New primal point on simplex -->
-  <circle cx="620" cy="235" r="5" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="1.5"/>
-  <text x="635" y="230" font-family="Georgia, serif" font-size="9" fill="#2D5A8E">x_{t+1}</text>
+  <!-- ===================== BOTTOM: Comparison ===================== -->
+  <line x1="30" y1="240" x2="770" y2="240" stroke="#D4C5A9" stroke-width="1"/>
 
-  <!-- Stays on simplex annotation -->
-  <text x="600" y="82" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Stays on simplex</text>
-  <text x="600" y="96" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">automatically via softmax</text>
+  <!-- Standard GD (left) -->
+  <text x="200" y="262" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#C4A87A" text-anchor="middle">Standard Gradient Descent</text>
+  <text x="200" y="277" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">Euclidean geometry assumed</text>
 
-  <!-- Bottom legend -->
-  <text x="200" y="395" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">φ(x) = Σ xᵢ log xᵢ  (neg. entropy)</text>
-  <text x="600" y="395" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Bregman div. Dφ replaces ‖·‖²</text>
+  <!-- Euclidean contours -->
+  <circle cx="160" cy="340" r="48" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+  <circle cx="160" cy="340" r="34" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+  <circle cx="160" cy="340" r="18" fill="none" stroke="#C4A87A" stroke-width="1" opacity="0.6"/>
+  <circle cx="160" cy="340" r="4" fill="#C4A87A"/>
+
+  <!-- GD step -->
+  <circle cx="208" cy="312" r="4" fill="#5C3D1E"/>
+  <line x1="208" y1="312" x2="178" y2="332" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowTan)"/>
+  <text x="225" y="307" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">x \u2212 \u03B7\u2207f</text>
+
+  <!-- Divergence label -->
+  <text x="200" y="393" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle">D(x,y) = \u00BD\u2016x\u2212y\u2016\u00B2</text>
+
+  <!-- VS label -->
+  <text x="400" y="345" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#D4C5A9" text-anchor="middle">vs.</text>
+
+  <!-- Mirror Descent (right) -->
+  <text x="600" y="262" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Mirror Descent</text>
+  <text x="600" y="277" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">Adapted to problem geometry</text>
+
+  <!-- Warped contours -->
+  <ellipse cx="560" cy="340" rx="58" ry="32" fill="none" stroke="#7C2530" stroke-width="1" opacity="0.5" transform="rotate(-20, 560, 340)"/>
+  <ellipse cx="560" cy="340" rx="40" ry="22" fill="none" stroke="#7C2530" stroke-width="1" opacity="0.5" transform="rotate(-20, 560, 340)"/>
+  <ellipse cx="560" cy="340" rx="20" ry="11" fill="none" stroke="#7C2530" stroke-width="1" opacity="0.5" transform="rotate(-20, 560, 340)"/>
+  <circle cx="560" cy="340" r="4" fill="#7C2530"/>
+
+  <!-- MD step -->
+  <circle cx="618" cy="318" r="4" fill="#5C3D1E"/>
+  <path d="M 618 318 Q 592 326 572 340" fill="none" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+  <text x="636" y="313" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Bregman proj.</text>
+
+  <!-- Bregman divergence label -->
+  <text x="600" y="393" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">D_\u03C6(x,y) = \u03C6(x) \u2212 \u03C6(y) \u2212 \u2207\u03C6(y)\u1D40(x\u2212y)</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowNavy" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#7C2530"/>
+    </marker>
+  </defs>
 </svg>

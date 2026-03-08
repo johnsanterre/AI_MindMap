@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Georgia, serif" font-size="20" fill="#7C2530" text-anchor="middle" font-weight="bold">Topological Data Analysis: From Point Cloud to Persistence</text>
+
+  <!-- Stage 1: Point Cloud -->
+  <text x="100" y="68" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Point Cloud</text>
+  <!-- Scattered points forming a rough loop shape -->
+  <circle cx="75" cy="105" r="3" fill="#2D5A8E"/>
+  <circle cx="90" cy="85" r="3" fill="#2D5A8E"/>
+  <circle cx="115" cy="80" r="3" fill="#2D5A8E"/>
+  <circle cx="135" cy="90" r="3" fill="#2D5A8E"/>
+  <circle cx="140" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="130" cy="130" r="3" fill="#2D5A8E"/>
+  <circle cx="110" cy="140" r="3" fill="#2D5A8E"/>
+  <circle cx="85" cy="135" r="3" fill="#2D5A8E"/>
+  <circle cx="70" cy="120" r="3" fill="#2D5A8E"/>
+  <circle cx="100" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="105" cy="95" r="3" fill="#2D5A8E"/>
+  <circle cx="125" cy="115" r="3" fill="#2D5A8E"/>
+
+  <!-- Arrow 1 -->
+  <line x1="160" y1="110" x2="195" y2="110" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="178" y="100" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">small r</text>
+
+  <!-- Stage 2: Small radius - disconnected components -->
+  <text x="270" y="68" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">r = small</text>
+  <circle cx="245" cy="105" r="3" fill="#2D5A8E"/>
+  <circle cx="260" cy="85" r="3" fill="#2D5A8E"/>
+  <circle cx="285" cy="80" r="3" fill="#2D5A8E"/>
+  <circle cx="305" cy="90" r="3" fill="#2D5A8E"/>
+  <circle cx="310" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="300" cy="130" r="3" fill="#2D5A8E"/>
+  <circle cx="280" cy="140" r="3" fill="#2D5A8E"/>
+  <circle cx="255" cy="135" r="3" fill="#2D5A8E"/>
+  <circle cx="240" cy="120" r="3" fill="#2D5A8E"/>
+  <circle cx="270" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="275" cy="95" r="3" fill="#2D5A8E"/>
+  <circle cx="295" cy="115" r="3" fill="#2D5A8E"/>
+  <!-- Small edges forming fragments -->
+  <line x1="245" y1="105" x2="240" y2="120" stroke="#2D5A8E" stroke-width="1" opacity="0.4"/>
+  <line x1="260" y1="85" x2="275" y2="95" stroke="#2D5A8E" stroke-width="1" opacity="0.4"/>
+  <line x1="285" y1="80" x2="305" y2="90" stroke="#2D5A8E" stroke-width="1" opacity="0.4"/>
+  <line x1="310" y1="110" x2="295" y2="115" stroke="#2D5A8E" stroke-width="1" opacity="0.4"/>
+  <line x1="280" y1="140" x2="255" y2="135" stroke="#2D5A8E" stroke-width="1" opacity="0.4"/>
+
+  <!-- Arrow 2 -->
+  <line x1="330" y1="110" x2="365" y2="110" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="348" y="100" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">med r</text>
+
+  <!-- Stage 3: Medium radius - loop visible -->
+  <text x="440" y="68" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">r = medium</text>
+  <circle cx="415" cy="105" r="3" fill="#2D5A8E"/>
+  <circle cx="430" cy="85" r="3" fill="#2D5A8E"/>
+  <circle cx="455" cy="80" r="3" fill="#2D5A8E"/>
+  <circle cx="475" cy="90" r="3" fill="#2D5A8E"/>
+  <circle cx="480" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="470" cy="130" r="3" fill="#2D5A8E"/>
+  <circle cx="450" cy="140" r="3" fill="#2D5A8E"/>
+  <circle cx="425" cy="135" r="3" fill="#2D5A8E"/>
+  <circle cx="410" cy="120" r="3" fill="#2D5A8E"/>
+  <circle cx="440" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="445" cy="95" r="3" fill="#2D5A8E"/>
+  <circle cx="465" cy="115" r="3" fill="#2D5A8E"/>
+  <!-- Connected loop with triangles filled -->
+  <polygon points="415,105 430,85 445,95" fill="#2D5A8E" opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="430,85 455,80 445,95" fill="#2D5A8E" opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="455,80 475,90 465,115" fill="#2D5A8E" opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="475,90 480,110 465,115" fill="#2D5A8E" opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="480,110 470,130 465,115" fill="#2D5A8E" opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="470,130 450,140 465,115" fill="#7C2530" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="450,140 425,135 440,110" fill="#7C2530" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <polygon points="425,135 415,105 410,120" fill="#2D5A8E" opacity="0.1" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="415" y1="105" x2="445" y2="95" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="445" y1="95" x2="440" y2="110" stroke="#2D5A8E" stroke-width="1"/>
+  <!-- Hole in center indicated -->
+  <text x="447" y="115" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">loop!</text>
+
+  <!-- Arrow 3 -->
+  <line x1="500" y1="110" x2="535" y2="110" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="518" y="100" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">large r</text>
+
+  <!-- Stage 4: Large radius - filled in, loop gone -->
+  <text x="620" y="68" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">r = large</text>
+  <polygon points="585,105 600,85 625,80 645,90 650,110 640,130 620,140 595,135 580,120" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <circle cx="585" cy="105" r="3" fill="#2D5A8E"/>
+  <circle cx="600" cy="85" r="3" fill="#2D5A8E"/>
+  <circle cx="625" cy="80" r="3" fill="#2D5A8E"/>
+  <circle cx="645" cy="90" r="3" fill="#2D5A8E"/>
+  <circle cx="650" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="640" cy="130" r="3" fill="#2D5A8E"/>
+  <circle cx="620" cy="140" r="3" fill="#2D5A8E"/>
+  <circle cx="595" cy="135" r="3" fill="#2D5A8E"/>
+  <circle cx="580" cy="120" r="3" fill="#2D5A8E"/>
+  <circle cx="610" cy="110" r="3" fill="#2D5A8E"/>
+  <circle cx="615" cy="95" r="3" fill="#2D5A8E"/>
+  <circle cx="635" cy="115" r="3" fill="#2D5A8E"/>
+  <!-- Fill triangles across center -->
+  <polygon points="585,105 615,95 610,110" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="0.5"/>
+  <polygon points="615,95 635,115 610,110" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="0.5"/>
+  <polygon points="610,110 620,140 595,135" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="0.5"/>
+  <text x="615" y="118" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">filled</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Bottom section: Persistence Barcode (left) and Persistence Diagram (right) -->
+  <line x1="30" y1="170" x2="770" y2="170" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Persistence Barcode -->
+  <text x="220" y="195" font-family="Georgia, serif" font-size="15" fill="#7C2530" text-anchor="middle" font-weight="bold">Persistence Barcode</text>
+
+  <!-- Axis -->
+  <line x1="60" y1="360" x2="380" y2="360" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="220" y="385" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Scale parameter (r)</text>
+  <!-- Tick marks -->
+  <line x1="80" y1="357" x2="80" y2="363" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="160" y1="357" x2="160" y2="363" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="240" y1="357" x2="240" y2="363" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="320" y1="357" x2="320" y2="363" stroke="#5C3D1E" stroke-width="1"/>
+  <line x1="360" y1="357" x2="360" y2="363" stroke="#5C3D1E" stroke-width="1"/>
+
+  <!-- H0 label (connected components) -->
+  <text x="50" y="225" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="end" font-weight="bold">H0</text>
+  <text x="50" y="238" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="end" font-style="italic">(components)</text>
+
+  <!-- H0 bars - connected components that merge -->
+  <rect x="80" y="215" width="280" height="6" rx="2" fill="#2D5A8E" opacity="0.8"/>
+  <rect x="80" y="225" width="90" height="6" rx="2" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="80" y="235" width="60" height="6" rx="2" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="80" y="245" width="50" height="6" rx="2" fill="#2D5A8E" opacity="0.5"/>
+  <rect x="80" y="255" width="70" height="6" rx="2" fill="#2D5A8E" opacity="0.5"/>
+  <rect x="80" y="265" width="40" height="6" rx="2" fill="#2D5A8E" opacity="0.4"/>
+  <rect x="80" y="275" width="55" height="6" rx="2" fill="#2D5A8E" opacity="0.4"/>
+  <rect x="80" y="285" width="45" height="6" rx="2" fill="#2D5A8E" opacity="0.4"/>
+
+  <!-- H1 label (loops) -->
+  <text x="50" y="315" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="end" font-weight="bold">H1</text>
+  <text x="50" y="328" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="end" font-style="italic">(loops)</text>
+
+  <!-- H1 bars - loop appears and persists -->
+  <rect x="150" y="310" width="150" height="6" rx="2" fill="#7C2530" opacity="0.8"/>
+  <rect x="170" y="320" width="40" height="6" rx="2" fill="#7C2530" opacity="0.4"/>
+  <rect x="180" y="330" width="30" height="6" rx="2" fill="#7C2530" opacity="0.3"/>
+
+  <!-- Annotation: long bar = real feature -->
+  <line x1="230" y1="305" x2="230" y2="296" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="232" y="292" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">persistent = real feature</text>
+
+  <!-- Annotation: short bar = noise -->
+  <line x1="195" y1="335" x2="195" y2="345" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="197" y="353" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">short = noise</text>
+
+  <!-- Persistence Diagram -->
+  <text x="600" y="195" font-family="Georgia, serif" font-size="15" fill="#7C2530" text-anchor="middle" font-weight="bold">Persistence Diagram</text>
+
+  <!-- Axes -->
+  <line x1="470" y1="360" x2="740" y2="360" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="470" y1="360" x2="470" y2="210" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="610" y="385" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Birth</text>
+  <text x="458" y="285" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" transform="rotate(-90 458 285)">Death</text>
+
+  <!-- Diagonal line (birth = death) -->
+  <line x1="470" y1="360" x2="680" y2="210" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="695" y="218" font-family="Georgia, serif" font-size="9" fill="#C4A87A" font-style="italic">birth=death</text>
+
+  <!-- H0 points (blue, near diagonal = short-lived components) -->
+  <circle cx="495" cy="340" r="4" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="500" cy="335" r="4" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="510" cy="330" r="4" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="490" cy="345" r="4" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="505" cy="325" r="4" fill="#2D5A8E" opacity="0.5"/>
+  <circle cx="515" cy="338" r="4" fill="#2D5A8E" opacity="0.4"/>
+  <circle cx="488" cy="350" r="4" fill="#2D5A8E" opacity="0.4"/>
+  <!-- One H0 point far from diagonal (the surviving component) -->
+  <circle cx="485" cy="225" r="5" fill="#2D5A8E" opacity="0.9" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- H1 points (red) -->
+  <!-- Persistent loop - far from diagonal -->
+  <circle cx="540" cy="250" r="6" fill="#7C2530" opacity="0.9" stroke="#7C2530" stroke-width="1"/>
+  <!-- Noisy short-lived loops - near diagonal -->
+  <circle cx="560" cy="315" r="4" fill="#7C2530" opacity="0.4"/>
+  <circle cx="575" cy="320" r="4" fill="#7C2530" opacity="0.3"/>
+
+  <!-- Annotation arrow to persistent loop -->
+  <line x1="555" y1="248" x2="610" y2="240" stroke="#7C2530" stroke-width="1"/>
+  <text x="612" y="237" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">significant loop</text>
+  <text x="612" y="249" font-family="Georgia, serif" font-size="9" fill="#7C2530" font-style="italic">(far from diagonal)</text>
+
+  <!-- Legend -->
+  <circle cx="480" cy="382" r="4" fill="#2D5A8E"/>
+  <text x="488" y="386" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">H0 (components)</text>
+  <circle cx="580" cy="382" r="4" fill="#7C2530"/>
+  <text x="588" y="386" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">H1 (loops)</text>
+</svg>

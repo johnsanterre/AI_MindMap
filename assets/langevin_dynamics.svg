@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowNavy" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Langevin Dynamics: Gradient + Noise = Sampling</text>
+
+  <!-- Energy landscape curve -->
+  <path d="M60,300 Q120,180 180,260 Q220,310 270,220 Q310,150 370,200 Q420,240 460,170 Q510,90 560,130 Q600,160 640,120 Q680,90 740,160" fill="none" stroke="#D4C5A9" stroke-width="3"/>
+
+  <!-- Shaded area under energy landscape -->
+  <path d="M60,300 Q120,180 180,260 Q220,310 270,220 Q310,150 370,200 Q420,240 460,170 Q510,90 560,130 Q600,160 640,120 Q680,90 740,160 L740,340 L60,340 Z" fill="#C4A87A" fill-opacity="0.15"/>
+
+  <!-- Energy landscape label -->
+  <text x="90" y="170" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Energy U(x)</text>
+
+  <!-- Particle trajectory with noisy path -->
+  <circle cx="130" cy="230" r="6" fill="#7C2530" opacity="0.3"/>
+  <circle cx="175" cy="255" r="6" fill="#7C2530" opacity="0.35"/>
+  <circle cx="220" cy="280" r="6" fill="#7C2530" opacity="0.4"/>
+  <circle cx="265" cy="225" r="6" fill="#7C2530" opacity="0.45"/>
+  <circle cx="310" cy="195" r="6" fill="#7C2530" opacity="0.5"/>
+  <circle cx="360" cy="205" r="6" fill="#7C2530" opacity="0.55"/>
+  <circle cx="405" cy="225" r="6" fill="#7C2530" opacity="0.6"/>
+  <circle cx="450" cy="180" r="6" fill="#7C2530" opacity="0.7"/>
+  <circle cx="500" cy="120" r="6" fill="#7C2530" opacity="0.8"/>
+  <circle cx="545" cy="138" r="6" fill="#7C2530" opacity="0.85"/>
+  <circle cx="590" cy="155" r="6" fill="#7C2530" opacity="0.9"/>
+  <circle cx="635" cy="125" r="7" fill="#7C2530" opacity="1.0"/>
+
+  <!-- Noisy trajectory line -->
+  <path d="M130,230 L175,255 L220,280 L265,225 L310,195 L360,205 L405,225 L450,180 L500,120 L545,138 L590,155 L635,125" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+
+  <!-- Gradient arrow at a point -->
+  <line x1="405" y1="225" x2="435" y2="190" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowNavy)"/>
+  <text x="448" y="188" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">-nabla U(x)</text>
+  <text x="448" y="202" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">gradient</text>
+
+  <!-- Noise wiggle arrow -->
+  <path d="M405,225 C395,240 415,250 400,260" fill="none" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="340" y="272" font-family="Georgia, serif" font-size="11" fill="#7C2530">sqrt(epsilon) * eta</text>
+  <text x="362" y="286" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">noise</text>
+
+  <!-- Current particle glow -->
+  <circle cx="635" cy="125" r="12" fill="#7C2530" opacity="0.15"/>
+
+  <!-- Low-energy basin label -->
+  <text x="650" y="105" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">low-energy region</text>
+  <text x="650" y="80" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(high probability)</text>
+
+  <!-- Bottom equation box -->
+  <rect x="120" y="348" width="560" height="40" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="400" y="374" font-family="Georgia, serif" font-size="15" fill="#5C3D1E" text-anchor="middle">
+    x(t+1) = x(t) + (epsilon/2) nabla log p(x(t)) + sqrt(epsilon) * eta(t),   eta ~ N(0, I)
+  </text>
+
+  <!-- Legend -->
+  <circle cx="60" cy="365" r="5" fill="#7C2530"/>
+  <text x="70" y="369" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">particle trajectory</text>
+
+  <!-- Deterministic vs Stochastic labels at top -->
+  <rect x="180" y="52" width="160" height="28" fill="#2D5A8E" fill-opacity="0.1" rx="4" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="260" y="71" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle">Deterministic: Gradient</text>
+
+  <rect x="460" y="52" width="160" height="28" fill="#7C2530" fill-opacity="0.1" rx="4" stroke="#7C2530" stroke-width="1"/>
+  <text x="540" y="71" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle">Stochastic: Noise</text>
+
+  <!-- Combined arrow -->
+  <text x="400" y="71" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle">+</text>
+
+  <!-- Convergence annotation -->
+  <text x="740" y="180" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">converges to</text>
+  <text x="740" y="194" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">p(x)</text>
+</svg>
