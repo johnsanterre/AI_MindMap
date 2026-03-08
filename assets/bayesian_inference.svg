@@ -1,0 +1,72 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Bayesian Update Process</text>
+
+  <!-- Prior Distribution (wide bell curve) -->
+  <g transform="translate(0, 0)">
+    <text x="130" y="70" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Prior</text>
+    <text x="130" y="88" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(initial belief)</text>
+    <!-- Axis -->
+    <line x1="40" y1="250" x2="220" y2="250" stroke="#5C3D1E" stroke-width="1.5"/>
+    <!-- Wide bell curve -->
+    <path d="M 45,250 Q 60,248 75,240 Q 90,220 105,180 Q 120,130 130,120 Q 140,130 155,180 Q 170,220 185,240 Q 200,248 215,250" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+    <path d="M 45,250 Q 60,248 75,240 Q 90,220 105,180 Q 120,130 130,120 Q 140,130 155,180 Q 170,220 185,240 Q 200,248 215,250 Z" fill="#2D5A8E" fill-opacity="0.15"/>
+    <text x="130" y="268" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">wide, uncertain</text>
+  </g>
+
+  <!-- Multiplication symbol -->
+  <text x="255" y="190" font-family="Georgia, serif" font-size="32" fill="#7C2530" text-anchor="middle">&times;</text>
+
+  <!-- Likelihood (data-driven, tall narrow shape) -->
+  <g transform="translate(0, 0)">
+    <text x="370" y="70" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="middle" font-weight="bold">Likelihood</text>
+    <text x="370" y="88" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(evidence from data)</text>
+    <!-- Axis -->
+    <line x1="280" y1="250" x2="460" y2="250" stroke="#5C3D1E" stroke-width="1.5"/>
+    <!-- Narrower, shifted curve -->
+    <path d="M 295,250 Q 310,249 330,245 Q 350,230 360,170 Q 365,110 375,95 Q 385,110 390,170 Q 400,230 420,245 Q 440,249 455,250" fill="none" stroke="#7C2530" stroke-width="3"/>
+    <path d="M 295,250 Q 310,249 330,245 Q 350,230 360,170 Q 365,110 375,95 Q 385,110 390,170 Q 400,230 420,245 Q 440,249 455,250 Z" fill="#7C2530" fill-opacity="0.15"/>
+    <!-- Data points -->
+    <circle cx="345" cy="246" r="3" fill="#7C2530"/>
+    <circle cx="365" cy="246" r="3" fill="#7C2530"/>
+    <circle cx="375" cy="246" r="3" fill="#7C2530"/>
+    <circle cx="385" cy="246" r="3" fill="#7C2530"/>
+    <circle cx="400" cy="246" r="3" fill="#7C2530"/>
+    <text x="370" y="268" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">peaked at observed data</text>
+  </g>
+
+  <!-- Arrow from multiplication to result -->
+  <line x1="488" y1="190" x2="520" y2="190" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="504" y="175" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">=</text>
+
+  <!-- Posterior Distribution (narrow, shifted bell curve) -->
+  <g transform="translate(0, 0)">
+    <text x="640" y="70" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Posterior</text>
+    <text x="640" y="88" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">(updated belief)</text>
+    <!-- Axis -->
+    <line x1="540" y1="250" x2="740" y2="250" stroke="#5C3D1E" stroke-width="1.5"/>
+    <!-- Narrow, tall bell curve -->
+    <path d="M 570,250 Q 590,249 610,245 Q 625,230 635,160 Q 638,100 643,80 Q 648,100 651,160 Q 661,230 676,245 Q 696,249 716,250" fill="none" stroke="#5C3D1E" stroke-width="3"/>
+    <path d="M 570,250 Q 590,249 610,245 Q 625,230 635,160 Q 638,100 643,80 Q 648,100 651,160 Q 661,230 676,245 Q 696,249 716,250 Z" fill="#C4A87A" fill-opacity="0.35"/>
+    <text x="640" y="268" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">narrow, more certain</text>
+  </g>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Feedback loop arrow at bottom -->
+  <path d="M 640,290 Q 640,360 400,370 Q 160,360 130,290" fill="none" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowhead2)"/>
+  <text x="400" y="355" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="middle" font-style="italic">posterior becomes new prior</text>
+
+  <!-- Bayes formula at bottom -->
+  <text x="400" y="393" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle">P(&theta; | data) &prop; P(data | &theta;) &times; P(&theta;)</text>
+</svg>

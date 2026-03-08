@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="8"/>
+
+  <text x="400" y="35" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Earth Mover's Distance</text>
+
+  <!-- Left distribution (source) - histogram bars -->
+  <text x="175" y="65" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Distribution P</text>
+  <rect x="80" y="200" width="30" height="120" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <rect x="115" y="150" width="30" height="170" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <rect x="150" y="110" width="30" height="210" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <rect x="185" y="160" width="30" height="160" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <rect x="220" y="230" width="30" height="90" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <rect x="255" y="270" width="30" height="50" fill="#2D5A8E" opacity="0.8" rx="2"/>
+  <!-- Baseline for left -->
+  <line x1="70" y1="320" x2="295" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Right distribution (target) - histogram bars -->
+  <text x="625" y="65" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">Distribution Q</text>
+  <rect x="515" y="270" width="30" height="50" fill="#7C2530" opacity="0.8" rx="2"/>
+  <rect x="550" y="230" width="30" height="90" fill="#7C2530" opacity="0.8" rx="2"/>
+  <rect x="585" y="160" width="30" height="160" fill="#7C2530" opacity="0.8" rx="2"/>
+  <rect x="620" y="110" width="30" height="210" fill="#7C2530" opacity="0.8" rx="2"/>
+  <rect x="655" y="150" width="30" height="170" fill="#7C2530" opacity="0.8" rx="2"/>
+  <rect x="690" y="200" width="30" height="120" fill="#7C2530" opacity="0.8" rx="2"/>
+  <!-- Baseline for right -->
+  <line x1="505" y1="320" x2="730" y2="320" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Transport arrows showing earth moving -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Arrow 1: tall left bar to tall right bar -->
+  <line x1="180" y1="130" x2="620" y2="130" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowhead)" stroke-dasharray="6,3"/>
+  <text x="400" y="122" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">cost = d x mass</text>
+
+  <!-- Arrow 2 -->
+  <line x1="145" y1="175" x2="585" y2="185" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="6,3"/>
+  <text x="365" y="170" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">c = 4.2</text>
+
+  <!-- Arrow 3 -->
+  <line x1="200" y1="210" x2="555" y2="245" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="6,3"/>
+  <text x="378" y="218" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">c = 3.1</text>
+
+  <!-- Arrow 4 -->
+  <line x1="110" y1="250" x2="525" y2="280" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="6,3"/>
+  <text x="318" y="258" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">c = 1.8</text>
+
+  <!-- Arrow 5 -->
+  <line x1="240" y1="275" x2="690" y2="225" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="6,3"/>
+  <text x="465" y="262" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">c = 2.5</text>
+
+  <!-- Bottom annotation -->
+  <text x="400" y="355" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-style="italic">W(P, Q) = minimum total cost to reshape P into Q</text>
+  <text x="400" y="380" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Total cost = sum of (amount moved x distance moved)</text>
+</svg>

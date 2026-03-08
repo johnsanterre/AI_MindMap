@@ -1,0 +1,97 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#7C2530" font-weight="bold">Sufficient Statistics: Compression Without Information Loss</text>
+
+  <!-- Raw Data cloud -->
+  <rect x="30" y="60" width="200" height="290" rx="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="130" y="85" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E" font-weight="bold">Raw Data  X</text>
+
+  <!-- Data points scattered -->
+  <circle cx="70" cy="115" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="140" cy="108" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="105" cy="140" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="170" cy="130" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="60" cy="165" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="130" cy="175" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="90" cy="200" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="160" cy="195" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="75" cy="230" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="145" cy="225" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="110" cy="255" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="55" cy="280" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="175" cy="260" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="95" cy="300" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="155" cy="310" r="6" fill="#2D5A8E" opacity="0.7"/>
+  <circle cx="120" cy="330" r="6" fill="#2D5A8E" opacity="0.7"/>
+
+  <text x="130" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">n data points</text>
+
+  <!-- Arrows from data to funnel -->
+  <line x1="230" y1="140" x2="310" y2="175" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowTan)"/>
+  <line x1="230" y1="200" x2="310" y2="200" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowTan)"/>
+  <line x1="230" y1="260" x2="310" y2="225" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowTan)"/>
+
+  <!-- Funnel shape -->
+  <polygon points="320,130 480,130 460,170 340,170" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="340,170 460,170 430,210 370,210" fill="#C4A87A" opacity="0.4" stroke="#5C3D1E" stroke-width="1.5"/>
+  <polygon points="370,210 430,210 415,270 385,270" fill="#C4A87A" opacity="0.5" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <text x="400" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">T(X)</text>
+  <text x="400" y="245" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Sufficient</text>
+  <text x="400" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Statistic</text>
+
+  <!-- Discarded info falling off sides -->
+  <text x="290" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#D4C5A9" font-style="italic">noise</text>
+  <text x="510" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#D4C5A9" font-style="italic">irrelevant</text>
+  <circle cx="280" cy="295" r="4" fill="#D4C5A9" opacity="0.5"/>
+  <circle cx="300" cy="310" r="3" fill="#D4C5A9" opacity="0.4"/>
+  <circle cx="520" cy="295" r="4" fill="#D4C5A9" opacity="0.5"/>
+  <circle cx="500" cy="310" r="3" fill="#D4C5A9" opacity="0.4"/>
+
+  <!-- Compact summary output -->
+  <line x1="400" y1="270" x2="400" y2="295" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="345" y="300" width="110" height="45" rx="10" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="320" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Compact</text>
+  <text x="400" y="337" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Summary</text>
+
+  <!-- Arrow to theta -->
+  <line x1="455" y1="322" x2="540" y2="322" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Theta inference box -->
+  <rect x="550" y="80" width="220" height="280" rx="14" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="660" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" font-weight="bold">Inference about &#x3B8;</text>
+
+  <!-- Key equation -->
+  <text x="660" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Factorization Theorem:</text>
+  <text x="660" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-style="italic">p(x|&#x3B8;) = h(x) &#xB7; g(T(x), &#x3B8;)</text>
+
+  <!-- Examples -->
+  <line x1="575" y1="200" x2="745" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="660" y="225" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">Examples:</text>
+
+  <text x="580" y="250" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Gaussian &#x3BC;:</text>
+  <text x="680" y="250" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">T = &#x2211;x&#x1D62;</text>
+
+  <text x="580" y="275" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Bernoulli p:</text>
+  <text x="680" y="275" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">T = &#x2211;x&#x1D62;</text>
+
+  <text x="580" y="300" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">Poisson &#x3BB;:</text>
+  <text x="680" y="300" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">T = &#x2211;x&#x1D62;</text>
+
+  <!-- Key message -->
+  <line x1="575" y1="320" x2="745" y2="320" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="660" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">No information about &#x3B8; is lost!</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrowTan" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Linear Matrix Transformations</text>
+
+  <!-- Original Grid (left) -->
+  <text x="135" y="65" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Original</text>
+  <!-- grid lines vertical -->
+  <line x1="60" y1="80" x2="60" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="90" y1="80" x2="90" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="120" y1="80" x2="120" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="150" y1="80" x2="150" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="180" y1="80" x2="180" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="210" y1="80" x2="210" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- grid lines horizontal -->
+  <line x1="60" y1="80" x2="210" y2="80" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="60" y1="110" x2="210" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="60" y1="140" x2="210" y2="140" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="60" y1="170" x2="210" y2="170" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="60" y1="200" x2="210" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- unit square highlight -->
+  <rect x="120" y="110" width="30" height="30" fill="#2D5A8E" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- basis vectors -->
+  <line x1="120" y1="140" x2="150" y2="140" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+  <line x1="120" y1="140" x2="120" y2="110" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+  <text x="155" y="145" font-family="Georgia, serif" font-size="11" fill="#7C2530">e&#x2081;</text>
+  <text x="108" y="107" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">e&#x2082;</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Scaling (top center) -->
+  <text x="370" y="65" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Scaling</text>
+  <!-- stretched grid -->
+  <line x1="290" y1="80" x2="290" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="330" y1="80" x2="330" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="370" y1="80" x2="370" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="410" y1="80" x2="410" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="450" y1="80" x2="450" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="290" y1="80" x2="450" y2="80" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="290" y1="110" x2="450" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="290" y1="140" x2="450" y2="140" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="290" y1="170" x2="450" y2="170" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="290" y1="200" x2="450" y2="200" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- scaled unit square - wider -->
+  <rect x="330" y="110" width="40" height="30" fill="#7C2530" fill-opacity="0.2" stroke="#7C2530" stroke-width="2"/>
+  <text x="370" y="155" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">2x width</text>
+
+  <!-- Rotation (top right) -->
+  <text x="620" y="65" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Rotation (45&#xB0;)</text>
+  <!-- rotated grid lines -->
+  <g transform="translate(620,140) rotate(-45)">
+    <line x1="-60" y1="-60" x2="-60" y2="60" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="-30" y1="-60" x2="-30" y2="60" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="0" y1="-60" x2="0" y2="60" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="30" y1="-60" x2="30" y2="60" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="60" y1="-60" x2="60" y2="60" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="-60" y1="-60" x2="60" y2="-60" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="-60" y1="-30" x2="60" y2="-30" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="-60" y1="0" x2="60" y2="0" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="-60" y1="30" x2="60" y2="30" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="-60" y1="60" x2="60" y2="60" stroke="#D4C5A9" stroke-width="1"/>
+    <rect x="0" y="-30" width="30" height="30" fill="#2D5A8E" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="2"/>
+  </g>
+
+  <!-- Shear (bottom left) -->
+  <text x="135" y="240" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Shear</text>
+  <!-- sheared grid -->
+  <g>
+    <!-- horizontal lines stay horizontal -->
+    <line x1="60" y1="255" x2="230" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="60" y1="285" x2="230" y2="285" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="60" y1="315" x2="230" y2="315" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="60" y1="345" x2="230" y2="345" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="60" y1="375" x2="230" y2="375" stroke="#D4C5A9" stroke-width="1"/>
+    <!-- vertical lines become slanted -->
+    <line x1="100" y1="375" x2="130" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="120" y1="375" x2="150" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="140" y1="375" x2="170" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="160" y1="375" x2="190" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="180" y1="375" x2="210" y2="255" stroke="#D4C5A9" stroke-width="1"/>
+    <!-- sheared unit parallelogram -->
+    <polygon points="140,345 160,345 170,315 150,315" fill="#C4A87A" fill-opacity="0.4" stroke="#5C3D1E" stroke-width="2"/>
+  </g>
+
+  <!-- Reflection (bottom center) -->
+  <text x="370" y="240" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Reflection</text>
+  <!-- reflection axis -->
+  <line x1="370" y1="255" x2="370" y2="380" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="370" y="392" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">axis</text>
+  <!-- original shape (left of axis) -->
+  <polygon points="320,290 350,270 350,330" fill="#2D5A8E" fill-opacity="0.3" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="335" y="310" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">F</text>
+  <!-- reflected shape (right of axis, mirrored) -->
+  <polygon points="420,290 390,270 390,330" fill="#7C2530" fill-opacity="0.3" stroke="#7C2530" stroke-width="2"/>
+  <text x="405" y="310" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">F'</text>
+
+  <!-- Projection (bottom right) -->
+  <text x="620" y="240" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Projection</text>
+  <!-- 2D points projected onto a line -->
+  <line x1="540" y1="370" x2="700" y2="280" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="705" y="278" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">subspace</text>
+  <!-- scattered points with projection lines -->
+  <circle cx="570" cy="290" r="4" fill="#2D5A8E"/>
+  <line x1="570" y1="290" x2="562" y2="352" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="562" cy="352" r="3" fill="#7C2530"/>
+
+  <circle cx="610" cy="280" r="4" fill="#2D5A8E"/>
+  <line x1="610" y1="280" x2="600" y2="340" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="600" cy="340" r="3" fill="#7C2530"/>
+
+  <circle cx="650" cy="270" r="4" fill="#2D5A8E"/>
+  <line x1="650" y1="270" x2="643" y2="322" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="643" cy="322" r="3" fill="#7C2530"/>
+
+  <circle cx="680" cy="260" r="4" fill="#2D5A8E"/>
+  <line x1="680" y1="260" x2="675" y2="305" stroke="#C4A87A" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="675" cy="305" r="3" fill="#7C2530"/>
+
+  <!-- Legend -->
+  <circle cx="555" cy="385" r="4" fill="#2D5A8E"/>
+  <text x="565" y="389" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">original</text>
+  <circle cx="620" cy="385" r="3" fill="#7C2530"/>
+  <text x="630" y="389" font-family="Georgia, serif" font-size="10" fill="#7C2530">projected</text>
+
+  <!-- Connecting arrow from original to transformations -->
+  <line x1="220" y1="140" x2="280" y2="140" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <line x1="210" y1="200" x2="210" y2="310" stroke="none"/>
+
+</svg>

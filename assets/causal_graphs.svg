@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Georgia" font-size="18" fill="#5C3D1E" font-weight="bold">Causal Graphs: Observing vs. Intervening</text>
+
+  <!-- LEFT GRAPH: Observational P(Y|X) -->
+  <text x="200" y="65" text-anchor="middle" font-family="Georgia" font-size="14" fill="#7C2530" font-style="italic">Observational: P(Y | X)</text>
+
+  <!-- Confounder node -->
+  <ellipse cx="200" cy="110" rx="55" ry="20" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="115" text-anchor="middle" font-family="Georgia" font-size="12" fill="#5C3D1E">Confounder</text>
+
+  <!-- Treatment node -->
+  <ellipse cx="100" cy="210" rx="50" ry="20" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="100" y="215" text-anchor="middle" font-family="Georgia" font-size="12" fill="#FDFAF4">Treatment</text>
+
+  <!-- Outcome node -->
+  <ellipse cx="300" cy="210" rx="45" ry="20" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="300" y="215" text-anchor="middle" font-family="Georgia" font-size="12" fill="#FDFAF4">Outcome</text>
+
+  <!-- Mediator node -->
+  <ellipse cx="200" cy="310" rx="45" ry="20" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="315" text-anchor="middle" font-family="Georgia" font-size="12" fill="#FDFAF4">Mediator</text>
+
+  <!-- Arrows: Confounder -> Treatment -->
+  <defs>
+    <marker id="arrowLeft" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowRight" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Confounder -> Treatment -->
+  <line x1="160" y1="125" x2="120" y2="192" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arrowLeft)"/>
+  <!-- Confounder -> Outcome -->
+  <line x1="240" y1="125" x2="280" y2="192" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arrowRight)"/>
+  <!-- Treatment -> Outcome -->
+  <line x1="150" y1="210" x2="253" y2="210" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arrowRight)"/>
+  <!-- Treatment -> Mediator -->
+  <line x1="115" y1="228" x2="168" y2="295" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arrowRight)"/>
+  <!-- Mediator -> Outcome -->
+  <line x1="232" y1="295" x2="285" y2="228" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arrowRight)"/>
+
+  <!-- Spurious path label -->
+  <text x="200" y="170" text-anchor="middle" font-family="Georgia" font-size="10" fill="#7C2530" font-style="italic">spurious path open</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="55" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- RIGHT GRAPH: Interventional P(Y|do(X)) -->
+  <text x="600" y="65" text-anchor="middle" font-family="Georgia" font-size="14" fill="#2D5A8E" font-style="italic">Interventional: P(Y | do(X))</text>
+
+  <!-- Confounder node -->
+  <ellipse cx="600" cy="110" rx="55" ry="20" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="600" y="115" text-anchor="middle" font-family="Georgia" font-size="12" fill="#5C3D1E">Confounder</text>
+
+  <!-- Treatment node (intervened) -->
+  <ellipse cx="500" cy="210" rx="50" ry="20" fill="#2D5A8E" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="500" y="215" text-anchor="middle" font-family="Georgia" font-size="12" fill="#FDFAF4">Treatment</text>
+  <!-- do() label -->
+  <text x="500" y="248" text-anchor="middle" font-family="Georgia" font-size="11" fill="#7C2530" font-weight="bold">do(X = x)</text>
+
+  <!-- Outcome node -->
+  <ellipse cx="700" cy="210" rx="45" ry="20" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="700" y="215" text-anchor="middle" font-family="Georgia" font-size="12" fill="#FDFAF4">Outcome</text>
+
+  <!-- Mediator node -->
+  <ellipse cx="600" cy="310" rx="45" ry="20" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="600" y="315" text-anchor="middle" font-family="Georgia" font-size="12" fill="#FDFAF4">Mediator</text>
+
+  <!-- Confounder -> Treatment: REMOVED (crossed out) -->
+  <line x1="560" y1="125" x2="520" y2="192" stroke="#D4C5A9" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <!-- Red X on the removed edge -->
+  <text x="530" y="160" text-anchor="middle" font-family="Georgia" font-size="18" fill="#7C2530" font-weight="bold">X</text>
+
+  <!-- Confounder -> Outcome (still present) -->
+  <line x1="640" y1="125" x2="680" y2="192" stroke="#5C3D1E" stroke-width="1.8" marker-end="url(#arrowRight)"/>
+  <!-- Treatment -> Outcome -->
+  <line x1="550" y1="210" x2="653" y2="210" stroke="#2D5A8E" stroke-width="2.2" marker-end="url(#arrowRight)"/>
+  <!-- Treatment -> Mediator -->
+  <line x1="515" y1="228" x2="568" y2="295" stroke="#2D5A8E" stroke-width="2.2" marker-end="url(#arrowRight)"/>
+  <!-- Mediator -> Outcome -->
+  <line x1="632" y1="295" x2="685" y2="228" stroke="#2D5A8E" stroke-width="2.2" marker-end="url(#arrowRight)"/>
+
+  <!-- Causal path label -->
+  <text x="600" y="170" text-anchor="middle" font-family="Georgia" font-size="10" fill="#2D5A8E" font-style="italic">spurious path blocked</text>
+
+  <!-- Bottom legend -->
+  <text x="400" y="390" text-anchor="middle" font-family="Georgia" font-size="11" fill="#5C3D1E">Intervention severs incoming edges to treatment, isolating the true causal effect.</text>
+</svg>

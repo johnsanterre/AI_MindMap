@@ -1,0 +1,86 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">The Algorithmic Bias Feedback Loop</text>
+
+  <!-- Cycle nodes -->
+  <!-- Node 1: Biased Data (top) -->
+  <rect x="300" y="58" width="200" height="52" rx="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="400" y="80" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Biased Training</text>
+  <text x="400" y="98" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Data</text>
+
+  <!-- Node 2: Model Training (right) -->
+  <rect x="570" y="155" width="190" height="52" rx="10" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="665" y="177" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Model</text>
+  <text x="665" y="195" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Training</text>
+
+  <!-- Node 3: Biased Predictions (bottom-right) -->
+  <rect x="520" y="275" width="200" height="52" rx="10" fill="#5C3D1E" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="620" y="297" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Biased</text>
+  <text x="620" y="315" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Predictions</text>
+
+  <!-- Node 4: Real-World Decisions (bottom-left) -->
+  <rect x="80" y="275" width="200" height="52" rx="10" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="180" y="297" font-family="Georgia, serif" font-size="14" fill="#3A2410" text-anchor="middle">Real-World</text>
+  <text x="180" y="315" font-family="Georgia, serif" font-size="14" fill="#3A2410" text-anchor="middle">Decisions</text>
+
+  <!-- Node 5: More Biased Data (left) -->
+  <rect x="40" y="155" width="190" height="52" rx="10" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="135" y="177" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Reinforced</text>
+  <text x="135" y="195" font-family="Georgia, serif" font-size="14" fill="#FDFAF4" text-anchor="middle">Biased Data</text>
+
+  <!-- Arrows (clockwise) -->
+  <!-- Arrow 1: Biased Data -> Model Training -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto" fill="#5C3D1E">
+      <polygon points="0 0, 10 3.5, 0 7"/>
+    </marker>
+  </defs>
+
+  <path d="M 500 95 Q 545 115 570 155" stroke="#5C3D1E" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="555" y="118" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">learns patterns</text>
+
+  <!-- Arrow 2: Model Training -> Biased Predictions -->
+  <path d="M 665 207 Q 660 240 650 275" stroke="#5C3D1E" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="690" y="243" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">outputs scores</text>
+
+  <!-- Arrow 3: Biased Predictions -> Real-World Decisions -->
+  <path d="M 520 301 Q 400 340 280 301" stroke="#5C3D1E" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="400" y="352" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">hiring, lending, sentencing</text>
+
+  <!-- Arrow 4: Real-World Decisions -> Reinforced Biased Data -->
+  <path d="M 135 275 Q 120 240 135 207" stroke="#5C3D1E" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="80" y="243" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">outcomes</text>
+  <text x="80" y="256" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">recorded</text>
+
+  <!-- Arrow 5: Reinforced Biased Data -> Biased Data (back to top) -->
+  <path d="M 200 155 Q 240 115 300 90" stroke="#5C3D1E" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="225" y="118" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">cycle repeats</text>
+
+  <!-- Center label -->
+  <text x="400" y="210" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="middle" font-weight="bold">Feedback</text>
+  <text x="400" y="230" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="middle" font-weight="bold">Loop</text>
+
+  <!-- Small icons/symbols inside nodes -->
+  <!-- Data icon (bars) in Biased Data node -->
+  <rect x="315" y="68" width="6" height="16" fill="#FDFAF4" opacity="0.4" rx="1"/>
+  <rect x="325" y="74" width="6" height="10" fill="#FDFAF4" opacity="0.4" rx="1"/>
+  <rect x="335" y="70" width="6" height="14" fill="#FDFAF4" opacity="0.4" rx="1"/>
+
+  <!-- Gear icon hint in Model Training -->
+  <circle cx="593" cy="181" r="10" fill="none" stroke="#FDFAF4" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="593" cy="181" r="4" fill="none" stroke="#FDFAF4" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Warning triangle in Biased Predictions -->
+  <polygon points="540,309 548,295 556,309" fill="none" stroke="#FDFAF4" stroke-width="1.5" opacity="0.5"/>
+  <text x="548" y="307" font-family="Georgia, serif" font-size="9" fill="#FDFAF4" text-anchor="middle" opacity="0.5">!</text>
+
+  <!-- Scale icon hint in Real-World Decisions -->
+  <line x1="250" y1="290" x2="265" y2="290" stroke="#3A2410" stroke-width="1.5" opacity="0.4"/>
+  <line x1="257" y1="290" x2="257" y2="310" stroke="#3A2410" stroke-width="1.5" opacity="0.4"/>
+  <line x1="250" y1="290" x2="247" y2="298" stroke="#3A2410" stroke-width="1.5" opacity="0.4"/>
+  <line x1="265" y1="290" x2="268" y2="298" stroke="#3A2410" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Bottom annotation -->
+  <text x="400" y="388" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" opacity="0.7">Without intervention, each cycle amplifies existing disparities</text>
+</svg>

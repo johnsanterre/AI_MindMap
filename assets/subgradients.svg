@@ -1,0 +1,55 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Axes -->
+  <line x1="100" y1="320" x2="700" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="400" y1="50" x2="400" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- f(x) = |x| curve — left branch -->
+  <line x1="150" y1="95" x2="400" y2="320" stroke="#7C2530" stroke-width="3"/>
+  <!-- f(x) = |x| curve — right branch -->
+  <line x1="400" y1="320" x2="650" y2="95" stroke="#7C2530" stroke-width="3"/>
+
+  <!-- Kink point -->
+  <circle cx="400" cy="320" r="5" fill="#7C2530"/>
+
+  <!-- Subgradient lines through kink — multiple supporting hyperplanes -->
+  <!-- slope = -1 (tangent to left branch) -->
+  <line x1="200" y1="120" x2="600" y2="520" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.7"/>
+  <!-- slope = -0.6 -->
+  <line x1="180" y1="188" x2="620" y2="452" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.7"/>
+  <!-- slope = 0 (horizontal) -->
+  <line x1="150" y1="320" x2="650" y2="320" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="8,4" opacity="0.8"/>
+  <!-- slope = 0.6 -->
+  <line x1="180" y1="452" x2="620" y2="188" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.7"/>
+  <!-- slope = 1 (tangent to right branch) -->
+  <line x1="200" y1="520" x2="600" y2="120" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.7"/>
+
+  <!-- Clip the overflowing lines with a white border mask -->
+  <rect x="0" y="0" width="800" height="45" fill="#FDFAF4"/>
+  <rect x="0" y="345" width="800" height="55" fill="#FDFAF4"/>
+  <rect x="0" y="0" width="95" height="400" fill="#FDFAF4"/>
+  <rect x="705" y="0" width="95" height="400" fill="#FDFAF4"/>
+  <!-- Re-draw border -->
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Labels -->
+  <text x="400" y="35" font-family="Georgia" font-size="18" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Subdifferential of f(x) = |x| at x = 0</text>
+
+  <text x="670" y="315" font-family="Georgia" font-size="15" fill="#5C3D1E">x</text>
+  <text x="410" y="65" font-family="Georgia" font-size="15" fill="#5C3D1E">f(x)</text>
+
+  <!-- Function label -->
+  <text x="560" y="140" font-family="Georgia" font-size="16" fill="#7C2530" font-style="italic">f(x) = |x|</text>
+
+  <!-- Subdifferential bracket annotation -->
+  <text x="115" y="175" font-family="Georgia" font-size="13" fill="#2D5A8E">Supporting</text>
+  <text x="115" y="192" font-family="Georgia" font-size="13" fill="#2D5A8E">hyperplanes</text>
+  <text x="115" y="209" font-family="Georgia" font-size="13" fill="#2D5A8E">(subgradients)</text>
+
+  <!-- Subdifferential set annotation -->
+  <rect x="530" y="220" width="155" height="70" rx="6" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="607" y="243" font-family="Georgia" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Subdifferential</text>
+  <text x="607" y="263" font-family="Georgia" font-size="14" fill="#2D5A8E" text-anchor="middle" font-style="italic">&#x2202;f(0) = [&#x2212;1, 1]</text>
+  <text x="607" y="281" font-family="Georgia" font-size="12" fill="#5C3D1E" text-anchor="middle">every g &#x2208; [&#x2212;1,1] valid</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Georgia, serif" font-size="20" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Lipschitz Continuity: Bounded Rate of Change</text>
+
+  <!-- Left panel: Lipschitz function with cone -->
+  <text x="210" y="65" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Lipschitz Function (bounded slope)</text>
+
+  <!-- Left axes -->
+  <line x1="60" y1="340" x2="380" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="60" y1="340" x2="60" y2="80" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="220" y="370" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">x</text>
+  <text x="45" y="210" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">f(x)</text>
+
+  <!-- Cone at point (190, 200) showing slope bounds -->
+  <polygon points="190,200 330,108 330,292" fill="#C4A87A" fill-opacity="0.2" stroke="#C4A87A" stroke-width="1" stroke-dasharray="5,3"/>
+  <polygon points="190,200 70,108 70,292" fill="#C4A87A" fill-opacity="0.2" stroke="#C4A87A" stroke-width="1" stroke-dasharray="5,3"/>
+
+  <!-- Upper cone lines (slope +L) -->
+  <line x1="70" y1="278" x2="330" y2="108" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <!-- Lower cone lines (slope -L) -->
+  <line x1="70" y1="122" x2="330" y2="292" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="6,3"/>
+
+  <!-- Lipschitz function curve (smooth, bounded slope) -->
+  <path d="M 70,280 Q 110,240 140,220 Q 170,200 190,200 Q 220,200 250,180 Q 290,155 330,140" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+
+  <!-- Point marker -->
+  <circle cx="190" cy="200" r="5" fill="#7C2530"/>
+  <text x="195" y="193" font-family="Georgia, serif" font-size="12" fill="#7C2530">(x₀, f(x₀))</text>
+
+  <!-- Cone label -->
+  <text x="320" y="100" font-family="Georgia, serif" font-size="11" fill="#C4A87A">slope = +L</text>
+  <text x="320" y="305" font-family="Georgia, serif" font-size="11" fill="#C4A87A">slope = -L</text>
+  <text x="130" y="330" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-style="italic">Curve stays inside the cone</text>
+
+  <!-- Right panel: Non-Lipschitz function -->
+  <text x="600" y="65" font-family="Georgia, serif" font-size="15" fill="#7C2530" text-anchor="middle" font-weight="bold">Non-Lipschitz (unbounded slope)</text>
+
+  <!-- Right axes -->
+  <line x1="440" y1="340" x2="760" y2="340" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="440" y1="340" x2="440" y2="80" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="600" y="370" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">x</text>
+  <text x="425" y="210" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">f(x)</text>
+
+  <!-- sqrt(x) style curve with vertical tangent at origin -->
+  <path d="M 500,340 Q 500,280 505,250 Q 510,220 520,195 Q 540,160 570,140 Q 610,118 660,105 Q 710,95 750,92" fill="none" stroke="#7C2530" stroke-width="3"/>
+
+  <!-- Vertical tangent indicator -->
+  <line x1="500" y1="340" x2="500" y2="240" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="510" y="265" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-style="italic">vertical</text>
+  <text x="510" y="278" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-style="italic">tangent</text>
+
+  <!-- Point at cusp -->
+  <circle cx="500" cy="340" r="5" fill="#7C2530"/>
+
+  <!-- Annotation: slope -> infinity -->
+  <text x="465" y="235" font-family="Georgia, serif" font-size="13" fill="#7C2530">slope → ∞</text>
+
+  <!-- f(x) = sqrt(x) label -->
+  <text x="680" y="85" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-style="italic">f(x) = √x</text>
+
+  <!-- No cone can contain this -->
+  <text x="620" y="330" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">No finite L works here</text>
+
+  <!-- Dividing line -->
+  <line x1="410" y1="55" x2="410" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="8,4"/>
+
+  <!-- Bottom formula -->
+  <text x="400" y="395" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">|f(x) - f(y)| ≤ L · |x - y|  for all x, y</text>
+</svg>
