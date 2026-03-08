@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Matroid Theory: Independence Abstracted</text>
+
+  <!-- Left side: Graph with spanning tree highlighted -->
+  <text x="180" y="62" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Graphic Matroid (Spanning Tree)</text>
+
+  <!-- Graph vertices -->
+  <circle cx="100" cy="130" r="14" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="100" y="134" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">a</text>
+  <circle cx="260" cy="130" r="14" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="260" y="134" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">b</text>
+  <circle cx="180" cy="220" r="14" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="180" y="224" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">c</text>
+  <circle cx="100" cy="310" r="14" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="100" y="314" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">d</text>
+  <circle cx="260" cy="310" r="14" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="260" y="314" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">e</text>
+
+  <!-- Non-tree edges (thin gray) -->
+  <line x1="114" y1="130" x2="246" y2="130" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="114" y1="310" x2="246" y2="310" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Spanning tree edges (bold red) -->
+  <line x1="105" y1="144" x2="174" y2="206" stroke="#7C2530" stroke-width="3"/>
+  <line x1="255" y1="144" x2="186" y2="206" stroke="#7C2530" stroke-width="3"/>
+  <line x1="174" y1="234" x2="106" y2="296" stroke="#7C2530" stroke-width="3"/>
+  <line x1="186" y1="234" x2="254" y2="296" stroke="#7C2530" stroke-width="3"/>
+
+  <!-- Legend for left -->
+  <line x1="60" y1="360" x2="90" y2="360" stroke="#7C2530" stroke-width="3"/>
+  <text x="95" y="364" font-family="Georgia,serif" font-size="10" fill="#7C2530">Tree (basis)</text>
+  <line x1="170" y1="360" x2="200" y2="360" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="205" y="364" font-family="Georgia,serif" font-size="10" fill="#C4A87A">Non-tree</text>
+
+  <!-- Divider -->
+  <line x1="360" y1="50" x2="360" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Right side: Independent sets lattice -->
+  <text x="580" y="62" font-family="Georgia,serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Independent Sets of {1, 2, 3}</text>
+
+  <!-- Empty set at bottom -->
+  <rect x="555" y="310" width="50" height="24" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="580" y="326" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{}</text>
+
+  <!-- Singletons -->
+  <rect x="455" y="240" width="50" height="24" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="480" y="256" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{1}</text>
+  <rect x="555" y="240" width="50" height="24" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="580" y="256" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{2}</text>
+  <rect x="655" y="240" width="50" height="24" rx="4" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="680" y="256" font-family="Georgia,serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{3}</text>
+
+  <!-- Pairs -->
+  <rect x="475" y="160" width="60" height="24" rx="4" fill="#F5EFE4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="505" y="176" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">{1,2}</text>
+  <rect x="555" y="160" width="60" height="24" rx="4" fill="#F5EFE4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="585" y="176" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">{1,3}</text>
+  <rect x="635" y="160" width="60" height="24" rx="4" fill="#F5EFE4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="665" y="176" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle">{2,3}</text>
+
+  <!-- Bases label -->
+  <rect x="530" y="90" width="100" height="28" rx="5" fill="#7C2530" stroke="none"/>
+  <text x="580" y="109" font-family="Georgia,serif" font-size="12" fill="#FDFAF4" text-anchor="middle" font-weight="bold">Bases (rank 2)</text>
+
+  <!-- Lines: empty to singletons -->
+  <line x1="568" y1="310" x2="492" y2="264" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="580" y1="310" x2="580" y2="264" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="592" y1="310" x2="668" y2="264" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Lines: singletons to pairs -->
+  <line x1="480" y1="240" x2="505" y2="184" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="480" y1="240" x2="585" y2="184" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="580" y1="240" x2="505" y2="184" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="580" y1="240" x2="665" y2="184" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="680" y1="240" x2="585" y2="184" stroke="#2D5A8E" stroke-width="1"/>
+  <line x1="680" y1="240" x2="665" y2="184" stroke="#2D5A8E" stroke-width="1"/>
+
+  <!-- Arrow from pairs to bases label -->
+  <line x1="530" y1="160" x2="550" y2="118" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="585" y1="160" x2="580" y2="118" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="660" y1="160" x2="610" y2="118" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Bottom annotation -->
+  <text x="580" y="360" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Hereditary: every subset of an independent set is independent</text>
+  <text x="580" y="375" font-family="Georgia,serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Augmentation: smaller independent sets can grow from larger ones</text>
+</svg>

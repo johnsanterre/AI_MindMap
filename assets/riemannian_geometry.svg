@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect width="800" height="400" fill="none" stroke="#D4C5A9" stroke-width="1" rx="6"/>
+
+  <!-- ===== SECTION 1: Curved Manifold with Tangent Plane ===== -->
+  <text x="200" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Manifold with Tangent Plane</text>
+  <line x1="30" y1="33" x2="370" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Curved manifold surface -->
+  <path d="M40,220 C80,120 160,80 240,130 C320,180 340,100 380,140" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <!-- Surface shading -->
+  <path d="M40,220 C80,120 160,80 240,130 C320,180 340,100 380,140 L380,180 C340,140 320,220 240,170 C160,120 80,160 40,260 Z" fill="#C4A87A" opacity="0.2" stroke="none"/>
+  <!-- Back edge of surface (depth illusion) -->
+  <path d="M60,200 C100,100 180,60 260,110 C340,160 360,80 400,120" fill="none" stroke="#5C3D1E" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+
+  <!-- Point p on manifold -->
+  <circle cx="200" cy="115" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="200" y="108" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle" font-weight="bold">p</text>
+
+  <!-- Tangent plane (parallelogram at point p) -->
+  <path d="M140,145 L180,85 L260,85 L220,145 Z" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="205" y="78" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">T_p M</text>
+
+  <!-- Tangent vectors -->
+  <line x1="200" y1="115" x2="250" y2="95" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <line x1="200" y1="115" x2="165" y2="95" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="258" y="90" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">v</text>
+  <text x="152" y="90" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">u</text>
+
+  <!-- Metric tensor label -->
+  <text x="200" y="175" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Metric: g(u,v) = inner product</text>
+  <text x="200" y="192" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">ds&#xB2; = g&#x2C7;&#x2C7; dx&#x2071; dx&#x2B2;</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Divider -->
+  <line x1="390" y1="20" x2="390" y2="350" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 2: Geodesic Path ===== -->
+  <text x="530" y="28" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Geodesic (Shortest Path on Surface)</text>
+  <line x1="395" y1="33" x2="665" y2="33" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Curved surface for geodesic -->
+  <path d="M410,200 C440,110 500,70 560,120 C620,170 650,90 680,130" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <path d="M410,200 C440,110 500,70 560,120 C620,170 650,90 680,130 L680,165 C650,125 620,205 560,155 C500,105 440,145 410,235 Z" fill="#C4A87A" opacity="0.15" stroke="none"/>
+
+  <!-- Start point A -->
+  <circle cx="450" cy="145" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="440" y="140" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="end" font-weight="bold">A</text>
+
+  <!-- End point B -->
+  <circle cx="630" cy="130" r="5" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="643" y="125" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">B</text>
+
+  <!-- Geodesic (shortest path along surface) -->
+  <path d="M450,145 C480,100 540,85 580,105 C610,118 625,128 630,130" fill="none" stroke="#7C2530" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Straight line (Euclidean) for contrast -->
+  <line x1="450" y1="145" x2="630" y2="130" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="545" y="155" font-family="Georgia, serif" font-size="10" fill="#D4C5A9" text-anchor="middle" font-style="italic">Euclidean</text>
+  <text x="530" y="82" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">geodesic</text>
+
+  <!-- Geodesic equation label -->
+  <text x="530" y="192" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Shortest curve on surface</text>
+
+  <!-- Divider -->
+  <line x1="390" y1="205" x2="680" y2="205" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 3: Parallel Transport ===== -->
+  <text x="530" y="222" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Parallel Transport</text>
+
+  <!-- Curved path for transport -->
+  <path d="M430,300 C470,260 530,250 580,270 C610,280 640,290 660,300" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Vector at start -->
+  <circle cx="440" cy="295" r="3" fill="#2D5A8E"/>
+  <line x1="440" y1="295" x2="455" y2="268" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- Vector transported midway (rotated slightly) -->
+  <circle cx="520" cy="257" r="3" fill="#2D5A8E"/>
+  <line x1="520" y1="257" x2="540" y2="232" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- Vector at end (rotated more) -->
+  <circle cx="620" cy="278" r="3" fill="#2D5A8E"/>
+  <line x1="620" y1="278" x2="645" y2="257" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- Curvature annotation -->
+  <text x="530" y="330" font-family="Georgia, serif" font-size="10.5" fill="#2D5A8E" text-anchor="middle">Vector rotates due to curvature</text>
+  <text x="530" y="345" font-family="Georgia, serif" font-size="10.5" fill="#5C3D1E" text-anchor="middle">Rotation = Riemann curvature tensor</text>
+
+  <!-- ===== Bottom caption bar ===== -->
+  <rect x="0" y="360" width="800" height="40" fill="#F0EAD8" rx="0"/>
+  <rect x="0" y="360" width="800" height="40" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="376" font-family="Georgia, serif" font-size="11.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">
+    Riemannian geometry equips smooth manifolds with an inner product on each tangent space, enabling distances, angles, and curvature.
+  </text>
+  <text x="400" y="392" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">
+    Geodesics generalise straight lines; parallel transport reveals curvature; the metric tensor governs it all.
+  </text>
+</svg>

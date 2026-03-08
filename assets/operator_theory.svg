@@ -1,0 +1,58 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="32" text-anchor="middle" fill="#5C3D1E" font-size="18" font-weight="bold">Operator Theory: Mapping Between Function Spaces</text>
+
+  <defs>
+    <marker id="arro" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#7C2530"/>
+    </marker>
+    <marker id="arro2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Input function space -->
+  <ellipse cx="150" cy="200" rx="120" ry="150" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="150" y="65" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">Function Space V</text>
+
+  <!-- Input function curve -->
+  <path d="M 80 180 Q 110 130, 150 170 Q 190 210, 220 160" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="150" y="230" text-anchor="middle" fill="#5C3D1E" font-size="13" font-style="italic">f(x)</text>
+
+  <!-- Operator arrow -->
+  <line x1="280" y1="200" x2="390" y2="200" stroke="#7C2530" stroke-width="3" marker-end="url(#arro)"/>
+  <text x="335" y="185" text-anchor="middle" fill="#7C2530" font-size="16" font-weight="bold">T</text>
+  <text x="335" y="225" text-anchor="middle" fill="#7C2530" font-size="12">Operator</text>
+
+  <!-- Output function space -->
+  <ellipse cx="520" cy="200" rx="120" ry="150" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="520" y="65" text-anchor="middle" fill="#2D5A8E" font-size="14" font-weight="bold">Function Space W</text>
+
+  <!-- Output function curve -->
+  <path d="M 450 190 Q 480 150, 520 180 Q 560 210, 590 140" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="520" y="230" text-anchor="middle" fill="#7C2530" font-size="13" font-style="italic">Tf(x)</text>
+
+  <!-- Eigenfunction decomposition box -->
+  <rect x="660" y="55" width="130" height="300" rx="8" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="725" y="78" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">Eigenfunction</text>
+  <text x="725" y="94" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">Decomposition</text>
+
+  <!-- Eigenfunctions -->
+  <path d="M 680 135 Q 700 115, 720 135 Q 740 155, 760 135" fill="none" stroke="#7C2530" stroke-width="1.8"/>
+  <text x="725" y="160" text-anchor="middle" fill="#7C2530" font-size="11">e1 : lambda1</text>
+
+  <path d="M 680 195 Q 695 175, 710 195 Q 725 215, 740 195 Q 755 175, 770 195" fill="none" stroke="#2D5A8E" stroke-width="1.8"/>
+  <text x="725" y="220" text-anchor="middle" fill="#2D5A8E" font-size="11">e2 : lambda2</text>
+
+  <path d="M 680 255 Q 690 240, 700 255 Q 710 270, 720 255 Q 730 240, 740 255 Q 750 270, 760 255" fill="none" stroke="#5C3D1E" stroke-width="1.8"/>
+  <text x="725" y="280" text-anchor="middle" fill="#5C3D1E" font-size="11">e3 : lambda3</text>
+
+  <text x="725" y="310" text-anchor="middle" fill="#C4A87A" font-size="18">...</text>
+  <text x="725" y="340" text-anchor="middle" fill="#5C3D1E" font-size="10">lambda_n --&gt; 0</text>
+
+  <!-- Connection arrow from output to eigendecomposition -->
+  <path d="M 590 120 Q 630 90, 660 110" fill="none" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arro2)"/>
+
+  <!-- Bottom equation -->
+  <text x="335" y="380" text-anchor="middle" fill="#5C3D1E" font-size="14">Tf = Sum lambda_n &lt;f, e_n&gt; e_n</text>
+</svg>

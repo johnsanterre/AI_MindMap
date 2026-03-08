@@ -1,0 +1,99 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia,serif">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="35" text-anchor="middle" fill="#5C3D1E" font-size="20" font-weight="bold">Tensor Algebra: Scalar to Higher-Order Tensors</text>
+
+  <!-- Scalar (order 0) -->
+  <circle cx="100" cy="180" r="22" fill="#7C2530" fill-opacity="0.15" stroke="#7C2530" stroke-width="2"/>
+  <text x="100" y="186" text-anchor="middle" fill="#7C2530" font-size="22" font-weight="bold">5</text>
+  <text x="100" y="240" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">Scalar</text>
+  <text x="100" y="258" text-anchor="middle" fill="#5C3D1E" font-size="12">Order 0</text>
+  <text x="100" y="276" text-anchor="middle" fill="#888" font-size="11">single number</text>
+
+  <!-- Arrow 1 -->
+  <line x1="132" y1="180" x2="170" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Vector (order 1) -->
+  <rect x="180" y="140" width="30" height="80" rx="4" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="195" y="165" text-anchor="middle" fill="#2D5A8E" font-size="11">3</text>
+  <text x="195" y="185" text-anchor="middle" fill="#2D5A8E" font-size="11">1</text>
+  <text x="195" y="205" text-anchor="middle" fill="#2D5A8E" font-size="11">4</text>
+  <!-- axis label -->
+  <line x1="215" y1="140" x2="215" y2="220" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="230" y="185" text-anchor="start" fill="#2D5A8E" font-size="10">i</text>
+  <text x="195" y="240" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">Vector</text>
+  <text x="195" y="258" text-anchor="middle" fill="#5C3D1E" font-size="12">Order 1</text>
+  <text x="195" y="276" text-anchor="middle" fill="#888" font-size="11">one index</text>
+
+  <!-- Arrow 2 -->
+  <line x1="245" y1="180" x2="290" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Matrix (order 2) -->
+  <rect x="300" y="130" width="100" height="100" rx="4" fill="#7C2530" fill-opacity="0.10" stroke="#7C2530" stroke-width="2"/>
+  <!-- grid lines -->
+  <line x1="333" y1="130" x2="333" y2="230" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="366" y1="130" x2="366" y2="230" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="300" y1="163" x2="400" y2="163" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <line x1="300" y1="196" x2="400" y2="196" stroke="#7C2530" stroke-width="0.5" opacity="0.4"/>
+  <!-- sample entries -->
+  <text x="316" y="153" text-anchor="middle" fill="#7C2530" font-size="11">2</text>
+  <text x="350" y="153" text-anchor="middle" fill="#7C2530" font-size="11">7</text>
+  <text x="383" y="153" text-anchor="middle" fill="#7C2530" font-size="11">1</text>
+  <text x="316" y="186" text-anchor="middle" fill="#7C2530" font-size="11">0</text>
+  <text x="350" y="186" text-anchor="middle" fill="#7C2530" font-size="11">5</text>
+  <text x="383" y="186" text-anchor="middle" fill="#7C2530" font-size="11">3</text>
+  <text x="316" y="219" text-anchor="middle" fill="#7C2530" font-size="11">8</text>
+  <text x="350" y="219" text-anchor="middle" fill="#7C2530" font-size="11">4</text>
+  <text x="383" y="219" text-anchor="middle" fill="#7C2530" font-size="11">6</text>
+  <!-- axis labels -->
+  <line x1="300" y1="235" x2="400" y2="235" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="350" y="248" text-anchor="middle" fill="#7C2530" font-size="10">j</text>
+  <line x1="295" y1="130" x2="295" y2="230" stroke="#7C2530" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="288" y="185" text-anchor="middle" fill="#7C2530" font-size="10">i</text>
+  <text x="350" y="268" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">Matrix</text>
+  <text x="350" y="286" text-anchor="middle" fill="#5C3D1E" font-size="12">Order 2</text>
+  <text x="350" y="304" text-anchor="middle" fill="#888" font-size="11">two indices</text>
+
+  <!-- Arrow 3 -->
+  <line x1="410" y1="180" x2="460" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- 3rd-order tensor (order 3) — 3D cube -->
+  <!-- Back face -->
+  <rect x="510" y="95" width="110" height="110" rx="3" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Front face -->
+  <rect x="475" y="130" width="110" height="110" rx="3" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Connecting edges (3D effect) -->
+  <line x1="475" y1="130" x2="510" y2="95" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="585" y1="130" x2="620" y2="95" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="585" y1="240" x2="620" y2="205" stroke="#2D5A8E" stroke-width="1.5"/>
+  <!-- Front face grid -->
+  <line x1="512" y1="130" x2="512" y2="240" stroke="#2D5A8E" stroke-width="0.5" opacity="0.3"/>
+  <line x1="548" y1="130" x2="548" y2="240" stroke="#2D5A8E" stroke-width="0.5" opacity="0.3"/>
+  <line x1="475" y1="167" x2="585" y2="167" stroke="#2D5A8E" stroke-width="0.5" opacity="0.3"/>
+  <line x1="475" y1="203" x2="585" y2="203" stroke="#2D5A8E" stroke-width="0.5" opacity="0.3"/>
+  <!-- axis labels -->
+  <line x1="475" y1="248" x2="585" y2="248" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="530" y="262" text-anchor="middle" fill="#2D5A8E" font-size="10">j</text>
+  <line x1="468" y1="130" x2="468" y2="240" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="460" y="190" text-anchor="middle" fill="#2D5A8E" font-size="10">i</text>
+  <line x1="590" y1="125" x2="625" y2="90" stroke="#2D5A8E" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="632" y="88" text-anchor="middle" fill="#2D5A8E" font-size="10">k</text>
+  <text x="530" y="282" text-anchor="middle" fill="#5C3D1E" font-size="14" font-weight="bold">3rd-Order Tensor</text>
+  <text x="530" y="300" text-anchor="middle" fill="#5C3D1E" font-size="12">Order 3</text>
+  <text x="530" y="318" text-anchor="middle" fill="#888" font-size="11">three indices</text>
+
+  <!-- Nth-order hint -->
+  <text x="668" y="170" text-anchor="middle" fill="#C4A87A" font-size="28">...</text>
+  <text x="730" y="175" text-anchor="middle" fill="#5C3D1E" font-size="13" font-style="italic">Nth-order</text>
+  <text x="730" y="195" text-anchor="middle" fill="#5C3D1E" font-size="12">N indices</text>
+
+  <!-- Bottom annotation -->
+  <text x="400" y="370" text-anchor="middle" fill="#888" font-size="12">Each step adds a new index (mode), generalising linear algebra to multilinear algebra</text>
+  <text x="400" y="388" text-anchor="middle" fill="#C4A87A" font-size="11">Element access: scalar = x  |  vector = x_i  |  matrix = x_ij  |  tensor = x_ijk...</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="400" y="35" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Convex Duality: A Function and Its Conjugate</text>
+
+  <!-- Left panel: primal function f(x) -->
+  <text x="200" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#7C2530">Primal: f(x)</text>
+
+  <!-- Axes for f(x) -->
+  <line x1="60" y1="320" x2="370" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="60" y1="320" x2="60" y2="80" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="370" y="340" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">x</text>
+  <text x="50" y="85" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">f</text>
+
+  <!-- Convex curve f(x) = x^2 style -->
+  <path d="M80,280 Q130,310 170,290 Q210,240 230,180 Q250,130 290,110 Q330,130 350,200" fill="none" stroke="#7C2530" stroke-width="3"/>
+
+  <!-- Supporting hyperplane (tangent line) at slope y -->
+  <line x1="100" y1="310" x2="340" y2="100" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="345" y="95" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">slope = y</text>
+
+  <!-- Gap annotation -->
+  <line x1="230" y1="180" x2="230" y2="148" stroke="#C4A87A" stroke-width="1.5"/>
+  <circle cx="230" cy="180" r="4" fill="#7C2530"/>
+  <circle cx="230" cy="148" r="3" fill="#2D5A8E"/>
+
+  <!-- Max gap label -->
+  <text x="248" y="168" font-family="Georgia, serif" font-size="11" fill="#C4A87A">gap =</text>
+  <text x="248" y="182" font-family="Georgia, serif" font-size="11" fill="#C4A87A">yx - f(x)</text>
+
+  <!-- sup annotation -->
+  <text x="130" y="355" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">f*(y) = sup { yx - f(x) }</text>
+  <text x="178" y="372" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">x</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="60" x2="400" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Right panel: conjugate f*(y) -->
+  <text x="600" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#2D5A8E">Conjugate: f*(y)</text>
+
+  <!-- Axes for f*(y) -->
+  <line x1="440" y1="320" x2="750" y2="320" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="440" y1="320" x2="440" y2="80" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="750" y="340" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">y</text>
+  <text x="430" y="85" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">f*</text>
+
+  <!-- Conjugate curve (also convex) -->
+  <path d="M470,240 Q510,280 550,290 Q590,280 620,230 Q650,170 680,120 Q710,100 730,110" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+
+  <!-- Arrow showing the mapping -->
+  <path d="M355,75 Q400,55 445,75" fill="none" stroke="#C4A87A" stroke-width="2" marker-end="url(#arrowTan)"/>
+  <text x="400" y="50" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#C4A87A">Legendre</text>
+
+  <!-- Biconjugate arrow -->
+  <path d="M445,85 Q400,105 355,85" fill="none" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowTan2)"/>
+  <text x="400" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#C4A87A">f** = f (biconjugate)</text>
+
+  <!-- Key insight box -->
+  <rect x="445" y="335" width="290" height="50" rx="6" fill="none" stroke="#7C2530" stroke-width="1"/>
+  <text x="590" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">Fenchel-Young Inequality:</text>
+  <text x="590" y="373" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">f(x) + f*(y) &gt;= xy</text>
+
+  <!-- Multiple tangent lines on right to show envelope -->
+  <line x1="460" y1="300" x2="600" y2="230" stroke="#7C2530" stroke-width="1" stroke-opacity="0.3"/>
+  <line x1="500" y1="310" x2="650" y2="170" stroke="#7C2530" stroke-width="1" stroke-opacity="0.3"/>
+  <line x1="540" y1="310" x2="700" y2="120" stroke="#7C2530" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="720" y="160" font-family="Georgia, serif" font-size="10" fill="#7C2530" opacity="0.6">supporting</text>
+  <text x="720" y="173" font-family="Georgia, serif" font-size="10" fill="#7C2530" opacity="0.6">hyperplanes</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowTan" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowTan2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L8,4 z" fill="#C4A87A"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E">Reproducing Kernel Hilbert Space</text>
+
+  <!-- Left side: Input Space -->
+  <text x="140" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Input Space X</text>
+  <rect x="40" y="78" width="200" height="200" rx="12" fill="none" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Input points -->
+  <circle cx="100" cy="150" r="6" fill="#7C2530"/>
+  <text x="100" y="142" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">x</text>
+  <circle cx="160" cy="200" r="6" fill="#2D5A8E"/>
+  <text x="160" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">y</text>
+  <circle cx="120" cy="240" r="5" fill="#5C3D1E" opacity="0.5"/>
+  <circle cx="80" cy="210" r="5" fill="#5C3D1E" opacity="0.5"/>
+  <circle cx="170" cy="150" r="5" fill="#5C3D1E" opacity="0.5"/>
+
+  <!-- Arrow: phi map -->
+  <line x1="255" y1="178" x2="345" y2="178" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="300" y="168" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">k(x, .)</text>
+  <text x="300" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">feature map</text>
+
+  <!-- Right side: RKHS (Hilbert Space H) -->
+  <text x="560" y="65" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">RKHS H</text>
+  <ellipse cx="560" cy="195" rx="170" ry="130" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- Function vectors in H -->
+  <!-- k_x vector -->
+  <line x1="500" y1="250" x2="530" y2="130" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowR)"/>
+  <defs>
+    <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+  <text x="510" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">k_x</text>
+
+  <!-- k_y vector -->
+  <line x1="500" y1="250" x2="620" y2="145" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrowB)"/>
+  <defs>
+    <marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+  <text x="638" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#2D5A8E">k_y</text>
+
+  <!-- Origin dot -->
+  <circle cx="500" cy="250" r="3" fill="#5C3D1E"/>
+
+  <!-- Angle arc between vectors -->
+  <path d="M 510 230 Q 520 220 525 225" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Inner product annotation -->
+  <text x="580" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">&lt;k_x, k_y&gt; = k(x,y)</text>
+
+  <!-- Bottom: Reproducing Property box -->
+  <rect x="120" y="310" width="560" height="65" rx="8" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="335" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Reproducing Property</text>
+  <text x="400" y="358" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">f(x) = &lt;f, k_x&gt;   &mdash;   evaluate f at x via inner product in H</text>
+</svg>

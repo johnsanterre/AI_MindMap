@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Martingale: Conditional Expectation = Current Value</text>
+
+  <!-- LEFT PANEL: Stochastic trajectory with conditional expectation -->
+  <rect x="20" y="46" width="470" height="310" rx="6" fill="#FAF7EF" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="255" y="66" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">A Martingale Trajectory: E[X_{t+1} | X_t] = X_t</text>
+
+  <!-- Axes -->
+  <line x1="55" y1="240" x2="465" y2="240" stroke="#9B8C70" stroke-width="1.5"/>
+  <line x1="55" y1="85" x2="55" y2="320" stroke="#9B8C70" stroke-width="1.5"/>
+
+  <!-- Axis labels -->
+  <text x="468" y="244" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">t</text>
+  <text x="38" y="89" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">X</text>
+  <text x="55" y="256" font-family="Georgia, serif" font-size="10" fill="#9B8C70" text-anchor="middle">0</text>
+
+  <!-- Realized martingale path (deep red) -->
+  <polyline
+    points="55,200 80,190 105,205 130,195 155,180 180,192 205,178 230,185 255,170 280,182 305,168 330,176 355,160 380,172 405,155 430,165 455,150"
+    fill="none" stroke="#7C2530" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Highlight point at t=255: conditional expectation fan -->
+  <circle cx="255" cy="170" r="5" fill="#7C2530" stroke="#FDFAF4" stroke-width="1.5"/>
+
+  <!-- Fan of possible futures from t=255 (dashed navy) showing E=current -->
+  <line x1="255" y1="170" x2="305" y2="140" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.6"/>
+  <line x1="255" y1="170" x2="305" y2="155" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.6"/>
+  <line x1="255" y1="170" x2="305" y2="170" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+  <line x1="255" y1="170" x2="305" y2="185" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.6"/>
+  <line x1="255" y1="170" x2="305" y2="200" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.6"/>
+
+  <!-- Horizontal line at current value showing E[X_{t+1}] = X_t -->
+  <line x1="255" y1="170" x2="320" y2="170" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="325" y="167" font-family="Georgia, serif" font-size="10" fill="#C4A87A">E[X_{t+1}|X_t]</text>
+
+  <!-- Annotation arrow and label -->
+  <text x="260" y="130" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">Possible futures</text>
+  <text x="260" y="143" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#2D5A8E">average = current value</text>
+
+  <!-- Legend -->
+  <line x1="70" y1="290" x2="100" y2="290" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="105" y="294" font-family="Georgia, serif" font-size="10" fill="#7C2530">Realized path</text>
+  <line x1="195" y1="290" x2="225" y2="290" stroke="#2D5A8E" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="230" y="294" font-family="Georgia, serif" font-size="10" fill="#2D5A8E">Future scenarios</text>
+  <line x1="340" y1="290" x2="370" y2="290" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="375" y="294" font-family="Georgia, serif" font-size="10" fill="#C4A87A">Cond. expectation</text>
+
+  <!-- Key formula -->
+  <text x="255" y="335" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">E[X_{n+1} | X_1, ..., X_n] = X_n  (fair game property)</text>
+  <text x="255" y="350" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">no expected gain or loss, regardless of current information</text>
+
+  <!-- RIGHT PANEL: Taxonomy -->
+  <rect x="508" y="46" width="272" height="310" rx="6" fill="#FAF7EF" stroke="#D4C5A9" stroke-width="1.2"/>
+  <text x="644" y="66" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">Martingale Taxonomy</text>
+
+  <!-- Supermartingale box -->
+  <rect x="530" y="80" width="228" height="58" rx="5" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="644" y="98" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Supermartingale</text>
+  <text x="644" y="115" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">E[X_{n+1} | F_n] &lt;= X_n</text>
+  <text x="644" y="130" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">tendency to decrease (unfavorable game)</text>
+
+  <!-- Martingale box (center, highlighted) -->
+  <rect x="530" y="148" width="228" height="58" rx="5" fill="#5C3D1E" stroke="none"/>
+  <text x="644" y="168" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#FDFAF4" text-anchor="middle">Martingale</text>
+  <text x="644" y="185" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">E[X_{n+1} | F_n] = X_n</text>
+  <text x="644" y="200" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#C4A87A" text-anchor="middle">fair game (no drift)</text>
+
+  <!-- Submartingale box -->
+  <rect x="530" y="216" width="228" height="58" rx="5" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="644" y="236" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Submartingale</text>
+  <text x="644" y="253" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">E[X_{n+1} | F_n] >= X_n</text>
+  <text x="644" y="268" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">tendency to increase (favorable game)</text>
+
+  <!-- Key theorems -->
+  <text x="644" y="298" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Key Theorems</text>
+  <text x="644" y="314" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Optional Stopping | Convergence</text>
+  <text x="644" y="330" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Azuma-Hoeffding | Maximal Inequality</text>
+  <text x="644" y="346" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#9B8C70" text-anchor="middle">Doob 1953 | Levy 1934 | Ville 1939</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="386" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#9B8C70" text-anchor="middle">The mathematical formalization of "fair games" — central to convergence proofs in optimization and learning</text>
+</svg>
