@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Lambda Calculus: The Grammar of Computation</text>
+
+  <!-- ===== LEFT PANEL: Three Rules ===== -->
+  <text x="200" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">The Three Rules</text>
+
+  <!-- Variable box -->
+  <rect x="40" y="78" width="320" height="56" rx="8" fill="#EDE3D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="60" y="100" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Variable</text>
+  <text x="60" y="120" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">x, y, z ...</text>
+  <text x="200" y="110" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">A name that stands for a value</text>
+
+  <!-- Abstraction box -->
+  <rect x="40" y="144" width="320" height="56" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="60" y="166" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Abstraction</text>
+  <text x="60" y="186" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-style="italic">(lambda x . body)</text>
+  <text x="240" y="176" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Define a function</text>
+
+  <!-- Application box -->
+  <rect x="40" y="210" width="320" height="56" rx="8" fill="#F2E0D0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="60" y="232" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Application</text>
+  <text x="60" y="252" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">(f x)</text>
+  <text x="200" y="242" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Apply function to argument</text>
+
+  <!-- ===== LEFT PANEL: Beta Reduction Example ===== -->
+  <text x="200" y="296" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Beta Reduction</text>
+
+  <rect x="40" y="306" width="320" height="74" rx="8" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="200" y="330" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">(lambda x . x + 1) 5</text>
+  <!-- Arrow -->
+  <line x1="200" y1="338" x2="200" y2="354" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowLC)"/>
+  <text x="200" y="370" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">5 + 1 = 6</text>
+  <text x="280" y="345" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">substitute x = 5</text>
+
+  <defs>
+    <marker id="arrowLC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- ===== DIVIDER ===== -->
+  <line x1="395" y1="50" x2="395" y2="385" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- ===== RIGHT PANEL: Church Encodings ===== -->
+  <text x="600" y="62" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Church Encodings</text>
+
+  <!-- TRUE -->
+  <rect x="420" y="78" width="170" height="40" rx="6" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="440" y="96" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">TRUE</text>
+  <text x="440" y="110" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">lambda x y . x</text>
+
+  <!-- FALSE -->
+  <rect x="610" y="78" width="170" height="40" rx="6" fill="#EDE3D0" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="630" y="96" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E">FALSE</text>
+  <text x="630" y="110" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">lambda x y . y</text>
+
+  <!-- Numbers -->
+  <rect x="420" y="130" width="360" height="60" rx="6" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="440" y="150" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E">Church Numerals</text>
+  <text x="440" y="168" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">0 = lambda f x . x</text>
+  <text x="620" y="168" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">1 = lambda f x . f x</text>
+  <text x="440" y="182" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">2 = lambda f x . f (f x)</text>
+  <text x="620" y="182" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">n = apply f n times</text>
+
+  <!-- ===== RIGHT PANEL: Equivalence ===== -->
+  <text x="600" y="218" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Church-Turing Thesis</text>
+
+  <!-- Lambda box -->
+  <rect x="430" y="230" width="120" height="50" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="490" y="252" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Lambda</text>
+  <text x="490" y="268" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Calculus</text>
+
+  <!-- Equals sign -->
+  <text x="580" y="260" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#7C2530" text-anchor="middle">=</text>
+
+  <!-- Turing box -->
+  <rect x="610" y="230" width="120" height="50" rx="8" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="670" y="252" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Turing</text>
+  <text x="670" y="268" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Machines</text>
+
+  <text x="580" y="298" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Same computational power</text>
+
+  <!-- ===== RIGHT PANEL: Legacy ===== -->
+  <text x="600" y="328" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Modern Descendants</text>
+
+  <text x="440" y="350" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">Haskell</text>
+  <text x="520" y="350" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">Lisp</text>
+  <text x="585" y="350" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">ML/OCaml</text>
+  <text x="680" y="350" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">Python</text>
+  <text x="750" y="350" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-weight="bold">JS</text>
+
+  <text x="600" y="374" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">Every language with anonymous functions inherits from lambda calculus</text>
+
+</svg>

@@ -1,0 +1,163 @@
+<<include "Header">>
+! The Halting Problem
+<img src="assets/halting_problem.svg" alt="Halting Problem diagonalization argument" style="max-width:100%; height:auto;">
+
+Imagine you are a teacher grading homework. A student hands you a program and asks, "Will this ever finish running, or will it spin forever?" You might think a sufficiently clever teacher could always answer that question — just trace through the logic carefully enough. The ''Halting Problem'' is Alan Turing's 1936 proof that no such perfectly clever teacher can exist. No algorithm, no matter how sophisticated, can correctly determine for //every// possible program and input whether that program will eventually stop. This is not a limitation of current technology — it is a //fundamental mathematical impossibility//.
+
+!! The Core Insight
+
+The Halting Problem reveals that computation has inherent blind spots. A computer can do extraordinary things, but it cannot fully understand itself. Specifically, you cannot build a general-purpose "halt detector" because the very act of trying to detect halting in all cases creates a logical paradox — the detector contradicts itself when asked to analyze a program specifically designed to defy it. This is the same flavor of self-referential paradox as the liar's sentence ("This statement is false") but made rigorous through the language of [[Turing Machines|Turing Machines]].
+
+!! Turing's Proof by Diagonalization
+
+Turing's argument proceeds by ''proof by contradiction''. Suppose a halting decider $H$ exists — a program that takes any program $P$ and input $I$, and correctly outputs "halts" or "loops forever."
+
+Now construct a devious new program $D$:
+* $D$ takes a program $P$ as input
+* $D$ runs $H(P, P)$ — asking whether $P$ halts when given //its own source code// as input
+* If $H$ says "$P$ halts on $P$," then $D$ deliberately enters an infinite loop
+* If $H$ says "$P$ loops on $P$," then $D$ immediately halts
+
+Now ask: what happens when we run $D(D)$ — feeding $D$ its own source code?
+
+* If $H(D, D)$ says "halts" → $D$ loops forever → $H$ was //wrong//
+* If $H(D, D)$ says "loops" → $D$ halts → $H$ was //wrong//
+
+Either way, $H$ gives the wrong answer. Therefore $H$ cannot exist. This ''diagonalization'' technique — constructing an object that differs from every item in a supposed complete list — echoes Cantor's proof that the real numbers are uncountable, and connects to deep results in [[Complexity Classes|Complexity Classes]].
+
+!! What the Math Is Actually Doing
+
+We can formalize the argument. Define the ''halting function'':
+
+$$h(P, I) = \begin{cases} 1 & \text{if program } P \text{ halts on input } I \\ 0 & \text{if program } P \text{ loops forever on input } I \end{cases}$$
+
+Assume a Turing machine $H$ computes $h$. Construct $D$ such that:
+
+$$D(P) = \begin{cases} \text{loop forever} & \text{if } H(P, P) = 1 \\ \text{halt} & \text{if } H(P, P) = 0 \end{cases}$$
+
+Evaluate $D(D)$:
+
+$$D(D) \text{ halts} \iff H(D, D) = 0 \iff D(D) \text{ does not halt}$$
+
+This is a direct contradiction: $D(D) \text{ halts} \iff D(D) \text{ does not halt}$. Therefore no such $H$ exists, and $h$ is ''uncomputable''.
+
+The proof generalizes via ''Rice's theorem'': //any// non-trivial semantic property of programs is undecidable. Formally, if $S$ is a non-empty, proper subset of the computable partial functions, then the set $\{P \mid \text{the function computed by } P \in S\}$ is undecidable. This means you cannot algorithmically determine whether a program computes a particular function, always outputs positive numbers, never accesses certain memory, or satisfies essentially //any// interesting behavioral specification.
+
+!! Reductions and the Undecidability Landscape
+
+The halting problem sits at the center of a web of undecidable problems, connected by ''reductions''. A reduction from problem $A$ to problem $B$ shows that if you could solve $B$, you could solve $A$ — so if $A$ is undecidable, $B$ must be too.
+
+Key undecidable problems reducible from the halting problem:
+* ''Equivalence problem'': Do two programs compute the same function?
+* ''Totality problem'': Does a program halt on //every// input?
+* ''Emptiness problem'': Does a program halt on //any// input?
+* ''Post's correspondence problem'': Does a set of string-pair tiles admit a matching sequence?
+
+This reduction machinery is the same conceptual tool used in [[NP-Completeness|NP-Completeness]], where problems are shown to be at least as hard as all others in NP. The difference is that NP-complete problems are //decidable// but (likely) intractable, while the halting problem is truly //undecidable// — no algorithm of any speed can solve it.
+
+!! Implications for ML and AI Safety
+
+The halting problem is not merely a theoretical curiosity — it imposes hard limits on what we can guarantee about intelligent systems:
+
+* ''Verification of neural networks'': Determining whether a neural network will //never// produce a specific output is undecidable in general. Static analysis tools can handle restricted cases but cannot provide universal guarantees.
+* ''AI alignment'': Checking whether an AI system's behavior satisfies an arbitrary specification is undecidable by Rice's theorem. Perfect automated alignment verification is mathematically impossible.
+* ''Termination of training'': For certain adaptive learning algorithms, whether training will converge is undecidable. Practical training uses heuristics (early stopping, learning rate schedules) that sidestep but do not solve this.
+* ''Program synthesis'': ML systems that generate code cannot generally verify whether their outputs halt, creating reliability challenges for AI-driven software development.
+
+These impossibility results do not mean safety work is futile — they mean that safety guarantees must be ''partial'' (covering restricted domains), ''probabilistic'' (high confidence but not certainty), or ''empirical'' (tested rather than proved). Understanding what //cannot// be done is essential for focusing effort on what //can// be done.
+
+!! When the Halting Problem Breaks Down
+
+<strong>1. Finite-state illusion.</strong> Real computers have finite memory, making them technically finite automata — for which halting //is// decidable (enumerate all states). But the state space is so astronomically large ($2^{2^{34}}$ for 16 GB RAM) that this theoretical decidability is practically useless.
+
+<strong>2. Confusing undecidability with unprovability.</strong> For //specific// programs, we can often prove termination or non-termination. The halting problem says no //single algorithm// works for //all// programs. Many useful programs (compilers, sort routines) have straightforward termination proofs.
+
+<strong>3. Ignoring restricted models.</strong> The halting problem applies to [[Turing Machines|Turing Machines]] and equivalently powerful models. For weaker models — finite automata, pushdown automata (see [[Automata Theory|Automata Theory]]), primitive recursive functions, or programs with bounded loops — halting //is// decidable. Designing systems within decidable fragments is a practical engineering strategy.
+
+!! Technical Details
+
+''Historical context'': Turing published "On Computable Numbers" in 1936, introducing Turing machines and proving the halting problem undecidable. Alonzo Church independently proved an equivalent result using lambda calculus the same year (the Church-Turing thesis). Kurt Gödel's 1931 incompleteness theorems anticipated these results.
+
+''Formal classification'': The halting problem is ''$\Sigma_1^0$-complete'' in the arithmetical hierarchy — it is computably enumerable (a halting program can be confirmed by running it) but not computable (a looping program cannot be confirmed in finite time).
+
+''Relationship to Kolmogorov complexity'': The uncomputability of Kolmogorov complexity (the shortest program producing a given string) follows directly from the undecidability of halting. If you could compute Kolmogorov complexity, you could solve the halting problem via Berry's paradox.
+
+''Busy beaver function'': $\text{BB}(n)$, the maximum number of steps an $n$-state halting Turing machine can take, grows faster than any computable function. Computing $\text{BB}(n)$ is equivalent to solving the halting problem for $n$-state machines. Current known values: $\text{BB}(1)=1$, $\text{BB}(2)=6$, $\text{BB}(3)=21$, $\text{BB}(4)=107$, $\text{BB}(5)=47{,}176{,}870$.
+
+''Practical impact on static analysis'': Tools like model checkers and type systems work by //over-approximating// program behavior (reporting false positives) or restricting the language to decidable fragments. Sound and complete analysis of arbitrary programs is impossible by Rice's theorem.
+
+!! Quiz
+
+<div id="q1">
+''1. What did Turing prove about the halting problem?''
+
+<<button "A) It can be solved with enough computing power">><<replace "#q1">>That is incorrect. The halting problem is undecidable regardless of computational resources — it is a fundamental mathematical impossibility, not a resource limitation.<</replace>><</button>>
+<<button "B) No algorithm can correctly decide halting for all programs">><<replace "#q1">>Correct! Turing proved that no single algorithm can determine, for every possible program and input, whether that program will halt or run forever.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) Only quantum computers can solve it">><<replace "#q1">>That is incorrect. Quantum computers obey the Church-Turing thesis for computability — they cannot solve undecidable problems either.<</replace>><</button>>
+<<button "D) It applies only to programs without input">><<replace "#q1">>That is incorrect. The halting problem concerns whether program $P$ halts on input $I$, for arbitrary $P$ and $I$.<</replace>><</button>>
+</div>
+
+<div id="q2">
+''2. What proof technique did Turing use?''
+
+<<button "A) Induction">><<replace "#q2">>That is incorrect. Turing used diagonalization — constructing a self-referential program that contradicts any assumed halting decider.<</replace>><</button>>
+<<button "B) Diagonalization (proof by contradiction)">><<replace "#q2">>Correct! Turing assumed a halting decider $H$ exists, constructed program $D$ that contradicts $H$ when applied to itself, yielding a contradiction.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) Exhaustive enumeration">><<replace "#q2">>That is incorrect. Exhaustive enumeration cannot cover infinitely many programs. Turing used a self-referential diagonalization argument.<</replace>><</button>>
+<<button "D) Probabilistic analysis">><<replace "#q2">>That is incorrect. The proof is purely logical, using diagonalization to derive a contradiction.<</replace>><</button>>
+</div>
+
+<div id="q3">
+''3. In the diagonalization proof, what does program D do when H says P halts on itself?''
+
+<<button "A) D halts immediately">><<replace "#q3">>That is incorrect. D does the //opposite// — if $H(P, P)$ says "halts," then $D$ deliberately loops forever.<</replace>><</button>>
+<<button "B) D asks H again">><<replace "#q3">>That is incorrect. D does not re-query H. It takes the opposite action: looping forever when H predicts halting.<</replace>><</button>>
+<<button "C) D enters an infinite loop">><<replace "#q3">>Correct! D is constructed to do the opposite of what H predicts. If $H(P, P) = $ "halts," then $D(P)$ loops forever.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D) D outputs an error">><<replace "#q3">>That is incorrect. D deliberately loops forever when H predicts halting — this opposition is what creates the contradiction.<</replace>><</button>>
+</div>
+
+<div id="q4">
+''4. What does Rice's theorem generalize?''
+
+<<button "A) That only the halting problem is undecidable">><<replace "#q4">>That is incorrect. Rice's theorem shows the opposite — that //all// non-trivial semantic properties of programs are undecidable, far beyond just halting.<</replace>><</button>>
+<<button "B) That any non-trivial semantic property of programs is undecidable">><<replace "#q4">>Correct! Rice's theorem states that if a property of the function computed by a program is non-trivial (some programs have it, some do not), then it is undecidable.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) That all syntactic properties are undecidable">><<replace "#q4">>That is incorrect. Syntactic properties (e.g., "does the source code contain the word 'print'?") are perfectly decidable. Rice's theorem concerns //semantic// (behavioral) properties.<</replace>><</button>>
+<<button "D) That finite automata cannot decide halting">><<replace "#q4">>That is incorrect. Rice's theorem is about Turing-complete programs, not finite automata. It generalizes halting undecidability to all non-trivial semantic properties.<</replace>><</button>>
+</div>
+
+<div id="q5">
+''5. Why does the halting problem matter for AI safety?''
+
+<<button "A) It means AI systems always crash">><<replace "#q5">>That is incorrect. The halting problem does not cause crashes. It means that //perfectly verifying// arbitrary behavioral properties of AI systems is mathematically impossible.<</replace>><</button>>
+<<button "B) Verifying arbitrary behavioral specifications of AI is undecidable">><<replace "#q5">>Correct! By Rice's theorem, checking whether an AI system satisfies any non-trivial behavioral property is undecidable in general, forcing safety work to rely on partial, probabilistic, or empirical methods.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) It prevents training neural networks">><<replace "#q5">>That is incorrect. Neural networks train just fine in practice. The halting problem limits //formal verification// of their behavior, not training itself.<</replace>><</button>>
+<<button "D) It only affects classical algorithms, not ML">><<replace "#q5">>That is incorrect. ML systems are implemented as programs and subject to the same computability limits. Rice's theorem applies to any program's semantic properties.<</replace>><</button>>
+</div>
+
+<div id="q6">
+''6. Is the halting problem decidable for real computers with finite memory?''
+
+<<button "A) No, it is always undecidable">><<replace "#q6">>That is incorrect. Technically, a machine with finite memory is a finite automaton, and halting //is// decidable for finite automata (by tracking all possible states).<</replace>><</button>>
+<<button "B) Yes in theory, but the state space is astronomically large">><<replace "#q6">>Correct! A real computer with finite memory is a finite automaton, so halting is theoretically decidable. But the state space (e.g., $2^{2^{34}}$ for 16 GB) makes this approach practically impossible.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) Only if the program is written in Python">><<replace "#q6">>That is incorrect. The language is irrelevant — what matters is whether the execution model has finite or unbounded memory.<</replace>><</button>>
+<<button "D) Yes, and modern tools exploit this routinely">><<replace "#q6">>That is incorrect. While theoretically decidable, the enormous state space means practical tools use approximation techniques, not full state enumeration.<</replace>><</button>>
+</div>
+
+<div id="q7">
+''7. What is the busy beaver function BB(n)?''
+
+<<button "A) The fastest sorting algorithm for n elements">><<replace "#q7">>That is incorrect. The busy beaver function $\text{BB}(n)$ is the maximum number of steps any halting $n$-state Turing machine can execute.<</replace>><</button>>
+<<button "B) The maximum steps an n-state halting Turing machine can take">><<replace "#q7">>Correct! $\text{BB}(n)$ grows faster than any computable function, and computing it is equivalent to solving the halting problem for $n$-state machines.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) The number of programs with n lines of code">><<replace "#q7">>That is incorrect. $\text{BB}(n)$ counts the maximum //steps// an $n$-state halting Turing machine can take, not the number of programs.<</replace>><</button>>
+<<button "D) A computable function that grows very quickly">><<replace "#q7">>That is incorrect. The key property of $\text{BB}(n)$ is that it is //uncomputable// — it grows faster than any computable function.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="q8">
+''8. How do reductions connect the halting problem to NP-completeness?''
+
+<<button "A) They are the same concept">><<replace "#q8">>That is incorrect. Halting is //undecidable// (no algorithm at all), while NP-complete problems are //decidable// but likely intractable. Reductions are used in both contexts but to show different things.<</replace>><</button>>
+<<button "B) Both use reductions to show relative hardness, but halting is undecidable while NP-complete problems are decidable">><<replace "#q8">>Correct! Reductions are the shared technique — showing problem A is at least as hard as problem B. But halting-problem reductions prove undecidability, while [[NP-Completeness|NP-Completeness]] reductions prove (likely) intractability within the decidable realm.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) NP-complete problems are all undecidable">><<replace "#q8">>That is incorrect. NP-complete problems are decidable — they can be solved, just (probably) not efficiently. The halting problem is truly undecidable.<</replace>><</button>>
+<<button "D) Reductions are only used for undecidable problems">><<replace "#q8">>That is incorrect. Reductions are used extensively in [[Complexity Classes|Complexity Classes]] to classify decidable problems by difficulty (P, NP, etc.).<</replace>><</button>>
+</div>
+
+<<include "Footer">>

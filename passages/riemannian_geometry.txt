@@ -1,0 +1,168 @@
+<<include "Header">>
+
+! Riemannian Geometry
+
+<img src="assets/riemannian_geometry.svg" alt="Diagram showing a curved manifold with tangent plane, geodesic path between two points, and parallel transport of vectors along a curve" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are an ant living on the surface of a bowling ball. You have never seen flat ground. When you walk "straight ahead," you trace a great circle — the shortest path between two points on the sphere. You can measure angles between directions you might walk, and you notice something strange: if you carry a compass needle along a closed loop, it comes back rotated. That rotation is //curvature//, and everything the ant experiences — distances, shortest paths, how directions twist — is governed by a single object called the ''metric tensor''. Riemannian geometry is the mathematics of measuring things on curved spaces, and it turns out that much of modern machine learning quietly lives on curved spaces rather than flat ones.
+
+!! The Core Insight
+
+A ''Riemannian manifold'' $(M, g)$ is a smooth manifold $M$ equipped with a ''metric tensor'' $g$ — a smoothly varying inner product on each tangent space $T_pM$. The metric tensor is the master object: from $g$ alone, you can derive distances between points, angles between tangent vectors, volumes of regions, shortest paths (geodesics), and curvature.
+
+On flat Euclidean space $\mathbb{R}^n$, the metric is just the identity matrix $g_{ij} = \delta_{ij}$, and everything reduces to familiar dot products and straight lines. On a curved manifold, $g_{ij}(p)$ varies from point to point, and "straight lines" become curved geodesics that follow the surface's shape. The key insight is that all geometric notions — distance, angle, curvature, volume — are //intrinsic// to the surface and depend only on $g$, not on how the surface sits inside some ambient space.
+
+!! Metrics, Geodesics, and Curvature
+
+The ''metric tensor'' $g$ at a point $p$ takes two tangent vectors $u, v \in T_pM$ and returns a real number $g_p(u, v)$ — their inner product. In local coordinates $(x^1, \ldots, x^n)$, the metric is an $n \times n$ positive definite matrix $g_{ij}(x)$, and the squared infinitesimal distance is:
+$$ds^2 = g_{ij}\, dx^i\, dx^j$$
+
+A ''geodesic'' is a curve that locally minimises length — the curved-space analogue of a straight line. On a sphere, geodesics are great circles. On a saddle surface, they curve in unexpected ways. Geodesics are the paths a particle would follow if no forces acted on it except the constraint of staying on the manifold.
+
+''Parallel transport'' moves a tangent vector along a curve while keeping it "as constant as possible" given the curvature. On a flat surface, the transported vector returns to its original orientation after a closed loop. On a curved surface, it comes back rotated — and the amount of rotation is precisely the ''curvature'' enclosed by the loop.
+
+The ''Riemann curvature tensor'' $R^i_{\ jkl}$ is the master curvature object. It measures how much parallel transport around an infinitesimal loop rotates a vector. From it, one derives the ''Ricci curvature'' $R_{ij}$ (an average over directions) and the ''scalar curvature'' $R$ (a single number summarising curvature at a point).
+
+!! What the Math Is Actually Doing
+
+In local coordinates, the metric tensor is a symmetric positive definite matrix field:
+$$g = [g_{ij}(x)], \quad g_{ij} = g_{ji}, \quad g_{ij}v^i v^j > 0 \text{ for all } v \neq 0$$
+
+The ''Christoffel symbols'' encode how the coordinate basis vectors change from point to point, derived entirely from $g$:
+$$\Gamma^k_{ij} = \frac{1}{2} g^{kl}\left(\frac{\partial g_{il}}{\partial x^j} + \frac{\partial g_{jl}}{\partial x^i} - \frac{\partial g_{ij}}{\partial x^l}\right)$$
+
+The ''geodesic equation'' describes shortest paths:
+$$\frac{d^2 x^k}{dt^2} + \Gamma^k_{ij} \frac{dx^i}{dt} \frac{dx^j}{dt} = 0$$
+
+This is a second-order ODE: given an initial point $p$ and initial velocity $v$, there is a unique geodesic. The ''exponential map'' $\text{Exp}_p: T_pM \to M$ maps a tangent vector $v$ to the point reached by following the geodesic from $p$ in direction $v$ for unit time. Its inverse, the ''logarithmic map'' $\text{Log}_p: M \to T_pM$, maps a point $q$ back to the tangent vector whose geodesic reaches $q$.
+
+The ''Riemann curvature tensor'' is:
+$$R^i_{\ jkl} = \frac{\partial \Gamma^i_{jl}}{\partial x^k} - \frac{\partial \Gamma^i_{jk}}{\partial x^l} + \Gamma^i_{mk}\Gamma^m_{jl} - \Gamma^i_{ml}\Gamma^m_{jk}$$
+
+The ''Ricci tensor'' contracts one index: $R_{jl} = R^i_{\ jil}$. The ''scalar curvature'' contracts again: $R = g^{jl} R_{jl}$.
+
+The ''geodesic distance'' between two points is:
+$$d(p, q) = \inf_{\gamma} \int_0^1 \sqrt{g_{\gamma(t)}(\dot{\gamma}(t), \dot{\gamma}(t))}\, dt$$
+
+where the infimum is over all smooth curves $\gamma$ connecting $p$ to $q$.
+
+!! Riemannian Geometry in Machine Learning
+
+''Natural gradient descent:'' the parameter space of a statistical model is not flat — the [[Fisher information matrix|Information Geometry]] $F(\theta)$ defines a Riemannian metric on it. Standard [[gradient descent|Gradient Descent]] treats parameter space as Euclidean and updates $\theta \leftarrow \theta - \eta \nabla L$. The ''[[natural gradient|Natural Gradient]]'' corrects for the curvature:
+$$\theta \leftarrow \theta - \eta\, F(\theta)^{-1} \nabla L(\theta)$$
+This is a Riemannian gradient step: it moves in the steepest direction as measured by the Fisher metric, not the Euclidean metric. The natural gradient is invariant to reparameterisation — a fundamental advantage.
+
+''Optimisation on manifolds:'' many ML parameters are naturally constrained to manifolds: orthogonal matrices ($O(n)$), rotation matrices ($SO(3)$), low-rank matrices, positive definite matrices (the ''SPD manifold''). Rather than optimising in Euclidean space with constraints, Riemannian optimisation performs gradient descent directly on the manifold using the exponential map for updates and parallel transport for momentum:
+$$\theta_{t+1} = \text{Exp}_{\theta_t}(-\eta\, \text{grad}\, f(\theta_t))$$
+
+''Hyperbolic embeddings:'' hierarchical data (taxonomies, social networks, parse trees) embeds more naturally in ''hyperbolic space'' — a Riemannian manifold with constant negative curvature — than in Euclidean space. The Poincar&#233; ball model uses the metric $g_{ij} = \frac{4}{(1 - \|x\|^2)^2}\delta_{ij}$, where distances grow exponentially near the boundary, providing room for exponentially branching trees.
+
+''SPD matrix manifolds:'' covariance matrices, diffusion tensors in brain imaging, and kernel matrices all live on the manifold of symmetric positive definite matrices. The standard Riemannian metric is the affine-invariant metric: $\langle A, B \rangle_P = \text{tr}(P^{-1}A P^{-1}B)$. Computing means and performing classification on this manifold (rather than in Euclidean space) respects the geometry and gives better results.
+
+''The [[loss landscape|Loss Landscape]]:'' the Hessian of the loss function at a critical point defines a local metric on parameter space. Understanding the Riemannian geometry of the loss landscape — its geodesics, curvature, and connected components of low-loss regions — illuminates why neural networks train and generalise.
+
+''[[Geometric deep learning|Geometric Deep Learning]]:'' neural networks on meshes, point clouds, and graphs must respect the geometry of the underlying domain. The Laplace-Beltrami operator, a Riemannian generalisation of the Laplacian, is the basis of spectral graph convolutions.
+
+Cross-references: [[Manifold Hypothesis]] | [[Natural Gradient]] | [[Information Geometry]] | [[Gradient Descent]] | [[Loss Landscape]] | [[Geometric Deep Learning]] | [[Topology]]
+
+!! When Riemannian Methods Break Down
+
+''(1) Computational cost of geometric operations:'' every Riemannian gradient step requires computing the metric tensor (or its inverse), Christoffel symbols, exponential maps, and parallel transport. For the Fisher information matrix in neural networks with millions of parameters, even storing the full $n \times n$ matrix is infeasible ($n = 10^8$ means $10^{16}$ entries). Approximations like K-FAC or diagonal Fisher reduce cost but sacrifice the geometric faithfulness that motivated Riemannian methods in the first place. The exponential map rarely has a closed-form expression outside well-studied manifolds (spheres, hyperbolic spaces, SPD matrices), requiring expensive numerical ODE solvers.
+
+''(2) Choosing the right metric:'' the power of Riemannian geometry depends entirely on choosing a metric that captures the problem's structure. For parameter spaces, the Fisher information metric is theoretically motivated but alternatives exist (Wasserstein metric, Hessian of the loss). For data manifolds, the metric is unknown and must be estimated from finite, noisy samples. A poor metric choice can make Riemannian methods perform worse than flat Euclidean baselines, and there is no universal procedure for selecting the correct metric from data.
+
+''(3) Local nature of Riemannian tools:'' the exponential map, geodesics, and curvature are all //local// concepts — they describe the manifold near a point. For globally complex manifolds (those with nontrivial [[topology|Topology]], multiple connected components, or high genus), local Riemannian tools may miss important global structure. The exponential map is only a diffeomorphism within the ''injectivity radius'' — beyond that, geodesics may cross and the map becomes ill-defined. In high-dimensional manifolds typical of ML, the injectivity radius can be very small relative to the manifold's diameter, severely limiting the useful range of local Riemannian coordinates.
+
+!! Technical Details
+
+''Historical roots:'' Bernhard Riemann introduced the concept in his 1854 habilitation lecture //Ueber die Hypothesen, welche der Geometrie zu Grunde liegen//. The formalism was developed by Christoffel (1869), Ricci-Curbastro and Levi-Civita (1900), and became central to Einstein's general relativity (1915). Riemannian optimisation entered ML through Amari's ''information geometry'' (1985) and the natural gradient (1998).
+
+''Key manifolds in ML:'' the sphere $S^{n-1}$ (normalised embeddings, directional statistics); the Stiefel manifold $V_k(\mathbb{R}^n)$ (orthonormal $k$-frames, used in subspace learning); the Grassmann manifold $\text{Gr}(k, n)$ (k-dimensional subspaces); the hyperbolic space $\mathbb{H}^n$ (hierarchical embeddings); the SPD manifold $\mathcal{S}^n_{++}$ (covariance matrices, diffusion tensors).
+
+''Software:'' Geomstats (Python library for Riemannian geometry in ML), Geoopt (Riemannian optimisation in PyTorch), Manopt (MATLAB/Python manifold optimisation), McTorch (manifold optimisation in PyTorch).
+
+''Fr&#233;chet mean:'' the Riemannian analogue of the Euclidean mean. For points $\{p_1, \ldots, p_N\}$ on a manifold $(M, g)$:
+$$\bar{p} = \arg\min_{q \in M} \sum_{i=1}^N d(q, p_i)^2$$
+Existence and uniqueness depend on curvature bounds and the spread of the data.
+
+''Sectional curvature:'' for a 2-plane $\sigma$ spanned by $u, v$ in $T_pM$:
+$$K(\sigma) = \frac{g(R(u,v)v, u)}{g(u,u)g(v,v) - g(u,v)^2}$$
+Positive sectional curvature (spheres) makes geodesics converge; negative (hyperbolic space) makes them diverge; zero (flat space) keeps them parallel.
+
+''Connections:'' [[Information Geometry]] | [[Natural Gradient]] | [[Geometric Deep Learning]] | [[Topology]] | [[Manifold Hypothesis]]
+
+!! Quiz
+
+<span id="rg-q1">A Riemannian manifold is a smooth manifold equipped with:</span>
+
+A. A distance function defined by an ambient Euclidean space
+B. A smoothly varying inner product (metric tensor) on each tangent space
+C. A fixed global coordinate system
+D. A curvature tensor that determines the topology
+
+<<button "A">><<replace "#rg-q1">>Incorrect. A Riemannian metric is intrinsic — it does not require or reference any ambient space. The metric tensor $g_p$ lives on each tangent space $T_pM$ and defines all geometry from within.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q1">>Correct. A Riemannian manifold $(M, g)$ has a metric tensor $g$ that assigns a positive definite inner product $g_p: T_pM \times T_pM \to \mathbb{R}$ to each tangent space, varying smoothly with $p$. All geometric notions — distance, angle, curvature — follow from $g$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q1">>Incorrect. Manifolds generally do not admit a single global coordinate system (only $\mathbb{R}^n$ does). A Riemannian manifold uses local coordinate charts and a metric tensor, not global coordinates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q1">>Incorrect. The curvature tensor is //derived from// the metric tensor — it is a consequence, not the defining object. Also, curvature does not determine topology in general (many different topologies can share the same local curvature).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q2">Christoffel symbols $\Gamma^k_{ij}$ encode:</span>
+
+A. The topology of the manifold
+B. How coordinate basis vectors change from point to point, derived from the metric tensor
+C. The eigenvalues of the curvature tensor
+D. The embedding of the manifold in Euclidean space
+
+<<button "A">><<replace "#rg-q2">>Incorrect. Christoffel symbols are local differential quantities that describe how the coordinate frame varies. They say nothing about global topological properties like holes or connectedness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q2">>Correct. The Christoffel symbols $\Gamma^k_{ij} = \frac{1}{2}g^{kl}(\partial_j g_{il} + \partial_i g_{jl} - \partial_l g_{ij})$ describe how the coordinate basis vectors change — they define the ''Levi-Civita connection'' and are derived entirely from the metric.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q2">>Incorrect. The curvature tensor is computed //from// the Christoffel symbols (and their derivatives), but the symbols themselves do not directly give eigenvalues of curvature.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q2">>Incorrect. Christoffel symbols are intrinsic — they depend only on the metric tensor $g_{ij}$ and its derivatives, not on any embedding. This is a key feature of Riemannian geometry.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q3">The natural gradient uses the Fisher information matrix because:</span>
+
+A. It makes gradient computation faster by reducing the number of parameters
+B. It accounts for the Riemannian geometry of the parameter space, making updates invariant to reparameterisation
+C. It eliminates the need for a learning rate
+D. It guarantees global convergence to the optimal parameters
+
+<<button "A">><<replace "#rg-q3">>Incorrect. The natural gradient actually requires //more// computation (inverting the Fisher matrix), not less. Its advantage is geometric correctness, not speed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q3">>Correct. The Fisher information matrix $F(\theta)$ is the Riemannian metric on the statistical manifold. The natural gradient $F(\theta)^{-1}\nabla L$ is the steepest descent direction in this geometry, and it does not change when parameters are reparameterised — unlike the standard Euclidean gradient.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q3">>Incorrect. The natural gradient still requires a learning rate $\eta$. What it provides is a //direction// that respects the parameter space geometry, not the elimination of hyperparameters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q3">>Incorrect. The natural gradient improves local descent directions but does not guarantee global convergence. Non-convex loss landscapes can still have spurious local minima.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q4">The exponential map $\text{Exp}_p(v)$ does what?</span>
+
+A. Computes $e^v$ at the point $p$
+B. Maps a tangent vector $v$ at $p$ to the point reached by following the geodesic from $p$ in direction $v$ for unit time
+C. Projects a point in ambient space onto the manifold
+D. Computes the curvature tensor at $p$
+
+<<button "A">><<replace "#rg-q4">>Incorrect. Despite the name, the exponential map is not the matrix or scalar exponential. It is a map from the tangent space to the manifold defined by following geodesics.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q4">>Correct. $\text{Exp}_p(v)$ follows the unique geodesic starting at $p$ with initial velocity $v$ for time $t=1$, landing at a point on the manifold. It is the fundamental tool for "stepping" on a manifold — the Riemannian analogue of $p + v$ in Euclidean space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q4">>Incorrect. Projection onto a manifold (retraction) is a related but different operation. The exponential map specifically follows geodesics, which is more geometrically faithful than generic projection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q4">>Incorrect. The curvature tensor is computed from the Christoffel symbols and metric. The exponential map is a different object entirely — it converts tangent vectors into points on the manifold via geodesics.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q5">Hyperbolic space is useful for embedding hierarchical data because:</span>
+
+A. It has zero curvature, making distances easy to compute
+B. It has constant negative curvature, so volume grows exponentially — matching the exponential branching of trees
+C. It has constant positive curvature, which compresses distances at the boundary
+D. It is the only Riemannian manifold that admits a global coordinate system
+
+<<button "A">><<replace "#rg-q5">>Incorrect. Hyperbolic space has constant //negative// curvature, not zero. Zero curvature is Euclidean space, which lacks the exponential volume growth needed for hierarchical data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q5">>Correct. In hyperbolic space with curvature $K < 0$, the volume of a ball grows exponentially with radius (vs. polynomially in Euclidean space). This provides "room" for the exponentially many nodes at each level of a tree, enabling low-distortion embeddings of hierarchical structures.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q5">>Incorrect. Constant //positive// curvature describes spheres, where volume growth is sublinear and the space is compact — the opposite of what is needed for unbounded tree structures.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q5">>Incorrect. Hyperbolic space does have nice coordinate models (Poincar&#233; ball, half-space), but so do many other manifolds. Its utility for hierarchies comes from its negative curvature, not its coordinate structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q6">Parallel transport of a vector around a closed loop on a curved surface results in:</span>
+
+A. The vector returning to its original orientation, just as in flat space
+B. The vector being scaled by the enclosed area
+C. The vector being rotated by an amount determined by the enclosed curvature
+D. The vector being projected onto the normal direction
+
+<<button "A">><<replace "#rg-q6">>Incorrect. This is true only on //flat// surfaces (zero curvature). On a curved surface, the vector returns rotated — this is the geometric meaning of curvature and is called ''holonomy''.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q6">>Incorrect. The vector is //rotated//, not scaled. Its length is preserved by parallel transport (the metric is preserved along the connection). The rotation angle depends on the curvature integrated over the enclosed region.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q6">>Correct. This is the Ambrose-Singer theorem in action: parallel transport around a closed loop rotates the vector by an angle proportional to the integral of the Gaussian curvature over the enclosed region. This ''holonomy'' is exactly what the Riemann curvature tensor measures infinitesimally.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q6">>Incorrect. Parallel transport keeps the vector tangent to the surface — it does not project onto the normal. The vector stays in the tangent space but changes its direction within that space due to curvature.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q7">The injectivity radius of a Riemannian manifold at a point $p$ is:</span>
+
+A. The largest radius within which the exponential map $\text{Exp}_p$ is a diffeomorphism
+B. The minimum curvature at $p$
+C. The dimension of the tangent space at $p$
+D. The distance from $p$ to the nearest boundary of the manifold
+
+<<button "A">><<replace "#rg-q7">>Correct. The injectivity radius is the supremum of radii $r$ such that $\text{Exp}_p$ restricted to the ball of radius $r$ in $T_pM$ is a diffeomorphism onto its image. Beyond this radius, geodesics may intersect and the exponential map fails to be one-to-one — limiting the usefulness of local Riemannian coordinates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q7">>Incorrect. While curvature bounds influence the injectivity radius (high curvature generally means small injectivity radius), they are not the same concept. The injectivity radius is about the range of validity of the exponential map.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q7">>Incorrect. The tangent space dimension equals the manifold dimension and is the same at every point. The injectivity radius is a distance measure related to geodesic behaviour, not a dimensional quantity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q7">>Incorrect. Riemannian manifolds need not have boundaries (e.g., the sphere is a manifold without boundary). The injectivity radius concerns where the exponential map ceases to be injective, which can happen on closed manifolds too.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rg-q8">Which is a primary obstacle to using Riemannian optimisation in deep learning?</span>
+
+A. Neural network parameters always lie in Euclidean space, so Riemannian methods do not apply
+B. The metric tensor (e.g., Fisher information) for millions of parameters is too expensive to compute, store, or invert
+C. Riemannian manifolds cannot represent non-convex loss functions
+D. Geodesics do not exist on high-dimensional manifolds
+
+<<button "A">><<replace "#rg-q8">>Incorrect. While unconstrained parameters live in $\mathbb{R}^n$, the //statistical manifold// of distributions parameterised by the network has intrinsic curvature via the Fisher metric. Additionally, many architectures have constrained parameters (orthogonal weight matrices, normalised embeddings) that are explicitly manifold-valued.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rg-q8">>Correct. For a network with $n$ parameters, the full Fisher information matrix is $n \times n$ — with $n \sim 10^8$, this is $\sim 10^{16}$ entries, completely infeasible to store or invert. Approximations (diagonal, block-diagonal, K-FAC) trade geometric faithfulness for tractability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rg-q8">>Incorrect. Riemannian geometry handles non-convex functions perfectly well. Geodesic convexity is a separate (stronger) notion, but Riemannian tools apply to arbitrary smooth functions on manifolds.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rg-q8">>Incorrect. Geodesics exist on any Riemannian manifold regardless of dimension — this is guaranteed by the Hopf-Rinow theorem for complete manifolds. High dimensionality creates computational challenges, not existence problems.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

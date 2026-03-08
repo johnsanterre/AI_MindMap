@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Shortest Path Algorithms</text>
+
+  <!-- Graph nodes -->
+  <!-- Node A -->
+  <circle cx="100" cy="160" r="28" fill="#2D5A8E" stroke="#1A3D6B" stroke-width="2"/>
+  <text x="100" y="166" font-family="Georgia, serif" font-size="18" fill="#FDFAF4" text-anchor="middle" font-weight="bold">A</text>
+
+  <!-- Node B -->
+  <circle cx="280" cy="90" r="28" fill="#2D5A8E" stroke="#1A3D6B" stroke-width="2"/>
+  <text x="280" y="96" font-family="Georgia, serif" font-size="18" fill="#FDFAF4" text-anchor="middle" font-weight="bold">B</text>
+
+  <!-- Node C -->
+  <circle cx="300" cy="260" r="28" fill="#2D5A8E" stroke="#1A3D6B" stroke-width="2"/>
+  <text x="300" y="266" font-family="Georgia, serif" font-size="18" fill="#FDFAF4" text-anchor="middle" font-weight="bold">C</text>
+
+  <!-- Node D -->
+  <circle cx="500" cy="130" r="28" fill="#2D5A8E" stroke="#1A3D6B" stroke-width="2"/>
+  <text x="500" y="136" font-family="Georgia, serif" font-size="18" fill="#FDFAF4" text-anchor="middle" font-weight="bold">D</text>
+
+  <!-- Node E -->
+  <circle cx="520" cy="300" r="28" fill="#2D5A8E" stroke="#1A3D6B" stroke-width="2"/>
+  <text x="520" y="306" font-family="Georgia, serif" font-size="18" fill="#FDFAF4" text-anchor="middle" font-weight="bold">E</text>
+
+  <!-- Node F (destination) -->
+  <circle cx="700" cy="200" r="28" fill="#2D5A8E" stroke="#1A3D6B" stroke-width="2"/>
+  <text x="700" y="206" font-family="Georgia, serif" font-size="18" fill="#FDFAF4" text-anchor="middle" font-weight="bold">F</text>
+
+  <!-- Non-shortest-path edges (background, muted) -->
+  <!-- A -> C (weight 6) -->
+  <line x1="124" y1="178" x2="276" y2="244" stroke="#D4C5A9" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="180" y="200" width="28" height="20" fill="#FDFAF4" rx="3"/>
+  <text x="194" y="215" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">6</text>
+
+  <!-- B -> D (weight 7) -->
+  <line x1="308" y1="96" x2="472" y2="124" stroke="#D4C5A9" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="376" y="98" width="28" height="20" fill="#FDFAF4" rx="3"/>
+  <text x="390" y="113" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">7</text>
+
+  <!-- C -> E (weight 5) -->
+  <line x1="326" y1="272" x2="494" y2="292" stroke="#D4C5A9" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="396" y="272" width="28" height="20" fill="#FDFAF4" rx="3"/>
+  <text x="410" y="287" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">5</text>
+
+  <!-- D -> F (weight 6) -->
+  <line x1="526" y1="142" x2="674" y2="190" stroke="#D4C5A9" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="590" y="156" width="28" height="20" fill="#FDFAF4" rx="3"/>
+  <text x="604" y="171" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">6</text>
+
+  <!-- E -> F (weight 8) -->
+  <line x1="546" y1="290" x2="676" y2="214" stroke="#D4C5A9" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="600" y="244" width="28" height="20" fill="#FDFAF4" rx="3"/>
+  <text x="614" y="259" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">8</text>
+
+  <!-- Shortest path edges (highlighted) A -> B -> D -> F via A->B=2, but let's do A->C->E->F? No, let's make A->B(2)->D(3)->F(4) = 9 shortest -->
+  <!-- Actually let me define: shortest = A(2)B, B(3)D ... let me just highlight A->B->D with different weights -->
+
+  <!-- Shortest path: A -> B (weight 2) -->
+  <line x1="126" y1="148" x2="254" y2="102" stroke="#7C2530" stroke-width="4"/>
+  <polygon points="254,102 242,94 244,108" fill="#7C2530"/>
+  <rect x="170" y="110" width="28" height="20" fill="#FDFAF4" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="184" y="125" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">2</text>
+
+  <!-- Shortest path: B -> D (weight 3) -->
+  <line x1="306" y1="82" x2="474" y2="122" stroke="#7C2530" stroke-width="4"/>
+  <polygon points="474,122 460,118 464,132" fill="#7C2530"/>
+  <rect x="376" y="86" width="28" height="20" fill="#FDFAF4" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="390" y="101" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">3</text>
+
+  <!-- Shortest path: D -> F (weight 4) -->
+  <line x1="526" y1="140" x2="674" y2="190" stroke="#7C2530" stroke-width="4"/>
+  <polygon points="674,190 660,184 664,198" fill="#7C2530"/>
+  <rect x="588" y="152" width="28" height="20" fill="#FDFAF4" rx="3" stroke="#7C2530" stroke-width="1"/>
+  <text x="602" y="167" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">4</text>
+
+  <!-- Source/Dest labels -->
+  <text x="100" y="208" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">source</text>
+  <text x="700" y="248" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">dest</text>
+
+  <!-- Legend -->
+  <rect x="40" y="310" width="280" height="70" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <line x1="60" y1="340" x2="110" y2="340" stroke="#7C2530" stroke-width="4"/>
+  <polygon points="110,340 102,334 102,346" fill="#7C2530"/>
+  <text x="120" y="345" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Shortest path (cost = 2 + 3 + 4 = 9)</text>
+  <line x1="60" y1="362" x2="110" y2="362" stroke="#D4C5A9" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="120" y="367" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Other edges (not on shortest path)</text>
+
+  <!-- Algorithm summary on right -->
+  <rect x="500" y="340" width="270" height="46" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1" rx="4"/>
+  <text x="635" y="360" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Relaxation: if d[u] + w(u,v) &lt; d[v]</text>
+  <text x="635" y="377" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">then d[v] = d[u] + w(u,v)</text>
+</svg>

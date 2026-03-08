@@ -1,0 +1,135 @@
+<<include "Header">>
+! Graph Neural Networks
+<img src="assets/graph_neural_networks.svg" style="width:100%;max-width:800px;display:block;margin:0.5em auto 1em;">
+
+Imagine a group of friends, each holding a different piece of a jigsaw puzzle. Nobody can see the full picture, but everyone can whisper to their immediate neighbors about what they see. After a few rounds of whispering, each person has a surprisingly good idea of what the whole puzzle looks like — even though they only ever talked to the people sitting next to them. That is the essential idea behind ''graph neural networks'' (GNNs): data lives on a graph, and nodes learn by exchanging messages with their neighbors.
+
+!! The Core Insight
+
+Many real-world datasets are not grids (images) or sequences (text) — they are ''graphs'': molecules where atoms are nodes and bonds are edges, social networks where people are nodes and friendships are edges, citation networks, knowledge bases, 3D meshes. Standard neural networks assume a fixed input shape, but graphs come in wildly different sizes and topologies. GNNs solve this by defining computation //relative to graph structure//: each node updates its representation by gathering information from its neighbors, so the same learned parameters work regardless of graph size or shape. The foundational unifying framework is the ''message passing neural network'' (MPNN) introduced by Gilmer et al. (2017), which showed that most existing GNN variants are special cases of a single message-passing template. Connections: <<link "Graph Theory" "Graph Theory">><</link>>, <<link "Spectral Graph Theory" "Spectral Graph Theory">><</link>>, <<link "Deep Learning" "Deep Learning">><</link>>, <<link "Attention" "Attention">><</link>>.
+
+!! Message Passing and Aggregation
+
+A GNN operates in rounds (layers). At each round $k$, every node $v$ does three things:
+
+''1. Message.'' Each neighbor $u \in \mathcal{N}(v)$ constructs a message from its current hidden state: $\mathbf{m}_{u \to v}^{(k)} = \text{MSG}^{(k)}(\mathbf{h}_u^{(k-1)}, \mathbf{h}_v^{(k-1)}, \mathbf{e}_{uv})$, where $\mathbf{e}_{uv}$ is an optional edge feature.
+
+''2. Aggregate.'' Node $v$ combines all incoming messages using a permutation-invariant function (because neighbor ordering is arbitrary): $\mathbf{M}_v^{(k)} = \text{AGG}(\{\mathbf{m}_{u \to v}^{(k)} : u \in \mathcal{N}(v)\})$. Common choices are sum, mean, or max.
+
+''3. Update.'' The node combines the aggregated message with its own state to produce a new embedding: $\mathbf{h}_v^{(k)} = \text{UPDATE}^{(k)}(\mathbf{h}_v^{(k-1)}, \mathbf{M}_v^{(k)})$.
+
+After $K$ rounds, each node's embedding encodes structural information from its ''$K$-hop neighborhood'' — nodes up to $K$ edges away. This is the ''receptive field'' of a GNN, directly analogous to the receptive field in a CNN. For graph-level tasks (e.g., predicting a molecular property), a final ''readout'' function pools all node embeddings into a single graph vector: $\mathbf{h}_G = \text{READOUT}(\{\mathbf{h}_v^{(K)} : v \in G\})$. See also: <<link "Message Passing Neural Networks" "Message Passing Neural Networks">><</link>>.
+
+!! What the Math Is Actually Doing
+
+The simplest and most influential instantiation is the ''Graph Convolutional Network'' (GCN) of Kipf and Welling (2017). Its layer-wise update rule is:
+
+$$\mathbf{H}^{(k)} = \sigma\!\left(\tilde{D}^{-1/2}\,\tilde{A}\,\tilde{D}^{-1/2}\,\mathbf{H}^{(k-1)}\,\mathbf{W}^{(k)}\right)$$
+
+where $\tilde{A} = A + I$ is the adjacency matrix with added self-loops, $\tilde{D}$ is its degree matrix, $\mathbf{W}^{(k)}$ is a learnable weight matrix, and $\sigma$ is a non-linearity (typically ReLU). The symmetric normalization $\tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$ computes a ''normalized mean'' of neighbor features, preventing high-degree nodes from dominating.
+
+The ''Graph Attention Network'' (GAT) replaces the fixed normalization with learned attention weights:
+
+$$\alpha_{uv} = \frac{\exp\!\left(\text{LeakyReLU}(\mathbf{a}^T[\mathbf{W}\mathbf{h}_u \| \mathbf{W}\mathbf{h}_v])\right)}{\sum_{w \in \mathcal{N}(v)} \exp\!\left(\text{LeakyReLU}(\mathbf{a}^T[\mathbf{W}\mathbf{h}_w \| \mathbf{W}\mathbf{h}_v])\right)}$$
+
+so different neighbors contribute different amounts based on content, not just degree.
+
+The ''Graph Isomorphism Network'' (GIN) uses sum aggregation with an injective update to maximize expressive power:
+
+$$\mathbf{h}_v^{(k)} = \text{MLP}^{(k)}\!\left((1 + \epsilon^{(k)}) \cdot \mathbf{h}_v^{(k-1)} + \sum_{u \in \mathcal{N}(v)} \mathbf{h}_u^{(k-1)}\right)$$
+
+Xu et al. (2019) proved that GIN is //as powerful as the Weisfeiler-Leman graph isomorphism test//, establishing a theoretical ceiling for standard message-passing GNNs. See: <<link "Graph Isomorphism Network" "Graph Isomorphism Network">><</link>>.
+
+!! Applications and Architectures
+
+''Molecular property prediction:'' atoms as nodes, bonds as edges. GNNs predict toxicity, solubility, binding affinity — the original motivation for MPNNs. ''Protein structure:'' residues as nodes, spatial proximity as edges. AlphaFold's Evoformer uses message-passing ideas on pair representations. ''Recommendation systems:'' users and items as a bipartite graph; GNNs propagate preference signals (PinSage at Pinterest). ''Combinatorial optimization:'' GNNs learn heuristics for NP-hard graph problems like TSP, graph coloring, and maximum independent set. ''Physics simulation:'' particles as nodes, interactions as edges; GNNs learn to simulate fluid dynamics and rigid-body physics (Interaction Networks, Graph Network Simulators). ''Point clouds and meshes:'' 3D points connected by k-nearest-neighbor graphs; GNNs perform 3D shape classification and segmentation.
+
+Beyond the core GCN/GAT/GIN trio, notable architectures include ''GraphSAGE'' (Hamilton et al. 2017), which samples a fixed-size neighborhood for scalability; ''SchNet'' and ''DimeNet'' for 3D molecular graphs with distance and angle features; and ''equivariant GNNs'' (EGNN, SE(3)-Transformers) that respect 3D rotational symmetry. The broader framework of <<link "Geometric Deep Learning" "Geometric Deep Learning">><</link>> situates GNNs within a unified theory of neural networks on structured domains.
+
+!! When GNNs Break Down
+
+''Over-smoothing:'' as the number of message-passing layers increases, all node embeddings converge to the same vector. After many rounds of averaging, local structure is washed out. Empirically, most GNNs perform best with 2-4 layers — far fewer than the dozens of layers standard in CNNs or Transformers. Techniques like residual connections, DropEdge, and jumping knowledge mitigate but do not fully solve this.
+
+''Limited expressiveness (the WL barrier):'' standard message-passing GNNs cannot distinguish certain non-isomorphic graphs that the 1-dimensional Weisfeiler-Leman test also fails on. For example, they cannot count cycles or detect certain substructures. Higher-order GNNs (k-WL), subgraph GNNs, and random feature augmentation push beyond this limit at increased computational cost.
+
+''Scalability to large graphs:'' full-batch GCN requires storing the entire adjacency matrix and all node features in memory, which is infeasible for graphs with millions of nodes (e.g., social networks). Mini-batch training with neighborhood sampling (GraphSAGE) or cluster-based methods (ClusterGCN) address this, but introduce variance and complexity.
+
+!! Technical Details
+
+''Key papers:'' Kipf and Welling (ICLR 2017) — GCN; Velickovic et al. (ICLR 2018) — GAT; Gilmer et al. (ICML 2017) — MPNN framework; Xu et al. (ICLR 2019) — GIN and WL expressiveness analysis; Hamilton, Ying, Leskovec (NeurIPS 2017) — GraphSAGE. ''Typical hidden dimensions:'' 64-256 per node. ''Layers:'' 2-4 for most tasks; deeper requires residual connections. ''Aggregation functions:'' sum (most expressive for multisets), mean (normalized, stable), max (captures salient features). ''Readout:'' sum or mean pooling for graph classification; hierarchical pooling (DiffPool, TopKPool) for structured coarsening. ''Training:'' node classification uses cross-entropy on labeled nodes with the full graph as context; link prediction uses contrastive or binary cross-entropy losses on node pairs; graph classification pools node embeddings and feeds to an MLP head. ''Over-squashing:'' distinct from over-smoothing — information from distant nodes is compressed through bottleneck edges, losing fidelity. Graph rewiring and curvature-based methods address this. ''Spectral perspective:'' GCN can be derived as a first-order Chebyshev approximation of spectral graph convolution, connecting it to graph Fourier analysis and the graph Laplacian. ''Software:'' PyTorch Geometric (PyG), Deep Graph Library (DGL), and JAX-based frameworks (Jraph) are the primary implementations.
+
+!! Quiz
+
+''1. What is the main advantage of GNNs over standard neural networks for graph-structured data?''
+
+<span id="gnn-q1">
+<<button "A. GNNs use fewer parameters than MLPs">><<replace "#gnn-q1">>A. GNNs use fewer parameters than MLPs — ''Incorrect.'' Parameter count is not the core advantage; the key is handling variable graph structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. GNNs define computation relative to graph structure, handling arbitrary sizes and topologies">><<replace "#gnn-q1">>B. GNNs define computation relative to graph structure, handling arbitrary sizes and topologies — ''Correct.'' By operating on neighborhoods rather than fixed input shapes, GNNs generalize across different graphs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. GNNs always converge faster than CNNs">><<replace "#gnn-q1">>C. GNNs always converge faster than CNNs — ''Incorrect.'' Convergence speed depends on the task and architecture, not on being a GNN per se.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. GNNs do not require backpropagation for training">><<replace "#gnn-q1">>D. GNNs do not require backpropagation for training — ''Incorrect.'' GNNs are trained with standard backpropagation and gradient descent.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''2. In message passing, why must the aggregation function be permutation-invariant?''
+
+<span id="gnn-q2">
+<<button "A. To ensure the output is always a scalar">><<replace "#gnn-q2">>A. To ensure the output is always a scalar — ''Incorrect.'' Aggregation typically produces a vector, not a scalar.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To reduce computational cost">><<replace "#gnn-q2">>B. To reduce computational cost — ''Incorrect.'' Permutation invariance is about correctness, not efficiency.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Because graph nodes have no canonical ordering, so the result must not depend on neighbor order">><<replace "#gnn-q2">>C. Because graph nodes have no canonical ordering, so the result must not depend on neighbor order — ''Correct.'' Unlike sequences or grids, neighbors in a graph have no natural order, so the aggregation must be order-independent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To prevent overfitting to large graphs">><<replace "#gnn-q2">>D. To prevent overfitting to large graphs — ''Incorrect.'' Permutation invariance is a structural requirement, not a regularization technique.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''3. What does the symmetric normalization $\tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$ achieve in GCN?''
+
+<span id="gnn-q3">
+<<button "A. It makes the adjacency matrix sparse">><<replace "#gnn-q3">>A. It makes the adjacency matrix sparse — ''Incorrect.'' The matrix is already sparse; normalization changes the values, not the sparsity pattern.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It computes a normalized mean of neighbor features, preventing high-degree nodes from dominating">><<replace "#gnn-q3">>B. It computes a normalized mean of neighbor features, preventing high-degree nodes from dominating — ''Correct.'' The normalization scales contributions by the geometric mean of node degrees, balancing the influence of neighbors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It converts the graph to a directed acyclic graph">><<replace "#gnn-q3">>C. It converts the graph to a directed acyclic graph — ''Incorrect.'' The normalization does not change graph topology or directionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It removes self-loops from the graph">><<replace "#gnn-q3">>D. It removes self-loops from the graph — ''Incorrect.'' In fact, self-loops are //added// via $\tilde{A} = A + I$ before normalization.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''4. How does GAT differ from GCN in its treatment of neighbors?''
+
+<span id="gnn-q4">
+<<button "A. GAT uses max pooling instead of mean aggregation">><<replace "#gnn-q4">>A. GAT uses max pooling instead of mean aggregation — ''Incorrect.'' GAT uses a weighted sum with learned attention coefficients, not max pooling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. GAT assigns learned attention weights to neighbors based on content, rather than fixed degree-based normalization">><<replace "#gnn-q4">>B. GAT assigns learned attention weights to neighbors based on content, rather than fixed degree-based normalization — ''Correct.'' Attention allows different neighbors to contribute different amounts depending on their features.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. GAT processes neighbors sequentially instead of in parallel">><<replace "#gnn-q4">>C. GAT processes neighbors sequentially instead of in parallel — ''Incorrect.'' GAT computes attention coefficients for all neighbors in parallel.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. GAT only works on directed graphs while GCN works on undirected graphs">><<replace "#gnn-q4">>D. GAT only works on directed graphs while GCN works on undirected graphs — ''Incorrect.'' Both can operate on directed or undirected graphs.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''5. What theoretical limit did Xu et al. (2019) establish for standard message-passing GNNs?''
+
+<span id="gnn-q5">
+<<button "A. They proved GNNs cannot learn on graphs with more than 10,000 nodes">><<replace "#gnn-q5">>A. They proved GNNs cannot learn on graphs with more than 10,000 nodes — ''Incorrect.'' The limit is about distinguishing graph structures, not graph size.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. They showed GNNs are at most as powerful as the 1-WL graph isomorphism test">><<replace "#gnn-q5">>B. They showed GNNs are at most as powerful as the 1-WL graph isomorphism test — ''Correct.'' Standard message-passing GNNs cannot distinguish graphs that the 1-dimensional Weisfeiler-Leman test fails to distinguish, and GIN achieves this upper bound.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. They proved that GNNs require exponential depth for graph classification">><<replace "#gnn-q5">>C. They proved that GNNs require exponential depth for graph classification — ''Incorrect.'' The result concerns expressiveness relative to WL, not depth requirements.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They showed attention-based GNNs are strictly more powerful than sum-based GNNs">><<replace "#gnn-q5">>D. They showed attention-based GNNs are strictly more powerful than sum-based GNNs — ''Incorrect.'' In fact, sum aggregation (as in GIN) is //more// expressive than mean or attention for distinguishing multisets.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''6. What causes over-smoothing in deep GNNs?''
+
+<span id="gnn-q6">
+<<button "A. Gradient vanishing in the weight matrices">><<replace "#gnn-q6">>A. Gradient vanishing in the weight matrices — ''Incorrect.'' Over-smoothing is a forward-pass phenomenon where representations converge, distinct from gradient issues during backpropagation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Repeated aggregation causes all node embeddings to converge to the same vector">><<replace "#gnn-q6">>B. Repeated aggregation causes all node embeddings to converge to the same vector — ''Correct.'' Each round of neighbor averaging mixes representations further, and after many rounds local structure is washed out.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The learning rate is set too high for graph data">><<replace "#gnn-q6">>C. The learning rate is set too high for graph data — ''Incorrect.'' Over-smoothing occurs regardless of learning rate; it is an architectural phenomenon.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Dropout removes too many edges during training">><<replace "#gnn-q6">>D. Dropout removes too many edges during training — ''Incorrect.'' In fact, DropEdge is used as a //remedy// for over-smoothing, not a cause of it.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''7. How does GraphSAGE address scalability to large graphs?''
+
+<span id="gnn-q7">
+<<button "A. It reduces the hidden dimension for large graphs">><<replace "#gnn-q7">>A. It reduces the hidden dimension for large graphs — ''Incorrect.'' Hidden dimension is a hyperparameter unrelated to GraphSAGE's scalability innovation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It uses spectral methods to compress the adjacency matrix">><<replace "#gnn-q7">>B. It uses spectral methods to compress the adjacency matrix — ''Incorrect.'' GraphSAGE is a spatial method; spectral compression is a different approach entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It samples a fixed-size neighborhood for each node rather than using all neighbors">><<replace "#gnn-q7">>C. It samples a fixed-size neighborhood for each node rather than using all neighbors — ''Correct.'' By sampling a fixed number of neighbors per layer, GraphSAGE keeps computation bounded regardless of node degree.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It converts the graph to a sequence and uses an RNN">><<replace "#gnn-q7">>D. It converts the graph to a sequence and uses an RNN — ''Incorrect.'' GraphSAGE maintains graph structure; it does not linearize the graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''8. What distinguishes over-squashing from over-smoothing in GNNs?''
+
+<span id="gnn-q8">
+<<button "A. Over-squashing occurs only in directed graphs; over-smoothing occurs only in undirected graphs">><<replace "#gnn-q8">>A. Over-squashing occurs only in directed graphs; over-smoothing occurs only in undirected graphs — ''Incorrect.'' Both phenomena can occur in any graph type.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Over-squashing is a training problem; over-smoothing is an inference problem">><<replace "#gnn-q8">>B. Over-squashing is a training problem; over-smoothing is an inference problem — ''Incorrect.'' Both are forward-pass representation issues present during both training and inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Over-squashing compresses distant information through bottleneck edges; over-smoothing makes all embeddings converge">><<replace "#gnn-q8">>C. Over-squashing compresses distant information through bottleneck edges; over-smoothing makes all embeddings converge — ''Correct.'' Over-squashing is about information loss through graph bottlenecks, while over-smoothing is about representations becoming indistinguishable after many aggregation rounds.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They are two names for the same phenomenon">><<replace "#gnn-q8">>D. They are two names for the same phenomenon — ''Incorrect.'' They are distinct failure modes with different causes and different remedies.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

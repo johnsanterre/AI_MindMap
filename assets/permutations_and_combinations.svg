@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Permutations vs Combinations</text>
+
+  <!-- ===== LEFT PANEL: Permutations (Order Matters) ===== -->
+  <rect x="16" y="48" width="370" height="160" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="201" y="68" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Permutations (Order Matters)</text>
+
+  <!-- Source set -->
+  <text x="50" y="92" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Choose 2 from {A, B, C}:</text>
+
+  <!-- Arrangement boxes -->
+  <rect x="30" y="100" width="48" height="28" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="54" y="119" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">AB</text>
+
+  <rect x="86" y="100" width="48" height="28" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="110" y="119" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">BA</text>
+
+  <rect x="142" y="100" width="48" height="28" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="166" y="119" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">AC</text>
+
+  <rect x="198" y="100" width="48" height="28" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="222" y="119" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">CA</text>
+
+  <rect x="254" y="100" width="48" height="28" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="278" y="119" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">BC</text>
+
+  <rect x="310" y="100" width="48" height="28" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="334" y="119" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">CB</text>
+
+  <!-- Count and formula -->
+  <text x="201" y="152" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">P(3,2) = 6</text>
+  <text x="201" y="170" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">P(n,k) = n! / (n-k)!</text>
+
+  <!-- Emphasis label -->
+  <rect x="28" y="180" width="100" height="18" rx="3" fill="#7C2530" opacity="0.08"/>
+  <text x="78" y="193" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" text-anchor="middle" font-style="italic">AB ≠ BA</text>
+
+  <!-- ===== RIGHT PANEL: Combinations (Order Doesn't Matter) ===== -->
+  <rect x="404" y="48" width="380" height="160" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="594" y="68" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Combinations (Order Ignored)</text>
+
+  <!-- Source set -->
+  <text x="438" y="92" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">Choose 2 from {A, B, C}:</text>
+
+  <!-- Group boxes - combinations -->
+  <rect x="450" y="100" width="80" height="28" rx="4" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="490" y="119" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{A, B}</text>
+
+  <rect x="545" y="100" width="80" height="28" rx="4" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="585" y="119" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{A, C}</text>
+
+  <rect x="640" y="100" width="80" height="28" rx="4" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="680" y="119" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">{B, C}</text>
+
+  <!-- Count and formula -->
+  <text x="594" y="152" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">C(3,2) = 3</text>
+  <text x="594" y="170" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">C(n,k) = n! / (k!(n-k)!)</text>
+
+  <!-- Emphasis label -->
+  <rect x="438" y="180" width="100" height="18" rx="3" fill="#2D5A8E" opacity="0.08"/>
+  <text x="488" y="193" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle" font-style="italic">{A,B} = {B,A}</text>
+
+  <!-- ===== CENTER CONNECTOR ===== -->
+  <line x1="400" y1="100" x2="400" y2="180" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="400" y="200" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-weight="bold">÷ k!</text>
+
+  <!-- ===== BOTTOM LEFT: Pascal's Triangle ===== -->
+  <rect x="16" y="222" width="370" height="160" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="201" y="242" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Pascal's Triangle</text>
+
+  <!-- Row 0 -->
+  <text x="201" y="262" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <!-- Row 1 -->
+  <text x="185" y="278" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="217" y="278" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <!-- Row 2 -->
+  <text x="169" y="294" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="201" y="294" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">2</text>
+  <text x="233" y="294" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <!-- Row 3 -->
+  <text x="153" y="310" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="185" y="310" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">3</text>
+  <text x="217" y="310" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">3</text>
+  <text x="249" y="310" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <!-- Row 4 -->
+  <text x="137" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="169" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">4</text>
+  <text x="201" y="326" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">6</text>
+  <text x="233" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">4</text>
+  <text x="265" y="326" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1</text>
+
+  <!-- Annotation -->
+  <text x="310" y="294" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="start">← C(n,k) = C(n-1,k-1)</text>
+  <text x="330" y="308" font-family="Georgia, serif" font-size="9.5" fill="#C4A87A" text-anchor="start">+ C(n-1,k)</text>
+
+  <!-- Binomial note -->
+  <text x="201" y="354" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Row n gives coefficients of (a+b)ⁿ</text>
+  <text x="201" y="370" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">(a+b)³ = 1a³ + 3a²b + 3ab² + 1b³</text>
+
+  <!-- ===== BOTTOM RIGHT: ML Applications ===== -->
+  <rect x="404" y="222" width="380" height="160" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="594" y="242" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">ML Applications</text>
+
+  <!-- Feature selection -->
+  <rect x="418" y="252" width="160" height="50" rx="4" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="498" y="270" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Feature Selection</text>
+  <text x="498" y="284" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">C(d,k) subsets of k</text>
+  <text x="498" y="296" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">from d features</text>
+
+  <!-- Hyperparameter search -->
+  <rect x="590" y="252" width="180" height="50" rx="4" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="680" y="270" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Hyperparameter Grid</text>
+  <text x="680" y="284" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">|H₁| × |H₂| × … × |Hₘ|</text>
+  <text x="680" y="296" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">= product rule</text>
+
+  <!-- Data augmentation -->
+  <rect x="418" y="310" width="160" height="50" rx="4" fill="#5C3D1E" opacity="0.08" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="498" y="328" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Data Augmentation</text>
+  <text x="498" y="342" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">P(n,k) orderings for</text>
+  <text x="498" y="354" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">sequence tasks</text>
+
+  <!-- Stars and bars -->
+  <rect x="590" y="310" width="180" height="50" rx="4" fill="#C4A87A" opacity="0.2" stroke="#C4A87A" stroke-width="1"/>
+  <text x="680" y="328" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Stars and Bars</text>
+  <text x="680" y="342" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">C(n+k-1, k) ways to</text>
+  <text x="680" y="354" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">distribute n into k bins</text>
+</svg>

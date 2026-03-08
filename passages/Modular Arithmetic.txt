@@ -1,0 +1,160 @@
+<<include "Header">>
+
+! Modular Arithmetic
+
+<img src="assets/modular_arithmetic.svg" alt="Modular Arithmetic" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Every twelve-year-old already understands modular arithmetic — they just call it "telling time." If it is 10 o'clock and you add five hours, you do not get 15 o'clock; you get 3 o'clock. The numbers ''wrap around'' after reaching 12, and the only thing that matters is the remainder. ''Modular arithmetic'' formalizes this wrapping: instead of working on the infinite number line, you work on a finite loop where numbers that differ by a fixed amount are treated as identical. This simple idea — "only the remainder matters" — underpins virtually all of modern cryptography, powers hash functions in every computer, gives neural networks a testbed for studying [[Grokking]], and provides the algebraic scaffolding for error-correcting codes that keep your data intact.
+
+!! The Core Insight
+
+We say that two integers $a$ and $b$ are ''congruent modulo $n$'' — written $a \equiv b \pmod{n}$ — if $n$ divides their difference. The number $n$ is called the ''modulus''. This is not a vague analogy; it is a precise equivalence relation that partitions //all// integers into $n$ non-overlapping buckets called ''congruence classes'' or ''residue classes''. Every integer belongs to exactly one class: $[0], [1], [2], \ldots, [n-1]$.
+
+The critical property is that arithmetic //respects// these classes. If $a \equiv a' \pmod{n}$ and $b \equiv b' \pmod{n}$, then:
+
+$$a + b \equiv a' + b' \pmod{n}$$
+$$a \cdot b \equiv a' \cdot b' \pmod{n}$$
+
+This means you can add, subtract, and multiply residues without ever leaving the system. You have a self-contained arithmetic universe with exactly $n$ elements. When $n$ is prime, something remarkable happens: every nonzero element has a ''multiplicative inverse'', and this tiny universe becomes a ''finite field'' $\mathbb{F}_p$ — the most important algebraic structure in modern cryptography and coding theory.
+
+!! Rings, Fields, and the Role of the Modulus
+
+The set $\mathbb{Z}/n\mathbb{Z}$ (integers mod $n$) always forms a ''ring'' — you can add, subtract, and multiply freely. But whether it forms a ''field'' (where division is also possible) depends entirely on $n$.
+
+''When $n$ is prime:'' $\mathbb{Z}/p\mathbb{Z}$ is a field. Every nonzero element $a$ has a unique inverse $a^{-1}$ such that $a \cdot a^{-1} \equiv 1 \pmod{p}$. For example, in $\mathbb{Z}/7\mathbb{Z}$: $3 \cdot 5 = 15 \equiv 1 \pmod{7}$, so $3^{-1} = 5$. This is what makes prime moduli so special and so ubiquitous in cryptography.
+
+''When $n$ is composite:'' $\mathbb{Z}/n\mathbb{Z}$ has ''zero divisors'' — nonzero elements whose product is zero. In $\mathbb{Z}/6\mathbb{Z}$: $2 \cdot 3 = 6 \equiv 0 \pmod{6}$. Elements that share a common factor with $n$ have no inverse. Only elements coprime to $n$ are invertible, and there are exactly $\phi(n)$ of them, where $\phi$ is ''Euler's totient function''.
+
+''Euler's theorem'' generalizes Fermat's little theorem: for any $a$ coprime to $n$:
+
+$$a^{\phi(n)} \equiv 1 \pmod{n}$$
+
+When $n = p$ is prime, $\phi(p) = p - 1$, recovering ''Fermat's little theorem'': $a^{p-1} \equiv 1 \pmod{p}$. This result is the mathematical engine behind RSA encryption.
+
+!! What the Math Is Actually Doing
+
+''The extended Euclidean algorithm'' is the workhorse for computing modular inverses. Given $a$ and $n$ with $\gcd(a, n) = 1$, it finds integers $x, y$ such that:
+
+$$ax + ny = 1$$
+
+Reducing modulo $n$ gives $ax \equiv 1 \pmod{n}$, so $x = a^{-1} \bmod n$. This runs in $O(\log n)$ steps — fast even for numbers with hundreds of digits.
+
+''Modular exponentiation'' computes $a^k \bmod n$ efficiently via ''repeated squaring''. Rather than computing $a^k$ (which could have millions of digits) and then reducing, you reduce at every step:
+
+$$a^{2m} \equiv (a^m)^2 \pmod{n}$$
+
+This keeps intermediate values bounded by $n^2$ and runs in $O(\log k)$ multiplications. It is the computational core of RSA, Diffie-Hellman, and essentially all public-key cryptography.
+
+''The Chinese Remainder Theorem (CRT)'' states that if $n_1, n_2, \ldots, n_k$ are pairwise coprime, the system of simultaneous congruences:
+
+$$x \equiv a_1 \pmod{n_1}, \quad x \equiv a_2 \pmod{n_2}, \quad \ldots, \quad x \equiv a_k \pmod{n_k}$$
+
+has a unique solution modulo $N = n_1 n_2 \cdots n_k$. This isomorphism $\mathbb{Z}/N\mathbb{Z} \cong \mathbb{Z}/n_1\mathbb{Z} \times \cdots \times \mathbb{Z}/n_k\mathbb{Z}$ lets you decompose a hard problem mod $N$ into easier problems mod each $n_i$ — a technique used in RSA-CRT to speed up decryption by a factor of 4.
+
+!! Applications in Computing and ML
+
+''Cryptography:'' RSA encryption rests on the difficulty of factoring $N = pq$ (a product of two large primes). Encryption computes $c \equiv m^e \pmod{N}$; decryption computes $m \equiv c^d \pmod{N}$, where $ed \equiv 1 \pmod{\phi(N)}$. The entire security model is modular arithmetic over a carefully chosen composite modulus.
+
+''Hash functions:'' Universal hashing uses $h(x) = (ax + b) \bmod p$ to distribute keys uniformly. Polynomial hashing, used in Rabin-Karp string matching, computes rolling hash values modulo a prime for $O(1)$ substring comparisons.
+
+''Positional encodings:'' Some positional encoding schemes for [[Transformers]] use modular or periodic functions to represent token positions. The sinusoidal encodings in the original Transformer paper create patterns that repeat with different frequencies — a continuous analog of modular structure.
+
+''Grokking:'' The landmark [[Grokking]] paper (Power et al., 2022) trained small transformers on modular addition $(a + b) \bmod 97$. The models first memorized the training set, then — after vastly more training — suddenly generalized. Mechanistic interpretability studies found that the networks learned to implement modular arithmetic via discrete Fourier transforms over $\mathbb{Z}/97\mathbb{Z}$, with neurons encoding circular representations of residue classes.
+
+''Error-correcting codes:'' Reed-Solomon codes, used in QR codes, CDs, and deep-space communication, operate over finite fields $\mathbb{F}_{p^k}$ built from modular polynomial arithmetic. [[Combinatorics]] and modular structure together guarantee that corrupted symbols can be recovered.
+
+!! When Modular Arithmetic Breaks Down
+
+''Non-prime modulus kills division.'' When the modulus $n$ is composite, zero divisors appear and not every nonzero element has an inverse. Algorithms that assume field structure (like Gaussian elimination mod $n$, or naive polynomial interpolation) will silently produce garbage if $n$ is not prime. The fix is either to ensure $n$ is prime, or to explicitly check $\gcd(a, n) = 1$ before attempting inversion — and to use the extended Euclidean algorithm rather than Fermat's little theorem (which requires primality).
+
+''Overflow in implementation.'' Computing $a \cdot b \bmod n$ naively requires an intermediate product $a \cdot b$ that can overflow fixed-width integers. If $a$ and $b$ are both close to $2^{63}$, their product exceeds $2^{126}$ — far beyond 64-bit range. The result is silently wrong, not an error. The fix is ''Montgomery multiplication'' or explicit 128-bit intermediate arithmetic. Every serious cryptographic library handles this; naive implementations routinely do not.
+
+''Timing side channels.'' Modular exponentiation that branches on secret bits (e.g., "if this bit of $d$ is 1, multiply by $a$") leaks the secret key through execution time differences. An attacker measuring microsecond variations can recover RSA private keys. ''Constant-time'' implementations — where every operation takes the same number of cycles regardless of the secret value — are mandatory for cryptographic code. This is a case where mathematically correct code is still catastrophically insecure.
+
+!! Technical Details
+
+''Foundational concepts:'' The ring $\mathbb{Z}/n\mathbb{Z}$ is the quotient of $\mathbb{Z}$ by the ideal $n\mathbb{Z}$. It is the prototypical example in abstract algebra, motivating the general theory of quotient rings, ideals, and homomorphisms.
+
+''Euler's totient function:'' $\phi(n) = n \prod_{p | n}(1 - 1/p)$ counts integers in $[1, n]$ coprime to $n$. For $n = p^a$: $\phi(p^a) = p^{a-1}(p-1)$. For $n = p q$: $\phi(pq) = (p-1)(q-1)$.
+
+''Primitive roots:'' If $\gcd(g, n) = 1$ and the order of $g$ modulo $n$ is $\phi(n)$, then $g$ is a ''primitive root'' mod $n$. Primitive roots exist for $n = 1, 2, 4, p^k, 2p^k$ (where $p$ is an odd prime). The multiplicative group $(\mathbb{Z}/p\mathbb{Z})^*$ is cyclic of order $p - 1$, generated by any primitive root.
+
+''Quadratic residues:'' An integer $a$ is a quadratic residue mod $p$ if $x^2 \equiv a \pmod{p}$ has a solution. Exactly half the nonzero residues mod an odd prime are quadratic residues. The ''Legendre symbol'' $\left(\frac{a}{p}\right)$ encodes this, and ''quadratic reciprocity'' (Gauss's "golden theorem") relates $\left(\frac{p}{q}\right)$ to $\left(\frac{q}{p}\right)$ for distinct odd primes.
+
+''Connections:'' [[Grokking]] | [[Combinatorics]] | [[Graph Theory]] | [[Probability Theory]] | [[Topology]]
+
+!! Quiz
+
+<span id="ma-q1">What does $17 \equiv 2 \pmod{5}$ mean?</span>
+A. $17 / 5 = 2$
+B. $17$ and $2$ differ by a multiple of $5$
+C. $17^2 = 5$
+D. $5$ divides $17 + 2$
+
+<<button "A">><<replace "#ma-q1">>Incorrect. That would be ordinary division. Congruence modulo 5 is about remainders, not quotients. $17 / 5 = 3.4$, not 2.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q1">>Correct! $17 - 2 = 15 = 3 \times 5$, so $5 \mid (17 - 2)$. This is exactly the definition of congruence: $a \equiv b \pmod{n}$ means $n$ divides $a - b$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q1">>Incorrect. The $\equiv$ symbol with (mod 5) denotes congruence, not exponentiation. It states a relationship about remainders.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q1">>Incorrect. The definition requires $5 \mid (17 - 2)$, not $5 \mid (17 + 2)$. $17 + 2 = 19$, which is not divisible by 5.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q2">In $\mathbb{Z}/7\mathbb{Z}$, what is $3^{-1}$ (the multiplicative inverse of 3)?</span>
+A. $1/3$
+B. $-3 \equiv 4$
+C. $5$
+D. $3$
+
+<<button "A">><<replace "#ma-q2">>Incorrect. There are no fractions in modular arithmetic. The inverse of 3 is an integer $x$ such that $3x \equiv 1 \pmod{7}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q2">>Incorrect. $-3 \equiv 4 \pmod{7}$ is the additive inverse of 3, not the multiplicative inverse. We need $3x \equiv 1$, not $3 + x \equiv 0$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q2">>Correct! $3 \times 5 = 15 = 2 \times 7 + 1$, so $3 \times 5 \equiv 1 \pmod{7}$. The multiplicative inverse exists because 7 is prime, making $\mathbb{Z}/7\mathbb{Z}$ a field.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q2">>Incorrect. $3 \times 3 = 9 \equiv 2 \pmod{7}$, not 1. You need the element $x$ where $3x \equiv 1 \pmod{7}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q3">Why does $\mathbb{Z}/6\mathbb{Z}$ fail to be a field?</span>
+A. 6 is too small to form a field
+B. It contains zero divisors: $2 \cdot 3 \equiv 0 \pmod{6}$
+C. Addition is not well-defined modulo 6
+D. It has no identity element for multiplication
+
+<<button "A">><<replace "#ma-q3">>Incorrect. Size is not the issue — $\mathbb{Z}/2\mathbb{Z}$ and $\mathbb{Z}/3\mathbb{Z}$ are perfectly valid fields with only 2 and 3 elements respectively. The problem is that 6 is composite.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q3">>Correct! Since $2 \times 3 = 6 \equiv 0 \pmod{6}$, two nonzero elements multiply to zero. In a field, this is impossible — $ab = 0$ must imply $a = 0$ or $b = 0$. Zero divisors exist precisely because 6 is composite ($6 = 2 \times 3$).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q3">>Incorrect. Addition is perfectly well-defined modulo any positive integer. The ring structure of $\mathbb{Z}/n\mathbb{Z}$ is always valid; the question is whether it forms a //field//.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q3">>Incorrect. The element $[1]$ is the multiplicative identity in $\mathbb{Z}/n\mathbb{Z}$ for any $n$. The problem is that not every nonzero element has an //inverse//.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q4">Fermat's little theorem states that if $p$ is prime and $\gcd(a, p) = 1$, then:</span>
+A. $a^p \equiv 0 \pmod{p}$
+B. $a^{p-1} \equiv 1 \pmod{p}$
+C. $a^{p+1} \equiv a \pmod{p}$
+D. $a^2 \equiv 1 \pmod{p}$
+
+<<button "A">><<replace "#ma-q4">>Incorrect. $a^p \equiv a \pmod{p}$ (not 0) by Fermat's little theorem. If $\gcd(a,p)=1$, dividing both sides by $a$ gives $a^{p-1} \equiv 1$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q4">>Correct! This is the standard form of Fermat's little theorem. It tells us the multiplicative group $(\mathbb{Z}/p\mathbb{Z})^*$ has order $p-1$, so every element raised to that power returns to 1. This result enables fast modular inverse computation: $a^{-1} \equiv a^{p-2} \pmod{p}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q4">>Close but not quite right. $a^{p+1} \equiv a^2 \pmod{p}$ by Fermat's little theorem ($a^{p-1} \equiv 1$, so $a^{p+1} = a^{p-1} \cdot a^2 \equiv a^2$). The correct statement is $a^{p-1} \equiv 1$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q4">>Incorrect. $a^2 \equiv 1 \pmod{p}$ means the order of $a$ divides 2, which is only true for $a \equiv \pm 1$. Fermat's theorem says $a^{p-1} \equiv 1$, which is a much weaker (and universally true) statement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q5">The Chinese Remainder Theorem guarantees a unique solution modulo $N = n_1 n_2 \cdots n_k$ when:</span>
+A. All $n_i$ are prime numbers
+B. All $n_i$ are pairwise coprime
+C. $N$ is a perfect square
+D. All $n_i$ are powers of 2
+
+<<button "A">><<replace "#ma-q5">>Not quite. Being prime is //sufficient// (primes are automatically coprime to each other) but not //necessary//. The CRT requires pairwise coprimality: $\gcd(n_i, n_j) = 1$ for all $i \neq j$. For example, $n_1 = 4, n_2 = 9$ works even though neither is prime.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q5">>Correct! The CRT requires $\gcd(n_i, n_j) = 1$ for all $i \neq j$. Under this condition, the map $\mathbb{Z}/N\mathbb{Z} \to \mathbb{Z}/n_1\mathbb{Z} \times \cdots \times \mathbb{Z}/n_k\mathbb{Z}$ is an isomorphism, guaranteeing a unique solution for any combination of residues.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q5">>Incorrect. Whether $N$ is a perfect square is irrelevant. The CRT is about the relationship between the moduli $n_i$ — specifically, that they share no common factors pairwise.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q5">>Incorrect. Powers of 2 are never pairwise coprime: $\gcd(2, 4) = 2 \neq 1$. The CRT would //fail// for a collection of powers of 2.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q6">In RSA, the private exponent $d$ satisfies $ed \equiv 1 \pmod{\phi(N)}$. Why is $\phi(N)$ hard to compute without knowing the factorization of $N = pq$?</span>
+A. $\phi(N)$ requires computing $N!$, which is infeasible
+B. $\phi(N) = (p-1)(q-1)$ requires knowing $p$ and $q$, but factoring $N$ is computationally hard
+C. $\phi(N)$ does not exist for composite numbers
+D. Computing $\phi(N)$ requires solving a system of differential equations
+
+<<button "A">><<replace "#ma-q6">>Incorrect. Euler's totient function has nothing to do with factorials. $\phi(N)$ counts integers less than $N$ that are coprime to $N$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q6">>Correct! $\phi(pq) = (p-1)(q-1)$ is trivial to compute if you know $p$ and $q$, but computing $\phi(N)$ from $N$ alone is as hard as factoring $N$. This asymmetry — easy to construct, hard to invert — is the foundation of RSA security.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q6">>Incorrect. $\phi(N)$ is well-defined for all positive integers. For $N = 15$: $\phi(15) = 15(1-1/3)(1-1/5) = 8$. The difficulty is //computing// it without the factorization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q6">>Incorrect. Euler's totient is a number-theoretic function involving only integer arithmetic — no calculus required. The difficulty is purely computational: factoring large semiprimes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q7">What algorithm efficiently computes the modular inverse $a^{-1} \bmod n$ when $\gcd(a, n) = 1$?</span>
+A. Gradient descent on $f(x) = (ax - 1)^2$
+B. The extended Euclidean algorithm
+C. Newton's method in $\mathbb{R}$
+D. Singular value decomposition
+
+<<button "A">><<replace "#ma-q7">>Incorrect. Gradient descent operates on continuous functions and would not produce an exact integer solution. Modular inversion is a discrete problem with an exact, efficient algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q7">>Correct! The extended Euclidean algorithm finds $x, y$ such that $ax + ny = \gcd(a,n) = 1$, giving $x \equiv a^{-1} \pmod{n}$. It runs in $O(\log n)$ steps and works for any modulus, not just primes. For prime $p$, you can alternatively use Fermat: $a^{-1} \equiv a^{p-2} \pmod{p}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q7">>Incorrect. Newton's method is a continuous root-finding algorithm. Modular arithmetic lives in the discrete world of integers, where the extended Euclidean algorithm is the standard tool.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q7">>Incorrect. SVD is a matrix factorization technique from [[Linear Algebra]]. It has no role in computing modular inverses.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q8">In the Grokking paper, small transformers trained on $(a + b) \bmod 97$ were found to internally implement:</span>
+A. A lookup table memorizing all input-output pairs
+B. Discrete Fourier transforms over $\mathbb{Z}/97\mathbb{Z}$ with circular neuron representations
+C. Symbolic algebra using the extended Euclidean algorithm
+D. Binary long addition with a carry bit
+
+<<button "A">><<replace "#ma-q8">>Incorrect. While the models //initially// memorized the training data, the grokking phase transition involved them learning a generalizable algorithm. Mechanistic interpretability revealed structured, non-memorized representations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q8">>Correct! Neel Nanda et al. showed that grokked models learn to embed inputs as points on circles (using Fourier components), effectively implementing modular addition via the discrete Fourier transform over $\mathbb{Z}/97\mathbb{Z}$. The neurons encode trigonometric functions of the residues — a beautiful example of networks discovering deep mathematical structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q8">>Incorrect. Neural networks do not perform symbolic computation. The models learned //numerical// representations that happen to implement modular arithmetic through geometric (Fourier) structure in activation space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q8">>Incorrect. Binary long addition is how CPUs add numbers, not how neural networks learn modular arithmetic. The learned algorithm was fundamentally different — based on circular Fourier representations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ma-q9">Why does computing $a \cdot b \bmod n$ naively risk producing incorrect results in fixed-width integer arithmetic?</span>
+A. Modular multiplication is mathematically undefined for large numbers
+B. The intermediate product $a \cdot b$ can overflow the integer type before the reduction step
+C. The modulus $n$ must be smaller than $\sqrt{a \cdot b}$
+D. Fixed-width integers cannot represent remainders
+
+<<button "A">><<replace "#ma-q9">>Incorrect. Modular multiplication is perfectly well-defined for all integers. The problem is //computational//, not mathematical — it is about how hardware represents numbers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ma-q9">>Correct! If $a$ and $b$ are both near the maximum value of a 64-bit integer (~$2^{63}$), their product exceeds $2^{126}$, silently overflowing and producing a wrong result //before// the mod operation. Montgomery multiplication and 128-bit intermediates are standard fixes in cryptographic implementations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ma-q9">>Incorrect. There is no such requirement on $n$. The issue is that the intermediate product $a \cdot b$ itself overflows the hardware integer type, regardless of the modulus value.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ma-q9">>Incorrect. Fixed-width integers can represent any remainder — remainders mod $n$ are just integers in $[0, n-1]$. The problem is the intermediate //product//, not the final remainder.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

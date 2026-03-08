@@ -1,0 +1,123 @@
+<<include "Header">>
+! Multi-Armed Bandit
+[img[assets/multi_armed_bandit.svg]]
+
+Imagine you walk into a casino with a row of slot machines. Each machine pays out at a different rate, but you have no idea which ones are generous and which are duds. You have a limited number of coins. Every coin you spend on a bad machine is a coin you could have spent on the best one. Do you keep pulling the lever on the machine that paid out last time, or do you try a new one that might be even better? That is the ''multi-armed bandit'' problem -- the fundamental tension between ''exploration'' (gathering information) and ''exploitation'' (using what you already know).
+
+!! The Core Insight
+
+The bandit problem captures a dilemma that appears everywhere in decision-making: you cannot simultaneously learn about all your options and maximize your reward. Every pull of an arm gives you two things -- a reward and //information//. The art of bandit algorithms is balancing these two currencies. A purely greedy agent that always picks the best-known arm will miss better options hiding behind insufficient data. A purely exploratory agent that tries everything equally wastes pulls on arms it already knows are poor. The optimal strategy lives in the tension between these extremes, and the price of imperfect balance is measured by ''regret'' -- the gap between what you earned and what you //could// have earned if you had known the best arm from the start.
+
+!! Exploration Strategies
+
+Several families of algorithms attack this tradeoff from different angles:
+
+''Epsilon-Greedy'' is the simplest approach. With probability $\epsilon$ you pull a random arm (explore); otherwise you pull the arm with the highest observed average reward (exploit). It works, but it explores blindly -- it wastes pulls on arms it already knows are terrible, and it never stops exploring even after the answer is obvious.
+
+''Upper Confidence Bound'' (<<link "UCB" "UCB">><</link>>) takes a smarter approach: "be optimistic in the face of uncertainty." For each arm, it computes an upper confidence bound on the true reward -- the observed average plus a bonus that shrinks as you gather more data. It always pulls the arm with the highest upper bound. Arms that are poorly understood get a large bonus and are naturally explored. Arms that have been tried many times and found wanting lose their bonus and are ignored. No randomness required.
+
+''<<link "Thompson Sampling" "Thompson Sampling">><</link>>'' uses Bayesian reasoning. You maintain a probability distribution (a ''posterior'') over each arm's true reward rate. At each round, you //sample// a value from each arm's posterior and pull whichever arm produced the highest sample. Arms with wide, uncertain posteriors will occasionally produce high samples and get explored. Arms with tight posteriors centered on low values almost never win the sampling lottery. The exploration happens organically, driven by uncertainty itself.
+
+!! What the Math Is Actually Doing
+
+Each arm $i$ has an unknown true expected reward $\mu_i$. The best arm has reward $\mu^* = \max_i \mu_i$. After $T$ rounds, your ''cumulative regret'' is:
+
+$$R_T = T \cdot \mu^* - \sum_{t=1}^{T} \mu_{A_t}$$
+
+where $A_t$ is the arm chosen at time $t$. Good algorithms achieve //sublinear// regret -- meaning regret grows slower than linearly with $T$, so the per-round regret $R_T / T \to 0$.
+
+For ''UCB1'', the index for arm $i$ at time $t$ is:
+
+$$\text{UCB}_i(t) = \bar{X}_i + \sqrt{\frac{2 \ln t}{N_i(t)}}$$
+
+where $\bar{X}_i$ is the sample mean reward and $N_i(t)$ is the number of times arm $i$ has been pulled. The second term is the ''exploration bonus'' -- it grows with total time $t$ (encouraging exploration of neglected arms) and shrinks with $N_i(t)$ (reducing exploration of well-understood arms). This achieves regret $O(\sqrt{KT \ln T})$ for $K$ arms.
+
+For ''Thompson Sampling'' with Bernoulli rewards, you maintain a Beta posterior for each arm: if arm $i$ has produced $S_i$ successes and $F_i$ failures, its posterior is $\text{Beta}(S_i + 1, F_i + 1)$. At each round, sample $\theta_i \sim \text{Beta}(S_i + 1, F_i + 1)$ for each arm and play $\arg\max_i \theta_i$. Thompson Sampling achieves the Lai-Robbins lower bound asymptotically:
+
+$$R_T \geq \sum_{i: \mu_i < \mu^*} \frac{\mu^* - \mu_i}{\text{KL}(\mu_i \| \mu^*)} \ln T$$
+
+where $\text{KL}$ is the Kullback-Leibler divergence. No algorithm can do better than this in the long run.
+
+!! Bandits in Practice
+
+The bandit framework powers more real-world systems than most people realize:
+
+''<<link "A/B Testing" "A/B Testing">><</link>>'' is the most direct application. Traditional A/B tests split traffic equally between variants for a fixed period, then pick the winner. This wastes enormous traffic on the losing variant. Bandit-based testing (sometimes called //adaptive experiments//) shifts traffic toward the winning variant as evidence accumulates, reducing opportunity cost while still learning.
+
+''Recommendation systems'' use contextual bandits, where the algorithm sees features (user demographics, time of day, browsing history) before choosing which content to show. The reward is a click, purchase, or engagement signal. This is a bandit problem because showing a recommendation is simultaneously an action (generating revenue) and an experiment (learning preferences).
+
+''Clinical trials'' face a stark version of the explore-exploit tradeoff: every patient assigned to an inferior treatment suffers real harm. Bandit algorithms can adaptively assign more patients to the treatment that appears more effective, reducing total patient harm while still reaching statistical conclusions.
+
+''Network routing, dynamic pricing, ad placement,'' and ''hyperparameter tuning'' all reduce to bandit problems. The <<link "explore-exploit tradeoff" "Explore-Exploit Tradeoff">><</link>> is one of the most universal structures in sequential decision-making, and it connects directly to <<link "reinforcement learning" "Reinforcement Learning">><</link>>, where bandits are the single-state special case.
+
+!! When Bandit Algorithms Break Down
+
+''Non-stationary rewards.'' Standard bandit algorithms assume each arm's reward distribution is fixed. If the best arm changes over time (trending topics, seasonal demand, drifting user preferences), accumulated history becomes misleading. The algorithm confidently exploits an arm that //used to be// good. Fixes include sliding windows, discounting old observations, or change-detection mechanisms, but all introduce new tuning parameters.
+
+''Delayed feedback.'' Bandit theory assumes you observe the reward immediately after pulling an arm. In practice, rewards are often delayed -- a user might convert hours or days after seeing an ad. During the delay, the algorithm keeps making decisions based on incomplete information, potentially over-exploring or over-exploiting. The longer the delay relative to the decision frequency, the worse standard algorithms perform.
+
+''Combinatorial action spaces.'' When you must choose a //set// of items (a webpage layout, a playlist, a portfolio) rather than a single arm, the number of possible actions explodes combinatorially. Naive enumeration is impossible. Structured bandits (linear bandits, combinatorial bandits) impose assumptions on how rewards compose, but if those assumptions are wrong, the algorithm can be systematically biased.
+
+!! Technical Details
+
+The ''Lai-Robbins lower bound'' (1985) proves that for any consistent policy, regret must grow at least logarithmically: $R_T = \Omega(\ln T)$. UCB1 achieves $O(K \ln T)$ gap-dependent regret. Thompson Sampling matches this bound and often outperforms UCB empirically.
+
+''Contextual bandits'' extend the framework: at each round the learner observes a context $x_t \in \mathcal{X}$ and chooses an action $a_t$. The expected reward depends on both: $\mathbb{E}[r_t | x_t, a_t]$. LinUCB assumes a linear model $\mathbb{E}[r_t] = x_t^\top \theta_{a_t}$ and maintains a confidence ellipsoid for each $\theta_a$, achieving $\tilde{O}(d\sqrt{T})$ regret where $d$ is the context dimension.
+
+''EXP3'' handles the ''adversarial bandit'' setting where rewards are chosen by an adversary rather than drawn from a fixed distribution. It uses multiplicative weights and achieves $O(\sqrt{KT \ln K})$ regret against the best fixed arm in hindsight.
+
+The ''Gittins index'' (1979) provides the optimal solution for discounted infinite-horizon bandits via dynamic programming, but it requires known reward distributions and independent arms -- assumptions rarely met in practice.
+
+Key relationships: bandits are single-state MDPs; adding states gives full <<link "reinforcement learning" "Reinforcement Learning">><</link>>. <<link "Thompson Sampling" "Thompson Sampling">><</link>> connects to Bayesian optimization. <<link "UCB" "UCB">><</link>> connects to concentration inequalities and PAC learning.
+
+!! Quiz
+
+<span id="mab-q1">''1. What does "regret" measure in the bandit setting?''
+<<button "A) The number of arms you failed to try">><<replace "#mab-q1">>''1.'' A) Incorrect. Regret is not about counting untried arms -- it is about the cumulative cost of suboptimal choices.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The difference between your total reward and the total reward of always playing the best arm">><<replace "#mab-q1">>''1.'' B) Correct! Regret = $T \mu^* - \sum_{t=1}^{T} \mu_{A_t}$, the gap between your performance and the omniscient optimal.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The variance of your reward estimates">><<replace "#mab-q1">>''1.'' C) Incorrect. Variance of estimates relates to uncertainty, not regret.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The probability of selecting a suboptimal arm">><<replace "#mab-q1">>''1.'' D) Incorrect. That is related to regret but is not the definition -- regret is a cumulative quantity, not a probability.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q2">''2. In epsilon-greedy, what happens as epsilon approaches 1?''
+<<button "A) The algorithm becomes purely exploitative">><<replace "#mab-q2">>''2.'' A) Incorrect. That would be epsilon approaching 0.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The algorithm becomes purely exploratory, choosing arms at random">><<replace "#mab-q2">>''2.'' B) Correct! At $\epsilon = 1$, every action is random -- pure exploration with no exploitation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The algorithm converges faster">><<replace "#mab-q2">>''2.'' C) Incorrect. More randomness slows convergence to the optimal arm.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The algorithm uses UCB instead">><<replace "#mab-q2">>''2.'' D) Incorrect. Epsilon-greedy and UCB are separate algorithms.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q3">''3. What does the exploration bonus in UCB1 depend on?''
+<<button "A) The reward variance and number of arms">><<replace "#mab-q3">>''3.'' A) Incorrect. Basic UCB1 uses the total number of rounds and the pull count, not reward variance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The total number of rounds played and how many times that arm was pulled">><<replace "#mab-q3">>''3.'' B) Correct! The bonus is $\sqrt{2 \ln t / N_i(t)}$ -- it grows with total time and shrinks with arm-specific pulls.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Only the sample mean of the arm">><<replace "#mab-q3">>''3.'' C) Incorrect. The sample mean is the exploitation term, not the exploration bonus.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The Gittins index">><<replace "#mab-q3">>''3.'' D) Incorrect. The Gittins index is a separate framework from UCB.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q4">''4. How does Thompson Sampling decide which arm to pull?''
+<<button "A) It always picks the arm with the highest observed mean">><<replace "#mab-q4">>''4.'' A) Incorrect. That would be a greedy algorithm, not Thompson Sampling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It picks a random arm uniformly">><<replace "#mab-q4">>''4.'' B) Incorrect. Thompson Sampling is not uniform -- it is guided by posterior distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It samples from each arm's posterior distribution and picks the arm with the highest sample">><<replace "#mab-q4">>''4.'' C) Correct! Each arm gets a random draw from its posterior, and the highest draw wins. Uncertain arms occasionally produce high draws, driving exploration.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It uses a fixed exploration schedule">><<replace "#mab-q4">>''4.'' D) Incorrect. Thompson Sampling has no fixed schedule -- exploration emerges from posterior uncertainty.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q5">''5. What is the Lai-Robbins lower bound?''
+<<button "A) No algorithm can achieve zero regret">><<replace "#mab-q5">>''5.'' A) Partially true but too vague. The bound gives a precise rate, not just a qualitative statement.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Regret must grow at least logarithmically in the number of rounds for any consistent policy">><<replace "#mab-q5">>''5.'' B) Correct! The 1985 result proves $R_T = \Omega(\ln T)$, establishing a fundamental floor on bandit performance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Regret must grow linearly">><<replace "#mab-q5">>''5.'' C) Incorrect. Linear regret is what bad algorithms suffer -- good algorithms beat this easily.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The optimal policy is always epsilon-greedy">><<replace "#mab-q5">>''5.'' D) Incorrect. The lower bound applies to all algorithms and does not prescribe a specific strategy.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q6">''6. Why do standard bandit algorithms fail with non-stationary rewards?''
+<<button "A) They cannot handle more than two arms">><<replace "#mab-q6">>''6.'' A) Incorrect. Non-stationarity is about changing reward distributions, not the number of arms.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) They accumulate historical data that becomes misleading when the best arm changes">><<replace "#mab-q6">>''6.'' B) Correct! Past observations from an arm that was good but is now poor bias the algorithm toward a stale decision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) They require Gaussian rewards">><<replace "#mab-q6">>''6.'' C) Incorrect. Most bandit algorithms work with various reward distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) They need more compute than is available">><<replace "#mab-q6">>''6.'' D) Incorrect. The failure is statistical, not computational.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q7">''7. What distinguishes contextual bandits from standard bandits?''
+<<button "A) Contextual bandits have more arms">><<replace "#mab-q7">>''7.'' A) Incorrect. The number of arms is not the distinguishing feature.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Contextual bandits observe side information (context) before choosing an action">><<replace "#mab-q7">>''7.'' B) Correct! The learner sees features $x_t$ at each round and the expected reward depends on both context and action.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Contextual bandits do not suffer regret">><<replace "#mab-q7">>''7.'' C) Incorrect. Contextual bandits still have regret -- it is just measured against the best context-dependent policy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Contextual bandits only work with Thompson Sampling">><<replace "#mab-q7">>''7.'' D) Incorrect. LinUCB, epsilon-greedy, and many other strategies work in the contextual setting.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mab-q8">''8. How do multi-armed bandits relate to reinforcement learning?''
+<<button "A) They are completely unrelated fields">><<replace "#mab-q8">>''8.'' A) Incorrect. Bandits are a foundational component of RL theory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Bandits are the single-state special case of reinforcement learning">><<replace "#mab-q8">>''8.'' B) Correct! A bandit is an MDP with one state. Adding multiple states and transitions gives full reinforcement learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Reinforcement learning is a special case of bandits">><<replace "#mab-q8">>''8.'' C) Incorrect. It is the other way around -- bandits are simpler than full RL.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Bandits require a neural network; RL does not">><<replace "#mab-q8">>''8.'' D) Incorrect. Neither bandits nor RL inherently require neural networks.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

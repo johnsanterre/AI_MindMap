@@ -1,0 +1,155 @@
+<<include "Header">>
+
+! Monte Carlo Methods
+
+[img[assets/monte_carlo_methods.svg]]
+
+Imagine you need to find the area of a strangely shaped pond in your backyard, but you have no measuring tools. So you stand on the roof and throw thousands of pebbles at random onto the rectangular yard below. Count how many land in the pond versus on dry ground, and the ratio gives you the pond's area as a fraction of the rectangle. That is the essence of ''Monte Carlo methods'': use randomness to estimate quantities that would be difficult or impossible to compute exactly.
+
+!! The Core Insight
+
+Monte Carlo methods replace exact computation with ''statistical estimation''. Instead of solving an integral analytically, you draw random samples and average the results. The law of large numbers guarantees that this average converges to the true answer as you draw more samples — and crucially, the convergence rate of $O(1/\sqrt{N})$ does //not// depend on the dimensionality of the problem. This dimension-independence is why Monte Carlo dominates high-dimensional computation where grid-based methods would require astronomically many evaluation points.
+
+The name comes from the famous casino in Monaco — a fitting metaphor for a method that harnesses chance. The approach was formalized during the Manhattan Project by Stanislaw Ulam and John von Neumann, who used random sampling to simulate neutron diffusion through shielding materials when deterministic calculation was intractable.
+
+!! Importance Sampling and Variance Reduction
+
+The naive approach — sampling uniformly at random — works but can be inefficient. If the function you are integrating has most of its mass concentrated in a small region, uniform samples will waste effort on regions that contribute almost nothing. ''Importance sampling'' fixes this by sampling from a //proposal distribution// $q(x)$ that concentrates samples where the integrand is large, then reweighting each sample by the ratio $p(x)/q(x)$ to correct for the bias.
+
+The ''importance-weighted estimator'' is:
+
+$$\hat{I} = \frac{1}{N} \sum_{i=1}^{N} \frac{f(x_i) \, p(x_i)}{q(x_i)}, \quad x_i \sim q$$
+
+When $q$ is proportional to $|f(x)| \, p(x)$, the variance drops to zero — the //optimal// importance distribution. In practice you cannot achieve this exactly (it requires knowing the answer), but even rough approximations can reduce variance by orders of magnitude.
+
+Other ''variance reduction'' techniques include:
+
+* ''Stratified sampling'': divide the domain into strata, sample within each, and combine — guarantees every region is represented.
+* ''Antithetic variates'': pair each sample $x$ with a negatively correlated counterpart $1-x$, so their errors partially cancel.
+* ''Control variates'': subtract a function whose expectation you know analytically, reducing the variance of the remainder.
+
+See <<link "Importance Sampling" "Importance Sampling">><</link>> for a deeper treatment.
+
+!! What the Math Is Actually Doing
+
+The fundamental problem is evaluating an integral:
+
+$$I = \int f(x) \, p(x) \, dx = \mathbb{E}_{p}[f(X)]$$
+
+The ''Monte Carlo estimator'' draws $N$ independent samples $x_1, \ldots, x_N \sim p(x)$ and computes:
+
+$$\hat{I}_N = \frac{1}{N} \sum_{i=1}^{N} f(x_i)$$
+
+By the ''strong law of large numbers'', $\hat{I}_N \to I$ almost surely as $N \to \infty$. The ''central limit theorem'' gives the error distribution:
+
+$$\sqrt{N}(\hat{I}_N - I) \xrightarrow{d} \mathcal{N}\left(0, \text{Var}_p[f(X)]\right)$$
+
+So the standard error is $\sigma / \sqrt{N}$, where $\sigma^2 = \text{Var}_p[f(X)]$. Halving the error requires quadrupling the samples — but this rate holds //regardless of dimension//, unlike deterministic quadrature which suffers the curse of dimensionality.
+
+For importance sampling with proposal $q$:
+
+$$\hat{I}_q = \frac{1}{N} \sum_{i=1}^{N} f(x_i) \frac{p(x_i)}{q(x_i)}, \quad x_i \sim q$$
+
+The ''effective sample size'' (ESS) measures how many independent samples your importance-weighted samples are worth:
+
+$$\text{ESS} = \frac{\left(\sum_i w_i\right)^2}{\sum_i w_i^2}$$
+
+where $w_i = p(x_i)/q(x_i)$. When $q$ matches $p$ poorly, a few samples dominate the weights and ESS collapses.
+
+!! Monte Carlo in ML
+
+Monte Carlo methods are woven throughout modern machine learning:
+
+''Bayesian inference'': Computing the posterior $p(\theta \mid D) \propto p(D \mid \theta) \, p(\theta)$ requires integrating over the parameter space. <<link "MCMC" "MCMC">><</link>> algorithms — including <<link "Metropolis-Hastings" "Metropolis-Hastings">><</link>>, Hamiltonian Monte Carlo, and Gibbs sampling — construct Markov chains whose stationary distribution is the posterior, letting you draw approximate samples without computing the normalizing constant.
+
+''Variational inference'': The evidence lower bound (ELBO) involves an expectation under the variational distribution. The ''reparameterization trick'' rewrites samples as deterministic transformations of noise, enabling gradient-based optimization of Monte Carlo estimates of the ELBO.
+
+''Reinforcement learning'': Policy gradient methods like REINFORCE estimate the gradient of expected reward using Monte Carlo rollouts of the policy. <<link "Monte Carlo Tree Search" "Monte Carlo Tree Search">><</link>> uses random simulations to evaluate game positions — it powered AlphaGo's superhuman Go play.
+
+''Dropout as Monte Carlo'': Running a network with dropout at test time and averaging predictions approximates Bayesian model averaging — a technique called MC Dropout that provides uncertainty estimates for free.
+
+''Generative models'': Diffusion models, variational autoencoders, and energy-based models all rely on Monte Carlo estimation of intractable likelihoods or gradients during training.
+
+!! When Monte Carlo Methods Break Down
+
+''High variance from bad proposals'': If your proposal distribution $q$ assigns low probability to regions where $f(x) \cdot p(x)$ is large, a few rare samples will receive enormous importance weights. The estimate becomes dominated by these outliers, and the effective sample size collapses. You might need millions of samples to get a reliable estimate — or worse, your confidence interval may //look// tight while systematically missing the true value because the rare important region was never sampled.
+
+''Slow mixing in MCMC'': When the target distribution has well-separated modes (think a posterior with multiple peaks separated by valleys of near-zero probability), Markov chain samplers can get trapped in a single mode for extremely long runs. The chain appears to have converged — diagnostics look fine — but it has only explored one mode. This is the curse of multimodality, and it afflicts high-dimensional problems in Bayesian deep learning and statistical physics alike.
+
+''Compounding error in sequential estimation'': In particle filters and sequential Monte Carlo, samples are reweighted and resampled at each time step. Small errors compound over time: the particle population progressively degenerates as a few particles accumulate all the weight. After enough steps, the effective sample size drops to one, and the filter has collapsed. Resampling strategies (systematic, residual) help but do not eliminate the fundamental issue in high dimensions or over long time horizons. See <<link "Random Variables" "Random Variables">><</link>> for foundational concepts.
+
+!! Technical Details
+
+''History'': The method was named by Nicholas Metropolis during the Manhattan Project (1940s). Ulam conceived the idea while playing solitaire and wondering about the probability of winning — he realized random simulation was more practical than combinatorial analysis.
+
+''Convergence rate'': The Monte Carlo error is $O(N^{-1/2})$ regardless of dimension $d$. Compare with the trapezoidal rule at $O(N^{-2/d})$ — in $d = 20$ dimensions, Monte Carlo is vastly superior.
+
+''Quasi-Monte Carlo'': Replacing pseudorandom sequences with low-discrepancy sequences (Sobol, Halton) can improve convergence to $O(N^{-1} (\log N)^d)$ in favorable cases, though the advantage diminishes in very high dimensions.
+
+''Rao-Blackwellization'': If you can analytically integrate out some variables, do so — this always reduces variance. The resulting ''Rao-Blackwellized estimator'' uses the conditional expectation over the analytically tractable variables, keeping Monte Carlo only for the rest.
+
+''Effective sample size'': A practical diagnostic. When ESS drops below $N/2$, importance sampling estimates become unreliable. For MCMC, ESS accounts for autocorrelation between successive samples.
+
+''Bias vs. consistency'': Simple Monte Carlo estimators are unbiased. Self-normalized importance sampling (dividing by $\sum w_i$) introduces a small bias of order $O(1/N)$ but is often more stable in practice.
+
+''Coupling and perfect simulation'': Propp and Wilson's ''coupling from the past'' algorithm produces exact samples from a Markov chain's stationary distribution, eliminating the need to worry about burn-in — though it requires a monotone coupling structure.
+
+!! Quiz
+
+<span id="mc-q1">''1. What is the convergence rate of standard Monte Carlo estimation?'' <<button "A">><<replace "#mc-q1">>Incorrect. $O(1/N)$ is faster than Monte Carlo achieves. The standard rate is $O(1/\sqrt{N})$ — halving the error requires quadrupling the samples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q1">>Correct. The standard error of a Monte Carlo estimator is $\sigma/\sqrt{N}$, giving convergence rate $O(1/\sqrt{N})$. Crucially, this rate is independent of the dimensionality of the problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q1">>Incorrect. $O(1/N^2)$ is much faster than Monte Carlo achieves. You may be thinking of Simpson's rule in 1D. Monte Carlo converges at $O(1/\sqrt{N})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q1">>Incorrect. Exponential convergence is characteristic of some iterative solvers, not Monte Carlo. The rate is $O(1/\sqrt{N})$, which is polynomial in the number of samples.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. $O(1/N)$
+B. $O(1/\sqrt{N})$
+C. $O(1/N^2)$
+D. $O(e^{-N})$</span>
+
+<span id="mc-q2">''2. Why is Monte Carlo preferred over grid-based methods in high dimensions?'' <<button "A">><<replace "#mc-q2">>Incorrect. Monte Carlo is not necessarily more accurate per sample — its advantage is that its convergence rate does not degrade with dimension, while grid methods suffer the curse of dimensionality.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q2">>Incorrect. Monte Carlo does require random number generation, which has computational cost. The real advantage is dimension-independent convergence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q2">>Correct. Grid-based quadrature requires $O(N^d)$ points in $d$ dimensions (the curse of dimensionality). Monte Carlo converges at $O(1/\sqrt{N})$ regardless of $d$, making it the only practical option in high-dimensional spaces.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q2">>Incorrect. Monte Carlo can absolutely be used in low dimensions — it is just less efficient there compared to deterministic quadrature. Its advantage is specifically in //high// dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. Monte Carlo is always more accurate than grid methods.
+B. Monte Carlo requires no computation.
+C. Its convergence rate does not depend on the number of dimensions.
+D. Monte Carlo only works in low dimensions.</span>
+
+<span id="mc-q3">''3. What does importance sampling correct for?'' <<button "A">><<replace "#mc-q3">>Incorrect. Importance sampling does not change the random number generator itself. It corrects for sampling from a different distribution than the target by reweighting samples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q3">>Correct. When you sample from $q(x)$ instead of $p(x)$, each sample is reweighted by $p(x_i)/q(x_i)$ to correct for the mismatch. This lets you concentrate samples where they matter most while still getting an unbiased estimate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q3">>Incorrect. Importance sampling does not eliminate randomness — it still uses random samples. It reduces //variance// by sampling more efficiently, while reweighting to maintain correctness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q3">>Incorrect. Importance sampling does not require increasing the sample size. It improves efficiency by sampling from a better-matched proposal distribution and reweighting.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. Bias in the random number generator.
+B. Sampling from a different distribution than the target.
+C. The inherent randomness of the method.
+D. Having too few samples.</span>
+
+<span id="mc-q4">''4. What happens when the importance sampling proposal $q$ poorly matches the target?'' <<button "A">><<replace "#mc-q4">>Incorrect. The estimator is still technically unbiased (for unnormalized importance sampling), but the //variance// becomes enormous because a few samples dominate the weights.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q4">>Incorrect. The method does not become deterministic. It becomes //unreliable// because the effective sample size collapses.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q4">>Correct. When $q$ assigns low probability to regions where $p$ is large, a few samples receive enormous weights. The effective sample size (ESS) collapses, and the estimate is dominated by rare outliers, making it highly unreliable despite appearing converged.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q4">>Incorrect. A poor proposal does not cause the algorithm to fail silently with no output. Rather, it produces estimates with dangerously high variance — the numbers look plausible but are unreliable.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. The estimate becomes biased but low-variance.
+B. The method becomes deterministic.
+C. A few samples dominate the weights and ESS collapses.
+D. The algorithm produces no output.</span>
+
+<span id="mc-q5">''5. In the pi estimation example, how is pi calculated from the random points?'' <<button "A">><<replace "#mc-q5">>Incorrect. You do not need to measure distances between points. The method counts how many points fall inside the quarter circle versus the total, then multiplies by 4.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q5">>Incorrect. The circumference is not directly estimated. The //area// ratio is what Monte Carlo estimates: (points inside quarter circle) / (total points) approximates $\pi/4$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q5">>Correct. A quarter circle of radius 1 inscribed in a unit square has area $\pi/4$. The fraction of random points landing inside the quarter circle estimates $\pi/4$, so $\pi \approx 4 \times (\text{inside}/\text{total})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q5">>Incorrect. There is no grid involved — that would be a deterministic method. Monte Carlo uses //random// points and counts the fraction inside the quarter circle.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. Measure the average distance between random points.
+B. Count points on the circumference.
+C. $\pi \approx 4 \times (\text{points inside quarter circle}) / (\text{total points})$.
+D. Divide the grid squares inside the circle by total grid squares.</span>
+
+<span id="mc-q6">''6. What is Monte Carlo Tree Search primarily used for?'' <<button "A">><<replace "#mc-q6">>Incorrect. Training neural networks from scratch uses backpropagation, not MCTS. MCTS is used for decision-making in sequential problems like game play.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q6">>Correct. MCTS uses random simulations (rollouts) to evaluate positions in game trees. It builds a search tree incrementally, guided by the results of random playouts. AlphaGo combined MCTS with neural network evaluation to achieve superhuman Go play.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q6">>Incorrect. Sorting algorithms are deterministic and do not require Monte Carlo methods. MCTS evaluates game positions through random simulation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q6">>Incorrect. Image compression typically uses transform coding or learned compression. MCTS is used for evaluating game positions via random rollouts.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. Training neural networks from scratch.
+B. Evaluating game positions through random simulation rollouts.
+C. Sorting large datasets efficiently.
+D. Compressing images.</span>
+
+<span id="mc-q7">''7. What variance reduction technique pairs each sample with a negatively correlated counterpart?'' <<button "A">><<replace "#mc-q7">>Incorrect. Control variates subtract a function with known expectation, rather than pairing samples. The technique that pairs correlated counterparts is antithetic variates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q7">>Incorrect. Stratified sampling divides the domain into strata and samples within each. It does not pair individual samples with correlated counterparts.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q7">>Correct. ''Antithetic variates'' pair each sample $x$ with a negatively correlated counterpart (e.g., $1-x$ for uniform samples). When $f$ is monotone, the errors from the two samples partially cancel, reducing variance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q7">>Incorrect. Importance sampling changes the proposal distribution and reweights — it does not pair samples with negatively correlated counterparts. That technique is antithetic variates.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. Control variates.
+B. Stratified sampling.
+C. Antithetic variates.
+D. Importance sampling.</span>
+
+<span id="mc-q8">''8. Why can MCMC samplers give misleading results on multimodal distributions?'' <<button "A">><<replace "#mc-q8">>Incorrect. MCMC can absolutely handle continuous distributions — it was designed for them. The issue with multimodal distributions is getting trapped in one mode.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mc-q8">>Incorrect. MCMC always produces real-valued samples from the target space. The problem is not the output type but the //coverage// of the distribution's modes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mc-q8">>Incorrect. While more samples generally help, the problem with multimodal distributions is that the chain can be stuck in one mode for an astronomical number of steps. Simply running longer may not be enough in practice.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mc-q8">>Correct. When modes are separated by regions of very low probability, the Markov chain can get trapped in a single mode for extremely long runs. Standard convergence diagnostics may look fine because the chain //has// converged — to one mode. It may never discover the other modes in any practical run length.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+A. MCMC cannot handle continuous distributions.
+B. MCMC only produces integer outputs.
+C. More samples always fix the problem.
+D. The chain gets trapped in one mode and never explores the others.</span>
+
+<<include "Footer">>

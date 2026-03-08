@@ -1,0 +1,153 @@
+<<include "Header">>
+
+! Random Variables
+
+<img src="assets/random_variables.svg" alt="Random Variables" width="800">
+
+Imagine you run an experiment — rolling dice, measuring a patient's blood pressure, or sampling a sentence from the internet. The outcome itself might be complicated: a sequence of die faces, a physiological state, a string of words. A ''random variable'' is a translator that converts each messy outcome into a number you can actually compute with. It is the bridge between the abstract world of "things that could happen" and the concrete world of arithmetic, algebra, and calculus. Every feature column in your dataset, every loss value during training, every gradient update in SGD — all of these are random variables, whether you call them that or not.
+
+!! The Core Insight
+
+A ''random variable'' $X$ is not random, and it is not a variable. It is a //function//. Specifically, it is a function from a sample space $\Omega$ (the set of all possible outcomes of some experiment) to the real numbers $\mathbb{R}$:
+
+$$X: \Omega \to \mathbb{R}$$
+
+Each outcome $\omega \in \Omega$ gets mapped to a number $X(\omega)$. Roll two dice and let $X$ be the sum: if $\omega = (3,5)$, then $X(\omega) = 8$. The "randomness" comes entirely from //which $\omega$ nature selects// — once that is determined, $X$ mechanically produces a number.
+
+The key requirement is ''measurability'': $X$ must be structured so that questions like "what is the probability that $X$ falls in the interval $[2, 5]$?" have well-defined answers. Formally, $X$ must be a measurable function from $(\Omega, \mathcal{F})$ to $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, meaning the preimage of every Borel set is an event in your $\sigma$-algebra.
+
+!! Discrete vs Continuous
+
+Random variables come in two fundamental flavors, unified by a single object:
+
+''Discrete random variables'' take on countably many values — integers, categories, counts. Their behavior is fully described by the ''probability mass function'' (PMF):
+
+$$p(x) = P(X = x)$$
+
+The PMF assigns a probability to each possible value. All probabilities are non-negative and sum to 1: $\sum_x p(x) = 1$. Examples: Bernoulli (coin flip), Binomial (number of successes), Poisson (count of rare events).
+
+''Continuous random variables'' take values in an interval or all of $\mathbb{R}$. No single point has positive probability — $P(X = x) = 0$ for every $x$. Instead, probabilities come from the ''probability density function'' (PDF):
+
+$$P(a \leq X \leq b) = \int_a^b f(x) \, dx$$
+
+The PDF $f(x)$ can exceed 1 (it is a density, not a probability), but it integrates to 1: $\int_{-\infty}^{\infty} f(x) \, dx = 1$. Examples: [[Gaussian Distribution|Gaussian Distribution]], Exponential, Uniform.
+
+The ''cumulative distribution function'' (CDF) unifies both:
+
+$$F(x) = P(X \leq x)$$
+
+Every random variable has a CDF. It is always non-decreasing, right-continuous, with $\lim_{x \to -\infty} F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$. For discrete variables, the CDF is a staircase. For continuous variables, it is a smooth curve. For a PDF, $f(x) = F'(x)$. The CDF is the true unifying object of [[Probability Distributions|Probability Distributions]].
+
+!! What the Math Is Actually Doing
+
+''Formal definition.'' A random variable is a measurable function $X: (\Omega, \mathcal{F}) \to (\mathbb{R}, \mathcal{B}(\mathbb{R}))$. Measurability means: for every Borel set $B \in \mathcal{B}(\mathbb{R})$, the preimage $X^{-1}(B) = \{\omega \in \Omega : X(\omega) \in B\} \in \mathcal{F}$. This ensures that $P(X \in B)$ is well-defined through the probability measure $P$ on $(\Omega, \mathcal{F})$. See [[Measure Theory|Measure Theory]] for the full scaffolding.
+
+''Expectation'' is the probability-weighted average value:
+
+$$E[X] = \int_\Omega X(\omega) \, dP(\omega) = \begin{cases} \sum_x x \, p(x) & \text{discrete} \\ \int_{-\infty}^{\infty} x \, f(x) \, dx & \text{continuous} \end{cases}$$
+
+The expectation is a Lebesgue integral with respect to the probability measure $P$. Linearity always holds: $E[aX + bY] = aE[X] + bE[Y]$, regardless of dependence between $X$ and $Y$.
+
+''Variance'' measures spread around the mean:
+
+$$\text{Var}(X) = E[(X - E[X])^2] = E[X^2] - (E[X])^2$$
+
+The standard deviation $\sigma = \sqrt{\text{Var}(X)}$ shares units with $X$. For independent random variables: $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$.
+
+''Joint, marginal, and conditional distributions.'' For two random variables $X$ and $Y$, the joint distribution describes their simultaneous behavior. The ''marginal'' recovers one variable by integrating out the other:
+
+$$f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x,y) \, dy$$
+
+The ''conditional distribution'' of $Y$ given $X = x$ is:
+
+$$f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}$$
+
+This is the continuous version of [[Conditional Probability|Conditional Probability]] and the foundation of [[Bayesian Inference|Bayesian Inference]]. Independence means the joint factors: $f_{X,Y}(x,y) = f_X(x) f_Y(y)$.
+
+!! Random Variables in ML
+
+''Features as random variables.'' Each column in your dataset — pixel intensity, word count, age — is a random variable. The joint distribution of all features defines the data-generating process. A model learns $P(Y | X_1, \ldots, X_d)$, which is a conditional distribution of one random variable (the target) given others (the features).
+
+''Loss as a random variable.'' The loss $\ell(f(X), Y)$ on a randomly drawn sample $(X, Y)$ is itself a random variable. The //expected risk// $E[\ell(f(X), Y)]$ is its expectation — the quantity we truly want to minimize. The //empirical risk// $\frac{1}{n}\sum_i \ell(f(x_i), y_i)$ is a sample average estimating this expectation. Generalization theory studies when the sample average converges to the true expectation.
+
+''Stochastic gradient descent.'' At each step, SGD computes $\nabla \ell(f(x_i), y_i)$ on a random minibatch. This gradient is a random variable whose expectation equals the full-batch gradient: $E[\nabla \ell_i] = \nabla E[\ell]$. The variance of this gradient estimator controls convergence speed — high variance means noisy updates and slower progress. Techniques like momentum, variance reduction, and learning rate schedules all manage properties of this random variable.
+
+''The [[Central Limit Theorem|Central Limit Theorem]]'' explains why averaging works: the mean of $n$ i.i.d. random variables converges to a [[Gaussian Distribution|Gaussian Distribution]] as $n$ grows, regardless of the original distribution. This underpins confidence intervals, hypothesis testing, and the statistical foundations of [[Statistics|Statistics]].
+
+!! When Random Variable Assumptions Break Down
+
+''The independence assumption fails.'' Most ML theory assumes training samples are i.i.d. draws from some distribution. In reality, time-series data is auto-correlated, user data has group structure, and web-scraped text has complex dependencies. When samples are dependent, variance estimates are wrong (typically underestimated), standard errors shrink artificially, and confidence intervals lie. Ignoring dependence leads to overconfident models that look excellent on paper and fail in deployment.
+
+''The distribution shifts.'' A random variable's distribution is defined relative to a data-generating process. When that process changes — new user demographics, sensor drift, adversarial manipulation — the random variable's distribution changes too. A model trained under distribution $P_{\text{train}}$ makes guarantees about $E_{P_{\text{train}}}[\ell]$, but you deploy it under $P_{\text{deploy}} \neq P_{\text{train}}$. The expected loss under the new distribution can be arbitrarily worse, and no amount of training data from the old distribution helps.
+
+''Moments may not exist.'' Not all random variables have finite mean or variance. Heavy-tailed distributions (Cauchy, Pareto with small $\alpha$) break the law of large numbers in practice — sample means wander instead of converging, sample variances explode, and standard confidence intervals become meaningless. Financial returns, network degree distributions, and loss spikes in training can exhibit heavy tails that invalidate moment-based reasoning.
+
+!! Technical Details
+
+''Borel measurability.'' The Borel $\sigma$-algebra $\mathcal{B}(\mathbb{R})$ is the smallest $\sigma$-algebra containing all open intervals. A function $X: \Omega \to \mathbb{R}$ is Borel measurable (i.e., a valid random variable) if $X^{-1}((-\infty, a]) \in \mathcal{F}$ for all $a \in \mathbb{R}$. Equivalently, $\{X \leq a\} \in \mathcal{F}$ for all $a$. Continuous functions are always measurable; so are limits of measurable functions.
+
+''Transformations of random variables.'' If $X$ has density $f_X$ and $Y = g(X)$ for a monotone differentiable $g$, then:
+
+$$f_Y(y) = f_X(g^{-1}(y)) \cdot \left|\frac{d}{dy} g^{-1}(y)\right|$$
+
+For multivariate transformations, the derivative becomes the Jacobian determinant. This is the foundation of normalizing flows and the reparameterization trick in variational autoencoders.
+
+''Moment generating function'' (MGF): $M_X(t) = E[e^{tX}]$, defined for $t$ in a neighborhood of 0. The $n$-th moment is $E[X^n] = M_X^{(n)}(0)$. If two random variables have the same MGF in a neighborhood of 0, they have the same distribution. The MGF of a sum of independent RVs is the product of their MGFs.
+
+''Characteristic function'': $\varphi_X(t) = E[e^{itX}]$, which always exists (unlike the MGF). It uniquely determines the distribution and is the Fourier transform of the density. The [[Central Limit Theorem|Central Limit Theorem]] is most elegantly proved via characteristic functions: if $S_n = \frac{1}{\sqrt{n}}\sum_i (X_i - \mu)/\sigma$, then $\varphi_{S_n}(t) \to e^{-t^2/2}$, the characteristic function of the standard normal.
+
+''Convergence of random variables'' comes in multiple modes: almost sure ($X_n \to X$ with probability 1), in probability ($P(|X_n - X| > \epsilon) \to 0$), in $L^p$ ($E[|X_n - X|^p] \to 0$), and in distribution ($F_{X_n}(x) \to F_X(x)$ at continuity points). Each mode is strictly weaker than the previous in this list.
+
+Connected topics: [[Probability Distributions|Probability Distributions]], [[Gaussian Distribution|Gaussian Distribution]], [[Bayesian Inference|Bayesian Inference]], [[Statistics|Statistics]], [[Central Limit Theorem|Central Limit Theorem]], [[Conditional Probability|Conditional Probability]], [[Measure Theory|Measure Theory]].
+
+!! Quiz
+
+<span id="rv-q1">''Question 1:'' What is a random variable, formally?
+<<button "A. A number that changes randomly each time you observe it">><<replace "#rv-q1">>Incorrect. A random variable is not a number — it is a function. The "randomness" comes from which outcome nature selects, not from the function itself changing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A measurable function from a sample space to the real numbers">><<replace "#rv-q1">>Correct. A random variable $X: (\Omega, \mathcal{F}) \to (\mathbb{R}, \mathcal{B}(\mathbb{R}))$ is a measurable function. It assigns a real number to each outcome $\omega$, and the measurability condition ensures that probability statements about $X$ are well-defined.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A variable in a programming language that stores a random seed">><<replace "#rv-q1">>Incorrect. The programming concept of a random number generator is related but different. Mathematically, a random variable is a function from a sample space to the reals.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Any function from the reals to the reals">><<replace "#rv-q1">>Incorrect. A random variable maps from a sample space $\Omega$ to $\mathbb{R}$, not from $\mathbb{R}$ to $\mathbb{R}$. And it must be measurable.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q2">''Question 2:'' For a continuous random variable, what is $P(X = 3)$?
+<<button "A. It depends on the density at $x = 3$">><<replace "#rv-q2">>Incorrect. The density $f(3)$ gives the //rate// of probability per unit length at $x=3$, but the probability of any single point is always zero for continuous random variables.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Zero">><<replace "#rv-q2">>Correct. For a continuous random variable, $P(X = x) = 0$ for every individual value $x$. Probabilities only arise from integrating the density over an interval: $P(a \leq X \leq b) = \int_a^b f(x)\,dx$. A single point has "zero width," so the integral is zero.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $f(3)$">><<replace "#rv-q2">>Incorrect. The PDF value $f(3)$ is a density, not a probability. It can even exceed 1. The probability at a single point is always zero for continuous distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Undefined">><<replace "#rv-q2">>Incorrect. It is perfectly well-defined — it is simply zero. The probability measure assigns zero mass to any singleton set for continuous random variables.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q3">''Question 3:'' Which property always holds for expectation, regardless of dependence between random variables?
+<<button "A. $E[XY] = E[X]E[Y]$">><<replace "#rv-q3">>Incorrect. This only holds when $X$ and $Y$ are independent (or uncorrelated). For dependent variables, $E[XY]$ includes the covariance term.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$">><<replace "#rv-q3">>Incorrect. This requires uncorrelatedness. In general, $\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $E[aX + bY] = aE[X] + bE[Y]$">><<replace "#rv-q3">>Correct. Linearity of expectation holds always — no independence, no uncorrelatedness, no conditions at all. This is arguably the most useful property in all of probability and is a direct consequence of the linearity of the Lebesgue integral.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $E[X^2] = (E[X])^2$">><<replace "#rv-q3">>Incorrect. This would imply $\text{Var}(X) = 0$, meaning $X$ is constant. In general, $E[X^2] \geq (E[X])^2$ by Jensen's inequality.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q4">''Question 4:'' What does the CDF $F(x) = P(X \leq x)$ look like for a discrete random variable?
+<<button "A. A smooth S-shaped curve">><<replace "#rv-q4">>Incorrect. Smooth S-curves describe continuous CDFs (like the Gaussian). Discrete CDFs have jumps at each value with positive probability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A staircase function with jumps at each value of positive probability">><<replace "#rv-q4">>Correct. The CDF of a discrete random variable is a step function. It jumps by $P(X = x_i)$ at each possible value $x_i$ and is flat between values. It is always right-continuous and non-decreasing.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A series of vertical bars">><<replace "#rv-q4">>Incorrect. Vertical bars describe the PMF (probability mass function), not the CDF. The CDF is a cumulative sum, producing a staircase shape.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A straight line from 0 to 1">><<replace "#rv-q4">>Incorrect. A straight-line CDF would describe a continuous uniform distribution, not a discrete random variable.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q5">''Question 5:'' In SGD, the stochastic gradient $\nabla \ell_i$ is a random variable. What is its key property?
+<<button "A. It has zero variance">><<replace "#rv-q5">>Incorrect. If it had zero variance, it would equal the full-batch gradient exactly, and there would be nothing stochastic about it. The variance is what makes SGD noisy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Its expectation equals the full-batch gradient">><<replace "#rv-q5">>Correct. The minibatch gradient is an //unbiased estimator// of the full gradient: $E[\nabla \ell_i] = \nabla E[\ell]$. This unbiasedness, combined with a decreasing learning rate, guarantees convergence. The variance of this estimator controls the convergence speed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It always points in the steepest descent direction">><<replace "#rv-q5">>Incorrect. Only the full-batch gradient points in the exact steepest descent direction. The stochastic gradient points in a noisy approximation of that direction.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It follows a Gaussian distribution">><<replace "#rv-q5">>Incorrect. While the CLT suggests it becomes approximately Gaussian for large minibatches, the distribution of individual sample gradients depends on the data and model, and is generally not Gaussian.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q6">''Question 6:'' If $Y = g(X)$ for a monotone differentiable function $g$, what is the density of $Y$?
+<<button "A. $f_Y(y) = f_X(g(y))$">><<replace "#rv-q6">>Incorrect. You need to apply the //inverse// function and multiply by the absolute value of the derivative of the inverse — the Jacobian correction factor.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $f_Y(y) = f_X(g^{-1}(y)) \cdot |d g^{-1}(y)/dy|$">><<replace "#rv-q6">>Correct. The change-of-variables formula requires two steps: evaluate the original density at the inverse $g^{-1}(y)$, then multiply by the absolute Jacobian $|dg^{-1}/dy|$ to account for how $g$ stretches or compresses the density. This is the foundation of normalizing flows.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $f_Y(y) = f_X(y) / g'(y)$">><<replace "#rv-q6">>Incorrect. This confuses the argument of $f_X$ and the derivative. The correct formula evaluates $f_X$ at $g^{-1}(y)$ and uses the derivative of the inverse.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $f_Y(y) = f_X(y) \cdot g'(y)$">><<replace "#rv-q6">>Incorrect. This has the wrong argument for $f_X$ and uses $g'$ instead of the derivative of $g^{-1}$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q7">''Question 7:'' Which statement about moment generating functions (MGFs) is true?
+<<button "A. Every random variable has a finite MGF">><<replace "#rv-q7">>Incorrect. Many distributions (e.g., Cauchy, log-normal) have MGFs that are infinite for all $t \neq 0$. The characteristic function $E[e^{itX}]$ always exists, but the MGF $E[e^{tX}]$ may not.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The MGF of a sum of independent RVs is the sum of their MGFs">><<replace "#rv-q7">>Incorrect. It is the //product//, not the sum: $M_{X+Y}(t) = M_X(t) \cdot M_Y(t)$ when $X$ and $Y$ are independent. This follows from $E[e^{t(X+Y)}] = E[e^{tX}]E[e^{tY}]$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. If two RVs have the same MGF in a neighborhood of 0, they have the same distribution">><<replace "#rv-q7">>Correct. The MGF uniquely determines the distribution when it exists in a neighborhood of the origin. This is used to prove that certain sums converge to specific distributions (e.g., the sum of independent Poissons is Poisson).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The MGF is the Fourier transform of the density">><<replace "#rv-q7">>Incorrect. The //characteristic function// $E[e^{itX}]$ is the Fourier transform of the density. The MGF $E[e^{tX}]$ is the //Laplace transform// (bilateral) evaluated at $-t$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="rv-q8">''Question 8:'' Why do heavy-tailed random variables (like Cauchy) break standard ML assumptions?
+<<button "A. They cannot be sampled from">><<replace "#rv-q8">>Incorrect. Heavy-tailed distributions can be sampled from perfectly well. The Cauchy distribution, for example, is easily sampled as the ratio of two standard normals.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Their CDF does not exist">><<replace "#rv-q8">>Incorrect. Every random variable has a CDF. The Cauchy distribution has a perfectly well-defined CDF: $F(x) = \frac{1}{\pi}\arctan(x) + \frac{1}{2}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Their mean and/or variance are infinite, so sample averages do not converge as expected">><<replace "#rv-q8">>Correct. The Cauchy distribution has no finite mean, and Pareto distributions with small shape parameter have infinite variance. The law of large numbers and CLT require finite mean (and finite variance for CLT). When moments do not exist, sample means wander unpredictably, confidence intervals are meaningless, and standard statistical reasoning collapses.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They are not measurable functions">><<replace "#rv-q8">>Incorrect. Heavy-tailed random variables are perfectly valid measurable functions. The issue is not measurability but the non-existence of moments.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

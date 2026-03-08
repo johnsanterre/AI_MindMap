@@ -1,0 +1,167 @@
+<<include "Header">>
+! Probability Distributions
+<img src="assets/probability_distributions.svg" alt="Family tree of probability distributions showing relationships from Bernoulli to Binomial to Normal, Exponential to Gamma, Beta to Dirichlet" style="max-width:100%;margin:1em 0;">
+
+Imagine you run a factory that makes lightbulbs. You can't predict which //specific// bulb will fail, but you //can// say that about 3% fail per month, and failures arrive independently like raindrops. That single sentence — a rate, a shape, a story about independence — is a ''probability distribution''. It replaces the chaos of individual outcomes with a complete mathematical portrait: not just the average, but the spread, the skew, the tails, and every percentile in between. Every ML model, from [[Random Variables|random variable]] transformations to billion-parameter language models, ultimately outputs, consumes, or implicitly assumes a probability distribution. Choosing the right one is half the battle.
+
+!! The Core Insight
+
+A ''probability distribution'' assigns a probability (or probability density) to every possible outcome of a [[Random Variables|random variable]]. For ''discrete'' variables, a ''probability mass function'' (PMF) gives $P(X = x)$ directly. For ''continuous'' variables, a ''probability density function'' (PDF) $f(x)$ gives probability through integration: $P(a \le X \le b) = \int_a^b f(x)\,dx$. In both cases, the ''cumulative distribution function'' (CDF) $F(x) = P(X \le x)$ provides a unified view — it always exists, always increases from 0 to 1, and uniquely characterizes any distribution.
+
+The reason we have a "zoo" of named distributions rather than one universal formula is that different //generative stories// — coin flips, waiting times, proportions, counts — produce different mathematical shapes. Each named distribution encodes a specific set of assumptions about how data is generated, and selecting a distribution is equivalent to stating those assumptions explicitly.
+
+!! The Distribution Zoo
+
+''Discrete distributions:''
+
+''Bernoulli($p$):'' The simplest distribution — a single trial with two outcomes, success (1) with probability $p$ and failure (0) with probability $1-p$. Every [[Bernoulli Distribution|binary classifier's output]] is a Bernoulli random variable.
+
+''Binomial($n, p$):'' The number of successes in $n$ independent Bernoulli trials. If you flip a coin 100 times, the count of heads follows $\text{Binomial}(100, 0.5)$. See [[Binomial Distribution]].
+
+''Poisson($\lambda$):'' The count of rare, independent events in a fixed window — website clicks per minute, mutations per gene, typos per page. As a Binomial with $n \to \infty$ and $p \to 0$ while $np = \lambda$ stays fixed.
+
+''Categorical($p_1, \ldots, p_k$):'' A single draw from $k$ categories — a generalization of Bernoulli to more than two outcomes. The output layer of a classifier with softmax produces a Categorical distribution.
+
+''Multinomial($n, \mathbf{p}$):'' Counts from $n$ independent Categorical draws — the multi-class generalization of Binomial. The bag-of-words model treats a document as a Multinomial draw over the vocabulary.
+
+''Continuous distributions:''
+
+''Uniform($a, b$):'' Equal density everywhere on $[a, b]$. The maximum-entropy distribution when you know only the range. Used as an uninformative prior and as the starting point for inverse-CDF sampling.
+
+''Gaussian (Normal) $\mathcal{N}(\mu, \sigma^2)$:'' The bell curve — the most important distribution in all of statistics. Justified by the [[Central Limit Theorem]]: sums of many independent variables converge to it regardless of the original distribution. See [[Gaussian Distribution]].
+
+''Exponential($\lambda$):'' The waiting time until the first event in a Poisson process. Memoryless: $P(X > s + t \mid X > s) = P(X > t)$. The only continuous memoryless distribution.
+
+''Gamma($\alpha, \beta$):'' The waiting time for the $\alpha$-th event in a Poisson process — a sum of $\alpha$ independent Exponentials. When $\alpha$ is large, the Gamma approaches a Gaussian. Used as a prior for rate and precision parameters.
+
+''Beta($\alpha, \beta$):'' A distribution //on probabilities// — values live in $[0, 1]$. The conjugate prior for [[Bernoulli Distribution|Bernoulli]] and [[Binomial Distribution|Binomial]] likelihoods, making Bayesian updating trivial: observe $s$ successes and $f$ failures, update $\text{Beta}(\alpha + s, \beta + f)$. See [[Beta Distribution]].
+
+''Multivariate distributions:''
+
+''Dirichlet($\boldsymbol{\alpha}$):'' A distribution over probability vectors (simplexes) — the multivariate generalization of Beta. The conjugate prior for Categorical and Multinomial likelihoods. Central to topic models like LDA. See [[Dirichlet Distribution]].
+
+''Multivariate Normal $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$:'' Joint Gaussian over $d$ dimensions, parameterized by a mean vector and covariance matrix. The foundation of [[Gaussian Processes|Gaussian process]] regression, Kalman filters, and VAE latent spaces.
+
+!! What the Math Is Actually Doing
+
+''PMF (discrete):'' $P(X = x)$ directly, with $\sum_x P(X = x) = 1$.
+
+''PDF (continuous):'' $f(x) \ge 0$ with $\int_{-\infty}^{\infty} f(x)\,dx = 1$. Note: $f(x)$ can exceed 1 — it is a //density//, not a probability.
+
+''CDF (both):'' $F(x) = P(X \le x)$. For continuous variables, $F'(x) = f(x)$.
+
+Key distribution formulas:
+
+$$\text{Bernoulli: } P(X = k) = p^k (1-p)^{1-k}, \quad k \in \{0, 1\}$$
+
+$$\text{Binomial: } P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$
+
+$$\text{Poisson: } P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+
+$$\text{Gaussian: } f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
+
+$$\text{Exponential: } f(x) = \lambda e^{-\lambda x}, \quad x \ge 0$$
+
+$$\text{Gamma: } f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}, \quad x \ge 0$$
+
+$$\text{Beta: } f(p) = \frac{p^{\alpha-1}(1-p)^{\beta-1}}{B(\alpha, \beta)}, \quad 0 \le p \le 1$$
+
+''Key relationships between distributions:''
+* Bernoulli is Beta with $\alpha, \beta \in \{0,1\}$ degenerate — or equivalently, Binomial($1, p$).
+* Binomial($n, p$) $\to$ Poisson($\lambda$) when $n \to \infty$, $p \to 0$, $np \to \lambda$.
+* Binomial($n, p$) $\to$ $\mathcal{N}(np, np(1-p))$ when $n$ is large ([[Central Limit Theorem]]).
+* Exponential($\lambda$) = Gamma($1, \lambda$).
+* Sum of $k$ independent Exp($\lambda$) = Gamma($k, \lambda$).
+* Beta is the univariate special case of Dirichlet (with $k=2$).
+
+!! Distributions in ML
+
+''Likelihood functions:'' Choosing a distribution for the data defines the likelihood. Gaussian noise gives MSE loss; Bernoulli likelihood gives binary [[Cross Entropy|cross-entropy]]; Categorical likelihood gives multi-class cross-entropy. The "loss function" is almost always the negative log-likelihood of an assumed distribution.
+
+''Priors and posteriors:'' In [[Bayesian Methods]], the prior distribution over parameters encodes beliefs before seeing data. After observing data, Bayes' theorem yields the posterior. Conjugate priors (Beta-Bernoulli, Dirichlet-Categorical, Normal-Normal) make the posterior analytically tractable — the posterior is the same family as the prior with updated parameters.
+
+''Noise models:'' Regression assumes Gaussian noise; count data assumes Poisson; survival analysis assumes Exponential or Weibull. Misspecifying the noise distribution biases estimates and distorts uncertainty.
+
+''Output distributions:'' A sigmoid output is a Bernoulli parameter; a softmax output parameterizes a Categorical distribution; mixture density networks output Gaussian mixture parameters. Variational autoencoders place a multivariate Normal prior on the latent space and use the reparameterization trick to sample differentiably.
+
+!! When Distribution Assumptions Break Down
+
+''Heavy tails and outliers:'' The Gaussian assigns negligible probability to events more than $4\sigma$ from the mean, but financial returns, network traffic, and natural language token frequencies have //heavy tails// — extreme events are far more common than Gaussians predict. Using Gaussian likelihoods with heavy-tailed data produces fragile models that overreact to outliers. ''Fix:'' Use Student-$t$ distributions (heavier tails, controlled by degrees of freedom), Cauchy distributions, or robust loss functions like Huber loss.
+
+''Independence violations:'' The Binomial assumes independent trials; the Poisson assumes independent events. When trials are correlated — users clicking in bursts, genes co-expressed on the same pathway — counts become ''overdispersed'' (variance exceeds the distribution's prediction). ''Fix:'' Use Beta-Binomial or Negative Binomial models that add a dispersion parameter, or hierarchical models that capture group-level correlation.
+
+''Wrong support or shape:'' Applying a Gaussian to strictly positive data (incomes, durations) assigns non-zero probability to negative values — nonsensical predictions. Using a unimodal distribution for genuinely multimodal data (user heights in a mixed population of children and adults) hides structure. ''Fix:'' Use distributions matching the data's natural support (Log-Normal or Gamma for positive reals, Beta for $[0,1]$), or mixture models for multimodality.
+
+!! Technical Details
+
+''Exponential family unification:'' Most named distributions belong to the ''exponential family'', which has the canonical form:
+
+$$p(x \mid \boldsymbol{\eta}) = h(x) \exp\!\left(\boldsymbol{\eta}^\top \mathbf{T}(x) - A(\boldsymbol{\eta})\right)$$
+
+where $\boldsymbol{\eta}$ are ''natural parameters'', $\mathbf{T}(x)$ are ''sufficient statistics'', and $A(\boldsymbol{\eta})$ is the ''log-partition function''. Bernoulli, Binomial, Poisson, Gaussian, Exponential, Gamma, Beta, Dirichlet, and Categorical all belong to this family. The exponential family is special because: (1) sufficient statistics compress data without loss, (2) the log-partition function generates all cumulants via differentiation, (3) [[Maximum Likelihood Estimation|MLE]] reduces to moment matching on sufficient statistics. See [[Exponential Family]].
+
+''Conjugacy table:'' Prior $\to$ Likelihood $\to$ Posterior — Beta $\to$ Bernoulli/Binomial $\to$ Beta; Dirichlet $\to$ Categorical/Multinomial $\to$ Dirichlet; Normal $\to$ Normal (known variance) $\to$ Normal; Gamma $\to$ Poisson $\to$ Gamma; Gamma $\to$ Exponential $\to$ Gamma. Conjugacy means the posterior has the same functional form as the prior, with parameters updated by simple addition of data statistics.
+
+''Maximum entropy characterization:'' Each standard distribution is the //maximum entropy// distribution subject to specific constraints. Uniform: fixed support, no other constraints. Gaussian: fixed mean and variance. Exponential: fixed mean over positive reals. This means choosing a distribution is equivalent to stating //exactly which summary statistics you trust// and being maximally uncertain about everything else.
+
+''Reproductive property:'' Some distributions are ''closed under convolution'': the sum of independent Gaussians is Gaussian; the sum of independent Poissons is Poisson; the sum of independent Gammas (same rate) is Gamma. This closure is why the [[Central Limit Theorem]] drives sums toward Gaussians — the Gaussian is the //fixed point// of the convolution operation in the space of finite-variance distributions.
+
+!! Quiz
+
+<span id="pd-q1">''1. What is the key difference between a PDF and a PMF?''
+
+<<button "A. A PDF gives probabilities directly; a PMF gives densities">><<replace "#pd-q1">>A. PDF gives probabilities — No. This is reversed. A PMF gives $P(X=x)$ directly; a PDF gives densities that must be integrated to obtain probabilities.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A PMF is for discrete variables and gives P(X=x); a PDF is for continuous variables and must be integrated">><<replace "#pd-q1">>B. PMF discrete, PDF continuous — Correct. $P(a \le X \le b) = \int_a^b f(x)\,dx$ for continuous variables. The PDF value itself is not a probability and can exceed 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. They are the same thing with different names">><<replace "#pd-q1">>C. Same thing — No. They are fundamentally different: PMF values sum to 1, PDF values integrate to 1, and PDF values can exceed 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A PDF always sums to 1; a PMF always integrates to 1">><<replace "#pd-q1">>D. Swapped — No. This reverses the correct statements: a PMF sums to 1, a PDF integrates to 1.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q2">''2. What distribution does the Binomial approach when n is large and p is small?''
+
+<<button "A. Gaussian">><<replace "#pd-q2">>A. Gaussian — Not in this regime. The Gaussian approximation requires $np$ and $n(1-p)$ both large. When $p$ is small, the Poisson is the correct limit.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Exponential">><<replace "#pd-q2">>B. Exponential — No. The Exponential is a continuous distribution for waiting times, not a limit of the Binomial.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Poisson">><<replace "#pd-q2">>C. Poisson — Correct. When $n \to \infty$, $p \to 0$, and $np \to \lambda$, the Binomial converges to Poisson($\lambda$). This is the "law of rare events."<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Beta">><<replace "#pd-q2">>D. Beta — No. The Beta distribution is continuous on $[0,1]$ and is a prior for probabilities, not a limit of counts.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q3">''3. Why is the Beta distribution natural as a prior for Bernoulli data?''
+
+<<button "A. It has the same support [0,1] as a probability parameter">><<replace "#pd-q3">>A. Same support — Partially right, but the deeper reason is conjugacy. Many distributions share the support.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It is the conjugate prior: the posterior is also Beta with updated parameters">><<replace "#pd-q3">>B. Conjugate prior — Correct. After observing $s$ successes and $f$ failures, $\text{Beta}(\alpha, \beta) \to \text{Beta}(\alpha + s, \beta + f)$. The posterior stays in the same family, making Bayesian updating simple.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It always produces a uniform prior">><<replace "#pd-q3">>C. Always uniform — No. Beta($\alpha, \beta$) is uniform only when $\alpha = \beta = 1$. Different parameters give skewed, U-shaped, or peaked distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It is the only distribution defined on [0,1]">><<replace "#pd-q3">>D. Only one on [0,1] — No. The Uniform, Kumaraswamy, and truncated distributions also live on [0,1]. Conjugacy is the key reason.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q4">''4. What unique property does the Exponential distribution have?''
+
+<<button "A. It has the highest entropy of all continuous distributions">><<replace "#pd-q4">>A. Highest entropy — No. The Gaussian has maximum entropy for fixed mean and variance over all reals. The Exponential has maximum entropy for fixed mean over positive reals only.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It is memoryless: P(X > s+t | X > s) = P(X > t)">><<replace "#pd-q4">>B. Memoryless — Correct. The probability of waiting another $t$ units is the same regardless of how long you have already waited. It is the //only// continuous distribution with this property.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It can model negative values">><<replace "#pd-q4">>C. Negative values — No. The Exponential is defined only for $x \ge 0$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It is symmetric around its mean">><<replace "#pd-q4">>D. Symmetric — No. The Exponential is heavily right-skewed, with its mode at 0.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q5">''5. In the exponential family form, what role does the log-partition function A(eta) play?''
+
+<<button "A. It is the prior distribution">><<replace "#pd-q5">>A. Prior — No. $A(\boldsymbol{\eta})$ is a normalizing term, not a prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It ensures the distribution integrates to 1 and its derivatives give the cumulants">><<replace "#pd-q5">>B. Normalizer and cumulant generator — Correct. $A(\boldsymbol{\eta}) = \log \int h(x) \exp(\boldsymbol{\eta}^\top \mathbf{T}(x))\,dx$. The first derivative gives the mean of $\mathbf{T}(x)$; the second derivative gives the variance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It defines the sufficient statistics">><<replace "#pd-q5">>C. Sufficient statistics — No. The sufficient statistics $\mathbf{T}(x)$ are a separate component. $A(\boldsymbol{\eta})$ is derived from them but serves as the normalizer.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It maps natural parameters to the data space">><<replace "#pd-q5">>D. Maps to data — No. $A(\boldsymbol{\eta})$ is a scalar function of the parameters, not a mapping to data space.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q6">''6. What does the Central Limit Theorem guarantee about sums of independent random variables?''
+
+<<button "A. The sum always follows a Gaussian distribution exactly">><<replace "#pd-q6">>A. Exactly Gaussian — No. The CLT is an //asymptotic// result: the standardized sum //converges// to Gaussian as $n \to \infty$. For finite $n$, it is an approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The standardized sum converges in distribution to a Gaussian, regardless of the original distribution (given finite variance)">><<replace "#pd-q6">>B. Convergence to Gaussian — Correct. For i.i.d. variables with finite mean $\mu$ and variance $\sigma^2$: $\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} \mathcal{N}(0,1)$. This is why the Gaussian appears everywhere.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The sum converges to a Poisson distribution">><<replace "#pd-q6">>C. Poisson — No. The Poisson arises as a limit of rare-event Binomials, not from the CLT.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It only applies to Gaussian random variables">><<replace "#pd-q6">>D. Only Gaussians — No. The power of the CLT is precisely that it applies to //any// distribution with finite variance.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q7">''7. Why can choosing a Gaussian likelihood be problematic for heavy-tailed data?''
+
+<<button "A. The Gaussian has too many parameters">><<replace "#pd-q7">>A. Too many parameters — No. The Gaussian has only two parameters ($\mu, \sigma^2$), fewer than many alternatives.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Gaussian tails decay as exp(-x^2), assigning negligible probability to extreme events that actually occur frequently">><<replace "#pd-q7">>B. Tails too thin — Correct. Gaussian tails decay faster than any polynomial, so extreme observations are treated as near-impossible. The model either ignores outliers or distorts its fit to accommodate them. Student-$t$ or Cauchy distributions handle this better.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The Gaussian cannot model positive data">><<replace "#pd-q7">>C. Cannot model positive data — No. The Gaussian can model any real-valued data; the issue is tail weight, not support.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The Gaussian requires discrete data">><<replace "#pd-q7">>D. Requires discrete — No. The Gaussian is a continuous distribution.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pd-q8">''8. What does "maximum entropy distribution" mean for the Gaussian?''
+
+<<button "A. It has zero entropy">><<replace "#pd-q8">>A. Zero entropy — No. The Gaussian has positive (and in fact maximal) entropy among distributions with the same constraints.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Among all distributions with a fixed mean and variance over the reals, the Gaussian has the highest entropy">><<replace "#pd-q8">>B. Highest entropy for fixed mean and variance — Correct. This means the Gaussian makes the //fewest additional assumptions// beyond specifying the first two moments. It is the most "uncertain" or "least informative" distribution consistent with a given mean and variance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It has the lowest entropy of any continuous distribution">><<replace "#pd-q8">>C. Lowest entropy — No. This is the opposite of the truth.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Its entropy equals exactly 1 bit">><<replace "#pd-q8">>D. Exactly 1 bit — No. Gaussian entropy depends on $\sigma$: $H = \frac{1}{2}\ln(2\pi e \sigma^2)$, which varies with the variance.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

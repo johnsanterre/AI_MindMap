@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Primality Testing: From Trial Division to AKS</text>
+
+  <!-- Timeline arrow -->
+  <line x1="60" y1="200" x2="740" y2="200" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- Era 1: Trial Division -->
+  <rect x="60" y="90" width="140" height="90" rx="8" fill="#EDE3D0" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="130" y="115" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Trial Division</text>
+  <text x="130" y="135" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Ancient Greece</text>
+  <text x="130" y="155" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">O(sqrt n)</text>
+  <text x="130" y="170" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Deterministic</text>
+  <line x1="130" y1="180" x2="130" y2="200" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Era 2: Fermat Test -->
+  <rect x="230" y="220" width="140" height="90" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="300" y="245" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Fermat Test</text>
+  <text x="300" y="265" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">1640</text>
+  <text x="300" y="285" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">O(k log^2 n)</text>
+  <text x="300" y="300" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Probabilistic</text>
+  <line x1="300" y1="220" x2="300" y2="200" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Era 3: Miller-Rabin -->
+  <rect x="400" y="90" width="140" height="90" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="470" y="115" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Miller-Rabin</text>
+  <text x="470" y="135" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">1980</text>
+  <text x="470" y="155" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">O(k log^2 n)</text>
+  <text x="470" y="170" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Prob. error &lt; 4^(-k)</text>
+  <line x1="470" y1="180" x2="470" y2="200" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Era 4: AKS -->
+  <rect x="580" y="220" width="140" height="90" rx="8" fill="#F0DDD0" stroke="#7C2530" stroke-width="2"/>
+  <text x="650" y="245" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">AKS Algorithm</text>
+  <text x="650" y="265" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">2002</text>
+  <text x="650" y="285" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">O(log^6 n)</text>
+  <text x="650" y="300" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">Deterministic + Poly!</text>
+  <line x1="650" y1="220" x2="650" y2="200" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Key insight box -->
+  <rect x="200" y="340" width="400" height="45" rx="6" fill="#FDFAF4" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="360" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Key Question: Can we decide "is n prime?"</text>
+  <text x="400" y="376" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">AKS proved: PRIMES is in P (deterministic polynomial time)</text>
+
+  <!-- Dot markers on timeline -->
+  <circle cx="130" cy="200" r="5" fill="#5C3D1E"/>
+  <circle cx="300" cy="200" r="5" fill="#2D5A8E"/>
+  <circle cx="470" cy="200" r="5" fill="#2D5A8E"/>
+  <circle cx="650" cy="200" r="5" fill="#7C2530"/>
+</svg>

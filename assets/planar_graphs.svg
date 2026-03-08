@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Section dividers -->
+  <line x1="270" y1="20" x2="270" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="540" y1="20" x2="540" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ===== SECTION 1: Planar Embedding ===== -->
+  <text x="135" y="38" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Planar Embedding</text>
+  <text x="135" y="56" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">(no edge crossings)</text>
+
+  <!-- Planar graph: a nice pentagonal-ish graph with internal edges, no crossings -->
+  <!-- Outer pentagon -->
+  <line x1="135" y1="80" x2="195" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="195" y1="130" x2="175" y2="200" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="175" y1="200" x2="95" y2="200" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="95" y1="200" x2="75" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="75" y1="130" x2="135" y2="80" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Internal edges (no crossings) -->
+  <line x1="135" y1="80" x2="175" y2="200" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="135" y1="80" x2="95" y2="200" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Nodes -->
+  <circle cx="135" cy="80" r="12" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="195" cy="130" r="12" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="175" cy="200" r="12" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="95" cy="200" r="12" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="75" cy="130" r="12" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+
+  <!-- Face labels -->
+  <text x="135" y="160" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">F1</text>
+  <text x="155" y="125" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">F2</text>
+  <text x="110" y="125" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">F3</text>
+  <text x="135" y="190" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">F4</text>
+
+  <!-- Euler formula box -->
+  <rect x="42" y="230" width="186" height="50" rx="5" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="135" y="250" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-weight="bold">V &#8722; E + F = 2</text>
+  <text x="135" y="270" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">5 &#8722; 7 + 4 = 2 &#10003;</text>
+
+  <!-- Checkmark label -->
+  <text x="135" y="300" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">Planar: can be drawn</text>
+  <text x="135" y="316" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-style="italic">with no crossings</text>
+
+  <!-- ===== SECTION 2: K5 (non-planar) ===== -->
+  <text x="405" y="38" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">K&#8325; &#8212; Non-Planar</text>
+  <text x="405" y="56" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">(complete graph on 5 vertices)</text>
+
+  <!-- K5: 5 nodes, all 10 edges -->
+  <!-- Pentagon positions for K5 -->
+  <!-- Top: 405,80  TR: 455,130  BR: 440,200  BL: 370,200  TL: 355,130 -->
+
+  <!-- All 10 edges of K5 -->
+  <line x1="405" y1="80" x2="455" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="405" y1="80" x2="440" y2="200" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="405" y1="80" x2="370" y2="200" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="405" y1="80" x2="355" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="455" y1="130" x2="440" y2="200" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="455" y1="130" x2="370" y2="200" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="455" y1="130" x2="355" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="440" y1="200" x2="370" y2="200" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="440" y1="200" x2="355" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="370" y1="200" x2="355" y2="130" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Crossing indicators -->
+  <circle cx="395" cy="155" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="415" cy="155" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="405" cy="175" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- K5 Nodes -->
+  <circle cx="405" cy="80" r="10" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="455" cy="130" r="10" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="440" cy="200" r="10" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="370" cy="200" r="10" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="355" cy="130" r="10" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+
+  <!-- K5 info -->
+  <rect x="310" y="230" width="190" height="50" rx="5" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="405" y="250" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">V=5, E=10</text>
+  <text x="405" y="268" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">E &gt; 3V &#8722; 6 = 9 &#8594; not planar</text>
+
+  <text x="405" y="300" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Crossings unavoidable</text>
+
+  <!-- ===== SECTION 3: K3,3 (non-planar) ===== -->
+  <text x="670" y="38" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">K&#8323;,&#8323; &#8212; Non-Planar</text>
+  <text x="670" y="56" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">(complete bipartite 3,3)</text>
+
+  <!-- K3,3: top row at y=90, bottom row at y=190 -->
+  <!-- Top: 620, 670, 720 at y=90 -->
+  <!-- Bottom: 620, 670, 720 at y=190 -->
+
+  <!-- All 9 edges of K3,3 -->
+  <line x1="620" y1="90" x2="620" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="620" y1="90" x2="670" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="620" y1="90" x2="720" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="670" y1="90" x2="620" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="670" y1="90" x2="670" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="670" y1="90" x2="720" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="720" y1="90" x2="620" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="720" y1="90" x2="670" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="720" y1="90" x2="720" y2="190" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Crossing indicators -->
+  <circle cx="645" cy="140" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="695" cy="140" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="670" cy="140" r="6" fill="none" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- K3,3 Nodes - top (set A) -->
+  <circle cx="620" cy="90" r="10" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="670" cy="90" r="10" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="720" cy="90" r="10" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+
+  <!-- K3,3 Nodes - bottom (set B) -->
+  <circle cx="620" cy="190" r="10" fill="#5C3D1E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="670" cy="190" r="10" fill="#5C3D1E" stroke="#FDFAF4" stroke-width="2"/>
+  <circle cx="720" cy="190" r="10" fill="#5C3D1E" stroke="#FDFAF4" stroke-width="2"/>
+
+  <!-- Set labels -->
+  <text x="590" y="95" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="end">A</text>
+  <text x="590" y="195" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="end">B</text>
+
+  <!-- K3,3 info -->
+  <rect x="580" y="230" width="180" height="50" rx="5" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="670" y="250" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">V=6, E=9</text>
+  <text x="670" y="268" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">E &gt; 2V &#8722; 4 = 8 &#8594; not planar</text>
+
+  <text x="670" y="300" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Crossings unavoidable</text>
+
+  <!-- Bottom caption -->
+  <rect x="100" y="340" width="600" height="40" rx="5" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="400" y="358" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Kuratowski&#8217;s Theorem:</text>
+  <text x="400" y="374" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">A graph is planar iff it contains no subdivision of K&#8325; or K&#8323;,&#8323;</text>
+</svg>

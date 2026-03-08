@@ -1,0 +1,119 @@
+<<include "Header">>
+! Variational Autoencoder
+[img[assets/variational_autoencoder.svg]]
+
+Imagine you're a portrait artist who has painted thousands of faces. Over time, you develop an intuitive sense of the "space of all faces" — you know that tweaking a few mental dials (face width, nose length, expression) can smoothly generate new, realistic faces you've never seen before. A ''Variational Autoencoder'' (VAE) does exactly this: it learns a compressed, continuous "sketch pad" of possibilities from data, then draws new samples from that pad. Unlike a plain <<link "autoencoder" "Autoencoders">><</link>>, which simply memorizes compressed codes, a VAE learns a //probability distribution// over codes, so it can generate entirely new data by sampling from that distribution.
+
+!! The Core Insight
+
+The breakthrough idea behind VAEs is treating the encoding process as //probabilistic//. Instead of mapping an input to a single point in <<link "latent space" "Latent Space">><</link>>, the encoder maps it to a //distribution// — specifically, a mean vector $\mu$ and a standard deviation vector $\sigma$. During training, you sample from this distribution to get a latent code $z$, then decode it back. This forces the network to spread its representations across a smooth, continuous region rather than memorizing isolated points. The genius is that this smoothness means nearby points in latent space decode to similar outputs, giving you a meaningful space you can interpolate through and sample from.
+
+!! The Encoder-Decoder Framework
+
+The architecture has two halves. The ''encoder'' $q_\phi(z|x)$ takes an input $x$ (an image, a sentence, a molecule) and produces two vectors: $\mu$ and $\sigma$. These parameterize a Gaussian distribution in latent space. The ''decoder'' $p_\theta(x|z)$ takes a sampled latent code $z$ and reconstructs the original input. The whole system trains end-to-end, but there's a problem: you can't backpropagate through a random sampling step. The ''reparameterization trick'' solves this elegantly — instead of sampling $z \sim \mathcal{N}(\mu, \sigma^2)$ directly, you sample noise $\epsilon \sim \mathcal{N}(0, I)$ and compute $z = \mu + \sigma \odot \epsilon$. This moves the randomness outside the computational graph, letting gradients flow through $\mu$ and $\sigma$ as usual.
+
+!! What the Math Is Actually Doing
+
+The VAE objective maximizes the ''Evidence Lower Bound'' (<<link "ELBO" "ELBO">><</link>>), a lower bound on the log-likelihood of the data:
+
+$$\text{ELBO} = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))$$
+
+The first term is the ''reconstruction loss'' — it measures how well the decoder recreates the input from the sampled latent code. In practice this is often a pixel-wise binary cross-entropy or MSE loss.
+
+The second term is the <<link "KL divergence" "KL Divergence">><</link>> between the encoder's learned posterior $q_\phi(z|x)$ and the prior $p(z) = \mathcal{N}(0, I)$. This acts as a regularizer, pulling the encoder's distributions toward a standard normal. For Gaussian distributions, the KL term has a closed-form solution:
+
+$$D_{KL} = -\frac{1}{2} \sum_{j=1}^{J} \left(1 + \log(\sigma_j^2) - \mu_j^2 - \sigma_j^2\right)$$
+
+The tension between these two terms is fundamental: reconstruction wants to spread codes apart for precision, while the KL term wants to pack them into a standard normal for smooth generation. The balance between them determines whether the model prioritizes faithful reconstruction or clean generation.
+
+!! VAE Variants
+
+Several important extensions address VAE limitations:
+
+''Beta-VAE'' introduces a hyperparameter $\beta$ weighting the KL term: $\mathcal{L} = \text{Reconstruction} - \beta \cdot D_{KL}$. Setting $\beta > 1$ encourages disentangled latent representations where individual dimensions correspond to interpretable factors of variation.
+
+''VQ-VAE'' (Vector Quantized VAE) replaces the continuous latent space with a discrete codebook. The encoder maps to the nearest codebook vector, enabling sharper reconstructions and serving as the backbone for modern audio and image generation systems.
+
+''Conditional VAE'' (CVAE) conditions both encoder and decoder on a label $y$, learning class-specific latent spaces: $q_\phi(z|x,y)$ and $p_\theta(x|z,y)$. This enables controlled generation — "generate a face with glasses" or "generate a molecule with high solubility."
+
+''Hierarchical VAEs'' stack multiple layers of latent variables $z_1, z_2, \ldots, z_L$, where each level captures structure at a different scale. Modern hierarchical VAEs like NVAE achieve image quality competitive with GANs.
+
+VAEs also served as a key stepping stone toward <<link "diffusion models" "Diffusion Models">><</link>>, which can be understood as hierarchical VAEs with a fixed encoder process.
+
+!! When VAEs Break Down
+
+''1. Posterior collapse.'' The decoder becomes so powerful it ignores the latent code entirely, and the KL term drives $q_\phi(z|x)$ to match the prior exactly. The latent space becomes meaningless — the model degenerates into a standard autoregressive model. This is especially common with expressive decoders like LSTMs or Transformers. Mitigation strategies include KL annealing (gradually increasing the KL weight during training), free bits (setting a minimum information threshold per latent dimension), and using weaker decoders.
+
+''2. Blurry outputs.'' Because the decoder must cover the full distribution $p_\theta(x|z)$ and typically uses a Gaussian likelihood, it tends to output the //mean// of all plausible reconstructions rather than a single sharp sample. This "hedging its bets" behavior produces blurry images — a fundamental limitation of the pixel-wise reconstruction loss. VQ-VAEs and adversarial training (VAE-GAN hybrids) partially address this.
+
+''3. Over-regularization from the KL term.'' When $\beta$ or the KL weight is too high, the model compresses too aggressively. Latent codes become nearly identical for different inputs, and the decoder produces generic, low-quality outputs. The model generates "average" samples that lack detail or specificity. Tuning the reconstruction-KL balance is critical and often dataset-specific.
+
+!! Technical Details
+
+* ''Architecture:'' Encoder and decoder are typically symmetric CNNs (for images) or MLPs (for tabular data). Latent dimensions typically range from 2 (for visualization) to 512 (for complex data).
+
+* ''Prior:'' Standard choice is $p(z) = \mathcal{N}(0, I)$, but richer priors (mixture of Gaussians, autoregressive flows, VampPrior) improve expressiveness.
+
+* ''Training:'' Adam optimizer, learning rate $\sim 10^{-3}$ to $10^{-4}$. KL annealing over first 10–50 epochs is common practice. Batch sizes of 64–256.
+
+* ''ELBO is a lower bound:'' The gap between ELBO and true log-likelihood equals $D_{KL}(q_\phi(z|x) \| p_\theta(z|x))$ — the mismatch between the approximate and true posterior. Better encoders tighten this bound.
+
+* ''Latent traversals:'' To interpret what the model learned, fix all but one latent dimension and sweep it across a range. In disentangled models, each dimension controls a single factor (e.g., rotation, color, scale).
+
+* ''Interpolation:'' Encode two inputs to $z_1, z_2$, then decode convex combinations $\alpha z_1 + (1 - \alpha) z_2$. Smooth transitions indicate a well-structured latent space.
+
+* ''FID and reconstruction metrics:'' Generation quality is measured by Frechet Inception Distance; reconstruction quality by MSE or SSIM. VAEs typically achieve FID 50–150 on CIFAR-10 (vs. GANs at 10–30), but offer stable training and meaningful latent spaces.
+
+* ''Seminal paper:'' Kingma & Welling, "Auto-Encoding Variational Bayes" (2013). Concurrent independent work by Rezende et al., "Stochastic Backpropagation and Approximate Inference in Deep Generative Models."
+
+!! Quiz
+
+<span id="vae-q1">''1. What does the encoder of a VAE output?''
+<<button "A. A single point in latent space">><<replace "#vae-q1">>A. Incorrect. That's what a standard autoencoder does. A VAE encoder outputs the //parameters of a distribution// — a mean vector and a standard deviation vector.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A mean vector and a standard deviation vector">><<replace "#vae-q1">>B. Correct! The VAE encoder outputs $\mu$ and $\sigma$, which parameterize a Gaussian distribution in latent space. Sampling from this distribution gives the latent code $z$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A discrete codebook index">><<replace "#vae-q1">>C. Incorrect. Discrete codebook indices are used in VQ-VAEs, not standard VAEs. The standard VAE encoder outputs continuous parameters $\mu$ and $\sigma$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A reconstructed image">><<replace "#vae-q1">>D. Incorrect. Reconstruction is the decoder's job. The encoder produces distribution parameters in latent space.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q2">''2. What problem does the reparameterization trick solve?''
+<<button "A. It prevents posterior collapse">><<replace "#vae-q2">>A. Incorrect. Posterior collapse is a separate issue addressed by KL annealing or free bits. The reparameterization trick solves the problem of backpropagating through a stochastic sampling step.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It reduces the KL divergence to zero">><<replace "#vae-q2">>B. Incorrect. The reparameterization trick doesn't affect the KL divergence value — it enables gradient computation through the sampling operation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It allows gradients to flow through the sampling step">><<replace "#vae-q2">>C. Correct! By rewriting $z = \mu + \sigma \odot \epsilon$ with $\epsilon \sim \mathcal{N}(0, I)$, the randomness is externalized and gradients can flow through $\mu$ and $\sigma$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It makes the decoder more expressive">><<replace "#vae-q2">>D. Incorrect. The reparameterization trick only affects how sampling is implemented during training — it doesn't change the decoder architecture.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q3">''3. The ELBO consists of which two terms?''
+<<button "A. Encoder loss and decoder loss">><<replace "#vae-q3">>A. Incorrect, though loosely related. The precise terms are the reconstruction loss (expected log-likelihood) and the KL divergence between the approximate posterior and the prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Reconstruction loss and KL divergence">><<replace "#vae-q3">>B. Correct! ELBO $= \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x) \| p(z))$. The first term rewards accurate reconstruction; the second regularizes the latent space.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Generator loss and discriminator loss">><<replace "#vae-q3">>C. Incorrect. Generator and discriminator losses belong to GANs, not VAEs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Cross-entropy loss and L2 regularization">><<replace "#vae-q3">>D. Incorrect. While cross-entropy may appear in the reconstruction term, the second component is specifically KL divergence, not generic L2 regularization.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q4">''4. What causes posterior collapse in a VAE?''
+<<button "A. The encoder becomes too weak to learn useful representations">><<replace "#vae-q4">>A. Incorrect. It's actually the opposite problem — the //decoder// becomes powerful enough to ignore the latent code entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The learning rate is too high">><<replace "#vae-q4">>B. Incorrect. While high learning rates can cause training issues, posterior collapse specifically occurs when the decoder ignores latent codes and the KL term drives the posterior to the prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The decoder ignores the latent code and the posterior matches the prior">><<replace "#vae-q4">>C. Correct! When the decoder is expressive enough to model the data without latent information, the KL term pushes $q(z|x)$ to match $p(z)$, making the latent space uninformative.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The latent space has too many dimensions">><<replace "#vae-q4">>D. Incorrect. While excess dimensions can be unused, posterior collapse is fundamentally about the decoder ignoring latent codes, not about dimensionality.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q5">''5. Why do VAEs tend to produce blurry images?''
+<<button "A. The latent space is too small">><<replace "#vae-q5">>A. Incorrect. Blurriness persists even with large latent spaces. The fundamental cause is the Gaussian likelihood assumption in the decoder, which averages over plausible outputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The Gaussian decoder averages over plausible reconstructions">><<replace "#vae-q5">>B. Correct! The pixel-wise Gaussian likelihood forces the decoder to output the mean of all plausible reconstructions, producing blurry "hedged" outputs rather than sharp single samples.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The KL divergence is too large">><<replace "#vae-q5">>C. Incorrect. High KL divergence would mean the latent space is not well-regularized, but this is not the main cause of blurriness.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The encoder discards too much information">><<replace "#vae-q5">>D. Incorrect. While information loss contributes, the primary cause is the decoder's likelihood function averaging over multiple valid outputs.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q6">''6. What does Beta-VAE modify compared to a standard VAE?''
+<<button "A. It uses a different prior distribution">><<replace "#vae-q6">>A. Incorrect. Beta-VAE keeps the standard Gaussian prior. It modifies the //weight// of the KL divergence term in the loss function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It weights the KL divergence term by a factor beta">><<replace "#vae-q6">>B. Correct! Beta-VAE uses $\mathcal{L} = \text{Reconstruction} - \beta \cdot D_{KL}$. Setting $\beta > 1$ encourages disentangled representations where individual latent dimensions capture independent factors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It replaces the encoder with a normalizing flow">><<replace "#vae-q6">>C. Incorrect. Normalizing flows can be used to improve VAE posteriors, but that's a different extension. Beta-VAE simply reweights the KL term.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It adds a discriminator network">><<replace "#vae-q6">>D. Incorrect. Adding a discriminator creates a VAE-GAN hybrid. Beta-VAE only adjusts the KL weight hyperparameter.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q7">''7. How does VQ-VAE differ from a standard VAE?''
+<<button "A. It uses a deeper encoder">><<replace "#vae-q7">>A. Incorrect. Depth is not the key difference. VQ-VAE fundamentally changes the latent representation from continuous to discrete.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It uses adversarial training">><<replace "#vae-q7">>B. Incorrect. VQ-VAE does not use adversarial training. Its key innovation is replacing continuous latent variables with discrete codebook vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It uses a discrete codebook instead of continuous latent variables">><<replace "#vae-q7">>C. Correct! VQ-VAE maps encoder outputs to the nearest vector in a learned codebook, producing discrete latent representations. This enables sharper outputs and has been highly successful in audio and image generation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It removes the KL divergence term entirely">><<replace "#vae-q7">>D. Incorrect. While VQ-VAE doesn't use KL divergence in the standard continuous sense, the key innovation is the discrete codebook, not simply removing a loss term.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="vae-q8">''8. What is the relationship between ELBO and the true log-likelihood?''
+<<button "A. ELBO equals the true log-likelihood">><<replace "#vae-q8">>A. Incorrect. ELBO is a //lower bound// on the log-likelihood. They are equal only when the approximate posterior perfectly matches the true posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. ELBO is an upper bound on the log-likelihood">><<replace "#vae-q8">>B. Incorrect. ELBO is a //lower// bound, not an upper bound. The true log-likelihood is always greater than or equal to the ELBO.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. ELBO is a lower bound, with the gap equal to KL between approximate and true posterior">><<replace "#vae-q8">>C. Correct! $\log p(x) = \text{ELBO} + D_{KL}(q_\phi(z|x) \| p_\theta(z|x))$. Since KL divergence is non-negative, ELBO $\leq \log p(x)$. A better approximate posterior tightens this bound.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They are unrelated quantities">><<replace "#vae-q8">>D. Incorrect. They are directly related — ELBO is derived as a tractable lower bound on the intractable log-likelihood $\log p(x)$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

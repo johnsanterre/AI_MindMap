@@ -1,0 +1,131 @@
+<<include "Header">>
+! Classifier-Free Guidance
+<img src="assets/classifier_free_guidance.svg" alt="Classifier-free guidance diagram showing interpolation between conditional and unconditional score estimates with guidance scale" style="max-width:100%;margin:1em 0;">
+
+Imagine you're giving directions to someone painting a landscape. If you say nothing, they'll paint something generic — maybe nice, maybe not what you wanted. If you shout every instruction with extreme emphasis, the painting becomes hyper-literal but loses all artistic subtlety. ''Classifier-free guidance'' (CFG) is the volume knob between those extremes: it lets you control how strongly a <<link "Diffusion Models" "Diffusion Models">><</link>> listens to your text prompt by blending the "paint whatever" signal with the "paint exactly this" signal. Turn the knob up for sharper, more prompt-faithful images; turn it down for more diverse, surprising results.
+
+!! The Core Insight
+
+In a conditional diffusion model, we want to sample from $p(x|c)$ — the distribution of images $x$ given a conditioning signal $c$ (e.g., a text prompt). Using <<link "Bayes Theorem" "Bayes Theorem">><</link>>, the score of this conditional distribution decomposes as:
+
+$$\nabla_x \log p(x|c) = \nabla_x \log p(x) + \nabla_x \log p(c|x)$$
+
+The first term is the ''unconditional score'' — the gradient that moves noisy images toward any plausible image. The second term is the ''classifier gradient'' — the direction that makes the image more consistent with condition $c$. Early work (Dhariwal & Nichol, 2021) used a separately trained classifier to provide this second term. ''Classifier-free guidance'' eliminates the separate classifier entirely: a single diffusion model learns both the conditional and unconditional scores by randomly dropping the conditioning signal during training. At inference time, the two scores are combined with an adjustable weight.
+
+!! How the Guidance Scale Controls Generation
+
+The guided score estimate is:
+
+$$\tilde{s}(x_t, c) = s_\theta(x_t, \varnothing) + w \cdot \bigl(s_\theta(x_t, c) - s_\theta(x_t, \varnothing)\bigr)$$
+
+where $s_\theta(x_t, c)$ is the conditional score, $s_\theta(x_t, \varnothing)$ is the unconditional score (conditioning dropped), and $w$ is the ''guidance scale''. This simplifies to:
+
+$$\tilde{s}(x_t, c) = (1 - w)\,s_\theta(x_t, \varnothing) + w\,s_\theta(x_t, c)$$
+
+When $w = 0$: purely unconditional generation — the prompt is ignored. When $w = 1$: standard conditional sampling — the model follows the prompt normally. When $w > 1$: the model ''extrapolates'' beyond normal conditioning, amplifying features associated with the prompt at the cost of diversity. Typical values in practice range from $w = 3$ to $w = 15$, depending on the application.
+
+!! What the Math Is Actually Doing
+
+To understand why $w > 1$ works, note that the guided score can be rewritten as:
+
+$$\tilde{s}(x_t, c) = \nabla_{x_t} \log p(x_t) + w \cdot \nabla_{x_t} \log p(c|x_t)$$
+
+Compared to the true conditional score $\nabla_{x_t} \log p(x_t|c)$, the classifier gradient $\nabla_{x_t} \log p(c|x_t)$ is scaled by $w$ instead of $1$. This corresponds to sampling from a ''sharpened'' distribution proportional to:
+
+$$\tilde{p}(x|c) \propto p(x) \cdot p(c|x)^w$$
+
+When $w > 1$, this distribution concentrates more mass on images that a classifier would assign high <<link "Conditional Probability" "Conditional Probability">><</link>> $p(c|x)$. The effect is analogous to lowering the temperature in a Boltzmann distribution — modes sharpen, diversity shrinks.
+
+During training, the model learns $s_\theta(x_t, c)$ with a standard <<link "Score Matching" "Score Matching">><</link>> denoising objective. The unconditional score is obtained by replacing $c$ with a null token $\varnothing$ for some fraction of training examples (typically 10-20%). This dropout schedule teaches the same network both conditional and unconditional generation. At inference, two forward passes per denoising step are required — one with $c$, one with $\varnothing$ — and the results are linearly combined.
+
+!! Practical Considerations and Extensions
+
+''Negative prompts:'' Instead of using $\varnothing$ as the unconditional input, practitioners can substitute a ''negative prompt'' $c^{-}$. The guided score becomes $s_\theta(x_t, c^{-}) + w \cdot (s_\theta(x_t, c) - s_\theta(x_t, c^{-}))$, which steers generation away from $c^{-}$ while toward $c$. This is widely used in Stable Diffusion workflows.
+
+''Dynamic guidance:'' Some schedulers vary $w$ across denoising steps — high guidance early (for global structure) and lower guidance later (for fine details and texture diversity).
+
+''CFG in latent space:'' Models like Stable Diffusion and DALL-E 2 apply classifier-free guidance in a compressed latent space rather than pixel space. The <<link "CLIP" "CLIP">><</link>> text encoder provides the conditioning signal $c$, and guidance operates on the latent diffusion process.
+
+''Classifier-free guidance rescale:'' High guidance scales can cause color saturation artifacts. Techniques like ''dynamic thresholding'' (Imagen) and ''CFG rescale'' clamp or renormalize the guided prediction to prevent pixel values from drifting outside valid ranges.
+
+!! When Classifier-Free Guidance Breaks Down
+
+''Oversaturation and artifacts:'' When $w$ is too high, the sharpened distribution $p(c|x)^w$ becomes extremely peaked. Generated images develop blown-out colors, unnatural textures, and repetitive patterns. The model effectively hallucinates features it associates with the prompt beyond what is physically plausible.
+
+''Loss of diversity:'' High guidance collapses the output distribution toward a narrow set of "canonical" images matching the prompt. For creative applications requiring variety — concept art, brainstorming, data augmentation — excessive guidance is counterproductive. The quality-diversity tradeoff is fundamental and cannot be eliminated.
+
+''Doubled compute cost:'' Every denoising step requires two full model evaluations (conditional + unconditional). For large models with hundreds of denoising steps, this doubles inference time. Distillation techniques and single-step guidance approximations are active areas of research aimed at mitigating this cost.
+
+!! Technical Details
+
+''Original paper:'' Ho & Salimans 2022, "Classifier-Free Diffusion Guidance." The idea was first presented at a NeurIPS 2021 workshop.
+
+''Classifier guidance predecessor:'' Dhariwal & Nichol 2021, "Diffusion Models Beat GANs on Image Synthesis." Used a separately trained classifier's gradient to guide sampling — effective but required an extra model and was limited to class-conditional generation.
+
+''Implicit classifier interpretation:'' The difference $s_\theta(x_t, c) - s_\theta(x_t, \varnothing)$ is an ''implicit classifier gradient'' $\nabla_{x_t} \log p_\theta(c|x_t)$. The diffusion model itself contains a classifier without ever being trained as one — a consequence of learning both conditional and unconditional distributions.
+
+''Conditioning dropout rate:'' The fraction of training examples where $c$ is replaced by $\varnothing$ is a hyperparameter. Too low (< 5%) and the unconditional score is poorly learned; too high (> 30%) and conditional quality degrades. The sweet spot is typically 10-20%.
+
+''FID vs. CLIP score tradeoff:'' Increasing $w$ improves CLIP score (prompt alignment) but worsens FID (image quality/diversity). The Pareto frontier between these metrics defines the practical operating range for a given model.
+
+''Connection to temperature scaling:'' CFG with scale $w$ on a class-conditional model is equivalent to sampling from $p(x|c)$ at temperature $1/w$ in the classifier logits — a direct bridge to the temperature parameter in language model sampling.
+
+!! Quiz
+
+<span id="cfg-q1">''1. What does classifier-free guidance eliminate compared to classifier guidance?''
+
+<<button "A. The diffusion model itself">><<replace "#cfg-q1">>A. The diffusion model — No. The diffusion model is still required; it is the classifier that is removed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A separately trained classifier used to compute the conditioning gradient">><<replace "#cfg-q1">>B. A separate classifier — Correct. CFG trains a single model to provide both conditional and unconditional scores, eliminating the need for an external classifier.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The text encoder">><<replace "#cfg-q1">>C. The text encoder — No. A text encoder (e.g., CLIP) is still used to produce the conditioning signal c.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The noise schedule">><<replace "#cfg-q1">>D. The noise schedule — No. The noise schedule is part of the diffusion process and is unrelated to guidance method.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q2">''2. How does the model learn the unconditional score in classifier-free guidance?''
+
+<<button "A. By training a separate unconditional model">><<replace "#cfg-q2">>A. Separate model — No. The same model handles both; that is the key insight of CFG.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. By randomly dropping the conditioning signal during training (replacing c with a null token)">><<replace "#cfg-q2">>B. Conditioning dropout — Correct. A fraction of training examples have their conditioning replaced with a null token, teaching the model unconditional generation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. By fine-tuning a pretrained conditional model with the conditioning removed">><<replace "#cfg-q2">>C. Fine-tuning — No. Both modes are learned jointly during training, not sequentially.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. By computing the mean of all conditional scores">><<replace "#cfg-q2">>D. Mean of conditional scores — No. The unconditional score is learned directly via conditioning dropout.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q3">''3. What happens when the guidance scale w = 1?''
+
+<<button "A. Purely unconditional generation">><<replace "#cfg-q3">>A. Unconditional — No. That occurs when w = 0.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The model generates random noise">><<replace "#cfg-q3">>B. Random noise — No. w = 1 produces valid images.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Standard conditional sampling without amplification">><<replace "#cfg-q3">>C. Standard conditional — Correct. At w = 1, the guided score equals the conditional score exactly, with no extrapolation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Maximum prompt adherence">><<replace "#cfg-q3">>D. Maximum adherence — No. Higher values of w (e.g., 7.5) produce stronger prompt adherence.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q4">''4. The guided score with w > 1 corresponds to sampling from which modified distribution?''
+
+<<button "A. p(x) / p(c|x)">><<replace "#cfg-q4">>A. p(x) / p(c|x) — No. This would suppress conditioning rather than amplify it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. p(x) * p(c|x)^w, a sharpened conditional distribution">><<replace "#cfg-q4">>B. p(x) * p(c|x)^w — Correct. The guidance scale w exponentiates the classifier likelihood, concentrating mass on high-confidence samples.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. p(x|c) with temperature w">><<replace "#cfg-q4">>C. Temperature w — Close but not precise. The temperature analogy applies to the classifier logits, not the full conditional.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A uniform distribution weighted by the prompt">><<replace "#cfg-q4">>D. Uniform — No. The base distribution is p(x), not uniform.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q5">''5. What is a negative prompt in the context of CFG?''
+
+<<button "A. A prompt with negative sentiment words">><<replace "#cfg-q5">>A. Negative sentiment — No. The term refers to replacing the null token with a specific prompt to steer away from.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A prompt used in place of the null token to steer generation away from undesired content">><<replace "#cfg-q5">>B. Replacing null token — Correct. The unconditional score is replaced with a score conditioned on the negative prompt, pushing generation away from it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A prompt that reduces the guidance scale automatically">><<replace "#cfg-q5">>C. Reduces guidance — No. Negative prompts do not change w; they change what the model steers away from.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A second forward pass with inverted pixel values">><<replace "#cfg-q5">>D. Inverted pixels — No. Negative prompts operate on the text conditioning, not pixel space.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q6">''6. Why does classifier-free guidance double the computational cost per denoising step?''
+
+<<button "A. The model must be run at double precision">><<replace "#cfg-q6">>A. Double precision — No. The cost increase is from two forward passes, not precision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Two forward passes are needed: one conditional, one unconditional">><<replace "#cfg-q6">>B. Two forward passes — Correct. The guided score requires evaluating s(x_t, c) and s(x_t, null) separately each step.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The guidance scale is computed via gradient descent">><<replace "#cfg-q6">>C. Gradient descent for w — No. The guidance scale w is a fixed hyperparameter, not optimized at inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The model size doubles when conditioning is added">><<replace "#cfg-q6">>D. Model size — No. The same model handles both passes.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q7">''7. What is the typical recommended conditioning dropout rate during training?''
+
+<<button "A. 50% of examples">><<replace "#cfg-q7">>A. 50% — No. This is too high and would degrade conditional generation quality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. 0% — unconditional learning is handled by a separate loss">><<replace "#cfg-q7">>B. 0% — No. Some dropout is essential for learning the unconditional score.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. 10-20% of examples">><<replace "#cfg-q7">>C. 10-20% — Correct. This range balances learning quality for both conditional and unconditional modes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. 90% of examples">><<replace "#cfg-q7">>D. 90% — No. This would starve the model of conditional training signal.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="cfg-q8">''8. What practical artifact commonly appears when the guidance scale is set too high?''
+
+<<button "A. Images become blurry and low-resolution">><<replace "#cfg-q8">>A. Blurry — No. High guidance tends to produce overly sharp, saturated images, not blurry ones.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Oversaturated colors, unnatural textures, and repetitive patterns">><<replace "#cfg-q8">>B. Oversaturation and artifacts — Correct. The sharpened distribution pushes pixel values to extremes, causing color blowout and pattern repetition.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The model outputs pure noise">><<replace "#cfg-q8">>C. Pure noise — No. Even high guidance still produces recognizable images, just with artifacts.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The text prompt is ignored entirely">><<replace "#cfg-q8">>D. Prompt ignored — No. High guidance amplifies the prompt, it does not ignore it.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

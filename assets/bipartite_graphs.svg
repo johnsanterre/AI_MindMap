@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5C3D1E" font-weight="bold">Bipartite Graph with Maximum Matching</text>
+
+  <!-- Labels for vertex sets -->
+  <text x="200" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#7C2530" font-style="italic">Set U</text>
+  <text x="600" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" font-style="italic">Set V</text>
+
+  <!-- Unmatched edges (tan, drawn first so matched edges overlay) -->
+  <!-- u1-v2 -->
+  <line x1="200" y1="110" x2="600" y2="170" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- u2-v1 -->
+  <line x1="200" y1="170" x2="600" y2="110" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- u2-v3 -->
+  <line x1="200" y1="170" x2="600" y2="230" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- u3-v2 -->
+  <line x1="200" y1="230" x2="600" y2="170" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- u4-v3 -->
+  <line x1="200" y1="290" x2="600" y2="230" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- u4-v5 -->
+  <line x1="200" y1="290" x2="600" y2="350" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- u5-v4 -->
+  <line x1="200" y1="350" x2="600" y2="290" stroke="#C4A87A" stroke-width="1.5" stroke-opacity="0.6"/>
+
+  <!-- Maximum matching edges (bold brown) -->
+  <!-- u1-v1 -->
+  <line x1="200" y1="110" x2="600" y2="110" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <!-- u2-v2 -->
+  <line x1="200" y1="170" x2="600" y2="170" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <!-- u3-v3 -->
+  <line x1="200" y1="230" x2="600" y2="230" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <!-- u4-v4 -->
+  <line x1="200" y1="290" x2="600" y2="290" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <!-- u5-v5 -->
+  <line x1="200" y1="350" x2="600" y2="350" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Set U vertices (red) -->
+  <circle cx="200" cy="110" r="18" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="200" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">u1</text>
+
+  <circle cx="200" cy="170" r="18" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="200" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">u2</text>
+
+  <circle cx="200" cy="230" r="18" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="200" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">u3</text>
+
+  <circle cx="200" cy="290" r="18" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="200" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">u4</text>
+
+  <circle cx="200" cy="350" r="18" fill="#7C2530" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="200" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">u5</text>
+
+  <!-- Set V vertices (navy) -->
+  <circle cx="600" cy="110" r="18" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="600" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">v1</text>
+
+  <circle cx="600" cy="170" r="18" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="600" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">v2</text>
+
+  <circle cx="600" cy="230" r="18" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="600" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">v3</text>
+
+  <circle cx="600" cy="290" r="18" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="600" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">v4</text>
+
+  <circle cx="600" cy="350" r="18" fill="#2D5A8E" stroke="#FDFAF4" stroke-width="2"/>
+  <text x="600" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#FDFAF4" font-weight="bold">v5</text>
+
+  <!-- Legend -->
+  <line x1="330" y1="385" x2="370" y2="385" stroke="#5C3D1E" stroke-width="4" stroke-linecap="round"/>
+  <text x="378" y="389" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Maximum Matching</text>
+  <line x1="500" y1="385" x2="540" y2="385" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="548" y="389" font-family="Georgia, serif" font-size="12" fill="#C4A87A">Unmatched Edge</text>
+</svg>

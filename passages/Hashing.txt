@@ -1,0 +1,133 @@
+<<include "Header">>
+
+! Hashing
+
+<img src="assets/hashing.svg" alt="Hashing" width="800">
+
+Imagine you run a library with a million books but no catalog. Every time someone asks for a title, you walk every aisle until you find it — agonizingly slow. Now imagine you invent a rule: take the first letter of the title, convert it to a number, and that number tells you exactly which shelf to check. You have just invented a crude ''hash function''. Real hash functions are far more sophisticated, but the principle is the same: transform an input of arbitrary size into a fixed-size address so you can jump straight to the right location instead of searching. Hashing is one of the most fundamental ideas in computer science, underpinning everything from Python dictionaries and database indexes to [[RSA Cryptography|RSA Cryptography]] and blockchain verification.
+
+!! The Core Insight
+
+A hash function takes any input — a string, a file, a number of any size — and produces a fixed-length output, called the ''hash value'' or ''digest''. The magic lies in three properties. First, it is ''deterministic'': the same input always yields the same output. Second, it is ''efficiently computable'': producing the hash takes time proportional to the input length, not the size of the output space. Third, a good hash function distributes outputs ''uniformly'' across the available range, minimizing the chance that two different inputs land in the same slot.
+
+This uniformity is what makes hash-based data structures fast. A ''hash table'' uses the hash value as an index into an array of buckets. Instead of searching through $n$ items one by one ($O(n)$ time), you compute a hash, jump to the right bucket, and find your item in $O(1)$ average time. The price you pay is that two different keys can map to the same bucket — a ''collision'' — and you need a strategy to handle it.
+
+!! Hash Functions and Collision Resolution
+
+The simplest hash function is ''division hashing'': $h(k) = k \bmod m$, where $m$ is the table size. This works, but the choice of $m$ matters enormously. If $m$ is a power of 2, the hash only depends on the lowest-order bits of $k$, creating patterns. Choosing $m$ as a prime not close to any power of 2 helps distribute keys more evenly — a practical consequence of [[Modular Arithmetic]].
+
+''Multiplication hashing'' avoids the sensitivity to $m$ by multiplying $k$ by an irrational constant (Knuth recommends $A = (\sqrt{5} - 1)/2 \approx 0.618$), extracting the fractional part, and scaling: $h(k) = \lfloor m \cdot (kA \bmod 1) \rfloor$. This spreads keys more uniformly regardless of $m$.
+
+When collisions occur, there are two main strategies. ''Chaining'' stores all items that hash to the same bucket in a linked list (or tree). Lookup walks the chain — $O(1)$ on average if the load factor $\alpha = n/m$ stays low. ''Open addressing'' finds an alternative slot within the table itself. ''Linear probing'' checks the next slot, then the next, and so on. ''Quadratic probing'' uses a quadratic sequence of offsets. ''Double hashing'' uses a second hash function to determine the probe step. Open addressing avoids pointer overhead but degrades sharply as the table fills.
+
+!! What the Math Is Actually Doing
+
+A hash function $h: U \to \{0, 1, \dots, m-1\}$ maps a large universe $U$ of possible keys to $m$ table slots. Since $|U| \gg m$, the [[Pigeonhole Principle]] guarantees that collisions are inevitable — multiple keys //must// share the same hash value.
+
+Under the ''simple uniform hashing assumption'' (SUHA), each key is equally likely to hash to any of the $m$ slots, independently. The expected number of keys per bucket is $\alpha = n/m$. For chaining, the expected time for a successful search is:
+
+$$T_{\text{success}} = 1 + \frac{\alpha}{2}$$
+
+and for an unsuccessful search:
+
+$$T_{\text{fail}} = 1 + \alpha$$
+
+Both are $O(1)$ when $\alpha$ is bounded by a constant — which you ensure by resizing the table when $\alpha$ exceeds a threshold.
+
+For open addressing with linear probing, Knuth's analysis gives the expected number of probes for an unsuccessful search as:
+
+$$E[\text{probes}] \approx \frac{1}{2}\left(1 + \frac{1}{(1-\alpha)^2}\right)$$
+
+This blows up as $\alpha \to 1$: at 90% full, you expect roughly 50 probes. This is why open-addressing tables resize aggressively.
+
+''Cryptographic hash functions'' (SHA-256, BLAKE3) add stronger requirements: ''preimage resistance'' (given $h(x)$, finding $x$ is computationally infeasible), ''second preimage resistance'' (given $x$, finding $x' \neq x$ with $h(x') = h(x)$ is infeasible), and ''collision resistance'' (finding //any// pair with the same hash is infeasible). The birthday paradox from [[Pigeonhole Principle]] combinatorics means that for a hash with $b$-bit output, a collision can be found in roughly $O(2^{b/2})$ trials — which is why SHA-256's 256-bit output requires $\sim 2^{128}$ work to break, placing it far beyond brute-force reach.
+
+!! Hashing in Machine Learning and Practice
+
+''Feature hashing'' (the "hashing trick") is widely used in ML when the feature space is enormous. Instead of maintaining a vocabulary mapping every token to a column index, you hash each feature name to an index in a fixed-size vector: $\phi_j(x) = \sum_{i: h(f_i) = j} \xi(f_i) \cdot x_i$, where $\xi$ is a sign hash that helps cancel collision bias in expectation. This technique powers large-scale text classification (Vowpal Wabbit) and recommendation systems where feature vocabularies reach billions.
+
+''Locality-Sensitive Hashing'' (LSH) deliberately violates the uniform-distribution goal. It designs hash functions so that similar items are //more likely// to collide. For cosine similarity, random hyperplane hashing projects vectors onto random directions and records the sign. Two vectors that are close in angle will agree on most hyperplane signs, landing in the same bucket. LSH powers approximate nearest neighbor search in high-dimensional spaces — critical for retrieval-augmented generation, image search, and deduplication.
+
+''Bloom filters'' use multiple hash functions to compactly represent a set. Insert an element by setting bits at $k$ hash positions; query by checking whether all $k$ bits are set. False positives are possible (all bits set by coincidence) but false negatives are not. With $m$ bits, $n$ elements, and $k = (m/n) \ln 2$ hash functions, the false positive rate is approximately $(1 - e^{-kn/m})^k$. Bloom filters are used in database systems, network routers, and spell checkers where memory is scarce.
+
+!! When Hashing Breaks Down
+
+* ''Adversarial collisions and hash flooding.'' If an attacker knows your hash function, they can craft inputs that all hash to the same bucket, turning $O(1)$ lookups into $O(n)$ — a denial-of-service attack. Web frameworks have been hit by this: an attacker sends thousands of POST parameters designed to collide. The fix is ''universal hashing'' or ''SipHash'' — keyed hash functions where the key is randomized at startup, so the attacker cannot predict collisions.
+
+* ''Poor load factor management.'' When a hash table grows too full without resizing, performance collapses. For open addressing, crossing $\alpha = 0.75$ begins a steep degradation curve. For chaining, long chains defeat the purpose of hashing. Amortized doubling (resize when $\alpha$ exceeds a threshold, rehashing all entries) maintains $O(1)$ average time but introduces occasional $O(n)$ resize pauses — problematic in real-time systems. Consistent hashing and incremental resizing address this for distributed systems.
+
+* ''Hash function weakness in cryptographic contexts.'' Using a non-cryptographic hash (CRC32, MurmurHash) where security is needed is dangerous — these functions are fast but trivially invertible. MD5 and SHA-1, once considered secure, now have known collision attacks. Choosing the wrong hash function for the context — speed-optimized for hash tables vs. security-hardened for digital signatures and password storage — can lead to catastrophic vulnerabilities.
+
+!! Technical Details
+
+''Universal hashing'' selects $h$ randomly from a family $\mathcal{H}$ such that for any two distinct keys $x \neq y$, $\Pr_{h \in \mathcal{H}}[h(x) = h(y)] \leq 1/m$. The Carter-Wegman family $h_{a,b}(x) = ((ax + b) \bmod p) \bmod m$ (where $p$ is prime, $a \neq 0$) achieves this and is fast to compute.
+
+''Perfect hashing'' achieves $O(1)$ worst-case lookup for static key sets. The FKS (Fredman-Komlós-Szemerédi) scheme uses two levels: the first level hashes into $m$ buckets, and each bucket uses a second-level hash table sized as the square of the number of keys in that bucket. Total space remains $O(n)$.
+
+''Consistent hashing'' (Karger et al., 1997) maps both keys and servers to a ring using a hash function. Each key is assigned to the nearest server clockwise. When a server is added or removed, only $O(n/m)$ keys need to be remapped — critical for distributed caches (Memcached, Amazon DynamoDB).
+
+''Cuckoo hashing'' uses two hash functions and two tables. Each key has exactly two candidate positions. On collision, the existing key is "kicked out" to its alternative position, potentially triggering a chain of evictions. Lookup is always $O(1)$ worst-case (check two positions). Insertion is $O(1)$ amortized but can require table rebuilding if eviction cycles occur.
+
+''Robin Hood hashing'' is a variant of open addressing where, during insertion, a new key can displace an existing key that is closer to its ideal position. This equalizes probe distances across all keys, dramatically reducing variance and worst-case lookup time.
+
+Password storage uses ''slow'' hash functions by design. ''bcrypt'', ''scrypt'', and ''Argon2'' are deliberately expensive to compute, making brute-force attacks impractical. Argon2 additionally requires large amounts of memory, defending against GPU-based attacks.
+
+!! Quiz
+
+<div id="q1">''1. What is the average-case time complexity of a hash table lookup with a good hash function?''
+<<button "A) O(n)">><<replace "#q1">>That's the worst case when all keys collide into one bucket, not the average case with a good hash function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) O(log n)">><<replace "#q1">>That's the complexity of binary search in a sorted structure. Hash tables do better on average.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) O(1)">><<replace "#q1">>Correct! With a good hash function and bounded load factor, hash table lookups take constant time on average.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) O(n log n)">><<replace "#q1">>That's the complexity of comparison-based sorting. Hash table lookup is much faster.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. Why does the Pigeonhole Principle guarantee hash collisions?''
+<<button "A) Because hash functions are random">><<replace "#q2">>Hash functions are deterministic, not random. The Pigeonhole Principle applies regardless of randomness.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because the universe of possible keys is larger than the number of table slots">><<replace "#q2">>Correct! If $|U| > m$, then by the Pigeonhole Principle, at least two keys must map to the same slot.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because computers use finite precision arithmetic">><<replace "#q2">>Finite precision is a real issue in computing, but it's not why hash collisions are inevitable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because hash functions are designed to produce collisions">><<replace "#q2">>Hash functions are designed to //minimize// collisions, not produce them. Collisions are an unavoidable consequence of compression.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. In chaining-based collision resolution, what is the expected search time when the load factor $\alpha = 2$?''
+<<button "A) O(1)">><<replace "#q3">>Close — chaining is still $O(1)$ for constant $\alpha$, but the expected time for a successful search is $1 + \alpha/2 = 2$, not just 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) O(2)">><<replace "#q3">>Correct! The expected time for a successful search is $1 + \alpha/2 = 1 + 1 = 2$. This is still $O(1)$ since $\alpha$ is a constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) O(n)">><<replace "#q3">>This would only happen if all elements ended up in the same bucket, which is extremely unlikely with a good hash function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) O(log n)">><<replace "#q3">>Logarithmic time applies to tree-based structures, not hash table chaining.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What is the main advantage of Locality-Sensitive Hashing over standard hashing?''
+<<button "A) It eliminates all collisions">><<replace "#q4">>LSH actually //encourages// collisions between similar items. Eliminating collisions would defeat its purpose.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It uses less memory">><<replace "#q4">>Memory savings aren't the primary goal of LSH. Its advantage is finding similar items efficiently.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Similar items are more likely to hash to the same bucket">><<replace "#q4">>Correct! LSH deliberately designs hash functions so that nearby points in the original space collide with high probability, enabling approximate nearest-neighbor search.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It runs in O(1) worst-case time">><<replace "#q4">>LSH provides approximate answers, not guaranteed constant-time exact answers.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What property distinguishes a cryptographic hash function from a non-cryptographic one?''
+<<button "A) Cryptographic hashes are faster to compute">><<replace "#q5">>The opposite is often true — cryptographic hashes are typically slower because security requires more computation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Cryptographic hashes produce longer outputs">><<replace "#q5">>While cryptographic hashes often have longer outputs, the defining distinction is the security properties (preimage resistance, collision resistance).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Preimage resistance — given a hash output, finding any valid input is computationally infeasible">><<replace "#q5">>Correct! Cryptographic hash functions must be one-way: knowing $h(x)$ shouldn't help you find $x$ or any $x'$ with the same hash. Non-cryptographic hashes like MurmurHash don't offer this guarantee.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Cryptographic hashes never have collisions">><<replace "#q5">>All hash functions have collisions (Pigeonhole Principle). Cryptographic hashes make collisions computationally infeasible to //find//, not nonexistent.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. A Bloom filter can produce:''
+<<button "A) False positives but not false negatives">><<replace "#q6">>Correct! A Bloom filter may say an element is in the set when it isn't (false positive), but if it says an element is //not// in the set, that answer is always correct (no false negatives).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) False negatives but not false positives">><<replace "#q6">>It's the other way around. If all $k$ bit positions are set, the element //might// be present; if any bit is unset, the element is definitely absent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Both false positives and false negatives">><<replace "#q6">>Bloom filters cannot produce false negatives. If an element was inserted, all its bit positions are set and will remain set.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Neither false positives nor false negatives">><<replace "#q6">>Bloom filters sacrifice exactness for space efficiency. They do produce false positives — that's the fundamental tradeoff.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. Why is linear probing vulnerable to "clustering"?''
+<<button "A) Because it uses a linked list for overflow">><<replace "#q7">>Linked lists are used in chaining, not linear probing. Linear probing searches within the table itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because consecutive occupied slots form runs that grow faster as they get larger">><<replace "#q7">>Correct! A cluster of size $k$ is hit with probability proportional to $k+1$, so large clusters attract more insertions, growing even larger. This is called ''primary clustering''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because it requires two hash functions">><<replace "#q7">>Double hashing uses two hash functions, not linear probing. Linear probing uses a single hash plus a step of 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because it cannot handle load factors above 0.5">><<replace "#q7">>Linear probing //can// handle higher load factors — it just becomes slow. The clustering problem exists at any load factor; it just worsens as the table fills.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. In consistent hashing, what happens when a server is removed from the ring?''
+<<button "A) All keys must be rehashed">><<replace "#q8">>That's what happens with standard hash tables when resizing. Consistent hashing avoids this.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Only the keys assigned to that server need to be redistributed">><<replace "#q8">>Correct! Only the keys that were mapped to the removed server move to the next server on the ring. All other key-server assignments remain unchanged — roughly $O(n/m)$ keys move.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The ring must be rebuilt from scratch">><<replace "#q8">>Consistent hashing's entire purpose is to avoid rebuilding. The ring structure is maintained and only local reassignment occurs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Keys are permanently lost">><<replace "#q8">>Keys are not lost — they are reassigned to the next available server on the ring.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

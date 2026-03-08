@@ -1,0 +1,146 @@
+<<include "Header">>
+! Martingale Theory
+<img src="assets/martingale_theory.svg" alt="Diagram showing a martingale trajectory with conditional expectation equal to current value, plus taxonomy of supermartingales, martingales, and submartingales" style="max-width:100%;margin:1em 0;">
+
+Imagine you're playing a perfectly fair coin-flip game — heads you win a dollar, tails you lose a dollar. After any sequence of flips, your //expected// future wealth is exactly what you have right now. No strategy, no matter how clever, can change this. A ''martingale'' is the mathematical formalization of this idea: a stochastic process where your best forecast of tomorrow's value, given everything you know today, is simply today's value. This deceptively simple property — $\mathbb{E}[X_{t+1} \mid \mathcal{F}_t] = X_t$ — turns out to be the backbone of convergence proofs across [[Stochastic Gradient Descent]], [[Multi-Armed Bandit]] algorithms, online learning, and much of modern [[Probability Theory]].
+
+!! The Core Insight
+
+A ''martingale'' is a sequence of random variables $X_0, X_1, X_2, \ldots$ adapted to a ''filtration'' $\{\mathcal{F}_t\}$ (a growing sequence of information sets) satisfying two conditions: (1) $\mathbb{E}[|X_t|] < \infty$ for all $t$, and (2) $\mathbb{E}[X_{t+1} \mid \mathcal{F}_t] = X_t$ almost surely. The filtration $\mathcal{F}_t$ represents everything you could possibly know at time $t$ — all past observations, all coin flips, all data seen so far.
+
+The key intuition: a martingale has ''no drift''. On average, it stays where it is. This doesn't mean it stays still — a random walk is a martingale with variance growing as $t$ — but it means no betting strategy can extract systematic profit. This is the mathematical content of the "efficient market hypothesis" and, more importantly for ML, the reason why SGD noise doesn't bias convergence.
+
+Links: [[Stochastic Processes]], [[Probability Theory]], [[Markov Chains]], [[Concentration Inequalities]]
+
+!! Supermartingales and Submartingales
+
+A ''supermartingale'' satisfies $\mathbb{E}[X_{t+1} \mid \mathcal{F}_t] \leq X_t$ — the process tends to decrease over time. Think of a gambler playing an unfavorable game: their expected wealth shrinks with each bet. Supermartingales are the workhorse of convergence proofs because if you can show that a loss function forms a supermartingale, it must converge.
+
+A ''submartingale'' satisfies $\mathbb{E}[X_{t+1} \mid \mathcal{F}_t] \geq X_t$ — the process tends to increase. If $X_t$ is a submartingale, then $-X_t$ is a supermartingale. The absolute value $|M_t|$ of any martingale $M_t$ is a submartingale (by Jensen's inequality), which is why ''Doob's maximal inequality'' applies to submartingales:
+
+$$P\left(\max_{0 \leq k \leq n} X_k \geq \lambda\right) \leq \frac{\mathbb{E}[X_n^+]}{\lambda}$$
+
+This inequality bounds the probability that a submartingale ever exceeds a threshold — crucial for bounding the worst-case behavior of learning algorithms.
+
+A useful construction: if $f$ is convex and $M_t$ is a martingale, then $f(M_t)$ is a submartingale (Jensen's inequality again). Taking $f(x) = x^2$ shows that $M_t^2$ is a submartingale whenever $M_t$ is a martingale — the squared process drifts upward, capturing the idea that martingale variance grows over time.
+
+!! What the Math Is Actually Doing
+
+''Doob's Optional Stopping Theorem'' says: if $M_t$ is a martingale and $\tau$ is a ''stopping time'' (a random time determined by information available up to that time), then under appropriate boundedness conditions:
+
+$$\mathbb{E}[M_\tau] = \mathbb{E}[M_0]$$
+
+This is profound — you can stop watching the process at a data-dependent time and the expectation is still the initial value. The conditions matter: either $\tau$ must be bounded, or the martingale must be uniformly integrable, or $|M_t|$ must be dominated by an integrable random variable. Violating these conditions gives paradoxes (the "doubling strategy" in gambling).
+
+''Doob's Martingale Convergence Theorem:'' If $M_t$ is a supermartingale bounded in $L^1$ (i.e., $\sup_t \mathbb{E}[|M_t|] < \infty$), then $M_t \to M_\infty$ almost surely. The limit exists and is finite. This is why bounded supermartingales are so useful in optimization — if the loss is non-negative and forms a supermartingale, it //must// converge.
+
+''Azuma-Hoeffding Inequality:'' If $M_t$ is a martingale with bounded differences $|M_t - M_{t-1}| \leq c_t$, then:
+
+$$P(|M_n - M_0| \geq \epsilon) \leq 2\exp\left(-\frac{\epsilon^2}{2\sum_{k=1}^n c_k^2}\right)$$
+
+This is a ''concentration inequality'' for martingales — the analogue of Hoeffding's bound but for //dependent// random variables. It works because the martingale property ensures the increments are uncorrelated (even though they can be dependent). This is the main tool for proving high-probability convergence bounds in online learning and [[Multi-Armed Bandit]] theory.
+
+''Doob Decomposition:'' Any adapted integrable process $X_t$ can be uniquely decomposed as $X_t = M_t + A_t$ where $M_t$ is a martingale and $A_t$ is a ''predictable'' process (known at time $t-1$). This separates "noise" ($M_t$) from "signal" ($A_t$) — the fundamental decomposition underlying stochastic optimization analysis.
+
+!! Martingales in Machine Learning
+
+''SGD convergence:'' In [[Stochastic Gradient Descent]], the gradient noise $\xi_t = \nabla f_{i_t}(\theta_t) - \nabla F(\theta_t)$ satisfies $\mathbb{E}[\xi_t \mid \mathcal{F}_t] = 0$ — it is a ''martingale difference sequence''. The accumulated noise $\sum_{k=1}^t \eta_k \xi_k$ is therefore a martingale. Convergence proofs show that $F(\theta_t)$ forms an approximate supermartingale (up to learning-rate-dependent correction terms), so the Robbins-Siegmund theorem guarantees convergence when $\sum \eta_t = \infty$ and $\sum \eta_t^2 < \infty$.
+
+''Online learning regret:'' In online convex optimization, the regret $R_T = \sum_{t=1}^T \ell_t(x_t) - \min_x \sum_{t=1}^T \ell_t(x)$ can be analyzed by constructing a martingale from the sequence of losses. Azuma-Hoeffding gives high-probability regret bounds of $O(\sqrt{T \log(1/\delta)})$ — the extra $\sqrt{\log(1/\delta)}$ factor over the expected $O(\sqrt{T})$ bound is the price of concentration.
+
+''Bandit algorithms:'' In the [[Multi-Armed Bandit]] problem, the reward sequence from each arm forms a martingale (under the null hypothesis of equal means). Upper confidence bounds (UCB) use martingale concentration inequalities to construct confidence intervals that shrink as $O(\sqrt{\log t / n_a})$ where $n_a$ is the number of pulls of arm $a$. The entire explore-exploit framework rests on martingale tail bounds.
+
+''Stopping rules:'' Sequential hypothesis testing uses martingale methods — Wald's ''sequential probability ratio test'' (SPRT) constructs a likelihood ratio martingale under the null hypothesis. The optional stopping theorem shows why the test has exact type-I error control regardless of the (random) sample size. Modern A/B testing platforms use martingale-based "anytime valid" confidence sequences that maintain coverage at every stopping time, not just fixed sample sizes.
+
+''[[Monte Carlo Methods]]:'' Importance sampling estimators form martingales when properly normalized. Martingale theory explains why resampling in particle filters works — the particle weights form a positive martingale, and the effective sample size measures how far this martingale has drifted from uniformity.
+
+!! When Martingale Methods Break Down
+
+''Unbounded increments or heavy tails:'' Azuma-Hoeffding requires bounded differences $|M_t - M_{t-1}| \leq c_t$. When increments have heavy tails (common in deep learning where gradient norms can spike), the exponential concentration fails. You get polynomial tails instead: $P(|M_n| \geq \epsilon) \leq \text{Var}(M_n)/\epsilon^2$ (Chebyshev). Modern approaches use ''truncated martingales'' or ''Freedman's inequality'', which replaces the bounded-difference condition with a bound on the conditional variance — much tighter for heavy-tailed SGD.
+
+''Non-adaptive processes:'' Martingale theory requires a filtration — the sequence must be adapted to a growing information set. When you analyze an algorithm post-hoc using information from the //future// (e.g., selecting the best checkpoint after training), the martingale structure breaks. This is why ''data snooping'' and ''multiple testing'' destroy martingale-based guarantees. The fix is ''e-processes'' and ''testing by betting'' frameworks that maintain validity under arbitrary data-dependent stopping and selection.
+
+''Continuous-time complications:'' The discrete martingale convergence theorem has a continuous-time analogue, but it requires ''right-continuity'' of sample paths and the filtration must satisfy the "usual conditions" (completeness and right-continuity). In practice, when discretizing continuous-time martingales (e.g., for numerical SDE solvers in [[Stochastic Processes]]), discretization error can destroy the martingale property. The Euler-Maruyama scheme preserves it only approximately, and the error accumulates over long time horizons.
+
+!! Technical Details
+
+''Historical development:'' The term "martingale" comes from a class of betting strategies in 18th-century France. Paul Lévy (1934) introduced martingales as mathematical objects. Jean Ville (1939) formalized the definition and connected it to gambling theory. Joseph Doob (1953) developed the comprehensive theory — convergence theorems, optional stopping, decomposition — in his monograph //Stochastic Processes//.
+
+''Uniform integrability:'' A martingale $\{M_t\}$ is ''uniformly integrable'' (UI) if $\sup_t \mathbb{E}[|M_t| \cdot \mathbf{1}_{|M_t| > K}] \to 0$ as $K \to \infty$. UI martingales converge in $L^1$ (not just a.s.), and the optional stopping theorem holds without boundedness conditions. UI is the "right" condition for most theoretical applications but is hard to verify in practice.
+
+''Predictable quadratic variation:'' The ''predictable quadratic variation'' $\langle M \rangle_n = \sum_{k=1}^n \mathbb{E}[(M_k - M_{k-1})^2 \mid \mathcal{F}_{k-1}]$ measures the "expected accumulated variance." Freedman's inequality: for a martingale with $|M_k - M_{k-1}| \leq R$,
+
+$$P(|M_n| \geq \epsilon \text{ and } \langle M \rangle_n \leq \sigma^2) \leq 2\exp\left(-\frac{\epsilon^2}{2(\sigma^2 + R\epsilon/3)}\right)$$
+
+This is a Bernstein-type bound — tighter than Azuma-Hoeffding when variance is small.
+
+''Backwards martingales:'' A sequence $M_n$ with $\mathbb{E}[M_n \mid \mathcal{F}_{n+1}] = M_{n+1}$ (indexed backwards). These always converge — no boundedness conditions needed. The sample mean $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ is a backwards martingale, providing an elegant proof of the strong law of large numbers.
+
+''Connections:'' [[Markov Chains]] — a function $f$ of a Markov chain is a martingale iff $f$ is harmonic ($Pf = f$). [[Concentration Inequalities]] — martingale methods give the sharpest results for dependent sequences. Doob's $h$-transform connects martingales to conditioned [[Stochastic Processes]].
+
+!! Quiz
+
+<span id="mt-q1">''1. What defines a martingale?''
+
+<<button "A. E[X_{t+1}] = 0 for all t">><<replace "#mt-q1">>A. Zero expectation — No. A martingale can have any expected value; the condition is about //conditional// expectation given the past, not the unconditional mean.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. E[X_{t+1} | F_t] = X_t">><<replace "#mt-q1">>B. Conditional expectation equals current value — Correct. The "fair game" property: your best prediction of the future, given all current information, is simply the present value.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Var(X_t) is constant over time">><<replace "#mt-q1">>C. Constant variance — No. A random walk is a martingale with variance growing as $t$. Martingale says nothing about variance constancy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. X_t is always positive">><<replace "#mt-q1">>D. Always positive — No. A symmetric random walk on the integers is a martingale that takes negative values freely.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q2">''2. What does the Optional Stopping Theorem guarantee (under appropriate conditions)?''
+
+<<button "A. A stopped martingale has zero variance">><<replace "#mt-q2">>A. Zero variance — No. Stopping doesn't eliminate randomness; the stopped value $M_\tau$ is still random.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. E[M_tau] = E[M_0]">><<replace "#mt-q2">>B. $\mathbb{E}[M_\tau] = \mathbb{E}[M_0]$ — Correct. Under boundedness or uniform integrability conditions, the expected value at a stopping time equals the initial expected value.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The stopping time must be deterministic">><<replace "#mt-q2">>C. Deterministic stopping — No. The whole point is that $\tau$ can be random and data-dependent (a stopping //time//), yet the expectation is preserved.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The martingale must be bounded">><<replace "#mt-q2">>D. Must be bounded — No. Boundedness is one //sufficient// condition, but uniform integrability also works. The theorem holds under several different conditions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q3">''3. What is a supermartingale?''
+
+<<button "A. A martingale with E[X_{t+1} | F_t] >= X_t">><<replace "#mt-q3">>A. $\geq$ — No, that's a //sub//martingale. The naming is counterintuitive: "super" means the process tends to decrease.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A martingale with bounded increments">><<replace "#mt-q3">>B. Bounded increments — No. Bounded increments is a separate condition (used in Azuma-Hoeffding), not what defines a supermartingale.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A process with E[X_{t+1} | F_t] <= X_t">><<replace "#mt-q3">>C. $\mathbb{E}[X_{t+1} \mid \mathcal{F}_t] \leq X_t$ — Correct. The expected future value is at most the current value — the process has a downward drift. Loss functions in optimization are often supermartingales.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A martingale that converges to infinity">><<replace "#mt-q3">>D. Converges to infinity — No. In fact, non-negative supermartingales must converge to a finite limit (Doob's convergence theorem).<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q4">''4. Why is SGD gradient noise a martingale difference sequence?''
+
+<<button "A. Because gradient norms are bounded">><<replace "#mt-q4">>A. Bounded norms — No. Bounded norms would help with concentration, but the martingale difference property comes from the noise having zero conditional mean.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Because E[noise_t | F_t] = 0 — the stochastic gradient is an unbiased estimator">><<replace "#mt-q4">>B. Unbiased gradient — Correct. $\mathbb{E}[\nabla f_{i_t}(\theta_t) \mid \mathcal{F}_t] = \nabla F(\theta_t)$, so the noise $\xi_t = \nabla f_{i_t} - \nabla F$ has zero conditional mean, making it a martingale difference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Because the learning rate decreases over time">><<replace "#mt-q4">>C. Decreasing learning rate — No. The learning rate schedule affects convergence but doesn't create the martingale difference property; that comes from unbiasedness of the gradient estimator.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Because the loss function is convex">><<replace "#mt-q4">>D. Convexity — No. The martingale difference property holds for SGD on non-convex objectives too. Convexity helps with convergence analysis but isn't needed for the noise to be unbiased.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q5">''5. What does the Azuma-Hoeffding inequality bound?''
+
+<<button "A. The expected value of a martingale">><<replace "#mt-q5">>A. Expected value — No. The expected value is already known from the martingale property ($\mathbb{E}[M_n] = \mathbb{E}[M_0]$). Azuma-Hoeffding bounds the //deviation// from that expectation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The probability that a martingale with bounded differences deviates far from its initial value">><<replace "#mt-q5">>B. Deviation probability — Correct. $P(|M_n - M_0| \geq \epsilon) \leq 2\exp(-\epsilon^2 / 2\sum c_k^2)$. It gives exponential concentration despite the increments being dependent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The variance of the martingale at time n">><<replace "#mt-q5">>C. Variance — No. Azuma-Hoeffding gives tail probability bounds, not variance estimates. The variance appears indirectly through $\sum c_k^2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The convergence rate of the martingale">><<replace "#mt-q5">>D. Convergence rate — No. Azuma-Hoeffding is a concentration inequality, not a convergence rate result. The martingale may not converge at all (e.g., a random walk).<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q6">''6. What does Doob's convergence theorem require for a supermartingale to converge a.s.?''
+
+<<button "A. The increments must be independent">><<replace "#mt-q6">>A. Independent increments — No. The theorem works for dependent increments; independence is not required. The martingale/supermartingale property is sufficient.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The process must be non-negative or bounded in L^1">><<replace "#mt-q6">>B. Non-negative or $L^1$-bounded — Correct. If $\sup_t \mathbb{E}[|M_t|] < \infty$ (or more simply, if $M_t \geq 0$), the supermartingale converges almost surely to a finite limit.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The filtration must be finite">><<replace "#mt-q6">>C. Finite filtration — No. The theorem works for infinite time horizons; that's precisely its power.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The process must have Gaussian increments">><<replace "#mt-q6">>D. Gaussian increments — No. Doob's theorem is distribution-free — it works for any increment distribution satisfying the supermartingale condition.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q7">''7. In bandit algorithms, how do martingale concentration inequalities help?''
+
+<<button "A. They prove that all arms have equal reward">><<replace "#mt-q7">>A. Equal reward — No. The whole point of bandits is that arms have //different// rewards. Concentration inequalities help //discover// which arm is best.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. They construct confidence intervals around estimated arm means that shrink with more pulls">><<replace "#mt-q7">>B. Shrinking confidence intervals — Correct. UCB algorithms use bounds like $\hat{\mu}_a \pm \sqrt{2\log t / n_a}$ derived from martingale concentration. These intervals guide exploration: wide intervals mean "explore," narrow intervals mean "exploit."<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. They guarantee the optimal arm is pulled first">><<replace "#mt-q7">>C. Optimal first — No. Without initial exploration, you can't know which arm is optimal. Concentration inequalities bound how much exploration is //needed//.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They eliminate the need for exploration">><<replace "#mt-q7">>D. No exploration — No. Exploration is always necessary. Martingale bounds quantify the explore-exploit tradeoff but don't eliminate it.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q8">''8. What is the Doob decomposition?''
+
+<<button "A. Splitting a process into a martingale plus a predictable process">><<replace "#mt-q8">>A. Martingale + predictable — Correct. Any adapted integrable process $X_t = M_t + A_t$ where $M_t$ is a martingale (noise) and $A_t$ is predictable (signal). This decomposition is unique.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Splitting a process into mean and variance components">><<replace "#mt-q8">>B. Mean + variance — No. The Doob decomposition separates the martingale component from the predictable drift, not mean from variance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Decomposing a martingale into positive and negative parts">><<replace "#mt-q8">>C. Positive/negative — No. That's the Jordan decomposition of signed measures. Doob decomposition is about separating noise from drift.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Factoring a martingale into independent increments">><<replace "#mt-q8">>D. Independent increments — No. Martingale increments are //uncorrelated// but generally not independent. The Doob decomposition doesn't factor into independent parts.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mt-q9">''9. Why does the "doubling strategy" (double your bet after each loss) fail to exploit the Optional Stopping Theorem?''
+
+<<button "A. Because casinos ban the strategy">><<replace "#mt-q9">>A. Casino rules — No. The failure is mathematical, not regulatory. Even with unlimited bankroll and no table limits, the theorem's conditions are violated.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Because the stopping time is not bounded and the martingale is not uniformly integrable">><<replace "#mt-q9">>B. Unbounded stopping time, not UI — Correct. The doubling strategy's stopping time has infinite expectation and the wealth process is not uniformly integrable. The OST conditions fail, so $\mathbb{E}[M_\tau] \neq \mathbb{E}[M_0]$ — the "guaranteed profit" is an illusion.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Because the game is not actually fair">><<replace "#mt-q9">>C. Unfair game — No. Even in a perfectly fair game (true martingale), the doubling strategy fails because it violates the theorem's integrability conditions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Because the variance is too large">><<replace "#mt-q9">>D. Large variance — Not the core issue. The problem is the //expectation// of the stopped process, not variance. The required bets grow exponentially, destroying the integrability condition.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

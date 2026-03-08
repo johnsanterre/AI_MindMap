@@ -1,0 +1,159 @@
+<<include "Header">>
+! Ilya Sutskever
+<img src="assets/ilya_sutskever.svg" alt="Ilya Sutskever" width="800">
+
+Imagine a chess grandmaster who doesn't memorize openings but instead develops such deep intuition for the game that they can see twenty moves ahead without consciously calculating. Ilya Sutskever is that figure in the world of artificial intelligence — a researcher whose singular conviction that ''scale'' would unlock intelligence helped transform deep learning from an academic curiosity into the most consequential technology of the 21st century. Born in Russia and raised in Israel before moving to Canada, Sutskever became [[Geoffrey Hinton|Geoffrey Hinton]]'s star student at the University of Toronto, then co-authored the paper that reignited the entire field, and went on to co-found OpenAI and shape the trajectory of modern AI.
+
+!! Key Contributions
+
+Sutskever's career reads like a highlight reel of the deep learning revolution:
+
+* ''[[AlexNet|AlexNet]]'' (2012): Together with [[Geoffrey Hinton|Geoffrey Hinton]] and Alex Krizhevsky, he built the convolutional neural network that crushed the ImageNet competition, reducing the error rate by a staggering margin and proving that [[Deep Learning|Deep Learning]] could outperform hand-engineered features at scale.
+
+* ''[[Sequence-to-sequence|Sequence-to-sequence]] Learning'' (2014): Co-authored the landmark paper introducing encoder-decoder architectures for mapping variable-length input sequences to variable-length output sequences, laying the groundwork for modern machine translation and eventually for [[Language Models|Language Models]].
+
+* ''OpenAI Co-founder and Chief Scientist'' (2015–2024): As one of the founding members and long-serving chief scientist of OpenAI, Sutskever drove the research strategy that led to the GPT series of [[Language Models|Language Models]], championing the idea that scaling up [[Transformers|Transformers]] with more data and more compute would yield qualitatively new capabilities.
+
+* ''Scaling Laws Intuition'': Before scaling laws were formally studied, Sutskever had an almost prophetic conviction that larger models trained on more data would exhibit emergent abilities — not just incremental improvements but qualitative leaps in reasoning and generation.
+
+* ''GPT Development'': Guided the technical vision behind GPT-2, GPT-3, and the research directions that culminated in GPT-4, consistently pushing for larger models when many in the field were skeptical.
+
+* ''Safe Superintelligence Inc. (SSI)'' (2024): After departing OpenAI, founded SSI with the mission of building safe superintelligent AI — reflecting his deep concern that the technology he helped create demands extraordinary care.
+
+!! The Core Insight
+
+Sutskever's central thesis can be summarized in one phrase: //scale is all you need//. While others debated novel architectures or clever tricks, Sutskever recognized that the combination of ''large models'' + ''large data'' + ''large compute'' would produce emergent capabilities that no amount of architectural cleverness could match at small scale.
+
+This insight was not obvious. For decades, the AI community believed that intelligence required carefully designed symbolic systems, domain-specific knowledge, or sophisticated algorithmic innovations. Sutskever's bet was radically different: take a sufficiently large [[Neural Networks|neural network]], feed it enough data, train it with enough compute, and intelligence-like behavior will //emerge//. The GPT series vindicated this bet spectacularly — each generation, scaled up by roughly 10–100x, exhibited capabilities that surprised even its creators.
+
+The deeper principle at work is that ''compression is intelligence''. A model that can predict the next token in a vast corpus of text must, in the process of learning to compress that data efficiently, develop internal representations that capture real-world knowledge, reasoning patterns, and even something resembling understanding.
+
+!! What the Math Is Actually Doing
+
+''AlexNet's innovations'' combined several mathematical ideas that became standard in [[Deep Learning|Deep Learning]]:
+
+$$\text{ReLU}(x) = \max(0, x)$$
+
+The use of ''ReLU activations'' instead of sigmoid or tanh solved the vanishing gradient problem, allowing gradients to flow through deep networks. [[Dropout|Dropout]] acted as a stochastic regularizer — during training, each neuron is randomly zeroed out with probability $p$, forcing the network to learn redundant representations:
+
+$$h_i^{(\text{dropped})} = h_i \cdot m_i, \quad m_i \sim \text{Bernoulli}(1 - p)$$
+
+AlexNet also pioneered ''multi-GPU training'', splitting the network across two GPUs — a precursor to the distributed training that would become essential for modern large models.
+
+''Sequence-to-sequence'' models use an encoder to map an input sequence $(x_1, x_2, \ldots, x_T)$ into a fixed-dimensional context vector $c$, then a decoder generates the output sequence conditioned on $c$:
+
+$$c = f_{\text{enc}}(x_1, \ldots, x_T)$$
+$$P(y_1, \ldots, y_{T'}) = \prod_{t=1}^{T'} P(y_t \mid y_1, \ldots, y_{t-1}, c)$$
+
+This framework generalized neural machine translation and became a precursor to the [[Transformers|Transformer]] architecture, which replaced the recurrent encoder-decoder with self-attention.
+
+''Scaling laws'' describe the empirical relationship between model performance (measured as loss $L$) and three factors — number of parameters $N$, dataset size $D$, and compute budget $C$:
+
+$$L(N) \approx \left(\frac{N_c}{N}\right)^{\alpha_N}, \quad L(D) \approx \left(\frac{D_c}{D}\right)^{\alpha_D}$$
+
+These power-law relationships mean that performance improves predictably and smoothly as you scale up — there is no plateau, just a steady march downward on the loss curve, with emergent capabilities appearing at critical thresholds.
+
+!! Impact on the Field
+
+Sutskever's influence extends far beyond his individual papers:
+
+* ''Shaped the scaling paradigm'': His conviction that scale matters more than architectural novelty redirected billions of dollars of compute toward training ever-larger models, fundamentally changing the economics and strategy of AI research.
+
+* ''OpenAI's trajectory'': As chief scientist, he set the technical direction that led OpenAI from a research lab to one of the most influential technology organizations in history. The decision to pursue large autoregressive language models — rather than, say, reinforcement learning or neurosymbolic approaches — was largely Sutskever's.
+
+* ''AI safety concerns'': Sutskever is one of the rare figures who both accelerated AI capabilities //and// raised serious alarms about its risks. His departure from OpenAI and founding of SSI reflect a belief that safety cannot be an afterthought — it must be the primary objective. He has spoken publicly about the possibility that future AI systems may not be fully controllable and that building them safely requires a fundamentally different organizational structure.
+
+* ''Mentorship and culture'': Trained a generation of researchers at OpenAI who went on to lead major AI efforts across the industry.
+
+!! When Scaling Hits Limits
+
+''1. Data exhaustion:'' Scaling laws assume access to ever-growing, high-quality datasets. But the internet is finite, and synthetic data generation introduces distributional biases. As models approach the frontier of available training data, the power-law improvements may slow or require fundamentally new data sources.
+
+''2. Diminishing emergent returns:'' While scaling has produced remarkable emergent capabilities, there is no mathematical guarantee that the next order of magnitude will yield equally transformative jumps. Some capabilities may require architectural innovations — such as explicit reasoning modules or memory systems — that pure scaling cannot provide.
+
+''3. Alignment under scale:'' Larger models are harder to align with human intentions. As Sutskever himself recognized, a superintelligent system optimized purely for next-token prediction may develop goals or behaviors that diverge from human values in subtle, hard-to-detect ways. The alignment problem grows //harder//, not easier, with scale.
+
+!! Technical Details
+
+''Key Papers:''
+* Krizhevsky, Sutskever, Hinton. "ImageNet Classification with Deep Convolutional Neural Networks" (NeurIPS 2012) — the [[AlexNet|AlexNet]] paper, one of the most cited in all of computer science.
+* Sutskever, Vinyals, Le. "Sequence to Sequence Learning with Neural Networks" (NeurIPS 2014) — introduced the encoder-decoder framework for [[Sequence-to-sequence|sequence-to-sequence]] tasks.
+* Contributions to the GPT series and internal OpenAI research on scaling.
+
+''Career Path:''
+* Born in Nizhny Novgorod, Russia (1986); grew up in Jerusalem, Israel.
+* B.Sc. and M.Sc. in Mathematics at the University of Toronto.
+* Ph.D. under [[Geoffrey Hinton|Geoffrey Hinton]] at the University of Toronto.
+* Postdoctoral work at Stanford with Andrew Ng.
+* Co-founded OpenAI (2015); served as Chief Scientist until 2024.
+* Founded Safe Superintelligence Inc. (SSI) in 2024.
+
+''Recognition:'' Named to MIT Technology Review's 35 Innovators Under 35, widely considered one of the most influential AI researchers of his generation.
+
+!! Quiz
+
+<div id="q1">''1. Which competition did AlexNet win in 2012, marking a turning point for deep learning?''
+
+<<button "A) CIFAR-10 Challenge">><<replace "#q1">>A) CIFAR-10 Challenge — ✗ CIFAR-10 is a smaller benchmark. AlexNet's landmark victory was in the ''ImageNet Large Scale Visual Recognition Challenge (ILSVRC)''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) ImageNet Large Scale Visual Recognition Challenge">><<replace "#q1">>B) ImageNet Large Scale Visual Recognition Challenge — ✓ Correct! [[AlexNet|AlexNet]] won ILSVRC 2012 with a dramatic margin, proving that deep convolutional networks could outperform traditional computer vision methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) PASCAL VOC">><<replace "#q1">>C) PASCAL VOC — ✗ PASCAL VOC was an important benchmark but not the one where AlexNet made history. It was the ''ImageNet'' challenge.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) COCO Detection Challenge">><<replace "#q1">>D) COCO Detection Challenge — ✗ COCO came later. AlexNet's breakthrough was at ''ImageNet ILSVRC 2012''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What activation function did AlexNet popularize, replacing sigmoid and tanh?''
+
+<<button "A) Leaky ReLU">><<replace "#q2">>A) Leaky ReLU — ✗ Leaky ReLU came later. AlexNet used the standard ''ReLU'' activation: $\max(0, x)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) GELU">><<replace "#q2">>B) GELU — ✗ GELU was introduced much later for [[Transformers|Transformers]]. AlexNet used ''ReLU''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) ReLU">><<replace "#q2">>C) ReLU — ✓ Correct! The Rectified Linear Unit $\text{ReLU}(x) = \max(0, x)$ solved the vanishing gradient problem and became the default activation in [[Deep Learning|Deep Learning]].<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Softmax">><<replace "#q2">>D) Softmax — ✗ Softmax is used in the output layer for classification, not as a hidden layer activation. AlexNet popularized ''ReLU''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What regularization technique used in AlexNet randomly zeros out neurons during training?''
+
+<<button "A) Weight decay">><<replace "#q3">>A) Weight decay — ✗ Weight decay is L2 regularization on parameters. The technique that randomly disables neurons is ''[[Dropout|Dropout]]''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Batch normalization">><<replace "#q3">>B) Batch normalization — ✗ Batch normalization was introduced later (2015). AlexNet used ''[[Dropout|Dropout]]''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Dropout">><<replace "#q3">>C) Dropout — ✓ Correct! ''[[Dropout|Dropout]]'' randomly sets neuron activations to zero with probability $p$ during training, forcing the network to learn robust, redundant representations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Data augmentation">><<replace "#q3">>D) Data augmentation — ✗ Data augmentation was also used in AlexNet, but the technique that zeros out neurons is ''[[Dropout|Dropout]]''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. In the sequence-to-sequence framework, what does the encoder produce?''
+
+<<button "A) A probability distribution over the vocabulary">><<replace "#q4">>A) A probability distribution over the vocabulary — ✗ That is what the decoder's output layer produces. The encoder produces a ''fixed-dimensional context vector''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A fixed-dimensional context vector">><<replace "#q4">>B) A fixed-dimensional context vector — ✓ Correct! The encoder compresses the input sequence into a context vector $c = f_{\text{enc}}(x_1, \ldots, x_T)$, which the decoder then uses to generate the output sequence.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) An attention matrix">><<replace "#q4">>C) An attention matrix — ✗ Attention mechanisms were added later by Bahdanau et al. The original [[Sequence-to-sequence|seq2seq]] paper used a single ''context vector''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A parse tree">><<replace "#q4">>D) A parse tree — ✗ Parse trees are from symbolic NLP. The encoder produces a ''dense context vector''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What organization did Sutskever co-found in 2015?''
+
+<<button "A) DeepMind">><<replace "#q5">>A) DeepMind — ✗ DeepMind was founded by Demis Hassabis and others. Sutskever co-founded ''OpenAI'' in 2015.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Anthropic">><<replace "#q5">>B) Anthropic — ✗ Anthropic was founded by Dario and Daniela Amodei. Sutskever co-founded ''OpenAI''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) OpenAI">><<replace "#q5">>C) OpenAI — ✓ Correct! Sutskever was a co-founder of OpenAI and served as its Chief Scientist from 2015 until his departure in 2024.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Google Brain">><<replace "#q5">>D) Google Brain — ✗ Google Brain was an internal Google project. Sutskever co-founded ''OpenAI''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What is Sutskever's core thesis about how intelligence emerges in neural networks?''
+
+<<button "A) Intelligence requires symbolic reasoning modules">><<replace "#q6">>A) Intelligence requires symbolic reasoning modules — ✗ This is the opposite of Sutskever's view. He believes intelligence emerges from ''scale'' — large models, large data, large compute.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Scale — large models + large data + large compute — yields emergent capabilities">><<replace "#q6">>B) Scale — large models + large data + large compute — yields emergent capabilities — ✓ Correct! Sutskever's central insight is that sufficient scale in [[Neural Networks|neural networks]] produces qualitatively new behaviors that cannot be achieved at smaller scale.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Evolutionary algorithms are the path to AGI">><<replace "#q6">>C) Evolutionary algorithms are the path to AGI — ✗ Sutskever's thesis is about ''scaling up'' gradient-based deep learning, not evolutionary methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Intelligence requires hand-crafted features">><<replace "#q6">>D) Intelligence requires hand-crafted features — ✗ AlexNet specifically showed that learned features beat hand-crafted ones. Sutskever champions ''end-to-end learning at scale''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What company did Sutskever found after leaving OpenAI in 2024?''
+
+<<button "A) xAI">><<replace "#q7">>A) xAI — ✗ xAI was founded by Elon Musk. Sutskever founded ''Safe Superintelligence Inc. (SSI)''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Safe Superintelligence Inc. (SSI)">><<replace "#q7">>B) Safe Superintelligence Inc. (SSI) — ✓ Correct! SSI was founded with the mission of building safe superintelligent AI, reflecting Sutskever's belief that safety must be the primary objective.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Cohere">><<replace "#q7">>C) Cohere — ✗ Cohere was founded by Aidan Gomez and others. Sutskever founded ''SSI''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Inflection AI">><<replace "#q7">>D) Inflection AI — ✗ Inflection was founded by Mustafa Suleyman. Sutskever founded ''Safe Superintelligence Inc.''<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. Scaling laws describe performance as a function of parameters and data using what type of relationship?''
+
+<<button "A) Exponential growth">><<replace "#q8">>A) Exponential growth — ✗ Scaling laws follow ''power-law'' relationships, not exponential ones. $L(N) \approx (N_c / N)^{\alpha_N}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Logarithmic decay">><<replace "#q8">>B) Logarithmic decay — ✗ While loss does decrease, the functional form is a ''power law'', not logarithmic.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Power law">><<replace "#q8">>C) Power law — ✓ Correct! Scaling laws show that loss decreases as a power law of model size and dataset size: $L(N) \approx (N_c / N)^{\alpha_N}$, meaning predictable, smooth improvement with scale.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Linear">><<replace "#q8">>D) Linear — ✗ The relationship is sublinear. Scaling laws follow ''power-law'' curves, requiring exponentially more resources for each linear improvement in loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

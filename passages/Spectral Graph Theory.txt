@@ -1,0 +1,142 @@
+<<include "Header">>
+! Spectral Graph Theory
+<img src="assets/spectral_graph_theory.svg" alt="Spectral Graph Theory" width="800">
+
+Imagine you have a large social network and you want to find its natural communities. You could try every possible split and see which one cuts the fewest friendships — but that is an NP-hard combinatorial nightmare. Spectral graph theory offers a stunning shortcut: //turn the graph into a matrix, compute its eigenvalues, and read the structure directly from the spectrum//. It is like striking a bell and learning its shape from the overtones. The low-frequency vibrations of a graph reveal its large-scale clusters, while the high-frequency modes expose local bottlenecks. This eigenvalue lens is the mathematical engine behind [[Spectral Clustering]], modern [[Graph Neural Networks|Graph Neural Network]], community detection, image segmentation, and a surprising amount of theoretical computer science.
+
+!! The Core Insight
+
+A graph's structure is encoded in the spectrum of its ''Laplacian matrix''. The eigenvalues of the Laplacian act like a fingerprint: the number of zero eigenvalues tells you how many disconnected components exist, the smallest nonzero eigenvalue (the ''Fiedler value'') measures how tightly the graph holds together, and its corresponding eigenvector (the ''Fiedler vector'') draws a natural partition line through the graph. You never need to enumerate cuts — the eigenvectors //already know// where to cut.
+
+!! Eigenvalues Reveal Graph Structure
+
+The spectrum of the [[Graph Laplacian]] encodes a remarkable amount of information about a graph's topology:
+
+* ''Number of connected components.'' The multiplicity of the eigenvalue $\lambda = 0$ equals the number of connected components. A connected graph has exactly one zero eigenvalue; a graph with three disjoint pieces has three.
+
+* ''Algebraic connectivity.'' The second-smallest eigenvalue $\lambda_2$ — the Fiedler value — quantifies how well-connected the graph is. A small $\lambda_2$ means there exists a narrow bottleneck; a large $\lambda_2$ means the graph is an //expander// that resists partitioning.
+
+* ''Clustering structure.'' If a graph has $k$ natural clusters connected by thin bridges, the first $k$ eigenvalues will be near zero, with a pronounced ''spectral gap'' before $\lambda_{k+1}$. This gap is exactly what [[Spectral Clustering]] algorithms look for.
+
+* ''Diameter and mixing.'' The spectral gap $\lambda_2$ controls how fast a random walk on the graph mixes to its stationary distribution. Larger gap means faster mixing, shorter effective diameter.
+
+* ''Bipartiteness.'' For a $d$-regular graph, $\lambda_n = 2d$ if and only if the graph is bipartite. The largest eigenvalue diagnoses two-colorability.
+
+!! What the Math Is Actually Doing
+
+Given an undirected graph $G = (V, E)$ with $n$ nodes, define:
+
+* ''Adjacency matrix'' $A$: entry $A_{ij} = 1$ if edge $(i,j)$ exists, 0 otherwise.
+* ''Degree matrix'' $D$: diagonal matrix with $D_{ii} = \deg(i)$.
+* ''Graph Laplacian'': $L = D - A$.
+
+The Laplacian is symmetric positive semidefinite, so all [[Eigenvalues and Eigenvectors|eigenvalues]] are real and non-negative: $0 = \lambda_1 \leq \lambda_2 \leq \cdots \leq \lambda_n$.
+
+The ''normalized Laplacian'' is often preferred in practice:
+
+$$\mathcal{L} = D^{-1/2} L \, D^{-1/2} = I - D^{-1/2} A \, D^{-1/2}$$
+
+Its eigenvalues lie in $[0, 2]$, making them comparable across graphs of different sizes.
+
+The ''Fiedler value'' $\lambda_2$ connects to graph cuts via the ''Cheeger inequality'':
+
+$$\frac{h(G)^2}{2} \leq \lambda_2 \leq 2\,h(G)$$
+
+where $h(G)$ is the ''Cheeger constant'' (or isoperimetric number) — the minimum ratio of cut edges to partition size. This inequality is profound: it says the continuous relaxation (eigenvalue) and the discrete combinatorial quantity (minimum cut ratio) are polynomially related. Solving the eigenvalue problem gives an approximate solution to the NP-hard minimum bisection problem.
+
+The ''Fiedler vector'' $v_2$ (eigenvector for $\lambda_2$) assigns a real value to each node. Partitioning nodes by the sign of $v_2$ — positive vs. negative — yields a near-optimal bisection. This is the foundation of [[Spectral Methods]] for graph partitioning.
+
+!! Spectral Methods in ML
+
+''Spectral Clustering Algorithm'' (Ng, Jordan, Weiss 2001):
+# Construct a similarity graph (e.g., $k$-nearest neighbors) with weight matrix $W$.
+# Compute the normalized Laplacian $\mathcal{L} = I - D^{-1/2}W D^{-1/2}$.
+# Find the first $k$ eigenvectors $v_1, \ldots, v_k$ and stack them as columns of $U \in \mathbb{R}^{n \times k}$.
+# Row-normalize $U$, then cluster the rows with $k$-means.
+# Each node's cluster assignment is its final label.
+
+This works because the eigenvectors embed the graph into $\mathbb{R}^k$ such that well-connected nodes land near each other — the nonlinear manifold structure becomes linearly separable.
+
+''GNN Message Passing as Spectral Filtering.'' A [[Graph Neural Network]] layer $H^{(\ell+1)} = \sigma(\hat{A} H^{(\ell)} W)$ with $\hat{A} = D^{-1/2}AD^{-1/2}$ is a //low-pass filter// on the graph spectrum. It smooths node features over neighborhoods. ''ChebNet'' (Defferrard et al., 2016) generalizes this by learning polynomial spectral filters $g_\theta(\Lambda) = \sum_{k=0}^{K} \theta_k T_k(\tilde{\Lambda})$ using Chebyshev polynomials — achieving localized, efficient spectral convolutions without computing the full eigendecomposition.
+
+''Graph wavelets'' extend spectral analysis to multi-scale: wavelet transforms on graphs use the Laplacian eigenbasis to define localized, scale-dependent filters — useful for detecting anomalies at different resolutions.
+
+!! When Spectral Methods Break Down
+
+* ''Scalability to massive graphs.'' Computing eigenvectors of the Laplacian is $O(n^3)$ in general. For graphs with millions of nodes (social networks, web graphs), even iterative methods like Lanczos struggle. Approximations (Nystrom method, random projections, stochastic block models) sacrifice exactness for tractability.
+
+* ''Sensitivity to graph construction.'' Spectral clustering results depend heavily on //how// the similarity graph is built — the choice of kernel bandwidth, number of neighbors, or distance metric. A poorly chosen graph can merge distinct clusters or shatter coherent ones, and the method offers no built-in way to validate the graph construction.
+
+* ''Non-convex, overlapping, or hierarchical clusters.'' The Fiedler vector produces a binary partition; recursive bisection can miss complex multi-scale structure. Overlapping communities — where a node belongs to multiple groups — violate the hard-assignment assumption. Spectral methods also assume the number of clusters $k$ is known or can be read from the spectral gap, which is ambiguous for noisy real-world data.
+
+!! Technical Details
+
+''Courant-Fischer Theorem.'' The eigenvalues of a symmetric matrix $M$ satisfy $\lambda_k = \min_{\dim(S)=k} \max_{x \in S, \|x\|=1} x^T M x$. For the Laplacian, this gives $\lambda_2 = \min_{x \perp \mathbf{1}} \frac{x^T L x}{x^T x} = \min_{x \perp \mathbf{1}} \frac{\sum_{(i,j) \in E}(x_i - x_j)^2}{\sum_i x_i^2}$. The numerator penalizes differences across edges — the eigenvector minimizing this is the smoothest non-constant function on the graph.
+
+''Interlacing Theorems.'' If $H$ is a subgraph of $G$ obtained by deleting edges, then $\lambda_k(H) \leq \lambda_k(G)$ for all $k$. Deleting edges can only decrease eigenvalues. Adding an edge between two components merges their zero eigenvalues. Cauchy interlacing further relates the spectrum of $G$ to any induced subgraph.
+
+''Expander Graphs.'' A family of $d$-regular graphs is an expander family if $\lambda_2$ is bounded away from zero as $n \to \infty$. Expanders have logarithmic diameter, rapid mixing, and are central to derandomization, error-correcting codes, and compressed sensing. The Ramanujan bound $\lambda_2 \geq d - 2\sqrt{d-1}$ is the best possible for $d$-regular graphs.
+
+''Random Walks and Laplacian Connection.'' The random walk on $G$ has transition matrix $P = D^{-1}A$. The normalized Laplacian satisfies $\mathcal{L} = I - D^{1/2}PD^{-1/2}$, so the eigenvalues of $P$ are $1 - \lambda_i(\mathcal{L})$. The mixing time $\tau_{\text{mix}} = \Theta(1/\lambda_2)$ is inversely proportional to the spectral gap, directly linking graph connectivity to Markov chain convergence.
+
+''Heat Kernel on Graphs.'' The heat equation $\frac{\partial f}{\partial t} = -Lf$ has solution $f(t) = e^{-tL}f(0) = \sum_i e^{-t\lambda_i}(v_i^T f(0))v_i$. At large $t$, only the low-frequency components survive — the heat kernel acts as a progressive low-pass filter. The ''heat kernel signature'' $h_t(i) = \sum_k e^{-t\lambda_k} v_k(i)^2$ characterizes each node's multi-scale structural role and is used for shape matching in computer graphics.
+
+!! Quiz
+
+<div id="q1">''1. What does the multiplicity of eigenvalue $\lambda = 0$ in the graph Laplacian tell you?''
+<<button "A) The number of edges">><<replace "#q1">>That is not correct. The number of edges relates to the trace of $A$, not the zero eigenvalue multiplicity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The number of connected components">><<replace "#q1">>Correct! Each connected component contributes one zero eigenvalue, so the multiplicity of $\lambda = 0$ equals the number of connected components.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The maximum degree">><<replace "#q1">>That is not correct. The maximum degree relates to the largest diagonal entry of $D$, not the zero eigenvalue multiplicity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The chromatic number">><<replace "#q1">>That is not correct. The chromatic number is not directly determined by the Laplacian spectrum.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. The Fiedler value $\lambda_2$ is small. What does this indicate?''
+<<button "A) The graph is densely connected everywhere">><<replace "#q2">>That is not correct. Dense connectivity implies a large $\lambda_2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The graph is bipartite">><<replace "#q2">>That is not correct. Bipartiteness is diagnosed by the largest eigenvalue, not the second-smallest.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The graph has a bottleneck and is easy to partition">><<replace "#q2">>Correct! A small Fiedler value means the graph has a narrow bottleneck — the Cheeger inequality links $\lambda_2$ to the minimum cut ratio.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The graph has many self-loops">><<replace "#q2">>That is not correct. Self-loops affect the diagonal of $A$ but are typically excluded in the standard Laplacian.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. In spectral clustering, what do you do after computing the first $k$ eigenvectors of the Laplacian?''
+<<button "A) Threshold each eigenvector at zero">><<replace "#q3">>That is not correct. Thresholding works for bisection with the Fiedler vector, but spectral clustering with $k > 2$ uses a different approach.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Use them as features for a decision tree">><<replace "#q3">>That is not correct. Decision trees are not part of the standard spectral clustering pipeline.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Stack them as columns, row-normalize, then apply $k$-means">><<replace "#q3">>Correct! The eigenvectors embed nodes into $\mathbb{R}^k$; row normalization and $k$-means in this space yields the final clusters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Compute their pairwise dot products">><<replace "#q3">>That is not correct. Eigenvectors of a symmetric matrix are orthogonal, so their dot products are trivially 0 or 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What is the graph Laplacian $L$ defined as?''
+<<button "A) $L = A + D$">><<replace "#q4">>That is not correct. The Laplacian subtracts the adjacency matrix from the degree matrix.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $L = D - A$">><<replace "#q4">>Correct! The unnormalized graph Laplacian is $L = D - A$, where $D$ is the degree matrix and $A$ is the adjacency matrix.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $L = A \cdot D^{-1}$">><<replace "#q4">>That is not correct. That would be a random walk transition matrix, not the Laplacian.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $L = D^2 - A^2$">><<replace "#q4">>That is not correct. The Laplacian uses the matrices directly, not their squares.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. The Cheeger inequality relates $\lambda_2$ to:''
+<<button "A) The chromatic number of the graph">><<replace "#q5">>That is not correct. The Cheeger inequality concerns cuts, not coloring.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The diameter of the graph">><<replace "#q5">>That is not correct. While $\lambda_2$ influences diameter, the Cheeger inequality specifically relates to the isoperimetric constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The isoperimetric (Cheeger) constant $h(G)$">><<replace "#q5">>Correct! The Cheeger inequality states $h(G)^2/2 \leq \lambda_2 \leq 2h(G)$, linking the spectral gap to the minimum cut ratio.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The maximum eigenvalue $\lambda_n$">><<replace "#q5">>That is not correct. The Cheeger inequality involves $\lambda_2$ and the Cheeger constant, not $\lambda_n$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. How does a standard GNN message-passing layer relate to spectral graph theory?''
+<<button "A) It computes the full eigendecomposition at each layer">><<replace "#q6">>That is not correct. Standard GNNs avoid eigendecomposition — that would be too expensive.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It acts as a low-pass filter on the graph spectrum">><<replace "#q6">>Correct! Multiplying by the normalized adjacency $\hat{A}$ smooths signals over neighborhoods, which in the spectral domain suppresses high-frequency components.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It performs a high-pass filter to sharpen node features">><<replace "#q6">>That is not correct. Neighborhood averaging smooths, which is low-pass, not high-pass.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It has no connection to spectral theory">><<replace "#q6">>That is not correct. GNN layers can be understood precisely as polynomial spectral filters on the Laplacian.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What controls the mixing time of a random walk on a graph?''
+<<button "A) The number of edges">><<replace "#q7">>That is not correct. Mixing time depends on graph structure, not just edge count.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The largest eigenvalue of the Laplacian">><<replace "#q7">>That is not correct. The largest eigenvalue relates to bipartiteness, not mixing time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The spectral gap (second eigenvalue $\lambda_2$)">><<replace "#q7">>Correct! The mixing time $\tau_{\text{mix}} = \Theta(1/\lambda_2)$. A larger spectral gap means faster convergence to the stationary distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The determinant of the adjacency matrix">><<replace "#q7">>That is not correct. The determinant of $A$ does not directly control mixing time.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. In the Courant-Fischer characterization, $\lambda_2$ of the Laplacian minimizes $\sum_{(i,j) \in E}(x_i - x_j)^2 / \sum_i x_i^2$ subject to what constraint?''
+<<button "A) $x$ must be a binary vector">><<replace "#q8">>That is not correct. Binary constraints give the NP-hard combinatorial problem; the spectral relaxation allows real-valued $x$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $x$ must be orthogonal to the all-ones vector $\mathbf{1}$">><<replace "#q8">>Correct! The constraint $x \perp \mathbf{1}$ excludes the trivial constant eigenvector, yielding the smoothest non-constant function on the graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $x$ must have unit entries">><<replace "#q8">>That is not correct. The entries of $x$ are unconstrained reals; only the global norm and orthogonality matter.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $x$ must be non-negative">><<replace "#q8">>That is not correct. The Fiedler vector typically has both positive and negative entries — that is how it defines the partition.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

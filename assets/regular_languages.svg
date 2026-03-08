@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Regular Languages &amp; the Chomsky Hierarchy</text>
+
+  <!-- ===== LEFT PANEL: Chomsky Hierarchy as nested rectangles ===== -->
+
+  <!-- Type 0: Recursively Enumerable -->
+  <rect x="30" y="50" width="370" height="330" rx="10" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="45" y="72" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E">Type 0: Recursively Enumerable</text>
+  <text x="45" y="86" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">Turing Machines</text>
+
+  <!-- Type 1: Context-Sensitive -->
+  <rect x="50" y="98" width="330" height="265" rx="9" fill="#DDD3B8" stroke="#C4A87A" stroke-width="2"/>
+  <text x="65" y="118" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E">Type 1: Context-Sensitive</text>
+  <text x="65" y="132" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" font-style="italic">Linear-Bounded Automata</text>
+
+  <!-- Type 2: Context-Free -->
+  <rect x="70" y="145" width="290" height="200" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="85" y="165" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">Type 2: Context-Free</text>
+  <text x="85" y="179" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">Pushdown Automata</text>
+  <text x="85" y="193" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" font-style="italic">e.g., balanced parentheses</text>
+
+  <!-- Type 3: Regular (highlighted) -->
+  <rect x="95" y="208" width="245" height="120" rx="7" fill="#F2E0D0" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="217" y="240" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530" text-anchor="middle">Type 3: Regular</text>
+  <text x="217" y="258" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Finite Automata</text>
+  <text x="217" y="276" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Regular Expressions</text>
+  <text x="217" y="294" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">e.g., (a|b)*abb</text>
+  <text x="217" y="310" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">identifiers, email patterns</text>
+
+  <!-- ===== RIGHT PANEL: DFA diagram ===== -->
+  <line x1="430" y1="50" x2="430" y2="385" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <text x="620" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Deterministic Finite Automaton</text>
+  <text x="620" y="90" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">Accepts strings ending in "ab"</text>
+
+  <!-- State q0 -->
+  <circle cx="500" cy="170" r="22" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="500" y="175" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">q0</text>
+  <!-- Start arrow -->
+  <line x1="455" y1="170" x2="476" y2="170" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="448" y="166" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">start</text>
+
+  <!-- State q1 -->
+  <circle cx="620" cy="170" r="22" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="620" y="175" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">q1</text>
+
+  <!-- State q2 (accepting - double circle) -->
+  <circle cx="740" cy="170" r="22" fill="#F2E0D0" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="740" cy="170" r="17" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="740" y="175" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">q2</text>
+
+  <!-- Transition q0 -> q1 on 'a' -->
+  <line x1="523" y1="165" x2="596" y2="165" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="558" y="157" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">a</text>
+
+  <!-- Transition q1 -> q2 on 'b' -->
+  <line x1="643" y1="165" x2="716" y2="165" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="157" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">b</text>
+
+  <!-- Self-loop q0 on 'b' -->
+  <path d="M 490,150 C 475,115 525,115 510,150" fill="none" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowSmall)"/>
+  <text x="500" y="118" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#C4A87A" text-anchor="middle">b</text>
+
+  <!-- Self-loop q1 on 'a' -->
+  <path d="M 610,150 C 595,115 645,115 630,150" fill="none" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowSmall)"/>
+  <text x="620" y="118" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#C4A87A" text-anchor="middle">a</text>
+
+  <!-- Transition q2 -> q1 on 'a' (curved below) -->
+  <path d="M 725,192 C 700,235 660,235 635,192" fill="none" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <text x="680" y="235" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">a</text>
+
+  <!-- Transition q2 -> q0 on 'b' (curved below) -->
+  <path d="M 720,190 C 650,290 560,290 505,192" fill="none" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="610" y="282" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">b</text>
+
+  <!-- ===== Equivalence box ===== -->
+  <rect x="460" y="310" width="310" height="70" rx="6" fill="#EDE3D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="615" y="332" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Three Equivalent Descriptions</text>
+  <text x="615" y="350" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">DFA  =  NFA  =  Regular Expression</text>
+  <text x="615" y="368" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">Kleene's theorem (1956)</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowSmall" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#C4A87A"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

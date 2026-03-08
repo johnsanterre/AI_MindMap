@@ -1,0 +1,147 @@
+<<include "Header">>
+
+! Pruning and Sparsity
+
+<img src="assets/pruning_sparsity.svg" alt="Diagram showing a dense neural network being pruned to a sparse network" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a garden that has grown wild over the summer. Branches cross and tangle, leaves block sunlight from reaching the fruit, and the tree spends energy feeding wood that produces nothing. A skilled gardener does not plant a new tree — she prunes. She cuts away the deadwood, the redundant branches, the shoots going nowhere, until what remains is leaner, healthier, and produces just as much fruit with half the wood. Neural network pruning works the same way. A trained network is full of weights that contribute almost nothing to the final prediction. Pruning identifies those weights — by magnitude, by gradient signal, by second-order importance — and zeros them out. What remains is a ''sparse'' network: fewer active parameters, less computation, same accuracy.
+
+---
+
+!! The Core Insight
+
+Most neural networks are ''massively overparameterized''. A 100-million-parameter language model might need only 10–20 million parameters to represent the same function at the same quality. The other 80–90 million weights are either redundant, near-zero, or compensating for each other. Pruning exploits this by removing parameters after training (or during training) and discovering that the network barely notices.
+
+The deeper insight is that overparameterization is useful for //finding// a good solution — gradient descent navigates a high-dimensional loss landscape more easily when there are many dimensions to move through — but it is not needed for //representing// that solution once found. Pruning separates the search phase from the deployment phase: train big, deploy small.
+
+This connects directly to the <<link "Lottery Ticket Hypothesis" "Lottery Ticket Hypothesis">><</link>>, which formalizes the idea that a sparse subnetwork capable of matching the full network exists from initialization. It also relates to <<link "Knowledge Distillation" "Knowledge Distillation">><</link>>, where a small student network learns to mimic a large teacher, and to <<link "Quantization" "Quantization">><</link>>, which reduces the //precision// of weights rather than their //count//. Together these techniques form the toolkit of <<link "Model Compression" "Model Compression">><</link>>.
+
+---
+
+!! Structured vs Unstructured Pruning
+
+There are two fundamentally different ways to prune, and the distinction matters enormously for real-world speedups.
+
+''Unstructured pruning'' removes individual weights wherever they fall below an importance threshold. The result is a sparse weight matrix with zeros scattered irregularly throughout. This achieves the highest compression ratios — 90–95% sparsity is common — but the irregular sparsity pattern is difficult to accelerate on standard GPUs, which are optimized for dense matrix multiplications. You save storage and theoretically save FLOPs, but the actual wall-clock speedup on commodity hardware is often modest unless you have specialized sparse hardware or libraries.
+
+''Structured pruning'' removes entire structural units: neurons, convolutional filters, attention heads, or even whole layers. The remaining network is a smaller but //dense// subnetwork that runs efficiently on any hardware without special sparse kernels. The tradeoff is that structured pruning is coarser — you cannot be as selective about what to remove, so you typically achieve lower compression ratios (50–80% parameter reduction) before accuracy degrades.
+
+Between these extremes lies ''semi-structured sparsity'' (e.g., N:M sparsity, where out of every M consecutive weights, exactly N are zero). NVIDIA's Ampere architecture natively supports 2:4 sparsity — 50% of weights are zero in a regular pattern — giving roughly 2x speedup with minimal accuracy loss. This is a practical middle ground that balances compression with hardware efficiency.
+
+---
+
+!! What the Math Is Actually Doing
+
+Let $W \in \mathbb{R}^{m \times n}$ be a weight matrix. A binary mask $M \in \{0,1\}^{m \times n}$ defines which weights survive pruning. The pruned weight matrix is:
+
+$$W_{\text{pruned}} = M \odot W$$
+
+where $\odot$ is elementwise multiplication. The ''sparsity'' $s$ is the fraction of zeros:
+
+$$s = 1 - \frac{\|M\|_0}{mn}$$
+
+''Magnitude pruning'' sets $M_{ij} = 0$ wherever $|W_{ij}| < \tau$ for a threshold $\tau$ chosen to achieve a target sparsity level. This assumes that small weights contribute little to the output — a reasonable but imperfect heuristic.
+
+More principled approaches use ''sensitivity analysis''. The change in loss from removing weight $w_{ij}$ can be approximated by a Taylor expansion:
+
+$$\Delta \mathcal{L} \approx g_{ij} \cdot \delta w_{ij} + \frac{1}{2} h_{ij} \cdot (\delta w_{ij})^2$$
+
+where $g_{ij} = \frac{\partial \mathcal{L}}{\partial w_{ij}}$ is the gradient and $h_{ij} = \frac{\partial^2 \mathcal{L}}{\partial w_{ij}^2}$ is the diagonal Hessian entry. At convergence, $g_{ij} \approx 0$, so the first-order term vanishes and the importance of weight $w_{ij}$ is approximately $\frac{1}{2} h_{ij} w_{ij}^2$. This is the ''Optimal Brain Damage'' (LeCun et al., 1990) criterion. ''Optimal Brain Surgeon'' (Hasselmo et al., 1993) uses the full inverse Hessian to account for correlations between weights, yielding better pruning decisions at higher computational cost.
+
+For structured pruning of entire neurons or filters, importance scores are aggregated across the structure. For a filter $F_k$, a common criterion is the $\ell_1$-norm: $\text{importance}(F_k) = \sum_{ij} |F_{k,ij}|$. Filters with the smallest aggregate importance are removed.
+
+---
+
+!! Pruning in Practice
+
+The standard pruning pipeline has three stages: ''train, prune, fine-tune'' — sometimes called the "prune-retrain" cycle. Train a full dense network to convergence. Apply a pruning criterion to remove a fraction of parameters. Fine-tune the pruned network for a few additional epochs to recover any lost accuracy. This cycle can be repeated iteratively, pruning a small percentage each round (''iterative pruning''), which consistently outperforms one-shot pruning at the same sparsity level.
+
+''Pruning during training'' (''gradual pruning'') starts with the dense network and progressively increases sparsity according to a schedule throughout training. Zhu and Gupta (2018) showed that a cubic sparsity schedule — starting pruning early, increasing the pruning rate, and freezing the mask late in training — works well across architectures.
+
+At extreme sparsity levels, pruning connects to <<link "Sparse Attention" "Sparse Attention">><</link>> mechanisms in transformers, where entire attention entries are zeroed to reduce the quadratic cost of self-attention. The SparseGPT method (Frantar and Alistarh, 2023) demonstrated that large language models with billions of parameters can be pruned to 50–60% sparsity in a single pass without any fine-tuning, using approximate second-order information computed layer by layer.
+
+---
+
+!! When Pruning Breaks Down
+
+''Accuracy collapse at high sparsity:'' Every network has a sparsity threshold beyond which accuracy drops sharply. This threshold depends on the architecture, the dataset, and the pruning method. Magnitude pruning on a ResNet-50 trained on ImageNet might sustain 80% sparsity with negligible accuracy loss, but at 95% sparsity the top-1 accuracy can drop by 5–10 percentage points. The collapse is not gradual — it often looks like a phase transition, with accuracy holding steady until a critical point and then falling off a cliff. There is no reliable way to predict this threshold without empirical testing.
+
+''Hardware mismatch for unstructured sparsity:'' Pruning 90% of weights sounds dramatic, but if the remaining 10% are scattered irregularly through the matrix, standard GPUs cannot exploit the sparsity. The sparse matrix still gets loaded into memory, the zero multiplications still consume cycles, and the actual inference speedup may be only 1.1–1.5x instead of the theoretical 10x. Without hardware that natively supports sparse operations (like NVIDIA's 2:4 structured sparsity or dedicated sparse accelerators), unstructured pruning delivers storage savings but not the inference speed gains practitioners expect.
+
+''Pruning amplifies bias and hurts minority classes:'' Hooker et al. (2020) showed that pruning disproportionately degrades performance on underrepresented classes and difficult examples — the "long tail" of the data distribution. The overall accuracy metric may remain high because majority classes dominate the average, but per-class analysis reveals that pruning effectively sacrifices rare-class performance to preserve common-class accuracy. This makes pruned models unreliable in applications where fairness and worst-case performance matter, such as medical diagnosis or content moderation.
+
+---
+
+!! Technical Details
+
+''Magnitude pruning:'' Simplest and most widely used. Remove weights with smallest $|w_i|$. Works well up to moderate sparsity (70–80%). No extra computation beyond sorting weights.
+
+''Optimal Brain Damage (OBD):'' LeCun, Denker & Solla, NeurIPS 1990. Uses diagonal Hessian to estimate weight importance: $\text{saliency}_i = \frac{1}{2} h_{ii} w_i^2$. Assumes diagonal Hessian (no weight correlations).
+
+''Optimal Brain Surgeon (OBS):'' Hasselmo, Stork & Wolff, NeurIPS 1993. Uses full inverse Hessian. Accounts for weight correlations, allows optimal adjustment of remaining weights after each pruning step. $O(d^2)$ memory for $d$ parameters — impractical for large networks without approximations.
+
+''SparseGPT:'' Frantar & Alistarh, ICML 2023. One-shot pruning for billion-parameter LLMs using approximate OBS computed layer by layer. Achieves 50–60% unstructured sparsity on GPT-family models with no retraining.
+
+''Wanda:'' Sun et al., ICML 2024. Prunes by weight magnitude multiplied by input activation norm: $\text{score}_{ij} = |w_{ij}| \cdot \|x_j\|_2$. Simpler than SparseGPT, competitive results.
+
+''N:M sparsity:'' NVIDIA Ampere supports 2:4 structured sparsity natively. For every 4 consecutive weights, exactly 2 must be zero. Achieves approximately 2x dense throughput. Mishra et al. (2021) showed this format preserves accuracy well across vision and language models.
+
+''Gradual magnitude pruning:'' Zhu & Gupta, "To Prune or Not to Prune," ICLR Workshop 2018. Cubic sparsity schedule during training. Starting sparsity $s_0$, final sparsity $s_f$, applied from step $t_0$ to $t_f$: $s_t = s_f + (s_0 - s_f)(1 - \frac{t - t_0}{t_f - t_0})^3$.
+
+''Movement pruning:'' Sanh et al., NeurIPS 2020. For fine-tuning pretrained models, prune weights moving //toward// zero during fine-tuning rather than those that are currently small. Better suited than magnitude pruning for transfer learning scenarios.
+
+''Compression ratios:'' Unstructured pruning: 90–95% sparsity common (10–20x parameter reduction). Structured pruning: 50–80% typical (2–5x). N:M sparsity: fixed 50% (2x). Combined with quantization, total compression can exceed 50–100x.
+
+---
+
+!! Quiz
+
+<span id="ps-q1">''1. What is the primary difference between structured and unstructured pruning?''
+<<button "A) Structured pruning uses gradients; unstructured uses magnitudes">><<replace "#ps-q1">>Wrong. Both structured and unstructured pruning can use either gradient-based or magnitude-based criteria. The distinction is about //what// gets removed, not //how// importance is measured.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Unstructured removes individual weights; structured removes entire neurons, filters, or heads">><<replace "#ps-q1">>Correct! Unstructured pruning zeros out individual weight entries (creating irregular sparsity), while structured pruning removes entire architectural units like neurons, filters, or attention heads (creating a smaller dense subnetwork).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Structured pruning only works on convolutional networks">><<replace "#ps-q1">>Wrong. Structured pruning applies to any architecture — convolutional filters, transformer attention heads, fully connected neurons, and more.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Unstructured pruning always achieves better speedups on GPUs">><<replace "#ps-q1">>Wrong. The opposite is often true — unstructured sparsity is hard to exploit on standard GPUs. Structured pruning yields dense sub-networks that run efficiently on commodity hardware.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q2">''2. Why does magnitude pruning use $|w_i|$ as an importance criterion?''
+<<button "A) Weights with large magnitude are always redundant">><<replace "#ps-q2">>Wrong. Large-magnitude weights are typically //important//, not redundant. Magnitude pruning removes //small// weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Small-magnitude weights contribute proportionally less to the layer output, so removing them causes minimal disruption">><<replace "#ps-q2">>Correct! A weight near zero multiplied by its input produces a near-zero contribution to the output. Removing it changes the output only slightly, making small magnitude a reasonable proxy for low importance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The gradient is always proportional to the weight magnitude">><<replace "#ps-q2">>Wrong. Gradient magnitude and weight magnitude are not generally proportional. At convergence, gradients are near zero for all weights regardless of magnitude.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Magnitude pruning is required by the Lottery Ticket Hypothesis">><<replace "#ps-q2">>Wrong. The Lottery Ticket Hypothesis uses magnitude pruning as one method to find winning tickets, but it is not //required// — other pruning criteria can also identify sparse subnetworks.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q3">''3. What does Optimal Brain Damage (OBD) use to estimate weight importance that magnitude pruning does not?''
+<<button "A) The full inverse Hessian matrix">><<replace "#ps-q3">>Wrong. The //full// inverse Hessian is used by Optimal Brain Surgeon (OBS), not OBD. OBD uses only the //diagonal// of the Hessian.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The diagonal of the Hessian, giving importance as $\frac{1}{2} h_{ii} w_i^2$">><<replace "#ps-q3">>Correct! OBD approximates the change in loss from removing a weight using the second-order term $\frac{1}{2} h_{ii} w_i^2$, which accounts for the curvature of the loss landscape — not just the weight's magnitude.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The activation statistics of the training set">><<replace "#ps-q3">>Wrong. While some methods (like Wanda) use activation norms, OBD specifically uses the Hessian diagonal.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The cosine similarity between weight vectors">><<replace "#ps-q3">>Wrong. Cosine similarity is not part of the OBD criterion.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q4">''4. What is 2:4 structured sparsity?''
+<<button "A) Removing 2 out of every 4 layers in the network">><<replace "#ps-q4">>Wrong. 2:4 sparsity operates at the weight level, not the layer level. It means 2 out of every 4 consecutive weights are zero.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Training with 2 GPUs out of 4 available">><<replace "#ps-q4">>Wrong. N:M sparsity is a weight sparsity pattern, not a hardware allocation scheme.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A pattern where exactly 2 out of every 4 consecutive weights are zero, giving 50% sparsity with hardware-friendly regularity">><<replace "#ps-q4">>Correct! NVIDIA Ampere GPUs natively support 2:4 sparsity, achieving roughly 2x throughput. The regular pattern allows the hardware to skip zero multiplications efficiently, unlike irregular unstructured sparsity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Pruning the network in 2 rounds of 4 iterations each">><<replace "#ps-q4">>Wrong. 2:4 refers to a sparsity //pattern// in the weight matrix, not a pruning schedule.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q5">''5. Why does the standard pruning pipeline include a fine-tuning step after pruning?''
+<<button "A) To increase the number of parameters back to the original count">><<replace "#ps-q5">>Wrong. Fine-tuning does not restore pruned weights. The pruned weights remain zero; fine-tuning adjusts the //surviving// weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) To allow the surviving weights to adjust and compensate for the removed ones, recovering lost accuracy">><<replace "#ps-q5">>Correct! Pruning disrupts the learned function. Fine-tuning gives the remaining weights a chance to shift slightly to compensate for the missing connections, typically recovering most or all of the accuracy drop.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) To convert unstructured sparsity into structured sparsity">><<replace "#ps-q5">>Wrong. Fine-tuning does not change the sparsity pattern — it only updates the values of the surviving weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Fine-tuning is optional and has no effect on pruned network accuracy">><<replace "#ps-q5">>Wrong. Fine-tuning typically recovers 1–3% accuracy that was lost from pruning. It is a critical step, especially at higher sparsity levels.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q6">''6. What did Hooker et al. (2020) discover about pruning and fairness?''
+<<button "A) Pruning improves fairness by removing biased weights">><<replace "#ps-q6">>Wrong. The finding was the opposite — pruning //hurts// fairness by disproportionately degrading performance on underrepresented classes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Pruning has no effect on per-class accuracy distributions">><<replace "#ps-q6">>Wrong. Pruning significantly affects per-class accuracy, even when the overall average accuracy remains high.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Pruning disproportionately degrades performance on underrepresented classes and difficult examples">><<replace "#ps-q6">>Correct! Overall accuracy masks the damage: majority classes dominate the average, so the metric stays high while rare-class and hard-example performance drops substantially. This is called "pruning's disparate impact."<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Structured pruning is always fairer than unstructured pruning">><<replace "#ps-q6">>Wrong. The type of pruning is not the main factor — both structured and unstructured pruning can exhibit disparate impact on minority classes.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q7">''7. What makes SparseGPT notable compared to traditional pruning methods?''
+<<button "A) It achieves 99% sparsity on all language models">><<replace "#ps-q7">>Wrong. SparseGPT achieves 50–60% sparsity, not 99%. Its novelty lies in the //method//, not extreme sparsity levels.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It prunes billion-parameter LLMs in one shot without any fine-tuning, using layer-wise approximate second-order information">><<replace "#ps-q7">>Correct! SparseGPT applies an approximate Optimal Brain Surgeon procedure layer by layer, making it computationally feasible for billion-scale models. No retraining is needed, which is critical when fine-tuning would cost millions of dollars.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It only works on models smaller than 1 billion parameters">><<replace "#ps-q7">>Wrong. SparseGPT was specifically designed for and demonstrated on billion-parameter models like OPT-175B.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It uses reinforcement learning to decide which weights to prune">><<replace "#ps-q7">>Wrong. SparseGPT uses second-order (Hessian-based) information, not reinforcement learning.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ps-q8">''8. Why does iterative pruning consistently outperform one-shot pruning at the same sparsity level?''
+<<button "A) Iterative pruning uses a better importance criterion">><<replace "#ps-q8">>Wrong. Both methods can use the same importance criterion (e.g., magnitude). The advantage of iterative pruning comes from the //process//, not the criterion.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Each pruning round allows the network to redistribute information among surviving weights before the next round removes more">><<replace "#ps-q8">>Correct! By pruning a small fraction and fine-tuning, the surviving weights adjust to compensate. Then the next round prunes from this adjusted state. This gradual process identifies less important weights more accurately than a single large pruning step, because importance changes after each round of adaptation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Iterative pruning uses more GPU memory, which improves accuracy">><<replace "#ps-q8">>Wrong. GPU memory usage does not determine pruning quality. Iterative pruning is better because of the gradual adaptation process, not resource usage.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) One-shot pruning cannot remove more than 50% of weights">><<replace "#ps-q8">>Wrong. One-shot pruning can target any sparsity level. It just tends to produce worse accuracy than iterative pruning at the same target sparsity.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

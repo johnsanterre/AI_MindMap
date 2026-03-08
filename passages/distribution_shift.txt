@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Distribution Shift
+
+[img[assets/distribution_shift.svg]]
+
+Imagine you study for an exam using last year's questions, and you get very good at answering them. But this year's exam covers a different chapter. Your preparation was excellent — for the wrong test. ''Distribution shift'' is exactly this problem in machine learning: the data a model sees during deployment comes from a different statistical distribution than the data it trained on. The model's learned patterns, decision boundaries, and calibrated confidences all assume a world that no longer matches reality. Nothing about the model itself has changed — the world moved.
+
+---
+
+!! The Core Insight
+
+Every supervised learning algorithm makes a foundational assumption: the training data and the test data are drawn from the same underlying distribution. This is the ''i.i.d. assumption'' — independent and identically distributed. When this assumption holds, a model that performs well on a held-out validation set will perform well in production. When it breaks, all bets are off.
+
+Distribution shift is not a bug in any particular algorithm; it is a structural mismatch between what the model learned and what it encounters. A spam filter trained on 2018 emails will struggle with 2024 spam. A medical imaging model trained on data from one hospital will degrade at another hospital with different scanners. A self-driving car trained in sunny California will falter in rainy London. The shift is not always dramatic — even subtle changes in lighting, demographics, or language use can erode model performance in ways that standard validation metrics never reveal.
+
+The danger is that distribution shift is //silent//. The model does not know it is wrong. It still produces confident predictions — they are just quietly less reliable. Detecting and adapting to shift is therefore not optional in any real deployment; it is a core engineering requirement. This connects directly to <<link "Out-of-Distribution Detection" "Out-of-Distribution Detection">><</link>>, which focuses on flagging inputs that fall outside the training distribution, and <<link "Robustness" "Robustness">><</link>>, which concerns building models that degrade gracefully under shift.
+
+---
+
+!! Types of Distribution Shift
+
+There are several distinct ways the training and test distributions can diverge, and each demands a different response.
+
+''Covariate shift'' occurs when the input distribution $P(X)$ changes but the labeling function $P(Y|X)$ stays the same. The relationship between features and labels is unchanged — the model just sees different inputs. A face recognition system trained on young adults deployed on elderly patients experiences covariate shift: the mapping from face to identity is the same, but the distribution of faces is different. This is the most studied form of shift and connects to <<link "Covariate Shift" "Covariate Shift">><</link>>.
+
+''Label shift'' (or prior probability shift) occurs when $P(Y)$ changes but $P(X|Y)$ stays the same. The class-conditional feature distributions are identical, but the prevalence of each class changes. A disease classifier trained when prevalence was 5% but deployed when prevalence is 20% experiences label shift. The symptoms of the disease look the same; only the base rate has changed.
+
+''Concept drift'' occurs when $P(Y|X)$ itself changes — the very relationship between inputs and outputs shifts over time. What counted as spam in 2018 no longer matches what counts as spam in 2024. The features of an email might be the same, but the label has changed meaning. This is the most pernicious form because no amount of input reweighting can fix it — the model must actually relearn. <<link "Concept Drift" "Concept Drift">><</link>> explores this in depth.
+
+''Domain shift'' is the umbrella term for shift across distinct but related domains — hospital A vs. hospital B, English vs. French, simulation vs. real world. <<link "Domain Adaptation" "Domain Adaptation">><</link>> addresses the family of techniques designed to bridge domain gaps by aligning feature representations or learning domain-invariant features.
+
+---
+
+!! What the Math Is Actually Doing
+
+The standard supervised learning objective minimizes expected risk under the training distribution:
+
+$$R_{\text{train}}(f) = \mathbb{E}_{(x,y) \sim P_{\text{train}}} [\ell(f(x), y)]$$
+
+But at deployment, the model faces a different distribution $P_{\text{test}}$. The actual risk is:
+
+$$R_{\text{test}}(f) = \mathbb{E}_{(x,y) \sim P_{\text{test}}} [\ell(f(x), y)]$$
+
+Under ''covariate shift'', where $P_{\text{test}}(Y|X) = P_{\text{train}}(Y|X)$ but $P_{\text{test}}(X) \neq P_{\text{train}}(X)$, importance weighting provides a correction. The test risk can be rewritten as an expectation under the training distribution:
+
+$$R_{\text{test}}(f) = \mathbb{E}_{(x,y) \sim P_{\text{train}}} \left[ \frac{P_{\text{test}}(x)}{P_{\text{train}}(x)} \ell(f(x), y) \right]$$
+
+The ratio $w(x) = P_{\text{test}}(x) / P_{\text{train}}(x)$ is the ''importance weight''. Training examples that are common in the test distribution but rare in the training distribution get upweighted; common training examples that are rare at test time get downweighted. The corrected empirical risk becomes:
+
+$$\hat{R}_{\text{test}}(f) = \frac{1}{n} \sum_{i=1}^{n} w(x_i) \ell(f(x_i), y_i)$$
+
+For ''label shift'', the correction uses class-prior ratios instead. If $P_{\text{test}}(y) / P_{\text{train}}(y)$ is known or estimated, predictions can be recalibrated by adjusting the class priors in a Bayesian fashion.
+
+The ''KL divergence'' $D_{\text{KL}}(P_{\text{test}} \| P_{\text{train}})$ quantifies how far apart the two distributions are. Larger divergence implies a larger potential gap between training performance and test performance. Generalization bounds under shift typically include a term proportional to this divergence, formalizing the intuition that bigger shifts cause bigger performance drops.
+
+---
+
+!! Detection and Adaptation
+
+Detecting distribution shift requires monitoring the input stream and comparing it against the training distribution. Common approaches include tracking summary statistics (mean, variance, quantiles) of input features over time, applying two-sample tests (Kolmogorov-Smirnov, Maximum Mean Discrepancy) to compare recent batches against a reference set, and monitoring model confidence or prediction entropy — a sudden increase in uncertainty often signals shift.
+
+''Importance weighting'' is the classical correction for covariate shift. The key difficulty is estimating the density ratio $w(x)$ without explicitly estimating both densities. Kernel mean matching (KMM) and discriminative approaches (training a classifier to distinguish source from target data) avoid density estimation entirely and directly estimate the weights.
+
+''Domain adaptation'' methods learn representations that are invariant to the domain while preserving task-relevant information. Domain-adversarial neural networks (DANN) add a domain classifier whose gradient is reversed during backpropagation, forcing the feature extractor to learn domain-invariant features. The representation satisfies two competing objectives: be useful for the task and be uninformative about which domain the data came from.
+
+''Continual learning'' and periodic retraining address concept drift by updating the model as new labeled data becomes available. The challenge is catastrophic forgetting: updating on new data can destroy performance on older patterns. Elastic weight consolidation (EWC) and experience replay are techniques designed to retain old knowledge while incorporating new information.
+
+---
+
+!! When Shift Correction Breaks Down
+
+''Support mismatch:'' Importance weighting assumes the test distribution has support within the training distribution — that is, $P_{\text{train}}(x) > 0$ wherever $P_{\text{test}}(x) > 0$. When the test data includes inputs from regions the model has never seen at all, no amount of reweighting can help. There is no training signal to upweight. This is the boundary between distribution shift (correctable) and out-of-distribution detection (requires abstention), and it fails silently when the model extrapolates into unseen regions with misplaced confidence.
+
+''High-variance importance weights:'' Even when the support condition holds, importance weights can have enormous variance. If a few training examples receive very large weights while most receive near-zero weights, the corrected estimator becomes dominated by a handful of points. The effective sample size $n_{\text{eff}} = (\sum w_i)^2 / \sum w_i^2$ can shrink to a tiny fraction of $n$. In high-dimensional settings, this is almost guaranteed because high-dimensional densities diverge rapidly, making importance-weighted estimates practically useless without aggressive variance reduction techniques.
+
+''Concept drift without detection:'' When the labeling function $P(Y|X)$ shifts gradually, the model's performance degrades slowly — slow enough that standard monitoring dashboards may not flag it. By the time the degradation is noticed, the model may have been making poor decisions for weeks or months. Importance weighting cannot fix concept drift at all because the conditional relationship has changed; only retraining on fresh labeled data from the new distribution can restore performance. Organizations that lack rapid relabeling and retraining pipelines are especially vulnerable.
+
+---
+
+!! Technical Details
+
+''Ben-David et al. (2010)'' established the foundational theory for domain adaptation, proving that the target domain error is bounded by the source domain error plus the divergence between domains (measured by $\mathcal{H}\Delta\mathcal{H}$-divergence) plus an irreducible joint error term. This bound formalizes the intuition that adaptation is possible only when the domains are sufficiently similar and the labeling functions are approximately compatible.
+
+''Shimodaira (2000)'' introduced importance-weighted empirical risk minimization for covariate shift correction, proving consistency under the support condition and showing that the maximum likelihood estimator trained with importance weights converges to the optimal model under the test distribution. The practical challenge of weight estimation spurred subsequent work on kernel density ratio estimation and discriminative weight learning.
+
+''Distributionally robust optimization'' (DRO) takes a minimax approach: instead of correcting for a specific shift, it optimizes worst-case performance over an ''uncertainty set'' of distributions centered on the training distribution. If the uncertainty set is defined using a Wasserstein ball of radius $\epsilon$, the model minimizes:
+
+$$\sup_{Q: W(Q, P_{\text{train}}) \leq \epsilon} \mathbb{E}_{(x,y) \sim Q}[\ell(f(x), y)]$$
+
+This provides a robustness guarantee: if the actual test distribution falls within the uncertainty set, the model's performance is bounded. The trade-off is that robustness to worst-case shifts typically costs average-case performance.
+
+''WILDS benchmark'' (Koh et al., 2021) provides standardized datasets for evaluating models under real-world distribution shifts across domains including wildlife identification, tumor detection, poverty mapping, and toxicity detection. It has become the standard benchmark for distribution shift research.
+
+The ''effective sample size'' under importance weighting is $n_{\text{eff}} = (\sum_{i=1}^n w_i)^2 / \sum_{i=1}^n w_i^2$. When $n_{\text{eff}} \ll n$, the correction is unreliable. Self-normalized importance weighting (dividing by $\sum w_i$) reduces variance but introduces bias. Doubly robust estimators combine importance weighting with a regression estimate to achieve lower variance while maintaining consistency when either the weight model or the regression model is correctly specified.
+
+---
+
+!! Quiz
+
+<span id="ds-q1">''1. What is the i.i.d. assumption in supervised learning?''
+<<button "A) Features are independent of labels">><<replace "#ds-q1">>Incorrect. The i.i.d. assumption is about training and test data coming from the same distribution, not about independence between features and labels.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Training and test data are drawn from the same distribution">><<replace "#ds-q1">>Correct! The i.i.d. (independent and identically distributed) assumption states that all data points — training and test — are sampled independently from the same underlying distribution. Distribution shift is precisely the violation of this assumption.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Each feature is identically distributed">><<replace "#ds-q1">>Incorrect. The i.i.d. assumption refers to data points being drawn from the same distribution, not to features sharing distributions with each other.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The model parameters are independently initialized">><<replace "#ds-q1">>Incorrect. The i.i.d. assumption concerns data sampling, not model initialization.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q2">''2. In covariate shift, which component of the joint distribution changes?''
+<<button "A) P(Y|X) — the labeling function">><<replace "#ds-q2">>Incorrect. When $P(Y|X)$ changes, that is concept drift, not covariate shift.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) P(X) — the input distribution">><<replace "#ds-q2">>Correct! Covariate shift means the marginal distribution of inputs $P(X)$ changes while the conditional $P(Y|X)$ remains the same. The relationship between features and labels is preserved; only the frequency of different inputs changes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) P(X|Y) — the class-conditional distribution">><<replace "#ds-q2">>Incorrect. When $P(X|Y)$ stays the same but $P(Y)$ changes, that is label shift. Covariate shift concerns $P(X)$ directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) P(X, Y) — everything changes simultaneously">><<replace "#ds-q2">>Incorrect. Covariate shift is a specific, structured change — only $P(X)$ shifts. If everything changed at once, no correction strategy would be tractable.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q3">''3. What is the importance weight used to correct for covariate shift?''
+<<button "A) $w(x) = P_{\text{train}}(x) / P_{\text{test}}(x)$">><<replace "#ds-q3">>Incorrect. The ratio is inverted. You need to upweight training examples that are common at test time, so the test density goes in the numerator.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $w(x) = P_{\text{test}}(x) / P_{\text{train}}(x)$">><<replace "#ds-q3">>Correct! The importance weight $w(x) = P_{\text{test}}(x) / P_{\text{train}}(x)$ reweights each training example so that the weighted training distribution matches the test distribution. Examples common at test time but rare in training get large weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $w(x) = P_{\text{test}}(y|x) / P_{\text{train}}(y|x)$">><<replace "#ds-q3">>Incorrect. Under covariate shift, $P(Y|X)$ is assumed unchanged, so this ratio would be 1. The correction operates on the marginal $P(X)$, not the conditional.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $w(x) = 1/n$ for all examples">><<replace "#ds-q3">>Incorrect. Uniform weights correspond to no correction at all — standard empirical risk minimization. Importance weighting requires non-uniform weights.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q4">''4. Which type of distribution shift cannot be fixed by reweighting training examples?''
+<<button "A) Covariate shift">><<replace "#ds-q4">>Incorrect. Covariate shift is precisely the case where importance weighting works, because $P(Y|X)$ is unchanged.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Label shift">><<replace "#ds-q4">>Incorrect. Label shift can be corrected by adjusting class priors — a form of reweighting based on $P(Y)$ ratios.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Concept drift">><<replace "#ds-q4">>Correct! Concept drift means $P(Y|X)$ itself has changed — the relationship between inputs and outputs is different. No reweighting of old training examples can recover a labeling function that has fundamentally shifted. The model must be retrained on newly labeled data from the current distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Domain shift">><<replace "#ds-q4">>Incorrect. Domain shift is a broad category. Many forms of domain shift involve only covariate shift and can be partially addressed by reweighting or domain adaptation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q5">''5. What does a domain-adversarial neural network (DANN) do?''
+<<button "A) Trains two separate models, one per domain">><<replace "#ds-q5">>Incorrect. DANN uses a single shared feature extractor. The key idea is learning domain-invariant representations, not building separate models.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Reverses the gradient from a domain classifier to learn domain-invariant features">><<replace "#ds-q5">>Correct! DANN attaches a domain classifier to the feature extractor and reverses its gradient during backpropagation. This forces the features to be useful for the task while being uninformative about which domain the data came from.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Augments training data with synthetic domain-shifted examples">><<replace "#ds-q5">>Incorrect. DANN does not generate synthetic data. It learns invariant representations through adversarial training between the task loss and the domain classification loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Removes domain-specific layers from a pretrained network">><<replace "#ds-q5">>Incorrect. DANN adds a domain classifier head, not removes layers. The gradient reversal mechanism is what drives domain-invariant feature learning.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q6">''6. Why do importance weights often fail in high-dimensional settings?''
+<<button "A) High-dimensional distributions are always identical">><<replace "#ds-q6">>Incorrect. High-dimensional distributions are often very different — that is precisely the problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The density ratio has extremely high variance, collapsing the effective sample size">><<replace "#ds-q6">>Correct! In high dimensions, density ratios can vary enormously — a few training points get huge weights while most get near-zero weights. The effective sample size $n_{\text{eff}} = (\sum w_i)^2 / \sum w_i^2$ shrinks dramatically, making the corrected estimate unreliable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Importance weights require labeled test data">><<replace "#ds-q6">>Incorrect. Importance weights only require estimating the density ratio $P_{\text{test}}(x)/P_{\text{train}}(x)$, which uses unlabeled data from both distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) High-dimensional data cannot be reweighted">><<replace "#ds-q6">>Incorrect. Reweighting is mathematically valid in any dimension. The problem is practical: the weights have such high variance that the correction is statistically unreliable.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q7">''7. Distributionally robust optimization (DRO) provides robustness by:''
+<<button "A) Training on the hardest examples in the training set">><<replace "#ds-q7">>Incorrect. While DRO can upweight hard examples, its formulation is about worst-case performance over a set of distributions, not just hard individual examples.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Minimizing worst-case loss over an uncertainty set of distributions around the training distribution">><<replace "#ds-q7">>Correct! DRO optimizes $\sup_{Q: d(Q, P_{\text{train}}) \leq \epsilon} \mathbb{E}_Q[\ell(f(x),y)]$, guaranteeing bounded performance for any test distribution within the uncertainty set. This trades average-case performance for robustness to shift.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Removing outliers from the training data">><<replace "#ds-q7">>Incorrect. DRO does not remove data. It changes the optimization objective to be robust to distributional perturbations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Ensembling models trained on different data subsets">><<replace "#ds-q7">>Incorrect. DRO is a single optimization framework, not an ensembling strategy.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ds-q8">''8. What is the key limitation of the support condition for importance weighting?''
+<<button "A) It requires knowing the exact test distribution">><<replace "#ds-q8">>Incorrect. The support condition is about where $P_{\text{train}}(x) > 0$ overlapping with where $P_{\text{test}}(x) > 0$, not about knowing the exact test distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It fails when test data includes inputs from regions where the training distribution has zero density">><<replace "#ds-q8">>Correct! When $P_{\text{test}}(x) > 0$ in regions where $P_{\text{train}}(x) = 0$, the importance weight $w(x)$ is undefined — there are no training examples to upweight. The model must extrapolate into unseen territory, which no reweighting scheme can fix.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It assumes the label distribution is uniform">><<replace "#ds-q8">>Incorrect. The support condition makes no assumption about label distributions. It concerns the overlap of the input marginals $P_{\text{train}}(X)$ and $P_{\text{test}}(X)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It only works for binary classification">><<replace "#ds-q8">>Incorrect. The support condition and importance weighting apply to any prediction task — regression, multiclass classification, or structured prediction.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

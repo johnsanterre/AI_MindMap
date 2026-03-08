@@ -1,0 +1,159 @@
+<<include "Header">>
+
+! Divide and Conquer
+
+<img src="assets/divide_and_conquer.svg" alt="Diagram showing divide and conquer strategy: a problem of size n splits into subproblems of size n/2, each solved recursively, then combined into a final solution, with recurrence T(n) = aT(n/b) + f(n)" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you need to alphabetize a thousand library cards. Doing it all at once is overwhelming — you would need to compare every card against every other card. But what if you split the pile in half, alphabetized each half separately, and then merged the two sorted halves together? Each half-pile is easier, and merging two already-sorted stacks is straightforward — just compare the top cards and pick the smaller one. That is ''divide and conquer'' in a nutshell: break a hard problem into smaller versions of itself, solve those smaller versions, and combine the results. It is one of the most powerful and universal strategies in all of algorithm design.
+
+!! The Core Insight
+
+Divide and conquer rests on a single observation: many problems have ''self-similar structure''. A sorting problem on $n$ elements looks exactly like a sorting problem on $n/2$ elements — just smaller. A search problem on a sorted array of $n$ elements can be reduced to a search on $n/2$ elements by checking the middle. The strategy exploits this self-similarity through three steps:
+
+''1. Divide:'' Split the problem into $a$ smaller subproblems, each roughly $1/b$ the size of the original.
+
+''2. Conquer:'' Solve each subproblem recursively. When a subproblem is small enough (the //base case//), solve it directly.
+
+''3. Combine:'' Merge the subproblem solutions into a solution for the original problem. The cleverness of the algorithm usually lives here — the combine step determines the overall efficiency.
+
+The magic is that dividing a problem in half and solving both halves //plus// combining is often dramatically cheaper than tackling the original directly. Sorting $n$ items by brute force takes $O(n^2)$ comparisons, but merge sort — which divides, conquers, and combines — does it in $O(n \log n)$.
+
+!! Classic Divide and Conquer Algorithms
+
+''Merge Sort'' divides an array in half, recursively sorts each half, and merges the two sorted halves in $O(n)$ time. Total cost: $T(n) = 2T(n/2) + O(n) = O(n \log n)$. It is the textbook example and one of the most elegant [[Sorting Algorithms]] ever designed.
+
+''Binary Search'' divides a sorted array in half and discards the irrelevant half. Only one subproblem survives: $T(n) = T(n/2) + O(1) = O(\log n)$. This is divide and conquer at its most efficient — eliminating half the search space at every step.
+
+''Quicksort'' picks a //pivot//, partitions the array into elements smaller and larger than the pivot, and recurses on both partitions. Expected time is $O(n \log n)$, but worst-case is $O(n^2)$ if the pivot is consistently bad (e.g., always the smallest element). Randomized pivot selection makes the worst case extremely unlikely.
+
+''Strassen's Matrix Multiplication'' multiplies two $n \times n$ matrices using 7 recursive multiplications of $n/2 \times n/2$ matrices instead of the naive 8. This gives $T(n) = 7T(n/2) + O(n^2) = O(n^{2.807})$, beating the naive $O(n^3)$.
+
+''Karatsuba Multiplication'' multiplies two $n$-digit numbers using 3 multiplications of $n/2$-digit numbers instead of 4. Cost: $T(n) = 3T(n/2) + O(n) = O(n^{1.585})$, faster than the schoolbook $O(n^2)$.
+
+''Closest Pair of Points'' finds the two nearest points in a plane. Divide the points by a vertical line, solve each half, then check pairs that straddle the boundary. The combine step is the subtle part — only a narrow strip needs checking, and a clever argument bounds comparisons to $O(n)$, giving $O(n \log n)$ overall.
+
+!! What the Math Is Actually Doing
+
+The runtime of a divide and conquer algorithm is captured by a ''recurrence relation'':
+
+$$T(n) = aT\!\left(\frac{n}{b}\right) + f(n)$$
+
+where $a$ is the number of subproblems, $b$ is the factor by which the problem shrinks, and $f(n)$ is the cost of dividing and combining. The ''Master Theorem'' (see [[Recurrence Relations]]) solves this recurrence in three cases by comparing $f(n)$ to $n^{\log_b a}$:
+
+''Case 1:'' If $f(n) = O(n^{\log_b a - \epsilon})$ for some $\epsilon > 0$, then $T(n) = \Theta(n^{\log_b a})$. The work is dominated by the leaves of the recursion tree.
+
+''Case 2:'' If $f(n) = \Theta(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a} \log n)$. The work is evenly spread across all levels of the recursion tree.
+
+''Case 3:'' If $f(n) = \Omega(n^{\log_b a + \epsilon})$ and $af(n/b) \leq cf(n)$ for some $c < 1$, then $T(n) = \Theta(f(n))$. The combine step dominates.
+
+For merge sort: $a = 2$, $b = 2$, $f(n) = O(n)$. Since $n^{\log_2 2} = n^1 = n = f(n)$, we are in Case 2: $T(n) = \Theta(n \log n)$.
+
+For Strassen: $a = 7$, $b = 2$, $f(n) = O(n^2)$. Since $n^{\log_2 7} \approx n^{2.807} \gg n^2$, we are in Case 1: $T(n) = \Theta(n^{\log_2 7})$.
+
+The recursion tree visualization makes this intuitive. At the top level, you do $f(n)$ work. At the next level, you do $a \cdot f(n/b)$ work across all subproblems. The tree has $\log_b n$ levels, and the total work is the sum across all levels. Whether the total is dominated by the root, the leaves, or evenly balanced determines which Master Theorem case applies.
+
+!! Divide and Conquer vs Other Paradigms
+
+Divide and conquer splits a problem into //independent// subproblems. [[Greedy Algorithms]] make a single locally optimal choice at each step without looking back. ''Dynamic programming'' solves //overlapping// subproblems — when the same subproblem appears multiple times, dynamic programming caches results to avoid redundant work, while pure divide and conquer would recompute them.
+
+A classic example of the distinction: computing the $n$-th Fibonacci number. A naive divide and conquer approach ($F(n) = F(n-1) + F(n-2)$) gives exponential time $O(2^n)$ because the same subproblems are solved repeatedly. Dynamic programming stores each $F(k)$ once, reducing the cost to $O(n)$.
+
+''When to choose divide and conquer:'' Use it when subproblems are independent and roughly equal in size. Use dynamic programming when subproblems overlap. Use greedy algorithms when a local choice provably leads to a global optimum.
+
+!! When Divide and Conquer Breaks Down
+
+''1. Overlapping subproblems.'' When the recursive decomposition produces the same subproblems multiple times, divide and conquer wastes enormous effort recomputing them. The Fibonacci recurrence is the simplest example: $F(5)$ needs $F(4)$ and $F(3)$, but $F(4)$ also needs $F(3)$, and the redundancy grows exponentially. The fix is dynamic programming — memoize subproblem results. Any time you see a divide and conquer solution with exponential runtime, check whether subproblems overlap.
+
+''2. Unbalanced partitions.'' Divide and conquer assumes subproblems are roughly equal in size. When they are not, performance degrades sharply. Quicksort's worst case ($O(n^2)$) occurs when every partition puts all but one element on one side — the recursion tree degenerates from $O(\log n)$ depth to $O(n)$ depth. Median-of-three or randomized pivot selection mitigates this, but any divide and conquer algorithm is vulnerable to pathological inputs that produce lopsided splits.
+
+''3. High combine cost.'' The combine step can dominate and negate the benefits of dividing. If merging $a$ subproblem solutions takes $O(n^2)$ work, dividing the problem may not help — you might as well solve it directly. Algorithms where the combine step is the bottleneck need clever restructuring (like the closest-pair strip argument) to keep the combine cost low.
+
+!! Technical Details
+
+''Master Theorem regularity condition:'' Case 3 requires the //regularity condition// $af(n/b) \leq cf(n)$ for some constant $c < 1$. This ensures $f(n)$ is "polynomially larger" than $n^{\log_b a}$ in a well-behaved way. Most practical combine functions satisfy it.
+
+''Akra-Bazzi theorem:'' Generalizes the Master Theorem to recurrences of the form $T(n) = \sum_i a_i T(n/b_i) + f(n)$ where subproblems can have //different// sizes. It states $T(n) = \Theta\!\left(n^p\!\left(1 + \int_1^n \frac{f(u)}{u^{p+1}}\,du\right)\right)$ where $p$ satisfies $\sum_i a_i / b_i^p = 1$.
+
+''Recursion overhead:'' In practice, divide and conquer algorithms switch to a direct (non-recursive) algorithm when the subproblem size falls below a threshold (e.g., insertion sort for arrays under 16 elements in merge sort implementations). This avoids the overhead of function calls on tiny inputs.
+
+''Parallelism:'' Divide and conquer is naturally parallel — independent subproblems can be solved on separate processors. The ''work-span model'' measures parallel efficiency: total work $T_1$ divided by span $T_\infty$ (longest dependent chain) gives the maximum useful parallelism $T_1/T_\infty$. Merge sort has work $O(n \log n)$ and span $O(\log^2 n)$ with parallel merging, giving parallelism $O(n/\log n)$.
+
+''Notable applications in ML:'' The FFT (Fast Fourier Transform) is divide and conquer — $T(n) = 2T(n/2) + O(n) = O(n \log n)$ — and underlies efficient convolution in CNNs. $k$-d trees for nearest neighbor search recursively partition space, and randomized partition trees enable fast approximate nearest neighbor queries in high-dimensional spaces.
+
+Related topics: [[Recurrence Relations]], [[Sorting Algorithms]], [[Greedy Algorithms]].
+
+!! Quiz
+
+<span id="dc-q1">What are the three steps of the divide and conquer paradigm?</span>
+
+A. Initialize, iterate, terminate
+B. Divide, conquer, combine
+C. Partition, search, backtrack
+D. Reduce, solve, expand
+
+<<button "A">><<replace "#dc-q1">>Incorrect. "Initialize, iterate, terminate" describes a generic loop, not the divide and conquer paradigm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q1">>Correct! Divide the problem into smaller subproblems, conquer each subproblem recursively (or directly if small enough), and combine the subproblem solutions into a solution for the original problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q1">>Incorrect. "Partition, search, backtrack" describes backtracking algorithms, not divide and conquer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q1">>Incorrect. "Reduce, solve, expand" is not a standard algorithmic paradigm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q2">What is the recurrence relation for merge sort?</span>
+
+A. $T(n) = T(n/2) + O(1)$
+B. $T(n) = 2T(n/2) + O(n)$
+C. $T(n) = 2T(n/2) + O(n^2)$
+D. $T(n) = 4T(n/2) + O(n)$
+
+<<button "A">><<replace "#dc-q2">>Incorrect. $T(n) = T(n/2) + O(1)$ is the recurrence for binary search, which only recurses on //one// subproblem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q2">>Correct! Merge sort splits the array into 2 halves (two subproblems of size $n/2$) and merges them in $O(n)$ time. By the Master Theorem Case 2, this gives $T(n) = O(n \log n)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q2">>Incorrect. If the merge step cost $O(n^2)$, merge sort would be $O(n^2)$ and no better than brute force. The $O(n)$ merge is what makes it efficient.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q2">>Incorrect. $a = 4$ would mean splitting into 4 subproblems of size $n/2$, which is not what merge sort does.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q3">Why does Strassen's algorithm beat naive matrix multiplication?</span>
+
+A. It uses fewer additions
+B. It reduces the number of recursive multiplications from 8 to 7
+C. It avoids recursion entirely
+D. It uses sparse matrix representations
+
+<<button "A">><<replace "#dc-q3">>Incorrect. Strassen's algorithm actually uses //more// additions than the naive method. The savings come from reducing multiplications.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q3">>Correct! Naive recursive matrix multiplication uses 8 multiplications of $n/2 \times n/2$ submatrices. Strassen cleverly combines elements to require only 7, changing the recurrence from $T(n) = 8T(n/2) + O(n^2) = O(n^3)$ to $T(n) = 7T(n/2) + O(n^2) = O(n^{2.807})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q3">>Incorrect. Strassen's algorithm is fundamentally recursive — it is a divide and conquer method.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q3">>Incorrect. Strassen's algorithm works on dense matrices. Sparse representations are a separate optimization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q4">What distinguishes divide and conquer from dynamic programming?</span>
+
+A. Divide and conquer uses iteration; dynamic programming uses recursion
+B. Divide and conquer solves independent subproblems; dynamic programming handles overlapping subproblems by caching results
+C. Dynamic programming always runs faster
+D. Divide and conquer only works on sorting problems
+
+<<button "A">><<replace "#dc-q4">>Incorrect. Divide and conquer is //defined// by recursion. Dynamic programming can use either top-down recursion (with memoization) or bottom-up iteration.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q4">>Correct! The key distinction is whether subproblems overlap. Divide and conquer assumes independent subproblems; if the same subproblem is solved multiple times, dynamic programming avoids redundant work by storing results. The Fibonacci sequence is the classic example where naive divide and conquer is exponential but dynamic programming is linear.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q4">>Incorrect. Neither paradigm is universally faster. For problems with independent subproblems (like merge sort), divide and conquer is already optimal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q4">>Incorrect. Divide and conquer applies to search (binary search), multiplication (Strassen, Karatsuba), geometry (closest pair), and many other domains beyond sorting.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q5">In the Master Theorem for $T(n) = aT(n/b) + f(n)$, what does Case 2 state?</span>
+
+A. If $f(n) = O(n^{\log_b a - \epsilon})$, the leaves dominate
+B. If $f(n) = \Theta(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a} \log n)$
+C. If $f(n)$ dominates, then $T(n) = \Theta(f(n))$
+D. The recurrence has no closed-form solution
+
+<<button "A">><<replace "#dc-q5">>Incorrect. That describes Case 1, where the work at the leaves dominates the total cost.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q5">>Correct! Case 2 applies when the combine cost $f(n)$ matches $n^{\log_b a}$, meaning work is evenly distributed across all $\log_b n$ levels of the recursion tree. This adds a $\log n$ factor, giving $T(n) = \Theta(n^{\log_b a} \log n)$. Merge sort is the canonical example.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q5">>Incorrect. That describes Case 3, where the combine step is so expensive that it dominates the entire computation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q5">>Incorrect. The Master Theorem provides closed-form solutions for all three cases.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q6">What causes quicksort's worst-case $O(n^2)$ performance?</span>
+
+A. The merge step takes quadratic time
+B. Every partition is perfectly balanced
+C. The pivot consistently produces maximally unbalanced partitions
+D. The array contains duplicate elements
+
+<<button "A">><<replace "#dc-q6">>Incorrect. Quicksort does not have a merge step — it partitions in-place. The cost is in the partitioning and recursion depth.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q6">>Incorrect. Perfectly balanced partitions give the //best// case: $T(n) = 2T(n/2) + O(n) = O(n \log n)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q6">>Correct! When the pivot is always the smallest or largest element, one partition has $n-1$ elements and the other has 0. The recursion tree has depth $n$ instead of $\log n$, giving $T(n) = T(n-1) + O(n) = O(n^2)$. Randomized pivot selection makes this extremely unlikely.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q6">>Incorrect. Duplicates can cause issues with certain partitioning schemes, but the fundamental problem is unbalanced partitions, not duplicates per se.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q7">Why is divide and conquer naturally suited for parallel computation?</span>
+
+A. It avoids memory allocation
+B. The combine step can be skipped on multicore systems
+C. Independent subproblems can be solved simultaneously on separate processors
+D. Recursion automatically distributes work across cores
+
+<<button "A">><<replace "#dc-q7">>Incorrect. Divide and conquer has no inherent memory advantage. Its parallelism comes from task independence, not memory management.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q7">>Incorrect. The combine step is essential — without it, you have solutions to subproblems but no solution to the original problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q7">>Correct! Since subproblems in divide and conquer are independent, they can be distributed across processors and solved in parallel. The parallelism is bounded by $T_1/T_\infty$ — total work divided by the span (longest sequential dependency chain). Merge sort achieves parallelism of $O(n/\log n)$ with parallel merging.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q7">>Incorrect. Recursion alone does not distribute work. Explicit parallel frameworks (fork-join, map-reduce) are needed to assign subproblems to processors.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="dc-q8">Karatsuba multiplication achieves $O(n^{1.585})$ by reducing how many sub-multiplications?</span>
+
+A. From 2 to 1
+B. From 4 to 3
+C. From 8 to 7
+D. From 4 to 2
+
+<<button "A">><<replace "#dc-q8">>Incorrect. Standard multiplication of two $n$-digit numbers already requires more than 2 sub-multiplications in a recursive scheme.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#dc-q8">>Correct! Naive recursive multiplication splits each $n$-digit number into two $n/2$-digit halves, requiring 4 half-size multiplications. Karatsuba cleverly computes the cross term from the other products, reducing to 3 multiplications: $T(n) = 3T(n/2) + O(n) = O(n^{\log_2 3}) \approx O(n^{1.585})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#dc-q8">>Incorrect. Reducing from 8 to 7 is what Strassen's algorithm does for matrix multiplication, not Karatsuba.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#dc-q8">>Incorrect. Reducing from 4 to 2 would give $T(n) = 2T(n/2) + O(n) = O(n \log n)$, which is not the Karatsuba complexity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

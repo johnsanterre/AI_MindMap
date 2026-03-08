@@ -1,0 +1,143 @@
+<<include "Header">>
+! Jan Peters
+<img src="assets/jan_peters.svg" alt="Jan Peters" width="800">
+
+Imagine you want to teach a person to throw darts. You would not make them memorise every muscle activation in sequence — instead, you would give them a rough motion template and let them refine it through practice. Jan Peters has spent two decades building the mathematical machinery that lets robots learn exactly this way: start with structured movement representations, then optimise them through principled ''policy search'' methods rather than brute-force exploration. His work sits at the crossroads of ''control theory'', ''reinforcement learning'', and ''motor neuroscience'', and has produced some of the most compelling demonstrations of robots acquiring dexterous skills — from playing table tennis to tossing a ball into a cup.
+
+!! Key Contributions
+
+Peters has shaped modern robot learning through several intertwined research threads:
+
+* ''Robot Motor Skill Learning'' — Framing robot skill acquisition not as generic RL but as learning structured movement policies that respect the physics and geometry of the task.
+* ''Policy Search Methods'' — Developing algorithms like ''Relative Entropy Policy Search (REPS)'' and ''Policy learning by Weighting Exploration with the Returns (PoWER)'' that update policies efficiently in high-dimensional continuous action spaces.
+* ''Movement Primitives'' — Advancing ''Dynamic Movement Primitives (DMPs)'' and ''Probabilistic Movement Primitives (ProMPs)'' as compact, reusable building blocks for motor behaviours.
+* ''Hierarchical RL for Robotics'' — Structuring learning into layers of abstraction so that complex tasks decompose into manageable sub-skills.
+* ''TU Darmstadt Intelligent Autonomous Systems Lab'' — Building one of Europe's premier robot learning groups, training a generation of researchers who now lead labs worldwide.
+* ''Max Planck Institute for Intelligent Systems'' — Holding a joint appointment that bridges fundamental research and applied robotics.
+
+!! The Core Insight
+
+The central thesis running through Peters' work is that ''robots need structured policy representations''. Generic [[Reinforcement Learning|Reinforcement Learning]] algorithms treat the agent as a blank slate — a //tabula rasa// learner that must discover everything from scratch. But a robot arm has known kinematics, tasks have temporal structure, and movements follow smooth trajectories. By encoding these priors into the policy representation — through movement primitives, contextual parameters, or hierarchical decompositions — the search space shrinks dramatically and learning becomes practical on real hardware with limited trials.
+
+This is not a rejection of RL but a //refinement// of it: use the right inductive bias so that [[Policy Gradient|Policy Gradient]] methods and information-theoretic updates can operate in a tractable space.
+
+!! What the Math Is Actually Doing
+
+''Policy search'' frames robot learning as direct optimisation of a parameterised policy $\pi_\theta(a \mid s)$ to maximise expected return:
+
+$$J(\theta) = \mathbb{E}_{\pi_\theta}\left[\sum_{t=0}^{T} \gamma^t r(s_t, a_t)\right]$$
+
+Standard policy gradient computes $\nabla_\theta J(\theta)$ and takes gradient steps, but this can be unstable in robotics. Peters' ''REPS'' algorithm instead constrains the policy update by bounding the ''Kullback-Leibler divergence'' between successive policies:
+
+$$\max_{\pi} \mathbb{E}_\pi[R] \quad \text{s.t.} \quad \text{KL}(\pi \| \pi_{\text{old}}) \leq \epsilon$$
+
+This information-theoretic bound prevents catastrophically large updates — critical when each trial runs on a real robot. The solution yields a closed-form weight for each sample trajectory:
+
+$$w_i \propto \exp\left(\frac{R_i}{\eta}\right)$$
+
+where $\eta$ is a temperature parameter found by solving a convex dual problem.
+
+''Dynamic Movement Primitives'' represent a trajectory as the output of a damped spring-mass system driven by a learnable forcing function:
+
+$$\tau \ddot{y} = \alpha_z(\beta_z(g - y) - \dot{y}) + f(x)$$
+
+where $g$ is the goal, $\tau$ is a temporal scaling factor, and $f(x)$ is a weighted sum of basis functions that shapes the movement. Learning reduces to finding the basis function weights — a low-dimensional, well-conditioned regression problem.
+
+!! Impact on the Field
+
+Peters' influence extends well beyond his own publications:
+
+* ''European Robotics Leadership'' — His lab at TU Darmstadt and the associated Max Planck group have been central to making Europe competitive in robot learning, an area historically dominated by US and Japanese labs.
+* ''Bridging Control Theory and RL'' — By insisting that RL for robotics must respect the structure of dynamical systems, Peters helped create a productive middle ground between classical control and modern deep RL. His students, including [[Sergey Levine|Sergey Levine]], have carried this perspective into influential research programs worldwide.
+* ''Compelling Demonstrations'' — The ''robot table tennis'' system and the ''ball-in-a-cup'' experiments became iconic benchmarks that showed policy search could acquire complex sensorimotor skills with remarkably few trials on real hardware.
+* ''[[Imitation Learning|Imitation Learning]] Integration'' — His work on learning from demonstrations combined with subsequent RL refinement established a practical workflow: show the robot roughly what to do, then let it improve autonomously.
+
+!! When Robot Skill Learning Breaks Down
+
+''1. Reward specification collapse.'' When the reward function does not capture the true task objective, the robot optimises the wrong thing. A table tennis reward based purely on ball velocity may produce motions that destroy the paddle. Structured movement primitives mitigate but do not eliminate this — the reward must still be well-designed.
+
+''2. Sim-to-real transfer gap.'' Policy search methods developed in simulation may exploit simulator artefacts (unrealistic friction, perfect sensing). Peters' emphasis on real-robot learning sidesteps this, but limits the number of trials available, making sample efficiency paramount. [[Model-Based RL|Model-Based RL]] and [[Bayesian Optimization|Bayesian Optimization]] can help stretch limited data further.
+
+''3. Non-stationary task structure.'' Movement primitives assume a relatively stable task geometry. When the environment changes unpredictably between episodes — a moving target, a deformable object, an unstructured workspace — the fixed primitive parameterisation may lack the expressiveness to adapt, requiring hierarchical or contextual extensions that add complexity.
+
+!! Technical Details
+
+''Key Papers:''
+* Peters &amp; Schaal, "Reinforcement Learning of Motor Skills with Policy Gradients" (Neural Networks, 2008) — foundational treatment of policy gradient methods for robotics.
+* Peters, Muelling &amp; Altun, "Relative Entropy Policy Search" (AAAI, 2010) — introduced the REPS algorithm.
+* Kober &amp; Peters, "Policy Search for Motor Primitives in Robotics" (NIPS, 2009) — PoWER algorithm for episodic RL.
+* Paraschos, Daniel, Peters &amp; Neumann, "Probabilistic Movement Primitives" (NIPS, 2013) — ProMPs framework.
+
+''Career:'' PhD at University of Southern California under Stefan Schaal; faculty at TU Darmstadt (Full Professor, Computer Science) and research group leader at Max Planck Institute for Intelligent Systems, Tuebingen.
+
+''Awards &amp; Recognition:'' IEEE Robotics and Automation Society (RAS) Early Career Award; ERC Starting Grant; multiple best paper awards at ICRA and IROS. Active in the IEEE RAS community as associate editor and programme committee member.
+
+''Research Group:'' The Intelligent Autonomous Systems (IAS) lab at TU Darmstadt has produced dozens of PhD graduates who now hold positions at major universities and industry labs across Europe and North America.
+
+!! Quiz
+
+<div id="q1">''1. What is the central philosophy behind Jan Peters' approach to robot learning?''
+
+<<button "A) Robots should learn from scratch using deep neural networks">><<replace "#q1">>''1.'' A is incorrect. Peters advocates the opposite — using structured representations rather than //tabula rasa// learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Robots need structured policy representations that leverage movement priors">><<replace "#q1">>''1.'' B is correct! Peters' core insight is that encoding structure — through movement primitives, known kinematics, and smooth trajectory priors — makes RL tractable on real robots.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Model-free RL is always superior for robotics">><<replace "#q1">>''1.'' C is incorrect. Peters' work often incorporates model knowledge and structured priors rather than relying on purely model-free methods.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Robots should only learn through imitation, never through trial and error">><<replace "#q1">>''1.'' D is incorrect. Peters combines imitation learning with reinforcement learning refinement.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What does the REPS algorithm constrain during policy updates?''
+
+<<button "A) The L2 norm of the policy parameters">><<replace "#q2">>''2.'' A is incorrect. REPS constrains information-theoretic divergence, not parameter norms.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The KL divergence between successive policies">><<replace "#q2">>''2.'' B is correct! REPS bounds $\text{KL}(\pi \| \pi_{\text{old}}) \leq \epsilon$ to ensure stable, conservative policy updates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The maximum trajectory length">><<replace "#q2">>''2.'' C is incorrect. Trajectory length is not what REPS constrains.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The number of basis functions in the policy">><<replace "#q2">>''2.'' D is incorrect. The number of basis functions is a design choice, not a constraint in REPS.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. In Dynamic Movement Primitives, what role does the forcing function $f(x)$ play?''
+
+<<button "A) It provides the damping that prevents oscillation">><<replace "#q3">>''3.'' A is incorrect. Damping comes from the spring-mass system terms, not the forcing function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It defines the reward signal for learning">><<replace "#q3">>''3.'' B is incorrect. The forcing function shapes the trajectory, not the reward.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It shapes the movement trajectory through learnable basis function weights">><<replace "#q3">>''3.'' C is correct! The forcing function $f(x)$ is a weighted sum of basis functions that determines the shape of the movement beyond simple point-to-point reaching.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It normalises the action space for gradient computation">><<replace "#q3">>''3.'' D is incorrect. Action space normalisation is not the role of the DMP forcing function.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What is the PoWER algorithm designed for?''
+
+<<button "A) Value function estimation in continuous MDPs">><<replace "#q4">>''4.'' A is incorrect. PoWER is a policy search method, not a value estimation method.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Episodic reinforcement learning with motor primitives">><<replace "#q4">>''4.'' B is correct! PoWER (Policy learning by Weighting Exploration with the Returns) performs policy search by weighting exploratory samples by their episodic returns.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Sim-to-real transfer of deep RL policies">><<replace "#q4">>''4.'' C is incorrect. PoWER predates the deep sim-to-real transfer paradigm and works directly on real robots.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Multi-agent coordination in swarm robotics">><<replace "#q4">>''4.'' D is incorrect. PoWER is for single-agent motor skill learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. Why is the KL divergence bound in REPS especially important for robotics?''
+
+<<button "A) It speeds up GPU computation">><<replace "#q5">>''5.'' A is incorrect. The KL bound relates to policy stability, not computational hardware.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It guarantees global optimality">><<replace "#q5">>''5.'' B is incorrect. The KL bound ensures stable updates but does not guarantee finding the global optimum.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It prevents catastrophically large policy changes that could damage real robots">><<replace "#q5">>''5.'' C is correct! On real hardware, a wild policy update could produce dangerous motions. The KL bound ensures conservative, safe updates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It eliminates the need for reward shaping">><<replace "#q5">>''5.'' D is incorrect. The KL constraint does not address reward design.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. Which institution houses Peters' Intelligent Autonomous Systems lab?''
+
+<<button "A) MIT">><<replace "#q6">>''6.'' A is incorrect. Peters' IAS lab is in Germany.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Stanford University">><<replace "#q6">>''6.'' B is incorrect. Peters is based in Europe.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) TU Darmstadt">><<replace "#q6">>''6.'' C is correct! The Intelligent Autonomous Systems (IAS) lab is at Technische Universitat Darmstadt in Germany.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) ETH Zurich">><<replace "#q6">>''6.'' D is incorrect. Peters is affiliated with TU Darmstadt and the Max Planck Institute.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What iconic robot demonstration became a benchmark for Peters' policy search methods?''
+
+<<button "A) Autonomous driving on highways">><<replace "#q7">>''7.'' A is incorrect. Peters' demonstrations focus on dexterous manipulation and motor skills.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Robot table tennis and ball-in-a-cup">><<replace "#q7">>''7.'' B is correct! These tasks demonstrated that policy search with movement primitives could acquire complex sensorimotor skills with few real-robot trials.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Bipedal walking across rough terrain">><<replace "#q7">>''7.'' C is incorrect. While important in robotics, this is not the signature demonstration of Peters' group.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Solving a Rubik's cube with a robotic hand">><<replace "#q7">>''7.'' D is incorrect. That demonstration is associated with OpenAI, not Peters' group.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. How does Peters' work relate to [[Imitation Learning|Imitation Learning]]?''
+
+<<button "A) He rejects imitation learning entirely in favour of pure RL">><<replace "#q8">>''8.'' A is incorrect. Peters actively integrates imitation learning with RL refinement.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) He uses demonstrations to initialise policies, then refines them with RL">><<replace "#q8">>''8.'' B is correct! The practical workflow combines learning from demonstrations with subsequent reinforcement learning improvement — getting the best of both approaches.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) He only uses imitation learning without any reinforcement signal">><<replace "#q8">>''8.'' C is incorrect. Peters combines both imitation and reinforcement learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) He uses imitation learning only for simulation, never on real robots">><<replace "#q8">>''8.'' D is incorrect. Peters emphasises real-robot learning throughout his work.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

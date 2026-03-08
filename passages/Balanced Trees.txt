@@ -1,0 +1,136 @@
+<<include "Header">>
+! Balanced Trees
+
+<img src="assets/balanced_trees.svg" alt="Comparison of an unbalanced BST degenerating to a linked list versus a balanced AVL tree with logarithmic depth">
+
+Picture a library where every new book gets shelved at the very end of a single long row. Finding a title means scanning the entire row — hopelessly slow. Now imagine a librarian who, after each addition, reorganizes the shelves so that from any starting point you can always eliminate half the remaining books with a single glance at a divider card. That is the essential promise of a ''balanced tree'': a [[Binary Search Trees|binary search tree]] that automatically restructures itself so its height stays proportional to $\log n$, guaranteeing fast search, insertion, and deletion no matter what order the data arrives.
+
+!! The Core Insight
+
+An ordinary binary search tree can degenerate into a linked list if elements arrive in sorted order, making every operation $O(n)$. Balanced trees add a ''structural invariant'' — a rule about the shape of the tree — that is restored after every modification through local restructuring operations called ''rotations''. The invariant ensures the tree's height never exceeds $O(\log n)$, so every search follows at most $O(\log n)$ comparisons. The genius is that maintaining balance costs only $O(\log n)$ additional work per operation, so you get worst-case logarithmic performance for free.
+
+!! Families of Balanced Trees
+
+'''AVL Trees.''' The original self-balancing BST, invented by Adelson-Velsky and Landis in 1962. The invariant: at every node, the heights of the left and right subtrees differ by at most 1. After an insertion or deletion violates this, one or two rotations restore it. AVL trees are //height-optimal// among all BSTs with the AVL property — an AVL tree of height $h$ has at least $F_{h+3} - 1$ nodes, where $F_k$ is the $k$th Fibonacci number.
+
+'''Red-Black Trees.''' Used internally by C++ `std::map`, Java `TreeMap`, and the Linux kernel's CFS scheduler. Each node carries a color bit (red or black) subject to rules: the root is black, red nodes have only black children, and every root-to-null path has the same number of black nodes. These constraints guarantee the longest path is at most twice the shortest, giving height $\le 2 \log_2(n+1)$. Red-black trees require fewer rotations on insertion (at most 2) and deletion (at most 3) than AVL trees, making them popular in practice.
+
+'''B-Trees and B+ Trees.''' Generalized balanced trees where each node holds multiple keys and has many children, designed for disk-based storage. A B-tree of order $m$ requires every non-root internal node to have between $\lceil m/2 \rceil$ and $m$ children. This keeps the tree extremely shallow — a B-tree with a branching factor of 1000 holding a billion keys has height 3. B+ trees, which store all data in leaves and link leaves for sequential access, are the backbone of virtually every database index and filesystem. These structures belong to the broader family of [[Trees and Forests|trees and forests]] used throughout computer science.
+
+'''Treaps and Skip Lists.''' Randomized alternatives that achieve $O(\log n)$ //expected// height without deterministic rotations. A treap assigns each node a random priority and maintains both BST order on keys and heap order on priorities. Skip lists are not trees at all but achieve the same logarithmic guarantees through randomized layered linked lists.
+
+!! What the Math Is Actually Doing
+
+The height $h$ of a balanced BST with $n$ nodes satisfies:
+
+$$h = \Theta(\log n)$$
+
+For AVL trees specifically, the minimum number of nodes $N(h)$ in a tree of height $h$ satisfies the recurrence:
+
+$$N(h) = N(h-1) + N(h-2) + 1, \quad N(0) = 1, \quad N(1) = 2$$
+
+This is closely related to the Fibonacci sequence, giving $N(h) = F_{h+3} - 1$, which means:
+
+$$h < 1.4405 \log_2(n+2) - 0.3277$$
+
+So AVL trees are at most about 44% taller than a perfectly balanced tree.
+
+A ''rotation'' is a local pointer reassignment that preserves BST ordering. A right rotation at node $q$ with left child $p$:
+
+$$\text{Right-Rotate}(q): \quad q.left \leftarrow p.right; \quad p.right \leftarrow q$$
+
+This runs in $O(1)$ time and reduces $q$'s subtree height by 1 while increasing $p$'s by 1. Double rotations (left-right, right-left) handle the case where the imbalance is in the "inner" subtree.
+
+For red-black trees, the ''black-height'' $bh(x)$ of a node $x$ is the number of black nodes on any path from $x$ to a leaf (not counting $x$). The key lemma: a subtree rooted at $x$ contains at least $2^{bh(x)} - 1$ internal nodes. Since at least half the nodes on any root-to-leaf path are black, $bh(\text{root}) \ge h/2$, giving:
+
+$$n \ge 2^{h/2} - 1 \implies h \le 2\log_2(n+1)$$
+
+!! Balanced Trees in Practice
+
+'''Database Indexing.''' B+ trees are the dominant index structure in relational databases (PostgreSQL, MySQL, SQLite). A query on an indexed column traverses at most 3–4 levels of B+ tree nodes, each fitting a disk page, making lookups near-instantaneous even on tables with billions of rows.
+
+'''In-Memory Ordered Collections.''' Red-black trees back the standard library ordered maps and sets in C++, Java, and .NET. They support $O(\log n)$ insertion, deletion, lookup, and ordered iteration — operations central to [[Sorting Algorithms|sorting algorithms]] and priority scheduling.
+
+'''Interval and Segment Trees.''' Augmented balanced BSTs that answer range queries ("which intervals overlap this point?") in $O(\log n + k)$ time where $k$ is the output size. These are essential in computational geometry, calendar scheduling, and genomic range queries.
+
+'''Persistent Data Structures.''' Because rotations are local, balanced trees can be made //persistent// — preserving all previous versions — with $O(\log n)$ overhead per operation via path copying. This is the basis of functional programming's immutable sorted maps.
+
+!! When Balanced Trees Break Down
+
+* ''Cache-unfriendly access patterns.'' Tree nodes are scattered across memory, causing cache misses on every pointer chase. For in-memory workloads where data fits in RAM, sorted arrays with binary search or B+ trees with large nodes often outperform AVL and red-black trees despite worse asymptotic insert/delete complexity, simply because sequential memory access is 10–100x faster than random access.
+
+* ''High contention in concurrent settings.'' Rotations during rebalancing require locking multiple nodes simultaneously, creating bottlenecks under heavy concurrent access. Lock-free or fine-grained locking balanced trees exist but are notoriously complex to implement correctly. Skip lists, which only modify local forward pointers, are often preferred in concurrent systems (e.g., Java's `ConcurrentSkipListMap`).
+
+* ''Worst-case constant factors.'' For small datasets (a few hundred elements), the overhead of maintaining balance factors, color bits, and performing rotations exceeds the benefit. A simple unsorted array with linear scan, or a hash table for unordered access, will be faster in practice due to lower constant factors and better memory locality.
+
+!! Technical Details
+
+''AVL rotation count:'' Insertion requires at most 2 rotations (one single or one double); deletion may require $O(\log n)$ rotations in the worst case, propagating rebalancing up the tree.
+
+''Red-black vs AVL height:'' AVL trees are more strictly balanced (height $\le 1.44 \log n$) vs red-black trees (height $\le 2 \log n$). AVL trees are faster for lookup-heavy workloads; red-black trees are faster for insertion/deletion-heavy workloads.
+
+''Amortized analysis of splaying:'' Splay trees are self-adjusting BSTs with $O(\log n)$ //amortized// cost per operation but $O(n)$ worst-case. They achieve this via the //access lemma//: if item $i$ has weight $w_i$, the amortized cost of accessing $i$ is $O(\log(W/w_i))$ where $W = \sum w_j$, giving them an optimality property no static balanced tree can match.
+
+''B-tree disk I/O:'' A B-tree of order $m$ on $n$ keys has height $O(\log_m n)$. With $m$ chosen to match the disk page size (typically 4–16 KB), searches require $O(\log_m n)$ disk reads. For $m = 1000$ and $n = 10^9$, this is just 3 reads.
+
+''Lower bound:'' Any comparison-based search structure on $n$ keys requires $\Omega(\log n)$ comparisons in the worst case, so balanced trees are //asymptotically optimal// for ordered data access.
+
+!! Quiz
+
+<div id="q1">''Q1: What is the worst-case height of an AVL tree with $n$ nodes?''
+<br>A) $O(n)$
+<br>B) $O(\sqrt{n})$
+<br>C) $O(\log n)$ — specifically $< 1.44 \log_2 n$
+<br>D) $O(\log^2 n)$
+<br><<button "Check Answer">><<replace "#q1">>''Correct: C) $O(\log n)$.'' The AVL balance invariant ensures the height never exceeds approximately $1.44 \log_2(n+2)$.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q2">''Q2: How many rotations are needed in the worst case to rebalance an AVL tree after a single insertion?''
+<br>A) 0
+<br>B) 1 or 2 (a single or double rotation)
+<br>C) $O(\log n)$
+<br>D) $O(n)$
+<br><<button "Check Answer">><<replace "#q2">>''Correct: B) 1 or 2.'' A single insertion can cause at most one imbalance point, fixable with one single or one double rotation.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q3">''Q3: In a red-black tree, the longest root-to-leaf path is at most how many times the shortest?''
+<br>A) 1.44 times
+<br>B) 2 times
+<br>C) 3 times
+<br>D) $\log n$ times
+<br><<button "Check Answer">><<replace "#q3">>''Correct: B) 2 times.'' The shortest path is all black nodes; the longest alternates red and black. Since red nodes cannot be adjacent and black-height is uniform, the ratio is at most 2:1.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q4">''Q4: Which balanced tree variant is most commonly used for database indexing on disk?''
+<br>A) AVL tree
+<br>B) Red-black tree
+<br>C) B+ tree
+<br>D) Splay tree
+<br><<button "Check Answer">><<replace "#q4">>''Correct: C) B+ tree.'' B+ trees have high branching factors that minimize disk reads, and linked leaves support efficient range scans.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q5">''Q5: A B-tree of order $m$ with $n = 10^9$ keys and $m = 1000$ has approximately what height?''
+<br>A) 3
+<br>B) 10
+<br>C) 30
+<br>D) 1000
+<br><<button "Check Answer">><<replace "#q5">>''Correct: A) 3.'' Height is $\log_m n = \log_{1000}(10^9) = 3$. Each level corresponds to one disk read.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q6">''Q6: What data structure does C++ std::map typically use internally?''
+<br>A) Hash table
+<br>B) AVL tree
+<br>C) Red-black tree
+<br>D) Skip list
+<br><<button "Check Answer">><<replace "#q6">>''Correct: C) Red-black tree.'' Red-black trees offer good worst-case guarantees with fewer rotations on modification than AVL trees.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q7">''Q7: Why do balanced trees often lose to simpler structures for small datasets?''
+<br>A) They have worse asymptotic complexity
+<br>B) Pointer-chasing causes cache misses and rotation overhead exceeds the benefit
+<br>C) They cannot store duplicate keys
+<br>D) They require more total memory than hash tables
+<br><<button "Check Answer">><<replace "#q7">>''Correct: B) Pointer-chasing causes cache misses and rotation overhead exceeds the benefit.'' For small $n$, constant factors and memory locality dominate asymptotic complexity.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q8">''Q8: What is a splay tree's amortized time complexity per operation?''
+<br>A) $O(1)$
+<br>B) $O(\log n)$
+<br>C) $O(n)$
+<br>D) $O(n \log n)$
+<br><<button "Check Answer">><<replace "#q8">>''Correct: B) $O(\log n)$ amortized.'' Individual operations may take $O(n)$, but the splaying strategy guarantees that any sequence of $m$ operations on an $n$-node tree takes $O((m+n) \log n)$ total time.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<<include "Footer">>

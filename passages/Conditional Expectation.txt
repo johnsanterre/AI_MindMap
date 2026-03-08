@@ -1,0 +1,151 @@
+<<include "Header">>
+! Conditional Expectation
+<img src="assets/conditional_expectation.svg" alt="Conditional Expectation" width="800">
+
+Imagine you are trying to guess someone's income. Knowing nothing, your best guess is the overall average income across everyone. But now suppose you learn the person has a PhD. Suddenly your guess should shift — you should predict the average income //among PhD holders//, not the average across everyone. That updated, more informed average is a ''conditional expectation''. It is the single best prediction you can make about one quantity once you have partial information about something related. Every regression model you have ever seen, from a simple line of best fit to a deep neural network, is ultimately trying to approximate a conditional expectation.
+
+!! The Core Insight
+
+The conditional expectation $E[Y \mid X]$ is not a single number — it is a //function// of $X$. For every possible value $x$ that $X$ might take, $E[Y \mid X = x]$ tells you the average value of $Y$ among all cases where $X = x$. Plot these averages and you get the ''regression function'', the curve that runs through the centers of the data cloud. This function extracts the systematic, predictable part of $Y$ from $X$ and discards the noise. In fact, $E[Y \mid X]$ is the function of $X$ that minimizes the mean squared error $E[(Y - g(X))^2]$ over all possible functions $g$ — it is the ''optimal predictor'' in the squared-error sense.
+
+!! The Best Prediction Given Partial Information
+
+The power of conditional expectation comes from two remarkable structural properties:
+
+''The Tower Property (Law of Iterated Expectations):'' If you first condition on detailed information and then average over that information, you recover the coarser expectation. Formally, $E[E[Y \mid X]] = E[Y]$. More generally, if $\mathcal{G} \subseteq \mathcal{F}$ are nested information sets, then $E[E[Y \mid \mathcal{F}] \mid \mathcal{G}] = E[Y \mid \mathcal{G}]$. In plain language: averaging a fine-grained prediction over the detailed information you conditioned on always recovers the coarser prediction. This is why you can decompose complex estimation problems into stages — predict given detailed info, then average over the details — and still get the right answer.
+
+''The Regression Function:'' For a pair of [[Random Variables|Random Variables]] $(X, Y)$, the function $m(x) = E[Y \mid X = x]$ is the ''regression function''. It is the best approximation of $Y$ by any function of $X$ alone. Every [[Regression|Regression]] technique, whether linear, polynomial, kernel-based, or neural, is trying to estimate this function. Linear regression restricts the search to $m(x) = \beta_0 + \beta_1 x$; nonparametric methods let $m$ be arbitrary. The conditional expectation is the target all of them are chasing.
+
+!! What the Math Is Actually Doing
+
+The conditional expectation of $Y$ given $X = x$ for continuous random variables is defined via the conditional density:
+
+$$E[Y \mid X = x] = \int_{-\infty}^{\infty} y \, f_{Y \mid X}(y \mid x) \, dy$$
+
+where $f_{Y \mid X}(y \mid x) = f_{X,Y}(x,y) / f_X(x)$ comes from [[Conditional Probability|Conditional Probability]].
+
+''Tower Property:'' The law of iterated expectations states
+
+$$E[E[Y \mid X]] = E[Y]$$
+
+This follows because $E[E[Y \mid X]] = \int E[Y \mid X = x] f_X(x) \, dx = \int \int y \, f_{Y \mid X}(y \mid x) \, dy \, f_X(x) \, dx = \int \int y \, f_{X,Y}(x,y) \, dy \, dx = E[Y]$.
+
+''Law of Total Variance:'' Variance decomposes into two interpretable pieces:
+
+$$\text{Var}(Y) = E[\text{Var}(Y \mid X)] + \text{Var}(E[Y \mid X])$$
+
+The first term is the //average unexplained variance// within each slice $X = x$ (irreducible noise). The second is the //variance of the conditional means// across slices (the signal your model can capture). A good predictor makes the second term large relative to the first — this is exactly what $R^2$ measures.
+
+''Conditional Variance:'' The spread of $Y$ around its conditional mean is:
+
+$$\text{Var}(Y \mid X = x) = E[Y^2 \mid X = x] - (E[Y \mid X = x])^2$$
+
+When this quantity varies with $x$, you have //heteroscedasticity// — the noise level depends on the input.
+
+''MMSE Optimality:'' Among all functions $g(X)$, the conditional expectation minimizes mean squared error:
+
+$$E[Y \mid X] = \arg\min_{g} E[(Y - g(X))^2]$$
+
+The residual $Y - E[Y \mid X]$ is uncorrelated with any function of $X$.
+
+!! Conditional Expectation in ML
+
+''Regression:'' Every [[Regression|Regression]] model targets $E[Y \mid X = x]$. Linear regression constrains this to be a linear function. Neural networks and tree ensembles provide flexible, nonparametric approximations. The universal approximation theorem says neural nets can approximate any conditional expectation to arbitrary accuracy.
+
+''Value Functions in RL:'' In [[Reinforcement Learning|Reinforcement Learning]], the state-value function $V(s) = E[G_t \mid S_t = s]$ is literally a conditional expectation — the expected cumulative reward given the current state. The Bellman equation is a consequence of the tower property applied to this conditional expectation, decomposing the future into one step plus the remaining conditional expectation.
+
+''Bayesian Updating:'' In [[Bayesian Inference|Bayesian Inference]], the posterior mean $E[\theta \mid \text{data}]$ is a conditional expectation. It is the optimal point estimate under squared error loss. As more data arrives, the tower property guarantees consistency: the expectation of tomorrow's posterior mean, given today's information, equals today's posterior mean.
+
+''E-step in EM:'' The [[Expectation Maximization|Expectation Maximization]] algorithm computes $E[\log p(X, Z \mid \theta) \mid X, \theta^{(t)}]$ — a conditional expectation of the complete-data log-likelihood given the observed data. This is literally what the "E" in EM stands for.
+
+!! When Conditional Expectations Mislead
+
+''Simpson's Paradox and Confounding:'' The conditional expectation $E[Y \mid X]$ answers "what is the average $Y$ among units with $X = x$" — a //descriptive// question. It does not answer the //causal// question "what happens to $Y$ if we set $X = x$." When confounders are present, $E[Y \mid X = x]$ conflates the causal effect of $X$ with selection effects. Naive regression on observational data can reverse the sign of an effect entirely.
+
+''Non-Gaussian Heavy Tails:'' Conditional expectation is the optimal predictor only under squared error loss. When $Y$ has heavy tails or extreme outliers, the conditional mean may be dominated by rare events and the conditional //median// (minimizing absolute error) can be far more robust. In financial risk, the conditional expectation of losses in the tail (CVaR) behaves very differently from the overall conditional mean.
+
+''Nonlinear Dependence Beyond the Mean:'' Two variables can have $E[Y \mid X] = \text{const}$ (no relationship in the mean) yet be strongly dependent — for instance, $X$ might determine the //variance// of $Y$ but not its center. Conditional expectation only captures mean dependence. Detecting such relationships requires looking at the full conditional distribution, not just its expectation.
+
+!! Technical Details
+
+''Measure-Theoretic Definition:'' For a [[Random Variables|random variable]] $Y$ on $(\Omega, \mathcal{F}, P)$ and a sub-$\sigma$-algebra $\mathcal{G} \subseteq \mathcal{F}$, the conditional expectation $E[Y \mid \mathcal{G}]$ is the (a.s. unique) $\mathcal{G}$-measurable random variable satisfying $\int_G E[Y \mid \mathcal{G}] \, dP = \int_G Y \, dP$ for all $G \in \mathcal{G}$. Existence is guaranteed by the Radon-Nikodym theorem. This abstract definition is necessary because conditioning on events of probability zero (like $X = x$ for continuous $X$) is not well-defined via elementary ratios.
+
+''$\sigma$-Algebra Conditioning:'' Conditioning on $X$ means conditioning on $\sigma(X)$, the $\sigma$-algebra generated by $X$. Conditioning on $\sigma(X)$ captures exactly the information "knowing the value of $X$." Nesting of $\sigma$-algebras ($\mathcal{G} \subseteq \mathcal{H} \subseteq \mathcal{F}$) gives the tower property: $E[E[Y \mid \mathcal{H}] \mid \mathcal{G}] = E[Y \mid \mathcal{G}]$.
+
+''[[Martingale Theory|Martingale Theory]] Connection:'' If $\{\mathcal{F}_n\}$ is a filtration and $M_n = E[Y \mid \mathcal{F}_n]$, then $\{M_n\}$ is a martingale — by the tower property, $E[M_{n+1} \mid \mathcal{F}_n] = E[E[Y \mid \mathcal{F}_{n+1}] \mid \mathcal{F}_n] = E[Y \mid \mathcal{F}_n] = M_n$. This connects conditional expectation to the theory of fair games and underpins martingale convergence theorems used throughout probability and statistics.
+
+''MMSE Optimality (Formal):'' The conditional expectation is the orthogonal projection of $Y$ onto the space of $\sigma(X)$-measurable $L^2$ random variables. The residual $\varepsilon = Y - E[Y \mid X]$ satisfies $E[\varepsilon \cdot h(X)] = 0$ for every square-integrable function $h$. This is the infinite-dimensional analog of orthogonal projection in Euclidean space, placing conditional expectation at the heart of Hilbert space methods in statistics.
+
+''Conditional Characteristic Function:'' The conditional distribution of $Y \mid X$ is fully characterized by $E[e^{itY} \mid X]$ for all $t$, connecting conditional expectations to Fourier analysis and enabling proofs of conditional independence and distributional results.
+
+!! Quiz
+
+<div id="cond-exp-quiz">
+
+''Q1:'' What does $E[Y \mid X]$ represent geometrically in a scatter plot of $Y$ vs $X$?
+
+<div id="q1-answer"></div>
+<<button "A) The line connecting the minimum and maximum Y values">><<replace "#q1-answer">>Incorrect. That describes the range, not the conditional expectation.<</replace>><</button>>
+<<button "B) The curve passing through the average Y at each value of X">><<replace "#q1-answer">>Correct! $E[Y \mid X = x]$ traces the conditional means through the data cloud — this is the regression function.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) The principal component direction">><<replace "#q1-answer">>Incorrect. PCA finds directions of maximum variance, not conditional means.<</replace>><</button>>
+<<button "D) The median of Y for each X">><<replace "#q1-answer">>Incorrect. The conditional median minimizes absolute error, not squared error.<</replace>><</button>>
+
+''Q2:'' What does the tower property $E[E[Y \mid X]] = E[Y]$ tell us?
+
+<div id="q2-answer"></div>
+<<button "A) Conditioning always reduces variance">><<replace "#q2-answer">>Incorrect. That is true but is a separate result (law of total variance), not the tower property itself.<</replace>><</button>>
+<<button "B) The conditional expectation is always linear">><<replace "#q2-answer">>Incorrect. Conditional expectations can be highly nonlinear functions of the conditioning variable.<</replace>><</button>>
+<<button "C) Averaging the conditional expectation over X recovers the unconditional expectation">><<replace "#q2-answer">>Correct! The tower property says that averaging the fine-grained prediction over the conditioning variable gives back the overall average.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D) E[Y|X] is always greater than E[Y]">><<replace "#q2-answer">>Incorrect. $E[Y \mid X]$ can be above or below $E[Y]$ depending on the value of $X$.<<script>>typesetMath();<</script>><</replace>><</button>>
+
+''Q3:'' In the law of total variance $\text{Var}(Y) = E[\text{Var}(Y|X)] + \text{Var}(E[Y|X])$, what does $\text{Var}(E[Y|X])$ represent?
+
+<div id="q3-answer"></div>
+<<button "A) The noise that cannot be predicted from X">><<replace "#q3-answer">>Incorrect. That is $E[\text{Var}(Y \mid X)]$, the average within-group variance.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B) The total variance of Y">><<replace "#q3-answer">>Incorrect. The total variance is the sum of both terms.<</replace>><</button>>
+<<button "C) The explained variance — how much the conditional mean varies with X">><<replace "#q3-answer">>Correct! $\text{Var}(E[Y \mid X])$ measures the spread of the group means, which is the signal your model captures.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D) The conditional variance at the mean of X">><<replace "#q3-answer">>Incorrect. It is the variance //of// the conditional means across all values of $X$, not the conditional variance at one point.<<script>>typesetMath();<</script>><</replace>><</button>>
+
+''Q4:'' Why is $E[Y \mid X]$ called the MMSE estimator?
+
+<div id="q4-answer"></div>
+<<button "A) It minimizes the maximum possible error">><<replace "#q4-answer">>Incorrect. That describes minimax estimation, not MMSE.<</replace>><</button>>
+<<button "B) It minimizes E[(Y - g(X))^2] over all functions g">><<replace "#q4-answer">>Correct! MMSE stands for Minimum Mean Squared Error. The conditional expectation is the function of $X$ that achieves the smallest expected squared prediction error.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) It minimizes the absolute error E[|Y - g(X)|]">><<replace "#q4-answer">>Incorrect. The conditional //median// minimizes absolute error. The conditional //mean// minimizes squared error.<</replace>><</button>>
+<<button "D) It minimizes the number of parameters">><<replace "#q4-answer">>Incorrect. MMSE is about prediction accuracy, not model complexity.<</replace>><</button>>
+
+''Q5:'' In reinforcement learning, the value function $V(s) = E[G_t \mid S_t = s]$ is a conditional expectation. Which property of conditional expectation underlies the Bellman equation?
+
+<div id="q5-answer"></div>
+<<button "A) Linearity">><<replace "#q5-answer">>Incorrect. While conditional expectation is linear, the Bellman recursion specifically exploits the tower property.<</replace>><</button>>
+<<button "B) The tower property">><<replace "#q5-answer">>Correct! The Bellman equation decomposes the value into immediate reward plus the conditional expectation of future value, which is exactly an application of the tower property (iterated expectations).<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) Jensen's inequality">><<replace "#q5-answer">>Incorrect. Jensen's inequality relates expectations of convex functions, not the recursive decomposition of value functions.<</replace>><</button>>
+<<button "D) The central limit theorem">><<replace "#q5-answer">>Incorrect. The CLT concerns distributions of sums, not recursive value decomposition.<</replace>><</button>>
+
+''Q6:'' What does the measure-theoretic definition of $E[Y \mid \mathcal{G}]$ require?
+
+<div id="q6-answer"></div>
+<<button "A) Y must be normally distributed">><<replace "#q6-answer">>Incorrect. The definition works for any integrable random variable regardless of its distribution.<</replace>><</button>>
+<<button "B) A G-measurable random variable satisfying the integral condition for all G in G">><<replace "#q6-answer">>Correct! $E[Y \mid \mathcal{G}]$ must be $\mathcal{G}$-measurable and satisfy $\int_G E[Y \mid \mathcal{G}] dP = \int_G Y dP$ for every $G \in \mathcal{G}$.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) X and Y must be jointly continuous">><<replace "#q6-answer">>Incorrect. The measure-theoretic definition handles discrete, continuous, and mixed cases uniformly.<</replace>><</button>>
+<<button "D) The conditional density must exist">><<replace "#q6-answer">>Incorrect. The measure-theoretic definition avoids requiring densities — that is its key advantage.<</replace>><</button>>
+
+''Q7:'' When can $E[Y \mid X]$ be misleading for causal inference?
+
+<div id="q7-answer"></div>
+<<button "A) When X and Y are independent">><<replace "#q7-answer">>Incorrect. When $X$ and $Y$ are independent, $E[Y \mid X] = E[Y]$, which is not misleading — it correctly reflects no relationship.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "B) When there are confounders affecting both X and Y">><<replace "#q7-answer">>Correct! Confounders create spurious associations. $E[Y \mid X = x]$ reflects both the causal effect and the confounding, so naive conditional expectations from observational data can be misleading (Simpson's paradox).<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "C) When Y is continuous">><<replace "#q7-answer">>Incorrect. Continuity of $Y$ is not related to causal confounding.<</replace>><</button>>
+<<button "D) When X is discrete">><<replace "#q7-answer">>Incorrect. The discrete/continuous nature of $X$ does not determine whether confounding is present.<</replace>><</button>>
+
+''Q8:'' If $M_n = E[Y \mid \mathcal{F}_n]$ for a filtration $\{\mathcal{F}_n\}$, what kind of process is $\{M_n\}$?
+
+<div id="q8-answer"></div>
+<<button "A) A Markov chain">><<replace "#q8-answer">>Incorrect. Markov chains have the memoryless property, which is different from the martingale property.<</replace>><</button>>
+<<button "B) A Poisson process">><<replace "#q8-answer">>Incorrect. Poisson processes count events; this is about iterated conditional expectations.<</replace>><</button>>
+<<button "C) A martingale">><<replace "#q8-answer">>Correct! By the tower property, $E[M_{n+1} \mid \mathcal{F}_n] = E[E[Y \mid \mathcal{F}_{n+1}] \mid \mathcal{F}_n] = E[Y \mid \mathcal{F}_n] = M_n$, which is exactly the [[Martingale Theory|martingale]] property.<<script>>typesetMath();<</script>><</replace>><</button>>
+<<button "D) A random walk">><<replace "#q8-answer">>Incorrect. Random walks have independent increments; martingales have a weaker "fair game" property.<</replace>><</button>>
+
+</div>
+
+<<include "Footer">>

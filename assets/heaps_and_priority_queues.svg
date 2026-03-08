@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Heaps and Priority Queues</text>
+
+  <!-- ===== LEFT PANEL: Binary Min-Heap Tree ===== -->
+  <text x="200" y="60" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Min-Heap (Tree View)</text>
+
+  <!-- Level 0: root -->
+  <circle cx="200" cy="100" r="22" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="200" y="105" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">1</text>
+
+  <!-- Edges level 0→1 -->
+  <line x1="183" y1="118" x2="120" y2="155" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="217" y1="118" x2="280" y2="155" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Level 1 -->
+  <circle cx="120" cy="175" r="22" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="120" y="180" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">3</text>
+
+  <circle cx="280" cy="175" r="22" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="280" y="180" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">5</text>
+
+  <!-- Edges level 1→2 -->
+  <line x1="105" y1="193" x2="70" y2="230" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="135" y1="193" x2="170" y2="230" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="265" y1="193" x2="230" y2="230" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="295" y1="193" x2="330" y2="230" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Level 2 -->
+  <circle cx="70" cy="250" r="22" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="70" y="255" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">7</text>
+
+  <circle cx="170" cy="250" r="22" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="170" y="255" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">9</text>
+
+  <circle cx="230" cy="250" r="22" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="230" y="255" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">8</text>
+
+  <circle cx="330" cy="250" r="22" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="330" y="255" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">12</text>
+
+  <!-- Heap property annotation -->
+  <text x="200" y="305" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Parent is always smaller than children</text>
+
+  <!-- Array representation -->
+  <text x="200" y="335" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Array: [1, 3, 5, 7, 9, 8, 12]</text>
+
+  <!-- Index labels -->
+  <text x="200" y="355" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle">idx:   0  1  2  3  4  5   6</text>
+
+  <!-- Parent-child formula -->
+  <rect x="60" y="365" width="280" height="25" rx="5" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="200" y="382" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">children(i) = 2i+1, 2i+2    parent(i) = (i-1)/2</text>
+
+  <!-- ===== RIGHT PANEL: Operations ===== -->
+  <line x1="420" y1="50" x2="420" y2="385" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <text x="610" y="60" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Key Operations</text>
+
+  <!-- Insert -->
+  <rect x="450" y="75" width="310" height="65" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="470" y="95" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">Insert (push)</text>
+  <text x="470" y="112" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Add at bottom, bubble UP</text>
+  <text x="710" y="112" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">O(log n)</text>
+  <text x="470" y="128" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">Swap with parent while smaller</text>
+
+  <!-- Extract-Min -->
+  <rect x="450" y="150" width="310" height="65" rx="8" fill="#F5EDD8" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="470" y="170" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Extract-Min (pop)</text>
+  <text x="470" y="187" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Remove root, bubble DOWN last</text>
+  <text x="710" y="187" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">O(log n)</text>
+  <text x="470" y="203" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">Swap with smaller child while larger</text>
+
+  <!-- Peek -->
+  <rect x="450" y="225" width="310" height="45" rx="8" fill="#EDE3D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="470" y="245" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">Peek (find-min)</text>
+  <text x="470" y="260" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Just read the root</text>
+  <text x="710" y="252" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">O(1)</text>
+
+  <!-- Heapify -->
+  <rect x="450" y="280" width="310" height="45" rx="8" fill="#EDE3D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="470" y="300" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">Build Heap (heapify)</text>
+  <text x="470" y="315" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Bottom-up sift on all nodes</text>
+  <text x="710" y="307" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">O(n)</text>
+
+  <!-- ML connection -->
+  <rect x="450" y="340" width="310" height="45" rx="5" fill="#F5EDD8" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="605" y="358" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">ML Uses</text>
+  <text x="605" y="375" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Dijkstra, A*, Beam Search, Top-K Selection, Huffman</text>
+
+</svg>

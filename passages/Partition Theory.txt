@@ -1,0 +1,161 @@
+<<include "Header">>
+! Partition Theory
+
+<img src="assets/partition_theory.svg" alt="Partitions of 5 shown as Ferrers and Young diagrams with conjugate partition illustration">
+
+Imagine you have five identical coins and you want to split them into piles. You could make one pile of five, or a pile of three and a pile of two, or five piles of one coin each. ''Partition theory'' is the branch of mathematics that asks: in how many ways can you break a positive integer into unordered sums of positive integers? The answer turns out to be surprisingly deep — touching [[Combinatorics|Combinatorics]], number theory, representation theory, and even modern machine learning through tensor decompositions.
+
+!! The Core Insight
+
+A ''partition'' of a positive integer $n$ is a way of writing $n$ as a sum of positive integers where order does not matter. The number $5$ has exactly $7$ partitions: $5$, $4+1$, $3+2$, $3+1+1$, $2+2+1$, $2+1+1+1$, and $1+1+1+1+1$. The function $p(n)$ counts these partitions and grows //astonishingly fast// — $p(100) = 190{,}569{,}292{,}356$ and $p(200)$ has $13$ digits. Yet despite this explosive growth, the function follows elegant patterns governed by modular arithmetic, infinite products, and [[Generating Functions|Generating Functions]].
+
+!! Ferrers Diagrams, Young Diagrams, and Conjugates
+
+Every partition can be drawn as a ''Ferrers diagram'' — rows of dots where each row has as many dots as the corresponding part, arranged top-to-bottom in non-increasing order. Replace the dots with boxes and you get a ''Young diagram'' (also called a Young tableau when the boxes are filled with numbers). These visual representations are far more than pedagogical conveniences — they are the primary computational objects in the theory.
+
+The ''conjugate'' of a partition is obtained by reflecting a Ferrers diagram across its main diagonal — turning rows into columns. The partition $4+1$ becomes $2+1+1+1$. Conjugation is an involution: conjugating twice returns the original partition. This simple operation proves powerful theorems almost for free.
+
+One beautiful consequence: the number of partitions of $n$ into exactly $k$ parts equals the number of partitions of $n$ whose largest part is $k$. The proof is a single sentence — just conjugate the diagram.
+
+!! What the Math Is Actually Doing
+
+The ''generating function'' for the partition function encodes all values of $p(n)$ in a single infinite product:
+
+$$\sum_{n=0}^{\infty} p(n)\, x^n = \prod_{k=1}^{\infty} \frac{1}{1 - x^k}$$
+
+Each factor $\frac{1}{1-x^k} = 1 + x^k + x^{2k} + x^{3k} + \cdots$ represents choosing how many copies of part $k$ to include (zero, one, two, ...). The coefficient of $x^n$ in the product collects every way to combine parts summing to $n$.
+
+''Euler's partition identity'' states that the number of partitions of $n$ into ''odd parts'' equals the number of partitions of $n$ into ''distinct parts''. The generating function proof is immediate:
+
+$$\prod_{k=1}^{\infty} \frac{1}{1 - x^{2k-1}} = \prod_{k=1}^{\infty} (1 + x^k)$$
+
+The left side counts partitions into odd parts; the right side counts partitions into distinct parts. Algebraic manipulation confirms they are equal.
+
+The ''pentagonal number theorem'' gives a remarkable recurrence. Euler showed:
+
+$$\prod_{k=1}^{\infty}(1 - x^k) = \sum_{j=-\infty}^{\infty} (-1)^j\, x^{j(3j-1)/2}$$
+
+This yields the recurrence $p(n) = p(n-1) + p(n-2) - p(n-5) - p(n-7) + \cdots$ using generalized pentagonal numbers, enabling efficient computation of $p(n)$.
+
+Hardy and Ramanujan derived the famous asymptotic formula:
+
+$$p(n) \sim \frac{1}{4n\sqrt{3}}\, \exp\!\left(\pi\sqrt{\frac{2n}{3}}\right)$$
+
+This was later refined by Rademacher into an exact convergent series — one of the great achievements of analytic number theory.
+
+!! Connections to Representation Theory and ML
+
+Young diagrams are not just a combinatorial curiosity — they //classify// the irreducible representations of the symmetric group $S_n$ and the general linear group $GL(n)$. Each partition of $n$ labels a unique irreducible representation, making partition theory the backbone of representation theory.
+
+In machine learning, these connections surface through ''tensor decompositions''. When decomposing a high-dimensional tensor, the possible decomposition shapes correspond to partitions. The ''CP decomposition'' corresponds to the partition where every part is $1$; the ''Tucker decomposition'' corresponds to partitions with potentially larger parts. Understanding which partition structure best fits a data tensor is an active research question in tensor network methods, model compression, and neural network factorization.
+
+Partitions also arise in the study of ''random matrix theory'' — the distribution of eigenvalues of random matrices connects to Plancherel measure on partitions, which has implications for understanding weight matrix spectra during neural network training.
+
+!! When Partition Theory Breaks Down
+
+<strong>1. Computational intractability at scale.</strong> Although the Rademacher series gives exact values, computing $p(n)$ for very large $n$ remains expensive. The partition function grows sub-exponentially but super-polynomially, and enumerating all partitions (rather than just counting them) is infeasible for $n$ beyond a few hundred.
+
+<strong>2. Restricted partition problems are often much harder.</strong> While $p(n)$ has beautiful exact formulas, adding constraints — partitions into primes, partitions with bounded multiplicity, partitions avoiding certain part sizes — can destroy the elegant product structure. Many restricted partition problems have no known closed-form generating function.
+
+<strong>3. Higher-dimensional generalizations resist analysis.</strong> ''Plane partitions'' (3D generalizations of Young diagrams) and ''solid partitions'' (4D) are far less understood. MacMahon conjectured a formula for solid partitions that turned out to be wrong; the exact generating function for solid partitions remains unknown.
+
+!! Technical Details
+
+The ''Durfee square'' of a partition is the largest square fitting inside its Young diagram. A partition with Durfee square of side $d$ can be uniquely decomposed into the square plus a partition fitting to its right and one fitting below it. This gives the identity:
+
+$$\sum_{n=0}^{\infty} p(n)\, x^n = \sum_{d=0}^{\infty} \frac{x^{d^2}}{(1-x)(1-x^2)\cdots(1-x^d)^2 \cdot \text{...}}$$
+
+More precisely, Euler's identity refines as:
+
+$$\prod_{k=1}^{\infty}\frac{1}{1-x^k} = \sum_{d=0}^{\infty}\frac{x^{d^2}}{((1-x)(1-x^2)\cdots(1-x^d))^2}$$
+
+''Ramanujan's congruences'' reveal deep modular structure:
+* $p(5n+4) \equiv 0 \pmod{5}$
+* $p(7n+5) \equiv 0 \pmod{7}$
+* $p(11n+6) \equiv 0 \pmod{11}$
+
+These were proved using modular forms and $q$-series identities.
+
+The ''hook length formula'' counts the number of standard Young tableaux of shape $\lambda$, a partition of $n$:
+
+$$f^\lambda = \frac{n!}{\prod_{u \in \lambda} h(u)}$$
+
+where $h(u)$ is the hook length at cell $u$. This formula is central to computing characters of $S_n$ and arises in the RSK correspondence connecting permutations to pairs of standard Young tableaux.
+
+Key related topics include [[Stirling Numbers|Stirling Numbers]] (counting set partitions rather than integer partitions), [[Catalan Numbers|Catalan Numbers]] (counting Dyck paths which relate to special classes of partitions), and [[Generating Functions|Generating Functions]] (the primary analytic tool).
+
+!! Quiz
+
+<div id="q1">
+''1. How many partitions does the integer 5 have?''
+
+<<button "A) 5">><<replace "#q1">>&#10008; There are 5 parts in the largest partition of 5, but $p(5) = 7$.<</replace>><</button>>
+<<button "B) 6">><<replace "#q1">>&#10008; Close, but one partition is missing from your count. $p(5) = 7$.<</replace>><</button>>
+<<button "C) 7">><<replace "#q1">>&#10004; Correct! The 7 partitions are: 5, 4+1, 3+2, 3+1+1, 2+2+1, 2+1+1+1, and 1+1+1+1+1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 8">><<replace "#q1">>&#10008; Too many. Remember that order does not matter: 3+2 and 2+3 are the same partition.<</replace>><</button>>
+</div>
+
+<div id="q2">
+''2. What is the conjugate of the partition 4+1?''
+
+<<button "A) 3+2">><<replace "#q2">>&#10008; Conjugation reflects the Ferrers diagram. The partition 4+1 has columns of length 2, 1, 1, 1.<</replace>><</button>>
+<<button "B) 2+1+1+1">><<replace "#q2">>&#10004; Correct! Reflecting the Ferrers diagram of 4+1 across the diagonal gives rows of length 2, 1, 1, 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) 5">><<replace "#q2">>&#10008; The conjugate of 5 (a single row) would be 1+1+1+1+1 (a single column).<</replace>><</button>>
+<<button "D) 3+1+1">><<replace "#q2">>&#10008; This is a partition of 5 but not the conjugate of 4+1.<</replace>><</button>>
+</div>
+
+<div id="q3">
+''3. Euler's partition identity states that partitions into odd parts equal partitions into:''
+
+<<button "A) Even parts">><<replace "#q3">>&#10008; Partitions into even parts only exist when $n$ is even. Euler's identity involves distinct parts.<</replace>><</button>>
+<<button "B) Prime parts">><<replace "#q3">>&#10008; Partitions into primes is a different (harder) problem. Euler's identity involves distinct parts.<</replace>><</button>>
+<<button "C) Distinct parts">><<replace "#q3">>&#10004; Correct! The number of partitions of $n$ into odd parts equals the number of partitions into distinct parts.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Consecutive parts">><<replace "#q3">>&#10008; Consecutive-part partitions are a special case. Euler's identity equates odd parts with distinct parts.<</replace>><</button>>
+</div>
+
+<div id="q4">
+''4. In the generating function $\prod_{k=1}^{\infty}\frac{1}{1-x^k}$, what does each factor represent?''
+
+<<button "A) The number of primes up to k">><<replace "#q4">>&#10008; The generating function has nothing to do with primes. Each factor chooses how many copies of part $k$ to include.<</replace>><</button>>
+<<button "B) Choosing how many copies of part k to include">><<replace "#q4">>&#10004; Correct! The expansion $\frac{1}{1-x^k} = 1 + x^k + x^{2k} + \cdots$ represents 0, 1, 2, ... copies of part $k$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The k-th Fibonacci number">><<replace "#q4">>&#10008; Fibonacci numbers are unrelated here. Each factor allows zero or more copies of part $k$.<</replace>><</button>>
+<<button "D) The probability of selecting part k">><<replace "#q4">>&#10008; This is a formal generating function, not a probability distribution. Each factor represents copies of part $k$.<</replace>><</button>>
+</div>
+
+<div id="q5">
+''5. Which of Ramanujan's congruences is correct?''
+
+<<button "A) p(5n+4) is divisible by 5">><<replace "#q5">>&#10004; Correct! This is one of the three celebrated Ramanujan congruences, along with $p(7n+5) \equiv 0 \pmod{7}$ and $p(11n+6) \equiv 0 \pmod{11}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) p(3n+1) is divisible by 3">><<replace "#q5">>&#10008; This is not one of Ramanujan's congruences. The correct moduli are 5, 7, and 11.<</replace>><</button>>
+<<button "C) p(2n) is always even">><<replace "#q5">>&#10008; $p(2) = 2$ is even but $p(4) = 5$ is odd. Ramanujan's congruences involve moduli 5, 7, and 11.<</replace>><</button>>
+<<button "D) p(n) is divisible by n">><<replace "#q5">>&#10008; $p(4) = 5$ is not divisible by 4. Ramanujan found congruences for specific arithmetic progressions.<</replace>><</button>>
+</div>
+
+<div id="q6">
+''6. Young diagrams classify irreducible representations of which group?''
+
+<<button "A) The cyclic group Z_n">><<replace "#q6">>&#10008; Cyclic group representations are classified by roots of unity, not partitions.<</replace>><</button>>
+<<button "B) The symmetric group S_n">><<replace "#q6">>&#10004; Correct! Each partition of $n$ labels exactly one irreducible representation of $S_n$. This is a cornerstone of representation theory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The dihedral group D_n">><<replace "#q6">>&#10008; Dihedral group representations have a different classification. Partitions classify representations of the symmetric group.<</replace>><</button>>
+<<button "D) The quaternion group Q_8">><<replace "#q6">>&#10008; $Q_8$ has specific representations unrelated to integer partitions. Young diagrams classify $S_n$ representations.<</replace>><</button>>
+</div>
+
+<div id="q7">
+''7. In tensor decomposition, what does the CP decomposition correspond to in partition terms?''
+
+<<button "A) A partition into equal parts">><<replace "#q7">>&#10008; Equal parts would correspond to a very specific Tucker structure. CP corresponds to all parts being 1.<</replace>><</button>>
+<<button "B) The trivial partition n = n">><<replace "#q7">>&#10008; A single large part would be a rank-1 approximation concept, not CP. CP decomposes into rank-1 summands, corresponding to all parts being 1.<</replace>><</button>>
+<<button "C) A partition where every part is 1">><<replace "#q7">>&#10004; Correct! CP decomposition expresses a tensor as a sum of rank-1 terms, analogous to the partition $1+1+\cdots+1$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A partition into two parts">><<replace "#q7">>&#10008; Two parts would correspond to a matrix factorization. CP decomposition uses rank-1 components, all parts equal to 1.<</replace>><</button>>
+</div>
+
+<div id="q8">
+''8. What does the Durfee square of a partition measure?''
+
+<<button "A) The number of distinct parts">><<replace "#q8">>&#10008; Distinct parts count is different. The Durfee square is the largest square fitting inside the Young diagram.<</replace>><</button>>
+<<button "B) The largest square fitting inside the Young diagram">><<replace "#q8">>&#10004; Correct! The Durfee square side length $d$ is the largest integer such that the partition has at least $d$ parts, each of size at least $d$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The total number of parts">><<replace "#q8">>&#10008; The total number of parts is the partition's length. The Durfee square measures the largest inscribed square.<</replace>><</button>>
+<<button "D) The difference between the largest and smallest part">><<replace "#q8">>&#10008; That difference is the partition's range. The Durfee square is the largest square fitting inside the diagram.<</replace>><</button>>
+</div>
+
+<<include "Footer">>

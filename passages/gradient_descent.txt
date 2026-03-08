@@ -1,0 +1,146 @@
+<<include "Header">>
+
+! Gradient Descent
+
+[img[assets/gradient_descent.svg]]
+
+Imagine you are lost in foggy mountains at night and you need to reach the valley floor. You cannot see the landscape, but you can feel the slope beneath your feet. Your strategy: take a step in whichever direction goes most steeply downhill, pause, feel the slope again, and repeat. That is ''gradient descent'' — an algorithm that finds the bottom of a mathematical valley by repeatedly stepping in the direction of steepest decrease. In machine learning, the "valley" is a <<link "Loss Function" "Loss Function">><</link>> that measures how wrong a model's predictions are, and the "ground beneath your feet" is the set of model parameters. Gradient descent adjusts those parameters step by step until the loss is as small as possible.
+
+---
+
+!! The Core Insight
+
+The ''gradient'' of a function at any point is a vector that points in the direction of steepest //increase//. To minimize the function, you walk in the //opposite// direction — the negative gradient. The size of each step is controlled by a scalar called the ''learning rate''. Too large a learning rate and you overshoot the valley, bouncing wildly from slope to slope. Too small and you inch forward so slowly that training takes forever — or you get stuck in a shallow dip that is not the true minimum.
+
+This simple idea powers virtually all of modern machine learning. Every time a neural network trains, it computes how the loss changes with respect to each parameter (via <<link "Backpropagation" "Backpropagation">><</link>>), assembles those partial derivatives into a gradient vector, and takes one step downhill. The magic is that this local, greedy strategy — just go downhill from wherever you are — works extraordinarily well even in landscapes with millions of dimensions.
+
+The reason it works so well in high dimensions is partly surprising: while low-dimensional loss landscapes are full of traps (local minima), high-dimensional landscapes tend to have ''saddle points'' instead — places that curve downward in some directions and upward in others. Gradient descent can escape saddle points by following the downward directions, which means the algorithm rarely gets permanently stuck in practice.
+
+---
+
+!! Variants and Learning Rate Schedules
+
+''Batch gradient descent'' computes the gradient using the entire training dataset before taking a single step. This gives an exact gradient but is prohibitively expensive for large datasets. ''Stochastic gradient descent'' (<<link "SGD" "Stochastic Gradient Descent">><</link>>) computes the gradient from a single randomly chosen example, making each step noisy but cheap. In practice, nearly everyone uses ''mini-batch SGD'' — a compromise that computes the gradient from a small random subset (typically 32 to 512 examples) of the data.
+
+The noise in SGD is not merely a nuisance — it is a feature. Noisy gradients help the optimizer escape sharp local minima and settle into broad, flat minima that tend to generalize better to unseen data. This connection between optimizer noise and generalization is an active area of research.
+
+Beyond vanilla SGD, ''momentum'' methods accumulate a running average of past gradients, letting the optimizer build up speed in consistent directions and dampen oscillations in inconsistent ones. ''Nesterov momentum'' looks ahead before computing the gradient, giving a slight but reliable improvement. Adaptive methods like ''AdaGrad'', ''RMSProp'', and the <<link "Adam optimizer" "Adam Optimizer">><</link>> maintain per-parameter learning rates that adapt based on the history of gradients for each parameter. Adam, which combines momentum with adaptive rates, is the default optimizer for most deep learning tasks today.
+
+''Learning rate schedules'' adjust the learning rate over the course of training. Common strategies include step decay (cut the rate by a factor every $k$ epochs), cosine annealing (smoothly decrease the rate following a cosine curve), and ''warm-up'' (start with a very small rate and ramp up before decaying). The ''one-cycle policy'' starts low, ramps to a peak, then decays, and has been shown to reach good solutions faster. Choosing the right schedule can matter as much as choosing the right architecture.
+
+---
+
+!! What the Math Is Actually Doing
+
+The update rule for gradient descent is deceptively simple. Given parameters $\theta$, a loss function $L(\theta)$, and a learning rate $\eta$:
+
+$$\theta_{t+1} = \theta_t - \eta \nabla_\theta L(\theta_t)$$
+
+The gradient $\nabla_\theta L$ is a vector of partial derivatives — one per parameter — pointing in the direction of steepest ascent. Subtracting it moves $\theta$ downhill.
+
+For ''SGD with momentum'', we maintain a velocity vector $v$:
+
+$$v_{t+1} = \mu v_t + \nabla_\theta L(\theta_t)$$
+$$\theta_{t+1} = \theta_t - \eta v_{t+1}$$
+
+where $\mu \in [0, 1)$ is the momentum coefficient (typically 0.9). The velocity accumulates past gradients exponentially, smoothing the trajectory.
+
+For ''Adam'', we track both a first moment (mean) and second moment (uncentered variance) of the gradients:
+
+$$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$$
+$$s_t = \beta_2 s_{t-1} + (1 - \beta_2) g_t^2$$
+$$\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{s}_t} + \epsilon}$$
+
+where $\hat{m}_t$ and $\hat{s}_t$ are bias-corrected estimates, $g_t = \nabla_\theta L(\theta_t)$, and $\epsilon \approx 10^{-8}$ prevents division by zero. Adam effectively gives each parameter its own adaptive learning rate: parameters with consistently large gradients get smaller effective rates, preventing them from overshooting, while parameters with small gradients get larger effective rates, helping them make progress.
+
+The ''convergence rate'' of gradient descent depends on the geometry of the loss surface. For a convex function with Lipschitz-continuous gradients (constant $L$), gradient descent with $\eta = 1/L$ converges at rate $O(1/t)$ for general convex functions and $O(e^{-t})$ (linear convergence) for strongly convex functions. Neural network losses are non-convex, so these guarantees do not directly apply — but they guide intuition about learning rate selection.
+
+---
+
+!! Practical Considerations
+
+''Learning rate is the most important hyperparameter.'' Before tuning anything else, find a good learning rate. The ''learning rate range test'' (proposed by Leslie Smith) trains the model for one epoch while exponentially increasing the learning rate, then plots loss versus learning rate. The best learning rate is typically just below the point where the loss starts to diverge.
+
+''Gradient clipping'' caps the norm of the gradient vector to prevent catastrophically large updates. This is essential for training recurrent networks and transformers, where gradients can explode due to repeated matrix multiplication through many time steps. A common threshold is clipping the global norm to 1.0.
+
+''Weight decay'' adds a penalty proportional to the magnitude of the parameters, pulling them toward zero. In SGD, weight decay is mathematically equivalent to $L_2$ <<link "regularization" "Regularization">><</link>>, but in Adam they differ — a distinction called ''decoupled weight decay'' (AdamW). Most modern transformer training uses AdamW rather than Adam with $L_2$ regularization.
+
+''Batch size'' interacts with the learning rate: the ''linear scaling rule'' suggests that when you double the batch size, you should double the learning rate to maintain similar training dynamics. Very large batch sizes can degrade generalization, though techniques like LARS and LAMB optimizers partially mitigate this.
+
+---
+
+!! When Gradient Descent Breaks Down
+
+''Vanishing and exploding gradients:'' In deep networks, gradients are computed by the chain rule through many layers. If the per-layer gradient magnitudes are consistently less than 1, the signal shrinks exponentially toward zero (vanishing); if consistently greater than 1, it grows exponentially (exploding). Vanishing gradients stall learning in early layers, while exploding gradients cause numerical overflow. Solutions include careful initialization (He or Xavier), <<link "batch normalization" "Batch Normalization">><</link>>, residual connections, and gradient clipping — but diagnosing gradient pathology remains a practical challenge in very deep architectures.
+
+''Pathological curvature and ill-conditioning:'' When the loss landscape has very different curvatures in different directions — imagine a long, narrow valley — gradient descent oscillates across the narrow direction while making slow progress along the long axis. The ''condition number'' (ratio of largest to smallest curvature) quantifies this problem. Standard gradient descent is inefficient when the condition number is large. Momentum and adaptive methods help, but second-order methods like natural gradient descent or K-FAC address the root cause by rescaling the gradient according to the local curvature. These methods are expensive per step but can converge in far fewer steps.
+
+''Sharp minima and poor generalization:'' Gradient descent may converge to a minimum that is sharp — the loss rises steeply in nearby directions. Models at sharp minima tend to generalize poorly because small perturbations to the parameters (or small distribution shifts in the data) cause large jumps in loss. <<link "Stochastic gradient descent" "Stochastic Gradient Descent">><</link>> with moderate batch sizes naturally avoids sharp minima because its noise prevents settling into narrow basins. However, highly tuned optimizers with aggressive learning rate schedules can override this regularizing effect, finding sharp solutions that perform well on training data but fail on test data.
+
+---
+
+!! Technical Details
+
+''Convergence theory:'' For $L$-smooth convex objectives, gradient descent with step size $\eta = 1/L$ satisfies $L(\theta_t) - L(\theta^*) \leq \frac{\|\theta_0 - \theta^*\|^2}{2t/L}$. For $\mu$-strongly convex and $L$-smooth objectives, the convergence rate improves to $O((1 - \mu/L)^t)$, which is linear (exponential) convergence. The condition number $\kappa = L/\mu$ controls the rate: higher $\kappa$ means slower convergence. Nesterov's accelerated gradient achieves rate $O((1 - \sqrt{\mu/L})^t)$, which is provably optimal for first-order methods on this function class.
+
+''Non-convex optimization:'' For smooth non-convex functions, gradient descent with appropriate step size guarantees convergence to an approximate stationary point: $\min_{t \leq T} \|\nabla L(\theta_t)\|^2 \leq O(1/T)$. SGD achieves the same rate in expectation. Finding global minima is NP-hard in general, but empirically deep networks rarely suffer from bad local minima — the loss at local minima tends to be close to the global minimum for overparameterized networks.
+
+''Key papers and developments:'' Robbins and Monro (1951) introduced stochastic approximation, the theoretical foundation of SGD. Polyak (1964) introduced momentum. Duchi et al. (2011) proposed AdaGrad. Kingma and Ba (2015) introduced Adam, which remains the most widely used adaptive optimizer. Loshchilov and Hutter (2019) proposed decoupled weight decay (AdamW), now the default for transformer training. Smith (2017) introduced cyclical learning rates and the one-cycle policy.
+
+''Connection to <<link "convex optimization" "Convex Optimization">><</ link>>:'' Gradient descent is a special case of the more general proximal gradient and mirror descent frameworks. The choice of norm in the update (Euclidean for standard gradient descent, KL divergence for natural gradient, $\ell_1$ for proximal methods) determines which geometry the optimizer respects. Natural gradient descent, which uses the Fisher information matrix to define the step, is equivalent to gradient descent in the space of probability distributions rather than the space of parameters.
+
+''Implicit regularization:'' SGD with small batch sizes and moderate learning rates implicitly regularizes toward flat minima. This is connected to the ''stochastic differential equation'' (SDE) approximation of SGD: the continuous-time limit of SGD is a Langevin diffusion whose stationary distribution favors flat regions of the loss landscape. The ratio $\eta / B$ (learning rate over batch size) controls the noise temperature of this diffusion, linking optimizer hyperparameters directly to generalization.
+
+---
+
+!! Quiz
+
+<span id="gd-q1">''1. What does the gradient of a loss function point toward?''
+<<button "A">><<replace "#gd-q1">>The direction of steepest decrease in the loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q1">>The nearest local minimum.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q1">>The direction of steepest increase in the loss. That is why gradient descent moves in the //negative// gradient direction to go downhill.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q1">>A random direction sampled from the parameter space.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q2">''2. What happens if the learning rate is set too high?''
+<<button "A">><<replace "#gd-q2">>Training converges faster to the global minimum.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q2">>The optimizer overshoots the minimum and the loss may diverge, bouncing wildly across the landscape instead of settling into a valley.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q2">>The model underfits because it cannot learn complex patterns.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q2">>Gradients vanish to zero in all layers.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q3">''3. Why does stochastic gradient descent (SGD) use a random subset of data rather than the full dataset?''
+<<button "A">><<replace "#gd-q3">>Because the full gradient is mathematically undefined for neural networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q3">>Because randomness makes the gradient more accurate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q3">>Computing the full gradient is too expensive for large datasets, and the noise from mini-batches actually helps escape sharp minima and can improve generalization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q3">>Because neural networks require random inputs to function properly.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q4">''4. In the Adam optimizer, what does maintaining a second moment estimate of the gradients accomplish?''
+<<button "A">><<replace "#gd-q4">>It computes the exact Hessian matrix for second-order optimization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q4">>It provides a per-parameter adaptive learning rate: parameters with historically large gradients get smaller effective rates, preventing overshooting, while parameters with small gradients get larger rates to make progress.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q4">>It eliminates the need for a learning rate entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q4">>It doubles the convergence speed by averaging even and odd gradient steps.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q5">''5. What is the vanishing gradient problem?''
+<<button "A">><<replace "#gd-q5">>The optimizer converges so fast that gradients become zero at the solution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q5">>In deep networks, gradients computed via the chain rule shrink exponentially through many layers, causing early layers to learn extremely slowly or not at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q5">>The training data runs out before the model converges.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q5">>The model parameters approach infinity, causing numerical overflow.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q6">''6. The standard gradient descent update rule is $\theta_{t+1} = \theta_t - \eta \nabla L(\theta_t)$. What does $\eta$ represent?''
+<<button "A">><<replace "#gd-q6">>The momentum coefficient.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q6">>The regularization strength.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q6">>The batch size.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q6">>The learning rate — a scalar that controls how large each parameter update step is. Too large and training diverges; too small and training stalls.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q7">''7. Why are saddle points less problematic in high-dimensional loss landscapes than local minima?''
+<<button "A">><<replace "#gd-q7">>Saddle points do not exist in high dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q7">>Saddle points curve downward in at least some directions, so gradient descent can follow those downward directions to escape. A true local minimum would require //every// direction to curve upward, which becomes exponentially unlikely in high dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q7">>The learning rate automatically increases at saddle points.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q7">>Momentum prevents the optimizer from ever reaching a saddle point.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="gd-q8">''8. What distinguishes AdamW from standard Adam with $L_2$ regularization?''
+<<button "A">><<replace "#gd-q8">>AdamW uses a larger default learning rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#gd-q8">>AdamW decouples weight decay from the adaptive gradient scaling. In standard Adam, the $L_2$ penalty is scaled by the adaptive learning rate, weakening it for parameters with large gradients. AdamW applies weight decay directly to the parameters, independent of the gradient history.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#gd-q8">>AdamW removes the momentum term to save memory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#gd-q8">>AdamW and Adam with $L_2$ regularization are mathematically identical; the distinction is only in implementation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

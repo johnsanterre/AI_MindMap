@@ -1,0 +1,149 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="1" y="1" width="798" height="398" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Section dividers -->
+  <line x1="280" y1="16" x2="280" y2="384" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="540" y1="16" x2="540" y2="384" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ===== SECTION 1: Greedy Choice Illustration ===== -->
+  <text x="140" y="36" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Greedy Choice Property</text>
+
+  <!-- Decision tree showing greedy vs optimal -->
+  <!-- Root node -->
+  <circle cx="140" cy="80" r="16" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="140" y="85" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">Start</text>
+
+  <!-- Greedy path (left, highlighted) -->
+  <line x1="125" y1="93" x2="80" y2="130" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="80" cy="142" r="14" fill="#7C2530"/>
+  <text x="80" y="147" text-anchor="middle" font-size="9" fill="#FDFAF4">Best</text>
+  <text x="95" y="118" font-size="9" fill="#7C2530" font-weight="bold">pick</text>
+
+  <line x1="68" y1="153" x2="45" y2="185" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="45" cy="197" r="14" fill="#7C2530"/>
+  <text x="45" y="202" text-anchor="middle" font-size="9" fill="#FDFAF4">Best</text>
+
+  <line x1="33" y1="208" x2="22" y2="238" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="22" cy="250" r="14" fill="#7C2530"/>
+  <text x="22" y="255" text-anchor="middle" font-size="9" fill="#FDFAF4">Best</text>
+
+  <!-- Non-greedy branches (faded) -->
+  <line x1="155" y1="93" x2="200" y2="130" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <circle cx="200" cy="142" r="14" fill="#C4A87A" opacity="0.6"/>
+  <text x="200" y="147" text-anchor="middle" font-size="9" fill="#5C3D1E">skip</text>
+
+  <line x1="92" y1="153" x2="115" y2="185" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <circle cx="115" cy="197" r="14" fill="#C4A87A" opacity="0.6"/>
+  <text x="115" y="202" text-anchor="middle" font-size="9" fill="#5C3D1E">skip</text>
+
+  <!-- Label -->
+  <text x="140" y="290" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">Always pick the locally</text>
+  <text x="140" y="306" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">best option; never</text>
+  <text x="140" y="322" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">reconsider.</text>
+
+  <!-- Check mark -->
+  <text x="140" y="360" text-anchor="middle" font-size="12" fill="#7C2530" font-weight="bold">No backtracking needed</text>
+
+  <!-- ===== SECTION 2: Classic Greedy Problems ===== -->
+  <text x="410" y="36" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Classic Greedy Problems</text>
+
+  <!-- Table header -->
+  <rect x="290" y="48" width="240" height="22" fill="#5C3D1E" rx="3"/>
+  <text x="370" y="63" font-size="10" fill="#FDFAF4" font-weight="bold">Problem</text>
+  <text x="497" y="63" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">Strategy</text>
+
+  <!-- Rows -->
+  <rect x="290" y="70" width="240" height="22" fill="#EEE8DA"/>
+  <text x="298" y="85" font-size="10" fill="#2D5A8E">Activity Selection</text>
+  <text x="497" y="85" text-anchor="middle" font-size="9" fill="#7C2530">Earliest finish</text>
+
+  <rect x="290" y="92" width="240" height="22" fill="#FDFAF4"/>
+  <text x="298" y="107" font-size="10" fill="#2D5A8E">Huffman Coding</text>
+  <text x="497" y="107" text-anchor="middle" font-size="9" fill="#7C2530">Merge least freq</text>
+
+  <rect x="290" y="114" width="240" height="22" fill="#EEE8DA"/>
+  <text x="298" y="129" font-size="10" fill="#2D5A8E">Kruskal MST</text>
+  <text x="497" y="129" text-anchor="middle" font-size="9" fill="#7C2530">Lightest edge</text>
+
+  <rect x="290" y="136" width="240" height="22" fill="#FDFAF4"/>
+  <text x="298" y="151" font-size="10" fill="#2D5A8E">Prim MST</text>
+  <text x="497" y="151" text-anchor="middle" font-size="9" fill="#7C2530">Nearest vertex</text>
+
+  <rect x="290" y="158" width="240" height="22" fill="#EEE8DA"/>
+  <text x="298" y="173" font-size="10" fill="#2D5A8E">Dijkstra</text>
+  <text x="497" y="173" text-anchor="middle" font-size="9" fill="#7C2530">Min distance</text>
+
+  <rect x="290" y="180" width="240" height="22" fill="#FDFAF4"/>
+  <text x="298" y="195" font-size="10" fill="#2D5A8E">Fractional Knapsack</text>
+  <text x="497" y="195" text-anchor="middle" font-size="9" fill="#7C2530">Best value/weight</text>
+
+  <rect x="290" y="202" width="240" height="22" fill="#EEE8DA"/>
+  <text x="298" y="217" font-size="10" fill="#2D5A8E">Set Cover</text>
+  <text x="497" y="217" text-anchor="middle" font-size="9" fill="#7C2530">Max coverage</text>
+
+  <!-- Matroid note -->
+  <rect x="295" y="240" width="230" height="52" fill="none" stroke="#2D5A8E" stroke-width="1.5" rx="5"/>
+  <text x="410" y="258" text-anchor="middle" font-size="11" fill="#2D5A8E" font-weight="bold">Matroid Guarantee</text>
+  <text x="410" y="274" text-anchor="middle" font-size="9.5" fill="#5C3D1E">If the feasible sets form a matroid,</text>
+  <text x="410" y="288" text-anchor="middle" font-size="9.5" fill="#7C2530" font-weight="bold">greedy always finds the optimum.</text>
+
+  <!-- Greedy vs DP comparison -->
+  <text x="410" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C3D1E">Greedy vs Dynamic Programming</text>
+  <rect x="295" y="326" width="110" height="48" fill="#7C2530" rx="4"/>
+  <text x="350" y="346" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">Greedy</text>
+  <text x="350" y="362" text-anchor="middle" font-size="9" fill="#C4A87A">One choice, O(n log n)</text>
+
+  <rect x="415" y="326" width="110" height="48" fill="#2D5A8E" rx="4"/>
+  <text x="470" y="346" text-anchor="middle" font-size="10" fill="#FDFAF4" font-weight="bold">DP</text>
+  <text x="470" y="362" text-anchor="middle" font-size="9" fill="#C4A87A">All subproblems, O(n^2+)</text>
+
+  <!-- ===== SECTION 3: When Greedy Fails ===== -->
+  <text x="670" y="36" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">When Greedy Fails</text>
+
+  <!-- 0/1 Knapsack example -->
+  <text x="670" y="62" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">0/1 Knapsack</text>
+  <!-- Items -->
+  <rect x="570" y="72" width="60" height="36" fill="#2D5A8E" rx="3"/>
+  <text x="600" y="88" text-anchor="middle" font-size="9" fill="#FDFAF4">v=60</text>
+  <text x="600" y="100" text-anchor="middle" font-size="9" fill="#C4A87A">w=10</text>
+
+  <rect x="640" y="72" width="60" height="36" fill="#2D5A8E" rx="3"/>
+  <text x="670" y="88" text-anchor="middle" font-size="9" fill="#FDFAF4">v=100</text>
+  <text x="670" y="100" text-anchor="middle" font-size="9" fill="#C4A87A">w=20</text>
+
+  <rect x="710" y="72" width="60" height="36" fill="#2D5A8E" rx="3"/>
+  <text x="740" y="88" text-anchor="middle" font-size="9" fill="#FDFAF4">v=120</text>
+  <text x="740" y="100" text-anchor="middle" font-size="9" fill="#C4A87A">w=30</text>
+
+  <text x="670" y="128" text-anchor="middle" font-size="9" fill="#5C3D1E">Capacity = 50</text>
+
+  <!-- Greedy picks -->
+  <rect x="565" y="138" width="95" height="22" fill="#7C2530" rx="3" opacity="0.85"/>
+  <text x="612" y="153" text-anchor="middle" font-size="9" fill="#FDFAF4">Greedy: v=220</text>
+
+  <rect x="670" y="138" width="95" height="22" fill="#2D5A8E" rx="3"/>
+  <text x="717" y="153" text-anchor="middle" font-size="9" fill="#FDFAF4">Optimal: v=220</text>
+
+  <text x="670" y="178" text-anchor="middle" font-size="9" fill="#7C2530" font-style="italic">Not always this lucky!</text>
+
+  <!-- Coin change failure -->
+  <text x="670" y="205" text-anchor="middle" font-size="11" fill="#7C2530" font-weight="bold">Coin Change</text>
+  <text x="670" y="222" text-anchor="middle" font-size="9.5" fill="#5C3D1E">Coins: {1, 3, 4},  Target: 6</text>
+
+  <rect x="565" y="232" width="95" height="34" fill="#7C2530" rx="3" opacity="0.85"/>
+  <text x="612" y="248" text-anchor="middle" font-size="9" fill="#FDFAF4">Greedy: 4+1+1</text>
+  <text x="612" y="260" text-anchor="middle" font-size="9" fill="#C4A87A">3 coins</text>
+
+  <rect x="670" y="232" width="95" height="34" fill="#2D5A8E" rx="3"/>
+  <text x="717" y="248" text-anchor="middle" font-size="9" fill="#FDFAF4">Optimal: 3+3</text>
+  <text x="717" y="260" text-anchor="middle" font-size="9" fill="#C4A87A">2 coins</text>
+
+  <!-- Key insight box -->
+  <rect x="555" y="285" width="230" height="90" fill="none" stroke="#C4A87A" stroke-width="1.5" rx="5"/>
+  <text x="670" y="305" text-anchor="middle" font-size="10" font-weight="bold" fill="#5C3D1E">Greedy works when:</text>
+  <text x="670" y="323" text-anchor="middle" font-size="9.5" fill="#2D5A8E">1. Greedy choice property holds</text>
+  <text x="670" y="339" text-anchor="middle" font-size="9.5" fill="#2D5A8E">2. Optimal substructure exists</text>
+  <text x="670" y="357" text-anchor="middle" font-size="9.5" fill="#7C2530" font-style="italic">Proof obligation: exchange argument</text>
+</svg>

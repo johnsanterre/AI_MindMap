@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">The Probabilistic Method: Proving Existence Without Construction</text>
+
+  <!-- ===== LEFT PANEL: The Core Argument ===== -->
+  <rect x="16" y="48" width="240" height="200" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="136" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">The Core Argument</text>
+
+  <!-- Step 1 -->
+  <rect x="28" y="80" width="216" height="34" rx="4" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="136" y="95" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">1. Define random structure</text>
+  <text x="136" y="108" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Color edges of K_n randomly</text>
+
+  <!-- Arrow -->
+  <line x1="136" y1="116" x2="136" y2="126" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="130,124 136,134 142,124" fill="#C4A87A"/>
+
+  <!-- Step 2 -->
+  <rect x="28" y="136" width="216" height="34" rx="4" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1"/>
+  <text x="136" y="151" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">2. Compute probability</text>
+  <text x="136" y="164" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">P(bad event) &lt; 1</text>
+
+  <!-- Arrow -->
+  <line x1="136" y1="172" x2="136" y2="182" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="130,180 136,190 142,180" fill="#C4A87A"/>
+
+  <!-- Step 3 -->
+  <rect x="28" y="192" width="216" height="42" rx="4" fill="#5C3D1E" opacity="0.12" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="136" y="207" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">3. Therefore: good object exists!</text>
+  <text x="136" y="222" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">P(good) &gt; 0 implies existence</text>
+
+  <!-- ===== MIDDLE PANEL: Key Techniques ===== -->
+  <rect x="270" y="48" width="250" height="200" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="395" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Key Techniques</text>
+
+  <!-- First Moment / Union Bound -->
+  <rect x="282" y="80" width="226" height="36" rx="4" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="395" y="95" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">First Moment (Union Bound)</text>
+  <text x="395" y="110" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">P(X &gt; 0) &lt; E[X] by Markov</text>
+
+  <!-- Second Moment -->
+  <rect x="282" y="122" width="226" height="36" rx="4" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="395" y="137" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Second Moment Method</text>
+  <text x="395" y="152" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">P(X = 0) &lt; Var(X)/E[X]^2</text>
+
+  <!-- Lovasz Local Lemma -->
+  <rect x="282" y="164" width="226" height="36" rx="4" fill="#5C3D1E" opacity="0.08" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="395" y="179" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Lovasz Local Lemma</text>
+  <text x="395" y="194" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle">Avoid all bad events simultaneously</text>
+
+  <!-- Alteration -->
+  <rect x="282" y="206" width="226" height="30" rx="4" fill="#C4A87A" opacity="0.2" stroke="#C4A87A" stroke-width="1"/>
+  <text x="395" y="225" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Alteration: Random + Fix</text>
+
+  <!-- ===== RIGHT PANEL: Erdos's Ramsey Bound ===== -->
+  <rect x="534" y="48" width="250" height="200" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="659" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Erdos's Ramsey Bound (1947)</text>
+
+  <!-- Graph icon -->
+  <circle cx="590" cy="115" r="6" fill="#2D5A8E"/>
+  <circle cx="630" cy="90" r="6" fill="#2D5A8E"/>
+  <circle cx="670" cy="100" r="6" fill="#2D5A8E"/>
+  <circle cx="650" cy="140" r="6" fill="#2D5A8E"/>
+  <circle cx="710" cy="120" r="6" fill="#2D5A8E"/>
+  <line x1="590" y1="115" x2="630" y2="90" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="630" y1="90" x2="670" y2="100" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="670" y1="100" x2="710" y2="120" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="590" y1="115" x2="650" y2="140" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="650" y1="140" x2="710" y2="120" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="630" y1="90" x2="650" y2="140" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="590" y1="115" x2="670" y2="100" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="630" y1="90" x2="710" y2="120" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="670" y1="100" x2="650" y2="140" stroke="#7C2530" stroke-width="1.5"/>
+  <line x1="590" y1="115" x2="710" y2="120" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Legend -->
+  <line x1="556" y1="165" x2="576" y2="165" stroke="#7C2530" stroke-width="2"/>
+  <text x="582" y="169" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Red edge</text>
+  <line x1="640" y1="165" x2="660" y2="165" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="666" y="169" font-family="Georgia, serif" font-size="9" fill="#5C3D1E">Blue edge</text>
+
+  <line x1="546" y1="178" x2="772" y2="178" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <text x="659" y="195" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Random 2-coloring of K_n:</text>
+  <text x="659" y="211" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">P(mono K_s) &lt; C(n,s) 2^{1-C(s,2)}</text>
+  <text x="659" y="227" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">When &lt; 1: R(s,s) &gt; n</text>
+  <text x="659" y="243" font-family="Georgia, serif" font-size="9" fill="#2D5A8E" text-anchor="middle">Proves R(s,s) &gt; 2^{s/2}</text>
+
+  <!-- ===== BOTTOM PANEL: Applications ===== -->
+  <rect x="16" y="262" width="766" height="112" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="50" y="280" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530">Applications in ML and CS</text>
+
+  <!-- App 1 -->
+  <rect x="28" y="290" width="175" height="68" rx="4" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="116" y="308" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Random Projections</text>
+  <text x="116" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Johnson-Lindenstrauss:</text>
+  <text x="116" y="336" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">A random low-dim map</text>
+  <text x="116" y="350" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">preserves distances w.h.p.</text>
+
+  <!-- App 2 -->
+  <rect x="215" y="290" width="175" height="68" rx="4" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="303" y="308" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Compressed Sensing</text>
+  <text x="303" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Random matrices satisfy</text>
+  <text x="303" y="336" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Restricted Isometry Property</text>
+  <text x="303" y="350" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">with high probability</text>
+
+  <!-- App 3 -->
+  <rect x="402" y="290" width="175" height="68" rx="4" fill="#5C3D1E" opacity="0.08" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="490" y="308" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Hashing / Sketching</text>
+  <text x="490" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Random hash functions</text>
+  <text x="490" y="336" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">avoid collisions; count-min</text>
+  <text x="490" y="350" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">sketch approximates counts</text>
+
+  <!-- App 4 -->
+  <rect x="589" y="290" width="181" height="68" rx="4" fill="#C4A87A" opacity="0.15" stroke="#C4A87A" stroke-width="1"/>
+  <text x="680" y="308" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Random Initialization</text>
+  <text x="680" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Random weights break</text>
+  <text x="680" y="336" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">symmetry; good init exists</text>
+  <text x="680" y="350" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle" font-style="italic">with positive probability</text>
+</svg>

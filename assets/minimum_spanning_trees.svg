@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="36" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Minimum Spanning Tree: Cheapest Connected Subgraph</text>
+
+  <!-- Graph nodes -->
+  <circle cx="150" cy="120" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="150" y="125" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">A</text>
+
+  <circle cx="320" cy="80" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="320" y="85" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">B</text>
+
+  <circle cx="480" cy="100" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="480" y="105" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">C</text>
+
+  <circle cx="640" cy="120" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="640" y="125" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">D</text>
+
+  <circle cx="230" cy="260" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="230" y="265" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">E</text>
+
+  <circle cx="420" cy="280" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="420" y="285" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">F</text>
+
+  <circle cx="580" cy="260" r="22" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="580" y="265" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">G</text>
+
+  <!-- Non-MST edges (light, dashed) -->
+  <!-- A-B weight 7 -->
+  <line x1="172" y1="115" x2="298" y2="85" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+  <text x="230" y="92" font-family="Georgia,serif" font-size="11" fill="#C4A87A" text-anchor="middle">7</text>
+
+  <!-- B-C weight 8 -->
+  <line x1="342" y1="82" x2="458" y2="98" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+  <text x="400" y="82" font-family="Georgia,serif" font-size="11" fill="#C4A87A" text-anchor="middle">8</text>
+
+  <!-- C-D weight 9 -->
+  <line x1="502" y1="105" x2="618" y2="115" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+  <text x="560" y="100" font-family="Georgia,serif" font-size="11" fill="#C4A87A" text-anchor="middle">9</text>
+
+  <!-- E-F weight 6 -->
+  <line x1="252" y1="264" x2="398" y2="278" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+  <text x="325" y="278" font-family="Georgia,serif" font-size="11" fill="#C4A87A" text-anchor="middle">6</text>
+
+  <!-- A-E weight 5 (non-MST) -->
+  <line x1="158" y1="142" x2="222" y2="238" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+  <text x="180" y="195" font-family="Georgia,serif" font-size="11" fill="#C4A87A" text-anchor="middle">5</text>
+
+  <!-- MST edges (bold, red) -->
+  <!-- A-E weight 2 (MST) -->
+  <line x1="165" y1="139" x2="215" y2="243" stroke="#7C2530" stroke-width="3.5"/>
+  <rect x="172" y="180" width="22" height="16" rx="3" fill="#FDFAF4"/>
+  <text x="183" y="192" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">2</text>
+
+  <!-- B-E weight 3 (MST) -->
+  <line x1="307" y1="99" x2="243" y2="241" stroke="#7C2530" stroke-width="3.5"/>
+  <rect x="260" y="162" width="22" height="16" rx="3" fill="#FDFAF4"/>
+  <text x="271" y="174" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">3</text>
+
+  <!-- B-C weight 4 (MST) -->
+  <line x1="342" y1="85" x2="458" y2="95" stroke="#7C2530" stroke-width="3.5"/>
+  <rect x="389" y="78" width="22" height="16" rx="3" fill="#FDFAF4"/>
+  <text x="400" y="90" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">4</text>
+
+  <!-- C-G weight 1 (MST) -->
+  <line x1="495" y1="118" x2="565" y2="242" stroke="#7C2530" stroke-width="3.5"/>
+  <rect x="519" y="172" width="22" height="16" rx="3" fill="#FDFAF4"/>
+  <text x="530" y="184" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">1</text>
+
+  <!-- G-D weight 3 (MST) -->
+  <line x1="597" y1="245" x2="633" y2="140" stroke="#7C2530" stroke-width="3.5"/>
+  <rect x="608" y="184" width="22" height="16" rx="3" fill="#FDFAF4"/>
+  <text x="619" y="196" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">3</text>
+
+  <!-- F-G weight 2 (MST) -->
+  <line x1="442" y1="276" x2="558" y2="264" stroke="#7C2530" stroke-width="3.5"/>
+  <rect x="489" y="262" width="22" height="16" rx="3" fill="#FDFAF4"/>
+  <text x="500" y="274" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">2</text>
+
+  <!-- Legend -->
+  <rect x="30" y="330" width="340" height="50" rx="5" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="50" y1="350" x2="90" y2="350" stroke="#7C2530" stroke-width="3.5"/>
+  <text x="100" y="354" font-family="Georgia,serif" font-size="11" fill="#5C3D1E">MST edge (total weight = 15)</text>
+  <line x1="50" y1="368" x2="90" y2="368" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+  <text x="100" y="372" font-family="Georgia,serif" font-size="11" fill="#5C3D1E">Non-MST edge (excluded)</text>
+
+  <rect x="420" y="330" width="350" height="50" rx="5" fill="#F5EFE4" stroke="#C4A87A" stroke-width="1"/>
+  <text x="595" y="350" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-weight="bold">7 nodes, 11 edges → MST uses 6 edges</text>
+  <text x="595" y="368" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">A spanning tree always has exactly N-1 edges</text>
+</svg>

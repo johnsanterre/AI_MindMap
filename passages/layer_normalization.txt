@@ -1,0 +1,229 @@
+<<include "Header">>
+
+! Layer Normalization
+
+<img src="assets/layer_normalization.svg" alt="Diagram comparing Batch Normalization and Layer Normalization, showing that BN normalizes down columns (across the batch for each feature) while LN normalizes across rows (across features for each sample)" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are a teacher grading a single student's test. Rather than comparing that student's score on question 5 to every other student's score on question 5 (which is what <<link "Batch Normalization" "Batch Normalization">><</link>> does), you instead look at all of that one student's answers together and ask: "Are these scores on a consistent scale?" If the student scored 95 on easy questions and 12 on hard ones, you re-center and rescale all their answers so the overall profile has a stable mean and spread. That is ''layer normalization'' — it normalizes across the features within a single example, completely ignoring what any other example in the batch looks like.
+
+This batch-independence is what makes layer normalization the default <<link "normalization" "normalization">><</link>> technique for <<link "Transformers" "Transformers">><</link>> and <<link "recurrent neural networks" "RNN">><</link>>. Since each sample is normalized on its own, the method works identically whether your batch size is 1 or 10,000, and it behaves the same way at training and inference time — no running statistics, no train/eval mode switch, no subtle bugs.
+
+---
+
+!! The Core Insight
+
+<<link "Batch Normalization" "Batch Normalization">><</link>> computes the mean and variance of each feature //across the batch//. This works well when batches are large enough that those statistics are reliable estimates of the true distribution. But when the batch is small — or when the data is sequential and each timestep has a different distribution — the batch statistics become noisy and unreliable.
+
+Layer normalization flips the axis entirely. Instead of asking "What is the average value of feature $j$ across all samples?", it asks "What is the average value of //all features// within sample $i$?" For each individual input vector, it computes the mean and variance across the feature dimension, then centers and rescales. The result is that every single sample gets a self-contained normalization, with no dependency on what else happens to be in the batch.
+
+This is why layer normalization became essential for <<link "Transformers" "Transformers">><</link>>. In a Transformer, each token in a sequence is processed with its own feature vector. Layer normalization ensures that each token's representation is well-conditioned, regardless of sequence length, batch size, or whether you are training or running inference. The entire "Attention Is All You Need" architecture — and every large language model built on it — relies on layer normalization at every sublayer.
+
+The key tradeoff: batch normalization has a mild regularizing effect (because the batch statistics introduce noise), while layer normalization does not. In settings where that regularization helps (large-batch CNNs), BN may still be preferred. But in settings where stability and batch-independence matter more, layer normalization wins decisively.
+
+---
+
+!! Pre-Norm vs Post-Norm Placement
+
+In the original Transformer architecture (Vaswani et al., 2017), layer normalization was applied //after// the residual connection — a configuration called ''post-norm'':
+
+$$\text{output} = \text{LayerNorm}(x + \text{Sublayer}(x))$$
+
+This means the sublayer's output is added to the residual, and //then// the sum is normalized. Post-norm Transformers can achieve strong final performance, but they are notoriously difficult to train at depth. The gradients must flow through the normalization layer before reaching the residual path, which can cause instability during the early phase of training. Careful learning rate warmup is typically required.
+
+''Pre-norm'' Transformers flip the order: normalize first, then apply the sublayer, then add the residual:
+
+$$\text{output} = x + \text{Sublayer}(\text{LayerNorm}(x))$$
+
+This arrangement lets gradients flow through the residual connection completely unobstructed — the identity path from output back to input has no normalization layer in the way. Pre-norm architectures train more stably, often without warmup, and scale more predictably to very deep networks. GPT-2, GPT-3, LLaMA, and most modern large language models use pre-norm placement.
+
+The practical takeaway: if you are building a new Transformer, start with pre-norm. Switch to post-norm only if you have evidence that the extra training difficulty is worth the marginal performance gain for your specific task and scale.
+
+---
+
+!! What the Math Is Actually Doing
+
+Given an input vector $\mathbf{x} = (x_1, x_2, \ldots, x_H)$ with $H$ features, layer normalization computes:
+
+$$\mu = \frac{1}{H} \sum_{i=1}^{H} x_i$$
+
+$$\sigma^2 = \frac{1}{H} \sum_{i=1}^{H} (x_i - \mu)^2$$
+
+Then each feature is normalized:
+
+$$\hat{x}_i = \frac{x_i - \mu}{\sqrt{\sigma^2 + \varepsilon}}$$
+
+where $\varepsilon \approx 10^{-5}$ prevents division by zero. Finally, learned parameters $\gamma_i$ and $\beta_i$ (one per feature) apply an affine transformation:
+
+$$y_i = \gamma_i \hat{x}_i + \beta_i$$
+
+The parameters $\gamma$ and $\beta$ are initialized to 1 and 0 respectively, so the network starts with pure normalization and learns to scale and shift each feature independently.
+
+Unlike <<link "Batch Normalization" "Batch Normalization">><</link>>, there are no running statistics to maintain. The mean $\mu$ and variance $\sigma^2$ are computed fresh for each input at both training and inference time. This means layer normalization is a pure, deterministic function of its input — the same input always produces the same output, regardless of what else is in the batch.
+
+For a Transformer with hidden dimension $d = 768$, each layer normalization operation computes a mean and variance over 768 values, applies the normalization, then scales and shifts with $2 \times 768 = 1536$ learned parameters. Across a 12-layer Transformer with two layer norms per block (one for attention, one for the feed-forward network), that is $12 \times 2 \times 1536 = 36{,}864$ parameters dedicated to normalization — a tiny fraction of the total model size.
+
+---
+
+!! Practical Considerations
+
+''RMSNorm — a faster variant.'' RMSNorm (Root Mean Square Normalization) drops the mean-centering step entirely and normalizes by the root mean square alone:
+
+$$\hat{x}_i = \frac{x_i}{\sqrt{\frac{1}{H}\sum_{j=1}^{H} x_j^2 + \varepsilon}}$$
+
+This saves one pass over the data (no need to compute $\mu$) and has been shown to match layer normalization's performance in practice. LLaMA, Gemma, and several other recent architectures use RMSNorm instead of standard layer normalization. When choosing between them, RMSNorm is the pragmatic default unless you have evidence that mean-centering matters for your specific task.
+
+''Numerical precision matters.'' The normalization computation involves subtracting the mean from each value and dividing by a potentially small standard deviation. In half-precision (FP16), this can cause numerical instability — the subtraction can lose significant bits when values are close to the mean. Most frameworks compute layer normalization internally in FP32 even when the rest of the network runs in FP16 or BF16. If you implement a custom layer norm kernel, always accumulate the mean and variance in FP32.
+
+''Interaction with <<link "gradient descent" "Stochastic Gradient Descent">><</link>>.'' Layer normalization smooths the loss landscape by reducing the sensitivity of each layer's output to the scale of its input. If the pre-normalization activations are scaled by a constant $c$, the post-normalization values are unchanged (the mean and variance absorb the scaling). This scale invariance means the effective learning rate is automatically adjusted for each layer, which is one reason why layer-normalized networks are less sensitive to learning rate choices.
+
+---
+
+!! When Layer Normalization Breaks Down
+
+''1. Convolutional networks with spatial structure.'' Layer normalization computes statistics across //all// features in a sample, which in a CNN means pooling across both spatial positions and channels. This conflates spatial information with channel information, destroying the channel-wise structure that convolutional layers depend on. For CNNs, <<link "Batch Normalization" "Batch Normalization">><</link>> (or Group Normalization for small batches) remains the better choice because it normalizes each channel independently across the batch and spatial dimensions, preserving the channel structure.
+
+''2. Features with deliberately different scales.'' Layer normalization assumes that all features in a vector should be on a roughly comparable scale. If your architecture intentionally encodes information in the //relative magnitudes// of different features — for example, if feature 1 is always 100x larger than feature 2 and that ratio carries meaning — then layer normalization will erase that signal by forcing all features to the same scale. The learned $\gamma$ and $\beta$ can partially recover this, but only after training discovers the pattern. In such cases, consider normalizing over subsets of features (group normalization) rather than all features at once.
+
+''3. Very low-dimensional feature spaces.'' When the feature dimension $H$ is very small (say, $H = 4$ or $H = 8$), the mean and variance computed over so few values are noisy estimates. The normalization step can amplify small perturbations rather than stabilizing the representation. This is rarely a problem in modern <<link "Transformers" "Transformers">><</link>> (where $H \geq 256$), but it can arise in lightweight models, early layers of hierarchical architectures, or when layer normalization is applied to small embedding dimensions. If you see training instability with very small feature dimensions, consider removing the normalization or increasing the dimension.
+
+---
+
+!! Technical Details
+
+''Original paper:'' Ba, Kiros & Hinton, 2016 — "Layer Normalization." Proposed as a solution to BN's batch-size dependency, specifically motivated by <<link "RNN" "RNN">><</link>> training where BN was impractical.
+
+''Parameter count:'' $2H$ per layer norm operation ($H$ for $\gamma$, $H$ for $\beta$). For a Transformer with hidden size $d$, each block typically has 2 layer norms, contributing $4d$ parameters per block.
+
+''Computational cost:'' Two passes over the feature vector per normalization (one for $\mu$, one for $\sigma^2$), plus elementwise scaling. Total: $O(H)$ per sample per layer norm. In practice, fused CUDA kernels compute mean and variance in a single pass using Welford's online algorithm.
+
+''Gradient:'' The Jacobian of layer normalization is not diagonal — normalizing $x_i$ depends on all $x_j$ through the shared $\mu$ and $\sigma^2$. The backward pass must account for the contribution of each $x_j$ to the mean and variance. Efficient implementations compute this analytically rather than through autograd, reducing memory usage.
+
+''Variants:''
+- ''RMSNorm:'' Drops mean centering. Used in LLaMA, PaLM, Gemma.
+- ''AdaLN (Adaptive Layer Norm):'' Conditions $\gamma$ and $\beta$ on an external signal (e.g., timestep in diffusion models). Used in DiT and Stable Diffusion 3.
+- ''QK-Norm:'' Applies layer norm to query and key vectors before attention dot products. Stabilizes training at large scale.
+
+''Typical placement in Transformers:''
+- ''Post-norm (original):'' $\text{LN}(x + \text{Attn}(x))$ — harder to train, potentially better final quality.
+- ''Pre-norm (modern default):'' $x + \text{Attn}(\text{LN}(x))$ — easier to train, scales reliably.
+- ''Sandwich norm:'' Applies LN both before and after the sublayer. Occasionally used for extra stability.
+
+''Framework defaults:'' `torch.nn.LayerNorm(normalized_shape)` in PyTorch; `tf.keras.layers.LayerNormalization(axis=-1)` in TensorFlow/Keras. Both default to normalizing over the last dimension (features).
+
+---
+
+!! Quiz
+
+<div id="ln-q1">
+''1. What axis does layer normalization compute its statistics over?''
+
+A) The batch dimension
+B) The spatial dimensions (height and width)
+C) The feature/channel dimension within each sample
+D) The time dimension across sequence steps
+
+<<button "A">><<replace "#ln-q1">>Incorrect. That is what Batch Normalization does — it computes statistics across the batch for each feature. Layer normalization works within each sample.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q1">>Incorrect. That describes instance normalization. Layer normalization operates across all features within a single sample.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q1">>Correct! Layer normalization computes the mean and variance across all features (the feature dimension) for each individual sample, independent of the batch.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q1">>Incorrect. Layer normalization normalizes across features at each timestep independently, not across time.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q2">
+''2. Why is layer normalization preferred over batch normalization for Transformers?''
+
+A) Layer normalization has more learnable parameters
+B) Layer normalization is independent of batch size and behaves identically at train and inference time
+C) Layer normalization provides stronger regularization
+D) Layer normalization is computationally cheaper than batch normalization
+
+<<button "A">><<replace "#ln-q2">>Incorrect. Both methods have the same number of learnable parameters ($2H$ for scale and shift).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q2">>Correct! Layer normalization computes statistics per-sample, so it works the same regardless of batch size and has no train/inference discrepancy — critical for Transformers which often serve single sequences at inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q2">>Incorrect. Batch normalization actually provides mild regularization through its noisy batch statistics. Layer normalization does not have this effect.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q2">>Incorrect. The computational cost is similar for both methods. The advantage of layer normalization is its batch-size independence.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q3">
+''3. What is the difference between pre-norm and post-norm Transformer architectures?''
+
+A) Pre-norm applies layer norm before the sublayer; post-norm applies it after the residual addition
+B) Pre-norm uses layer normalization; post-norm uses batch normalization
+C) Pre-norm normalizes the input embeddings; post-norm normalizes the output logits
+D) There is no meaningful difference; they produce identical results
+
+<<button "A">><<replace "#ln-q3">>Correct! Pre-norm computes $x + \text{Sublayer}(\text{LN}(x))$, while post-norm computes $\text{LN}(x + \text{Sublayer}(x))$. Pre-norm allows unobstructed gradient flow through the residual path.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q3">>Incorrect. Both pre-norm and post-norm use layer normalization. The difference is where in the computation it is placed relative to the sublayer and residual connection.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q3">>Incorrect. Both terms refer to the placement of layer normalization within each Transformer block, not at the input or output of the full model.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q3">>Incorrect. The placement significantly affects training stability. Pre-norm trains more stably and is the default for most modern LLMs.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q4">
+''4. What do the learned parameters $\gamma$ and $\beta$ do in layer normalization?''
+
+A) They control the learning rate for the layer
+B) They apply a per-feature scale and shift after normalization, preserving expressivity
+C) They determine which features to normalize and which to skip
+D) They set the mean and variance targets for the normalization
+
+<<button "A">><<replace "#ln-q4">>Incorrect. The learning rate is a separate hyperparameter. $\gamma$ and $\beta$ are learned affine parameters applied after the normalization step.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q4">>Correct! $\gamma$ scales and $\beta$ shifts each normalized feature independently. This lets the network recover any distribution it needs while still benefiting from stable optimization. They are initialized to $\gamma = 1$ and $\beta = 0$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q4">>Incorrect. Layer normalization always normalizes all features. $\gamma$ and $\beta$ allow the network to learn the optimal scale and shift for each feature.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q4">>Incorrect. The mean and variance are computed from the data. $\gamma$ and $\beta$ are applied after normalization to scale and shift the result.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q5">
+''5. How does RMSNorm differ from standard layer normalization?''
+
+A) RMSNorm normalizes across the batch instead of across features
+B) RMSNorm skips the mean-centering step and normalizes by the root mean square only
+C) RMSNorm uses running statistics like batch normalization
+D) RMSNorm removes the learned scale and shift parameters
+
+<<button "A">><<replace "#ln-q5">>Incorrect. RMSNorm still normalizes across features within each sample, just like standard layer normalization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q5">>Correct! RMSNorm drops the mean subtraction and divides only by $\sqrt{\frac{1}{H}\sum x_j^2 + \varepsilon}$. This saves one pass over the data and empirically matches layer norm performance. LLaMA and other modern models use it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q5">>Incorrect. RMSNorm, like standard layer normalization, computes statistics fresh for each input with no running statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q5">>Incorrect. RMSNorm still uses a learned scale parameter $\gamma$ (though some implementations omit $\beta$). The key difference is dropping mean centering.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q6">
+''6. Why does layer normalization struggle with convolutional networks?''
+
+A) CNNs do not have features to normalize over
+B) Layer norm conflates spatial and channel dimensions, destroying channel-wise structure that convolutions depend on
+C) Layer norm is too computationally expensive for the large tensors in CNNs
+D) Layer norm requires variable-length inputs, which CNNs do not have
+
+<<button "A">><<replace "#ln-q6">>Incorrect. CNNs do have features (channels), but the issue is how layer normalization treats them relative to spatial dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q6">>Correct! In a CNN, layer normalization computes statistics across both channels and spatial positions, mixing information that should be kept separate. Batch normalization preserves channel structure by normalizing each channel independently.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q6">>Incorrect. The computational cost of layer norm is comparable to batch norm. The issue is about what information gets normalized together.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q6">>Incorrect. Layer normalization does not require variable-length inputs. The issue is about which dimensions it normalizes over in convolutional architectures.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q7">
+''7. What problem does layer normalization solve for RNN training that batch normalization cannot?''
+
+A) RNNs have too many parameters for batch normalization
+B) Batch statistics across timesteps mix distributions from different points in a sequence, causing instability
+C) RNNs cannot compute gradients through batch normalization
+D) Batch normalization makes RNNs too slow to train
+
+<<button "A">><<replace "#ln-q7">>Incorrect. The parameter count is not the issue. The problem is about the statistics computed across the batch at different timesteps.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q7">>Correct! In an RNN, what is "normal" at timestep 1 may differ completely from timestep 50. BN smears these different distributions together across the batch. Layer normalization normalizes each timestep independently across features, handling this correctly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q7">>Incorrect. Gradients can flow through batch normalization in RNNs; the problem is that the batch statistics at each timestep are unreliable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q7">>Incorrect. Speed is not the primary concern. The issue is statistical — batch normalization produces poor statistics when applied across timesteps in recurrent networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="ln-q8">
+''8. Why might layer normalization cause problems with very low-dimensional feature spaces (e.g., $H = 4$)?''
+
+A) The $\gamma$ and $\beta$ parameters cannot be learned with so few features
+B) The mean and variance computed over very few values are noisy, potentially amplifying perturbations
+C) Layer normalization requires at least 64 features to function correctly
+D) Low-dimensional spaces cannot represent the normalized distribution
+
+<<button "A">><<replace "#ln-q8">>Incorrect. $\gamma$ and $\beta$ can be learned regardless of dimension. The issue is with the quality of the normalization statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B">><<replace "#ln-q8">>Correct! With only a handful of features, the sample mean and variance are poor estimates. Small perturbations in one feature significantly shift $\mu$ and $\sigma^2$, causing the normalization to amplify noise rather than stabilize the representation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#ln-q8">>Incorrect. There is no hard minimum dimension requirement. The issue is that statistics over very few values are simply less reliable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#ln-q8">>Incorrect. Any dimension can represent a normalized distribution. The problem is the statistical reliability of the normalization computation itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

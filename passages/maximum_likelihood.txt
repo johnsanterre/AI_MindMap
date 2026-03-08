@@ -1,0 +1,115 @@
+<<include "Header">>
+
+! Maximum Likelihood
+
+[img[assets/maximum_likelihood.svg]]
+
+Imagine you hear a coin land heads seven times out of ten flips. You do not know whether the coin is fair, biased, or wildly crooked. But you can ask a sharp question: //which coin, among all possible coins, would have made this exact sequence of outcomes the least surprising?// That question is ''maximum likelihood estimation'' (MLE). Instead of guessing a parameter and hoping for the best, you let the data vote on which parameter is most consistent with what actually happened. The parameter that wins the vote is called the ''maximum likelihood estimate''.
+
+---
+
+!! The Core Insight
+
+A statistical model assigns a probability to every possible dataset for every possible parameter value. The ''likelihood function'' flips this relationship: you fix the data you actually observed and treat the probability as a function of the parameter. The MLE is the parameter value that makes the observed data most probable under the model.
+
+This is //not// the same as asking "what is the most probable parameter?" That is a [[Bayes Theorem|Bayes Theorem]] question, which requires a prior. MLE asks the reverse: "for which parameter value does the data have the highest probability?" The distinction matters. MLE needs no prior distribution, makes no claim about parameter probability, and relies solely on the model and the observed data. This makes it both powerful and limited — powerful because it is assumption-light, limited because it can overfit when data is scarce.
+
+The likelihood function contains all the information the data has about the parameter. Two different datasets that produce the same likelihood function lead to the same MLE — a property known as the ''sufficiency principle''. This makes MLE a natural starting point for nearly every estimation problem in statistics and machine learning.
+
+---
+
+!! Log-Likelihood and Optimization
+
+In practice, no one maximizes the likelihood directly. Real-world data consists of many independent observations, and the likelihood is a product of many probabilities — a product that quickly becomes astronomically small. Instead, we maximize the ''log-likelihood'', the natural logarithm of the likelihood. Because the logarithm is a monotonically increasing function, it preserves the location of the maximum while converting products into sums.
+
+For $n$ independent observations $x_1, x_2, \ldots, x_n$ drawn from a distribution $p(x \mid \theta)$, the log-likelihood is:
+
+$$\ell(\theta) = \sum_{i=1}^{n} \log p(x_i \mid \theta)$$
+
+This sum is far easier to optimize, differentiate, and compute than the original product. Taking the derivative and setting it to zero gives the ''score equation'':
+
+$$\frac{\partial}{\partial \theta} \ell(\theta) = \sum_{i=1}^{n} \frac{\partial}{\partial \theta} \log p(x_i \mid \theta) = 0$$
+
+For many common distributions in the [[Exponential Family]], this equation has a closed-form solution. For others, numerical methods like gradient ascent or Newton's method are used. In machine learning, minimizing the negative log-likelihood is equivalent to maximizing the likelihood — which is why [[Cross-Entropy]] loss is so ubiquitous: it is the negative log-likelihood for classification models.
+
+---
+
+!! What the Math Is Actually Doing
+
+Consider the simplest example: estimating the mean $\mu$ of a Gaussian with known variance $\sigma^2$. Each observation has density $p(x_i \mid \mu) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)$. The log-likelihood is:
+
+$$\ell(\mu) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2$$
+
+Maximizing over $\mu$ means minimizing $\sum(x_i - \mu)^2$, which gives $\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum x_i$ — the sample mean. MLE recovers the intuitive estimator through rigorous optimization.
+
+For the Bernoulli distribution with parameter $p$, given $k$ successes in $n$ trials, the log-likelihood is $\ell(p) = k\log p + (n-k)\log(1-p)$. Solving gives $\hat{p}_{\text{MLE}} = k/n$ — the observed proportion.
+
+The ''Fisher information'' $I(\theta) = -\mathbb{E}\left[\frac{\partial^2}{\partial\theta^2}\log p(X \mid \theta)\right]$ measures how sharply the log-likelihood peaks around the true parameter. The ''Cramer-Rao lower bound'' states that no unbiased estimator can have variance less than $1/I(\theta)$, and the MLE achieves this bound asymptotically. This means MLE is ''asymptotically efficient'' — as $n \to \infty$, no estimator can do better. See [[Fisher Information]] for deeper treatment.
+
+Under regularity conditions, the MLE is also ''consistent'' (converges to the true parameter as $n$ grows) and ''asymptotically normal'': $\hat{\theta}_{\text{MLE}} \sim \mathcal{N}\left(\theta_0, \frac{1}{nI(\theta_0)}\right)$ for large $n$. These properties make MLE the workhorse of classical statistics.
+
+---
+
+!! MLE in Machine Learning
+
+Nearly every loss function in supervised learning is a negative log-likelihood in disguise. Training a logistic regression model by minimizing cross-entropy loss is performing MLE on a Bernoulli model. Training a linear regression model by minimizing mean squared error is performing MLE on a Gaussian model. Training a neural network with softmax output and cross-entropy loss is performing MLE on a categorical distribution parameterized by the network.
+
+This connection runs deep. When you add an $\ell_2$ regularization penalty to the loss, you are no longer doing pure MLE — you are doing ''maximum a posteriori'' (MAP) estimation, which is MLE with a Gaussian prior on the parameters. The step from MLE to MAP is the step from frequentist to [[Bayesian Inference]]. Understanding MLE is therefore prerequisite to understanding regularization, Bayesian methods, and the entire landscape of modern training objectives.
+
+In generative models, MLE trains the model to assign high probability to the training data. This is the foundation of language models: given a sequence of tokens, maximize the likelihood of each next token given its context. The cross-entropy loss computed during training is exactly the average negative log-likelihood per token.
+
+---
+
+!! When Maximum Likelihood Breaks Down
+
+''Small sample overfitting:'' MLE trusts the data completely. With few observations, the MLE can be extreme or degenerate. Estimating a Gaussian mixture model with MLE can produce a component with zero variance collapsed onto a single data point — infinite likelihood, meaningless model. In low-data regimes, [[Bayesian Inference]] or regularized variants (MAP estimation) often outperform pure MLE because they inject prior knowledge that prevents pathological solutions.
+
+''Model misspecification:'' MLE finds the parameter that best fits the data under the assumed model. If the model is wrong — if the true distribution is not in the family being searched — MLE converges to the member of the family closest in KL divergence to the truth. This is well-defined but can be misleading: the "best" Gaussian fit to bimodal data is a poor description of the data, yet MLE will confidently report a mean and variance. MLE gives no warning that the model itself is inadequate.
+
+''Multimodal likelihoods and non-convexity:'' For complex models like neural networks and mixture models, the likelihood surface has many local maxima. Gradient-based optimization finds a local maximum, not the global one. Different initializations yield different MLEs, and there is no guarantee that any of them is close to the global optimum. In these settings, MLE is only as good as the optimizer, and the theoretical guarantees (consistency, efficiency) apply only to the global maximum that may never be found in practice.
+
+---
+
+!! Technical Details
+
+''Invariance property:'' If $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$ for any function $g$. This means you can reparameterize freely without redoing the estimation — a practically important property that Bayesian posteriors do not share in general.
+
+''Sufficient statistics:'' For exponential family distributions, the MLE depends on the data only through the sufficient statistic. For example, the MLE of the Gaussian mean depends only on $\sum x_i$ and $n$, not on the individual data points. This connects MLE to the [[Exponential Family]] and to information-theoretic notions of data compression.
+
+''Observed vs. expected Fisher information:'' The expected Fisher information $I(\theta)$ uses the expectation over the data distribution. The ''observed'' Fisher information $-\frac{\partial^2}{\partial\theta^2}\ell(\hat\theta)$ uses the actual data. Both can be used for confidence intervals; the observed version is often preferred because it adapts to the particular dataset.
+
+''Relationship to cross-entropy and KL divergence:'' Maximizing the log-likelihood over parameters is equivalent to minimizing the KL divergence $D_{\text{KL}}(\hat{p}_{\text{data}} \| p_\theta)$ between the empirical data distribution and the model. This is also equivalent to minimizing the [[Cross-Entropy]] $H(\hat{p}_{\text{data}}, p_\theta)$, since the entropy of $\hat{p}_{\text{data}}$ is constant with respect to $\theta$.
+
+''EM algorithm:'' When the model involves latent variables, direct MLE is often intractable. The expectation-maximization (EM) algorithm alternates between computing expected sufficient statistics under the current parameter estimate (E-step) and maximizing the expected log-likelihood (M-step). Each iteration is guaranteed to increase (or maintain) the likelihood, converging to a local maximum.
+
+''Penalized and profile likelihood:'' Adding a penalty $R(\theta)$ to the log-likelihood produces ''penalized MLE'', which includes ridge ($\ell_2$) and lasso ($\ell_1$) regression as special cases. ''Profile likelihood'' handles nuisance parameters by maximizing the likelihood over them for each value of the parameter of interest, reducing a high-dimensional problem to a one-dimensional curve.
+
+---
+
+!! Quiz
+
+<span id="mle-q1">''1. What does the likelihood function treat as fixed and what does it treat as variable?''
+<<button "A) Fixed: parameter; Variable: data">><<replace "#mle-q1">>Incorrect. This describes ordinary probability. The likelihood function flips the roles: data is fixed (already observed), and the parameter is the variable being optimized over.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Fixed: data; Variable: parameter">><<replace "#mle-q1">>Correct! The likelihood function takes the observed data as given and evaluates how probable that data would be under each possible parameter value. The parameter that maximizes this function is the MLE.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Both are fixed">><<replace "#mle-q1">>Incorrect. If both were fixed, there would be nothing to optimize. The likelihood function holds the data fixed and varies the parameter.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Both are variable">><<replace "#mle-q1">>Incorrect. The data has already been observed and is fixed. Only the parameter varies as we search for the value that best explains the observations.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q2">''2. Why do we maximize the log-likelihood instead of the likelihood itself?''
+<<button "A) The log-likelihood is always concave, making optimization easy">><<replace "#mle-q2">>Incorrect. The log-likelihood is concave for exponential family models, but not in general (e.g., mixture models, neural networks). The main reason is numerical: products become sums.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The log-likelihood gives a different, better estimate than the likelihood">><<replace "#mle-q2">>Incorrect. Because log is monotonically increasing, the maximum of the log-likelihood occurs at the same parameter value as the maximum of the likelihood. The estimate is identical.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Products of many small probabilities cause numerical underflow; the log converts them to sums">><<replace "#mle-q2">>Correct! With $n$ independent observations, the likelihood is a product of $n$ probabilities that can be vanishingly small. Taking the log converts this product to a sum, which is numerically stable and easier to differentiate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The likelihood function is undefined for continuous distributions">><<replace "#mle-q2">>Incorrect. For continuous distributions, the likelihood uses the probability density function, which is well-defined. The log transform is about numerical convenience, not definition.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q3">''3. The MLE for the mean of a Gaussian distribution with known variance is:''
+<<button "A) The sample median">><<replace "#mle-q3">>Incorrect. The sample median is a robust estimator but does not maximize the Gaussian likelihood. Maximizing the Gaussian log-likelihood yields the sample mean.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The sample mean $\bar{x} = \frac{1}{n}\sum x_i$">><<replace "#mle-q3">>Correct! Maximizing the Gaussian log-likelihood $\ell(\mu) = -\frac{1}{2\sigma^2}\sum(x_i - \mu)^2 + \text{const}$ over $\mu$ gives $\hat{\mu} = \bar{x}$, the sample mean.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The mode of the data">><<replace "#mle-q3">>Incorrect. The data mode is the most frequently occurring value and does not arise from maximizing the Gaussian likelihood.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The midrange $(\max x_i + \min x_i) / 2$">><<replace "#mle-q3">>Incorrect. The midrange is not related to the Gaussian likelihood. Differentiating the log-likelihood gives the sample mean, not the midrange.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q4">''4. What does "asymptotic efficiency" of MLE mean?''
+<<button "A) MLE always produces unbiased estimates regardless of sample size">><<replace "#mle-q4">>Incorrect. MLE can be biased in finite samples (e.g., the MLE of Gaussian variance divides by $n$, not $n-1$). Asymptotic efficiency refers to variance, not bias.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) As $n \to \infty$, MLE achieves the lowest possible variance (Cramer-Rao bound) among consistent estimators">><<replace "#mle-q4">>Correct! Asymptotic efficiency means that for large samples, no consistent estimator can have lower variance than MLE. It saturates the Cramer-Rao lower bound $1/(nI(\theta))$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) MLE runs in linear time for all models">><<replace "#mle-q4">>Incorrect. Efficiency here is a statistical concept about estimator variance, not a computational complexity statement.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) MLE converges faster than gradient descent">><<replace "#mle-q4">>Incorrect. Asymptotic efficiency is about the statistical properties of the estimate, not the speed of the optimization algorithm used to find it.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q5">''5. How does minimizing cross-entropy loss relate to MLE?''
+<<button "A) They are unrelated; cross-entropy is an information-theoretic quantity">><<replace "#mle-q5">>Incorrect. While cross-entropy does come from information theory, minimizing cross-entropy over model parameters is mathematically equivalent to maximizing the log-likelihood.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Cross-entropy approximates MLE only for large datasets">><<replace "#mle-q5">>Incorrect. The equivalence is exact, not approximate. For any sample size, minimizing cross-entropy and maximizing log-likelihood yield the same parameter estimate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Minimizing cross-entropy over parameters is exactly equivalent to maximizing the log-likelihood">><<replace "#mle-q5">>Correct! Cross-entropy $H(\hat{p}, p_\theta) = -\sum \hat{p}(x)\log p_\theta(x)$ differs from the negative log-likelihood only by the constant entropy of $\hat{p}$, so minimizing one is identical to minimizing the other.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Cross-entropy is the Bayesian version of MLE">><<replace "#mle-q5">>Incorrect. The Bayesian version of MLE is MAP estimation (adding a prior). Cross-entropy is the frequentist MLE objective rewritten in information-theoretic language.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q6">''6. What happens when MLE is applied to a misspecified model (the true distribution is not in the model family)?''
+<<button "A) MLE fails to converge and produces no estimate">><<replace "#mle-q6">>Incorrect. MLE still converges; it simply converges to the member of the model family that is closest to the truth in KL divergence, even though the truth lies outside the family.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) MLE converges to the distribution in the family closest to the truth in KL divergence">><<replace "#mle-q6">>Correct! Under model misspecification, MLE converges to $\arg\min_\theta D_{\text{KL}}(p_{\text{true}} \| p_\theta)$. This is well-defined but can give a misleading fit if the family is a poor match for the data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) MLE automatically detects misspecification and warns the user">><<replace "#mle-q6">>Incorrect. MLE has no built-in mechanism to detect model misspecification. It will confidently return the best-fitting parameter within the assumed family, regardless of how poor that family is.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) MLE becomes equivalent to Bayesian inference under misspecification">><<replace "#mle-q6">>Incorrect. MLE and Bayesian inference remain distinct under misspecification. MLE converges to the KL-minimizing parameter; Bayesian inference concentrates the posterior around the same point but with different finite-sample behavior.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q7">''7. What is the invariance property of MLE?''
+<<button "A) MLE gives the same estimate regardless of how the parameter is defined">><<replace "#mle-q7">>Incorrect. The estimate itself changes under reparameterization, but the //transformation// of the MLE equals the MLE of the transformation: if $\hat\theta$ is the MLE of $\theta$, then $g(\hat\theta)$ is the MLE of $g(\theta)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) If $\hat\theta$ is the MLE of $\theta$, then $g(\hat\theta)$ is the MLE of $g(\theta)$ for any function $g$">><<replace "#mle-q7">>Correct! This invariance property means you can freely reparameterize (e.g., estimate $\sigma^2$ and then take $\sqrt{\hat\sigma^2}$ for $\sigma$) without re-deriving the MLE. It follows from the fact that reparameterization does not change the location of the maximum.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) MLE is invariant to the choice of prior distribution">><<replace "#mle-q7">>Incorrect. MLE does not use a prior at all (that is MAP estimation). The invariance property refers to reparameterization of the parameter space, not to priors.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) MLE produces the same estimate whether you use the likelihood or the log-likelihood">><<replace "#mle-q7">>Incorrect. While this is true (because log is monotone), it is not what the invariance property refers to. The invariance property is about transformations of the parameter, not transformations of the objective.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mle-q8">''8. Adding an $\ell_2$ penalty to the negative log-likelihood converts MLE into:''
+<<button "A) Bayesian inference with a uniform prior">><<replace "#mle-q8">>Incorrect. A uniform (flat) prior produces no penalty term. The $\ell_2$ penalty corresponds to a Gaussian prior on the parameters, yielding MAP estimation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) MAP estimation with a Gaussian prior on the parameters">><<replace "#mle-q8">>Correct! The $\ell_2$ penalty $\lambda\|\theta\|^2$ is the negative log of a zero-mean Gaussian prior $p(\theta) \propto \exp(-\lambda\|\theta\|^2)$. Minimizing the penalized negative log-likelihood is equivalent to finding the mode of the posterior — which is MAP estimation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Expectation maximization">><<replace "#mle-q8">>Incorrect. EM is an algorithm for handling latent variables, not a regularization technique. The $\ell_2$ penalty corresponds to MAP estimation with a Gaussian prior.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Method of moments estimation">><<replace "#mle-q8">>Incorrect. Method of moments matches sample moments to theoretical moments and does not involve likelihood optimization. The $\ell_2$ penalty produces MAP estimation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

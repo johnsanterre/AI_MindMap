@@ -1,0 +1,165 @@
+<<include "Header">>
+! Subgradients
+<img src="assets/subgradients.svg" alt="Subdifferential of f(x)=|x| showing multiple supporting hyperplanes at the kink" style="max-width:100%;margin:1em 0;">
+
+Imagine you're hiking downhill and the trail is smooth — at every point you can feel exactly which direction is steepest. Now imagine the trail has a sharp V-shaped valley. Standing right at the bottom of the V, there's no single "steepest" direction — any direction between the two valley walls counts as "downhill enough." A ''subgradient'' is any of those valid downhill directions. Where a smooth function has one gradient, a non-smooth function has a whole //set// of subgradients, and optimization still works as long as you pick any one of them.
+
+!! The Core Insight
+
+A ''subgradient'' $g$ of a [[Convex|convex]] function $f$ at a point $x$ is any vector that defines a supporting hyperplane that touches the function at $x$ and never rises above it anywhere. Smooth convex functions have exactly one subgradient at each point (the ordinary gradient). Non-smooth convex functions — which appear constantly in machine learning — have //multiple// subgradients at their kinks. The set of all subgradients at a point is called the ''subdifferential'' $\partial f(x)$, and it is always a convex, compact set. This machinery lets us optimize functions that classical calculus cannot differentiate.
+
+See also: [[Convex Optimization]], [[Gradient Descent]], [[Loss Functions]], [[Regularization]]
+
+!! Beyond Smooth Functions
+
+Most textbook optimization assumes smooth, differentiable objectives. But machine learning is full of functions with kinks, corners, and flat regions that violate this assumption:
+
+- ''L1 / [[Lasso]] regularization:'' $\|w\|_1 = \sum |w_i|$ is non-differentiable whenever any $w_i = 0$. This is exactly the sparsity-inducing point — the most important one.
+- ''[[Activation Functions|ReLU]] activations:'' $\max(0, x)$ has a kink at $x = 0$, and every neuron in a ReLU network hits this kink during training.
+- ''[[Hinge Loss]]:'' $\max(0, 1 - y \hat{y})$ used in SVMs is piecewise linear with a corner at $y\hat{y} = 1$.
+- ''Max functions:'' $\max(f_1(x), f_2(x), \ldots)$ appears in robust optimization, minimax games, and piecewise models.
+
+Without subgradients, we would have no principled way to train sparse models, ReLU networks, or SVMs. Subgradient theory provides the mathematical foundation that makes non-smooth optimization rigorous.
+
+!! What the Math Is Actually Doing
+
+''Definition:'' A vector $g$ is a subgradient of a convex function $f$ at $x$ if for all $y$:
+
+$$f(y) \geq f(x) + g^T(y - x)$$
+
+This says the linear approximation $f(x) + g^T(y - x)$ is a global //underestimator// of $f$ — a tangent hyperplane that never crosses above the function.
+
+''Subdifferential:'' The set of all subgradients at $x$ is:
+
+$$\partial f(x) = \{g \mid f(y) \geq f(x) + g^T(y - x) \;\; \forall \, y\}$$
+
+If $f$ is differentiable at $x$, then $\partial f(x) = \{\nabla f(x)\}$ — a singleton. Otherwise it is a convex set.
+
+''Example — absolute value:'' For $f(x) = |x|$:
+- At $x > 0$: $\partial f(x) = \{1\}$
+- At $x < 0$: $\partial f(x) = \{-1\}$
+- At $x = 0$: $\partial f(x) = [-1, 1]$ — every value in this interval is a valid subgradient
+
+''Example — ReLU:'' For $f(x) = \max(0, x)$:
+- At $x > 0$: $\partial f(x) = \{1\}$
+- At $x < 0$: $\partial f(x) = \{0\}$
+- At $x = 0$: $\partial f(x) = [0, 1]$
+
+''Example — L1 norm:'' For $f(w) = \|w\|_1$, the subdifferential is componentwise:
+
+$$[\partial f(w)]_i = \begin{cases} \{1\} & w_i > 0 \\ \{-1\} & w_i < 0 \\ [-1, 1] & w_i = 0 \end{cases}$$
+
+This is the ''sign function'' extended to a set-valued map at zero, and it is the reason [[Lasso]] produces exactly sparse solutions — the subgradient condition at $w_i = 0$ can be satisfied without moving $w_i$ away from zero.
+
+!! Subgradient Methods in Practice
+
+''Subgradient descent:'' The simplest approach replaces the gradient with any subgradient $g_t \in \partial f(x_t)$:
+
+$$x_{t+1} = x_t - \alpha_t \, g_t$$
+
+Unlike gradient descent, subgradient descent does //not// guarantee $f(x_{t+1}) < f(x_t)$, so we track $x_{\text{best}} = \arg\min_{s \leq t} f(x_s)$. Convergence rate for a fixed step size $\alpha$: $O(1/\sqrt{T})$ — significantly slower than the $O(1/T)$ rate of smooth [[Gradient Descent]]. The step size must decrease ($\alpha_t \to 0$, $\sum \alpha_t = \infty$) for convergence to the optimum.
+
+''Proximal operators:'' A far more powerful approach. The ''proximal operator'' of $f$ is:
+
+$$\text{prox}_{\alpha f}(v) = \arg\min_x \left\{ f(x) + \frac{1}{2\alpha}\|x - v\|^2 \right\}$$
+
+For $f(x) = \|x\|_1$, this is the ''soft-thresholding operator'' $S_\alpha(v)_i = \text{sign}(v_i)\max(|v_i| - \alpha, 0)$. Proximal gradient descent splits the objective into smooth $g$ + non-smooth $h$ and alternates: gradient step on $g$, then proximal step on $h$. This achieves the $O(1/T)$ rate of smooth methods.
+
+''ADMM (Alternating Direction Method of Multipliers):'' Decomposes composite problems into subproblems that can each be solved with proximal operators. Widely used for distributed optimization, compressed sensing, and large-scale [[Regularization|regularized]] models.
+
+''Convergence comparison:''
+- Subgradient methods: $O(1/\sqrt{T})$
+- Proximal gradient: $O(1/T)$
+- Accelerated proximal (FISTA): $O(1/T^2)$
+
+!! When Subgradient Methods Break Down
+
+- ''Slow convergence with raw subgradient descent:'' The $O(1/\sqrt{T})$ rate means subgradient descent needs 100x more iterations to gain one extra digit of precision compared to smooth gradient descent. For large-scale problems, this is prohibitive — always prefer proximal methods or ADMM when the proximal operator is available in closed form.
+
+- ''Step size sensitivity:'' Unlike gradient descent, subgradient descent is not a descent method — the function value oscillates. Choosing the step size schedule $\alpha_t$ is critical and problem-dependent. Too large causes divergence; too small wastes iterations. There is no analog of line search for non-smooth functions.
+
+- ''Nonconvex non-smooth functions:'' The classical subgradient theory assumes convexity. For nonconvex problems (e.g., deep networks with ReLU), the subdifferential may be empty or ill-behaved. Practitioners rely on the ''Clarke subdifferential'' or simply set the gradient to a conventional value (e.g., 0 at the ReLU kink), which works in practice but lacks the clean theoretical guarantees of the convex case.
+
+!! Technical Details
+
+''Moreau envelope:'' The Moreau envelope $M_\alpha f(x) = \min_z \{f(z) + \frac{1}{2\alpha}\|z-x\|^2\}$ is a smooth approximation to any convex $f$. Its gradient is $\nabla M_\alpha f(x) = \frac{1}{\alpha}(x - \text{prox}_{\alpha f}(x))$. This connects proximal methods to smooth gradient descent on a modified landscape.
+
+''Proximal gradient descent:'' For $\min_x \, g(x) + h(x)$ where $g$ is smooth and $h$ is non-smooth:
+
+$$x_{t+1} = \text{prox}_{\alpha h}\!\left(x_t - \alpha \nabla g(x_t)\right)$$
+
+This is the workhorse of modern sparse optimization: ISTA for [[Lasso]], nuclear norm minimization for matrix completion, total variation for image denoising.
+
+''FISTA (Fast ISTA):'' Beck & Teboulle 2009 added Nesterov-style momentum to proximal gradient descent, achieving the optimal $O(1/T^2)$ rate for non-smooth composite objectives. Sequence: $y_{t+1} = x_t + \frac{t-1}{t+2}(x_t - x_{t-1})$; $x_{t+1} = \text{prox}_{\alpha h}(y_{t+1} - \alpha \nabla g(y_{t+1}))$.
+
+''Clarke subdifferential:'' For locally Lipschitz nonconvex functions, Clarke 1983 defined the subdifferential as the convex hull of all limit points of gradients at nearby differentiable points: $\partial_C f(x) = \text{conv}\{\lim \nabla f(x_k) : x_k \to x, \, f \text{ differentiable at } x_k\}$. This extends subgradient theory to the nonconvex functions used in deep learning.
+
+''Danskin's theorem:'' For $f(x) = \max_{z \in Z} \phi(x,z)$, the subdifferential is $\partial f(x) = \text{conv}\{\nabla_x \phi(x, z^*) : z^* \in \arg\max_z \phi(x,z)\}$. This is the foundation for minimax optimization and adversarial training.
+
+!! Quiz
+
+<div id="q1">''1. What is the subdifferential of $f(x) = |x|$ at $x = 0$?''
+
+<<button "A. {0}">><<replace "#q1">>The subdifferential at $x=0$ is not $\{0\}$. The function has slope $-1$ on the left and $+1$ on the right.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. {-1, 1}">><<replace "#q1">>Not just the two endpoints — every value //between// $-1$ and $1$ is a valid subgradient.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. [-1, 1]">><<replace "#q1">>Correct! $\partial f(0) = [-1, 1]$. Every $g$ in this closed interval defines a supporting hyperplane that stays at or below $|x|$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The empty set">><<replace "#q1">>The subdifferential of a convex function is never empty at interior points. At the kink it is a whole interval.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What condition defines a subgradient $g$ of convex $f$ at $x$?''
+
+<<button "A. $f(y) \leq f(x) + g^T(y-x)$ for all $y$">><<replace "#q2">>The inequality goes the wrong way. A subgradient defines a global //underestimator//, not overestimator.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $f(y) \geq f(x) + g^T(y-x)$ for all $y$">><<replace "#q2">>Correct! The linear approximation $f(x) + g^T(y-x)$ must lie at or below $f(y)$ everywhere — a supporting hyperplane.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $g = \nabla f(x)$">><<replace "#q2">>This is only true when $f$ is differentiable at $x$. At non-smooth points, there are many valid subgradients.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $g^T(y-x) = 0$ for all $y$">><<replace "#q2">>This would make $g=0$ always, which is not the definition of a subgradient.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. Why does L1 regularization produce exactly sparse solutions?''
+
+<<button "A. The L1 penalty is very large">><<replace "#q3">>The magnitude alone doesn't explain sparsity — L2 can also be large. The key is the geometry at zero.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The subdifferential at $w_i=0$ is $[-1,1]$, so the optimality condition can be satisfied without moving $w_i$ away from zero">><<replace "#q3">>Correct! Because there is a whole interval of valid subgradients at zero, the optimality condition $0 \in \partial(\text{loss} + \lambda\|w\|_1)$ can often be satisfied with $w_i$ exactly at zero.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. L1 regularization uses a different optimizer than L2">><<replace "#q3">>Both can use gradient-based optimizers. The sparsity comes from the geometry of the L1 subdifferential, not the optimizer choice.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. L1 clips weights to zero during training">><<replace "#q3">>There is no explicit clipping. Sparsity emerges naturally from the subgradient optimality conditions.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What is the convergence rate of basic subgradient descent for convex functions?''
+
+<<button "A. $O(1/T^2)$">><<replace "#q4">>$O(1/T^2)$ is the rate for accelerated methods like FISTA, not basic subgradient descent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $O(1/T)$">><<replace "#q4">>$O(1/T)$ is the rate for proximal gradient methods on composite problems. Basic subgradient descent is slower.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $O(1/\sqrt{T})$">><<replace "#q4">>Correct! Basic subgradient descent converges at $O(1/\sqrt{T})$, which is much slower than smooth gradient descent's $O(1/T)$. This is why proximal methods are preferred.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $O(e^{-T})$">><<replace "#q4">>Linear (exponential) convergence requires strong convexity and smoothness. Subgradient methods on non-smooth functions do not achieve this.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What does the proximal operator of the L1 norm compute?''
+
+<<button "A. Hard thresholding — set components below $\alpha$ to zero">><<replace "#q5">>Hard thresholding is discontinuous. The proximal operator of L1 uses //soft// thresholding, which shrinks continuously.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Soft thresholding — shrink magnitudes toward zero by $\alpha$">><<replace "#q5">>Correct! $\text{prox}_{\alpha\|\cdot\|_1}(v)_i = \text{sign}(v_i)\max(|v_i|-\alpha, 0)$. Components within $\alpha$ of zero become exactly zero; others shrink by $\alpha$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Projection onto the L1 ball">><<replace "#q5">>Projection onto the L1 ball is a different operation (used in constrained optimization). The proximal operator performs soft thresholding.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Division by the L1 norm">><<replace "#q5">>Normalizing by the L1 norm is not related to the proximal operator.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What is the Moreau envelope of a convex function $f$?''
+
+<<button "A. The convex hull of $f$">><<replace "#q6">>The convex hull is a different construction. The Moreau envelope adds a quadratic penalty and minimizes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A smooth approximation: $M_\alpha f(x) = \min_z\{f(z) + \frac{1}{2\alpha}\|z-x\|^2\}$">><<replace "#q6">>Correct! The Moreau envelope smooths out the kinks of $f$ while preserving the same set of minimizers. Its gradient connects directly to the proximal operator.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The epigraph of $f$ restricted to a ball of radius $\alpha$">><<replace "#q6">>The epigraph is the set of points above $f$'s graph. The Moreau envelope is a function, not a set.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The Legendre transform of $f$">><<replace "#q6">>The Legendre (Fenchel) conjugate is $f^*(g) = \sup_x\{g^Tx - f(x)\}$, which is different from the Moreau envelope.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. How does FISTA improve upon basic proximal gradient descent?''
+
+<<button "A. It uses second-order (Hessian) information">><<replace "#q7">>FISTA is a first-order method — it does not compute or approximate the Hessian.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It adds Nesterov-style momentum, improving the rate from $O(1/T)$ to $O(1/T^2)$">><<replace "#q7">>Correct! FISTA uses an extrapolation step $y_{t+1} = x_t + \frac{t-1}{t+2}(x_t - x_{t-1})$ that achieves the optimal rate for first-order methods on composite objectives.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It replaces the proximal step with a projection step">><<replace "#q7">>FISTA still uses the proximal operator. The improvement comes from momentum, not a different subproblem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It uses adaptive step sizes like Adam">><<replace "#q7">>FISTA predates Adam and uses a fixed or line-searched step size. The acceleration comes from momentum.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. Why is the Clarke subdifferential needed for deep learning with ReLU?''
+
+<<button "A. ReLU networks are convex, so the classical subdifferential applies">><<replace "#q8">>ReLU networks are highly nonconvex. The classical convex subdifferential does not apply to the overall loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The Clarke subdifferential extends subgradient theory to nonconvex, locally Lipschitz functions">><<replace "#q8">>Correct! Clarke's generalization defines subgradients as the convex hull of limit gradients at nearby differentiable points, providing a theoretical foundation for optimizing nonconvex, non-smooth deep networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. ReLU has no kinks, so the standard gradient works">><<replace "#q8">>ReLU has a kink at $x=0$, which is exactly where the Clarke subdifferential is needed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Deep learning does not use subgradients at all">><<replace "#q8">>In practice, setting the ReLU gradient to 0 or 1 at $x=0$ is an implicit use of a subgradient selection rule.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

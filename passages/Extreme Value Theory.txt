@@ -1,0 +1,139 @@
+<<include "Header">>
+! Extreme Value Theory
+<img src="assets/extreme_value_theory.svg" alt="Extreme Value Theory" width="800">
+
+Imagine you run a chain of warehouses and need to know: what is the //worst// flood your facility might face in a hundred years? You don't care about the average river level — you care about the single most extreme event. ''Extreme Value Theory'' (EVT) is the branch of [[Statistics|Statistics]] that provides rigorous answers to exactly this kind of question. Where the [[Central Limit Theorem|Central Limit Theorem]] tells you what happens when you //average// many observations, EVT tells you what happens when you take the //maximum// (or minimum). And just as the CLT yields a universal limiting distribution (the Gaussian), EVT yields its own small family of universal limits — no matter what the original data looked like.
+
+!! The Core Insight
+
+The deep surprise of EVT is that ''extreme values are not lawless''. Regardless of whether your data comes from a Gaussian, an exponential, a Pareto, or almost any other well-behaved distribution, the distribution of the maximum of $n$ independent samples, properly rescaled, converges to one of only //three// possible shapes. This is the ''Fisher-Tippett-Gnedenko theorem'' — the CLT for extremes. The shape is governed by a single parameter $\xi$ (xi), which controls the tail: light, heavy, or bounded. You don't need to know the parent distribution to model extremes; you only need to estimate $\xi$.
+
+!! The CLT for Extremes
+
+The ''Fisher-Tippett theorem'' states that if sequences $a_n > 0$ and $b_n$ exist such that the rescaled maximum $(M_n - b_n)/a_n$ converges in distribution, the limit must be the ''Generalized Extreme Value'' (GEV) distribution. This is the universal attractor for block maxima, just as the Gaussian is the universal attractor for sums. The GEV unifies three classical types:
+
+* ''Gumbel'' ($\xi = 0$): the domain of attraction for light-tailed distributions — Gaussian, exponential, log-normal. Tails decay exponentially.
+* ''Fréchet'' ($\xi > 0$): the domain of attraction for heavy-tailed distributions — Pareto, Cauchy, Student-$t$. Tails decay polynomially, meaning catastrophic outliers are far more likely.
+* ''Weibull'' ($\xi < 0$): the domain of attraction for distributions with a bounded upper tail — uniform, beta. The maximum has a finite upper endpoint.
+
+Every [[Probability Distributions|probability distribution]] that satisfies mild regularity conditions belongs to exactly one of these three domains of attraction. This classification is one of the most powerful results in all of statistics.
+
+!! What the Math Is Actually Doing
+
+The GEV cumulative distribution function is:
+
+$$G(x;\,\mu,\sigma,\xi) = \exp\!\left\{-\left[1 + \xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}$$
+
+for $1 + \xi(x-\mu)/\sigma > 0$, where $\mu$ is the location parameter, $\sigma > 0$ is the scale parameter, and $\xi$ is the ''shape parameter'' that determines the tail type. When $\xi = 0$ the expression is interpreted as the limit $G(x) = \exp(-e^{-(x-\mu)/\sigma})$, the Gumbel distribution.
+
+For threshold exceedances (the ''peaks-over-threshold'' approach), the natural companion is the ''Generalized Pareto Distribution'' (GPD):
+
+$$H(y;\,\sigma,\xi) = 1 - \left(1 + \xi\,\frac{y}{\sigma}\right)^{-1/\xi}$$
+
+for $y > 0$ and $1 + \xi\,y/\sigma > 0$. The Pickands-Balkema-de Haan theorem guarantees that exceedances over a sufficiently high threshold $u$ converge to the GPD, with the //same// shape parameter $\xi$ as the corresponding GEV. This duality means you can either split data into blocks and fit the GEV to block maxima, or set a high threshold and fit the GPD to exceedances — both estimate the same tail behavior.
+
+The [[Random Variables|random variable]] $X$ belongs to the domain of attraction of the Fréchet distribution if and only if $\bar{F}(x) = x^{-1/\xi}L(x)$ for a slowly varying function $L$, connecting EVT directly to the theory of regularly varying functions and heavy tails.
+
+!! EVT in ML
+
+EVT is quietly becoming essential across machine learning:
+
+* ''Out-of-distribution (OOD) detection'': Fit a GEV or GPD to the tail of in-distribution activation scores. A new sample whose score falls deep into the extreme tail is flagged as OOD. This is more principled than ad hoc thresholds because EVT provides a //statistical model// for the tail — see [[Distribution Shift|Distribution Shift]].
+* ''[[Anomaly Detection|Anomaly Detection]]'': The same tail-modeling logic applies. Instead of choosing an arbitrary percentile cutoff, EVT gives a probability that an observation is more extreme than anything in the training set.
+* ''Tail risk in finance'': Value-at-Risk (VaR) and Expected Shortfall (ES) at extreme quantiles (99.9%) require accurate tail models. Fitting a Gaussian grossly underestimates losses; EVT's GPD fit to losses above a threshold captures the true heavy-tailed risk.
+* ''Robustness certification'': Bounding the //worst-case// perturbation an adversary might find uses EVT to estimate the distribution of maximum adversarial loss over input neighborhoods.
+* ''Calibration of extreme predictions'': Weather, climate, and engineering models need calibrated probabilities for rare events (Category 5 hurricanes, 500-year floods). EVT provides the principled extrapolation framework.
+
+!! When EVT Breaks Down
+
+'''1. Not enough tail data.''' EVT is asymptotic theory — it describes what happens as $n \to \infty$. With small samples the block maxima are noisy, the GPD threshold choice is fragile, and $\xi$ estimates have high variance. A mean excess plot may be unreadable with fewer than a few hundred exceedances, and misestimating $\xi$ by even $0.1$ changes tail probabilities by orders of magnitude.
+
+'''2. Violations of independence and stationarity.''' The Fisher-Tippett theorem assumes i.i.d. data. Time series with clusters of extremes (volatility bursts in finance, heatwave sequences in climate) violate this. Naively applying EVT to dependent data inflates the effective sample size, yielding overconfident tail estimates. Remedies like the ''extremal index'' or declustering exist but add complexity and assumptions.
+
+'''3. Choosing the wrong approach or threshold.''' Block maxima (GEV) wastes data by keeping only one extreme per block. POT (GPD) is more data-efficient but requires picking a threshold $u$: too low and the GPD approximation fails; too high and you have too few exceedances. There is no universally correct choice, and results can be sensitive. The mean excess plot and parameter stability plots guide the choice but are subjective.
+
+!! Technical Details
+
+* ''Return levels'': The $T$-year return level $x_T$ satisfies $G(x_T) = 1 - 1/T$. Under the GEV: $x_T = \mu - \frac{\sigma}{\xi}\left[1 - (-\log(1-1/T))^{-\xi}\right]$ for $\xi \neq 0$.
+* ''Mean excess plot'': Plot of $e(u) = E[X - u \mid X > u]$ vs. $u$. A linear mean excess plot signals GPD-type tails. Upward slope indicates $\xi > 0$ (heavy tail); flat indicates $\xi = 0$ (Gumbel); downward slope indicates $\xi < 0$ (bounded tail).
+* ''Hill estimator'': For $\xi > 0$, estimates the tail index from the $k$ largest order statistics: $\hat{\xi}_{\text{Hill}} = \frac{1}{k}\sum_{i=1}^{k}\log X_{(n-i+1)} - \log X_{(n-k)}$. Simple but only valid for positive $\xi$ and sensitive to choice of $k$.
+* ''Pickands estimator'': Non-parametric, works for all $\xi$: $\hat{\xi}_{\text{Pickands}} = \frac{1}{\log 2}\log\frac{X_{(n-k+1)} - X_{(n-2k+1)}}{X_{(n-2k+1)} - X_{(n-4k+1)}}$. More general than Hill but higher variance.
+* ''Block maxima vs. POT'': Block maxima fits the GEV to the maximum of each block (e.g., annual maxima). POT fits the GPD to all exceedances above threshold $u$. POT is generally preferred for efficiency, but block maxima avoids threshold selection issues.
+* ''Domains of attraction'': A distribution $F$ is in the domain of attraction of $G_\xi$ (written $F \in \text{MDA}(G_\xi)$) if the rescaled maximum converges to $G_\xi$. The ''von Mises conditions'' provide sufficient conditions: e.g., $F \in \text{MDA}(\text{Gumbel})$ if the hazard rate $\frac{f(x)}{1-F(x)} \to c > 0$ as $x \to x^*$.
+* ''Profile likelihood'': For GEV/GPD fitting, profile likelihood confidence intervals for $\xi$ and return levels are preferred over normal approximations because the likelihood surface is often asymmetric, especially when $\xi$ is near zero.
+
+!! Quiz
+
+<div id="evtq1">
+''1. The Fisher-Tippett-Gnedenko theorem is the analogue of which theorem, but for maxima instead of sums?''
+<br>A) Bayes' theorem
+<br>B) Central Limit Theorem
+<br>C) Law of Large Numbers
+<br>D) Chebyshev's inequality
+<br><<button "Check Answer">><<replace "#evtq1">>''Answer: B'' — The Fisher-Tippett theorem is to maxima what the CLT is to sums: it identifies the universal limiting distribution.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq2">
+''2. If the shape parameter $\xi = 0$ in the GEV, which type results?''
+<br>A) Fréchet
+<br>B) Weibull
+<br>C) Gumbel
+<br>D) Pareto
+<br><<button "Check Answer">><<replace "#evtq2">>''Answer: C'' — $\xi = 0$ gives the Gumbel distribution, which governs the domain of attraction of light-tailed distributions.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq3">
+''3. A distribution with $\xi > 0$ in the GEV belongs to which domain of attraction?''
+<br>A) Gumbel (light tail)
+<br>B) Fréchet (heavy tail)
+<br>C) Weibull (bounded tail)
+<br>D) None — it does not belong to any domain of attraction
+<br><<button "Check Answer">><<replace "#evtq3">>''Answer: B'' — Positive $\xi$ indicates heavy (polynomial) tails, which is the Fréchet domain.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq4">
+''4. The Generalized Pareto Distribution is the natural model for which type of extreme value analysis?''
+<br>A) Block maxima
+<br>B) Peaks-over-threshold
+<br>C) Moving averages
+<br>D) Seasonal decomposition
+<br><<button "Check Answer">><<replace "#evtq4">>''Answer: B'' — The Pickands-Balkema-de Haan theorem shows that exceedances above a high threshold converge to the GPD.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq5">
+''5. An upward-sloping mean excess plot suggests which type of tail behavior?''
+<br>A) Bounded tail ($\xi < 0$)
+<br>B) Light tail ($\xi = 0$)
+<br>C) Heavy tail ($\xi > 0$)
+<br>D) No tail at all
+<br><<button "Check Answer">><<replace "#evtq5">>''Answer: C'' — An increasing mean excess function $e(u) = E[X - u \mid X > u]$ is the hallmark of heavy-tailed (Fréchet-type) distributions.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq6">
+''6. The Hill estimator is limited because it only works when:''
+<br>A) The sample size is small
+<br>B) $\xi < 0$ (bounded tail)
+<br>C) $\xi > 0$ (heavy tail)
+<br>D) The data is multivariate
+<br><<button "Check Answer">><<replace "#evtq6">>''Answer: C'' — The Hill estimator is designed only for positive shape parameters (heavy tails). The Pickands estimator handles all three cases.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq7">
+''7. Why does naive application of EVT to time series data fail?''
+<br>A) Time series have no extremes
+<br>B) The Fisher-Tippett theorem requires i.i.d. data
+<br>C) EVT only works for continuous distributions
+<br>D) Time series are always Gaussian
+<br><<button "Check Answer">><<replace "#evtq7">>''Answer: B'' — The classical EVT theorems assume independent, identically distributed observations. Temporal dependence (clustering of extremes) violates this assumption.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<div id="evtq8">
+''8. In ML, EVT is used for out-of-distribution detection by:''
+<br>A) Training a separate classifier for OOD samples
+<br>B) Fitting a GEV/GPD to the tail of in-distribution scores and flagging extreme outliers
+<br>C) Replacing the softmax layer with a GEV layer
+<br>D) Augmenting training data with extreme values
+<br><<button "Check Answer">><<replace "#evtq8">>''Answer: B'' — EVT provides a principled statistical model for the tail of the in-distribution score distribution, enabling probability-based OOD detection rather than arbitrary thresholds.<<script>>typesetMath();<</script>><</replace>><</button>>
+</div>
+
+<<include "Footer">>

@@ -1,0 +1,131 @@
+<<include "Header">>
+
+! Markov Decision Processes
+
+[img[assets/markov_decision_processes.svg]]
+
+Imagine you are navigating a city where every intersection is a choice: turn left toward the highway (fast but risky traffic), or stay on side streets (slow but predictable). At each intersection you cannot see the entire map — you only know where you are //right now//, and you must pick a direction based solely on that. A ''Markov Decision Process (MDP)'' is the mathematical framework that formalises exactly this kind of sequential decision-making under uncertainty. It gives an agent a precise language for describing states, actions, probabilistic outcomes, and rewards — and then asks: what is the best strategy for navigating from here to a goal?
+
+MDPs are the theoretical backbone of <<link "Reinforcement Learning" "Reinforcement Learning">><</link>>. Every RL algorithm — from tabular <<link "Q-Learning" "Q-Learning">><</link>> to deep <<link "Policy Gradient" "Policy Gradient">><</link>> methods — is implicitly or explicitly solving an MDP. Understanding MDPs means understanding //what// RL is trying to optimise, not just //how//.
+
+---
+
+!! The Core Insight
+
+An MDP captures a simple but powerful idea: the future depends on the present state and the action you take, but //not// on how you got to the present state. This is the ''Markov property'' — the past is irrelevant once you know where you are now. This memorylessness is not a limitation of the framework; it is a modelling choice that makes the problem tractable. If history matters, you expand the state to include the relevant history, and the Markov property holds again.
+
+An MDP is defined by a tuple $(S, A, P, R, \gamma)$: a set of ''states'' $S$, a set of ''actions'' $A$, a ''transition function'' $P(s'|s,a)$ giving the probability of landing in state $s'$ after taking action $a$ in state $s$, a ''reward function'' $R(s,a,s')$ assigning a numerical signal to each transition, and a ''discount factor'' $\gamma \in [0,1)$ that controls how much the agent cares about future versus immediate rewards.
+
+The goal is to find a ''policy'' $\pi(a|s)$ — a mapping from states to actions (or distributions over actions) — that maximises the expected cumulative discounted reward over time. This is the problem that all of reinforcement learning is built to solve.
+
+---
+
+!! States, Actions, Rewards, and Transitions
+
+''States'' represent everything the agent needs to know about the world at a given moment. In a board game, the state is the board configuration. In robotics, it might be joint angles and velocities. The Markov property demands that the state be //sufficient// — it must encode all information relevant to future outcomes.
+
+''Actions'' are the choices available to the agent in each state. The action set can be finite (move left, right, up, down) or continuous (apply a torque of any magnitude). Different states may have different available actions, though many formulations assume a fixed action set for simplicity.
+
+''Transitions'' $P(s'|s,a)$ encode the environment's response to an action. They capture stochasticity: taking the same action in the same state might produce different outcomes. A robot gripper may slip. A card game may deal a random card. The agent cannot control transitions — it can only choose actions and let the environment respond.
+
+''Rewards'' $R(s,a,s')$ are scalar signals that tell the agent what is desirable. Positive rewards encourage behaviour; negative rewards (penalties) discourage it. Designing good reward functions is one of the hardest practical challenges in RL — it connects to the broader problem of alignment between what we //specify// and what we //want//.
+
+The ''discount factor'' $\gamma$ balances short-term and long-term thinking. When $\gamma = 0$ the agent is purely myopic, grabbing immediate reward. As $\gamma \to 1$, the agent weighs future rewards almost equally with present ones. In practice, $\gamma$ between 0.95 and 0.99 is typical, giving the agent a planning horizon of roughly $1/(1-\gamma)$ steps.
+
+---
+
+!! What the Math Is Actually Doing
+
+The central quantity in an MDP is the ''state-value function'' under a policy $\pi$:
+
+$$V^\pi(s) = \mathbb{E}_\pi\!\left[\sum_{t=0}^{\infty} \gamma^t R(s_t, a_t, s_{t+1}) \;\middle|\; s_0 = s\right]$$
+
+This is the expected total discounted reward starting from state $s$ and following policy $\pi$ forever. There is also the ''action-value function'' (Q-function):
+
+$$Q^\pi(s,a) = \mathbb{E}_\pi\!\left[\sum_{t=0}^{\infty} \gamma^t R(s_t, a_t, s_{t+1}) \;\middle|\; s_0 = s,\; a_0 = a\right]$$
+
+Both satisfy recursive relationships known as the ''Bellman equations''. For the value function:
+
+$$V^\pi(s) = \sum_{a} \pi(a|s) \sum_{s'} P(s'|s,a)\!\left[R(s,a,s') + \gamma\, V^\pi(s')\right]$$
+
+The optimal policy $\pi^*$ satisfies the ''Bellman optimality equation'':
+
+$$V^*(s) = \max_{a} \sum_{s'} P(s'|s,a)\!\left[R(s,a,s') + \gamma\, V^*(s')\right]$$
+
+This equation says: the value of the best strategy equals the best action's expected immediate reward plus discounted future value. The <<link "Bellman Equation" "Bellman Equation">><</link>> is the recursive heartbeat of every MDP solver — value iteration, policy iteration, and their deep-learning descendants all revolve around making this equation hold.
+
+---
+
+!! Solving MDPs
+
+When the transition and reward functions are //known//, an MDP can be solved exactly using ''<<link "Dynamic Programming" "Dynamic Programming">><</link>>'' methods.
+
+''Value iteration'' starts with an arbitrary value function and repeatedly applies the Bellman optimality operator: $V(s) \leftarrow \max_a \sum_{s'} P(s'|s,a)[R + \gamma V(s')]$. This converges to $V^*$ because the Bellman operator is a contraction mapping — each application brings the estimate closer to the truth. The optimal policy is then extracted greedily: $\pi^*(s) = \arg\max_a Q^*(s,a)$.
+
+''Policy iteration'' alternates between two steps: (1) ''policy evaluation'' — compute $V^\pi$ for the current policy by solving the linear Bellman equation, and (2) ''policy improvement'' — set $\pi(s) = \arg\max_a Q^\pi(s,a)$. This converges in remarkably few iterations (often fewer than 10, regardless of state-space size).
+
+When the model is //unknown// — the agent cannot access $P$ or $R$ directly — we enter the territory of reinforcement learning. The agent must learn from interaction: <<link "Q-Learning" "Q-Learning">><</link>> estimates $Q^*$ from sampled transitions without ever building a model, while <<link "Policy Gradient" "Policy Gradient">><</link>> methods directly optimise the policy by estimating gradients of expected return from rollouts.
+
+---
+
+!! When MDPs Break Down
+
+''Partial observability:'' The Markov property requires that the state encode everything the agent needs. In many real problems — a robot with a limited camera, a card game with hidden cards — the agent sees only a noisy, incomplete observation. The problem becomes a ''Partially Observable MDP (POMDP)'', which is vastly harder: the agent must maintain a belief distribution over possible states, and the effective state space (the space of beliefs) is continuous even when the underlying state space is finite.
+
+''Enormous state spaces:'' MDPs with millions or billions of states cannot be solved by tabular methods. The value function must be approximated — typically with a neural network — which sacrifices the convergence guarantees of exact dynamic programming. Function approximation introduces instability, catastrophic forgetting, and the deadly triad (off-policy + function approximation + bootstrapping) that makes deep RL notoriously brittle.
+
+''Reward misspecification:'' An MDP will faithfully optimise whatever reward function you provide, even if it does not capture your true intent. A cleaning robot rewarded for "no visible mess" may learn to hide mess in closets. This is not a failure of the MDP framework — it is a failure of the reward design. Reward shaping, inverse RL, and human-feedback methods exist to mitigate this, but it remains an open problem at the heart of AI safety.
+
+---
+
+!! Technical Details
+
+''Formal definition:'' An MDP is the tuple $(\mathcal{S}, \mathcal{A}, P, R, \gamma)$ where $\mathcal{S}$ is a (possibly infinite) state space, $\mathcal{A}$ is the action space, $P: \mathcal{S} \times \mathcal{A} \times \mathcal{S} \to [0,1]$ is the transition kernel, $R: \mathcal{S} \times \mathcal{A} \times \mathcal{S} \to \mathbb{R}$ is the reward function, and $\gamma \in [0,1)$ is the discount factor.
+
+''Convergence:'' Value iteration converges at rate $O(\gamma^k)$ where $k$ is the iteration count. Policy iteration converges in at most $|\mathcal{A}|^{|\mathcal{S}|}$ steps (the total number of deterministic policies), but in practice converges in $O(|\mathcal{S}|)$ iterations or fewer.
+
+''Continuous MDPs:'' When $\mathcal{S}$ or $\mathcal{A}$ is continuous, summations become integrals and exact solutions require solving integral equations. Practical approaches include discretisation, linear function approximation, and kernel-based methods.
+
+''Relationship to control theory:'' MDPs in continuous state and action spaces with deterministic transitions and quadratic costs reduce to the ''Linear-Quadratic Regulator (LQR)'' problem from optimal control, which has a closed-form solution via the Riccati equation.
+
+''Key extensions:'' Semi-MDPs (variable time between decisions), factored MDPs (state decomposed into independent factors), constrained MDPs (optimise reward subject to safety constraints), and multi-agent MDPs (multiple interacting decision-makers).
+
+''Historical note:'' Richard Bellman formalised MDPs in the 1950s as part of his work on dynamic programming. The name "dynamic programming" was chosen deliberately to sound impressive to government funders — Bellman later admitted this in his autobiography.
+
+---
+
+!! Quiz
+
+<span id="mdp-q1">''1. What does the Markov property assert about an MDP?''
+
+<<button "A) The transition probabilities change over time">><<replace "#mdp-q1">>Incorrect. The Markov property says nothing about time-varying dynamics. It asserts that $P(s'|s,a)$ depends only on the current state and action, not on the history of prior states.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The future state depends only on the current state and action, not on past history">><<replace "#mdp-q1">>Correct! The Markov property means $P(s_{t+1}|s_t, a_t, s_{t-1}, a_{t-1}, \ldots) = P(s_{t+1}|s_t, a_t)$. The past is irrelevant once you know the present state.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Rewards must be positive">><<replace "#mdp-q1">>Incorrect. Rewards in an MDP can be any real number — positive, negative, or zero. The Markov property is about state transitions, not reward signs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Actions are deterministic">><<replace "#mdp-q1">>Incorrect. Actions can be chosen stochastically by a policy $\pi(a|s)$. The Markov property is about the transition structure, not about action selection.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q2">''2. In the tuple $(S, A, P, R, \gamma)$, what does $\gamma$ control?''
+
+<<button "A) The probability of transitioning to a terminal state">><<replace "#mdp-q2">>Incorrect. Terminal state probabilities are part of the transition function $P$, not $\gamma$. The discount factor $\gamma$ controls how much future rewards are weighted relative to immediate ones.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The learning rate of the agent">><<replace "#mdp-q2">>Incorrect. The learning rate is a parameter of the solving algorithm (e.g., Q-learning), not part of the MDP definition. $\gamma$ is the discount factor.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The tradeoff between exploration and exploitation">><<replace "#mdp-q2">>Incorrect. Exploration vs exploitation is handled by the agent's policy or algorithm (e.g., epsilon-greedy), not by $\gamma$. The discount factor controls the weighting of future vs present reward.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) How much the agent values future rewards relative to immediate rewards">><<replace "#mdp-q2">>Correct! $\gamma \in [0,1)$ discounts future rewards: a reward $k$ steps in the future is worth $\gamma^k$ times its face value. Near 0 means myopic; near 1 means far-sighted.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q3">''3. What does the Bellman optimality equation express?''
+
+<<button "A) The value of the worst-case action in each state">><<replace "#mdp-q3">>Incorrect. The Bellman optimality equation uses $\max$, not $\min$ — it expresses the value of the //best// action, not the worst.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The average reward across all policies">><<replace "#mdp-q3">>Incorrect. The Bellman optimality equation characterises the //optimal// policy's value, not an average over all policies.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The optimal value of a state equals the best action's expected immediate reward plus discounted future value">><<replace "#mdp-q3">>Correct! $V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]$. This recursive equation is the foundation of both value iteration and policy iteration.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The policy gradient with respect to the reward function">><<replace "#mdp-q3">>Incorrect. Policy gradients are a method for optimising policies, not what the Bellman equation expresses. The Bellman equation is a recursive relationship between state values.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q4">''4. How does value iteration find the optimal policy?''
+
+<<button "A) It performs gradient descent on the policy parameters">><<replace "#mdp-q4">>Incorrect. Value iteration is a dynamic programming method, not a gradient-based method. It repeatedly applies the Bellman operator to update value estimates until convergence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) It randomly samples actions and keeps the best-performing policy">><<replace "#mdp-q4">>Incorrect. Value iteration is systematic, not random. It iteratively updates the value function using the Bellman optimality operator across all states.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) It repeatedly applies the Bellman optimality operator until the value function converges, then extracts the greedy policy">><<replace "#mdp-q4">>Correct! Each iteration sets $V(s) \leftarrow \max_a \sum_{s'} P(s'|s,a)[R + \gamma V(s')]$. This converges because the Bellman operator is a contraction. The optimal policy is then $\pi^*(s) = \arg\max_a Q^*(s,a)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) It enumerates all possible policies and selects the one with highest expected return">><<replace "#mdp-q4">>Incorrect. Enumerating all $|\mathcal{A}|^{|\mathcal{S}|}$ policies is computationally infeasible for any non-trivial MDP. Value iteration efficiently converges without exhaustive search.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q5">''5. What is the key difference between policy iteration and value iteration?''
+
+<<button "A) Policy iteration only works for continuous state spaces">><<replace "#mdp-q5">>Incorrect. Both methods work for discrete state spaces (where they are most commonly applied). Policy iteration alternates evaluation and improvement, while value iteration combines them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Policy iteration alternates between fully evaluating a policy and improving it, while value iteration combines both steps">><<replace "#mdp-q5">>Correct! Policy iteration does full policy evaluation (solving a linear system) then greedy improvement. Value iteration folds both into a single max-based update. Policy iteration often converges in fewer iterations but each iteration is more expensive.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Value iteration requires a model of the environment but policy iteration does not">><<replace "#mdp-q5">>Incorrect. Both are model-based dynamic programming methods that require knowing $P$ and $R$. Model-free methods like Q-learning are a different category entirely.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Policy iteration cannot find optimal policies, only approximate ones">><<replace "#mdp-q5">>Incorrect. Policy iteration finds the exact optimal policy and typically converges faster (in fewer iterations) than value iteration, though each iteration costs more.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q6">''6. Why do large state spaces cause MDPs to break down in practice?''
+
+<<button "A) The Markov property no longer holds with many states">><<replace "#mdp-q6">>Incorrect. The Markov property is a modelling assumption, not affected by state-space size. Large MDPs break down because tabular methods cannot store or iterate over all states.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Tabular value functions cannot be stored or updated, requiring function approximation that sacrifices convergence guarantees">><<replace "#mdp-q6">>Correct! With millions of states, you cannot maintain a table entry for each. Neural-network approximations introduce instability, the deadly triad, and loss of the contraction guarantees that make exact DP work.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Rewards become meaningless in high-dimensional spaces">><<replace "#mdp-q6">>Incorrect. Rewards remain well-defined regardless of dimensionality. The issue is computational: representing and optimising the value function becomes intractable without approximation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Discount factors cannot be applied to more than 1000 states">><<replace "#mdp-q6">>Incorrect. The discount factor $\gamma$ is applied per time step, not per state, and works identically regardless of state-space size.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q7">''7. What happens to an MDP when the agent cannot fully observe the state?''
+
+<<button "A) The problem becomes a Partially Observable MDP (POMDP), which requires maintaining a belief distribution over states">><<replace "#mdp-q7">>Correct! In a POMDP, the agent receives observations rather than true states. It must maintain a belief $b(s) = P(s|\text{history})$ and act based on this distribution. The belief space is continuous even if the state space is finite, making POMDPs vastly harder.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The problem becomes unsolvable">><<replace "#mdp-q7">>Incorrect. POMDPs are harder than MDPs but not unsolvable. Approximate methods (belief-space planning, recurrent policies) can handle many practical POMDP problems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The discount factor must be set to zero">><<replace "#mdp-q7">>Incorrect. Partial observability does not change the discount factor. It changes the information available to the agent, requiring a fundamentally different solution approach.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The transition function becomes deterministic">><<replace "#mdp-q7">>Incorrect. Partial observability affects what the agent //sees//, not the underlying transition dynamics. The transitions remain whatever they were — stochastic or deterministic.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mdp-q8">''8. Which of the following is NOT a component of the standard MDP tuple?''
+
+<<button "A) Transition function $P(s'|s,a)$">><<replace "#mdp-q8">>Incorrect. The transition function is a core component: $P$ defines the environment dynamics.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Reward function $R(s,a,s')$">><<replace "#mdp-q8">>Incorrect. The reward function is a core component that defines the optimisation signal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Observation function $O(o|s)$">><<replace "#mdp-q8">>Correct! An observation function is part of a //POMDP//, not a standard MDP. In a standard MDP, the agent directly observes the full state — no observation model is needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Discount factor $\gamma$">><<replace "#mdp-q8">>Incorrect. The discount factor $\gamma$ is a standard component that controls the tradeoff between immediate and future rewards.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

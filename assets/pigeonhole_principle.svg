@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Pigeonhole Principle: n+1 Items into n Containers</text>
+
+  <!-- Pigeons (n+1 = 6 pigeons) -->
+  <!-- Row of pigeons at top -->
+  <text x="400" y="68" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">6 pigeons</text>
+
+  <!-- Pigeon 1 -->
+  <ellipse cx="115" cy="105" rx="22" ry="16" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="130" cy="96" r="8" fill="#2D5A8E" opacity="0.85"/>
+  <polygon points="138,94 146,90 138,98" fill="#C4A87A"/>
+  <circle cx="132" cy="94" r="2" fill="#FDFAF4"/>
+  <text x="115" y="110" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">P1</text>
+
+  <!-- Pigeon 2 -->
+  <ellipse cx="235" cy="105" rx="22" ry="16" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="250" cy="96" r="8" fill="#2D5A8E" opacity="0.85"/>
+  <polygon points="258,94 266,90 258,98" fill="#C4A87A"/>
+  <circle cx="252" cy="94" r="2" fill="#FDFAF4"/>
+  <text x="235" y="110" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">P2</text>
+
+  <!-- Pigeon 3 -->
+  <ellipse cx="355" cy="105" rx="22" ry="16" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="370" cy="96" r="8" fill="#2D5A8E" opacity="0.85"/>
+  <polygon points="378,94 386,90 378,98" fill="#C4A87A"/>
+  <circle cx="372" cy="94" r="2" fill="#FDFAF4"/>
+  <text x="355" y="110" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">P3</text>
+
+  <!-- Pigeon 4 -->
+  <ellipse cx="475" cy="105" rx="22" ry="16" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="490" cy="96" r="8" fill="#2D5A8E" opacity="0.85"/>
+  <polygon points="498,94 506,90 498,98" fill="#C4A87A"/>
+  <circle cx="492" cy="94" r="2" fill="#FDFAF4"/>
+  <text x="475" y="110" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">P4</text>
+
+  <!-- Pigeon 5 -->
+  <ellipse cx="595" cy="105" rx="22" ry="16" fill="#2D5A8E" opacity="0.85"/>
+  <circle cx="610" cy="96" r="8" fill="#2D5A8E" opacity="0.85"/>
+  <polygon points="618,94 626,90 618,98" fill="#C4A87A"/>
+  <circle cx="612" cy="94" r="2" fill="#FDFAF4"/>
+  <text x="595" y="110" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">P5</text>
+
+  <!-- Pigeon 6 -->
+  <ellipse cx="715" cy="105" rx="22" ry="16" fill="#7C2530" opacity="0.85"/>
+  <circle cx="730" cy="96" r="8" fill="#7C2530" opacity="0.85"/>
+  <polygon points="738,94 746,90 738,98" fill="#C4A87A"/>
+  <circle cx="732" cy="94" r="2" fill="#FDFAF4"/>
+  <text x="715" y="110" font-family="Georgia, serif" font-size="10" fill="#FDFAF4" text-anchor="middle">P6</text>
+
+  <!-- Arrows from pigeons to holes -->
+  <line x1="115" y1="121" x2="130" y2="195" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="235" y1="121" x2="250" y2="195" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="355" y1="121" x2="370" y2="195" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="121" x2="490" y2="195" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="595" y1="121" x2="610" y2="195" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <!-- P6 must share a hole - goes to hole 5 -->
+  <line x1="715" y1="121" x2="620" y2="195" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead-red)"/>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- 5 Pigeonholes -->
+  <text x="370" y="192" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">5 holes</text>
+
+  <!-- Hole 1 -->
+  <rect x="100" y="200" width="60" height="80" fill="none" stroke="#5C3D1E" stroke-width="2" rx="4"/>
+  <rect x="100" y="200" width="60" height="80" fill="#C4A87A" opacity="0.2" rx="4"/>
+  <text x="130" y="245" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">H1</text>
+  <text x="130" y="268" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">P1</text>
+
+  <!-- Hole 2 -->
+  <rect x="220" y="200" width="60" height="80" fill="none" stroke="#5C3D1E" stroke-width="2" rx="4"/>
+  <rect x="220" y="200" width="60" height="80" fill="#C4A87A" opacity="0.2" rx="4"/>
+  <text x="250" y="245" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">H2</text>
+  <text x="250" y="268" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">P2</text>
+
+  <!-- Hole 3 -->
+  <rect x="340" y="200" width="60" height="80" fill="none" stroke="#5C3D1E" stroke-width="2" rx="4"/>
+  <rect x="340" y="200" width="60" height="80" fill="#C4A87A" opacity="0.2" rx="4"/>
+  <text x="370" y="245" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">H3</text>
+  <text x="370" y="268" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">P3</text>
+
+  <!-- Hole 4 -->
+  <rect x="460" y="200" width="60" height="80" fill="none" stroke="#5C3D1E" stroke-width="2" rx="4"/>
+  <rect x="460" y="200" width="60" height="80" fill="#C4A87A" opacity="0.2" rx="4"/>
+  <text x="490" y="245" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">H4</text>
+  <text x="490" y="268" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">P4</text>
+
+  <!-- Hole 5 (contains 2 pigeons - highlighted) -->
+  <rect x="580" y="200" width="60" height="80" fill="none" stroke="#7C2530" stroke-width="3" rx="4"/>
+  <rect x="580" y="200" width="60" height="80" fill="#7C2530" opacity="0.1" rx="4"/>
+  <text x="610" y="238" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle" font-weight="bold">H5</text>
+  <text x="600" y="260" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">P5</text>
+  <text x="620" y="272" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">P6</text>
+
+  <!-- Collision callout -->
+  <rect x="660" y="215" width="115" height="50" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5" rx="6"/>
+  <text x="717" y="236" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Collision!</text>
+  <text x="717" y="254" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Guaranteed by</text>
+  <text x="717" y="262" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">the principle</text>
+  <line x1="660" y1="240" x2="643" y2="240" stroke="#7C2530" stroke-width="1.5"/>
+
+  <!-- Bottom summary box -->
+  <rect x="80" y="310" width="640" height="72" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5" rx="6"/>
+
+  <!-- Formal statement -->
+  <text x="400" y="332" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-weight="bold">If n+1 objects are placed into n containers,</text>
+  <text x="400" y="350" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle" font-weight="bold">at least one container must hold at least 2 objects.</text>
+
+  <text x="400" y="372" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Also known as Dirichlet's box principle (1834)</text>
+</svg>

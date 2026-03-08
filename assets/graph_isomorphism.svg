@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Graph Isomorphism: Same Structure, Different Labels</text>
+
+  <!-- ===== LEFT PANEL: Graph G ===== -->
+  <text x="175" y="65" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Graph G</text>
+
+  <!-- Graph G nodes -->
+  <circle cx="100" cy="130" r="20" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="100" y="135" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">1</text>
+
+  <circle cx="250" cy="130" r="20" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="250" y="135" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">2</text>
+
+  <circle cx="100" cy="270" r="20" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="100" y="275" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">3</text>
+
+  <circle cx="250" cy="270" r="20" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="250" y="275" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">4</text>
+
+  <!-- Graph G edges -->
+  <line x1="120" y1="130" x2="230" y2="130" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="100" y1="150" x2="100" y2="250" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="250" y1="150" x2="250" y2="250" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="120" y1="270" x2="230" y2="270" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="116" y1="144" x2="234" y2="256" stroke="#2D5A8E" stroke-width="2"/>
+
+  <!-- ===== CENTER: Mapping arrows ===== -->
+  <text x="400" y="170" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">Bijection f</text>
+
+  <defs>
+    <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Mapping arrows -->
+  <line x1="280" y1="125" x2="490" y2="125" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowR)"/>
+  <text x="385" y="118" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">1 → A</text>
+
+  <line x1="280" y1="200" x2="490" y2="200" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowR)"/>
+  <text x="385" y="193" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">2 → B</text>
+
+  <line x1="280" y1="240" x2="490" y2="240" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowR)"/>
+  <text x="385" y="233" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">3 → C</text>
+
+  <line x1="280" y1="275" x2="490" y2="275" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowR)"/>
+  <text x="385" y="268" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">4 → D</text>
+
+  <!-- ===== RIGHT PANEL: Graph H ===== -->
+  <text x="625" y="65" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Graph H</text>
+
+  <!-- Graph H nodes (same structure, different layout) -->
+  <circle cx="550" cy="130" r="20" fill="#F5EDD8" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="550" y="135" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">A</text>
+
+  <circle cx="700" cy="130" r="20" fill="#F5EDD8" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="700" y="135" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">B</text>
+
+  <circle cx="550" cy="270" r="20" fill="#F5EDD8" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="550" y="275" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">C</text>
+
+  <circle cx="700" cy="270" r="20" fill="#F5EDD8" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="700" y="275" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">D</text>
+
+  <!-- Graph H edges (same structure as G) -->
+  <line x1="570" y1="130" x2="680" y2="130" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="550" y1="150" x2="550" y2="250" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="700" y1="150" x2="700" y2="250" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="570" y1="270" x2="680" y2="270" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="566" y1="144" x2="684" y2="256" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- ===== BOTTOM: Key insight ===== -->
+  <rect x="160" y="330" width="480" height="50" rx="8" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="400" y="352" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Isomorphic: same edges, same structure</text>
+  <text x="400" y="369" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Edge (u,v) in G  ⟺  Edge (f(u), f(v)) in H</text>
+</svg>

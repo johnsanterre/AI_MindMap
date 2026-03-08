@@ -1,0 +1,151 @@
+<<include "Header">>
+
+! K-Means Clustering
+
+[img[assets/k_means_clustering.svg]]
+
+Imagine you dump a bag of mixed candies onto a table and ask three friends to each grab the ones nearest to them. Each friend reaches out, pulls candies close, then shifts to sit at the center of their pile. The friends at the edges notice some candies are now closer to a different person, so everyone re-grabs and re-centers. After a few rounds, nobody moves — each friend sits squarely in the middle of a stable group. That is ''K-Means Clustering'': pick K center points, assign every data point to the nearest center, recompute each center as the average of its assigned points, and repeat until nothing changes.
+
+---
+
+!! The Core Insight
+
+Most [[Clustering]] algorithms ask the same question: which data points belong together? K-Means answers with a beautifully simple contract — a point belongs to whichever cluster center (''centroid'') is closest, and each centroid is the arithmetic mean of its members. This circular definition is resolved by iteration: start somewhere, alternate between assigning and averaging, and let the assignments and centroids co-evolve toward a stable configuration.
+
+The genius is that every iteration is guaranteed to reduce (or at least not increase) the total ''within-cluster sum of squares'' (WCSS). Because WCSS is bounded below by zero and decreases monotonically, the algorithm must converge in a finite number of steps. It may not find the global optimum — K-Means is solving an NP-hard problem after all — but it always finds //a// locally optimal partition, usually in surprisingly few iterations.
+
+K-Means is the workhorse of [[Unsupervised Learning]]. It scales linearly in the number of data points per iteration, making it practical for millions of samples where more sophisticated methods like [[Gaussian Mixture Models]] or spectral clustering become prohibitively expensive. Its simplicity also makes it a natural building block: vector quantization in compression, codebook construction in retrieval systems, and initialization for more complex algorithms all rely on K-Means at their core.
+
+---
+
+!! The Algorithm Step by Step
+
+''Step 0 — Choose K.'' Decide the number of clusters before seeing the results. This is the algorithm's most consequential decision and its most criticized requirement.
+
+''Step 1 — Initialize centroids.'' Place K centroids in feature space. Random selection from the data points works, but ''K-Means++'' initialization is far superior: it picks the first centroid at random, then selects each subsequent centroid with probability proportional to its squared distance from the nearest existing centroid. This spreads initial centroids apart and dramatically reduces both the number of iterations needed and the chance of a poor local minimum.
+
+''Step 2 — Assign.'' For each data point $x_i$, compute the [[Distance Metrics|distance]] to every centroid $\mu_k$ and assign $x_i$ to the nearest one:
+
+$$c_i = \arg\min_k \|x_i - \mu_k\|^2$$
+
+''Step 3 — Update.'' Recompute each centroid as the mean of all points assigned to it:
+
+$$\mu_k = \frac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
+
+''Step 4 — Repeat'' steps 2 and 3 until assignments stop changing (or until the decrease in WCSS falls below a threshold, or until a maximum iteration count is reached).
+
+The typical run converges in 10-20 iterations even on large datasets, making the total cost roughly $O(n \cdot K \cdot d \cdot t)$ where $n$ is the number of points, $d$ the dimensionality, and $t$ the number of iterations.
+
+---
+
+!! What the Math Is Actually Doing
+
+K-Means minimizes the ''within-cluster sum of squares'' (also called ''inertia''):
+
+$$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k\|^2$$
+
+This objective decomposes the total variance of the data into within-cluster variance and between-cluster variance. K-Means pushes variance from the within-cluster term into the between-cluster term — it wants tight, well-separated groups.
+
+The assignment step holds $\mu_k$ fixed and minimizes $J$ with respect to cluster memberships $c_i$. The update step holds memberships fixed and minimizes $J$ with respect to $\mu_k$. Each step solves its respective sub-problem exactly (closest centroid; arithmetic mean), so $J$ never increases. This is a special case of ''coordinate descent'' and is closely related to the [[Expectation Maximization]] algorithm — in fact, K-Means is the hard-assignment limit of EM applied to [[Gaussian Mixture Models]] with equal, spherical covariances.
+
+The converged solution satisfies a ''Voronoi partition'' of the space: the decision boundary between any two clusters is the perpendicular bisector of the line connecting their centroids. Each cluster occupies a convex polytope. This geometric fact explains both the algorithm's strength (linear boundaries are fast to compute) and its limitation (it cannot capture non-convex cluster shapes).
+
+The connection to the mean is exact: the point $\mu$ that minimizes $\sum \|x_i - \mu\|^2$ is precisely the arithmetic mean. If we used a different distance — say $L_1$ — the minimizer would be the median, giving rise to the ''K-Medians'' algorithm. If we restrict centroids to actual data points, we get ''K-Medoids'', which is more robust to outliers.
+
+---
+
+!! Choosing K and Variants
+
+The hardest part of K-Means is choosing $K$. Several heuristics exist:
+
+''The elbow method'' plots WCSS against $K$ and looks for a "bend" where adding another cluster yields diminishing returns. The bend is often ambiguous, but when it is clear, it works well.
+
+''The silhouette score'' measures how similar each point is to its own cluster compared to the nearest neighboring cluster. Values near +1 mean well-clustered; near 0 means the point is on a boundary; near -1 means probable misassignment. The $K$ maximizing average silhouette is a reasonable choice.
+
+''The gap statistic'' compares the WCSS of the real data against the WCSS of data drawn uniformly from the bounding box. The optimal $K$ is where the gap between them is largest — where the real data's cluster structure exceeds what you would expect by chance.
+
+''Mini-batch K-Means'' speeds up each iteration by computing centroid updates on random subsets rather than the full dataset, trading a small amount of accuracy for massive speed gains on very large datasets.
+
+''K-Means++'' initialization has become the de facto standard. Arthur and Vassilvitskii (2007) proved it achieves an expected approximation ratio of $O(\log K)$ compared to the optimal solution, a dramatic improvement over random initialization.
+
+''Bisecting K-Means'' starts with $K=1$ and recursively splits the cluster with highest WCSS, producing a hierarchical decomposition that is less sensitive to initialization.
+
+---
+
+!! When K-Means Breaks Down
+
+''Non-spherical or unequal-size clusters:'' K-Means implicitly assumes that clusters are roughly spherical and equally sized because it minimizes squared Euclidean distance. When clusters are elongated, crescent-shaped, or vastly different in density, K-Means will carve Voronoi cells that split natural groups or merge distinct ones. [[Gaussian Mixture Models]] handle elliptical clusters via per-cluster covariance matrices, and spectral or density-based methods handle arbitrary shapes.
+
+''Sensitivity to initialization and local minima:'' The WCSS objective is non-convex with many local minima. A bad random initialization can strand the algorithm in a poor partition. The standard mitigation is to run K-Means multiple times with different random seeds and keep the solution with lowest WCSS. K-Means++ initialization reduces but does not eliminate this risk. For high-dimensional data with many clusters, even K-Means++ can find substantially suboptimal solutions.
+
+''The curse of dimensionality:'' In very high-dimensional spaces, [[Distance Metrics|distances]] between points concentrate — the ratio of the nearest to farthest distance approaches 1 — making the "nearest centroid" assignment increasingly meaningless. Feature selection, dimensionality reduction (e.g., PCA), or switching to subspace clustering methods becomes necessary. K-Means on raw high-dimensional data can produce clusters that are artifacts of distance concentration rather than meaningful structure.
+
+---
+
+!! Technical Details
+
+''Convergence:'' K-Means is guaranteed to converge in a finite number of iterations because there are finitely many possible partitions of $n$ points into $K$ groups, and WCSS strictly decreases (or stays constant) at each step. In practice, convergence is fast: empirically $O(n)$ iterations suffice for most datasets, though worst-case examples exist requiring exponential iterations ($2^{\Omega(\sqrt{n})}$, Vattani 2011).
+
+''Lloyd's algorithm'' is the standard implementation (the assign-update loop described above). ''Elkan's algorithm'' uses the triangle inequality to skip unnecessary distance computations, achieving significant speedups when $K$ or $d$ is large. ''Hamerly's algorithm'' maintains upper and lower bounds on distances, further reducing redundant calculations.
+
+''Relationship to PCA:'' The relaxed K-Means solution (allowing soft assignments) is equivalent to projecting onto the top $K-1$ principal components. This connection, formalized by Ding and He (2004), explains why PCA-based initialization often works well and why K-Means clusters tend to align with directions of maximum variance.
+
+''Kernel K-Means'' applies the kernel trick to implicitly perform K-Means in a high-dimensional feature space, enabling non-linear cluster boundaries. It is equivalent to a form of spectral [[Clustering]] when the kernel is the graph Laplacian.
+
+''Objective function equivalence:'' minimizing WCSS is equivalent to maximizing the between-cluster sum of squares (BCSS), since total sum of squares = WCSS + BCSS and the total is constant for a given dataset.
+
+''Complexity:'' Each iteration costs $O(nKd)$. With K-Means++ initialization and $t$ iterations, total cost is $O(nKd + nKdt) = O(nKdt)$. Mini-batch variants reduce this to $O(bKdt)$ where $b \ll n$ is the batch size.
+
+---
+
+!! Quiz
+
+<span id="km-q1">''1. What does K-Means minimize?''
+<<button "A) Total distance between all pairs of points">><<replace "#km-q1">>Incorrect. K-Means does not minimize all pairwise distances. It minimizes the ''within-cluster sum of squares'' (WCSS) — the sum of squared distances from each point to its assigned centroid.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Within-cluster sum of squares (WCSS)">><<replace "#km-q1">>Correct! K-Means minimizes $J = \sum_k \sum_{x_i \in C_k} \|x_i - \mu_k\|^2$, the total squared distance from each point to its cluster centroid.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The number of clusters needed">><<replace "#km-q1">>Incorrect. K is fixed before the algorithm runs. K-Means does not optimize over the number of clusters — it minimizes WCSS for a given K.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The maximum distance from any point to its centroid">><<replace "#km-q1">>Incorrect. That would be a minimax objective. K-Means minimizes the //sum// of squared distances, not the maximum distance.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q2">''2. Why does K-Means always converge?''
+<<button "A) The objective is convex, so gradient descent finds the global minimum">><<replace "#km-q2">>Incorrect. The WCSS objective is ''not'' convex with respect to cluster assignments. K-Means converges because WCSS decreases monotonically and there are finitely many possible partitions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Each step reduces or maintains WCSS, and there are finitely many possible partitions">><<replace "#km-q2">>Correct! The assign step and the update step each independently reduce (or maintain) WCSS. Since there are finitely many ways to partition $n$ points into $K$ groups, the algorithm must terminate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The centroids move toward the global mean, which is unique">><<replace "#km-q2">>Incorrect. Centroids move toward their cluster means, not the global mean. The algorithm converges to a local minimum, not necessarily the global one.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) K-Means uses a learning rate that decays to zero">><<replace "#km-q2">>Incorrect. K-Means has no learning rate — the centroid update is an exact mean computation, not a gradient step.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q3">''3. What advantage does K-Means++ initialization provide?''
+<<button "A) It determines the optimal K automatically">><<replace "#km-q3">>Incorrect. K-Means++ does not choose K — it selects //where// to place the initial K centroids by spreading them apart using distance-weighted probability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It guarantees finding the global optimum">><<replace "#km-q3">>Incorrect. No polynomial-time algorithm can guarantee the global optimum for K-Means (it is NP-hard). K-Means++ provides a provable $O(\log K)$ approximation ratio in expectation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It spreads initial centroids apart, giving an O(log K) approximation guarantee">><<replace "#km-q3">>Correct! K-Means++ selects each new centroid with probability proportional to squared distance from existing centroids, ensuring good initial spread and a provable $O(\log K)$ competitive ratio.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It eliminates the need for the iterative update step">><<replace "#km-q3">>Incorrect. K-Means++ only improves initialization. The standard assign-update loop still runs afterward to refine the solution.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q4">''4. K-Means is the hard-assignment limit of which algorithm?''
+<<button "A) Principal Component Analysis">><<replace "#km-q4">>Incorrect. While K-Means and PCA are mathematically related (relaxed K-Means connects to top principal components), K-Means is the hard-assignment limit of EM on Gaussian Mixture Models, not PCA.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Expectation Maximization on Gaussian Mixture Models">><<replace "#km-q4">>Correct! When you take [[Expectation Maximization]] applied to [[Gaussian Mixture Models]] with equal, spherical covariances and replace soft probabilistic assignments with hard nearest-centroid assignments, you get exactly K-Means.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Gradient descent on a neural network">><<replace "#km-q4">>Incorrect. K-Means is not derived from neural network training. It is the hard-assignment limit of EM applied to Gaussian Mixture Models.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Hierarchical agglomerative clustering">><<replace "#km-q4">>Incorrect. Hierarchical clustering builds a dendrogram by merging or splitting — a fundamentally different approach from K-Means. The EM/GMM connection is the correct answer.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q5">''5. Why does K-Means struggle with elongated or crescent-shaped clusters?''
+<<button "A) It cannot handle more than three dimensions">><<replace "#km-q5">>Incorrect. K-Means works in any number of dimensions. The problem is that it creates ''Voronoi partitions'' based on Euclidean distance, which are always convex polytopes — unable to capture non-convex shapes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Its Voronoi partition creates only convex regions, which cannot capture non-convex shapes">><<replace "#km-q5">>Correct! K-Means decision boundaries are perpendicular bisectors between centroids, producing convex Voronoi cells. Non-convex clusters like crescents or rings will be split across multiple cells.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The algorithm diverges when clusters are not spherical">><<replace "#km-q5">>Incorrect. K-Means still converges regardless of cluster shape — it just converges to a partition that poorly reflects the true structure of non-spherical clusters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Elongated clusters require more than 256 iterations to converge">><<replace "#km-q5">>Incorrect. Convergence speed is not the issue. The problem is structural: Voronoi cells are convex, so K-Means cannot represent non-convex cluster boundaries no matter how many iterations it runs.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q6">''6. In the update step, why is the arithmetic mean the optimal centroid location?''
+<<button "A) The mean is the point that minimizes the sum of absolute distances">><<replace "#km-q6">>Incorrect. The mean minimizes the sum of //squared// distances. The ''median'' minimizes the sum of absolute distances (and is used in K-Medians).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The mean is the point that minimizes the sum of squared distances to all points in the cluster">><<replace "#km-q6">>Correct! By calculus, $\frac{\partial}{\partial \mu} \sum \|x_i - \mu\|^2 = 0$ yields $\mu = \frac{1}{n}\sum x_i$. The arithmetic mean is the unique minimizer of the sum of squared Euclidean distances.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The mean is always closest to the majority of points">><<replace "#km-q6">>Incorrect. The mean is not necessarily the closest point to the majority — it is the unique point that minimizes the total //squared// distance to all points in the cluster.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The mean is computationally cheapest to calculate">><<replace "#km-q6">>Incorrect. While the mean is indeed efficient to compute, that is not //why// it is optimal. It is optimal because it uniquely minimizes the sum of squared distances, which is exactly the WCSS objective.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q7">''7. What does the elbow method identify?''
+<<button "A) The K at which WCSS first reaches zero">><<replace "#km-q7">>Incorrect. WCSS reaches zero only when $K = n$ (every point is its own cluster). The elbow method looks for the ''bend'' where increasing K yields diminishing returns in WCSS reduction.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The K beyond which adding more clusters yields diminishing returns in WCSS reduction">><<replace "#km-q7">>Correct! The elbow method plots WCSS vs. K and looks for the inflection point where the curve bends — additional clusters provide less and less improvement.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The K that maximizes total variance">><<replace "#km-q7">>Incorrect. Total variance is constant regardless of K (it depends only on the data). The elbow method examines how WCSS decreases as K increases.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The K that produces the fastest convergence">><<replace "#km-q7">>Incorrect. The elbow method is about clustering quality (WCSS), not convergence speed. It identifies the K where the marginal benefit of adding another cluster drops sharply.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="km-q8">''8. How does the curse of dimensionality affect K-Means?''
+<<button "A) K-Means cannot run on data with more than 100 features">><<replace "#km-q8">>Incorrect. K-Means can technically run in any dimensionality. The problem is that high-dimensional distances ''concentrate'' — nearest and farthest distances become nearly equal — making centroid assignments unreliable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Higher dimensions require exponentially more clusters">><<replace "#km-q8">>Incorrect. The number of true clusters does not grow with dimensionality. The issue is that distance concentration makes the nearest-centroid assignment step increasingly meaningless.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Distances concentrate, making nearest-centroid assignments increasingly meaningless">><<replace "#km-q8">>Correct! In high dimensions, the ratio of nearest to farthest distance approaches 1, so all centroids appear roughly equidistant from each point. This undermines the core assignment mechanism of K-Means.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The mean becomes undefined in spaces with more than 50 dimensions">><<replace "#km-q8">>Incorrect. The arithmetic mean is perfectly well-defined in any number of dimensions. The issue is distance concentration, not the mean computation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

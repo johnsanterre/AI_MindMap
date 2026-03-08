@@ -1,0 +1,192 @@
+<<include "Header">>
+! Markov Inequality
+<img src="assets/markov_inequality.svg" alt="Markov Inequality" width="800">
+
+Imagine you know that a class of students scores an average of 70 points on an exam, but you have no idea what the distribution of scores looks like -- it could be bell-shaped, uniform, wildly skewed, anything. Can you still say something useful about how many students scored above 90? Remarkably, yes. The ''Markov Inequality'' tells you that no more than 70/90 (about 78%) of the class could have scored 90 or above. That bound might seem loose, but consider what you got it from: //nothing but the average//. No standard deviation, no histogram, no assumptions about shape. It is the statistical equivalent of making a prediction while blindfolded -- and still being right.
+
+!! The Core Insight
+
+The Markov Inequality captures a beautifully simple idea: if a non-negative quantity has a small average, then it //cannot// be large too often. If it were frequently large, the average would be dragged up. This tension between the mean and the tail is the most fundamental constraint in all of probability. Every other concentration inequality -- [[Chebyshev|Concentration Inequalities]], Chernoff, Hoeffding -- is ultimately a dressed-up version of Markov applied to a cleverly chosen transformation of the original [[random variable|Random Variables]].
+
+!! The Simplest Tail Bound
+
+What makes the Markov Inequality extraordinary is how little it demands. You need exactly two things:
+
+''Non-negativity:'' The random variable $X$ must satisfy $X \geq 0$. This is not as restrictive as it sounds -- distances, absolute values, squared errors, losses, and probabilities are all non-negative by nature.
+
+''Finite expectation:'' $E[X]$ must exist and be finite. If the mean is infinite, the bound gives you nothing (which is honest -- an infinite-mean variable //can// be large arbitrarily often).
+
+That is it. You do not need to know the variance, the shape of the distribution, whether it is continuous or discrete, or even whether it has a density. The Markov Inequality works for //every// non-negative random variable with a finite mean, making it the broadest tail bound in the statistician's toolkit. This universality is precisely why the bound is often loose -- it cannot exploit structure it does not assume.
+
+!! What the Math Is Actually Doing
+
+The ''Markov Inequality'' states:
+
+$$P(X \geq a) \leq \frac{E[X]}{a}$$
+
+for any non-negative random variable $X$ and any $a > 0$.
+
+The proof is strikingly elegant. Define an indicator: let $I = 1$ when $X \geq a$ and $I = 0$ otherwise. Since $X \geq 0$, we always have $X \geq a \cdot I$ (when $I=1$, $X \geq a$ by definition; when $I=0$, $X \geq 0$). Taking expectations of both sides:
+
+$$E[X] \geq E[a \cdot I] = a \cdot E[I] = a \cdot P(X \geq a)$$
+
+Dividing by $a$ gives the result. The entire proof is just //comparing the variable to a step function//.
+
+''Chebyshev as a corollary:'' Apply Markov to the non-negative variable $(X - \mu)^2$ with threshold $(k\sigma)^2$:
+
+$$P(|X - \mu| \geq k\sigma) = P((X-\mu)^2 \geq k^2\sigma^2) \leq \frac{E[(X-\mu)^2]}{k^2\sigma^2} = \frac{\sigma^2}{k^2\sigma^2} = \frac{1}{k^2}$$
+
+This is ''Chebyshev's Inequality'': $P(|X - \mu| \geq k\sigma) \leq 1/k^2$. It is simply Markov in disguise, applied to a squared deviation. The same trick -- applying Markov to $e^{tX}$ -- yields the exponentially tighter [[Chernoff bounds|Concentration Inequalities]].
+
+!! Markov Inequality in ML
+
+The Markov Inequality is less a tool you compute with directly and more a //foundation// that everything else rests on. Its fingerprints are throughout machine learning theory:
+
+''Bounding generalization error:'' In [[PAC learning|PAC Learning]], you want to guarantee that a learned hypothesis has low true error. The basic argument runs: the expected number of "bad" hypotheses in a finite class is at most $|H| \cdot e^{-m\epsilon}$ (for $m$ samples and error tolerance $\epsilon$). Markov's inequality then bounds the probability that //any// bad hypothesis survives, giving the foundational sample complexity bounds.
+
+''Algorithm analysis:'' When analyzing randomized algorithms (random projections, hashing, stochastic gradient methods), Markov converts an expected runtime or expected error into a high-probability guarantee. If $E[\text{error}] \leq \delta/2$, then $P(\text{error} \geq \delta) \leq 1/2$ by Markov -- and repeating the algorithm $k$ times drives failure probability to $2^{-k}$.
+
+''Connecting to [[probability distributions|Probability Distributions]]:'' Markov's inequality provides distribution-free bounds. When you //do// know the distribution, tighter results are available. But in ML, the true data distribution is often unknown, making distribution-free tools essential for theoretical guarantees.
+
+!! When Markov Bounds Are Too Loose
+
+''1. The bound exceeds 1.'' If $a < E[X]$, the Markov bound gives a probability greater than 1, which is trivially true and useless. For example, if $E[X] = 10$ and you ask about $P(X \geq 5)$, Markov says $\leq 2$. You already knew the probability was at most 1. The bound only becomes informative when $a$ is larger than $E[X]$.
+
+''2. The distribution has low variance but Markov ignores it.'' Consider a random variable concentrated tightly around its mean -- say $X$ is 100 with probability 0.99 and 200 with probability 0.01, so $E[X] = 101$. Markov says $P(X \geq 150) \leq 101/150 \approx 0.67$, but the true answer is 0.01. Chebyshev, which uses variance information, gives a much tighter bound. Whenever you have access to higher moments, the Markov bound is wasteful because it //throws away// that information.
+
+''3. Heavy-tailed distributions approach tightness.'' Ironically, Markov is //nearly tight// for pathological distributions. A random variable that is $a$ with probability $E[X]/a$ and $0$ otherwise achieves the bound exactly. This means you cannot improve Markov without additional assumptions -- but it also means that when your data is well-behaved, Markov dramatically overestimates tail probabilities. Recognizing when to graduate to [[Jensen's Inequality|Jensen's Inequality]], Chebyshev, or Chernoff is a key skill.
+
+!! Technical Details
+
+''Tightness:'' The bound $P(X \geq a) \leq E[X]/a$ is achieved by a two-point distribution: $X = a$ with probability $p$ and $X = 0$ with probability $1-p$, giving $E[X] = pa$ and $P(X \geq a) = p = E[X]/a$. No distribution-free improvement is possible.
+
+''The concentration inequality hierarchy:'' Each level applies Markov to a more informative transformation:
+
+- ''Markov:'' Apply to $X$ directly. Needs: mean. Gives: $O(1/a)$ tail decay.
+- ''Chebyshev:'' Apply Markov to $(X-\mu)^2$. Needs: mean + variance. Gives: $O(1/a^2)$ tail decay.
+- ''Chernoff:'' Apply Markov to $e^{tX}$ and optimize $t$. Needs: moment generating function. Gives: $O(e^{-ca})$ exponential tail decay.
+- ''Hoeffding:'' Chernoff specialized to bounded independent sums. Gives: $e^{-2n\epsilon^2/(b-a)^2}$.
+
+Each step trades generality for tightness.
+
+''Reverse Markov inequality:'' For $X \leq b$ (bounded above), $P(X \geq a) \geq (E[X] - a)/(b - a)$ for $a < E[X]$. This gives a //lower// bound on the tail, useful when you want to prove a random variable is //likely// to be large.
+
+''Paley-Zygmund inequality:'' For $X \geq 0$ with finite second moment: $P(X \geq \theta \cdot E[X]) \geq (1-\theta)^2 \cdot (E[X])^2 / E[X^2]$ for $0 < \theta < 1$. This is the standard "anti-concentration" companion to Markov, giving lower bounds on how spread out a distribution must be.
+
+''Generalized Markov:'' For any non-decreasing, non-negative function $\phi$ and threshold $a$ where $\phi(a) > 0$: $P(X \geq a) \leq E[\phi(X)] / \phi(a)$. Choosing $\phi(x) = x$ recovers Markov, $\phi(x) = x^2$ recovers Chebyshev, and $\phi(x) = e^{tx}$ recovers Chernoff.
+
+!! Quiz
+
+<div id="markov-q1">
+''1. The Markov Inequality requires which assumption(s) about X?''
+
+A) X has finite variance and known distribution
+B) X is non-negative with finite expectation
+C) X is normally distributed
+D) X has a symmetric distribution
+
+<<button "A">><<replace "#markov-q1">>Incorrect. Markov needs no distributional assumptions and does not require variance. It only needs non-negativity and finite expectation.<</replace>><</button>>
+<<button "B">><<replace "#markov-q1">>Correct! Non-negativity and finite expectation are the only two requirements -- no distribution shape, no variance needed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#markov-q1">>Incorrect. Normality is far too specific. Markov works for any non-negative random variable with finite mean.<</replace>><</button>>
+<<button "D">><<replace "#markov-q1">>Incorrect. No symmetry assumption is needed. Markov works for arbitrarily skewed distributions.<</replace>><</button>>
+</div>
+
+<div id="markov-q2">
+''2. If E[X] = 20 and X >= 0, what does Markov say about P(X >= 100)?''
+
+A) P(X >= 100) <= 0.02
+B) P(X >= 100) <= 0.2
+C) P(X >= 100) <= 0.5
+D) P(X >= 100) <= 5
+
+<<button "A">><<replace "#markov-q2">>Incorrect. Check the arithmetic: E[X]/a = 20/100 = 0.2, not 0.02.<</replace>><</button>>
+<<button "B">><<replace "#markov-q2">>Correct! $P(X \geq 100) \leq E[X]/a = 20/100 = 0.2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#markov-q2">>Incorrect. The bound is E[X]/a = 20/100 = 0.2, which is tighter than 0.5.<</replace>><</button>>
+<<button "D">><<replace "#markov-q2">>Incorrect. While 20/100 = 0.2, a probability bound above 1 would be trivially true and not useful.<</replace>><</button>>
+</div>
+
+<div id="markov-q3">
+''3. Chebyshev's Inequality is derived by applying Markov to:''
+
+A) The random variable X directly
+B) The absolute value |X|
+C) The squared deviation (X - mu)^2
+D) The exponential e^(tX)
+
+<<button "A">><<replace "#markov-q3">>Incorrect. Applying Markov to X directly just gives you Markov again.<</replace>><</button>>
+<<button "B">><<replace "#markov-q3">>Incorrect. Applying Markov to |X| gives a bound involving E[|X|], not the variance-based Chebyshev bound.<</replace>><</button>>
+<<button "C">><<replace "#markov-q3">>Correct! Applying Markov to the non-negative variable $(X-\mu)^2$ with threshold $k^2\sigma^2$ yields Chebyshev's $1/k^2$ bound.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#markov-q3">>Incorrect. Applying Markov to $e^{tX}$ gives Chernoff bounds, not Chebyshev.<</replace>><</button>>
+</div>
+
+<div id="markov-q4">
+''4. When is the Markov bound NOT informative?''
+
+A) When a > E[X]
+B) When a < E[X], making the bound exceed 1
+C) When X has high variance
+D) When X is continuous
+
+<<button "A">><<replace "#markov-q4">>Incorrect. When a > E[X], the bound is less than 1 and gives useful information about the tail.<</replace>><</button>>
+<<button "B">><<replace "#markov-q4">>Correct! When $a < E[X]$, the bound $E[X]/a > 1$, which is trivially true for any probability and thus useless.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#markov-q4">>Incorrect. High variance makes Markov potentially loose but not uninformative -- the bound is still valid.<</replace>><</button>>
+<<button "D">><<replace "#markov-q4">>Incorrect. Markov works equally well for continuous and discrete random variables.<</replace>><</button>>
+</div>
+
+<div id="markov-q5">
+''5. In PAC learning, Markov's inequality is used primarily to:''
+
+A) Compute the exact generalization error
+B) Convert expected error bounds into high-probability guarantees
+C) Determine the optimal learning rate
+D) Select the best hypothesis directly
+
+<<button "A">><<replace "#markov-q5">>Incorrect. Markov gives bounds, not exact values. Computing exact error requires knowing the true distribution.<</replace>><</button>>
+<<button "B">><<replace "#markov-q5">>Correct! Markov converts statements about expected quantities into probability bounds, which is exactly what PAC ("Probably Approximately Correct") learning requires.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#markov-q5">>Incorrect. Learning rate selection involves optimization, not tail probability bounds.<</replace>><</button>>
+<<button "D">><<replace "#markov-q5">>Incorrect. Hypothesis selection is done by the learning algorithm, not by probability inequalities.<</replace>><</button>>
+</div>
+
+<div id="markov-q6">
+''6. Which distribution achieves the Markov bound exactly (makes it tight)?''
+
+A) The normal distribution
+B) A two-point distribution: 0 with probability 1-p, and a with probability p = E[X]/a
+C) The uniform distribution on [0, a]
+D) The exponential distribution with mean E[X]
+
+<<button "A">><<replace "#markov-q6">>Incorrect. The normal distribution has tails that decay much faster than the Markov bound suggests.<</replace>><</button>>
+<<button "B">><<replace "#markov-q6">>Correct! This two-point distribution concentrates all its mass on just 0 and $a$, achieving $P(X \geq a) = p = E[X]/a$ exactly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#markov-q6">>Incorrect. The uniform distribution does not achieve the bound -- its tail probability at $a$ is just a single point with probability 0 (or $P(X \geq a) = 0$ for continuous uniform on $[0,a)$).<</replace>><</button>>
+<<button "D">><<replace "#markov-q6">>Incorrect. The exponential distribution has $P(X \geq a) = e^{-a/E[X]}$, which decays exponentially and is much smaller than $E[X]/a$ for large $a$.<</replace>><</button>>
+</div>
+
+<div id="markov-q7">
+''7. The generalized Markov inequality P(X >= a) <= E[phi(X)] / phi(a) recovers Chernoff bounds when phi is:''
+
+A) phi(x) = x
+B) phi(x) = x^2
+C) phi(x) = e^(tx)
+D) phi(x) = log(x)
+
+<<button "A">><<replace "#markov-q7">>Incorrect. $\phi(x) = x$ just recovers the basic Markov inequality itself.<</replace>><</button>>
+<<button "B">><<replace "#markov-q7">>Incorrect. $\phi(x) = x^2$ gives Chebyshev-type bounds, not Chernoff bounds.<</replace>><</button>>
+<<button "C">><<replace "#markov-q7">>Correct! Choosing $\phi(x) = e^{tx}$ and optimizing over $t > 0$ yields the Chernoff bound, which provides exponentially decaying tail estimates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D">><<replace "#markov-q7">>Incorrect. $\phi(x) = \log(x)$ is not non-negative for $x < 1$ and is not non-decreasing in the required sense for this application.<</replace>><</button>>
+</div>
+
+<div id="markov-q8">
+''8. The Paley-Zygmund inequality provides:''
+
+A) An upper bound on tail probability, tighter than Markov
+B) A lower bound on tail probability (anti-concentration)
+C) An exact formula for P(X >= a) for normal distributions
+D) A bound that requires no moments at all
+
+<<button "A">><<replace "#markov-q8">>Incorrect. Paley-Zygmund goes the other direction -- it gives a lower bound, not a tighter upper bound.<</replace>><</button>>
+<<button "B">><<replace "#markov-q8">>Correct! Paley-Zygmund is an anti-concentration inequality: it guarantees that a non-negative random variable has a //minimum// probability of being at least a fraction of its mean.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C">><<replace "#markov-q8">>Incorrect. Paley-Zygmund is distribution-free (for non-negative RVs with finite second moment), not specific to normals.<</replace>><</button>>
+<<button "D">><<replace "#markov-q8">>Incorrect. Paley-Zygmund requires both the first and second moments ($E[X]$ and $E[X^2]$).<</replace>><</button>>
+</div>
+
+<<include "Footer">>

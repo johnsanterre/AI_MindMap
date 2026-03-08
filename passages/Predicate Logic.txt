@@ -1,0 +1,151 @@
+<<include "Header">>
+! Predicate Logic
+<img src="assets/predicate_logic.svg" alt="Predicate Logic diagram showing universal and existential quantifiers with domain examples and the transition from propositional to first-order logic" style="max-width:100%;margin:1em 0;">
+
+Imagine you run a factory and need to state a rule: "Every widget must pass inspection." Propositional logic can only say "Widget #37 passed" or "Widget #38 passed" — one sentence per widget, forever. Predicate logic gives you variables and quantifiers so you can say it once: $\forall x\;(\text{Widget}(x) \rightarrow \text{Passed}(x))$. It upgrades logic from talking about specific facts to talking about //patterns// across entire domains — exactly the leap a machine learning model makes when it generalizes from training examples to unseen data.
+
+!! The Core Insight
+
+Where [[Propositional Logic|Propositional Logic]] treats statements as indivisible atoms (true or false), predicate logic cracks them open. A ''predicate'' $P(x)$ is a function from objects to truth values: $\text{Dog}(x)$ is true when $x$ is a dog, false otherwise. ''Quantifiers'' sweep over a domain of objects: $\forall x$ ("for all $x$") and $\exists x$ ("there exists an $x$"). Together they let you express relationships ($\text{Likes}(x, y)$), nested dependencies ($\forall x\;\exists y\;\text{Teaches}(y, x)$ — everyone has a teacher), and structural constraints impossible in propositional logic. First-order logic (FOL) is the most common form: quantifiers range over objects but not over predicates or functions themselves.
+
+Links: [[Propositional Logic|Propositional Logic]], [[Satisfiability|Satisfiability]], [[Knowledge Graphs|Knowledge Graphs]], [[Bayesian Networks|Bayesian Networks]]
+
+!! Predicates, Terms, and Quantifiers
+
+A ''term'' is either a variable ($x$), a constant ($\text{Alice}$), or a function applied to terms ($\text{mother}(x)$). An ''atomic formula'' applies a predicate to terms: $\text{Enrolled}(\text{Alice}, \text{CS101})$. Complex formulas are built with connectives ($\land, \lor, \rightarrow, \neg$) and quantifiers ($\forall, \exists$).
+
+''Scope'' matters. In $\forall x\;(\exists y\;\text{Likes}(x, y))$, $y$'s quantifier is //inside// $x$'s scope — for each person there is //some// liked thing (possibly different per person). Swap the quantifier order to $\exists y\;(\forall x\;\text{Likes}(x, y))$ and you claim a single thing is liked by everyone — a much stronger statement. Beginners confuse these constantly; the difference is the heart of predicate logic.
+
+''Free variables'' are unbound by any quantifier, making a formula an open sentence (neither true nor false until you assign values). A ''sentence'' (closed formula) has every variable bound.
+
+!! What the Math Is Actually Doing
+
+A ''first-order structure'' (or interpretation) $\mathcal{M} = (D, \mathcal{I})$ consists of a domain $D$ (nonempty set of objects) and an interpretation $\mathcal{I}$ that maps each constant to an element of $D$, each $n$-ary function symbol to a function $D^n \to D$, and each $n$-ary predicate to a relation $\subseteq D^n$.
+
+''Satisfaction'' is defined recursively:
+
+$$\mathcal{M} \models \forall x\;\phi(x) \iff \text{for every } d \in D,\;\mathcal{M} \models \phi(d)$$
+
+$$\mathcal{M} \models \exists x\;\phi(x) \iff \text{for some } d \in D,\;\mathcal{M} \models \phi(d)$$
+
+A formula is ''valid'' (a tautology) if it holds in every structure; ''satisfiable'' if it holds in at least one. Unlike propositional logic, first-order validity is ''undecidable'' (Church–Turing theorem, 1936) — no algorithm can determine, for every FOL sentence, whether it is valid.
+
+''Prenex normal form'' moves all quantifiers to the front: any FOL formula $\phi$ is logically equivalent to $Q_1 x_1\; Q_2 x_2\;\ldots\;Q_n x_n\;\psi$ where each $Q_i$ is $\forall$ or $\exists$ and $\psi$ is quantifier-free. This is useful for automated theorem provers and resolution.
+
+''Skolemization'' eliminates existential quantifiers by replacing $\exists y$ with a ''Skolem function'' that depends on previously universally-quantified variables. For $\forall x\;\exists y\;P(x, y)$, introduce a function $f$ and rewrite as $\forall x\;P(x, f(x))$. This preserves satisfiability (not logical equivalence) and is essential for converting FOL formulas to clausal form for resolution-based provers.
+
+''Herbrand's theorem'' says a universally quantified formula is unsatisfiable iff some finite set of its ground instances (substituting constant terms for variables) is propositionally unsatisfiable. This reduces first-order unsatisfiability checking to a propositional search — the basis of many automated theorem provers.
+
+!! Predicate Logic in Machine Learning
+
+''Knowledge representation:'' [[Knowledge Graphs|Knowledge Graphs]] encode facts as triples like $\text{LocatedIn}(\text{Paris}, \text{France})$ — essentially ground atomic formulas. Ontologies (OWL, RDF) use fragments of FOL to define class hierarchies and constraints. Link prediction in knowledge graphs can be viewed as predicting the truth value of an atomic formula given partial evidence.
+
+''Logic programming:'' Prolog and Datalog implement Horn clause fragments of FOL (clauses with at most one positive literal). Inductive Logic Programming (ILP) learns first-order rules from data — e.g., learning $\forall x\;(\text{Grandparent}(x,z) \leftarrow \exists y\;(\text{Parent}(x,y) \land \text{Parent}(y,z)))$ from family trees. This gives interpretable, compositional hypotheses that neural networks cannot naturally express.
+
+''Neuro-symbolic AI:'' systems like DeepProbLog, Logic Tensor Networks, and Neural Theorem Provers embed FOL reasoning into differentiable computation. Predicates become neural networks (soft truth values in $[0,1]$), quantifiers become aggregations (product for $\forall$, max for $\exists$), and the whole system is trained end-to-end with gradient descent. This bridges the gap between statistical learning and logical reasoning.
+
+''Theorem provers:'' FOL provers (Vampire, E, Prover9) use resolution and superposition calculi grounded in Skolemization and Herbrand's theorem. Modern provers are guided by ML models that choose which clauses to resolve next, dramatically improving search efficiency.
+
+!! When Predicate Logic Breaks Down
+
+''Undecidability:'' first-order validity is undecidable — a theorem prover may run forever without determining if a formula is valid. Practical systems use time limits and heuristics, but there is no guarantee of termination for arbitrary inputs.
+
+''Brittleness to uncertainty:'' classical FOL is all-or-nothing — $P(x)$ is true or false. Real-world knowledge is probabilistic ("smoking //usually// causes cancer"). Markov Logic Networks (MLNs) address this by attaching weights to FOL formulas, but inference becomes #P-hard and approximations are needed. [[Bayesian Networks|Bayesian Networks]] handle uncertainty more naturally but lack FOL's relational expressiveness.
+
+''Grounding explosion:'' when the domain is large, grounding a first-order formula (enumerating all variable assignments) produces an exponential number of propositional clauses. Lifted inference techniques try to reason about groups of symmetric objects without full grounding, but scalability remains a major challenge.
+
+!! Technical Details
+
+''Completeness:'' Gödel's completeness theorem (1930) guarantees that every valid FOL sentence has a finite proof. This is distinct from decidability — proofs exist, but finding them may take unbounded time.
+
+''Compactness:'' if every finite subset of a set of FOL sentences is satisfiable, then the whole set is satisfiable. This has deep consequences for model theory but also means FOL cannot express "there are finitely many $x$ such that $P(x)$."
+
+''Expressiveness hierarchy:'' propositional logic $\subset$ monadic FOL (decidable) $\subset$ full FOL (undecidable) $\subset$ second-order logic (quantifies over predicates). Description logics (used in OWL) are carefully chosen decidable fragments of FOL.
+
+''Unification:'' the core algorithm for resolution. Given two atomic formulas $P(f(x), a)$ and $P(y, a)$, the most general unifier is $\{y \mapsto f(x)\}$. Robinson's unification algorithm (1965) runs in near-linear time and underpins Prolog execution, type inference in programming languages, and FOL theorem proving.
+
+''Key references:'' Enderton, //A Mathematical Introduction to Logic// (1972/2001); Russell & Norvig, //AIMA// Ch. 8–9; Robinson, "A Machine-Oriented Logic" (1965); Raedt et al., //Statistical Relational Artificial Intelligence// (2016).
+
+!! Quiz
+
+<span id="pl-q1">''1. What distinguishes predicate logic from propositional logic?''
+
+<<button "A. Predicate logic uses truth tables">><<replace "#pl-q1">>A. Predicate logic uses truth tables — Incorrect. Truth tables are a propositional logic technique. Predicate logic adds variables, predicates, and quantifiers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Predicate logic adds variables, predicates, and quantifiers">><<replace "#pl-q1">>✓ B. Predicate logic adds variables, predicates, and quantifiers — Correct! These additions let you express properties of and relationships between objects across a domain, going beyond fixed propositional atoms.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Predicate logic is always decidable">><<replace "#pl-q1">>C. Predicate logic is always decidable — Incorrect. First-order logic is undecidable — the opposite of what this option states.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Predicate logic has no connectives">><<replace "#pl-q1">>D. Predicate logic has no connectives — Incorrect. Predicate logic retains all propositional connectives ($\land, \lor, \rightarrow, \neg$) and adds quantifiers on top.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q2">''2. What does $\forall x\;\exists y\;R(x, y)$ mean versus $\exists y\;\forall x\;R(x, y)$?''
+
+<<button "A. They are logically equivalent">><<replace "#pl-q2">>A. They are logically equivalent — Incorrect. Quantifier order matters. The first allows a different $y$ per $x$; the second demands a single $y$ that works for all $x$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The first says for each x there is some y; the second says one y works for all x">><<replace "#pl-q2">>✓ B. Correct! $\forall x\;\exists y$ allows $y$ to depend on $x$ (weaker claim); $\exists y\;\forall x$ requires a single universal $y$ (stronger claim). Example: everyone has a birthday vs. everyone shares the same birthday.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The second is always weaker">><<replace "#pl-q2">>C. The second is always weaker — Incorrect. $\exists y\;\forall x$ is the //stronger// claim because one $y$ must satisfy all $x$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Neither can be expressed in first-order logic">><<replace "#pl-q2">>D. Neither can be expressed in first-order logic — Incorrect. Both are perfectly standard first-order formulas.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q3">''3. What does Skolemization do?''
+
+<<button "A. Eliminates universal quantifiers">><<replace "#pl-q3">>A. Eliminates universal quantifiers — Incorrect. Skolemization eliminates //existential// quantifiers by introducing Skolem functions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Eliminates existential quantifiers by introducing Skolem functions">><<replace "#pl-q3">>✓ B. Correct! For $\forall x\;\exists y\;P(x,y)$, Skolemization replaces $\exists y$ with a function $f(x)$, yielding $\forall x\;P(x, f(x))$. This preserves satisfiability and is essential for resolution-based theorem proving.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Converts formulas to disjunctive normal form">><<replace "#pl-q3">>C. Converts formulas to disjunctive normal form — Incorrect. Skolemization is about removing existential quantifiers, not about normal form of the propositional matrix (though it is part of the pipeline to clausal form).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Grounds all variables with constants">><<replace "#pl-q3">>D. Grounds all variables with constants — Incorrect. That describes Herbrand instantiation, not Skolemization. Skolemization introduces function symbols.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q4">''4. Why is first-order logic undecidable?''
+
+<<button "A. Because it has too many connectives">><<replace "#pl-q4">>A. Because it has too many connectives — Incorrect. Propositional logic has the same connectives and is decidable. The issue is quantifiers over infinite domains.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Because of the Church–Turing theorem: no algorithm can determine validity for all FOL sentences">><<replace "#pl-q4">>✓ B. Correct! Church and Turing independently proved (1936) that the set of valid FOL sentences is not recursive. A theorem prover may search forever without terminating on some inputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Because truth tables grow too large">><<replace "#pl-q4">>C. Because truth tables grow too large — Incorrect. Large truth tables are a complexity issue for propositional logic (NP-completeness). FOL undecidability is a fundamentally different problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Because Gödel proved FOL is incomplete">><<replace "#pl-q4">>D. Because Gödel proved FOL is incomplete — Incorrect. Gödel's //completeness// theorem says FOL is complete (every valid sentence has a proof). His //incompleteness// theorems concern arithmetic, not FOL validity.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q5">''5. Herbrand's theorem reduces first-order unsatisfiability to:''
+
+<<button "A. Second-order satisfiability">><<replace "#pl-q5">>A. Second-order satisfiability — Incorrect. Herbrand's theorem goes //down// in expressiveness, not up.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Propositional unsatisfiability of a finite set of ground instances">><<replace "#pl-q5">>✓ B. Correct! Herbrand's theorem states that a universally quantified formula is unsatisfiable iff some finite set of its ground instances is propositionally unsatisfiable. This bridges FOL and SAT solving.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Model checking over finite domains">><<replace "#pl-q5">>C. Model checking over finite domains — Incorrect. Herbrand's theorem is about propositional unsatisfiability of ground instances, not general model checking.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Linear programming">><<replace "#pl-q5">>D. Linear programming — Incorrect. Herbrand's theorem has no connection to linear programming.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q6">''6. In neuro-symbolic AI, how is the universal quantifier $\forall$ typically approximated?''
+
+<<button "A. As a softmax operation">><<replace "#pl-q6">>A. As a softmax operation — Incorrect. Softmax is used for normalization, not for implementing universal quantification.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. As a product (or minimum) over soft truth values">><<replace "#pl-q6">>✓ B. Correct! In differentiable logic frameworks, $\forall$ is approximated by a product (t-norm) or minimum over the soft truth values $[0,1]$ of each instance — all must be close to 1 for the conjunction to be close to 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. As a summation">><<replace "#pl-q6">>C. As a summation — Incorrect. Summation doesn't enforce that all instances must be true; it would allow a few high values to compensate for failures.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It cannot be approximated">><<replace "#pl-q6">>D. It cannot be approximated — Incorrect. Multiple frameworks (Logic Tensor Networks, DeepProbLog) successfully approximate quantifiers in differentiable settings.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q7">''7. What is prenex normal form?''
+
+<<button "A. A form where all negations are pushed to atoms">><<replace "#pl-q7">>A. A form where all negations are pushed to atoms — Incorrect. That describes negation normal form, not prenex normal form.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. A form where the formula is converted to propositional logic">><<replace "#pl-q7">>B. A form where the formula is converted to propositional logic — Incorrect. Prenex form is still first-order; it rearranges quantifiers but doesn't eliminate them.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. A form where all quantifiers are moved to the front">><<replace "#pl-q7">>✓ C. Correct! Prenex normal form is $Q_1 x_1\;Q_2 x_2\;\ldots\;Q_n x_n\;\psi$ where all quantifiers precede a quantifier-free matrix $\psi$. Every FOL formula has a logically equivalent prenex form.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. A form where all variables are grounded">><<replace "#pl-q7">>D. A form where all variables are grounded — Incorrect. Prenex form retains variables and quantifiers; grounding is a separate step.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pl-q8">''8. What is the "grounding explosion" problem in predicate logic?''
+
+<<button "A. Too many predicates in the language">><<replace "#pl-q8">>A. Too many predicates in the language — Incorrect. The problem is about the number of variable //assignments//, not the number of predicates.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Enumerating all variable assignments produces exponentially many propositional clauses">><<replace "#pl-q8">>✓ B. Correct! For a formula with $k$ variables over a domain of size $n$, grounding can produce $n^k$ clauses. This makes naive propositional reduction intractable for large domains, motivating lifted inference techniques.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The Skolem functions become infinitely recursive">><<replace "#pl-q8">>C. The Skolem functions become infinitely recursive — Incorrect. Skolem functions are well-defined; the grounding explosion is about combinatorial blowup of variable assignments.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Neural networks cannot represent predicates">><<replace "#pl-q8">>D. Neural networks cannot represent predicates — Incorrect. Neuro-symbolic systems successfully represent predicates as neural networks; the grounding explosion is a classical logic problem.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

@@ -1,0 +1,129 @@
+<<include "Header">>
+! Convolutional Neural Networks
+<img src="assets/convolutional_neural_networks.svg" style="width:100%;max-width:800px;display:block;margin:0.5em auto 1em;">
+
+Imagine you are looking for a friend's face in a crowd. You do not examine the entire scene as a single flattened list of pixels. Instead, your visual system scans small local regions — an eyebrow here, the curve of a jaw there — and assembles these local features into a coherent whole. A ''convolutional neural network'' (CNN) works exactly this way: small learned filters slide across an image, each one detecting a specific local pattern, and successive layers compose those patterns into increasingly abstract representations — edges become textures, textures become object parts, parts become whole objects.
+
+!! The Core Insight
+
+The fundamental idea behind CNNs is ''parameter sharing'' combined with ''local connectivity''. Rather than connecting every input pixel to every neuron (as in a fully connected layer), a CNN uses a small filter — say 3×3 — that is applied at every spatial position in the image. This single set of weights is shared across the entire input, which means the network can detect a feature (like a vertical edge) regardless of where it appears. This property is called ''translation equivariance'': if the input shifts, the output shifts by the same amount but retains the same pattern of activations. The result is dramatically fewer parameters, built-in spatial structure, and the ability to scale to high-resolution images that would be intractable for fully connected architectures. Connections: <<link "Computer Vision" "Computer Vision">><</link>>, <<link "Deep Learning" "Deep Learning">><</link>>, <<link "Feature Maps" "Feature Maps">><</link>>, <<link "Backpropagation" "Backpropagation">><</link>>.
+
+!! Convolutions, Pooling, and Feature Hierarchies
+
+A CNN is built from three types of building blocks stacked in sequence:
+
+''Convolutional layers'' apply a bank of learned filters to the input. Each filter produces one ''feature map'' — a 2D grid of activations indicating where and how strongly that filter's pattern was detected. With $K$ filters of size $f \times f$ applied to an input with $C$ channels, the layer learns $K \times C \times f \times f$ weights plus $K$ biases. A non-linearity (almost always ReLU) follows each convolution.
+
+''Pooling layers'' downsample the spatial dimensions. ''Max pooling'' takes the maximum value in each local window (typically 2×2), reducing width and height by half. This provides a small degree of translation invariance and reduces computation in later layers. Some modern architectures replace pooling with strided convolutions.
+
+''Fully connected layers'' appear at the end of the network. After convolution and pooling have reduced the image to a compact feature vector, one or more dense layers map this vector to class scores or other outputs.
+
+The ''feature hierarchy'' is the key architectural principle: early layers detect low-level features (edges, color gradients), middle layers detect mid-level features (textures, corners, simple shapes), and deep layers detect high-level semantic features (eyes, wheels, buildings). This hierarchical composition is what gives CNNs their extraordinary representational power. See also: <<link "Pooling" "Pooling">><</link>>, <<link "Feature Maps" "Feature Maps">><</link>>.
+
+!! What the Math Is Actually Doing
+
+The discrete 2D convolution for a single filter applied to a single input channel is:
+
+$$(I * K)(i, j) = \sum_{m=0}^{f-1} \sum_{n=0}^{f-1} I(i+m,\, j+n) \cdot K(m, n)$$
+
+where $I$ is the input, $K$ is the filter of size $f \times f$, and the output is computed at every valid spatial position $(i, j)$. For multi-channel inputs with $C$ channels and $K$ output filters, the full operation is:
+
+$$Y_k(i, j) = b_k + \sum_{c=1}^{C} \sum_{m=0}^{f-1} \sum_{n=0}^{f-1} I_c(i+m,\, j+n) \cdot W_{k,c}(m, n)$$
+
+The output spatial size is determined by the ''stride'' $s$ (step size between filter positions) and ''padding'' $p$ (zeros added around the border):
+
+$$\text{output size} = \left\lfloor \frac{n_{\text{in}} + 2p - f}{s} \right\rfloor + 1$$
+
+With stride 1 and padding $p = \lfloor f/2 \rfloor$ (called ''same'' padding), the spatial dimensions are preserved. With stride 2, they are halved. During <<link "Backpropagation" "Backpropagation">><</link>>, the gradient with respect to the filter weights is itself a convolution of the input with the upstream gradient, which is why CNNs are efficient to train — the same computational primitive is reused in both the forward and backward passes.
+
+!! CNN Architectures Through History
+
+''LeNet-5'' (LeCun et al., 1998) applied two convolutional layers followed by fully connected layers to handwritten digit recognition — the architecture that proved CNNs worked in practice. ''AlexNet'' (Krizhevsky, Sutskever, Hinton, 2012) scaled this pattern to ImageNet with five convolutional layers, ReLU activations, dropout, and GPU training, winning the ImageNet Large Scale Visual Recognition Challenge by a decisive margin and igniting the deep learning revolution. ''VGGNet'' (Simonyan and Zisserman, 2014) showed that depth matters: 16–19 layers of uniform 3×3 convolutions outperformed shallower networks with larger filters. ''GoogLeNet/Inception'' (Szegedy et al., 2015) introduced parallel filter sizes within a single layer (inception modules), achieving efficiency through 1×1 convolutions that reduce channel dimensionality. ''ResNets'' (He et al., 2015) solved the degradation problem in very deep networks with skip connections, enabling architectures with 50, 101, or even 152 layers: <<link "ResNets" "ResNets">><</link>>. More recent work includes EfficientNet (compound scaling of depth, width, and resolution), ConvNeXt (modernizing pure CNN designs with Transformer-era training recipes), and the ongoing competition between CNNs and Vision Transformers.
+
+!! When CNNs Break Down
+
+''Spatial invariance is limited:'' CNNs achieve approximate translation invariance through pooling, but they are not inherently invariant to rotation, scale changes, or viewpoint shifts. A CNN trained on upright faces may fail on rotated faces unless augmentation or equivariant architectures are used. This is a fundamental limitation of the standard convolutional structure.
+
+''Global context is expensive:'' Because each filter sees only a small local receptive field, capturing long-range dependencies requires either very deep stacks (expanding the effective receptive field layer by layer) or architectural additions like self-attention. For tasks requiring global reasoning — such as understanding scene layout or long-range pixel relationships — pure CNNs struggle compared to Transformers, which attend to all positions simultaneously.
+
+''Small or noisy datasets cause overfitting:'' CNNs have millions of parameters. Without sufficient training data, regularization, or transfer learning, they memorize training examples rather than learning generalizable features. Data augmentation, dropout, weight decay, and pre-trained initialization are essential when data is limited.
+
+!! Technical Details
+
+''Parameter count examples:'' A 3×3 conv layer with 64 input and 128 output channels has $128 \times 64 \times 3 \times 3 + 128 = 73{,}856$ parameters. AlexNet: ~60M parameters. VGG-16: ~138M. ResNet-50: ~25.6M (skip connections allow going deeper with fewer parameters per layer). ''Receptive field:'' for a stack of $L$ layers each with $3 \times 3$ filters and stride 1, the theoretical receptive field is $(2L+1) \times (2L+1)$. ''1×1 convolutions:'' these perform channel-wise linear combinations without spatial mixing and are used in bottleneck blocks (ResNets), Inception modules, and channel attention (SE-Nets). ''Depthwise separable convolutions:'' factorize a standard convolution into a depthwise spatial convolution (one filter per channel) followed by a 1×1 pointwise convolution, reducing computation by roughly a factor of $K$ (number of output channels). Used in MobileNets and EfficientNets. ''Dilated (atrous) convolutions:'' insert gaps between filter elements to expand the receptive field without increasing parameters or reducing resolution; widely used in semantic segmentation (DeepLab). ''Batch normalization:'' normalizing activations per mini-batch after each conv layer stabilizes training and enables higher learning rates — nearly universal in modern CNNs. ''Typical training:'' SGD with momentum 0.9, learning rate 0.1 with cosine or step decay, weight decay $10^{-4}$, extensive data augmentation (random crop, horizontal flip, color jitter). Training ImageNet-scale models takes hours on multi-GPU setups.
+
+!! Quiz
+
+''1. Why do CNNs use shared filter weights across all spatial positions?''
+
+<span id="cnn-q1">
+<<button "A. To increase the number of learnable parameters">><<replace "#cnn-q1">>A. To increase the number of learnable parameters — ''Incorrect.'' Weight sharing dramatically //reduces// the number of parameters compared to fully connected layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To detect the same feature regardless of spatial location">><<replace "#cnn-q1">>B. To detect the same feature regardless of spatial location — ''Correct.'' A single filter applied everywhere provides translation equivariance, so a feature like a vertical edge is detected whether it appears at the top-left or bottom-right.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To eliminate the need for non-linear activation functions">><<replace "#cnn-q1">>C. To eliminate the need for non-linear activation functions — ''Incorrect.'' Non-linearities (typically ReLU) are still applied after every convolutional layer.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To ensure the output has the same resolution as the input">><<replace "#cnn-q1">>D. To ensure the output has the same resolution as the input — ''Incorrect.'' Output resolution depends on stride and padding, not on weight sharing.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''2. What does a single convolutional filter produce when applied to an input?''
+
+<span id="cnn-q2">
+<<button "A. A scalar class probability">><<replace "#cnn-q2">>A. A scalar class probability — ''Incorrect.'' Class probabilities come from the final classification layer, not from individual convolutional filters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A 2D feature map showing where the filter's pattern was detected">><<replace "#cnn-q2">>B. A 2D feature map showing where the filter's pattern was detected — ''Correct.'' The filter slides across the input and produces a value at each position indicating how strongly that local region matches the filter's pattern.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A reconstructed version of the original input">><<replace "#cnn-q2">>C. A reconstructed version of the original input — ''Incorrect.'' Convolution extracts features; it does not reconstruct the input (that would be a decoder).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A 1D vector of filter coefficients">><<replace "#cnn-q2">>D. A 1D vector of filter coefficients — ''Incorrect.'' The filter coefficients are the learned weights; the output is a spatial activation map.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''3. What is the primary purpose of max pooling in a CNN?''
+
+<span id="cnn-q3">
+<<button "A. To add non-linearity to the network">><<replace "#cnn-q3">>A. To add non-linearity to the network — ''Incorrect.'' While max pooling is technically non-linear, its primary purpose is spatial downsampling and providing local translation invariance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To increase the spatial resolution of feature maps">><<replace "#cnn-q3">>B. To increase the spatial resolution of feature maps — ''Incorrect.'' Pooling //reduces// spatial resolution; upsampling operations increase it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To downsample spatially and provide some translation invariance">><<replace "#cnn-q3">>C. To downsample spatially and provide some translation invariance — ''Correct.'' By taking the maximum in each local region, small shifts in the input do not change the output, and the spatial dimensions are reduced. See: <<link "Pooling" "Pooling">><</link>>.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To normalize activations to zero mean and unit variance">><<replace "#cnn-q3">>D. To normalize activations to zero mean and unit variance — ''Incorrect.'' That describes batch normalization, not pooling.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''4. What was the key innovation that allowed ResNets to train networks with 100+ layers?''
+
+<span id="cnn-q4">
+<<button "A. Using larger convolutional filters (7×7 throughout)">><<replace "#cnn-q4">>A. Using larger convolutional filters — ''Incorrect.'' ResNets primarily use 3×3 and 1×1 filters. VGG had already shown small filters are preferable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Replacing all pooling layers with strided convolutions">><<replace "#cnn-q4">>B. Replacing all pooling layers with strided convolutions — ''Incorrect.'' While ResNets do use strided convolutions for downsampling, this is not what enables extreme depth.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Skip connections that let gradients flow directly through identity shortcuts">><<replace "#cnn-q4">>C. Skip connections that let gradients flow directly through identity shortcuts — ''Correct.'' By learning the residual $F(x) = H(x) - x$ rather than the full mapping $H(x)$, gradients can bypass layers through the identity path, preventing vanishing gradients in very deep networks. See: <<link "ResNets" "ResNets">><</link>>.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Training with a much larger learning rate">><<replace "#cnn-q4">>D. Training with a much larger learning rate — ''Incorrect.'' ResNets use standard learning rate schedules; the architectural innovation of skip connections is the key.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''5. Given a 32×32 input, a 5×5 filter, stride 1, and no padding, what is the output size?''
+
+<span id="cnn-q5">
+<<button "A. 32×32">><<replace "#cnn-q5">>A. 32×32 — ''Incorrect.'' Without padding, the output shrinks. Apply the formula: $\lfloor(32 + 0 - 5)/1\rfloor + 1 = 28$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. 28×28">><<replace "#cnn-q5">>B. 28×28 — ''Correct.'' Output size $= \lfloor(32 + 0 - 5)/1\rfloor + 1 = 28$. Without padding, a 5×5 filter loses 2 pixels on each side.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. 30×30">><<replace "#cnn-q5">>C. 30×30 — ''Incorrect.'' That would be the result with a 3×3 filter. With a 5×5 filter: $\lfloor(32 - 5)/1\rfloor + 1 = 28$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. 14×14">><<replace "#cnn-q5">>D. 14×14 — ''Incorrect.'' That would result from stride 2 with appropriate padding. With stride 1: $\lfloor(32 - 5)/1\rfloor + 1 = 28$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''6. What is the difference between translation equivariance and translation invariance?''
+
+<span id="cnn-q6">
+<<button "A. They are the same property described with different terminology">><<replace "#cnn-q6">>A. They are the same property — ''Incorrect.'' They are distinct: equivariance means the output shifts with the input; invariance means the output stays the same regardless of input shift.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Equivariance means the output shifts with the input; invariance means it does not">><<replace "#cnn-q6">>B. Equivariance means the output shifts with the input; invariance means it does not — ''Correct.'' Convolution is equivariant (shift the input, and the feature map shifts). Pooling adds approximate invariance (the max in a window is unchanged by small shifts).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Equivariance applies only to rotation; invariance applies only to translation">><<replace "#cnn-q6">>C. Equivariance applies only to rotation — ''Incorrect.'' Both properties can apply to any transformation. Standard CNNs have translation equivariance but are not rotation equivariant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Invariance requires more parameters than equivariance">><<replace "#cnn-q6">>D. Invariance requires more parameters — ''Incorrect.'' The distinction is about behavior under transformations, not parameter count.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''7. Why do modern architectures use stacks of 3×3 filters rather than single large filters?''
+
+<span id="cnn-q7">
+<<button "A. 3×3 filters are the only size that supports GPU acceleration">><<replace "#cnn-q7">>A. Only 3×3 filters support GPU acceleration — ''Incorrect.'' GPUs can compute convolutions of any filter size. The advantage is computational, not hardware-exclusive.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Two 3×3 layers have the same receptive field as one 5×5 but fewer parameters and more non-linearity">><<replace "#cnn-q7">>B. Two 3×3 layers match a 5×5 receptive field with fewer parameters and more non-linearity — ''Correct.'' Two stacked 3×3 filters give a 5×5 receptive field using $2 \times 9 = 18$ parameters vs. 25, with an extra ReLU between them. This was a key insight from VGGNet.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Large filters cause numerical overflow during backpropagation">><<replace "#cnn-q7">>C. Large filters cause numerical overflow — ''Incorrect.'' Filter size does not inherently cause overflow; proper initialization and normalization handle this.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. 3×3 is the smallest size that can detect diagonal edges">><<replace "#cnn-q7">>D. 3×3 is the smallest size for diagonal edges — ''Incorrect.'' Even 2×2 filters can capture some edge information. The preference for 3×3 is about the efficiency-expressiveness tradeoff.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+''8. What is a depthwise separable convolution?''
+
+<span id="cnn-q8">
+<<button "A. A convolution applied only to the deepest layer of the network">><<replace "#cnn-q8">>A. A convolution applied only to the deepest layer — ''Incorrect.'' ''Depthwise'' refers to per-channel processing, not network depth.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A standard convolution with double the usual filter size">><<replace "#cnn-q8">>B. A standard convolution with double filter size — ''Incorrect.'' Depthwise separable convolutions use the same filter size but factorize the operation differently.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A per-channel spatial convolution followed by a 1×1 pointwise convolution">><<replace "#cnn-q8">>C. A per-channel spatial convolution followed by a 1×1 pointwise convolution — ''Correct.'' The spatial filtering and cross-channel mixing are separated, reducing computation by roughly a factor of $K$ (output channels). Used in MobileNets and EfficientNets for efficient inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A convolution that operates on separable frequency components of the input">><<replace "#cnn-q8">>D. A convolution on frequency components — ''Incorrect.'' Depthwise separable refers to the spatial-channel factorization, not frequency-domain processing.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

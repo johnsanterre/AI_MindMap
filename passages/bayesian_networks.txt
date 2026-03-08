@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Bayesian Networks
+
+[img[assets/bayesian_networks.svg]]
+
+Imagine you wake up sneezing. Is it the flu or allergies? You check: it is winter, your coworker was sick last week, and the pollen count is low. Without realizing it, you are running a ''Bayesian network'' in your head — combining multiple clues through a chain of cause-and-effect reasoning, where each piece of evidence updates your belief about what is actually going on. A Bayesian network formalizes this process as a graph: nodes are variables, arrows encode which variables directly influence which others, and attached to each node is a table describing //how much// parents influence their children.
+
+!! The Core Insight
+
+A Bayesian network is a ''directed acyclic graph'' (DAG) where each node represents a random variable and each directed edge represents a direct probabilistic dependency. The magic is in what the graph //leaves out//: missing edges encode ''conditional independencies''. If there is no arrow from node $A$ to node $B$, the network asserts that $A$ does not directly influence $B$ (though they may be indirectly related through other paths).
+
+Each node $X_i$ carries a ''conditional probability table'' (CPT) specifying $P(X_i \mid \text{Parents}(X_i))$. The full joint distribution over all variables factors as a product of these local tables:
+
+$$P(X_1, X_2, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Parents}(X_i))$$
+
+This factorization is the core computational trick. Instead of storing an exponentially large joint table, you store only the small local tables at each node. A network with $n$ binary variables and at most $k$ parents per node needs $O(n \cdot 2^k)$ parameters instead of $O(2^n)$. This is what makes Bayesian networks tractable for real-world problems. See <<link "Bayes Theorem" "Bayes Theorem">><</link>> for the foundational probability rule underlying all of this.
+
+!! D-Separation and Conditional Independence
+
+The graph structure encodes a rich set of ''conditional independence'' relationships through a criterion called ''d-separation''. Two variables $A$ and $B$ are d-separated given a set of observed variables $C$ if every path between them is "blocked." A path is blocked if it passes through a node that is either:
+
+''Chain'' ($A \rightarrow M \rightarrow B$): Observing the middle node $M$ blocks information flow. If you know the mediator, the cause tells you nothing new about the effect.
+
+''Fork'' ($A \leftarrow M \rightarrow B$): Observing the common cause $M$ blocks the path. Without conditioning on $M$, $A$ and $B$ appear correlated (they share a common cause), but once you know $M$, the correlation vanishes.
+
+''Collider'' ($A \rightarrow M \leftarrow B$): Here the opposite happens. The path is //blocked by default// — $A$ and $B$ are independent. But if you observe $M$ (or any descendant of $M$), the path //opens// and $A$ and $B$ become dependent. This is the infamous "explaining away" effect: learning that one cause is present makes the other cause less likely, given that their shared effect occurred.
+
+D-separation is complete: every conditional independence implied by the graph can be read off using d-separation, and every d-separation statement corresponds to a genuine independence in any distribution faithful to the graph. This connects deeply to <<link "Conditional Independence" "Conditional Independence">><</link>> in probability theory.
+
+!! What the Math Is Actually Doing
+
+The joint distribution factorizes according to the DAG structure:
+
+$$P(X_1, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Pa}(X_i))$$
+
+where $\text{Pa}(X_i)$ denotes the parents of node $X_i$. This is the ''chain rule of probability'' applied in the topological order of the DAG, with conditional independence assumptions dropping terms.
+
+''Inference'' means computing posterior probabilities given evidence $E = e$:
+
+$$P(Q \mid E = e) = \frac{P(Q, E = e)}{P(E = e)} = \frac{\sum_{\text{hidden}} \prod_i P(X_i \mid \text{Pa}(X_i))}{\sum_{Q} \sum_{\text{hidden}} \prod_i P(X_i \mid \text{Pa}(X_i))}$$
+
+For tree-structured networks, ''belief propagation'' computes exact marginals in $O(n)$ time by passing messages along edges:
+
+$$m_{i \to j}(x_j) = \sum_{x_i} P(x_i \mid \text{Pa}(x_i)) \prod_{k \in \text{neighbors}(i) \setminus j} m_{k \to i}(x_i)$$
+
+For general graphs, exact inference is NP-hard, so approximate methods like ''variational inference'' or ''MCMC sampling'' are used. The ''junction tree algorithm'' converts the DAG into a tree of cliques and runs exact message passing, but with cost exponential in the ''treewidth'' of the graph.
+
+''Parameter learning'' with complete data uses maximum likelihood. For each CPT entry:
+
+$$\hat{P}(X_i = x \mid \text{Pa}(X_i) = \pi) = \frac{\text{count}(X_i = x, \text{Pa}(X_i) = \pi)}{\text{count}(\text{Pa}(X_i) = \pi)}$$
+
+With missing data, the ''EM algorithm'' iterates between inferring missing values (E-step) and re-estimating parameters (M-step).
+
+!! Learning and Inference
+
+''Structure learning'' — discovering the graph itself from data — is one of the hardest and most important problems. Three main approaches exist:
+
+''Constraint-based methods'' (e.g., the PC algorithm) test pairs of variables for conditional independence, then orient edges based on detected v-structures (colliders). These scale well but are sensitive to errors in independence tests.
+
+''Score-based methods'' search over possible graph structures, scoring each with metrics like ''BIC'' (Bayesian Information Criterion) or ''BGe'' (Bayesian Gaussian equivalent). The search space is super-exponential in the number of variables, so heuristics like greedy hill-climbing or dynamic programming over parent sets are essential.
+
+''Hybrid methods'' combine both: use constraint-based tests to prune the search space, then apply score-based search over the reduced space.
+
+A fundamental limitation is that different DAGs can encode the same set of conditional independencies — they belong to the same ''Markov equivalence class''. Without interventional data or strong prior knowledge, you cannot distinguish between them from observational data alone. This connects to the broader challenge of <<link "Causal Discovery" "Causal Discovery">><</link>>.
+
+Bayesian networks are closely related to <<link "Probabilistic Graphical Models" "Probabilistic Graphical Models">><</link>>, which also include undirected models (Markov random fields). They also generalize <<link "Markov Chains" "Markov Chains">><</link>>, which are Bayesian networks with a simple linear chain structure.
+
+!! When Bayesian Networks Break Down
+
+''Intractable inference in dense graphs'': Exact inference is NP-hard in general, and the cost scales exponentially with ''treewidth'' — the size of the largest clique in the junction tree. Dense networks with many interconnected variables (treewidth > 20 or so) defeat exact methods, forcing reliance on approximate inference that may not converge or may give poor estimates. A medical diagnosis network with hundreds of interacting symptoms and diseases can easily exceed tractability limits.
+
+''Structure learning from limited data'': With few observations relative to the number of variables, conditional independence tests have low statistical power and score-based methods overfit. The PC algorithm may fail to detect true edges or hallucinate false ones. Worse, the number of possible DAGs grows super-exponentially — for $n$ nodes, there are more than $2^{n(n-1)/2}$ possible graphs — making exhaustive search impossible beyond about 30 variables without strong structural priors.
+
+''Assumption of causal sufficiency and no feedback'': Bayesian networks assume all relevant variables are included (no hidden confounders) and that relationships are acyclic (no feedback loops). In reality, many systems have unmeasured confounders — socioeconomic status affecting both health and behavior — and many real systems have cycles (predator-prey dynamics, economic feedback). Violating either assumption produces a model that misrepresents the true data-generating process, leading to incorrect inferences and dangerous overconfidence.
+
+!! Technical Details
+
+''History'': Judea Pearl introduced the modern framework of Bayesian networks in his 1988 book //Probabilistic Reasoning in Intelligent Systems//, unifying earlier work on influence diagrams and causal graphs.
+
+''Markov blanket'': The ''Markov blanket'' of a node $X$ consists of its parents, children, and co-parents (other parents of its children). Given its Markov blanket, $X$ is conditionally independent of all other variables in the network. This minimal set is crucial for feature selection and local computation.
+
+''Noisy-OR model'': A compact parameterization for nodes with many binary parents. Instead of $2^k$ parameters for $k$ parents, the noisy-OR uses $k$ parameters (one per parent), assuming each cause independently has a chance of producing the effect: $P(X = 0 \mid \text{Pa}) = \prod_{i: \text{Pa}_i = 1} (1 - p_i)$.
+
+''Dynamic Bayesian networks'' (DBNs): Extend Bayesian networks to model temporal processes by "unrolling" the network across time steps. Each time slice is a Bayesian network, with inter-slice edges capturing temporal dependencies. Hidden Markov Models and Kalman filters are special cases of DBNs.
+
+''Causal interpretation'': Pearl's ''do-calculus'' gives Bayesian networks a causal semantics. The ''intervention'' $do(X = x)$ differs from ''observation'' $X = x$: intervention removes all incoming edges to $X$, while observation does not. This distinction is the foundation of modern causal inference.
+
+''Complexity'': Exact inference in Bayesian networks is NP-hard (by reduction from 3-SAT). Approximate inference (even with bounded error) is also NP-hard in the worst case, though practical algorithms work well for many real-world network structures.
+
+!! Quiz
+
+<span id="bn-q1">''1. What does the factorization property of a Bayesian network state?'' <<button "A">><<replace "#bn-q1">>Correct. The joint distribution factors as $P(X_1, \ldots, X_n) = \prod_i P(X_i \mid \text{Pa}(X_i))$. Each variable depends only on its parents, and the full joint is the product of these local conditional distributions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q1">>Incorrect. All variables being independent would mean no edges at all. The factorization allows dependencies — each variable can depend on its parents — but the product of local CPTs replaces the need for a single monolithic joint table.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q1">>Incorrect. The factorization has nothing to do with uniform distributions. It says $P(X_1, \ldots, X_n) = \prod_i P(X_i \mid \text{Pa}(X_i))$, decomposing the joint into local conditional probability tables.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q1">>Incorrect. While Bayes' theorem is related, the factorization property specifically states that the joint distribution equals the product of conditional distributions given parents, which is the chain rule applied with conditional independence assumptions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. The joint distribution equals the product of each variable's conditional distribution given its parents.
+B. All variables in the network are mutually independent.
+C. Every variable follows a uniform distribution.
+D. The joint distribution equals a single application of Bayes' theorem.
+
+<span id="bn-q2">''2. In a collider structure $A \rightarrow M \leftarrow B$, what happens when you observe $M$?'' <<button "A">><<replace "#bn-q2">>Incorrect. In a collider, $A$ and $B$ are independent //before// observing $M$. Observing the collider //opens// the path and makes $A$ and $B$ dependent — the explaining-away effect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q2">>Correct. This is the "explaining away" effect. $A$ and $B$ are marginally independent (the collider blocks the path), but conditioning on $M$ opens the path, creating a dependency. If you know the effect happened and one cause didn't contribute, the other cause becomes more likely.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q2">>Incorrect. It is the opposite: a collider path is blocked by default. Observing the collider node //opens// the path, inducing a dependence between $A$ and $B$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q2">>Incorrect. Observing $M$ does not remove it from the graph. It conditions on $M$, which opens the collider path and makes $A$ and $B$ conditionally dependent.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. $A$ and $B$ become independent.
+B. $A$ and $B$ become conditionally dependent (explaining away).
+C. The path between $A$ and $B$ becomes blocked.
+D. $M$ is removed from the network.
+
+<span id="bn-q3">''3. Why is exact inference in Bayesian networks generally intractable?'' <<button "A">><<replace "#bn-q3">>Incorrect. Bayesian networks handle continuous variables through Gaussian or other parametric models, and discrete variables are the standard case. Intractability comes from the computational cost of summing over hidden variables in dense graphs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q3">>Incorrect. While CPTs can be large, the intractability stems from inference — summing over exponentially many configurations of hidden variables — not from storing the tables themselves.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q3">>Correct. Exact inference requires marginalizing over hidden variables, which involves summing over exponentially many configurations. The cost is exponential in the treewidth of the graph. This has been proven NP-hard by reduction from known hard problems like 3-SAT.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q3">>Incorrect. DAGs are a well-defined mathematical structure and present no inherent computational difficulty. The hardness comes from the inference computation — summing over hidden variable configurations — not from the graph structure itself.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. Bayesian networks cannot represent continuous variables.
+B. The conditional probability tables are too large to store.
+C. Marginalizing over hidden variables requires summing over exponentially many configurations.
+D. Directed acyclic graphs are inherently ill-defined.
+
+<span id="bn-q4">''4. What is the Markov blanket of a node $X$?'' <<button "A">><<replace "#bn-q4">>Incorrect. That describes only the //parents// of $X$. The Markov blanket also includes $X$'s children and the other parents of those children (co-parents). All three groups are needed to shield $X$ from the rest of the network.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q4">>Correct. The Markov blanket of $X$ consists of its parents, its children, and the co-parents of its children. Given the Markov blanket, $X$ is conditionally independent of every other variable in the network. This minimal set is essential for local computation and feature selection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q4">>Incorrect. That includes too many nodes. The Markov blanket is the //minimal// set that renders $X$ independent of everything else: parents, children, and co-parents only — not all ancestors and descendants.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q4">>Incorrect. Nodes without edges are simply isolated. The Markov blanket is a specific set — parents, children, and co-parents — that makes $X$ conditionally independent of the rest of the network.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. All nodes that are parents of $X$.
+B. Parents, children, and co-parents of $X$'s children.
+C. All ancestors and descendants of $X$.
+D. All nodes not connected by an edge to $X$.
+
+<span id="bn-q5">''5. What is a Markov equivalence class?'' <<button "A">><<replace "#bn-q5">>Incorrect. A Markov equivalence class contains different DAGs with the //same// conditional independencies but potentially different edge directions. The same skeleton can yield different independence structures depending on which edges are reversed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q5">>Incorrect. Two DAGs in the same equivalence class have the same skeleton but may differ in edge directions (except at v-structures). They cannot be distinguished from observational data alone because they encode identical independence constraints.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q5">>Correct. DAGs in the same Markov equivalence class have the same skeleton and v-structures, encoding identical conditional independencies. From observational data alone, you cannot tell which DAG in the class generated the data — you need interventional data or domain knowledge to distinguish them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q5">>Incorrect. A Markov equivalence class is about graph structure, not parameter values. It groups DAGs that encode the same conditional independence relationships, regardless of the specific probability values in their CPTs.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. A set of DAGs with identical edge directions.
+B. A set of DAGs with different numbers of nodes.
+C. A set of DAGs that encode the same conditional independence relationships.
+D. A set of DAGs with the same numerical parameters.
+
+<span id="bn-q6">''6. How does the noisy-OR model reduce parameterization?'' <<button "A">><<replace "#bn-q6">>Incorrect. The noisy-OR does not eliminate parents. It assumes each parent independently has a chance of causing the effect, reducing parameters from $2^k$ to $k$ for $k$ parents — one inhibition probability per parent.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q6">>Correct. Instead of specifying all $2^k$ entries for $k$ binary parents, the noisy-OR assumes each active parent independently produces the effect with some probability $p_i$. The probability of the effect //not// occurring is $\prod_{i: \text{Pa}_i=1}(1-p_i)$, requiring only $k$ parameters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q6">>Incorrect. The noisy-OR does not limit the number of parents. It provides a compact parameterization — $k$ parameters instead of $2^k$ — by assuming independent causal mechanisms, regardless of how many parents exist.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q6">>Incorrect. The noisy-OR still produces a proper conditional probability distribution, not a uniform one. It assumes independent causal mechanisms to reduce $2^k$ parameters to $k$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. It removes all but one parent from each node.
+B. It assumes each parent independently contributes to the effect, using $k$ parameters instead of $2^k$.
+C. It limits each node to at most two parents.
+D. It forces all CPT entries to be equal.
+
+<span id="bn-q7">''7. In a chain $A \rightarrow M \rightarrow B$, what effect does observing $M$ have?'' <<button "A">><<replace "#bn-q7">>Correct. In a chain, $M$ mediates the influence of $A$ on $B$. Once you observe $M$, you have all the information about $B$ that $A$ could provide — knowing $A$ adds nothing beyond what $M$ already tells you. The path is blocked, and $A \perp B \mid M$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q7">>Incorrect. In a chain, observing the middle node //blocks// the path. It is colliders ($A \rightarrow M \leftarrow B$) where observing the middle node opens a previously blocked path.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q7">>Incorrect. In a chain, $A$ and $B$ are //not// independent marginally — information flows from $A$ through $M$ to $B$. It is only after conditioning on $M$ that $A$ and $B$ become independent.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q7">>Incorrect. Observing a node conditions on it; it does not reverse causal direction. In the chain $A \rightarrow M \rightarrow B$, conditioning on $M$ blocks information flow and makes $A$ and $B$ conditionally independent.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. $A$ and $B$ become conditionally independent.
+B. $A$ and $B$ become conditionally dependent.
+C. $A$ and $B$ were already independent before observing $M$.
+D. The causal direction reverses.
+
+<span id="bn-q8">''8. What fundamental limitation prevents distinguishing between DAGs in the same Markov equivalence class from observational data?'' <<button "A">><<replace "#bn-q8">>Incorrect. Sample size affects estimation accuracy, but even with infinite data, DAGs in the same Markov equivalence class produce identical distributions and are indistinguishable from observations alone.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bn-q8">>Incorrect. The inference algorithm does not determine what the data can tell you about structure. The limitation is fundamental: equivalent DAGs encode the same independence constraints, so no amount of observational data can distinguish them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bn-q8">>Correct. DAGs in the same Markov equivalence class have the same skeleton and v-structures, so they impose identical conditional independence constraints. Any distribution consistent with one is consistent with all of them. Only interventional data — actively manipulating variables — or strong domain priors can break the equivalence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bn-q8">>Incorrect. Bayesian networks handle both continuous and discrete variables. The limitation of Markov equivalence is structural: different causal orderings can produce the same observational distribution, so the data alone cannot distinguish them.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+A. The sample size is always too small.
+B. The inference algorithm introduces errors.
+C. They encode identical conditional independence relationships, producing the same observational distributions.
+D. Bayesian networks cannot represent continuous variables.
+
+<<include "Footer">>

@@ -1,0 +1,153 @@
+<<include "Header">>
+
+! Multi-Head Attention
+
+[img[assets/multi_head_attention.svg]]
+
+Imagine you are reading a novel and trying to understand a single sentence. One part of your brain tracks //who// is doing the action, another tracks //where// it is happening, a third picks up on the //emotional tone//, and yet another notices a callback to a scene fifty pages ago. You are not reading the sentence once with a single focus — you are reading it several times simultaneously, each reading tuned to a different kind of relationship. Multi-head attention is exactly this: instead of computing a single attention pattern over a sequence, the model runs several independent attention computations in parallel, each with its own learned "lens," and then stitches their findings together into a single rich representation.
+
+---
+
+!! The Core Insight
+
+Single-head <<link "Attention Mechanisms" "Attention Mechanisms">></link>> compute one set of attention weights over the input, which forces every kind of relationship — syntactic, semantic, positional, coreference — into a single weighted average. That is like asking one journalist to cover politics, sports, and weather in one paragraph. ''Multi-head attention'' solves this by splitting the representation into $h$ independent subspaces. Each ''head'' learns its own query, key, and value projections, computes its own attention pattern, and produces its own output. These $h$ outputs are concatenated and projected back to the original dimension.
+
+The result is that different heads specialise. Empirical probing of trained <<link "Transformers" "Transformers">></link>> reveals heads that attend to the previous token, heads that attend to the first token, heads that track syntactic dependencies across long distances, and heads that seem to encode positional information. No explicit supervision forces this specialisation — it emerges from the gradient signal during training, because distributing different relational patterns across heads is the most efficient way to reduce loss.
+
+---
+
+!! Parallel Attention Heads
+
+In <<link "Self-Attention" "Self-Attention">></link>>, a single head computes $\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V$. Multi-head attention runs $h$ copies of this operation, each with //different// learned weight matrices.
+
+Given an input $X \in \mathbb{R}^{n \times d_{\text{model}}}$, each head $i$ first projects into a lower-dimensional subspace:
+
+$$Q_i = X W_i^Q, \quad K_i = X W_i^K, \quad V_i = X W_i^V$$
+
+where $W_i^Q, W_i^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$ and $W_i^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$. The standard choice is $d_k = d_v = d_{\text{model}} / h$, so the total parameter count across all heads is the same as a single full-dimension head.
+
+Each head then computes its own attention independently:
+
+$$\text{head}_i = \text{softmax}\!\left(\frac{Q_i K_i^\top}{\sqrt{d_k}}\right) V_i$$
+
+Because the heads do not share parameters and operate on separate subspaces, they are free to learn entirely different attention patterns. Head 1 might learn a sharp, local pattern (attend to the adjacent token), while Head 7 might learn a broad, diffuse pattern (attend roughly uniformly for context averaging).
+
+---
+
+!! What the Math Is Actually Doing
+
+The outputs from all $h$ heads are concatenated along the feature dimension and passed through a final linear projection:
+
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h) \, W^O$$
+
+where $W^O \in \mathbb{R}^{h \cdot d_v \times d_{\text{model}}}$. This output projection is crucial: it allows the model to //mix// information discovered by different heads. Head 3 might identify that "it" refers to "the cat" while Head 5 notices the verb is in past tense — the output projection $W^O$ learns to combine these signals into a single vector that encodes both facts.
+
+The total computation cost is:
+
+$$\text{FLOPs} \approx 4 \cdot n \cdot d_{\text{model}}^2 + 2 \cdot n^2 \cdot d_{\text{model}}$$
+
+The first term comes from the four linear projections ($W^Q, W^K, W^V, W^O$ across all heads combined). The second term comes from the $n \times n$ attention score computation. When $n < d_{\text{model}}$, projections dominate; when $n > d_{\text{model}}$, the quadratic attention cost dominates — which is why long-context models need techniques like <<link "Flash Attention" "Flash Attention">></link>>.
+
+The scaling factor $1/\sqrt{d_k}$ prevents the dot products from growing large as $d_k$ increases. Without it, the softmax would saturate into near-one-hot distributions, killing gradient flow. With $d_k = d_{\text{model}} / h$, increasing the number of heads //decreases// $d_k$ and thus //increases// the relative scale of attention logits — a tradeoff between head count and per-head expressiveness.
+
+---
+
+!! Multi-Head Attention in Practice
+
+The original "Attention Is All You Need" paper (Vaswani et al., 2017) used $h = 8$ heads with $d_{\text{model}} = 512$, giving $d_k = 64$ per head. Modern large language models have scaled this substantially: GPT-3 uses 96 heads with $d_{\text{model}} = 12288$; LLaMA-2 70B uses 64 heads with $d_{\text{model}} = 8192$.
+
+''<<link "Group Query Attention" "Group Query Attention">></link>>'' (GQA), introduced in LLaMA-2 and adopted by most modern architectures, reduces the number of key-value heads while keeping the full number of query heads. For example, 64 query heads might share only 8 KV heads (an 8:1 ratio). This dramatically reduces the KV cache size during inference — critical for serving long-context models — with minimal quality loss.
+
+''Head pruning'' research shows that many heads can be removed after training with little accuracy loss, suggesting significant redundancy. Michel et al. (2019) found that in some layers, a single head suffices. This has motivated efficient variants and structured pruning strategies.
+
+In practice, multi-head attention is the computational core of every <<link "Transformer" "Transformers">></link>> layer. Each layer applies multi-head self-attention followed by a feed-forward network, and modern models stack 32–128 such layers. The attention mechanism accounts for the majority of memory consumption at long sequence lengths due to the $O(n^2)$ score matrices, motivating optimisations like <<link "Flash Attention" "Flash Attention">></link>> and <<link "Group Query Attention" "Group Query Attention">></link>>.
+
+---
+
+!! When Multi-Head Attention Breaks Down
+
+''Head redundancy and collapse:'' In some training runs, multiple heads converge to nearly identical attention patterns — a phenomenon called ''head collapse''. When this happens, the model wastes capacity: eight heads acting identically are no better than one. This is most common when the learning rate is too high early in training or when $d_k$ is too small, leaving insufficient subspace capacity for differentiation. Regularisation techniques like auxiliary head diversity losses can mitigate this, but they are not standard practice.
+
+''Quadratic memory with sequence length:'' Each head computes an $n \times n$ attention matrix. With $h$ heads and $L$ layers, the total memory for attention scores is $O(L \cdot h \cdot n^2)$, which becomes prohibitive at long sequence lengths. At $n = 32768$ with 32 heads and 16-bit precision, a single layer's attention matrices consume over 2 GB. This is the core motivation for <<link "Flash Attention" "Flash Attention">></link>>, which avoids materialising these matrices, and for sparse attention variants that reduce the effective $n^2$ to $n \cdot k$.
+
+''Interpretability limits:'' While individual heads sometimes learn clean, interpretable patterns (e.g., "attend to the syntactic subject"), many heads learn diffuse or context-dependent patterns that resist simple characterisation. Worse, the output projection $W^O$ mixes head outputs non-linearly with subsequent layers, meaning that the "role" of a head can only be understood in the context of the full residual stream. Claims about what individual heads "do" should be treated with caution — the model's behaviour is a function of all heads jointly, not any single one.
+
+---
+
+!! Technical Details
+
+''Original paper:'' Vaswani et al. (2017), "Attention Is All You Need" (NeurIPS). Introduced multi-head attention as the core mechanism of the Transformer architecture.
+
+''Parameter count per layer:'' Each multi-head attention sublayer has $4 \cdot d_{\text{model}}^2$ parameters (three projection matrices plus the output matrix), assuming $d_k = d_v = d_{\text{model}} / h$ and all heads combined.
+
+''Head dimension tradeoff:'' With $h$ heads and $d_{\text{model}}$ fixed, $d_k = d_{\text{model}} / h$. More heads means finer-grained specialisation but lower per-head capacity. Empirically, $d_k = 64$ or $d_k = 128$ works well across a wide range of model sizes.
+
+''Relative vs. absolute position:'' Multi-head attention is permutation-equivariant without positional encoding. Positional information must be injected via sinusoidal embeddings, learned embeddings, or rotary position embeddings (RoPE). Different heads may learn to use positional information differently.
+
+''Cross-attention variant:'' In encoder-decoder models, the queries come from the decoder and the keys/values come from the encoder output. The multi-head mechanism is identical — only the source of K and V changes. This is the mechanism behind sequence-to-sequence tasks like translation.
+
+''Multi-query attention (MQA):'' An extreme variant where all heads share a single K and V projection. GQA generalises MQA by allowing a configurable number of KV groups between 1 (MQA) and $h$ (standard MHA).
+
+''Attention head probing:'' Clark et al. (2019) and Voita et al. (2019) systematically analysed BERT attention heads, finding heads specialised for direct objects, possessive pronouns, and coreference. However, later work showed these patterns vary across random seeds, suggesting that specialisation is a tendency, not a guarantee.
+
+---
+
+!! Quiz
+
+<span id="mha-q1">''1. Why does multi-head attention use multiple heads instead of a single large attention computation?''
+
+<<button "A. To reduce the total number of parameters">><<replace "#mha-q1">>Incorrect. Multi-head attention uses the same total parameter count as a single head of the same dimension. The benefit is representational, not parameter efficiency.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To allow different heads to attend to different types of relationships in parallel">><<replace "#mha-q1">>Correct! Each head operates in its own subspace and can learn a different attention pattern — one for syntax, another for coreference, another for local context — providing richer representations than a single attention computation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To make the softmax numerically stable">><<replace "#mha-q1">>Incorrect. Numerical stability is handled by the $1/\sqrt{d_k}$ scaling factor, not by the number of heads.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To reduce the sequence length that attention must process">><<replace "#mha-q1">>Incorrect. Each head still attends over the full sequence length. Multi-head attention does not reduce $n$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q2">''2. What is the standard relationship between $d_k$ (head dimension) and $d_{\text{model}}$?''
+
+<<button "A. $d_k = d_{\text{model}}$">><<replace "#mha-q2">>Incorrect. That would mean each head operates on the full dimension, which is the single-head case, not multi-head.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $d_k = d_{\text{model}} / h$">><<replace "#mha-q2">>Correct! The model dimension is divided evenly among the $h$ heads so that $d_k = d_{\text{model}} / h$, keeping total computation comparable to a single full-dimension attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $d_k = d_{\text{model}} \cdot h$">><<replace "#mha-q2">>Incorrect. That would make each head larger than the full model dimension, massively inflating parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $d_k = \sqrt{d_{\text{model}}}$">><<replace "#mha-q2">>Incorrect. The square root appears in the scaling factor $1/\sqrt{d_k}$, not in the relationship between $d_k$ and $d_{\text{model}}$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q3">''3. What does the output projection $W^O$ do?''
+
+<<button "A. It normalises attention weights to sum to 1">><<replace "#mha-q3">>Incorrect. The softmax handles normalisation. $W^O$ operates after all heads have produced their outputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It computes the attention scores for each head">><<replace "#mha-q3">>Incorrect. Attention scores are computed within each head via the $QK^\top$ product, not by $W^O$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It mixes and projects the concatenated head outputs back to $d_{\text{model}}$">><<replace "#mha-q3">>Correct! $W^O$ takes the concatenated outputs from all heads (dimension $h \cdot d_v$) and projects back to $d_{\text{model}}$, allowing information from different heads to interact.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It applies dropout to prevent overfitting">><<replace "#mha-q3">>Incorrect. Dropout is a separate operation. $W^O$ is a learned linear projection.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q4">''4. What is Group Query Attention (GQA)?''
+
+<<button "A. A method where all heads share a single set of key and value projections">><<replace "#mha-q4">>Incorrect. That describes Multi-Query Attention (MQA), which is the extreme case. GQA uses a configurable number of KV groups between 1 and $h$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A variant that groups queries by position to reduce sequence length">><<replace "#mha-q4">>Incorrect. GQA does not modify the sequence length or group by position.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. A variant where multiple query heads share fewer KV heads to reduce KV cache size">><<replace "#mha-q4">>Correct! GQA reduces the number of key-value heads relative to query heads (e.g., 64 query heads sharing 8 KV heads), dramatically shrinking the KV cache during inference with minimal quality degradation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. An attention mechanism that groups tokens by semantic similarity before attending">><<replace "#mha-q4">>Incorrect. GQA modifies the head structure, not how tokens are grouped or selected.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q5">''5. Why is the scaling factor $1/\sqrt{d_k}$ used in the attention score computation?''
+
+<<button "A. To ensure the output vectors have unit norm">><<replace "#mha-q5">>Incorrect. The scaling does not normalise output norms; it operates on the logits before softmax.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To prevent dot products from growing large and causing softmax saturation">><<replace "#mha-q5">>Correct! Without scaling, dot products grow proportionally to $d_k$, pushing softmax outputs toward one-hot distributions. This kills gradients through the softmax. The $1/\sqrt{d_k}$ factor keeps the variance of logits roughly constant regardless of $d_k$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To reduce the total number of floating-point operations">><<replace "#mha-q5">>Incorrect. Dividing by a scalar adds a trivial number of operations; the purpose is numerical, not computational.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To make multi-head attention equivalent to additive attention">><<replace "#mha-q5">>Incorrect. Scaled dot-product attention and additive attention are different mechanisms; the scaling does not make them equivalent.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q6">''6. What is "head collapse" in multi-head attention?''
+
+<<button "A. When attention weights become uniform across all positions">><<replace "#mha-q6">>Incorrect. Uniform attention is a separate problem. Head collapse specifically refers to multiple heads converging to the same pattern.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. When the model removes heads during pruning">><<replace "#mha-q6">>Incorrect. Head pruning is a deliberate intervention. Head collapse is an undesirable training phenomenon.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. When multiple heads converge to nearly identical attention patterns, wasting capacity">><<replace "#mha-q6">>Correct! Head collapse means several heads learn redundant patterns, reducing the effective diversity of the multi-head mechanism and wasting model capacity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. When the output projection $W^O$ has rank deficiency">><<replace "#mha-q6">>Incorrect. While $W^O$ rank issues can occur, head collapse refers specifically to multiple heads learning the same attention pattern.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q7">''7. How many total parameters does the multi-head attention sublayer have (with standard $d_k = d_v = d_{\text{model}} / h$)?''
+
+<<button "A. $h \cdot d_k^2$">><<replace "#mha-q7">>Incorrect. This only accounts for one projection per head and uses $d_k^2$ rather than $d_{\text{model}} \times d_k$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $4 \cdot d_{\text{model}}^2$">><<replace "#mha-q7">>Correct! Three projection matrices ($W^Q, W^K, W^V$, each $d_{\text{model}} \times d_{\text{model}}$ when summed across all heads) plus the output projection $W^O$ ($d_{\text{model}} \times d_{\text{model}}$) gives $4 \cdot d_{\text{model}}^2$ total parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $n^2 \cdot h$">><<replace "#mha-q7">>Incorrect. The $n^2$ term relates to the attention score matrix (which depends on sequence length), not to the learned parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $d_{\text{model}} \cdot h$">><<replace "#mha-q7">>Incorrect. This is far too few parameters; each projection matrix alone has $d_{\text{model}} \times d_k$ entries per head.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mha-q8">''8. In cross-attention (e.g., in an encoder-decoder model), what changes compared to self-attention?''
+
+<<button "A. The number of heads is halved">><<replace "#mha-q8">>Incorrect. Cross-attention typically uses the same number of heads as self-attention.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The queries come from the decoder while keys and values come from the encoder">><<replace "#mha-q8">>Correct! In cross-attention, Q is derived from the decoder hidden states while K and V are derived from the encoder output. The multi-head mechanism itself is identical — only the source of the inputs changes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The softmax is replaced with a sigmoid function">><<replace "#mha-q8">>Incorrect. Cross-attention still uses softmax normalisation. The attention mechanism is the same; only the input sources differ.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The output projection $W^O$ is removed">><<replace "#mha-q8">>Incorrect. Cross-attention retains the output projection. It is structurally identical to self-attention except for where Q, K, V originate.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

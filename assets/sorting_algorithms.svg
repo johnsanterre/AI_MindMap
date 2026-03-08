@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#5C3D1E">Sorting Algorithms</text>
+
+  <!-- Divider line -->
+  <line x1="60" y1="56" x2="740" y2="56" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Unsorted array -->
+  <text x="80" y="90" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">Unsorted</text>
+  <g transform="translate(160, 70)">
+    <rect x="0" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="22" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">38</text>
+    <rect x="50" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="72" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">27</text>
+    <rect x="100" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="122" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">43</text>
+    <rect x="150" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="172" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">3</text>
+    <rect x="200" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="222" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">9</text>
+    <rect x="250" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="272" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">82</text>
+    <rect x="300" y="0" width="44" height="28" fill="#C4A87A" stroke="#5C3D1E" stroke-width="1.2" rx="3"/>
+    <text x="322" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">10</text>
+  </g>
+
+  <!-- Arrow -->
+  <line x1="540" y1="84" x2="580" y2="84" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- Sorted array -->
+  <text x="596" y="90" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">Sorted</text>
+  <g transform="translate(160, 100)">
+    <rect x="440" y="0" width="44" height="28" fill="#7C2530" stroke="#5C3D1E" stroke-width="1" rx="3" opacity="0.15"/>
+    <text x="462" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">3</text>
+    <rect x="490" y="0" width="44" height="28" fill="#7C2530" stroke="#5C3D1E" stroke-width="1" rx="3" opacity="0.15"/>
+    <text x="512" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">9</text>
+    <rect x="540" y="0" width="44" height="28" fill="#7C2530" stroke="#5C3D1E" stroke-width="1" rx="3" opacity="0.15"/>
+    <text x="562" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">10</text>
+  </g>
+
+  <!-- Complexity comparison chart -->
+  <text x="400" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E">Time Complexity Comparison</text>
+
+  <!-- Column headers -->
+  <text x="180" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Algorithm</text>
+  <text x="370" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Best</text>
+  <text x="510" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Average</text>
+  <text x="660" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Worst</text>
+  <line x1="80" y1="195" x2="740" y2="195" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Bubble Sort row -->
+  <rect x="80" y="200" width="660" height="28" fill="#C4A87A" fill-opacity="0.15" rx="3"/>
+  <text x="180" y="219" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Bubble Sort</text>
+  <text x="370" y="219" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">O(n)</text>
+  <text x="510" y="219" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">O(n²)</text>
+  <text x="660" y="219" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">O(n²)</text>
+
+  <!-- Merge Sort row -->
+  <rect x="80" y="232" width="660" height="28" fill="none" rx="3"/>
+  <text x="180" y="251" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Merge Sort</text>
+  <text x="370" y="251" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+  <text x="510" y="251" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+  <text x="660" y="251" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+
+  <!-- Quick Sort row -->
+  <rect x="80" y="264" width="660" height="28" fill="#C4A87A" fill-opacity="0.15" rx="3"/>
+  <text x="180" y="283" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Quick Sort</text>
+  <text x="370" y="283" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+  <text x="510" y="283" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+  <text x="660" y="283" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">O(n²)</text>
+
+  <!-- Heap Sort row -->
+  <rect x="80" y="296" width="660" height="28" fill="none" rx="3"/>
+  <text x="180" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Heap Sort</text>
+  <text x="370" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+  <text x="510" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+  <text x="660" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O(n log n)</text>
+
+  <!-- Radix Sort row -->
+  <rect x="80" y="328" width="660" height="28" fill="#C4A87A" fill-opacity="0.15" rx="3"/>
+  <text x="180" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Radix Sort</text>
+  <text x="370" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">O(nk)</text>
+  <text x="510" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">O(nk)</text>
+  <text x="660" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">O(nk)</text>
+
+  <!-- Lower bound note -->
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#7C2530">Comparison-based lower bound: O(n log n)</text>
+</svg>

@@ -1,0 +1,153 @@
+<<include "Header">>
+
+! Eulerian and Hamiltonian Paths
+
+<img src="assets/eulerian_hamiltonian_paths.svg" alt="Side-by-side comparison: Eulerian path visiting every edge once, Hamiltonian path visiting every vertex once" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a postal worker who must drive down every street in a neighborhood exactly once before returning to the post office. Now imagine a traveling salesperson who must visit every city exactly once. Both problems involve traversing a graph, but they ask fundamentally different questions — and that difference spans a chasm in computational complexity. The ''Eulerian path'' asks whether you can walk every //edge// exactly once. The ''Hamiltonian path'' asks whether you can visit every //vertex// exactly once. Euler's version has an elegant, instant test. Hamilton's version is one of the hardest problems in all of computer science.
+
+!! The Core Insight
+
+The deep asymmetry is this: edges are ''local'' structure, vertices are ''global'' structure. Whether you can traverse every edge depends only on vertex degrees — a property you can check by looking at each node independently. Whether you can visit every vertex depends on the //entire topology// of the graph, and no local check suffices. This is why Eulerian paths are solvable in polynomial time while Hamiltonian paths are [[NP-Complete|NP-Completeness]]. Two questions that //sound// almost identical live in completely different complexity universes.
+
+!! K&#246;nigsberg Bridges and Euler's Theorem
+
+In 1736, Leonhard Euler asked whether the citizens of K&#246;nigsberg could walk across all seven bridges of the Pregel River exactly once. He abstracted the problem: landmasses became vertices, bridges became edges. His answer — //no// — launched [[Graph Theory|Graph Theory]].
+
+''Euler's Theorem'' gives a complete characterization:
+
+* A connected graph has an ''Eulerian circuit'' (closed path visiting every edge once) if and only if every vertex has ''even degree''.
+* A connected graph has an ''Eulerian path'' (open, start &#8800; end) if and only if exactly two vertices have ''odd degree''. Those two vertices must be the start and end points.
+
+K&#246;nigsberg had four vertices all with odd degree, so no Eulerian path existed. The proof is constructive: Hierholzer's algorithm (1873) finds an Eulerian circuit in $O(|E|)$ time by stitching together cycles greedily. This is //linear// in the number of edges — about as efficient as an algorithm can be.
+
+!! Hamiltonian Paths and the Complexity Barrier
+
+William Rowan Hamilton posed the complementary question in 1857: can you visit every vertex exactly once? Unlike Euler's clean degree criterion, no simple necessary-and-sufficient condition exists for Hamiltonian paths. The problem is ''NP-complete'', meaning:
+
+* Given a claimed solution, you can //verify// it in polynomial time (just check that every vertex appears exactly once).
+* No known algorithm can //find// a solution faster than exponential time in the worst case.
+
+Two classical ''sufficient'' conditions provide partial answers:
+
+''Dirac's Theorem (1952):'' If every vertex in a graph with $n \geq 3$ vertices has degree $\geq n/2$, then the graph has a Hamiltonian cycle.
+
+''Ore's Theorem (1960):'' If for every pair of non-adjacent vertices $u, v$ we have $\deg(u) + \deg(v) \geq n$, then the graph has a Hamiltonian cycle. (Dirac's theorem is a special case.)
+
+These are //sufficient but not necessary// — many graphs with lower degrees still have Hamiltonian paths. The gap between sufficient conditions and the general problem is where the NP-completeness lives.
+
+!! What the Math Is Actually Doing
+
+''Eulerian path existence'' reduces to a degree-parity check. Define the degree sequence $d_1, d_2, \ldots, d_n$. Then:
+
+$$\text{Eulerian circuit exists} \iff \forall\, i: d_i \equiv 0 \pmod{2}$$
+
+$$\text{Eulerian path exists} \iff |\{i : d_i \equiv 1 \pmod{2}\}| \in \{0, 2\}$$
+
+Both checks run in $O(n)$ time. Hierholzer's algorithm then constructs the path in $O(|E|)$ by maintaining a stack of unused edges.
+
+For ''Hamiltonian paths'', the best exact algorithm uses [[Dynamic Programming|Dynamic Programming]] over subsets (Bellman-Held-Karp, 1962):
+
+$$\text{dp}[S][v] = \begin{cases} \text{true} & \text{if there is a path visiting exactly the vertices in } S \text{ ending at } v \end{cases}$$
+
+$$\text{dp}[S][v] = \bigvee_{u \in S \setminus \{v\},\, (u,v) \in E} \text{dp}[S \setminus \{v\}][u]$$
+
+This runs in $O(2^n \cdot n^2)$ time and $O(2^n \cdot n)$ space — exponential, but far better than the na&#239;ve $O(n!)$ brute force. For the ''Travelling Salesman Problem'' (TSP), the same DP framework minimizes total edge weight over all Hamiltonian cycles.
+
+!! Connections to ML and Applied CS
+
+''De Bruijn sequences and genomics:'' A de Bruijn sequence of order $k$ on alphabet $\Sigma$ contains every possible $k$-mer as a substring. Finding it reduces to an ''Eulerian path'' in the de Bruijn graph, where nodes are $(k{-}1)$-mers and edges represent $k$-mers. Modern genome assemblers (Velvet, SPAdes) use exactly this construction — DNA sequencing is, at its core, an Euler path problem.
+
+''TSP heuristics in route optimization:'' The Hamiltonian cycle problem generalizes to TSP, which drives logistics, circuit board drilling, and delivery routing. Since exact solutions are intractable for large instances, ML approaches have emerged: pointer networks (Vinyals et al., 2015) use attention-based sequence-to-sequence models to output city orderings; reinforcement learning methods (Bello et al., 2016) train policies that construct tours incrementally. Graph neural networks encode city coordinates and learn edge selection probabilities, approaching within 1-2% of optimal on benchmarks with thousands of cities.
+
+''[[Combinatorics|Combinatorics]] in algorithm design:'' Both problems illustrate how [[Graph Theory|Graph Theory]] structures appear throughout ML — from constructing training data sequences (Eulerian paths through data graphs) to solving assignment and routing problems that arise in distributed training and resource allocation.
+
+!! When Eulerian/Hamiltonian Analysis Breaks Down
+
+''(1) Directed and mixed graphs complicate the degree conditions.'' Euler's theorem for directed graphs requires in-degree = out-degree at every vertex (for a circuit), which is more restrictive. Mixed graphs (some directed, some undirected edges) make even the Eulerian path problem NP-complete. Many real-world networks are directed, so the clean undirected theory does not directly apply.
+
+''(2) Hamiltonian sufficient conditions are far from tight.'' Dirac's and Ore's theorems demand high minimum degree ($\geq n/2$), but real-world graphs are typically sparse. A social network with millions of nodes and average degree 100 fails these conditions massively, yet may well contain Hamiltonian paths. The theorems provide no guidance for sparse graphs, which is where most practical instances live.
+
+''(3) Approximate and heuristic TSP solutions lack worst-case guarantees on general graphs.'' Christofides' algorithm guarantees a 3/2-approximation for metric TSP, but general (non-metric) TSP has no constant-factor approximation unless P = NP. ML-based solvers perform well empirically but can fail catastrophically on adversarial or out-of-distribution instances, and their learned heuristics do not transfer reliably across graph families.
+
+!! Technical Details
+
+''Historical origins:'' Euler (1736) solved the K&#246;nigsberg bridges problem, founding both graph theory and topology. Hamilton (1857) invented the "Icosian game" — finding a Hamiltonian cycle on a dodecahedron — and sold it commercially as a puzzle.
+
+''Hierholzer's algorithm (1873):'' Start at any vertex, follow edges (removing them) until returning to start, forming a cycle. If unused edges remain, pick a vertex on the current cycle with unused edges, form a new cycle, and splice it in. Repeat until all edges used. Time: $O(|E|)$.
+
+''Chinese Postman Problem:'' The optimization version of the Eulerian problem — find the minimum-weight closed walk covering every edge at least once. For undirected graphs, this is solvable in polynomial time by finding a minimum-weight perfect matching on odd-degree vertices and duplicating those edges.
+
+''Held-Karp bound:'' The linear programming relaxation of TSP (minimum spanning 1-tree) provides a lower bound within about 1% of optimal for random Euclidean instances. This bound guides branch-and-bound solvers like Concorde, which has solved instances with 85,900 cities to provable optimality.
+
+''Christofides-Serdyukov algorithm (1976):'' For metric TSP, compute MST, find minimum-weight perfect matching on odd-degree MST vertices, combine, find Eulerian circuit, shortcut repeated vertices. Guarantees tour weight $\leq \frac{3}{2} \cdot \text{OPT}$. This stood as the best approximation ratio for 45 years until Karlin, Klein, and Gharan (2021) achieved $\frac{3}{2} - \epsilon$.
+
+See also: [[Graph Theory|Graph Theory]], [[NP-Completeness|NP-Completeness]], [[Combinatorics|Combinatorics]], [[Dynamic Programming|Dynamic Programming]].
+
+!! Quiz
+
+<span id="ehp-q1">What condition guarantees a connected undirected graph has an Eulerian circuit?</span>
+A. Every vertex has degree at least 2
+B. Every vertex has even degree
+C. The graph has an even number of edges
+D. The graph is bipartite
+
+<<button "A">><<replace "#ehp-q1">>Incorrect. Degree at least 2 ensures no pendant vertices but does not guarantee an Eulerian circuit. A triangle with a pendant edge has minimum degree 1, but removing the pendant still leaves odd-degree vertices.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q1">>Correct. Euler's theorem states that a connected graph has an Eulerian circuit if and only if every vertex has even degree. Each time the path enters a vertex, it must also leave, consuming edges in pairs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q1">>Incorrect. An even number of edges is necessary (since the sum of degrees = $2|E|$ is always even) but not sufficient. The parity of individual vertex degrees is what matters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q1">>Incorrect. Bipartiteness is unrelated to Eulerian circuits. A bipartite graph can lack an Eulerian circuit (e.g., a path of length 2), and a non-bipartite graph can have one (e.g., a triangle).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q2">Why could the citizens of K&#246;nigsberg not walk all seven bridges exactly once?</span>
+A. The graph was disconnected
+B. All four landmasses had odd degree
+C. The graph had too many edges
+D. Two vertices had degree greater than 4
+
+<<button "A">><<replace "#ehp-q2">>Incorrect. The K&#246;nigsberg graph was connected — you could reach any landmass from any other. Connectivity is necessary but not sufficient for an Eulerian path.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q2">>Correct. All four vertices had odd degree (degrees 3, 3, 3, and 5). An Eulerian path requires at most 2 odd-degree vertices, and a circuit requires 0. With 4 odd-degree vertices, neither exists.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q2">>Incorrect. The number of edges (7) is not the issue. Graphs with 7 edges can certainly have Eulerian paths — it depends on the degree sequence, not the edge count.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q2">>Incorrect. Having high-degree vertices does not prevent Eulerian paths. The issue is the //parity// of degrees — odd vs. even — not their magnitude.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q3">What does Dirac's theorem guarantee?</span>
+A. A graph with $n \geq 3$ vertices where every vertex has degree $\geq n/2$ has a Hamiltonian cycle
+B. Every connected graph has a Hamiltonian path
+C. A graph with even degree at every vertex has a Hamiltonian cycle
+D. A graph with $n$ vertices and $> n^2/4$ edges has a Hamiltonian path
+
+<<button "A">><<replace "#ehp-q3">>Correct. Dirac's theorem (1952) provides a sufficient condition: if every vertex has degree at least $n/2$, the graph must contain a Hamiltonian cycle. This is a //sufficient// but not //necessary// condition — many sparser graphs also have Hamiltonian cycles.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q3">>Incorrect. Not every connected graph has a Hamiltonian path. The Petersen graph, for example, is 3-regular and connected but has no Hamiltonian cycle.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q3">>Incorrect. Even degree at every vertex guarantees an //Eulerian// circuit, not a Hamiltonian one. These are fundamentally different properties.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q3">>Incorrect. While Erd&#337;s-Gallai type results connect edge count to Hamiltonian properties, Dirac's theorem is specifically about //minimum vertex degree//, not total edge count.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q4">What is the time complexity of the Bellman-Held-Karp dynamic programming algorithm for the Hamiltonian path problem?</span>
+A. $O(n^3)$
+B. $O(n!)$
+C. $O(2^n \cdot n^2)$
+D. $O(n^2 \log n)$
+
+<<button "A">><<replace "#ehp-q4">>Incorrect. $O(n^3)$ would make the problem polynomial-time solvable, contradicting its NP-completeness (unless P = NP). The exponential factor $2^n$ is unavoidable in exact algorithms.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q4">>Incorrect. $O(n!)$ is the brute-force complexity of trying all permutations. Bellman-Held-Karp improves on this dramatically by using subset-based DP, trading space for time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q4">>Correct. The algorithm maintains a table indexed by subsets of vertices ($2^n$ entries) and current endpoint ($n$ choices), with $O(n)$ transitions per entry, giving $O(2^n \cdot n^2)$ total time and $O(2^n \cdot n)$ space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q4">>Incorrect. $O(n^2 \log n)$ is polynomial and would imply P = NP. No polynomial algorithm is known for the Hamiltonian path problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q5">How do modern genome assemblers use Eulerian paths?</span>
+A. They model DNA fragments as vertices and find Hamiltonian paths through them
+B. They build de Bruijn graphs where $k$-mers are edges and $(k{-}1)$-mers are nodes, then find Eulerian paths
+C. They use Euler's formula $V - E + F = 2$ to count genomic regions
+D. They compute minimum spanning trees of sequence similarity graphs
+
+<<button "A">><<replace "#ehp-q5">>Incorrect. Early assemblers (like the original Human Genome Project approach) did model reads as vertices, making it a Hamiltonian path problem — which was computationally expensive. Modern assemblers switched to the Eulerian formulation precisely to avoid this.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q5">>Correct. In a de Bruijn graph, nodes are $(k{-}1)$-mers and edges represent $k$-mers (connecting prefix to suffix). The genome corresponds to an Eulerian path through this graph — and since Eulerian paths can be found in linear time, this is vastly more efficient than the Hamiltonian alternative.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q5">>Incorrect. Euler's polyhedral formula ($V - E + F = 2$) is from topology, not graph traversal. It has no direct role in genome assembly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q5">>Incorrect. Minimum spanning trees are used in phylogenetics but not in the core assembly step. Assembly requires reconstructing the full sequence, which is a path problem, not a tree problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q6">What approximation ratio does the Christofides-Serdyukov algorithm guarantee for metric TSP?</span>
+A. 2
+B. 3/2
+C. 1 + $\epsilon$ for any $\epsilon > 0$
+D. No constant ratio is possible
+
+<<button "A">><<replace "#ehp-q6">>Incorrect. A factor-2 approximation is achievable by the simpler "double the MST" approach. Christofides improves on this by using minimum-weight perfect matching on odd-degree vertices instead of doubling all edges.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q6">>Correct. Christofides (1976) guarantees a tour of weight $\leq \frac{3}{2} \cdot \text{OPT}$ for metric TSP. The key insight is combining an MST with a minimum-weight matching on odd-degree MST vertices, then finding an Eulerian circuit and shortcutting repeated vertices.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q6">>Incorrect. A $(1+\epsilon)$-approximation scheme (PTAS) exists for Euclidean TSP (Arora, Mitchell, 1998), but Christofides works for the broader class of metric TSP and achieves exactly 3/2, not arbitrarily close to 1.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q6">>Incorrect. No constant ratio is possible for //general// (non-metric) TSP, but for //metric// TSP (satisfying the triangle inequality), constant-factor approximations are achievable, with 3/2 being the best known.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q7">Which statement correctly distinguishes Eulerian and Hamiltonian path complexity?</span>
+A. Both are solvable in polynomial time
+B. Both are NP-complete
+C. Eulerian paths are polynomial-time; Hamiltonian paths are NP-complete
+D. Eulerian paths are NP-complete; Hamiltonian paths are polynomial-time
+
+<<button "A">><<replace "#ehp-q7">>Incorrect. This is only half right. Eulerian paths are polynomial (even linear) time, but Hamiltonian paths are NP-complete. The stark contrast between these two similar-sounding problems is one of the most instructive examples in complexity theory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q7">>Incorrect. Eulerian path existence can be checked by examining vertex degrees in $O(n)$ time, and the path itself found in $O(|E|)$. Only the Hamiltonian version is NP-complete.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q7">>Correct. Eulerian paths require only a degree-parity check ($O(n)$) and construction via Hierholzer's algorithm ($O(|E|)$). Hamiltonian paths are NP-complete — no polynomial algorithm is known, and finding one would prove P = NP.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q7">>Incorrect. This reverses the complexity. Edges (Eulerian) are the easy case; vertices (Hamiltonian) are the hard case.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ehp-q8">In the Bellman-Held-Karp DP for Hamiltonian paths, what does the state $\text{dp}[S][v]$ represent?</span>
+A. The shortest path from source to $v$ using at most $|S|$ edges
+B. Whether there exists a path visiting exactly the vertices in subset $S$, ending at vertex $v$
+C. The number of Eulerian paths through the subgraph induced by $S$
+D. The minimum spanning tree weight of the subgraph on vertex set $S$
+
+<<button "A">><<replace "#ehp-q8">>Incorrect. That describes Bellman-Ford-style shortest path DP, not the Hamiltonian path formulation. The key distinction is that Hamiltonian DP tracks //which// vertices have been visited (the subset $S$), not just how many.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ehp-q8">>Correct. $\text{dp}[S][v]$ is true if there exists a Hamiltonian path through exactly the vertices in $S$ that ends at $v$. The recurrence tries extending from every neighbor $u \in S$ via $\text{dp}[S \setminus \{v\}][u]$. The exponential $2^n$ factor comes from enumerating all subsets $S$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ehp-q8">>Incorrect. Counting Eulerian paths is a separate problem (and #P-complete for directed graphs). The Held-Karp DP addresses Hamiltonian paths, not Eulerian ones.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ehp-q8">>Incorrect. Minimum spanning tree computation does not require subset enumeration — Kruskal's or Prim's algorithm runs in polynomial time. The subset-based DP is specific to the Hamiltonian/TSP problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

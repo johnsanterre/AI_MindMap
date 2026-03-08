@@ -1,0 +1,136 @@
+<<include "Header">>
+! Principal Component Analysis
+[img[assets/pca.svg]]
+
+Imagine you are photographing a three-dimensional sculpture. From most angles, the photo looks like a confusing blob. But there is one particular angle where the sculpture's shape is most clearly visible — where the silhouette captures the most detail. ''Principal Component Analysis'' (PCA) does exactly this for high-dimensional data: it finds the "camera angle" that reveals the most structure, then the next-best angle perpendicular to the first, and so on. Each of these angles is a //principal component//, and together they let you compress a sprawling dataset into its most informative lower-dimensional shadow.
+
+!! The Core Insight
+
+Most real-world datasets contain features that are correlated — height and weight tend to move together, for example. PCA exploits this redundancy. It rotates the coordinate system so the new axes (principal components) align with the directions of greatest ''variance'' in the data. The first principal component captures the single direction along which the data is most spread out. The second captures the most spread in a direction //perpendicular// to the first, and so on. Because correlated features share information, a handful of principal components often capture the vast majority of the total variance, letting you discard the rest with minimal information loss.
+
+This is fundamentally a change of basis: PCA does not throw away data points — it re-expresses every point in a new coordinate system where the axes are ranked by importance. Dimensionality reduction happens when you choose to keep only the top $k$ components.
+
+!! Eigenvectors and Variance Maximization
+
+The mathematical heart of PCA lies in the <<link "eigenvalue decomposition" "Eigenvalues and Eigenvectors">><</link>> of the data's <<link "covariance matrix" "Covariance Matrix">><</link>>. Given a data matrix $X$ (centered so each feature has zero mean), the covariance matrix is:
+
+$$C = \frac{1}{n-1} X^\top X$$
+
+Each eigenvector of $C$ defines a principal component direction, and its corresponding eigenvalue tells you how much variance that component captures. The eigenvector with the //largest// eigenvalue is PC1, the next-largest is PC2, and so on.
+
+Why eigenvectors? Consider the problem: find a unit vector $\mathbf{w}$ that maximizes the variance of the projected data, $\text{Var}(\mathbf{w}^\top X) = \mathbf{w}^\top C \mathbf{w}$. Using a Lagrange multiplier to enforce $\|\mathbf{w}\| = 1$, the optimality condition becomes $C\mathbf{w} = \lambda \mathbf{w}$ — the definition of an eigenvector. The maximum variance equals the eigenvalue $\lambda$.
+
+PCA can also be computed via the <<link "Singular Value Decomposition" "SVD">><</link>> of $X$ directly, which is numerically more stable: $X = U \Sigma V^\top$, where the columns of $V$ are the principal component directions and $\sigma_i^2 / (n-1)$ gives the variance along each component.
+
+!! What the Math Is Actually Doing
+
+''Step 1: Center the data.'' Subtract the mean of each feature so the cloud is centered at the origin:
+
+$$\tilde{X} = X - \mathbf{1}\boldsymbol{\mu}^\top$$
+
+''Step 2: Compute the covariance matrix'' (or go straight to SVD):
+
+$$C = \frac{1}{n-1}\tilde{X}^\top \tilde{X}$$
+
+''Step 3: Eigendecompose.'' Solve $C = V \Lambda V^\top$ where $\Lambda = \text{diag}(\lambda_1, \lambda_2, \ldots, \lambda_d)$ with $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_d$.
+
+''Step 4: Project.'' Keep the top $k$ eigenvectors $V_k$ and project:
+
+$$Z = \tilde{X} V_k \quad \in \mathbb{R}^{n \times k}$$
+
+The ''explained variance ratio'' for component $i$ is $\lambda_i / \sum_j \lambda_j$. A common heuristic is to keep enough components to explain 95% of total variance.
+
+''Reconstruction'' from $k$ components introduces an approximation error:
+
+$$\hat{X} = Z V_k^\top + \mathbf{1}\boldsymbol{\mu}^\top, \quad \text{error} = \sum_{i=k+1}^{d} \lambda_i$$
+
+This makes PCA the optimal linear <<link "dimensionality reduction" "Dimensionality Reduction">><</link>> in the least-squares sense — no other $k$-dimensional linear subspace yields a smaller reconstruction error.
+
+!! PCA in Practice
+
+''Standardize first.'' If features have different units (e.g., meters vs. kilograms), PCA on the raw covariance matrix will be dominated by the feature with the largest scale. Standardizing to unit variance (using the correlation matrix) is usually essential.
+
+''Choosing $k$.'' Three common approaches: (1) the //scree plot// — graph eigenvalues and look for an "elbow"; (2) cumulative explained variance — pick $k$ where you cross a threshold like 90–95%; (3) cross-validation on a downstream task.
+
+''Speed.'' Full eigendecomposition costs $O(d^3)$. For large $d$, randomized SVD or iterative methods (Lanczos, power iteration) compute only the top $k$ components in $O(ndk)$ time.
+
+''Common applications:'' noise reduction (discard low-variance components), visualization (project to 2–3 dims), decorrelation as a preprocessing step for models that assume uncorrelated inputs, and compression (faces, spectra, gene expression).
+
+!! When PCA Breaks Down
+
+''1. Nonlinear structure.'' PCA finds linear axes. If data lies on a curved manifold (e.g., a Swiss roll), PCA will fail to unroll it. <<link "Kernel PCA" "Kernel PCA">><</link>> addresses this by first mapping data into a higher-dimensional feature space via a kernel function, then performing PCA there.
+
+''2. Outlier sensitivity.'' Because PCA maximizes variance, a single outlier can dramatically rotate the principal components to accommodate it. Robust PCA variants use the median or trimmed covariance, and robust methods like PCP (Principal Component Pursuit) decompose the data into a low-rank component plus a sparse outlier matrix.
+
+''3. Interpretability loss.'' Each principal component is a linear combination of //all// original features. When you need to know which individual features matter, PCA's mixed components can be opaque. Sparse PCA adds an $\ell_1$ penalty to force most loadings to zero, yielding components that depend on only a few features.
+
+!! Technical Details
+
+* ''Computational complexity:'' Full decomposition is $O(\min(nd^2, n^2d))$; randomized SVD for top $k$ components is $O(ndk)$.
+* ''PCA is equivalent to'' minimizing reconstruction error $\|X - X V_k V_k^\top\|_F^2$.
+* ''Probabilistic PCA (PPCA):'' Models data as $\mathbf{x} = W\mathbf{z} + \boldsymbol{\mu} + \boldsymbol{\epsilon}$, where $\mathbf{z} \sim \mathcal{N}(0, I)$ and $\boldsymbol{\epsilon} \sim \mathcal{N}(0, \sigma^2 I)$. Maximum likelihood recovers PCA; also handles missing data via EM.
+* ''Incremental PCA:'' Processes data in mini-batches for datasets that do not fit in memory.
+* ''Whitening:'' After PCA projection, dividing each component by $\sqrt{\lambda_i}$ yields uncorrelated, unit-variance features — useful as preprocessing for neural networks and ICA.
+* ''Relationship to SVD:'' The right singular vectors of the centered data matrix are the principal component directions; the singular values relate to eigenvalues via $\lambda_i = \sigma_i^2 / (n-1)$.
+* ''PCA on the correlation matrix'' is equivalent to PCA on standardized (z-scored) data and should be preferred when features have different units or vastly different scales.
+* ''Kernel PCA'' uses the kernel trick to compute principal components in an implicit high-dimensional feature space, capturing nonlinear structure at the cost of an $n \times n$ kernel matrix.
+
+!! Quiz
+
+<span id="pca-q1">''1. What does PCA find in a dataset?''
+
+<<button "A) The features with the highest mean values">><<replace "#pca-q1">>Incorrect. PCA is concerned with variance, not means. In fact, the data is mean-centered before PCA begins.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The orthogonal directions of maximum variance">><<replace "#pca-q1">>Correct! PCA identifies orthogonal axes (principal components) ordered by the amount of variance they capture.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Clusters of similar data points">><<replace "#pca-q1">>Incorrect. PCA does not perform clustering — it finds directions of maximum variance regardless of cluster structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The nonlinear manifold underlying the data">><<replace "#pca-q1">>Incorrect. PCA is a strictly linear method. Nonlinear manifold discovery requires methods like Kernel PCA or t-SNE.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q2">''2. Why is data centered (mean-subtracted) before performing PCA?''
+
+<<button "A) To make all eigenvalues positive">><<replace "#pca-q2">>Incorrect. Eigenvalues of a covariance matrix are non-negative regardless of centering. Centering ensures the covariance matrix correctly measures spread around the mean.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) To ensure the covariance matrix captures variance rather than the location of the mean">><<replace "#pca-q2">>Correct! Without centering, $X^\top X / (n-1)$ conflates variance with the squared mean, giving misleading principal components.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) To remove outliers from the dataset">><<replace "#pca-q2">>Incorrect. Centering shifts data but does not remove any points. Outliers remain after centering.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) To reduce the number of features">><<replace "#pca-q2">>Incorrect. Centering preserves all features and dimensions — only projection onto fewer components reduces dimensionality.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q3">''3. The eigenvalue $\lambda_i$ of the covariance matrix tells you:''
+
+<<button "A) The mean of the $i$-th feature">><<replace "#pca-q3">>Incorrect. Eigenvalues relate to variance captured by each principal component, not feature means.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The number of data points projected onto component $i$">><<replace "#pca-q3">>Incorrect. All data points project onto every component. The eigenvalue measures how much variance that component explains.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The variance of the data along principal component $i$">><<replace "#pca-q3">>Correct! The eigenvalue $\lambda_i$ equals the variance of the data when projected onto the $i$-th eigenvector.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The reconstruction error when using $i$ components">><<replace "#pca-q3">>Incorrect. The reconstruction error from using $k$ components equals the sum of the //discarded// eigenvalues $\sum_{i=k+1}^d \lambda_i$, not a single eigenvalue.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q4">''4. You run PCA on data where one feature is in meters and another in millimeters. What is likely to happen?''
+
+<<button "A) PCA will correctly identify the most important direction">><<replace "#pca-q4">>Incorrect. The millimeter feature has variance roughly $10^6$ times larger purely due to scale, so PC1 will align almost entirely with it regardless of the actual data structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) PCA will be dominated by the millimeter feature due to its larger scale">><<replace "#pca-q4">>Correct! PCA maximizes variance, and unscaled features with larger units dominate. You should standardize features first or use the correlation matrix.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) PCA will fail with a numerical error">><<replace "#pca-q4">>Incorrect. PCA will still run, but it will produce misleading results because scale differences dominate the variance structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The eigenvalues will all be equal">><<replace "#pca-q4">>Incorrect. Unequal scales typically make eigenvalues very unequal, but in a way that reflects scale rather than meaningful data structure.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q5">''5. How does PCA relate to the Singular Value Decomposition (SVD)?''
+
+<<button "A) They are unrelated methods">><<replace "#pca-q5">>Incorrect. PCA and SVD are intimately connected — the right singular vectors of the centered data matrix are the principal component directions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) SVD of the centered data gives the same principal components, and is numerically more stable">><<replace "#pca-q5">>Correct! Writing $\tilde{X} = U\Sigma V^\top$, the columns of $V$ are the PC directions and $\lambda_i = \sigma_i^2/(n-1)$. SVD avoids explicitly forming the covariance matrix.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) SVD can only be used for square matrices">><<replace "#pca-q5">>Incorrect. SVD applies to any $m \times n$ matrix, square or rectangular.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) PCA uses SVD only when the data is sparse">><<replace "#pca-q5">>Incorrect. SVD can be used for PCA on any dataset, dense or sparse. It is generally preferred for numerical stability.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q6">''6. What is the main limitation of standard PCA on data that lies on a curved manifold?''
+
+<<button "A) PCA cannot handle more than three dimensions">><<replace "#pca-q6">>Incorrect. PCA works in any number of dimensions. Its limitation is linearity, not dimensionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) PCA only finds linear subspaces and cannot capture nonlinear structure">><<replace "#pca-q6">>Correct! PCA projects onto flat, linear subspaces. A curved manifold (like a Swiss roll) requires nonlinear methods such as Kernel PCA.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) PCA requires labels for each data point">><<replace "#pca-q6">>Incorrect. PCA is an unsupervised method and uses no labels at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) PCA is too computationally expensive for manifold data">><<replace "#pca-q6">>Incorrect. Computational cost is not the issue — PCA is fast but simply cannot represent nonlinear structure.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q7">''7. In probabilistic PCA, the generative model assumes $\mathbf{x} = W\mathbf{z} + \boldsymbol{\mu} + \boldsymbol{\epsilon}$. What distribution is placed on the latent variable $\mathbf{z}$?''
+
+<<button "A) Uniform over $[0, 1]^k$">><<replace "#pca-q7">>Incorrect. Probabilistic PCA uses a Gaussian prior, not a uniform one.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A standard normal $\mathcal{N}(0, I)$">><<replace "#pca-q7">>Correct! The latent variables follow a standard multivariate normal distribution. Maximum likelihood estimation of $W$ then recovers the PCA solution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A Bernoulli distribution">><<replace "#pca-q7">>Incorrect. Bernoulli distributions produce binary latent variables. Probabilistic PCA uses continuous Gaussian latent variables.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A Laplace distribution for sparsity">><<replace "#pca-q7">>Incorrect. A Laplace prior would induce sparse components (related to sparse PCA / ICA), but standard probabilistic PCA uses a Gaussian prior.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pca-q8">''8. After PCA projection, "whitening" additionally:''
+
+<<button "A) Removes the mean from each component">><<replace "#pca-q8">>Incorrect. The data is already centered before PCA. Whitening is about scaling, not centering.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Scales each component by $\sqrt{\lambda_i}$ to amplify variance">><<replace "#pca-q8">>Incorrect. That would make high-variance components even more dominant. Whitening divides by $\sqrt{\lambda_i}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Divides each component by $\sqrt{\lambda_i}$ to produce uncorrelated, unit-variance features">><<replace "#pca-q8">>Correct! Whitening rescales each principal component so all have variance 1, yielding features that are both uncorrelated and equally scaled — useful preprocessing for neural networks and ICA.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Applies a nonlinear activation function to each component">><<replace "#pca-q8">>Incorrect. Whitening is a purely linear rescaling operation, not a nonlinear transformation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

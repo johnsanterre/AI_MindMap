@@ -1,0 +1,161 @@
+<<include "Header">>
+
+! Residual Connections
+
+<img src="assets/residual_connections.svg" alt="Diagram comparing networks with and without residual skip connections" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are editing a photograph. Instead of rebuilding the entire image from scratch with each adjustment, you start with the original photo and just add small corrections — a little more brightness here, a bit more contrast there. If any single correction is bad, the original image is mostly preserved. That is exactly what residual connections do inside a neural network: each layer only has to learn the //correction// to apply to its input, not a complete new representation from scratch. This single idea unlocked the training of networks hundreds of layers deep, when previously even twenty layers could be intractable.
+
+---
+
+!! The Core Insight
+
+The fundamental problem with very deep networks is that gradients — the training signals flowing backward through <<link "Backpropagation and Chain Rule" "Backpropagation and Chain Rule">><</link>> — must pass through every single layer. Each layer multiplies the gradient by its weight matrix. If those multipliers are consistently less than one, the gradient shrinks exponentially and effectively vanishes by the time it reaches the early layers. This is the <<link "vanishing gradient" "vanishing gradient">><</link>> problem, and it made networks deeper than about 15–20 layers essentially untrainable.
+
+He et al. (2015) proposed a stunningly simple fix in their <<link "ResNets" "ResNets">><</link>> paper: instead of asking a stack of layers to learn the desired mapping $H(x)$ directly, add a ''shortcut connection'' that bypasses the layers and adds the input $x$ back to the output. The layers now only need to learn the ''residual'' $F(x) = H(x) - x$, so the output is $y = F(x) + x$. If the ideal transformation is close to the identity (which is often true in deep networks), then $F(x)$ is close to zero — much easier to learn than the full mapping. More critically, during backpropagation the gradient has a direct path through the addition, bypassing the problematic weight multiplications entirely.
+
+---
+
+!! Why Identity Shortcuts Work So Well
+
+The power of the identity shortcut becomes clear when you think about what happens during training. Without residual connections, the gradient at layer $l$ depends on the product of Jacobians across all subsequent layers — a chain of matrix multiplications that can either explode or vanish. With residual connections, the gradient decomposes into a sum of paths: one that goes directly through the skip connection (carrying a gradient of exactly 1) and others that pass through the learned layers.
+
+This means that even if the learned layers produce poor gradients early in training, the skip connection guarantees that //some// gradient signal reaches every layer. The network can never do worse than the identity function, because setting $F(x) = 0$ (all weights to zero) recovers the input perfectly. Each residual block is essentially asking: "What small correction should I add?" rather than "What entirely new representation should I produce?"
+
+This also explains why ''depth'' suddenly became beneficial rather than harmful. Before residual connections, adding more layers to a network often //hurt// performance on the training set — not just the test set — because optimisation failed. With residual connections, a 152-layer ResNet outperformed an 18-layer one, and even 1000+ layer networks could be trained successfully. The <<link "Transformers" "Transformers">><</link>> architecture relies on residual connections around every self-attention and feed-forward sub-layer, making them essential infrastructure for modern AI.
+
+---
+
+!! What the Math Is Actually Doing
+
+Consider a residual block with input $x$. The block computes:
+
+$$y = F(x, \{W_i\}) + x$$
+
+where $F$ represents the stacked nonlinear layers (convolutions, activations, <<link "Batch Normalization" "Batch Normalization">><</link>>). During backpropagation, if $\mathcal{L}$ is the loss, the gradient with respect to $x$ is:
+
+$$\frac{\partial \mathcal{L}}{\partial x} = \frac{\partial \mathcal{L}}{\partial y} \cdot \frac{\partial y}{\partial x} = \frac{\partial \mathcal{L}}{\partial y} \cdot \left(1 + \frac{\partial F}{\partial x}\right)$$
+
+The crucial term is the ''1''. No matter what $\frac{\partial F}{\partial x}$ is — even if it is very small — the gradient is at least $\frac{\partial \mathcal{L}}{\partial y}$. The identity path acts as a ''gradient highway''.
+
+For a full network with $L$ residual blocks, the output of layer $l$ is:
+
+$$x_L = x_l + \sum_{i=l}^{L-1} F(x_i, W_i)$$
+
+Taking the gradient:
+
+$$\frac{\partial \mathcal{L}}{\partial x_l} = \frac{\partial \mathcal{L}}{\partial x_L} \cdot \left(1 + \frac{\partial}{\partial x_l} \sum_{i=l}^{L-1} F(x_i, W_i)\right)$$
+
+This shows that the gradient at any layer $l$ always includes the term $\frac{\partial \mathcal{L}}{\partial x_L}$ — the gradient at the final layer — directly, without any multiplicative decay. The summation term provides additional gradient paths through the learned functions, but even if those paths vanish, the direct path survives.
+
+When dimensions of $x$ and $F(x)$ differ (e.g., when changing the number of channels), a linear projection $W_s$ is used:
+
+$$y = F(x) + W_s x$$
+
+This ''projection shortcut'' adds learnable parameters but preserves the gradient highway property.
+
+---
+
+!! Residual Connections in Practice
+
+''Pre-activation vs. post-activation:'' The original ResNet placed batch normalisation and ReLU //after// the addition: $y = \text{ReLU}(\text{BN}(F(x) + x))$. He et al. (2016) showed that placing BN and ReLU //before// the weight layers — the ''pre-activation'' design — improves gradient flow because the skip connection is a pure identity mapping with nothing obstructing it. Pre-activation is now the default in most implementations.
+
+''In Transformers:'' Every sub-layer in a Transformer block uses a residual connection: $\text{output} = \text{LayerNorm}(x + \text{SubLayer}(x))$. Without these skip connections, Transformers would be unable to train at the depths routinely used (12–96 layers). The entire success of models like GPT and BERT depends on this mechanism.
+
+''Scaling the residual:'' Some architectures scale the residual branch by a small constant $\alpha$ at initialisation: $y = x + \alpha \cdot F(x)$, with $\alpha \ll 1$. This technique (used in architectures like NFNets and deep ViTs) ensures early training stability by making the network behave approximately like an identity function initially, then gradually learning corrections.
+
+---
+
+!! When Residual Connections Break Down
+
+''Dimension mismatches without proper projection:'' Residual connections require $F(x)$ and $x$ to have identical dimensions for the addition $F(x) + x$ to work. When a layer changes spatial resolution or channel count, a projection shortcut ($1 \times 1$ convolution or linear layer) must bridge the gap. If this projection is missing or poorly designed, the skip connection breaks and gradient flow degrades. Forgetting to handle dimension changes is a common source of bugs when building custom architectures.
+
+''Excessive depth without bottleneck design:'' While residual connections enable very deep networks in principle, naively stacking hundreds of full-width layers creates enormous parameter counts and memory usage. The ''bottleneck'' design — a $1 \times 1$ convolution to reduce dimensions, a $3 \times 3$ convolution, then a $1 \times 1$ to expand back — is necessary to make extreme depth practical. Without bottlenecks, a 152-layer network would be computationally prohibitive.
+
+''Feature reuse stagnation:'' In very deep residual networks, the skip connections can become //too dominant//, causing the learned functions $F(x)$ to contribute negligibly. The network effectively ignores many of its layers, collapsing to a much shallower effective depth. DenseNet addressed this by concatenating rather than adding skip connections, and stochastic depth training randomly drops entire residual blocks during training to force all layers to be useful.
+
+---
+
+!! Technical Details
+
+''Original paper:'' He, Zhang, Ren, Sun (2015) "Deep Residual Learning for Image Recognition" (CVPR 2016, best paper). Demonstrated 152-layer networks on ImageNet, winning the ILSVRC 2015 classification, detection, and localisation challenges. Error rate dropped from 6.7% (GoogLeNet, 22 layers) to 3.57%.
+
+''Identity mapping paper:'' He et al. (2016) "Identity Mappings in Deep Residual Networks" (ECCV 2016) showed that pre-activation (BN → ReLU → Conv) produces cleaner gradient paths and better results than post-activation, especially beyond 100 layers.
+
+''Gradient flow analysis:'' For $L$ residual blocks, the gradient at layer $l$ is $\frac{\partial \mathcal{L}}{\partial x_l} = \frac{\partial \mathcal{L}}{\partial x_L}(1 + \text{cross terms})$. Veit et al. (2016) showed ResNets behave like ensembles of many shallow networks of varying depths — deleting individual blocks has minimal impact.
+
+''Variants:'' ResNeXt uses grouped convolutions within residual blocks. Wide ResNets increase channel width rather than depth. DenseNet concatenates all previous features. Highway Networks (Srivastava et al., 2015) preceded ResNets with gated shortcuts: $y = T(x) \cdot F(x) + (1 - T(x)) \cdot x$, where $T$ is a learned gating function, but the ungated identity shortcut proved simpler and more effective.
+
+''Numerical note:'' With standard initialisation (He init), $\|F(x)\| \ll \|x\|$ at the start of training, so $y \approx x$ and the network begins as an approximate identity. Learning rate warmup and <<link "Batch Normalization" "Batch Normalization">><</link>> help maintain this property during the critical early phase.
+
+''Connection to ODEs:'' In the continuous limit, the residual update $x_{l+1} = x_l + F(x_l)$ becomes an Euler step of the ODE $\frac{dx}{dt} = F(x, t)$. This connection led to Neural ODEs (Chen et al., 2018), which replace discrete layers with continuous dynamics.
+
+---
+
+!! Quiz
+
+<span id="rsc-q1">What does a residual connection add to a layer's output?</span>
+A. The output of the previous residual block
+B. The layer's own input, unchanged
+C. A learned gating signal
+D. The average of all previous layer outputs
+
+<<button "A">><<replace "#rsc-q1">>Wrong. A residual connection adds the input to //this// block, not the output of a different block. The shortcut is local: $y = F(x) + x$, where $x$ is the block's own input.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q1">>Correct! The residual connection adds the block's input $x$ directly to the output $F(x)$, forming $y = F(x) + x$. The layers only need to learn the residual correction $F(x)$, not the full transformation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q1">>Wrong. Learned gating is used in Highway Networks, not standard residual connections. ResNets use a simple, ungated identity shortcut — no extra parameters on the skip path.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q1">>Wrong. Averaging all previous outputs is not what residual connections do. That would be closer to DenseNet's approach (which concatenates, not averages). Residual connections add only the immediate input.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q2">Why does the "1" in $\frac{\partial y}{\partial x} = 1 + \frac{\partial F}{\partial x}$ matter for training deep networks?</span>
+A. It ensures the forward pass output is always positive
+B. It guarantees the gradient never vanishes to zero, regardless of $F$
+C. It forces the network to learn only linear functions
+D. It doubles the learning rate for early layers
+
+<<button "A">><<replace "#rsc-q2">>Wrong. The "1" appears in the gradient formula, not the forward pass value. The output $y = F(x) + x$ can take any value; the "1" ensures gradient flow, not output positivity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q2">>Correct! The additive "1" means that even when $\frac{\partial F}{\partial x}$ is very small or zero, the gradient still flows through the identity path. This is the gradient highway that prevents the vanishing gradient problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q2">>Wrong. The network can still learn highly nonlinear functions through $F(x)$. The identity shortcut does not constrain the representational power — it only improves gradient flow.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q2">>Wrong. The "1" does not affect the learning rate. It provides an unattenuated gradient path, but the actual learning rate is set by the optimiser, not by the architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q3">What does the residual function $F(x)$ represent conceptually?</span>
+A. The complete desired output of the network
+B. The difference between the desired output and the input (a correction)
+C. The error signal from the loss function
+D. The identity mapping of the input
+
+<<button "A">><<replace "#rsc-q3">>Wrong. The complete desired output is $H(x) = F(x) + x$. The residual function $F(x)$ learns only the //difference// between the desired output and the input, not the full mapping.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q3">>Correct! $F(x) = H(x) - x$ is the residual — the correction that needs to be added to the input to produce the desired output. When the ideal transformation is close to identity, $F(x)$ is close to zero, which is easy to learn.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q3">>Wrong. The error signal comes from the loss function during backpropagation. $F(x)$ is a learned function computed during the forward pass, representing the correction to add to the input.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q3">>Wrong. The identity mapping is the skip connection itself ($x$). $F(x)$ is the //non-identity// part — the learned correction that the layers contribute on top of the identity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q4">What happens when the dimensions of $x$ and $F(x)$ do not match?</span>
+A. The residual connection is simply omitted for that block
+B. The input $x$ is zero-padded to match the larger dimension
+C. A linear projection $W_s$ is applied to $x$ so that $y = F(x) + W_s x$
+D. The output $F(x)$ is truncated to match the input dimension
+
+<<button "A">><<replace "#rsc-q4">>Wrong. Omitting the residual connection would eliminate the gradient highway, defeating the entire purpose. Dimension mismatches must be handled, not ignored.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q4">>Wrong. While zero-padding is one possible approach (and was tested in the original paper), the standard solution is a learned projection. Zero-padding does not transform the features and performs worse in practice.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q4">>Correct! A $1 \times 1$ convolution or linear layer $W_s$ projects $x$ to match the dimensions of $F(x)$. This adds parameters but preserves the gradient highway: $\frac{\partial y}{\partial x} = W_s + \frac{\partial F}{\partial x}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q4">>Wrong. Truncating the output would discard learned features. The correct approach adjusts the //input// path via a projection, not the learned output.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q5">Why is the pre-activation design (BN-ReLU before weights) preferred over post-activation?</span>
+A. It uses fewer parameters than post-activation
+B. It keeps the skip connection as a pure identity mapping with no obstructions
+C. It removes the need for batch normalisation entirely
+D. It makes the network shallower by merging adjacent layers
+
+<<button "A">><<replace "#rsc-q5">>Wrong. Pre-activation and post-activation have the same number of parameters. The difference is in the //ordering// of operations, not the parameter count.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q5">>Correct! In post-activation, ReLU sits after the addition, meaning the skip path passes through a nonlinearity. Pre-activation moves BN and ReLU before the weight layers, leaving the skip connection as a clean identity — improving gradient flow especially in very deep networks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q5">>Wrong. Pre-activation still uses batch normalisation; it simply moves BN to before the convolution layers rather than after. BN remains an essential component.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q5">>Wrong. Pre-activation does not change the network's depth or merge layers. It only reorders the operations within each residual block to improve gradient flow.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q6">How do Transformers use residual connections?</span>
+A. Only around the final output layer
+B. Around every self-attention and feed-forward sub-layer
+C. Only during the backward pass, not the forward pass
+D. As a replacement for layer normalisation
+
+<<button "A">><<replace "#rsc-q6">>Wrong. If residual connections were only at the output, the interior layers would still suffer from vanishing gradients. Transformers place them around //every// sub-layer throughout the network.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q6">>Correct! Each Transformer block has two residual connections: one around the self-attention sub-layer and one around the feed-forward sub-layer. This is why Transformers can be stacked to 96+ layers — the gradient highway is present at every level.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q6">>Wrong. Residual connections are part of the forward pass computation ($y = x + \text{SubLayer}(x)$). Their gradient benefits follow automatically from this forward-pass structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q6">>Wrong. Residual connections and layer normalisation are complementary techniques used together, not replacements for each other. Transformers use both: $\text{LayerNorm}(x + \text{SubLayer}(x))$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q7">What did Veit et al. (2016) show about the behaviour of ResNets?</span>
+A. ResNets converge to a single dominant path through the network
+B. ResNets behave like ensembles of many shallow networks of varying depths
+C. ResNets are mathematically equivalent to a single wide layer
+D. Removing any single block causes the network to fail completely
+
+<<button "A">><<replace "#rsc-q7">>Wrong. Rather than converging to one path, ResNets maintain many paths simultaneously. The gradient flows through an exponential number of paths of different lengths.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q7">>Correct! Veit et al. showed that ResNets can be unravelled into a collection of $2^n$ paths of different lengths. Deleting individual blocks has minimal impact, suggesting the network functions as an ensemble rather than a single deep pipeline.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q7">>Wrong. ResNets are not equivalent to a single wide layer. They maintain depth-dependent feature hierarchies; the ensemble interpretation is about multiple //paths//, not a single layer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q7">>Wrong. The opposite is true — removing individual blocks has surprisingly //little// effect on performance, which supports the ensemble interpretation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="rsc-q8">In the continuous limit, what mathematical object does a residual network approximate?</span>
+A. A discrete Fourier transform
+B. An ordinary differential equation (ODE) solved by Euler's method
+C. A Markov chain transition matrix
+D. A Taylor series truncated at the second term
+
+<<button "A">><<replace "#rsc-q8">>Wrong. Fourier transforms decompose signals into frequency components. Residual updates $x_{l+1} = x_l + F(x_l)$ have no connection to frequency decomposition; they resemble numerical integration steps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#rsc-q8">>Correct! The update $x_{l+1} = x_l + F(x_l)$ is exactly a forward Euler step for the ODE $\frac{dx}{dt} = F(x,t)$. This connection led to Neural ODEs (Chen et al., 2018), which replace discrete residual blocks with continuous-depth dynamics.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#rsc-q8">>Wrong. Markov chains describe probabilistic state transitions. While both involve sequential updates, the residual update is deterministic and additive, not probabilistic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#rsc-q8">>Wrong. Taylor series approximate functions via polynomial terms. The residual update is an iterative dynamical process, not a polynomial approximation of a fixed function.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

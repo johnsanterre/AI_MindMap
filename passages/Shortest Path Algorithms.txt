@@ -1,0 +1,148 @@
+<<include "Header">>
+! Shortest Path Algorithms
+<img src="assets/shortest_path_algorithms.svg" alt="Weighted graph with shortest path highlighted in red">
+
+Imagine you are planning a road trip across the country. You have a map with cities connected by highways, each labeled with driving time. You want the fastest route from your hometown to the destination. You could try every possible route, but that would take forever. Shortest path algorithms are the clever strategies that let you find the best route without exhaustively checking all possibilities — and they underpin everything from GPS navigation to how data packets traverse the internet.
+
+!! The Core Insight
+
+Every shortest path algorithm relies on one beautifully simple observation called ''relaxation'': if you have found a path to node $u$ with cost $d[u]$, and there is an edge from $u$ to $v$ with weight $w(u,v)$, then you can potentially improve your best known distance to $v$ by checking whether $d[u] + w(u,v) &lt; d[v]$. If so, you update $d[v]$. The different algorithms are essentially different //strategies for deciding which edges to relax and in what order//.
+
+''Dijkstra's algorithm'' is the greedy champion: always relax the closest unvisited node first. ''Bellman-Ford'' is the cautious planner: relax every edge, then do it again, and again — up to $|V|-1$ times — to guarantee correctness even with negative weights. ''Floyd-Warshall'' takes the global view: compute shortest paths between //all pairs// of nodes simultaneously using [[Dynamic Programming|Dynamic Programming]]. ''A* search'' is the informed optimizer: use a heuristic to guide the search toward the goal, exploring fewer nodes than Dijkstra when a good heuristic is available.
+
+!! Algorithms in Detail
+
+''Dijkstra's Algorithm'' maintains a priority queue of nodes sorted by tentative distance. At each step, it extracts the node with the smallest distance, marks it as finalized, and relaxes all its outgoing edges. This [[Greedy Algorithms|Greedy]] strategy works because, with non-negative edge weights, once a node is extracted, its shortest distance is guaranteed. With a binary heap, it runs in $O((|V| + |E|) \log |V|)$ time.
+
+''Bellman-Ford'' iterates $|V| - 1$ times over all edges, relaxing each one. The key insight: in a graph with $|V|$ nodes, any shortest path has at most $|V|-1$ edges, so $|V|-1$ rounds of relaxation suffice. A bonus: if any distance //still// decreases on the $|V|$-th round, the graph contains a ''negative-weight cycle''. It runs in $O(|V| \cdot |E|)$.
+
+''Floyd-Warshall'' fills in an $|V| \times |V|$ distance matrix. The recurrence is:
+
+$$d^{(k)}[i][j] = \min\left(d^{(k-1)}[i][j],\; d^{(k-1)}[i][k] + d^{(k-1)}[k][j]\right)$$
+
+where $d^{(k)}[i][j]$ is the shortest path from $i$ to $j$ using only intermediate nodes from $\{1, \dots, k\}$. This is a textbook application of [[Dynamic Programming|Dynamic Programming]], running in $O(|V|^3)$.
+
+''[[A* Search|A* Search]]'' extends Dijkstra by adding a heuristic estimate $h(v)$ of the remaining cost from $v$ to the goal. It selects nodes to expand by minimizing $f(v) = g(v) + h(v)$, where $g(v)$ is the known cost from source to $v$. When $h$ is //admissible// (never overestimates) and //consistent// (satisfies the triangle inequality), A* finds the optimal path while often exploring far fewer nodes.
+
+!! What the Math Is Actually Doing
+
+The relaxation operation is the atomic building block. Formally, for an edge $(u, v)$ with weight $w$:
+
+$$\text{Relax}(u, v, w): \quad \text{if } d[v] > d[u] + w \text{ then } d[v] \leftarrow d[u] + w, \; \pi[v] \leftarrow u$$
+
+where $\pi[v]$ records the predecessor, letting you reconstruct the path.
+
+Dijkstra's correctness proof relies on the ''optimal substructure'' property: any sub-path of a shortest path is itself a shortest path. Combined with non-negative weights, this ensures the greedy extraction order is safe.
+
+Bellman-Ford leverages a different guarantee: after $k$ relaxation rounds, $d[v]$ is optimal over all paths using at most $k$ edges. After $|V|-1$ rounds:
+
+$$d[v] = \delta(s, v) = \min_{\text{paths } p: s \rightsquigarrow v} w(p)$$
+
+Floyd-Warshall's dynamic programming decomposition considers whether the optimal $i$-to-$j$ path passes through node $k$ or not, yielding the clean recurrence shown above.
+
+For [[Big O Notation|Big O Notation]] reference:
+* Dijkstra (binary heap): $O((|V| + |E|) \log |V|)$
+* Dijkstra (Fibonacci heap): $O(|V| \log |V| + |E|)$
+* Bellman-Ford: $O(|V| \cdot |E|)$
+* Floyd-Warshall: $O(|V|^3)$
+* A*: depends on heuristic quality; worst case matches Dijkstra
+
+!! Connections to Machine Learning
+
+Shortest path ideas appear throughout ML in surprising ways:
+
+''Graph Neural Networks (GNNs)'' perform //message passing// that closely mirrors relaxation. Each node aggregates information from its neighbors and updates its representation — structurally identical to one round of Bellman-Ford. Stacking $k$ GNN layers lets information propagate along paths of length $k$, echoing the $|V|-1$ iteration bound.
+
+''Reinforcement learning'' planning algorithms use shortest-path logic. Value iteration in an MDP is essentially Bellman-Ford on a stochastic graph, where the "relaxation" becomes the Bellman update: $V(s) \leftarrow \min_a \left[ c(s,a) + \gamma \sum_{s'} P(s'|s,a) V(s') \right]$.
+
+''Routing and network optimization'' in distributed systems relies on variants of Dijkstra and Bellman-Ford (the internet's BGP protocol is based on distributed Bellman-Ford). Understanding these algorithms illuminates how data flows through computational graphs during training.
+
+''Viterbi decoding'' in hidden Markov models finds the most likely state sequence — which is a shortest path problem on a trellis graph, typically solved with dynamic programming analogous to Bellman-Ford.
+
+!! When Shortest Path Algorithms Break Down
+
+''Negative-weight cycles:'' If a graph contains a cycle whose total weight is negative, the concept of "shortest path" becomes undefined — you can loop forever, driving the cost to $-\infty$. Dijkstra fails silently on negative edges (it may return wrong answers). Bellman-Ford at least //detects// negative cycles but cannot produce a finite shortest path through one.
+
+''Inadmissible heuristics in A*:'' If the heuristic $h(v)$ overestimates the true cost to the goal, A* may return a suboptimal path. The algorithm becomes fast but wrong. In ML planning applications, learned heuristics are often inadmissible, requiring weighted-A* or anytime variants that trade optimality for speed.
+
+''Scale and density:'' Floyd-Warshall's $O(|V|^3)$ time and $O(|V|^2)$ space become prohibitive for large graphs (millions of nodes). Even Dijkstra struggles on massive graphs without careful engineering — hierarchical decomposition, contraction hierarchies, or approximate methods become necessary. In GNN contexts, this is the "over-squashing" problem: information from distant nodes gets compressed through bottleneck paths.
+
+!! Technical Details
+
+''Single-source vs. all-pairs:'' Dijkstra and Bellman-Ford solve the ''single-source shortest path'' (SSSP) problem: shortest paths from one node to all others. Floyd-Warshall solves the ''all-pairs shortest path'' (APSP) problem. Running Dijkstra $|V|$ times also solves APSP in $O(|V|(|V|+|E|)\log|V|)$, which beats Floyd-Warshall on sparse graphs.
+
+''Johnson's algorithm'' combines Bellman-Ford with Dijkstra for APSP on sparse graphs with negative weights: use Bellman-Ford once to reweight edges (eliminating negatives), then run Dijkstra from every source. Total: $O(|V|^2 \log|V| + |V| \cdot |E|)$.
+
+''DAG shortest paths:'' If the graph is a directed acyclic graph, topological sort plus a single relaxation pass yields $O(|V| + |E|)$ — faster than all general methods. This is directly relevant to computation graphs in neural network forward passes.
+
+''Contraction hierarchies'' preprocess a graph by iteratively contracting less important nodes and adding shortcut edges. After preprocessing, bidirectional Dijkstra on the augmented graph answers point-to-point queries in milliseconds even on continental road networks.
+
+''Shortest path as linear programming:'' The SSSP problem can be formulated as: minimize $d[t]$ subject to $d[v] \leq d[u] + w(u,v)$ for all edges and $d[s] = 0$. The dual of this LP is a maximum flow problem, revealing deep connections between shortest paths and network flows in [[Graph Theory|Graph Theory]].
+
+!! Quiz
+
+<div id="q1">''1. What is the time complexity of Dijkstra's algorithm with a binary heap?''
+<br>A) $O(|V|^2)$
+<br>B) $O((|V| + |E|) \log |V|)$
+<br>C) $O(|V| \cdot |E|)$
+<br>D) $O(|V|^3)$
+<<button "Check Answer">><<replace "#q1-answer">>&#10004; ''B'' — With a binary heap priority queue, each extraction takes $O(\log|V|)$ and each relaxation (decrease-key) also takes $O(\log|V|)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q1-answer"></span></div>
+
+<div id="q2">''2. Which algorithm can detect negative-weight cycles?''
+<br>A) Dijkstra's algorithm
+<br>B) A* search
+<br>C) Bellman-Ford
+<br>D) Floyd-Warshall (standard version)
+<<button "Check Answer">><<replace "#q2-answer">>&#10004; ''C'' — Bellman-Ford detects negative cycles by checking if any distance decreases on the $|V|$-th iteration. Floyd-Warshall can also detect them (negative diagonal entries), but the standard formulation focuses on Bellman-Ford for this.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q2-answer"></span></div>
+
+<div id="q3">''3. Why does Dijkstra's algorithm fail with negative edge weights?''
+<br>A) It cannot handle weighted graphs at all
+<br>B) Its greedy extraction assumes finalized distances cannot improve, which negative edges violate
+<br>C) It requires an adjacency matrix, which cannot store negatives
+<br>D) It runs in infinite time on any graph with negative edges
+<<button "Check Answer">><<replace "#q3-answer">>&#10004; ''B'' — Dijkstra greedily finalizes the closest node, relying on the fact that no future path through unvisited nodes could be shorter. Negative edges break this invariant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q3-answer"></span></div>
+
+<div id="q4">''4. In Floyd-Warshall, what does $d^{(k)}[i][j]$ represent?''
+<br>A) The shortest path from $i$ to $j$ using exactly $k$ edges
+<br>B) The shortest path from $i$ to $j$ using intermediate nodes from $\{1, \dots, k\}$
+<br>C) The $k$-th shortest path from $i$ to $j$
+<br>D) The shortest path from $i$ to $j$ after $k$ relaxation rounds
+<<button "Check Answer">><<replace "#q4-answer">>&#10004; ''B'' — Floyd-Warshall's DP state considers which intermediate nodes are allowed, progressively expanding the set from $\{1\}$ to $\{1, \dots, |V|\}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q4-answer"></span></div>
+
+<div id="q5">''5. What property must an A* heuristic satisfy to guarantee finding the optimal path?''
+<br>A) It must be consistent but may overestimate
+<br>B) It must be admissible (never overestimates the true remaining cost)
+<br>C) It must equal zero for all nodes
+<br>D) It must be computed using Bellman-Ford
+<<button "Check Answer">><<replace "#q5-answer">>&#10004; ''B'' — Admissibility ($h(v) \leq h^*(v)$ for all $v$) guarantees optimality. Consistency (a stronger condition) additionally ensures A* never re-expands nodes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q5-answer"></span></div>
+
+<div id="q6">''6. How is GNN message passing analogous to shortest path algorithms?''
+<br>A) GNNs use Dijkstra internally for neighbor selection
+<br>B) Each message-passing layer aggregates neighbor information, mirroring one round of relaxation
+<br>C) GNNs solve Floyd-Warshall as a preprocessing step
+<br>D) There is no connection between GNNs and shortest paths
+<<button "Check Answer">><<replace "#q6-answer">>&#10004; ''B'' — Each GNN layer lets nodes update their representations based on neighbors, structurally paralleling one relaxation pass in Bellman-Ford. Stacking $k$ layers propagates information $k$ hops.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q6-answer"></span></div>
+
+<div id="q7">''7. What is the time complexity of the shortest path algorithm on a DAG?''
+<br>A) $O(|V| \cdot |E|)$
+<br>B) $O(|V|^2 \log |V|)$
+<br>C) $O(|V| + |E|)$
+<br>D) $O(|V|^3)$
+<<button "Check Answer">><<replace "#q7-answer">>&#10004; ''C'' — Topological sort is $O(|V|+|E|)$, and a single pass relaxing edges in topological order is also $O(|V|+|E|)$, giving linear total time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q7-answer"></span></div>
+
+<div id="q8">''8. Johnson's algorithm combines which two algorithms?''
+<br>A) Floyd-Warshall and A*
+<br>B) Dijkstra and depth-first search
+<br>C) Bellman-Ford (for reweighting) and Dijkstra (from each source)
+<br>D) Prim's algorithm and Bellman-Ford
+<<button "Check Answer">><<replace "#q8-answer">>&#10004; ''C'' — Johnson's algorithm runs Bellman-Ford once to compute a potential function that eliminates negative weights, then runs Dijkstra from every source on the reweighted graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+<span id="q8-answer"></span></div>
+
+<<include "Footer">>

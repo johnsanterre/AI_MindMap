@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Context-Free Grammar: Derivation Tree</text>
+
+  <!-- ===== LEFT PANEL: Parse tree ===== -->
+
+  <!-- Root: S -->
+  <circle cx="200" cy="75" r="18" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="200" y="80" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">S</text>
+
+  <!-- S -> NP VP lines -->
+  <line x1="188" y1="91" x2="120" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="212" y1="91" x2="280" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- NP node -->
+  <circle cx="120" cy="155" r="18" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="120" y="160" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">NP</text>
+
+  <!-- VP node -->
+  <circle cx="280" cy="155" r="18" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="280" y="160" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">VP</text>
+
+  <!-- NP -> Det N lines -->
+  <line x1="108" y1="171" x2="70" y2="215" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="132" y1="171" x2="170" y2="215" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Det node -->
+  <circle cx="70" cy="230" r="16" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="70" y="235" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Det</text>
+
+  <!-- N node -->
+  <circle cx="170" cy="230" r="16" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="170" y="235" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">N</text>
+
+  <!-- VP -> V NP lines -->
+  <line x1="268" y1="171" x2="240" y2="215" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="292" y1="171" x2="340" y2="215" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- V node -->
+  <circle cx="240" cy="230" r="16" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="240" y="235" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">V</text>
+
+  <!-- NP2 node -->
+  <circle cx="340" cy="230" r="18" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="340" y="235" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">NP</text>
+
+  <!-- NP2 -> Det N -->
+  <line x1="328" y1="246" x2="300" y2="285" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="352" y1="246" x2="380" y2="285" stroke="#5C3D1E" stroke-width="1.5"/>
+
+  <!-- Det2 node -->
+  <circle cx="300" cy="300" r="16" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="300" y="305" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Det</text>
+
+  <!-- N2 node -->
+  <circle cx="380" cy="300" r="16" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="380" y="305" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">N</text>
+
+  <!-- Terminal words -->
+  <text x="70" y="275" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">the</text>
+  <line x1="70" y1="246" x2="70" y2="262" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="170" y="275" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">model</text>
+  <line x1="170" y1="246" x2="170" y2="262" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="240" y="275" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">learns</text>
+  <line x1="240" y1="246" x2="240" y2="262" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="300" y="345" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">the</text>
+  <line x1="300" y1="316" x2="300" y2="332" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="380" y="345" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">data</text>
+  <line x1="380" y1="316" x2="380" y2="332" stroke="#7C2530" stroke-width="1.2"/>
+
+  <!-- ===== RIGHT PANEL: Production rules ===== -->
+  <line x1="440" y1="50" x2="440" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <text x="620" y="72" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Production Rules</text>
+
+  <!-- Rules -->
+  <text x="480" y="110" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">S</text>
+  <text x="505" y="110" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">&rarr; NP  VP</text>
+
+  <text x="480" y="145" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">NP</text>
+  <text x="510" y="145" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">&rarr; Det  N</text>
+
+  <text x="480" y="180" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">VP</text>
+  <text x="510" y="180" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">&rarr; V  NP</text>
+
+  <text x="480" y="215" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">Det</text>
+  <text x="520" y="215" font-family="Georgia, serif" font-size="14" fill="#7C2530">&rarr; "the"</text>
+
+  <text x="480" y="250" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">N</text>
+  <text x="505" y="250" font-family="Georgia, serif" font-size="14" fill="#7C2530">&rarr; "model" | "data"</text>
+
+  <text x="480" y="285" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" font-weight="bold">V</text>
+  <text x="505" y="285" font-family="Georgia, serif" font-size="14" fill="#7C2530">&rarr; "learns"</text>
+
+  <!-- Chomsky hierarchy box -->
+  <rect x="465" y="315" width="290" height="65" rx="6" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="610" y="337" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Chomsky Hierarchy (Type 2)</text>
+  <text x="610" y="355" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Regular (Type 3) &lt; Context-Free (Type 2)</text>
+  <text x="610" y="370" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">&lt; Context-Sensitive (Type 1) &lt; Unrestricted (Type 0)</text>
+
+  <!-- Legend -->
+  <circle cx="55" cy="375" r="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="68" y="379" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Non-terminal</text>
+  <text x="175" y="379" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">"terminal"</text>
+</svg>

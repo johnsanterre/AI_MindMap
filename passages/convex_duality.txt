@@ -1,0 +1,170 @@
+<<include "Header">>
+
+! Convex Duality
+
+<img src="assets/convex_duality.svg" alt="Diagram showing a convex function and its Fenchel conjugate related by the Legendre transform" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Every optimization problem has a mirror image. If the original asks "find the lowest valley in this landscape," the dual asks "find the tightest envelope of flat planes that hugs the landscape from below." These two formulations look nothing alike, yet under the right conditions they give the same answer. ''Convex duality'' is the mathematical framework that makes this mirror precise. It says that every convex function has a ''conjugate'' — a partner function encoding the same geometric information from the perspective of slopes rather than positions. When a machine learning algorithm minimizes a loss, there is almost always a dual problem lurking behind it, and understanding that dual often reveals why the algorithm works, when it will fail, and how to make it faster.
+
+---
+
+!! The Core Insight
+
+The central object of convex duality is the ''Fenchel conjugate'' (also called the ''convex conjugate'' or ''Legendre-Fenchel transform''). Given a function $f$, its conjugate $f^*$ encodes the maximum gap between a linear function and $f$. Geometrically, every slope $y$ defines a family of lines $x \mapsto yx$. The conjugate $f^*(y)$ measures how far below $f$ the best-fitting line with slope $y$ can sit. This is not an approximation — it is an exact, lossless encoding of $f$ (when $f$ is convex and closed).
+
+The profound consequence is the ''biconjugate theorem'': if $f$ is convex and lower semicontinuous, then $f^{**} = f$. Taking the conjugate twice returns you to the original function. This perfect symmetry means the primal and dual perspectives carry identical information. It is this symmetry that allows us to freely switch between a problem and its dual, solving whichever is easier.
+
+Duality is not merely a theoretical curiosity. The dual of the [[Support Vector Machine]] (SVM) turns a problem in $p$-dimensional feature space into one in $n$-dimensional sample space — often dramatically easier. The dual of [[Regularization|regularized regression]] reveals that adding a penalty is equivalent to imposing a constraint. The dual of the [[KL Divergence]] gives rise to variational representations that power modern generative models. In each case, the dual is not a different problem; it is the //same// problem seen from the other side of the mirror.
+
+---
+
+!! Fenchel Conjugates and the Legendre Transform
+
+The ''Fenchel conjugate'' of a function $f : \mathbb{R}^n \to \mathbb{R} \cup \{+\infty\}$ is defined as:
+
+$$f^*(y) = \sup_{x \in \mathbb{R}^n} \left\{ \langle y, x \rangle - f(x) \right\}$$
+
+For each slope vector $y$, we find the point $x$ where the linear function $\langle y, x \rangle$ exceeds $f(x)$ by the largest margin. This supremum is always convex in $y$, even if $f$ itself is not convex — the conjugate operation automatically convexifies.
+
+When $f$ is smooth and strictly convex, the supremum is attained at the unique point where $\nabla f(x) = y$. In this case the Fenchel conjugate reduces to the classical ''Legendre transform'': $f^*(y) = \langle y, x(y) \rangle - f(x(y))$, where $x(y) = (\nabla f)^{-1}(y)$. The Legendre transform swaps between a function described in terms of its position variable and one described in terms of its slope variable. Physicists use this constantly — the Lagrangian and Hamiltonian in classical mechanics are Legendre transforms of each other, and the relationship between energy and entropy in thermodynamics is exactly a conjugate pair.
+
+Some important conjugate pairs arise throughout machine learning:
+
+The conjugate of $f(x) = \frac{1}{2}\|x\|^2$ is $f^*(y) = \frac{1}{2}\|y\|^2$ — the squared norm is self-conjugate. The conjugate of $f(x) = \|x\|$ (any norm) is the indicator function of the unit ball in the dual norm: $f^*(y) = 0$ if $\|y\|_* \leq 1$ and $+\infty$ otherwise. The conjugate of $f(x) = e^x$ is $f^*(y) = y \log y - y$ for $y > 0$ — the negative entropy, which is why [[Information Theory|information-theoretic]] quantities are deeply intertwined with convex duality.
+
+---
+
+!! What the Math Is Actually Doing
+
+The ''Fenchel-Young inequality'' states that for any $x$ and $y$:
+
+$$f(x) + f^*(y) \geq \langle y, x \rangle$$
+
+This holds universally, with equality if and only if $y \in \partial f(x)$ (i.e., $y$ is a subgradient of $f$ at $x$). This single inequality is the engine of all duality results in [[Convex Optimization]].
+
+The ''biconjugate theorem'' states: if $f$ is convex, proper, and lower semicontinuous, then $f^{**} = f$. This means the conjugate is an involution on the space of closed convex functions. If $f$ is not convex, then $f^{**}$ is the ''convex envelope'' of $f$ — the largest convex function that is everywhere $\leq f$.
+
+''Fenchel duality'' generalizes this to optimization problems. Given two convex functions $f$ and $g$ and a linear map $A$:
+
+$$\inf_{x} \left\{ f(x) + g(Ax) \right\} \geq \sup_{y} \left\{ -f^*(-A^T y) - g^*(y) \right\}$$
+
+The left side is the ''primal problem''; the right is the ''dual problem''. The gap between them is the ''duality gap''. When ''strong duality'' holds (the gap is zero), both problems have the same optimal value. Strong duality holds under ''constraint qualification'' conditions, most commonly Slater's condition: if there exists a point strictly in the interior of the feasible set where all inequality constraints are strictly satisfied, the duality gap vanishes.
+
+The ''Karush-Kuhn-Tucker (KKT) conditions'' are the first-order necessary and sufficient conditions for strong duality. At the optimal primal-dual pair $(x^*, y^*)$:
+
+$$0 \in \partial f(x^*) + A^T y^*$$
+$$0 \in \partial g^*(y^*) - Ax^*$$
+$$y_i^* \cdot g_i(x^*) = 0 \quad \text{(complementary slackness)}$$
+
+The KKT conditions encode a beautiful symmetry: the primal variable $x^*$ and dual variable $y^*$ are linked by conjugate subgradient relations. Solving the KKT system is equivalent to solving both the primal and dual problems simultaneously.
+
+[[Lagrangian Duality]] is the special case where $g$ is an indicator function of a constraint set. The dual variable $y$ becomes the ''Lagrange multiplier'', and the dual objective becomes the infimum of the Lagrangian over the primal variable. This is the form most commonly encountered in constrained optimization and is the foundation of [[Linear Programming]] duality.
+
+---
+
+!! Duality in Machine Learning
+
+''Regularization-constraint duality:'' Adding an $\ell_2$ penalty $\lambda\|\theta\|^2$ to a [[Loss Functions|loss function]] is equivalent to constraining $\|\theta\|^2 \leq C$ for some $C$ determined by $\lambda$. The dual variable is $\lambda$ itself. This equivalence, established by Fenchel duality, explains why [[Regularization]] and early stopping have similar effects — both restrict the effective model complexity, just from different sides of the duality mirror. The same principle connects $\ell_1$ [[Regularization]] ([[Lasso]]) to sparsity constraints and elastic net to mixed-norm balls.
+
+''SVM dual:'' The [[Support Vector Machine]] primal problem minimizes $\frac{1}{2}\|w\|^2$ subject to margin constraints $y_i(w \cdot x_i + b) \geq 1$. Its dual maximizes $\sum_i \alpha_i - \frac{1}{2}\sum_{i,j} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j)$ over dual variables $\alpha_i \geq 0$. The dual depends on data only through inner products $x_i \cdot x_j$, enabling the ''kernel trick'' — replacing inner products with kernel evaluations $K(x_i, x_j)$ without ever computing in the high-dimensional feature space. Without duality, kernel methods would not exist in their current form.
+
+''$f$-divergence variational representation:'' Every [[KL Divergence|$f$-divergence]] $D_f(P \| Q) = \int f(dP/dQ) \, dQ$ has a dual variational form:
+
+$$D_f(P \| Q) = \sup_{T} \left\{ \mathbb{E}_P[T] - \mathbb{E}_Q[f^*(T)] \right\}$$
+
+This is a direct application of the Fenchel conjugate $f^*$. The variational form converts divergence estimation from a density ratio problem into an optimization over functions $T$ — which can be parameterized by neural networks. This representation underlies ''$f$-GANs'' and connects to the minimax formulation of generative adversarial networks. The GAN discriminator is literally computing the dual variable.
+
+''Fenchel-Young losses:'' Given a convex function $\Omega$, the Fenchel-Young loss $L_\Omega(\theta, y) = \Omega(\theta) + \Omega^*(y) - \langle \theta, y \rangle$ is always non-negative (by the Fenchel-Young inequality) and equals zero when $y \in \partial\Omega(\theta)$. Choosing different $\Omega$ recovers familiar losses: $\Omega(\theta) = \frac{1}{2}\|\theta\|^2$ gives squared loss; $\Omega(\theta) = \log \sum e^{\theta_i}$ (log-sum-exp) gives the logistic loss. This unifying perspective, developed by Blondel et al., reveals that most standard loss functions in ML are secretly Fenchel-Young losses with specific generating functions.
+
+---
+
+!! When Duality Breaks Down
+
+''Non-convexity and the duality gap:'' When the primal objective is not convex, strong duality can fail catastrophically. The dual problem always provides a lower bound on the primal, but the gap can be arbitrarily large. Deep learning objectives are massively non-convex, which is why Lagrangian duality rarely gives useful bounds for neural network optimization. Attempts to dualize non-convex problems typically produce loose, uninformative bounds. The biconjugate $f^{**}$ gives only the convex envelope of $f$, which may bear little resemblance to the original landscape. In these settings, duality remains a conceptual guide but loses its computational teeth.
+
+''Constraint qualification failure:'' Even for convex problems, strong duality requires a constraint qualification such as Slater's condition. When the feasible region has no strict interior — for example, equality constraints in infinite-dimensional spaces, or degenerate constraint geometries — the duality gap can be positive. Semidefinite programming and certain infinite-dimensional problems in functional analysis are classic settings where constraint qualification is subtle. In practice, numerical solvers may report solutions that violate complementary slackness, indicating the solver has not found the true dual optimum. Checking constraint qualification is essential before trusting dual bounds.
+
+''Infinite-dimensional and non-closed functions:'' The biconjugate theorem requires $f$ to be lower semicontinuous (closed). If $f$ is not closed — for example, an infimum that is not attained — then $f^{**} < f$ at some points, and the duality correspondence breaks. In infinite-dimensional optimization (common in [[Variational Calculus]] and optimal control), functions may fail to be lower semicontinuous in the relevant topology, and the Fenchel conjugate may not recover the original function. Careful choice of topology and function space is necessary to preserve duality, and the wrong choice can silently invalidate dual-based algorithms.
+
+---
+
+!! Technical Details
+
+''Historical development:'' The Legendre transform dates to Adrien-Marie Legendre (1787) in the context of classical mechanics. Werner Fenchel generalized it to non-smooth convex functions in the 1940s-50s, establishing the modern theory of conjugate functions. R. Tyrrell Rockafellar's //Convex Analysis// (1970) is the definitive reference, systematizing Fenchel duality, the biconjugate theorem, and the calculus of conjugates (conjugates of sums, compositions, infimal convolutions). Jean-Jacques Moreau contributed the theory of proximinal operators and Moreau envelopes, which are themselves defined via conjugate duality.
+
+''Calculus of conjugates:'' The conjugate of a sum is bounded by the infimal convolution: $(f + g)^* = f^* \mathop{\square} g^*$ where $(f^* \mathop{\square} g^*)(y) = \inf_z \{f^*(z) + g^*(y-z)\}$. The conjugate of $\lambda f(x)$ is $\lambda f^*(y/\lambda)$. The conjugate of $f(Ax)$ is $\inf \{f^*(y) : A^Ty = \cdot\}$. These rules allow systematic computation of duals for complex composite objectives common in machine learning.
+
+''Moreau envelope and proximal operators:'' The Moreau envelope $M_{\gamma f}(x) = \inf_z \{f(z) + \frac{1}{2\gamma}\|z-x\|^2\}$ is a smooth approximation to $f$ related to its conjugate via $M_{\gamma f}(x) = \frac{1}{2\gamma}\|x\|^2 - \frac{1}{2\gamma}(\frac{1}{2\gamma}\|\cdot\|^2 + f)^*(\frac{x}{\gamma})$. The proximal operator $\text{prox}_{\gamma f}(x) = \arg\min_z \{f(z) + \frac{1}{2\gamma}\|z-x\|^2\}$ satisfies the Moreau decomposition: $\text{prox}_{\gamma f}(x) + \gamma \, \text{prox}_{f^*/\gamma}(x/\gamma) = x$. This identity, relating the proximal operators of $f$ and $f^*$, is fundamental to proximal splitting algorithms (ADMM, Douglas-Rachford) used in large-scale machine learning optimization.
+
+''Minimax duality and saddle points:'' Von Neumann's minimax theorem states that for convex-concave functions $\Phi(x,y)$, $\min_x \max_y \Phi = \max_y \min_x \Phi$. This is a special case of Fenchel duality. GANs optimize a minimax objective $\min_G \max_D V(G,D)$; when $V$ is convex-concave, the minimax theorem guarantees the existence of a saddle point equilibrium. The failure of GAN training to converge reliably is partly because the generator parameterization makes the objective non-convex in $G$, violating the conditions for minimax duality.
+
+''Connections to [[Information Theory]]:'' The Legendre transform connects the cumulant generating function $\Lambda(\theta) = \log \mathbb{E}[e^{\theta X}]$ to the rate function $I(x) = \sup_\theta \{\theta x - \Lambda(\theta)\} = \Lambda^*(\theta)$ in large deviations theory. The rate function governs the exponential decay of tail probabilities. Similarly, maximum entropy distributions arise as solutions to dual problems: maximizing entropy subject to moment constraints is dual to minimizing the log-partition function, and the dual variables are the natural parameters of the resulting exponential family.
+
+---
+
+!! Quiz
+
+<span id="cd-q1">The Fenchel conjugate $f^*(y)$ geometrically represents:</span>
+A. The minimum value of $f$ along the direction $y$
+B. The supremum of the gap between the linear function $\langle y, x \rangle$ and $f(x)$
+C. The slope of $f$ at the point $y$
+D. The projection of $f$ onto the hyperplane defined by $y$
+<<button "A">><<replace "#cd-q1">>Incorrect. The conjugate is not about minimizing $f$ in a direction. It measures the maximum gap between a linear function with slope $y$ and $f$ itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q1">>Correct! $f^*(y) = \sup_x \{\langle y, x \rangle - f(x)\}$ measures the largest vertical gap between the linear function with slope $y$ and the graph of $f$. This is the tightest supporting hyperplane interpretation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q1">>Incorrect. The slope of $f$ at a point is its gradient $\nabla f$, which is the //inverse// relationship: $y = \nabla f(x)$ identifies which $x$ achieves the supremum in the conjugate definition.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q1">>Incorrect. The conjugate is not a projection. It is a supremum operation that transforms between position and slope representations of the same convex geometry.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q2">The biconjugate theorem states that $f^{**} = f$ when $f$ is:</span>
+A. Differentiable and bounded
+B. Convex, proper, and lower semicontinuous
+C. Strictly convex and smooth
+D. Any convex function, with no additional conditions
+<<button "A">><<replace "#cd-q2">>Incorrect. Differentiability and boundedness are neither necessary nor sufficient. The key requirements are convexity, properness (not identically $+\infty$ and never $-\infty$), and lower semicontinuity (closedness).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q2">>Correct! The biconjugate theorem requires exactly these three conditions: convexity, properness, and lower semicontinuity. If any condition fails, $f^{**}$ may only equal the closed convex envelope of $f$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q2">>Incorrect. Strict convexity and smoothness are sufficient but far stronger than necessary. The theorem holds for non-smooth convex functions like norms and indicator functions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q2">>Incorrect. A convex function that is not lower semicontinuous (not closed) can have $f^{**} < f$ at some points. Closedness is essential.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q3">The Fenchel-Young inequality states:</span>
+A. $f(x) + f^*(y) \leq \langle y, x \rangle$ for all $x, y$
+B. $f(x) + f^*(y) \geq \langle y, x \rangle$ for all $x, y$, with equality iff $y \in \partial f(x)$
+C. $f(x) \cdot f^*(y) \geq \langle y, x \rangle^2$ for all $x, y$
+D. $f^*(y) = \langle y, x^* \rangle - f(x^*)$ only at the minimizer $x^*$
+<<button "A">><<replace "#cd-q3">>Incorrect. The inequality goes the other way. The conjugate is defined as a supremum, which guarantees $f(x) + f^*(y) \geq \langle y, x \rangle$, not $\leq$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q3">>Correct! This is the Fenchel-Young inequality, the fundamental relation of convex duality. Equality holds precisely when $y$ is a subgradient of $f$ at $x$, linking the primal and dual variables.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q3">>Incorrect. The Fenchel-Young inequality involves addition, not multiplication. It is a direct consequence of the definition of the conjugate as a supremum.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q3">>Incorrect. This describes the conjugate value at a specific $y$, not the inequality. The Fenchel-Young inequality is a universal statement holding for //all// pairs $(x, y)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q4">Why does the SVM dual depend on data only through inner products $x_i \cdot x_j$?</span>
+A. Because the primal SVM uses cosine similarity as its loss function
+B. Because Fenchel duality of the hinge loss eliminates the weight vector, leaving only inner products between data points
+C. Because kernel functions are always defined in terms of inner products
+D. Because the dual is derived by a change of basis to the eigenvectors of the data matrix
+<<button "A">><<replace "#cd-q4">>Incorrect. The SVM uses hinge loss, not cosine similarity. The inner product structure arises from dualizing the quadratic norm objective $\frac{1}{2}\|w\|^2$, not from the choice of similarity measure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q4">>Correct! Dualizing the primal eliminates $w$ by substituting $w = \sum_i \alpha_i y_i x_i$ (from the KKT conditions). The resulting dual objective contains $w \cdot w = \sum_{i,j} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j)$, depending on data only through inner products. This enables the kernel trick.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q4">>Incorrect. While kernels do generalize inner products, the reason the //dual// depends on inner products is a consequence of the duality derivation, not a property assumed about kernels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q4">>Incorrect. The dual is not derived by eigendecomposition. It follows from Lagrangian duality applied to the constrained primal problem, which eliminates the weight vector through the KKT stationarity condition.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q5">Strong duality (zero duality gap) requires which condition for convex problems?</span>
+A. The objective function must be strictly convex
+B. A constraint qualification such as Slater's condition (strict feasibility)
+C. The dual variables must be bounded
+D. The problem must have a unique optimal solution
+<<button "A">><<replace "#cd-q5">>Incorrect. Strict convexity guarantees uniqueness of the primal solution but is not required for strong duality. Strong duality can hold for non-strictly convex problems like linear programs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q5">>Correct! Slater's condition — the existence of a strictly feasible point — is the standard sufficient condition for strong duality in convex optimization. Without constraint qualification, the duality gap can be positive even for convex problems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q5">>Incorrect. Boundedness of dual variables is a consequence of strong duality and compactness of the dual feasible set, not a prerequisite for it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q5">>Incorrect. Uniqueness of the optimal solution is related to strict convexity, not to strong duality. A linear program can have multiple optima and still satisfy strong duality.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q6">The variational representation $D_f(P \| Q) = \sup_T \{\mathbb{E}_P[T] - \mathbb{E}_Q[f^*(T)]\}$ is used in machine learning primarily to:</span>
+A. Compute $f$-divergences analytically in closed form
+B. Convert divergence estimation into an optimization over functions, enabling neural network approximation
+C. Prove that $f$-divergences are always finite
+D. Replace KL divergence with a simpler distance metric
+<<button "A">><<replace "#cd-q6">>Incorrect. The variational representation does not give closed-form solutions — it turns divergence computation into an optimization problem, which is solved approximately using function approximators.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q6">>Correct! The variational form converts divergence estimation from requiring density ratios (often intractable) into an optimization over a function $T$ that can be parameterized by a neural network. This is the foundation of $f$-GANs and related methods.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q6">>Incorrect. $f$-divergences can be infinite (e.g., KL divergence when supports do not match). The variational representation does not guarantee finiteness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q6">>Incorrect. The variational representation applies to all $f$-divergences, not just KL. It does not simplify the divergence — it provides an alternative computational route via optimization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q7">What is the conjugate of the function $f(x) = \frac{1}{2}\|x\|^2$?</span>
+A. $f^*(y) = \|y\|$
+B. $f^*(y) = \frac{1}{2}\|y\|^2$
+C. $f^*(y) = \frac{1}{4}\|y\|^4$
+D. $f^*(y) = \|y\|^2$
+<<button "A">><<replace "#cd-q7">>Incorrect. The conjugate of the squared norm is not the unsquared norm. Computing: $f^*(y) = \sup_x \{\langle y, x\rangle - \frac{1}{2}\|x\|^2\}$. Setting the gradient to zero gives $x = y$, so $f^*(y) = \langle y, y\rangle - \frac{1}{2}\|y\|^2 = \frac{1}{2}\|y\|^2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q7">>Correct! The half-squared norm is self-conjugate: $f^*(y) = \sup_x \{\langle y, x\rangle - \frac{1}{2}\|x\|^2\}$. The supremum is attained at $x = y$, giving $f^*(y) = \frac{1}{2}\|y\|^2$. This is one of the most important conjugate pairs in optimization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q7">>Incorrect. The conjugate of a quadratic is another quadratic, not a quartic. The self-conjugacy of $\frac{1}{2}\|x\|^2$ is a fundamental result.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q7">>Incorrect. Close, but the factor of $\frac{1}{2}$ matters. The supremum calculation yields $\frac{1}{2}\|y\|^2$, not $\|y\|^2$. The half-squared norm is exactly self-conjugate.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q8">When convex duality is applied to a non-convex problem, the biconjugate $f^{**}$ gives:</span>
+A. The original function $f$ exactly
+B. The convex envelope — the largest convex function everywhere $\leq f$
+C. A non-convex approximation tighter than any convex relaxation
+D. The concave envelope of $f$
+<<button "A">><<replace "#cd-q8">>Incorrect. $f^{**} = f$ only when $f$ is already convex, proper, and lower semicontinuous. For non-convex $f$, the biconjugate is strictly less than $f$ at non-convex points.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q8">>Correct! For non-convex $f$, the biconjugate $f^{**}$ is the closed convex envelope — the pointwise largest convex lower-semicontinuous function that does not exceed $f$ anywhere. This is the tightest convex relaxation of $f$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q8">>Incorrect. The biconjugate is always convex, by construction. It cannot be non-convex, regardless of the original function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q8">>Incorrect. The biconjugate produces a convex lower bound, not a concave upper bound. The concave envelope would be obtained by a different construction (negating, taking the conjugate of $-f$).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cd-q9">The Moreau decomposition $\text{prox}_{\gamma f}(x) + \gamma \, \text{prox}_{f^*/\gamma}(x/\gamma) = x$ is important because:</span>
+A. It shows that proximal operators always commute
+B. It relates the proximal operators of a function and its conjugate, enabling proximal splitting algorithms
+C. It proves that all convex functions have unique minimizers
+D. It eliminates the need for step-size tuning in gradient descent
+<<button "A">><<replace "#cd-q9">>Incorrect. Proximal operators do not commute in general. The Moreau decomposition is an identity linking $\text{prox}_f$ and $\text{prox}_{f^*}$, not a commutativity result.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cd-q9">>Correct! The Moreau decomposition is the proximal analog of convex duality. It allows algorithms like ADMM and Douglas-Rachford to exploit the conjugate structure, computing proximal steps for $f^*$ when the proximal of $f$ is known, and vice versa.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cd-q9">>Incorrect. Uniqueness of minimizers depends on strict convexity, not the Moreau decomposition. The decomposition is about the relationship between proximal operators, not about minimizer uniqueness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cd-q9">>Incorrect. Proximal algorithms still require step-size choices. The Moreau decomposition helps structure the algorithm but does not remove the need for tuning $\gamma$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

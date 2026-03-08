@@ -1,0 +1,157 @@
+<<include "Header">>
+
+! Primality Testing
+
+<img src="assets/primality_testing.svg" alt="Timeline showing the evolution of primality testing algorithms from Trial Division through Fermat Test and Miller-Rabin to the AKS algorithm in 2002" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are a bouncer at an exclusive club called "The Primes." Your job is to check every number's ID at the door and decide: are you prime, or are you composite? For small numbers you can just try dividing — but when someone shows up with a 300-digit ID, you need a much cleverer strategy. ''Primality testing'' is the art of answering this single yes-or-no question — "is $n$ prime?" — as efficiently as possible. It sits at the intersection of pure number theory, computational complexity, and applied cryptography, and its history contains one of the most beautiful results in modern mathematics: the proof that this problem lives in the class P.
+
+!! The Core Insight
+
+The fundamental tension in primality testing is the gap between what is //easy to state// and what is //hard to compute//. A number $n$ is prime if its only divisors are 1 and itself. This definition is trivially simple. But //verifying// it naively — trying every possible divisor up to $\sqrt{n}$ — takes $O(\sqrt{n})$ steps. For a 300-digit number, $\sqrt{n}$ has 150 digits, meaning roughly $10^{150}$ divisions. The age of the universe is about $10^{17}$ seconds. Brute force is cosmically hopeless.
+
+The insight that unlocks fast primality testing is ''Fermat's Little Theorem'': if $p$ is prime and $a$ is not divisible by $p$, then $a^{p-1} \equiv 1 \pmod{p}$. This gives a //necessary condition// for primality that can be checked in $O(\log^2 n)$ time using modular exponentiation. If $a^{n-1} \not\equiv 1 \pmod{n}$, then $n$ is definitely composite. The deep question is: can we turn necessary conditions into //sufficient// ones without sacrificing speed?
+
+!! Algorithms Through History
+
+''Trial division'' is the oldest method: test whether any integer from 2 to $\sqrt{n}$ divides $n$. It is deterministic and correct but takes $O(\sqrt{n})$ time — exponential in the number of digits of $n$.
+
+''The Fermat test'' picks a random base $a$ and checks whether $a^{n-1} \equiv 1 \pmod{n}$. If not, $n$ is composite. If yes, $n$ is //probably// prime. The fatal flaw: ''Carmichael numbers'' (like 561 = 3 × 11 × 17) pass the Fermat test for //every// base coprime to them, despite being composite. The Fermat test alone cannot reliably distinguish primes from these impostors.
+
+''Miller-Rabin'' (1976/1980) strengthens the Fermat test by also checking for nontrivial square roots of 1 modulo $n$. Write $n - 1 = 2^s \cdot d$ where $d$ is odd. For a random base $a$, compute $a^d \bmod n$ and then repeatedly square it. A prime $n$ must satisfy specific patterns in this sequence. With $k$ independent random bases, the probability of a composite fooling the test drops below $4^{-k}$. For $k = 40$, the error probability is less than $10^{-24}$ — far below the probability of hardware failure during the computation.
+
+''The AKS algorithm'' (Agrawal, Kayal, Saxena, 2002) was the breakthrough. Three computer scientists at IIT Kanpur proved that primality can be decided in ''deterministic polynomial time'': no randomness needed, no unproven assumptions. Their original algorithm ran in $\tilde{O}(\log^{12} n)$, later improved to $\tilde{O}(\log^{6} n)$. It resolved a question open since antiquity and showed that PRIMES is in P.
+
+!! What the Math Is Actually Doing
+
+The ''Fermat test'' computes $a^{n-1} \bmod n$ using fast modular exponentiation (repeated squaring), which takes $O(\log n)$ multiplications of numbers with $O(\log n)$ digits:
+
+$$a^{n-1} \bmod n \stackrel{?}{\equiv} 1$$
+
+If $n$ is prime, Fermat's Little Theorem guarantees this holds for all $1 \leq a < n$.
+
+''Miller-Rabin'' writes $n - 1 = 2^s \cdot d$ and checks a stronger condition. Compute $x_0 = a^d \bmod n$, then $x_1 = x_0^2 \bmod n$, and so on up to $x_s = a^{n-1} \bmod n$. For a prime $n$, either:
+
+$$a^d \equiv 1 \pmod{n}$$
+
+or there exists some $0 \leq r < s$ such that:
+
+$$a^{2^r \cdot d} \equiv -1 \pmod{n}$$
+
+Any composite $n$ fails this test for at least 3/4 of all bases $a$ in $\{1, \ldots, n-1\}$, giving the $4^{-k}$ error bound after $k$ rounds.
+
+The ''AKS algorithm'' relies on a polynomial identity generalization of Fermat's theorem. For prime $p$ and $\gcd(a, p) = 1$:
+
+$$(x + a)^p \equiv x^p + a \pmod{p}$$
+
+as polynomials, where all intermediate binomial coefficients $\binom{p}{k}$ for $0 < k < p$ vanish modulo $p$. AKS checks this identity modulo both $n$ and a polynomial $x^r - 1$ for a carefully chosen $r$, reducing the computation from exponential to polynomial.
+
+!! Primality Testing in Practice
+
+''[[RSA Cryptography]]'' depends entirely on primality testing. Generating an RSA key requires finding two large primes $p$ and $q$, typically 1024 bits each. The standard approach: generate a random odd number, apply Miller-Rabin with many rounds, and repeat until a probable prime is found. By the prime number theorem, roughly one in every $\ln(n) \approx 700$ odd 1024-bit numbers is prime, so the search terminates quickly.
+
+Despite AKS proving PRIMES is in P, ''Miller-Rabin remains the practical choice'' for cryptographic applications. Its $O(k \log^2 n \log\log n)$ runtime is orders of magnitude faster than AKS for real-world key sizes. The astronomically small error probability ($< 4^{-40} \approx 10^{-24}$) is negligible compared to other failure modes like cosmic ray bit flips.
+
+''[[Modular Arithmetic]]'' is the computational engine behind all fast primality tests. Every operation — exponentiation, multiplication, comparison — is performed modulo $n$, keeping intermediate values bounded by $O(\log n)$ digits.
+
+The classification of PRIMES in P was a landmark in [[P vs NP|P vs NP]] research — it moved primality from BPP (where Miller-Rabin placed it) to P, confirming the long-held belief that this natural problem is efficiently solvable without randomness.
+
+!! When Primality Testing Breaks Down
+
+''1. Carmichael numbers defeat the Fermat test.'' These composite numbers $n$ satisfy $a^{n-1} \equiv 1 \pmod{n}$ for //every// base $a$ coprime to $n$. The smallest is 561 = 3 × 11 × 17. There are infinitely many Carmichael numbers (proven by Alford, Granville, and Pomerance in 1994). Any system relying solely on the Fermat test — without the square-root refinement of Miller-Rabin — will accept these composites as prime. This is not a theoretical curiosity; it is a real vulnerability if the wrong algorithm is used.
+
+''2. Deterministic polynomial time does not mean fast.'' AKS runs in $\tilde{O}(\log^{6} n)$ — polynomial in the input length, but with large constants and exponents. For a 2048-bit RSA prime, $\log n \approx 2048$, so $\log^6 n \approx 7 \times 10^{19}$. Even with improvements, AKS is far slower than 40 rounds of Miller-Rabin. The complexity class P guarantees //asymptotic// efficiency, not practical speed. Choosing AKS over Miller-Rabin in a real system would make key generation orders of magnitude slower for no meaningful gain in correctness.
+
+''3. Primality testing does not help with factoring.'' Knowing that $n$ is composite does //not// reveal its factors. Factoring is believed to be strictly harder than primality testing — factoring is not known to be in P (it is a candidate for the NP-intermediate class predicted by Ladner's theorem), while primality testing is in P. This asymmetry is precisely what makes RSA work: you can efficiently verify that $p$ and $q$ are prime, but an attacker cannot efficiently factor $n = pq$.
+
+!! Technical Details
+
+''Fermat's Little Theorem:'' If $p$ is prime and $\gcd(a, p) = 1$, then $a^{p-1} \equiv 1 \pmod{p}$.
+
+''Euler's criterion:'' For odd prime $p$, $a^{(p-1)/2} \equiv \left(\frac{a}{p}\right) \pmod{p}$, where $\left(\frac{a}{p}\right)$ is the Legendre symbol.
+
+''Miller-Rabin error bound:'' For a single random base, the probability of a composite passing is at most $1/4$. With $k$ independent bases, the error is at most $4^{-k}$. This bound is tight — there exist composites where exactly 1/4 of bases are strong liars.
+
+''Strong probable primes:'' Under the Generalized Riemann Hypothesis (GRH), Miller's deterministic variant proves primality by testing all bases $a \leq 2 \ln^2(n)$. This gives a deterministic $O(\log^4 n)$ test contingent on GRH.
+
+''AKS core theorem:'' $n$ is prime if and only if $n$ is not a perfect power and there exists $r$ such that $\text{ord}_r(n) > \log^2 n$ and for all $a$ with $1 \leq a \leq \sqrt{\phi(r)} \log n$, $(x + a)^n \equiv x^n + a \pmod{x^r - 1, n}$.
+
+''Complexity classification:'' PRIMES $\in$ P (AKS, 2002). COMPOSITES $\in$ NP (a factor serves as certificate). FACTORING is in NP $\cap$ co-NP but not known to be in P.
+
+''Prime number theorem:'' $\pi(x) \sim x / \ln(x)$. The probability that a random $k$-bit number is prime is approximately $1/(k \ln 2)$.
+
+!! Quiz
+
+<span id="pt-q1">What does Fermat's Little Theorem state?</span>
+
+A. If $n$ is prime, then $n$ divides $a^n$ for all $a$
+B. If $p$ is prime and $\gcd(a,p)=1$, then $a^{p-1} \equiv 1 \pmod{p}$
+C. Every composite number fails the Fermat test for all bases
+D. If $a^{n-1} \equiv 1 \pmod{n}$, then $n$ is prime
+
+<<button "A">><<replace "#pt-q1">>Incorrect. Fermat's theorem concerns $a^{p-1}$, not $a^p$, and requires $\gcd(a,p)=1$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q1">>Correct! Fermat's Little Theorem: if $p$ is prime and $a$ is not divisible by $p$, then $a^{p-1} \equiv 1 \pmod{p}$. This is the foundation of probabilistic primality testing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q1">>Incorrect. Carmichael numbers are composite yet pass the Fermat test for every base coprime to them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q1">>Incorrect. The converse of Fermat's theorem is false — Carmichael numbers satisfy $a^{n-1} \equiv 1$ for all coprime bases despite being composite.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q2">Why are Carmichael numbers problematic for primality testing?</span>
+
+A. They cannot be represented in binary
+B. They pass the Fermat test for every base coprime to them, despite being composite
+C. They are too large for modular exponentiation
+D. They are prime numbers that appear composite
+
+<<button "A">><<replace "#pt-q2">>Incorrect. Carmichael numbers have standard binary representations like any integer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q2">>Correct! Carmichael numbers (e.g., 561 = 3 × 11 × 17) satisfy $a^{n-1} \equiv 1 \pmod{n}$ for all $a$ with $\gcd(a,n)=1$. This makes the Fermat test useless against them. Miller-Rabin overcomes this by checking square roots of unity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q2">>Incorrect. Carmichael numbers can be of any size; the issue is algebraic, not computational.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q2">>Incorrect. Carmichael numbers are composite, not prime. They //appear// prime to the Fermat test, which is the problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q3">What error probability does Miller-Rabin achieve with $k$ independent random bases?</span>
+
+A. $1/k$
+B. $2^{-k}$
+C. $4^{-k}$
+D. $1/\log(k)$
+
+<<button "A">><<replace "#pt-q3">>Incorrect. The error decreases exponentially, not as $1/k$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q3">>Incorrect. Close, but the base is 4, not 2 — at most 1/4 of bases are strong liars for any composite.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q3">>Correct! For any composite $n$, at most 1/4 of bases in $\{1, \ldots, n-1\}$ are strong liars. With $k$ independent random bases, the probability of all $k$ being liars is at most $(1/4)^k = 4^{-k}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q3">>Incorrect. The error bound is exponential in $k$, not logarithmic.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q4">What did the AKS algorithm (2002) prove about the complexity of primality testing?</span>
+
+A. Primality testing is NP-complete
+B. Primality testing is undecidable for sufficiently large numbers
+C. Primality testing can be solved in deterministic polynomial time (PRIMES is in P)
+D. Primality testing requires randomization for correctness
+
+<<button "A">><<replace "#pt-q4">>Incorrect. AKS showed PRIMES is in P, which means it is far easier than NP-complete (assuming $P \neq NP$).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q4">>Incorrect. Primality is decidable for all inputs — AKS gives a finite-time deterministic algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q4">>Correct! Agrawal, Kayal, and Saxena proved PRIMES $\in$ P: there exists a deterministic algorithm running in $\tilde{O}(\log^6 n)$ that correctly decides primality. No randomness or unproven conjectures needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q4">>Incorrect. AKS proved the opposite — randomization is //not// required. Deterministic polynomial time suffices.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q5">Why is Miller-Rabin preferred over AKS in practice, despite AKS being deterministic?</span>
+
+A. AKS has been proven incorrect for certain inputs
+B. Miller-Rabin is orders of magnitude faster, and its negligible error probability is acceptable
+C. AKS requires quantum computers to run efficiently
+D. Miller-Rabin is also deterministic but simpler to implement
+
+<<button "A">><<replace "#pt-q5">>Incorrect. AKS is provably correct for all inputs — there are no counterexamples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q5">>Correct! Miller-Rabin with 40 rounds has error probability below $10^{-24}$ — less likely than hardware failure — and runs in $O(k \log^2 n)$ versus AKS's $\tilde{O}(\log^6 n)$ with large constants. The practical speed advantage is enormous.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q5">>Incorrect. AKS runs on classical computers — it has nothing to do with quantum computing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q5">>Incorrect. Miller-Rabin is probabilistic, not deterministic. Its deterministic variant (Miller's test) requires the Generalized Riemann Hypothesis.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q6">In the Miller-Rabin test, what is computed after writing $n - 1 = 2^s \cdot d$?</span>
+
+A. The greatest common divisor of $n$ and all primes up to $\sqrt{n}$
+B. $a^d \bmod n$, followed by repeated squaring up to $a^{n-1} \bmod n$
+C. The full prime factorization of $n - 1$
+D. A random polynomial evaluated at $n$
+
+<<button "A">><<replace "#pt-q6">>Incorrect. That describes trial division, not Miller-Rabin. Miller-Rabin uses modular exponentiation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q6">>Correct! Miller-Rabin computes $x_0 = a^d \bmod n$, then squares repeatedly: $x_1 = x_0^2$, $x_2 = x_1^2$, etc. For a prime, either $x_0 \equiv 1$ or some $x_r \equiv -1$. Violations reveal compositeness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q6">>Incorrect. Factoring $n-1$ completely is far more expensive than Miller-Rabin requires. Only the power-of-2 factor $2^s$ is extracted.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q6">>Incorrect. Random polynomials are not part of Miller-Rabin. Polynomial identity testing is used in AKS, not Miller-Rabin.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q7">How does primality testing relate to integer factoring?</span>
+
+A. They are equivalent problems — solving one solves the other in polynomial time
+B. Primality testing is in P, but factoring is not known to be in P; knowing a number is composite does not reveal its factors
+C. Factoring is easier than primality testing
+D. Both problems are NP-complete
+
+<<button "A">><<replace "#pt-q7">>Incorrect. Primality testing is strictly easier — it is in P. Factoring is believed harder and is not known to be in P.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q7">>Correct! AKS proved PRIMES $\in$ P, but factoring remains in a limbo — in NP $\cap$ co-NP but not known to be in P. This asymmetry is the foundation of RSA: generating primes is easy, but factoring their product is (believed) hard.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q7">>Incorrect. Factoring is believed to be //harder// than primality testing, not easier.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q7">>Incorrect. Primality is in P. Factoring is not known to be NP-complete and is suspected to be NP-intermediate.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pt-q8">What is the smallest Carmichael number?</span>
+
+A. 341
+B. 561
+C. 1105
+D. 1729
+
+<<button "A">><<replace "#pt-q8">>Incorrect. 341 = 11 × 31 is a Fermat pseudoprime to base 2, but it is not a Carmichael number — it does not fool //all// coprime bases.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pt-q8">>Correct! 561 = 3 × 11 × 17 is the smallest Carmichael number. It satisfies $a^{560} \equiv 1 \pmod{561}$ for every $a$ with $\gcd(a, 561) = 1$, by Korselt's criterion.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pt-q8">>Incorrect. 1105 = 5 × 13 × 17 is a Carmichael number, but not the smallest. 561 comes first.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pt-q8">>Incorrect. 1729 is the Hardy-Ramanujan number (smallest expressible as the sum of two cubes in two ways), not the smallest Carmichael number.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

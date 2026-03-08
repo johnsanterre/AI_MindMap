@@ -1,0 +1,177 @@
+<<include "Header">>
+
+! Propositional Logic
+
+<img src="assets/propositional_logic.svg" alt="Truth tables and circuit-style gate diagrams for AND, OR, NOT, and IMPLIES connectives, with De Morgan's Laws shown at bottom" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine a courtroom where every statement is either //true// or //false// — no maybes, no "it depends." A witness says "the door was locked," and that claim is either right or wrong. Now chain these claims together: "the door was locked //and// the alarm was on." ''Propositional logic'' is the mathematics of these compound true/false statements. It gives you exact rules for when a compound claim is true based on whether its parts are true — and those same rules turn out to be the foundation of digital circuits, database queries, and the Boolean features that feed machine learning models.
+
+!! The Core Insight
+
+Every compound statement in propositional logic is built from two ingredients: ''propositions'' (atomic statements that are true or false, like $p$ = "it is raining") and ''connectives'' that combine them. There are five standard connectives:
+
+''Conjunction'' ($p \wedge q$, "and") — true only when //both// $p$ and $q$ are true.
+
+''Disjunction'' ($p \vee q$, "or") — true when //at least one// of $p$ or $q$ is true (inclusive or).
+
+''Negation'' ($\neg p$, "not") — flips truth to false and false to true.
+
+''Implication'' ($p \rightarrow q$, "if...then") — false //only// when $p$ is true but $q$ is false. This surprises most newcomers: "if pigs fly, then the moon is cheese" is logically true because the premise is false. The only broken promise is a true premise with a false conclusion.
+
+''Biconditional'' ($p \leftrightarrow q$, "if and only if") — true when $p$ and $q$ have the //same// truth value.
+
+The entire power of propositional logic comes from one principle: the truth value of any compound formula is //completely determined// by the truth values of its atomic propositions, computed mechanically through these connective rules. No interpretation, no context, no ambiguity.
+
+!! Truth Tables and Logical Equivalence
+
+A ''truth table'' lists every possible combination of truth values for the atomic propositions and computes the result for each row. With $n$ propositions, you get $2^n$ rows. For two propositions $p$ and $q$, there are 4 rows; for three, 8 rows; and for ten, 1024 rows — growth is exponential.
+
+Two formulas are ''logically equivalent'' (written $\equiv$) when they produce identical truth tables. The most important equivalences are ''De Morgan's laws'':
+
+$$\neg(p \wedge q) \equiv \neg p \vee \neg q$$
+$$\neg(p \vee q) \equiv \neg p \wedge \neg q$$
+
+Negating an AND flips it to OR (with negated parts), and vice versa. These laws are essential in circuit design, compiler optimization, and simplifying Boolean conditions in code.
+
+Other critical equivalences include the ''contrapositive'' — $(p \rightarrow q) \equiv (\neg q \rightarrow \neg p)$ — and ''material implication'' — $(p \rightarrow q) \equiv (\neg p \vee q)$.
+
+A ''tautology'' is a formula that is //always// true regardless of input (e.g., $p \vee \neg p$). A ''contradiction'' is //always// false (e.g., $p \wedge \neg p$). A ''contingency'' is sometimes true, sometimes false. Identifying tautologies is the complement problem to [[Satisfiability|Satisfiability]]: a formula is a tautology if and only if its negation is unsatisfiable.
+
+!! What the Math Is Actually Doing
+
+Every propositional formula defines a ''Boolean function'' $f: \{0,1\}^n \rightarrow \{0,1\}$. The $n$ atomic propositions are the inputs; the formula's truth value is the output. This maps propositional logic directly to digital circuits — every logic gate implements a connective, and every circuit computes a Boolean function.
+
+''Normal forms'' provide canonical representations:
+
+''Conjunctive Normal Form (CNF)'' — a conjunction (AND) of clauses, where each clause is a disjunction (OR) of literals:
+
+$$(p \vee \neg q) \wedge (\neg p \vee q \vee r) \wedge (\neg r)$$
+
+''Disjunctive Normal Form (DNF)'' — a disjunction (OR) of terms, where each term is a conjunction (AND) of literals:
+
+$$(p \wedge q) \vee (\neg p \wedge \neg q \wedge r)$$
+
+Any Boolean function can be expressed in either normal form. CNF is the standard input format for SAT solvers. DNF is useful for expressing "any one of these scenarios suffices."
+
+Converting between forms uses distributive laws:
+
+$$p \wedge (q \vee r) \equiv (p \wedge q) \vee (p \wedge r)$$
+$$p \vee (q \wedge r) \equiv (p \vee q) \wedge (p \vee r)$$
+
+The conversion can cause an exponential blowup in formula size — a compact CNF may become an exponentially large DNF and vice versa.
+
+''Functional completeness'': the set $\{\neg, \wedge\}$ (or $\{\neg, \vee\}$) can express //any// Boolean function. Even a single connective suffices: NAND alone or NOR alone is functionally complete, which is why real digital circuits are built from NAND gates.
+
+!! Propositional Logic in Machine Learning
+
+''Boolean features.'' Many ML pipelines encode categorical variables as binary features: "is_weekend = 1", "has_coupon = 0." Each feature is a proposition, and feature interactions ($x_1 \wedge x_2$) are conjunctions. [[Decision Trees|Decision Trees]] learn propositional formulas in DNF — each root-to-leaf path is a conjunction of feature tests, and the tree's prediction is the disjunction of all positive-class paths.
+
+''Neural-symbolic AI.'' Pure neural networks learn continuous functions; pure logic handles discrete reasoning. Neural-symbolic systems bridge the gap — encoding logical constraints as differentiable losses, or extracting propositional rules from trained networks. Logic Tensor Networks, DeepProbLog, and Neuro-Symbolic Concept Learner all embed propositional (and [[Predicate Logic|Predicate Logic]]) reasoning into gradient-based learning.
+
+''SAT solvers in ML.'' The [[Satisfiability|Satisfiability]] problem — given a CNF formula, find an assignment making it true — is the canonical [[NP-Completeness|NP-Completeness]] problem. Modern SAT solvers (DPLL, CDCL) can handle formulas with millions of variables and are used in formal verification of neural network properties (robustness, fairness), in constrained optimization, and in combinatorial search within structured prediction.
+
+''[[Boolean Fourier Analysis|Boolean Fourier Analysis]]'' treats Boolean functions as real-valued functions on $\{-1,+1\}^n$ and expands them in a Fourier basis. This connects propositional logic to learning theory: the Fourier spectrum reveals which "interactions" (conjunctions of variables) carry information, and low-degree Fourier concentration implies learnability by simple models.
+
+!! When Propositional Logic Breaks Down
+
+''1. Exponential truth tables.'' With $n$ propositions, the truth table has $2^n$ rows. For $n = 30$, that is over a billion rows — brute-force enumeration becomes impossible. This is why SAT solving requires clever algorithms (unit propagation, clause learning, backtracking) rather than exhaustive search, and why determining satisfiability is NP-complete in general.
+
+''2. No variables or quantifiers.'' Propositional logic cannot express "for all $x$" or "there exists $x$" — it has no notion of objects, properties, or relations. The statement "every even number greater than 2 is the sum of two primes" is beyond propositional logic entirely. For this, you need [[Predicate Logic|Predicate Logic]] (first-order logic), which adds variables, quantifiers, predicates, and functions.
+
+''3. No uncertainty or degrees of belief.'' Propositions are strictly true or false — there is no room for "probably true" or "80% confident." Real-world reasoning under uncertainty requires probabilistic logic, fuzzy logic, or Bayesian approaches. When ML models output probabilities rather than hard classifications, they have moved beyond the binary world of propositional logic into continuous-valued territory.
+
+!! Technical Details
+
+''Syntax:'' Propositional formulas are defined inductively. Atomic propositions ($p, q, r, \ldots$) are formulas. If $\phi$ and $\psi$ are formulas, then $\neg\phi$, $(\phi \wedge \psi)$, $(\phi \vee \psi)$, $(\phi \rightarrow \psi)$, and $(\phi \leftrightarrow \psi)$ are formulas.
+
+''Semantics:'' A ''valuation'' $v: \{p_1, \ldots, p_n\} \rightarrow \{T, F\}$ assigns truth values to all atomic propositions. The truth value of any compound formula under $v$ is computed recursively by the connective definitions.
+
+''Key equivalences:''
+- Idempotence: $p \wedge p \equiv p$, $p \vee p \equiv p$
+- Absorption: $p \wedge (p \vee q) \equiv p$, $p \vee (p \wedge q) \equiv p$
+- Double negation: $\neg\neg p \equiv p$
+- Exportation: $(p \wedge q) \rightarrow r \equiv p \rightarrow (q \rightarrow r)$
+
+''Resolution'' is a single inference rule sufficient for refutation-complete reasoning in CNF: from $(p \vee A)$ and $(\neg p \vee B)$, derive $(A \vee B)$. This is the basis of DPLL and CDCL SAT solvers.
+
+''Compactness theorem:'' An infinite set of propositional formulas is satisfiable if and only if every finite subset is satisfiable. This has implications for finite model theory and constraint satisfaction.
+
+''Craig's interpolation theorem:'' If $\phi \rightarrow \psi$ is a tautology and $\phi$ and $\psi$ share at least one atom, there exists a formula $\theta$ using only shared atoms such that $\phi \rightarrow \theta$ and $\theta \rightarrow \psi$ are both tautologies.
+
+Related topics: [[Predicate Logic|Predicate Logic]], [[Satisfiability|Satisfiability]], [[Boolean Fourier Analysis|Boolean Fourier Analysis]], [[Decision Trees|Decision Trees]], [[NP-Completeness|NP-Completeness]].
+
+!! Quiz
+
+<span id="pl-q1">Which connective makes $p \rightarrow q$ false?</span>
+
+A. When both $p$ and $q$ are false
+B. When $p$ is false and $q$ is true
+C. When $p$ is true and $q$ is false
+D. When both $p$ and $q$ are true
+
+<<button "A">><<replace "#pl-q1">>Incorrect. When $p$ is false, the implication $p \rightarrow q$ is //vacuously true// regardless of $q$. A false premise never breaks a conditional promise.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q1">>Incorrect. When $p$ is false, $p \rightarrow q$ is always true. The only way to break "if $p$ then $q$" is for $p$ to hold while $q$ fails.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q1">>Correct! Implication $p \rightarrow q$ is false //only// when the premise $p$ is true but the conclusion $q$ is false — a true hypothesis with a false guarantee is the one broken promise.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q1">>Incorrect. When both $p$ and $q$ are true, the implication holds: the premise is met and the conclusion follows.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q2">De Morgan's law states that $\neg(p \wedge q)$ is equivalent to:</span>
+
+A. $\neg p \wedge \neg q$
+B. $\neg p \vee \neg q$
+C. $p \vee q$
+D. $\neg p \rightarrow \neg q$
+
+<<button "A">><<replace "#pl-q2">>Incorrect. $\neg p \wedge \neg q$ is equivalent to $\neg(p \vee q)$, not $\neg(p \wedge q)$. De Morgan's law flips the connective from AND to OR when distributing negation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q2">>Correct! De Morgan's first law: negating a conjunction gives a disjunction of negations — $\neg(p \wedge q) \equiv \neg p \vee \neg q$. "Not both" means "at least one is false."<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q2">>Incorrect. $p \vee q$ drops the negations entirely. Negating $p \wedge q$ does not simply change the connective — the components must also be negated.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q2">>Incorrect. $\neg p \rightarrow \neg q$ is the //inverse// of $p \rightarrow q$, not related to De Morgan's laws. De Morgan converts AND/OR under negation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q3">A formula in Conjunctive Normal Form (CNF) is:</span>
+
+A. An OR of AND-clauses
+B. An AND of OR-clauses
+C. A single conjunction of all variables
+D. An implication chain $p_1 \rightarrow p_2 \rightarrow \cdots \rightarrow p_n$
+
+<<button "A">><<replace "#pl-q3">>Incorrect. An OR of AND-clauses is ''Disjunctive'' Normal Form (DNF). CNF is the dual: an AND of OR-clauses.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q3">>Correct! CNF is a conjunction (AND) of clauses, where each clause is a disjunction (OR) of literals. Example: $(p \vee \neg q) \wedge (\neg p \vee r)$. This is the standard input format for SAT solvers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q3">>Incorrect. A single conjunction of variables is just one term — a trivially simple CNF. The general form allows multiple OR-clauses joined by AND.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q3">>Incorrect. Implication chains are not a normal form. CNF and DNF use only AND, OR, and NOT — implications are eliminated first.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q4">How many rows does a truth table have for a formula with 5 atomic propositions?</span>
+
+A. 10
+B. 25
+C. 32
+D. 64
+
+<<button "A">><<replace "#pl-q4">>Incorrect. Truth table size grows exponentially as $2^n$, not linearly as $2n$. For $n = 5$: $2^5 = 32$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q4">>Incorrect. Truth table size is $2^n$, not $n^2$. For $n = 5$: $2^5 = 32$, not $5^2 = 25$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q4">>Correct! Each of the 5 propositions can be true or false, giving $2^5 = 32$ combinations. This exponential growth is why brute-force truth table evaluation becomes impractical for large formulas.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q4">>Incorrect. $64 = 2^6$, which would be the count for 6 propositions. For 5 propositions: $2^5 = 32$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q5">Which set of connectives is functionally complete (can express any Boolean function)?</span>
+
+A. $\{\wedge, \vee\}$ only
+B. $\{\neg, \wedge\}$
+C. $\{\rightarrow\}$ only
+D. $\{\vee\}$ only
+
+<<button "A">><<replace "#pl-q5">>Incorrect. Without negation, $\{\wedge, \vee\}$ can only compute //monotone// Boolean functions — functions where flipping an input from 0 to 1 never decreases the output. You cannot express NOT using only AND and OR.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q5">>Correct! $\{\neg, \wedge\}$ is functionally complete: you can build OR via De Morgan ($p \vee q \equiv \neg(\neg p \wedge \neg q)$), and from AND, OR, and NOT you can build any Boolean function. Similarly, $\{\neg, \vee\}$ and even $\{NAND\}$ alone are functionally complete.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q5">>Incorrect. Implication alone cannot express all Boolean functions — you cannot express $p \wedge q$ using only $\rightarrow$ without also having a constant (falsum). With falsum added, $\{\rightarrow, \bot\}$ is complete.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q5">>Incorrect. OR alone cannot express negation or conjunction. You need at least one "negating" operation to achieve functional completeness.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q6">What is the relationship between tautologies and satisfiability?</span>
+
+A. A formula is a tautology if and only if it is satisfiable
+B. A formula is a tautology if and only if its negation is unsatisfiable
+C. All satisfiable formulas are tautologies
+D. Tautologies and satisfiability are unrelated concepts
+
+<<button "A">><<replace "#pl-q6">>Incorrect. Every tautology is satisfiable, but not every satisfiable formula is a tautology. $p$ is satisfiable (set $p = T$) but not a tautology (fails when $p = F$).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q6">>Correct! A tautology $\phi$ is true under //every// valuation, so $\neg\phi$ is false under every valuation — meaning $\neg\phi$ has no satisfying assignment. This duality connects tautology-checking (Co-NP-complete) to satisfiability testing (NP-complete).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q6">>Incorrect. Satisfiable means "true under //at least one// valuation." Tautology means "true under //all// valuations." Most satisfiable formulas are not tautologies.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q6">>Incorrect. They are deeply related: tautology is the complement of unsatisfiability. Checking tautology and checking satisfiability are computationally dual problems.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q7">How do decision trees relate to propositional logic?</span>
+
+A. Each tree computes a formula in Conjunctive Normal Form (CNF)
+B. Each root-to-leaf path is a conjunction; the tree is a disjunction of these paths (DNF)
+C. Decision trees cannot express propositional formulas
+D. Decision trees use predicate logic, not propositional logic
+
+<<button "A">><<replace "#pl-q7">>Incorrect. Decision trees naturally produce DNF, not CNF. Each path is a conjunction of conditions (AND), and the overall tree is a disjunction (OR) of all positive paths.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q7">>Correct! A decision tree with Boolean features computes a DNF formula. Each path from root to a positive leaf is a conjunction of feature tests, and the tree predicts positive if //any// such path is satisfied — a disjunction of conjunctions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q7">>Incorrect. Decision trees with Boolean features express exactly the class of all Boolean functions and are equivalent to propositional formulas.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q7">>Incorrect. With Boolean features, decision trees operate squarely in propositional logic — no variables, quantifiers, or predicates are needed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pl-q8">What inference rule does the resolution method use?</span>
+
+A. From $p$ and $p \rightarrow q$, derive $q$ (modus ponens)
+B. From $(p \vee A)$ and $(\neg p \vee B)$, derive $(A \vee B)$
+C. From $\neg\neg p$, derive $p$ (double negation elimination)
+D. From $p \wedge q$, derive $p$ (simplification)
+
+<<button "A">><<replace "#pl-q8">>Incorrect. Modus ponens is a valid rule but not the resolution rule. Resolution works on disjunctive clauses in CNF, not implications.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pl-q8">>Correct! Resolution takes two clauses sharing a complementary literal — one containing $p$, the other $\neg p$ — and produces their ''resolvent'' $(A \vee B)$ with the complementary pair removed. Iterated resolution on CNF formulas is refutation-complete and forms the basis of DPLL/CDCL SAT solvers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pl-q8">>Incorrect. Double negation elimination is a valid equivalence but not the resolution rule. Resolution specifically operates on pairs of clauses with complementary literals.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pl-q8">>Incorrect. Simplification (conjunction elimination) extracts a conjunct from a conjunction. Resolution operates on //disjunctive// clauses, not conjunctions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

@@ -1,0 +1,154 @@
+Passage name: Stochastic Variance Reduction
+
+<<include "Header">>
+! Stochastic Variance Reduction
+<img src="assets/stochastic_variance_reduction.svg" alt="Diagram comparing SGD's noisy path vs SVRG's smooth variance-reduced path, with the control variate correction formula and method variants SVRG, SAGA, SARAH, Katyusha" style="max-width:100%; margin:1em 0;">
+
+Imagine you are trying to estimate the average height of trees in a forest. You could randomly sample trees, but each measurement is noisy — some trees are unusually tall, others stunted. Now suppose a surveyor already measured every tree last month. You can take your new random sample and ''correct'' it using the surveyor's old data: subtract the old measurement of the same tree and add back the old average. Your estimate barely wobbles. That is exactly what variance reduction does to stochastic gradients.
+
+!! The Core Insight
+
+<<link "Stochastic Gradient Descent" "Stochastic Gradient Descent">><</link>> uses a single data point (or mini-batch) to estimate the full gradient, which introduces ''variance'' that forces the learning rate to shrink over time and limits convergence to a sub-linear $O(1/T)$ rate. Johnson & Zhang (2013) showed that by periodically computing the ''full gradient'' at a reference point and using it as a ''control variate'', you can construct a stochastic gradient estimator whose variance shrinks to zero as the iterates approach the optimum. The payoff: ''linear convergence'' — exponentially fast — for strongly convex problems, using only $O(n)$ gradient evaluations per epoch (where $n$ is dataset size), matching full <<link "Gradient Descent" "Gradient Descent">><</link>> in rate while keeping the per-iteration cost of SGD.
+
+!! How Control Variates Tame the Noise
+
+The key mechanism is borrowed from Monte Carlo simulation. A ''control variate'' is a random variable with known expectation that is correlated with your noisy estimate. You subtract the control variate and add its known mean, cancelling much of the noise.
+
+In SVRG, at the start of each ''epoch'', you compute the full gradient $\tilde{\mu} = \frac{1}{n}\sum_{i=1}^n \nabla f_i(\tilde{w})$ at a snapshot point $\tilde{w}$. Then for each stochastic step with random index $i$:
+
+$$v_t = \nabla f_i(w_t) - \nabla f_i(\tilde{w}) + \tilde{\mu}$$
+
+The term $\nabla f_i(\tilde{w})$ acts as the control variate. Because $\mathbb{E}_i[\nabla f_i(\tilde{w})] = \tilde{\mu}$, the estimator $v_t$ is ''unbiased'': $\mathbb{E}[v_t] = \nabla F(w_t)$. But the variance is dramatically reduced: the two stochastic terms $\nabla f_i(w_t)$ and $\nabla f_i(\tilde{w})$ are highly correlated (same data point $i$, nearby parameters), so their difference has small variance. As $w_t \to w^*$ and $\tilde{w} \to w^*$, the variance goes to zero.
+
+!! What the Math Is Actually Doing
+
+For a finite-sum problem $F(w) = \frac{1}{n}\sum_{i=1}^n f_i(w)$ with each $f_i$ being $L$-smooth and $F$ being $\mu$-strongly convex (condition number $\kappa = L/\mu$):
+
+''SGD convergence:'' With decreasing step size $\eta_t = O(1/t)$:
+$$\mathbb{E}[F(w_T) - F(w^*)] = O\!\left(\frac{1}{T}\right)$$
+
+''SVRG convergence:'' With constant step size $\eta = \frac{1}{2L(1 + 4L/\mu)}$ and inner loop length $m = O(\kappa)$:
+$$\mathbb{E}[\|w_s - w^*\|^2] \leq \rho^s \|w_0 - w^*\|^2, \quad \rho < 1$$
+
+The convergence rate $\rho$ depends on the condition number: $\rho = \frac{1}{\mu \eta (1 - 2L\eta) m} + \frac{2L\eta}{1 - 2L\eta}$. Setting $m = O(n)$ and $\eta = O(1/L)$ gives $\rho = O(n/(n + \kappa))$, so the total gradient evaluations to reach $\epsilon$-accuracy is $O((n + \kappa)\log(1/\epsilon))$ — compared to $O(n\kappa\log(1/\epsilon))$ for full gradient descent and $O(1/\epsilon)$ for SGD.
+
+''Variance of the corrected estimator:''
+$$\text{Var}(v_t) = \mathbb{E}[\|\nabla f_i(w_t) - \nabla f_i(\tilde{w})\|^2] \leq 2L(F(w_t) - F(w^*) + F(\tilde{w}) - F(w^*))$$
+
+This bound (using smoothness) shows variance vanishes as both $w_t$ and $\tilde{w}$ approach $w^*$.
+
+!! Method Variants and Practical Usage
+
+''SVRG (Johnson & Zhang, 2013):'' Periodic full gradient at a snapshot point. Simple, low memory ($O(d)$ extra storage for $\tilde{\mu}$ and $\tilde{w}$). Must choose inner loop length $m$.
+
+''SAGA (Defazio et al., 2014):'' Stores one gradient per data point ($O(nd)$ memory). Updates the table incrementally — no periodic full gradient pass. Better for streaming or online settings. Update:
+$$v_t = \nabla f_i(w_t) - g_i^{\text{stored}} + \bar{g}, \quad \text{then } g_i^{\text{stored}} \leftarrow \nabla f_i(w_t)$$
+
+''SARAH (Nguyen et al., 2017):'' Uses recursive variance reduction:
+$$v_t = \nabla f_i(w_t) - \nabla f_i(w_{t-1}) + v_{t-1}$$
+Biased estimator but with inner product property $\langle v_t, \nabla F(w_t)\rangle \geq 0$ that guarantees descent. Tighter variance bounds than SVRG.
+
+''Katyusha (Allen-Zhu, 2017):'' Combines SVRG with Nesterov <<link "Momentum" "Momentum">><</link>>, achieving the optimal rate $O((n + n^{3/4}\sqrt{\kappa})\log(1/\epsilon))$ — provably faster than SVRG alone for ill-conditioned problems.
+
+''Practical considerations:'' These methods shine for convex problems (logistic regression, SVMs, structured prediction) where $n$ is large and $\kappa$ is moderate. For deep learning, the non-convexity and the dominance of mini-batch parallelism on GPUs have limited their adoption, though variance-reduced methods appear in reinforcement learning (SVRPG) and federated learning (SCAFFOLD). <<link "Learning Rate Scheduling" "Learning Rate Scheduling">><</link>> becomes simpler with variance reduction because a ''constant'' step size suffices.
+
+!! When Variance Reduction Breaks Down
+
+''Non-convex landscapes:'' The linear convergence guarantee requires strong convexity. In deep learning, the loss surface has saddle points, flat regions, and multiple minima. SVRG-style methods can still help empirically, but lose their theoretical edge. The periodic full gradient computation becomes expensive for large models, and the snapshot point $\tilde{w}$ may be far from useful in a rapidly changing loss landscape.
+
+''Memory-constrained settings:'' SAGA requires storing one gradient vector per training example — $O(nd)$ memory, which is prohibitive for high-dimensional problems (e.g., $n = 10^6$ images, $d = 10^6$ parameters). SVRG avoids this but requires the full-gradient pass. In practice, neither is free: you either pay in memory or in a periodic expensive computation.
+
+''GPU-parallel training:'' Modern deep learning relies on large mini-batches processed in parallel on GPUs. The variance of mini-batch SGD already decreases as $O(1/B)$ with batch size $B$, partially solving the variance problem by brute force. Variance reduction methods add computational overhead (two gradient evaluations per step in SVRG) that does not parallelize as naturally, making them less attractive when hardware parallelism is abundant.
+
+!! Technical Details
+
+''Foundational papers:''
+- Schmidt, Le Roux & Bach (2013) — SAG: the first incremental gradient method with linear convergence for finite sums.
+- Johnson & Zhang (2013) — SVRG: introduced the periodic full-gradient control variate approach.
+- Defazio, Bach & Lacoste-Julien (2014) — SAGA: unified incremental gradient framework.
+- Nguyen, Liu, Scheinberg & Takac (2017) — SARAH: recursive variance reduction.
+- Allen-Zhu (2017) — Katyusha: optimal accelerated variance reduction.
+
+''Relationship to <<link "Convex Optimization" "Convex Optimization">><</link>>:'' Variance reduction bridges the gap between stochastic and deterministic optimization. For strongly convex finite-sum problems, SVRG achieves the same linear rate as full gradient descent but with $O(n + \kappa)$ gradient evaluations per log-factor of accuracy improvement, vs. $O(n\kappa)$ for GD.
+
+''Proximal extensions:'' All major VR methods have proximal variants (Prox-SVRG, Prox-SAGA) that handle $\ell_1$ regularization and other non-smooth penalties by replacing the gradient step with a proximal operator.
+
+''Non-convex variants:'' Reddi et al. (2016) and Allen-Zhu & Hazan (2016) extended SVRG to non-convex settings, proving convergence to stationary points at rate $O(n^{2/3}/\epsilon)$ — faster than SGD's $O(1/\epsilon^2)$.
+
+''Connection to federated learning:'' SCAFFOLD (Karimireddy et al., 2020) applies the SVRG control variate idea across distributed clients, using local vs. global gradient differences to correct for client drift — a direct descendant of variance reduction theory.
+
+!! Quiz
+
+<span id="svr-q1">
+''1. What is the primary mechanism by which SVRG reduces gradient variance?''
+
+<<button "A. Using larger mini-batches">><<replace "#svr-q1">>Incorrect. Larger mini-batches reduce variance by averaging, but SVRG uses a control variate from a periodic full gradient — a fundamentally different mechanism.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Subtracting a correlated control variate and adding back the known full gradient">><<replace "#svr-q1">>Correct. SVRG computes $v_t = \nabla f_i(w_t) - \nabla f_i(\tilde{w}) + \tilde{\mu}$, where the control variate $\nabla f_i(\tilde{w})$ cancels much of the noise in $\nabla f_i(w_t)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Applying momentum to smooth out gradient estimates">><<replace "#svr-q1">>Incorrect. Momentum smooths gradients temporally but does not use a full gradient reference. Katyusha combines momentum with variance reduction, but the core VR mechanism is the control variate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Clipping gradient norms to bound variance">><<replace "#svr-q1">>Incorrect. Gradient clipping bounds the magnitude of updates but does not reduce estimator variance in the statistical sense.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q2">
+''2. What convergence rate does SVRG achieve for strongly convex finite-sum problems?''
+
+<<button "A. Sub-linear O(1/T)">><<replace "#svr-q2">>Incorrect. That is the rate of standard SGD with decreasing step sizes. SVRG does better.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Linear (exponential) convergence">><<replace "#svr-q2">>Correct. SVRG achieves $\mathbb{E}[\|w_s - w^*\|^2] \leq \rho^s$ with $\rho < 1$, meaning the error decreases exponentially — linear convergence in optimization terminology.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. O(1/T^2) like Nesterov acceleration">><<replace "#svr-q2">>Incorrect. $O(1/T^2)$ is the accelerated rate for convex (not strongly convex) problems in the deterministic setting. SVRG achieves the stronger linear rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Logarithmic O(log T)">><<replace "#svr-q2">>Incorrect. The error decreases as $\rho^T$, which is exponential — much faster than logarithmic.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q3">
+''3. How does SAGA differ from SVRG in its approach to variance reduction?''
+
+<<button "A. SAGA uses a periodic full gradient pass; SVRG does not">><<replace "#svr-q3">>Incorrect. This is backwards — SVRG requires periodic full gradient passes; SAGA avoids them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. SAGA stores one gradient per data point and updates incrementally, avoiding periodic full gradient computation">><<replace "#svr-q3">>Correct. SAGA maintains a table of $n$ stored gradients ($O(nd)$ memory) and updates them one at a time, eliminating the need for a periodic full pass over the data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. SAGA only works for non-convex problems">><<replace "#svr-q3">>Incorrect. SAGA was designed for and analyzed in the convex setting, like SVRG.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. SAGA uses second-order (Hessian) information">><<replace "#svr-q3">>Incorrect. SAGA is a first-order method that uses only gradient information.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q4">
+''4. Why does the variance of the SVRG estimator shrink to zero near the optimum?''
+
+<<button "A. The step size is decreased to zero">><<replace "#svr-q4">>Incorrect. SVRG uses a constant step size. The variance reduction comes from the estimator structure, not step size decay.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The mini-batch size is increased over time">><<replace "#svr-q4">>Incorrect. SVRG typically uses single data points throughout. The variance reduction is structural.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. As $w_t \to w^*$ and $\tilde{w} \to w^*$, the terms $\nabla f_i(w_t)$ and $\nabla f_i(\tilde{w})$ become nearly identical, so their difference vanishes">><<replace "#svr-q4">>Correct. By smoothness, $\|\nabla f_i(w_t) - \nabla f_i(\tilde{w})\|^2 \leq 2L(F(w_t) - F^* + F(\tilde{w}) - F^*)$, which goes to zero as both points approach the optimum.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The full gradient computation becomes exact at the optimum">><<replace "#svr-q4">>Incorrect. The full gradient is always exact (it is a sum over all data). The key is that the stochastic correction terms cancel near the optimum.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q5">
+''5. What is the total gradient evaluation complexity of SVRG to reach $\epsilon$-accuracy for a strongly convex problem?''
+
+<<button "A. $O(1/\epsilon)$">><<replace "#svr-q5">>Incorrect. That is the rate for standard SGD, which does not achieve linear convergence.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $O(n\kappa\log(1/\epsilon))$">><<replace "#svr-q5">>Incorrect. That is the rate for full gradient descent, which is slower than SVRG for large $n$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $O((n + \kappa)\log(1/\epsilon))$">><<replace "#svr-q5">>Correct. SVRG uses $O(n)$ evaluations for the full gradient plus $O(\kappa)$ stochastic steps per epoch, with $O(\log(1/\epsilon))$ epochs needed — giving $(n + \kappa)\log(1/\epsilon)$ total.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $O(n^2\log(1/\epsilon))$">><<replace "#svr-q5">>Incorrect. SVRG is much more efficient than quadratic in $n$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q6">
+''6. What property makes SARAH different from SVRG in terms of its gradient estimator?''
+
+<<button "A. SARAH uses an unbiased estimator like SVRG">><<replace "#svr-q6">>Incorrect. SARAH's recursive estimator $v_t = \nabla f_i(w_t) - \nabla f_i(w_{t-1}) + v_{t-1}$ is biased, unlike SVRG's unbiased estimator.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. SARAH builds the estimator recursively from the previous step, making it biased but with tighter variance bounds">><<replace "#svr-q6">>Correct. SARAH accumulates corrections recursively rather than anchoring to a fixed snapshot, producing a biased estimator with provably smaller variance than SVRG.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. SARAH requires second-order information">><<replace "#svr-q6">>Incorrect. SARAH is a first-order method using only gradient evaluations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. SARAH does not require any full gradient computation">><<replace "#svr-q6">>Incorrect. SARAH still requires a periodic full gradient to initialize each inner loop, similar to SVRG.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q7">
+''7. Why have variance reduction methods seen limited adoption in deep learning training?''
+
+<<button "A. They require convexity, which deep learning lacks">><<replace "#svr-q7">>Partially true but not the main practical reason. Non-convex extensions exist (Reddi et al., 2016). The bigger issue is computational.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. They are incompatible with GPU hardware">><<replace "#svr-q7">>Incorrect. They can run on GPUs; the issue is that they do not leverage GPU parallelism as naturally as large-batch SGD.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. GPU parallelism makes large mini-batches cheap, already reducing variance via averaging, while VR methods add overhead that parallelizes poorly">><<replace "#svr-q7">>Correct. Modern training uses large batches on parallel hardware, which naturally reduces variance as $O(1/B)$. The two-gradient-evaluation overhead of SVRG and the periodic full pass do not leverage GPU parallelism efficiently.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Variance reduction methods have been proven to diverge for neural networks">><<replace "#svr-q7">>Incorrect. There is no such proof; they can converge for neural networks but often do not provide a practical speedup over well-tuned SGD with momentum.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="svr-q8">
+''8. How does SCAFFOLD apply variance reduction ideas to federated learning?''
+
+<<button "A. It runs SVRG independently on each client">><<replace "#svr-q8">>Incorrect. Running SVRG locally does not address the client drift problem that SCAFFOLD targets.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It uses the difference between local and global gradient estimates as a control variate to correct for client drift">><<replace "#svr-q8">>Correct. SCAFFOLD maintains control variates that capture the discrepancy between each client's local gradient and the global gradient, directly applying the SVRG correction idea across distributed clients.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It averages all client gradients to eliminate variance">><<replace "#svr-q8">>Incorrect. Simple averaging (as in FedAvg) does not correct for client drift; SCAFFOLD specifically adds control variates to address this.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It replaces SGD with full gradient descent on each client">><<replace "#svr-q8">>Incorrect. Full gradient descent on each client would be expensive and does not address heterogeneity across clients.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

@@ -1,0 +1,157 @@
+<<include "Header">>
+
+! Matrix Multiplication
+
+<img src="assets/matrix_multiplication.svg" alt="Matrix Multiplication" style="width:100%;max-width:800px;display:block;margin:16px auto 24px auto;">
+
+Imagine you run a bakery with three kitchens, and each kitchen has a recipe card listing how much of each ingredient it uses. Now you get a shipment schedule — a table telling you how many batches each kitchen will run on each day of the week. To figure out the total amount of each ingredient you need each day, you walk down the ingredient list for one kitchen, multiply each quantity by how many batches that kitchen runs on a given day, and add them all up. Do this for every ingredient and every day, and you have a brand-new table. That is matrix multiplication: two tables of numbers combining to produce a third, where each entry is a ''dot product'' — a pairwise multiply-and-sum — of a row from the first table with a column from the second.
+
+---
+
+!! The Core Insight
+
+Matrix multiplication is not just arithmetic busywork — it is ''the language of composition''. When you multiply matrix $A$ by matrix $B$, you are asking: "What happens if I apply transformation $B$ first, then apply transformation $A$?" The result $C = AB$ is a single matrix that does both transformations in one shot. This is why the operation is //not commutative//: applying a rotation then a stretch is different from stretching then rotating, just as putting on your socks then your shoes gives a very different result from the reverse.
+
+The dimensional constraint — the number of columns in $A$ must equal the number of rows in $B$ — is not an arbitrary rule. It exists because the output of $B$'s transformation must live in a space that $A$ can accept as input. When you see $(m \times n) \cdot (n \times p) = (m \times p)$, the shared $n$ is the intermediate space where one transformation hands off to the next. Every neural network forward pass, every coordinate rotation, every change of basis in [[Core Linear Algebra|Core Linear Algebra]] is an instance of this single idea.
+
+---
+
+!! Rows Meet Columns
+
+Geometrically, each column of matrix $B$ is a vector in $n$-dimensional space. Multiplying $A$ by $B$ transforms //every column of $B$// through the linear map encoded by $A$. The columns of the result $C$ are the images of the columns of $B$ under transformation $A$.
+
+There is an equivalent and equally important viewpoint: each row of $A$ defines a //measurement direction//. The entry $c_{ij}$ records how much the $j$-th input vector (column $j$ of $B$) aligns with the $i$-th measurement direction (row $i$ of $A$). This row-column duality is what makes matrix multiplication so versatile — it simultaneously describes geometric transformation and inner-product measurement.
+
+When you compose two [[Linear Matrix Transformations|Linear Matrix Transformations]], the resulting matrix multiplication encodes every possible sequence of rotations, reflections, scalings, shears, and projections as a single matrix. Three successive rotations in 3D? One matrix. A camera projection followed by a pixel rescaling? One matrix. This composability is the reason linear algebra is the computational backbone of modern science.
+
+---
+
+!! What the Math Is Actually Doing
+
+The defining formula for matrix multiplication is:
+
+$$(AB)_{ij} = \sum_{k=1}^{n} A_{ik} B_{kj}$$
+
+For an $m \times n$ matrix $A$ and an $n \times p$ matrix $B$, the result $C = AB$ is $m \times p$. Each entry $c_{ij}$ is computed by taking the dot product of the $i$-th row of $A$ with the $j$-th column of $B$:
+
+$$c_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{in}b_{nj}$$
+
+''Dimension matching:'' The inner dimensions must agree. $(3 \times 5) \cdot (5 \times 2) = (3 \times 2)$ works; $(3 \times 5) \cdot (2 \times 5)$ does not. The inner dimension $n$ is "consumed" by the summation.
+
+''Non-commutativity:'' In general, $AB \neq BA$. Even when both products are defined (e.g., both are $n \times n$), the results differ unless $A$ and $B$ happen to share eigenvectors or one is the identity. Commutativity is the exception, not the rule.
+
+''Associativity:'' $(AB)C = A(BC)$ always holds when dimensions are compatible. This is crucial: it means you can choose the most efficient multiplication order. For matrices of sizes $(10 \times 100)$, $(100 \times 5)$, $(5 \times 50)$, multiplying left-to-right costs $10 \cdot 100 \cdot 5 + 10 \cdot 5 \cdot 50 = 7{,}500$ multiplications, while right-to-left costs $100 \cdot 5 \cdot 50 + 10 \cdot 100 \cdot 50 = 75{,}000$ — a 10x difference.
+
+''Distributivity:'' $A(B + C) = AB + AC$ and $(A + B)C = AC + BC$. Combined with associativity, this makes matrix algebra a ring — the algebraic structure that powers all of modern linear algebra.
+
+''Transpose rule:'' $(AB)^T = B^T A^T$. The reversal of order is a direct consequence of non-commutativity and shows up constantly when deriving gradients in backpropagation.
+
+---
+
+!! Matrix Multiplication in ML
+
+''Forward pass in [[Neural Networks|Neural Networks]]:'' Every fully connected layer computes $y = Wx + b$, where $W$ is a weight matrix, $x$ is the input vector (or a batch of vectors stacked as columns), and the multiplication $Wx$ is the core operation. A deep network with $L$ layers performs $L$ successive matrix multiplications, each followed by a nonlinearity. Without the nonlinearities, the entire network would collapse to a single matrix $W_L W_{L-1} \cdots W_1$ — which is precisely why [[Activation Functions|Activation Functions]] are essential.
+
+''[[Attention Mechanisms|Attention Mechanisms]] as matrix multiplication:'' The scaled dot-product attention $\text{softmax}(QK^T / \sqrt{d_k})V$ is two matrix multiplications sandwiching a softmax. The product $QK^T$ computes all pairwise similarities between queries and keys simultaneously — an $(n \times d)$ times $(d \times n)$ multiplication yielding an $(n \times n)$ attention matrix. Multiplying by $V$ then produces the weighted combination of values. This is why attention scales quadratically with sequence length and why efficient attention methods focus on approximating or restructuring these matrix products.
+
+''Batch operations and broadcasting:'' Modern ML frameworks process entire mini-batches as a single matrix multiplication. A batch of 64 input vectors, each 512-dimensional, passing through a layer with 256 neurons becomes a $(64 \times 512) \cdot (512 \times 256) = (64 \times 256)$ multiplication — all 64 samples computed in parallel.
+
+''GPU parallelism:'' Matrix multiplication is //embarrassingly parallel//: every entry of the output can be computed independently. GPUs exploit this by distributing the $m \times p$ output entries across thousands of cores. The NVIDIA A100 achieves 312 TFLOPS of float16 matrix multiply, and the entire deep learning hardware ecosystem — from tensor cores to TPUs — is optimised specifically for this one operation. The [[Hardware Lottery]] favors architectures built on matrix multiplication.
+
+---
+
+!! When Matrix Multiplication Breaks Down
+
+''Dimension mismatches in deep networks:'' When chaining layers, every weight matrix must have its row count equal to the previous layer's column count. A common source of bugs is reshaping or transposing tensors incorrectly, producing a $(512 \times 256)$ matrix where a $(256 \times 512)$ was expected. The error messages ("matmul: input operand 1 has a mismatch in dimension 0") are opaque, and the mismatch can propagate silently through broadcasting rules before surfacing layers later.
+
+''Numerical instability at scale:'' Multiplying many matrices in sequence can cause values to explode or vanish exponentially. If the largest [[Eigenvalues and Eigenvectors|eigenvalue]] of a weight matrix exceeds 1, repeated multiplication amplifies signals toward infinity; if all eigenvalues are less than 1, signals decay to zero. This is the fundamental cause of the vanishing and exploding gradient problem in deep networks, and it motivates techniques like careful weight initialization, gradient clipping, and normalization layers.
+
+''Computational cost of naive multiplication:'' For two $n \times n$ matrices, the standard algorithm requires $O(n^3)$ operations. Doubling the matrix size increases cost //eightfold//. At the scale of modern language models — where weight matrices can be $12{,}288 \times 12{,}288$ — a single matrix multiply involves billions of floating-point operations. Memory bandwidth, not compute, often becomes the true bottleneck, since the matrices must be loaded from slow DRAM into fast on-chip memory for every operation.
+
+---
+
+!! Technical Details
+
+''Strassen algorithm:'' In 1969, Volker Strassen showed that two $2 \times 2$ matrices can be multiplied with 7 scalar multiplications instead of the naive 8, yielding a recursive algorithm with complexity $O(n^{2.807})$. The constant factors are large enough that Strassen is only faster than naive multiplication for matrices roughly $n > 500$ in practice. On GPUs, the crossover point is even higher due to cache effects and memory access patterns.
+
+''Theoretical complexity bounds:'' The exponent $\omega$ of matrix multiplication — the smallest $\alpha$ such that two $n \times n$ matrices can be multiplied in $O(n^\alpha)$ operations — is a major open problem. The best current bound is $\omega < 2.3719$ (Duan, Wu, Zhou 2023). The lower bound is trivially $\omega \geq 2$ because you must at least read all inputs. Whether $\omega = 2$ is achievable remains unknown.
+
+''Block (tiled) multiplication:'' Partitioning matrices into sub-blocks and multiplying block-by-block improves cache utilisation dramatically. If each block fits in L1 cache, the number of slow memory accesses drops from $O(n^3)$ to $O(n^3 / \sqrt{M})$ where $M$ is cache size. This is the foundation of optimised BLAS (Basic Linear Algebra Subprograms) libraries like cuBLAS, MKL, and OpenBLAS.
+
+''Sparse matrix multiplication:'' When matrices are mostly zeros, specialized formats (CSR, CSC, COO) store only nonzero entries and skip zero multiplications. For a matrix with $\text{nnz}$ nonzero entries, sparse multiplication can run in $O(\text{nnz} \cdot p)$ instead of $O(n^2 p)$. Graph neural networks and sparse attention mechanisms exploit this heavily.
+
+''Numerical stability:'' Floating-point matrix multiplication accumulates rounding errors. For $n \times n$ matrices with entries of magnitude $\leq 1$, the worst-case error in each output entry is $O(n \cdot \epsilon)$ where $\epsilon$ is machine epsilon ($\sim 10^{-7}$ for float32, $\sim 10^{-3}$ for float16). Mixed-precision training uses float16 for speed but accumulates partial sums in float32 to bound error growth — this is exactly what GPU tensor cores do.
+
+''The matrix chain ordering problem:'' Given a sequence of matrices to multiply, choosing the optimal parenthesization is solvable in $O(n^3)$ time by dynamic programming. Frameworks like [[Einsum|Einsum]] and opt\_einsum automate this for tensor contractions in ML pipelines, sometimes yielding order-of-magnitude speedups.
+
+''Connection to [[Singular Value Decomposition|Singular Value Decomposition]]:'' Every matrix multiplication can be understood through SVD. If $A = U \Sigma V^T$, then $Ax$ first rotates $x$ by $V^T$, scales along principal axes by $\Sigma$, and rotates again by $U$. The [[Determinant|Determinant]] of the product $AB$ equals $\det(A) \cdot \det(B)$ — volume scaling composes multiplicatively.
+
+---
+
+!! Quiz
+
+<span id="mm-q1">What does entry $(i,j)$ of the product $AB$ represent?</span>
+A. The sum of all entries in row $i$ of $A$ and column $j$ of $B$
+B. The element-wise product of row $i$ of $A$ and row $j$ of $B$
+C. The dot product of row $i$ of $A$ with column $j$ of $B$
+D. The outer product of column $i$ of $A$ with row $j$ of $B$
+
+<<button "A">><<replace "#mm-q1">>Incorrect. The sum of entries ignores the pairwise structure. Each entry is a //dot product// — multiply corresponding elements, then sum.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q1">>Incorrect. Element-wise products between two rows would ignore the column structure of $B$. The dot product pairs row $i$ of $A$ with column $j$ of $B$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q1">>Correct! $(AB)_{ij} = \sum_k A_{ik} B_{kj}$ — each output entry is the dot product of one row from $A$ and one column from $B$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q1">>Incorrect. The outer product produces a matrix, not a scalar. A single entry of $AB$ is a scalar dot product.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q2">If $A$ is $4 \times 3$ and $B$ is $3 \times 7$, what is the size of $AB$?</span>
+A. $3 \times 3$
+B. $4 \times 7$
+C. $7 \times 4$
+D. $4 \times 3$
+
+<<button "A">><<replace "#mm-q2">>Incorrect. The inner dimensions (both 3) are consumed by the summation. The result takes the outer dimensions: 4 rows from $A$ and 7 columns from $B$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q2">>Correct! $(m \times n)(n \times p) = (m \times p)$. The 4 rows of $A$ and 7 columns of $B$ determine the output shape.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q2">>Incorrect. You have the dimensions reversed. The result has the row count of $A$ (4) and the column count of $B$ (7).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q2">>Incorrect. The result is not the same size as $A$. Matrix multiplication combines the outer dimensions: $4 \times 7$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q3">Why is matrix multiplication generally not commutative ($AB \neq BA$)?</span>
+A. Because floating-point rounding makes the results slightly different
+B. Because applying transformation $B$ then $A$ is geometrically different from $A$ then $B$
+C. Because the transpose rule reverses the order
+D. Because matrices must be square for both products to exist
+
+<<button "A">><<replace "#mm-q3">>Incorrect. Non-commutativity is an exact algebraic property, not a numerical artifact. Even with infinite precision, $AB \neq BA$ in general.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q3">>Correct! Matrix multiplication represents composition of transformations. Rotating then scaling gives a different result than scaling then rotating — the order of operations matters geometrically.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q3">>Incorrect. The transpose rule $(AB)^T = B^T A^T$ is a //consequence// of non-commutativity, not its cause.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q3">>Incorrect. Even when both matrices are square and both products $AB$ and $BA$ exist, they are generally unequal. Dimensionality is a separate issue.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q4">What is the computational complexity of naively multiplying two $n \times n$ matrices?</span>
+A. $O(n^2)$
+B. $O(n^{2.37})$
+C. $O(n^3)$
+D. $O(n^4)$
+
+<<button "A">><<replace "#mm-q4">>Incorrect. $O(n^2)$ is only enough to read the inputs. Computing each of the $n^2$ output entries requires an $n$-element dot product, giving $O(n^3)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q4">>Incorrect. $O(n^{2.37})$ is the best known //theoretical// bound using advanced algorithms. The //naive// triple-loop algorithm is $O(n^3)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q4">>Correct! The standard algorithm uses three nested loops (over $i$, $j$, $k$), each running $n$ times, for $O(n^3)$ total multiplications.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q4">>Incorrect. $O(n^4)$ would be wasteful. The naive algorithm needs only three nested loops, not four.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q5">In a neural network, what does the matrix multiplication $Wx$ compute in a fully connected layer?</span>
+A. The element-wise activation of the input
+B. The linear transformation of input $x$ by weight matrix $W$
+C. The gradient of the loss with respect to $x$
+D. The dropout mask applied to the layer
+
+<<button "A">><<replace "#mm-q5">>Incorrect. Element-wise activation is applied //after// the matrix multiplication by a nonlinear function like ReLU. The multiplication itself is a linear transformation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q5">>Correct! Each row of $W$ defines a learned linear combination of the input features. The product $Wx$ computes all such combinations simultaneously, mapping $x$ from one vector space to another.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q5">>Incorrect. Gradients are computed during backpropagation using the //transpose// $W^T$. The forward pass computes $Wx$, the transformation itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q5">>Incorrect. Dropout is a separate regularization technique that randomly zeroes entries. It has nothing to do with the matrix multiplication step.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q6">In the attention mechanism, what does the matrix product $QK^T$ compute?</span>
+A. The final output embeddings for each token
+B. A matrix of pairwise similarity scores between all queries and keys
+C. The gradient signal for updating the key matrix
+D. The positional encoding for each token
+
+<<button "A">><<replace "#mm-q6">>Incorrect. The final output requires a second multiplication by $V$ after applying softmax. $QK^T$ alone computes similarity scores, not output embeddings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q6">>Correct! $QK^T$ is an $(n \times d)(d \times n) = (n \times n)$ multiplication where each entry $(i,j)$ is the dot-product similarity between query $i$ and key $j$ — the foundation of [[Attention Mechanisms|Attention Mechanisms]].<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q6">>Incorrect. Gradients are computed in the backward pass. $QK^T$ in the forward pass measures how much each query attends to each key.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q6">>Incorrect. Positional encodings are added to the input embeddings before attention. The $QK^T$ product computes attention scores, not positions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q7">What does Strassen's algorithm achieve for matrix multiplication?</span>
+A. It reduces the complexity from $O(n^3)$ to $O(n^2)$ by eliminating redundant additions
+B. It reduces the complexity from $O(n^3)$ to $O(n^{2.807})$ by using 7 multiplications instead of 8 for $2 \times 2$ blocks
+C. It makes matrix multiplication commutative by reordering operations
+D. It converts dense multiplication to sparse multiplication automatically
+
+<<button "A">><<replace "#mm-q7">>Incorrect. $O(n^2)$ is impossible for general matrix multiplication since you must at least read all $2n^2$ inputs. Strassen achieves $O(n^{2.807})$, not $O(n^2)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q7">>Correct! Strassen's key insight is that two $2 \times 2$ matrices can be multiplied with 7 multiplications instead of 8, at the cost of more additions. Applied recursively, this gives $O(n^{\log_2 7}) \approx O(n^{2.807})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q7">>Incorrect. No algorithm can make matrix multiplication commutative — non-commutativity is a fundamental algebraic property, not an implementation detail.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q7">>Incorrect. Strassen operates on dense matrices. Sparse matrix algorithms are a separate family of techniques exploiting zero structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="mm-q8">Why does repeated matrix multiplication in deep networks cause vanishing or exploding gradients?</span>
+A. Because matrix multiplication is not associative, so errors accumulate unpredictably
+B. Because the eigenvalues of weight matrices compound multiplicatively across layers, causing exponential growth or decay
+C. Because GPUs lose precision when performing too many sequential multiplications
+D. Because the softmax function saturates after many layers
+
+<<button "A">><<replace "#mm-q8">>Incorrect. Matrix multiplication //is// associative — $(AB)C = A(BC)$ exactly. The problem is not associativity but the multiplicative compounding of eigenvalue magnitudes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mm-q8">>Correct! If the largest [[Eigenvalues and Eigenvectors|eigenvalue]] exceeds 1, signals grow exponentially across layers; if all eigenvalues are below 1, signals shrink to zero. This multiplicative compounding is the root cause of vanishing and exploding gradients.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mm-q8">>Incorrect. While floating-point precision is a real concern, vanishing/exploding gradients occur even in exact arithmetic. The issue is mathematical, not hardware-related.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mm-q8">>Incorrect. Softmax saturation can contribute to gradient issues in attention layers specifically, but the fundamental vanishing/exploding gradient problem arises from repeated matrix multiplication in any deep network architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

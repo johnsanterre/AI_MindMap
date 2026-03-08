@@ -1,0 +1,144 @@
+<<include "Header">>
+! Causal Graphs
+<img src="assets/causal_graphs.svg" alt="Causal Graphs" width="800">
+
+Imagine you notice that cities with more fire stations tend to have more fires. Should you close fire stations to reduce fires? Of course not — both are caused by a third factor: city size. ''Causal graphs'' are the mathematical tool that lets you draw out these relationships explicitly, distinguishing genuine causes from misleading correlations. They are directed acyclic graphs (DAGs) where each arrow represents a direct causal mechanism, and they give you a precise language for asking: //what would happen if we actually intervened//, rather than merely //what do we observe//?
+
+!! The Core Insight
+
+The fundamental idea behind causal graphs is that the world has a //direction//. Rain causes wet streets, not the other way around. A causal graph encodes this directionality as arrows between variables. Once you have the graph, you can read off exactly which statistical associations are causal and which are ''spurious'' — artifacts of shared causes, selection effects, or mediating pathways. The graph becomes a map that tells you which variables to adjust for, which to leave alone, and which you //must not// condition on, because doing so would actually //create// a false association where none existed.
+
+!! From Correlation to Causation
+
+A ''directed acyclic graph'' (DAG) is a set of nodes (variables) connected by directed edges (arrows) with no cycles — you can never follow the arrows and return to where you started. In a causal DAG, each arrow $X \rightarrow Y$ means that $X$ is a direct cause of $Y$ relative to the other variables in the graph.
+
+Three fundamental structures appear in every causal graph:
+
+//Chains//: $X \rightarrow M \rightarrow Y$. Here $M$ is a ''mediator''. The causal effect of $X$ on $Y$ flows //through// $M$. If you condition on the mediator, you block the path and can no longer see the effect of $X$ on $Y$ through that route.
+
+//Forks//: $X \leftarrow C \rightarrow Y$. Here $C$ is a ''confounder''. It causes both $X$ and $Y$, creating a [[Spurious Correlations|Spurious Correlations]] between them. Conditioning on $C$ blocks the spurious path and reveals the true relationship (or lack thereof) between $X$ and $Y$.
+
+//Colliders//: $X \rightarrow C \leftarrow Y$. Here $C$ is a ''collider''. The path between $X$ and $Y$ through $C$ is //naturally blocked//. But if you condition on $C$ (or any of its descendants), you //open// the path and create a spurious association. This is sometimes called ''collider bias'' or ''Berkson's paradox''.
+
+''D-separation'' is the graphical criterion that formalizes all of this. Two variables $X$ and $Y$ are d-separated given a set $Z$ if every path between them is blocked — either by a non-collider in $Z$ or by a collider not in $Z$. D-separation in the graph implies conditional independence in any distribution compatible with the graph: $X \perp\!\!\!\perp Y \mid Z$.
+
+These structures connect directly to [[Bayesian Networks|Bayesian Networks]] and [[Probabilistic Graphical Models|Probabilistic Graphical Models]], which share the same graphical language but add a quantitative probability layer.
+
+!! What the Math Is Actually Doing
+
+The central mathematical distinction in causal inference is between //observing// and //intervening//. Observing $X = x$ means learning that $X$ happened to take value $x$. Intervening means //forcing// $X$ to take value $x$, regardless of its usual causes. Judea Pearl's ''do-operator'' captures this:
+
+$$P(Y \mid do(X = x)) \neq P(Y \mid X = x)$$
+
+The left side asks: what is the distribution of $Y$ if we //set// $X$ to $x$? The right side asks: what is $Y$ among cases where $X$ //happened// to be $x$? These differ whenever confounders exist.
+
+The ''backdoor criterion'' provides a sufficient condition for computing causal effects from observational data. A set of variables $Z$ satisfies the backdoor criterion relative to $X \rightarrow Y$ if: (1) no variable in $Z$ is a descendant of $X$, and (2) $Z$ blocks every path from $X$ to $Y$ that has an arrow //into// $X$ (a "backdoor path"). When satisfied, the ''adjustment formula'' gives:
+
+$$P(Y \mid do(X = x)) = \sum_{z} P(Y \mid X = x, Z = z) \, P(Z = z)$$
+
+This is the bridge from causal questions to statistical estimation — you adjust for (stratify on) the right confounders, and observational data gives you the causal answer.
+
+The ''frontdoor criterion'' handles cases where you //cannot// observe the confounder directly. If a mediator $M$ lies on every directed path from $X$ to $Y$, and no unblocked backdoor paths exist from $X$ to $M$ or from $M$ to $Y$ after adjustment, then:
+
+$$P(Y \mid do(X = x)) = \sum_{m} P(M = m \mid X = x) \sum_{x'} P(Y \mid X = x', M = m) \, P(X = x')$$
+
+Pearl's ''do-calculus'' consists of three inference rules that, together, are //complete//: any causal quantity identifiable from the graph can be derived by applying these rules. The rules govern when you can insert or remove observations, interventions, and actions in probability expressions, based on d-separation criteria in modified versions of the graph.
+
+These ideas build on the foundations of [[Conditional Probability|Conditional Probability]] and extend [[Causal Inference|Causal Inference]] with a rigorous graphical language.
+
+!! Causal Reasoning in Practice
+
+A ''structural causal model'' (SCM) is the full formal framework underlying causal graphs. It consists of: (1) a set of endogenous variables, (2) a set of exogenous (background) variables, (3) a set of structural equations $X_i = f_i(\text{parents}(X_i), U_i)$ defining each variable as a deterministic function of its parents and noise. The causal graph is a visual summary of the SCM, and interventions correspond to //replacing// one or more structural equations.
+
+''A/B testing'' (randomized controlled trials) is the gold standard of causal inference because randomization physically implements the do-operator: by randomly assigning treatment, you sever all incoming edges to the treatment node, exactly as the right-hand panel of a mutilated graph shows. When experiments are impossible, we turn to observational methods.
+
+''Instrumental variables'' provide another path. An instrument $Z$ affects the outcome $Y$ //only through// the treatment $X$, and shares no common causes with $Y$. Graphically: $Z \rightarrow X \rightarrow Y$ with no other paths from $Z$ to $Y$. This structure lets you estimate causal effects even with unmeasured confounders.
+
+''Causal discovery algorithms'' attempt to learn the graph structure from data. The ''PC algorithm'' starts with a complete undirected graph and removes edges by testing conditional independences, then orients edges using collider patterns. The ''GES'' (Greedy Equivalence Search) algorithm searches over equivalence classes of DAGs by greedily optimizing a scoring function like BIC. Both algorithms return a ''Markov equivalence class'' — the set of DAGs that encode exactly the same conditional independences — since data alone typically cannot distinguish all causal directions.
+
+!! When Causal Reasoning Breaks Down
+
+* ''Unmeasured confounders''. If a common cause of treatment and outcome is missing from the graph, the backdoor criterion fails, and no adjustment set can remove the bias. The frontdoor criterion or instrumental variables may help, but only if the graph structure supports them. In practice, you can never be certain that all confounders have been measured, which is why observational causal claims always carry assumptions that cannot be tested from data alone.
+
+* ''Faithfulness violations''. The standard framework assumes that every d-connection in the graph corresponds to a real statistical association (''faithfulness''). But exact cancellations — where two causal paths produce effects that perfectly cancel — violate faithfulness and cause discovery algorithms to infer wrong structures. These cancellations are measure-zero in theory but can arise in finely tuned systems, such as feedback control loops or symmetric architectures.
+
+* ''Cycles and feedback''. Standard causal DAGs require acyclicity: no variable can cause itself, even indirectly. Many real systems — gene regulatory networks, economic markets, climate models — involve feedback loops. Extending causal reasoning to cyclic settings requires ''structural equation models with equilibrium'' or ''dynamic causal models'' that unfold time, and the neat guarantees of do-calculus no longer apply straightforwardly.
+
+!! Technical Details
+
+The ''causal Markov condition'' states that each variable is conditionally independent of its non-descendants given its parents in the causal DAG. This is the foundational assumption linking graph structure to probability distributions, and it is the same factorization property used in [[Bayesian Networks|Bayesian Networks]]:
+
+$$P(X_1, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Parents}(X_i))$$
+
+''Faithfulness'' is the converse assumption: the //only// conditional independences in the data are those implied by d-separation. Together, the Markov condition and faithfulness make the graph identifiable (up to Markov equivalence) from the independence structure of the distribution.
+
+A ''Markov equivalence class'' is the set of all DAGs that share the same skeleton (undirected edges) and the same v-structures (collider patterns $X \rightarrow C \leftarrow Y$ where $X$ and $Y$ are not adjacent). These classes are represented compactly as ''completed partially directed acyclic graphs'' (CPDAGs). Additional assumptions — such as additive noise models or non-Gaussianity — can break equivalences and allow identification of the unique causal DAG.
+
+Pearl's three rules of do-calculus are:
+* ''Rule 1 (Insertion/deletion of observations)'': $P(Y \mid do(X), Z, W) = P(Y \mid do(X), W)$ if $Y \perp\!\!\!\perp Z \mid X, W$ in the graph where all arrows into $X$ are removed.
+* ''Rule 2 (Action/observation exchange)'': $P(Y \mid do(X), do(Z), W) = P(Y \mid do(X), Z, W)$ if $Y \perp\!\!\!\perp Z \mid X, W$ in the graph where arrows into $X$ are removed and arrows out of $Z$ are removed.
+* ''Rule 3 (Insertion/deletion of actions)'': $P(Y \mid do(X), do(Z), W) = P(Y \mid do(X), W)$ if $Y \perp\!\!\!\perp Z \mid X, W$ in the graph where arrows into $X$ are removed and $Z$-ancestors removed in a specific way.
+
+These rules are provably //complete//: if a causal effect is identifiable from the graph and observational data, do-calculus can derive it.
+
+''Transportability'' extends causal reasoning across domains. Given experiments in a source population and observational data in a target population, transportability theory uses ''selection diagrams'' — causal graphs annotated with nodes indicating domain differences — to determine whether causal conclusions can be transferred, and how.
+
+!! Quiz
+
+<div id="q1">''1. In the fork structure $X \leftarrow C \rightarrow Y$, what role does $C$ play?''
+<<button "A) Mediator">><<replace "#q1">>That's not quite right. A mediator sits //between// cause and effect in a chain. $C$ here causes both $X$ and $Y$, making it a confounder.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Confounder">><<replace "#q1">>Correct! $C$ is a ''confounder'' — a common cause of both $X$ and $Y$. It creates a spurious association between them that disappears when you condition on $C$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Collider">><<replace "#q1">>Not quite. A collider has arrows pointing //into// it from both sides ($X \rightarrow C \leftarrow Y$). Here the arrows point //out// from $C$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Instrument">><<replace "#q1">>Incorrect. An instrumental variable affects the outcome only through the treatment. $C$ directly causes both $X$ and $Y$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What happens when you condition on a collider $X \rightarrow C \leftarrow Y$?''
+<<button "A) You block the path between X and Y">><<replace "#q2">>Actually the opposite. The path through a collider is //already blocked//. Conditioning on the collider //opens// it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) You remove confounding bias">><<replace "#q2">>No. Conditioning on a collider introduces a //new// spurious association rather than removing one.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) You open a previously blocked path, creating a spurious association">><<replace "#q2">>Correct! A collider naturally blocks the path between its parents. Conditioning on it (or its descendants) //opens// the path, inducing a spurious association known as ''collider bias''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Nothing changes">><<replace "#q2">>Incorrect. Conditioning on a collider has a very important effect — it opens the path and can create misleading associations.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What does the do-operator $P(Y \mid do(X = x))$ represent?''
+<<button "A) The probability of Y given that we observed X = x">><<replace "#q3">>That would be $P(Y \mid X = x)$, the observational conditional. The do-operator is different — it represents //intervention//, not observation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The probability of Y if we physically intervene to set X = x">><<replace "#q3">>Correct! The do-operator represents an //intervention// — forcing $X$ to take value $x$ by severing all incoming arrows to $X$ in the causal graph. This isolates the causal effect from confounding.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The joint probability of X and Y">><<replace "#q3">>No. $P(Y \mid do(X=x))$ is a conditional interventional distribution, not a joint distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The probability of X causing Y">><<replace "#q3">>Not exactly. It's the distribution of $Y$ //under intervention// on $X$, not a probability that causation exists. It quantifies the causal effect's magnitude.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. The backdoor criterion requires that the adjustment set $Z$:''
+<<button "A) Contains all descendants of X">><<replace "#q4">>Incorrect. In fact, the backdoor criterion requires that $Z$ contain //no// descendants of $X$. Including descendants can introduce bias.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Blocks all backdoor paths and contains no descendants of X">><<replace "#q4">>Correct! The ''backdoor criterion'' has exactly two conditions: (1) no variable in $Z$ is a descendant of $X$, and (2) $Z$ blocks every path from $X$ to $Y$ that contains an arrow //into// $X$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Includes the mediator between X and Y">><<replace "#q4">>No. Including a mediator would block part of the //causal// effect, which is what we're trying to measure. The backdoor criterion addresses confounding paths, not causal paths.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Must be a single variable">><<replace "#q4">>Incorrect. The adjustment set $Z$ can contain zero, one, or many variables — whatever is needed to block all backdoor paths.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. Why does randomization in an A/B test solve confounding?''
+<<button "A) It makes the sample larger">><<replace "#q5">>Sample size helps with precision but does not address confounding. Randomization solves confounding for a different reason.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It eliminates measurement error">><<replace "#q5">>Randomization doesn't affect measurement quality. Its power lies in breaking the link between treatment and confounders.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It severs all incoming causal edges to the treatment variable">><<replace "#q5">>Correct! Randomization physically implements the ''do-operator'' — it determines treatment independently of all other variables, severing any arrows that pointed into the treatment node. This eliminates all confounding by design.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It controls for all observed covariates">><<replace "#q5">>Not exactly. Randomization works because it breaks the //causal// link between confounders and treatment, not because it statistically adjusts for covariates.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What does a Markov equivalence class represent?''
+<<button "A) DAGs with the same number of nodes">><<replace "#q6">>No. Equivalence classes are defined by shared independence structure, not node count. Very different-looking graphs can have the same nodes but different equivalence classes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The set of all DAGs encoding the same conditional independences">><<replace "#q6">>Correct! A ''Markov equivalence class'' groups all DAGs that have the same skeleton and same v-structures (collider patterns). These DAGs imply exactly the same set of conditional independences, so observational data alone cannot distinguish between them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) DAGs that represent the same intervention">><<replace "#q6">>Not quite. DAGs in the same equivalence class share observational properties but can differ in their //interventional// distributions. That's exactly why equivalence is a limitation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A single unique DAG for each dataset">><<replace "#q6">>Incorrect. The key point is that multiple DAGs can be observationally indistinguishable, so you typically get a //class// of candidates, not a unique graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. The frontdoor criterion is useful when:''
+<<button "A) All confounders are observed">><<replace "#q7">>If all confounders are observed, you can use the simpler backdoor criterion. The frontdoor criterion is designed for situations where direct adjustment isn't possible.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) There is an unmeasured confounder but a fully mediating variable exists">><<replace "#q7">>Correct! The ''frontdoor criterion'' lets you identify causal effects even with //unmeasured confounders// by leveraging a mediator $M$ that lies on all directed paths from $X$ to $Y$, with no unblocked backdoor paths from $X$ to $M$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The graph contains no mediators">><<replace "#q7">>Actually, the frontdoor criterion //requires// a mediator. Without one, this criterion cannot be applied.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) You can run a randomized experiment">><<replace "#q7">>If you can run an experiment, you don't need the frontdoor criterion at all. It's an observational method for when experiments are infeasible.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. D-separation in a causal graph implies:''
+<<button "A) Causal sufficiency">><<replace "#q8">>No. Causal sufficiency is about whether all common causes are included in the graph. D-separation is about reading conditional independences from the graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) That an intervention will have no effect">><<replace "#q8">>Not necessarily. D-separation is about conditional independence under //observation//, not about the absence of causal effects under intervention.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Conditional independence in any distribution compatible with the graph">><<replace "#q8">>Correct! If $X$ and $Y$ are ''d-separated'' given $Z$ in the graph, then $X \perp\!\!\!\perp Y \mid Z$ in every probability distribution that is Markov with respect to that graph. This is the fundamental link between graphical structure and statistical properties.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) That X and Y have no common ancestor">><<replace "#q8">>Incorrect. D-separation is about blocked //paths//, not about ancestry. Two variables can share a common ancestor yet still be d-separated given the right conditioning set.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

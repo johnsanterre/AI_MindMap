@@ -1,0 +1,145 @@
+<<include "Header">>
+
+! Linear Matrix Transformations
+
+<img src="assets/linear_matrix_transformations.svg" alt="Linear Matrix Transformations" width="800">
+
+Imagine you have a rubber sheet with a grid drawn on it, pinned at the center. Every way you can stretch, rotate, flip, or skew that sheet — without tearing it or lifting the pin from the origin — is a ''linear matrix transformation''. The grid lines might tilt or spread apart, but they always stay straight, evenly spaced, and anchored at the origin. This single idea — that matrices are //functions that reshape space// — is the conceptual key that unlocks nearly all of [[Core Linear Algebra|Core Linear Algebra]], from solving equations to training [[Neural Networks|Neural Networks]].
+
+!! The Core Insight
+
+A linear transformation is completely determined by what it does to the ''basis vectors''. In two dimensions, if you know where the two unit vectors $\mathbf{e}_1 = (1,0)$ and $\mathbf{e}_2 = (0,1)$ land, you know where //every// point in the plane lands. The columns of the transformation matrix are simply the new positions of these basis vectors. This means a $2 \times 2$ matrix doesn't just store four numbers — it encodes an entire geometric operation on the plane. Every point $\mathbf{v}$ gets mapped to $A\mathbf{v}$, and the entire space deforms in a smooth, predictable way. Linearity guarantees two properties: $A(\mathbf{u} + \mathbf{v}) = A\mathbf{u} + A\mathbf{v}$ (addition is preserved) and $A(c\mathbf{v}) = cA\mathbf{v}$ ([[Scaling|Scaling]] is preserved).
+
+!! How Transformations Reshape Space
+
+Each type of transformation has a distinct geometric signature:
+
+''[[Rotation|Rotation]]'' spins every point around the origin by the same angle. Distances and angles between vectors are perfectly preserved — the grid rotates rigidly. In two dimensions, a rotation by angle $\theta$ sends the basis vectors to $(\cos\theta, \sin\theta)$ and $(-\sin\theta, \cos\theta)$.
+
+''[[Scaling|Scaling]]'' (and [[Stretching|Stretching]]) pulls the grid along the coordinate axes. Uniform scaling multiplies all distances equally; non-uniform scaling stretches one axis more than another, turning circles into ellipses. This is the geometric heart of [[Singular Value Decomposition|Singular Value Decomposition]].
+
+''[[Shear Transformation|Shear Transformation]]'' tilts one axis while keeping the other fixed. Think of pushing the top of a deck of cards sideways — each card slides proportionally to its height. Shears change angles but preserve area.
+
+''[[Reflection|Reflection]]'' flips space across a line (in 2D) or a plane (in 3D). It reverses orientation — a clockwise-wound shape becomes counterclockwise. You can detect a reflection because the [[Determinants|determinant]] is negative.
+
+''[[Projection|Projection]]'' collapses space onto a lower-dimensional subspace, like casting a shadow. Information is lost: multiple points map to the same image. This is the geometric engine behind [[Principal Component Analysis|Principal Component Analysis]].
+
+!! What the Math Is Actually Doing
+
+Every linear transformation in 2D can be written as matrix multiplication $\mathbf{y} = A\mathbf{x}$:
+
+''Rotation'' by angle $\theta$:
+
+$$R = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$$
+
+''Scaling'' by factors $s_x, s_y$:
+
+$$S = \begin{pmatrix} s_x & 0 \\ 0 & s_y \end{pmatrix}$$
+
+''Shear'' along the $x$-axis by factor $k$:
+
+$$H = \begin{pmatrix} 1 & k \\ 0 & 1 \end{pmatrix}$$
+
+''Reflection'' across the $x$-axis:
+
+$$M = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$$
+
+''Orthogonal projection'' onto the $x$-axis:
+
+$$P = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$$
+
+In each case, the columns of the matrix tell you exactly where the original basis vectors end up. Reading the matrix column-by-column //is// reading the transformation geometrically.
+
+!! Composing Transformations
+
+One of the most powerful properties of linear transformations is that ''composition equals [[Matrix Multiplication|Matrix Multiplication]]''. Applying transformation $B$ first and then $A$ is the same as multiplying by the product $AB$:
+
+$$(A \circ B)(\mathbf{x}) = A(B\mathbf{x}) = (AB)\mathbf{x}$$
+
+//Order matters.// Rotating then scaling generally produces a different result from scaling then rotating. In matrix language, $AB \neq BA$ in general. This non-commutativity is not a quirk — it reflects genuine geometric reality. Try rotating a rectangle 90 degrees then stretching it horizontally versus stretching first then rotating. You get different shapes.
+
+In deep learning, each layer of a [[Neural Networks|Neural Networks]] applies a linear transformation (weight matrix multiplication) followed by a nonlinear activation. The network learns a //composition// of transformations that progressively reshapes data from its raw form into a space where classification or regression becomes easy. [[Computer Vision|Computer Vision]] models, for instance, learn transformations that separate visual features into distinct regions of high-dimensional space.
+
+The ''inverse transformation'' $A^{-1}$ undoes the effect of $A$, sending every transformed point back to its original position. A [[Matrix Inverse|Matrix Inverse]] exists if and only if the transformation doesn't collapse any dimension — that is, when the determinant is nonzero.
+
+!! When Transformations Break Down
+
+* ''Singular transformations collapse dimensions.'' When $\det(A) = 0$, the transformation squashes space into a lower-dimensional subspace. A 3D volume becomes a plane, a line, or even a single point. Information is irreversibly destroyed, and the matrix has no inverse. This shows up numerically as division-by-near-zero instabilities.
+
+* ''Non-linearity sneaks in through translation.'' A "shift" that moves every point by a fixed offset — like $(x, y) \mapsto (x + 3, y + 1)$ — is //not// a linear transformation because it moves the origin. Affine transformations handle this by embedding into one higher dimension (homogeneous coordinates), but confusing linear with affine is a common source of modeling errors.
+
+* ''Floating-point errors compound under composition.'' Every time you multiply matrices, rounding errors accumulate. After many chained transformations, an orthogonal matrix (which should preserve lengths) gradually drifts, causing rotations to distort, scaling factors to creep, and geometric invariants to break. Re-orthogonalization procedures exist specifically to combat this.
+
+!! Technical Details
+
+The ''[[Determinants|determinant]]'' of a transformation matrix measures the factor by which the transformation scales area (2D) or volume (3D). $|\det(A)| > 1$ means expansion, $|\det(A)| < 1$ means contraction, and $\det(A) < 0$ means orientation is reversed.
+
+The ''[[Eigenvalues And Eigenvectors|Eigenvalues And Eigenvectors]]'' of a transformation matrix reveal its //invariant directions// — directions along which the transformation acts as pure scaling. An eigenvalue $\lambda$ tells you the scaling factor along its eigenvector. Rotation matrices in 2D have complex eigenvalues $e^{\pm i\theta}$ because no real direction stays fixed under a nontrivial rotation.
+
+The ''[[Singular Value Decomposition|Singular Value Decomposition]]'' decomposes any matrix $A = U\Sigma V^T$, expressing //every// linear transformation as: rotate ($V^T$), scale along axes ($\Sigma$), rotate again ($U$). The singular values in $\Sigma$ give the maximum and minimum stretching factors. The ''condition number'' $\kappa = \sigma_{\max}/\sigma_{\min}$ measures how close a transformation is to being singular — large condition numbers signal numerical instability.
+
+An ''orthogonal matrix'' ($Q^TQ = I$) represents a pure rotation or reflection — it preserves lengths and angles. Orthogonal transformations have $|\det(Q)| = 1$ and all singular values equal to 1. They are the isometries of Euclidean space.
+
+''Affine transformations'' extend linear transformations by adding a translation: $\mathbf{y} = A\mathbf{x} + \mathbf{b}$. They preserve parallelism and ratios of distances along lines, but not the origin. In homogeneous coordinates, they become linear maps in one higher dimension.
+
+The ''rank'' of the transformation matrix equals the dimension of its image — the number of independent output directions. A rank-deficient transformation projects onto a proper subspace, losing information in the null space.
+
+!! Quiz
+
+<div id="q1">''1. What determines a linear transformation completely in $\mathbb{R}^n$?''
+<<button "A) Its determinant">><<replace "#q1">>The determinant tells you area scaling, but not the full transformation. Two different matrices can share the same determinant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Where it sends the basis vectors">><<replace "#q1">>Correct! The columns of the transformation matrix are the images of the standard basis vectors, and linearity extends this to all points.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Its eigenvalues">><<replace "#q1">>Eigenvalues constrain the transformation, but different matrices can share the same eigenvalues (they may differ in eigenvectors).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The number of rows and columns">><<replace "#q1">>The dimensions tell you the input and output spaces, but not what the transformation actually does within those spaces.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What does a determinant of $-3$ tell you about a 2D transformation?''
+<<button "A) It triples the area and preserves orientation">><<replace "#q2">>The magnitude is 3 (triples area), but the negative sign means orientation is //reversed//, not preserved.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It reduces area by a factor of 3">><<replace "#q2">>A determinant of $-3$ means the area is //multiplied// by 3 (the absolute value), not reduced.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It triples the area and reverses orientation">><<replace "#q2">>Correct! $|\det| = 3$ means area is scaled by 3, and the negative sign indicates orientation reversal (like a reflection).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The transformation is singular">><<replace "#q2">>A singular transformation has determinant exactly 0. A nonzero determinant means the transformation is invertible.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. Why does matrix multiplication order matter when composing transformations?''
+<<button "A) Because matrices have different sizes">><<replace "#q3">>Even square matrices of the same size generally don't commute. The issue is geometric, not dimensional.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because the first transformation changes the space the second one acts on">><<replace "#q3">>Correct! Each transformation reshapes space, so the next transformation operates on //already-deformed// geometry. Rotating then scaling gives a different result than scaling then rotating.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because computers process operations left to right">><<replace "#q3">>This is a computational implementation detail, not the mathematical reason for non-commutativity.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Order doesn't actually matter for linear transformations">><<replace "#q3">>It absolutely does. $AB \neq BA$ in general. Try a rotation followed by a shear versus the reverse.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. A shear transformation has which property?''
+<<button "A) It preserves both lengths and angles">><<replace "#q4">>Shears distort angles — perpendicular lines become oblique. Only rotations and reflections preserve both lengths and angles.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It preserves area but changes angles">><<replace "#q4">>Correct! A shear has determinant 1, so it preserves area. But it tilts one axis, changing angles between vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It has determinant 0">><<replace "#q4">>A shear matrix like $\begin{pmatrix}1 & k \\ 0 & 1\end{pmatrix}$ has determinant 1, not 0. It is always invertible.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It always has complex eigenvalues">><<replace "#q4">>Shear matrices have repeated real eigenvalues (both equal to 1 in the standard case).<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. In the SVD $A = U\Sigma V^T$, what does $\Sigma$ represent geometrically?''
+<<button "A) A rotation">><<replace "#q5">>$U$ and $V^T$ handle the rotations. $\Sigma$ is the scaling step in between.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A reflection">><<replace "#q5">>Reflections may be absorbed into $U$ or $V$. $\Sigma$ is diagonal and non-negative — pure scaling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Scaling along the principal axes">><<replace "#q5">>Correct! $\Sigma$ is a diagonal matrix whose entries (the singular values) give the stretching factors along orthogonal axes defined by $U$ and $V$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A projection onto a subspace">><<replace "#q5">>Projection involves rank reduction. $\Sigma$ encodes all the scaling magnitudes, not projection specifically.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. Which transformation type does NOT preserve the origin?''
+<<button "A) Rotation">><<replace "#q6">>Rotation maps $\mathbf{0}$ to $\mathbf{0}$. All linear transformations fix the origin by definition.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Scaling">><<replace "#q6">>Scaling maps $\mathbf{0}$ to $\mathbf{0}$. The origin is always fixed under linear transformations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Translation">><<replace "#q6">>Correct! Translation shifts every point, including the origin. That is why it is //not// a linear transformation — it is affine. You need homogeneous coordinates to represent it as a matrix.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Reflection">><<replace "#q6">>Reflection maps $\mathbf{0}$ to $\mathbf{0}$. The origin lies on any reflection axis and is always fixed.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. A rotation matrix in 2D has which eigenvalue property?''
+<<button "A) Both eigenvalues are 1">><<replace "#q7">>That would be the identity matrix (rotation by 0 degrees). A nontrivial rotation has no real eigenvectors in 2D.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Eigenvalues are complex: $e^{\pm i\theta}$">><<replace "#q7">>Correct! No real direction stays fixed under a nontrivial 2D rotation. The complex eigenvalues $e^{\pm i\theta}$ encode the rotation angle, and their magnitude is 1, confirming length preservation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) One eigenvalue is 0">><<replace "#q7">>A zero eigenvalue would make the matrix singular (determinant = 0). Rotation matrices always have determinant 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Eigenvalues equal the rotation angle">><<replace "#q7">>The eigenvalues are $e^{\pm i\theta}$, not $\theta$ itself. They encode the angle through Euler's formula.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. What condition number indicates a nearly singular transformation?''
+<<button "A) $\kappa \approx 0$">><<replace "#q8">>The condition number is $\sigma_{\max}/\sigma_{\min} \geq 1$, so it cannot approach 0.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $\kappa \approx 1$">><<replace "#q8">>$\kappa = 1$ means all singular values are equal — the transformation scales uniformly. This is the //best-conditioned// case.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $\kappa \gg 1$ (very large)">><<replace "#q8">>Correct! A large condition number means $\sigma_{\max} \gg \sigma_{\min}$, so the matrix nearly collapses one direction. Small input perturbations get amplified, causing numerical instability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $\kappa = -1$">><<replace "#q8">>Condition numbers are always positive (ratio of positive singular values). A negative value is not possible.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

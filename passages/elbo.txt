@@ -1,0 +1,139 @@
+<<include "Header">>
+! ELBO
+<img src="assets/elbo.svg" alt="Diagram showing log evidence decomposed into ELBO plus KL divergence gap, with reconstruction and regularization components" style="max-width:100%;margin:1em 0;">
+
+Imagine you want to judge how well a factory produces a particular product, but you can only see the finished items — never the internal assembly steps. You know the factory uses hidden intermediate parts (latent variables), but inspecting every possible assembly pathway is impossibly expensive. The ''Evidence Lower Bound'' (ELBO) is like hiring an inspector who follows a //simplified// map of the assembly process and gives you a guaranteed-pessimistic score: the real quality is always at least as high as what the inspector reports. By improving the inspector's score, you push toward a better factory — without ever needing to audit every hidden pathway.
+
+!! The Core Insight
+
+We want to maximize the ''log evidence'' $\log p(x)$ — the probability our model assigns to observed data $x$. But computing $p(x) = \int p(x,z)\,dz$ requires integrating over all possible values of the ''latent variables'' $z$, which is almost always intractable.
+
+The ELBO gives us a computable lower bound on $\log p(x)$ that we //can// optimize. The trick is to introduce an approximate posterior $q(z|x)$ and use Jensen's inequality (or equivalently, the non-negativity of KL divergence) to show:
+
+$$\log p(x) \;\geq\; \mathbb{E}_{q(z|x)}\!\big[\log p(x,z) - \log q(z|x)\big] \;=\; \text{ELBO}$$
+
+The gap between $\log p(x)$ and the ELBO is exactly $D_{\text{KL}}\!\big(q(z|x)\,\|\,p(z|x)\big)$ — the [[KL Divergence]] between our approximate posterior and the true (unknown) posterior. When $q$ perfectly matches $p(z|x)$, the bound is tight.
+
+Links: <<link "Variational Autoencoder" "Variational Autoencoder">><</link>>, <<link "KL Divergence" "KL Divergence">><</link>>, <<link "Variational Inference" "Variational Inference">><</link>>, <<link "Maximum Likelihood" "Maximum Likelihood">><</link>>, <<link "Latent Variables" "Latent Variables">><</link>>
+
+!! Deriving the ELBO
+
+Start from log evidence and introduce $q(z|x)$:
+
+$$\log p(x) = \log \int p(x,z)\,dz = \log \int q(z|x)\,\frac{p(x,z)}{q(z|x)}\,dz$$
+
+By ''Jensen's inequality'' (since $\log$ is concave):
+
+$$\log p(x) \;\geq\; \int q(z|x)\,\log\frac{p(x,z)}{q(z|x)}\,dz \;=\; \text{ELBO}$$
+
+Alternatively, we can derive this from the KL decomposition. Since $p(z|x) = p(x,z)/p(x)$:
+
+$$D_{\text{KL}}\!\big(q(z|x)\,\|\,p(z|x)\big) = \mathbb{E}_{q}\!\Big[\log q(z|x) - \log p(z|x)\Big] = \mathbb{E}_{q}\!\Big[\log q(z|x) - \log p(x,z)\Big] + \log p(x)$$
+
+Rearranging: $\log p(x) = \text{ELBO} + D_{\text{KL}}\!\big(q(z|x)\,\|\,p(z|x)\big)$. Since $D_{\text{KL}} \geq 0$, the ELBO is a lower bound.
+
+!! What the Math Is Actually Doing
+
+The ELBO decomposes into two interpretable terms:
+
+$$\text{ELBO} = \underbrace{\mathbb{E}_{q(z|x)}\!\big[\log p(x|z)\big]}_{\text{reconstruction term}} \;-\; \underbrace{D_{\text{KL}}\!\big(q(z|x)\,\|\,p(z)\big)}_{\text{regularization term}}$$
+
+The ''reconstruction term'' $\mathbb{E}_{q(z|x)}[\log p(x|z)]$ measures how well latent codes sampled from $q$ can reconstruct the observed data $x$ through the decoder $p(x|z)$. Maximizing this encourages the model to encode enough information in $z$ to faithfully reproduce the data.
+
+The ''regularization term'' $-D_{\text{KL}}(q(z|x)\,\|\,p(z))$ penalizes the encoder $q(z|x)$ for deviating from the prior $p(z)$. When $p(z) = \mathcal{N}(0, I)$ and $q(z|x) = \mathcal{N}(\mu(x), \sigma^2(x)I)$, this KL has a closed-form solution:
+
+$$D_{\text{KL}} = \frac{1}{2}\sum_{j=1}^{d}\!\Big(\mu_j^2 + \sigma_j^2 - \log \sigma_j^2 - 1\Big)$$
+
+These two terms are in tension: the reconstruction term wants $q(z|x)$ to be informative (encode everything about $x$), while the regularization term wants $q(z|x)$ to stay close to a simple prior (forget $x$). This tension is the core tradeoff in [[Variational Autoencoder]] training.
+
+!! ELBO in Practice
+
+In a ''VAE'' (Kingma & Welling, 2014), the ELBO is optimized jointly over encoder parameters $\phi$ (for $q_\phi(z|x)$) and decoder parameters $\theta$ (for $p_\theta(x|z)$). The ''reparameterization trick'' makes this possible: sample $z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon$ with $\varepsilon \sim \mathcal{N}(0,I)$, so gradients flow through $\mu$ and $\sigma$ via backpropagation.
+
+''Importance-weighted ELBO'' (IWAE, Burda et al. 2016) tightens the bound using $K$ samples:
+
+$$\mathcal{L}_K = \mathbb{E}_{z_1,\ldots,z_K \sim q}\!\left[\log \frac{1}{K}\sum_{k=1}^{K} \frac{p(x,z_k)}{q(z_k|x)}\right]$$
+
+As $K \to \infty$, $\mathcal{L}_K \to \log p(x)$. In practice, $K = 5{-}50$ gives meaningful improvement.
+
+''Beta-VAE'' (Higgins et al. 2017) introduces a weight $\beta$ on the KL term: $\mathcal{L}_\beta = \mathbb{E}_q[\log p(x|z)] - \beta \cdot D_{\text{KL}}(q(z|x)\,\|\,p(z))$. Setting $\beta > 1$ encourages disentangled representations at the cost of reconstruction quality.
+
+!! When ELBO Optimization Breaks Down
+
+''Posterior collapse:'' The decoder $p_\theta(x|z)$ becomes so powerful that it ignores $z$ entirely. The encoder collapses to the prior ($q(z|x) \approx p(z)$), the KL term goes to zero, and the latent space carries no information. This is common with autoregressive decoders (e.g., PixelCNN, Transformer). Mitigations include KL annealing, free bits, and delta-VAE.
+
+''Approximate posterior gap:'' If the family of distributions for $q(z|x)$ is too restrictive (e.g., diagonal Gaussian when the true posterior is multimodal), the KL gap $D_{\text{KL}}(q\,\|\,p(z|x))$ stays large, and the ELBO becomes a loose bound. Normalizing flows, hierarchical posteriors, and auxiliary VAEs help tighten it.
+
+''Reconstruction-regularization conflict:'' With high-dimensional data, the reconstruction term can overwhelm the KL term by orders of magnitude, or vice versa. This leads to either blurry outputs (over-regularized) or latent spaces with no structure (under-regularized). Careful tuning of $\beta$, the likelihood model (Gaussian vs. Bernoulli), and the latent dimensionality is required.
+
+!! Technical Details
+
+''Origin:'' The ELBO was introduced in the context of variational EM by Jordan et al. (1999) and popularized in deep learning by the VAE paper (Kingma & Welling 2014; Rezende et al. 2014).
+
+''Tighter bounds:'' IWAE (Burda et al. 2016) uses importance weighting; IWAE with resampling (Cremer et al. 2017) further reduces variance. Thermodynamic variational objectives (Masrani et al. 2019) use annealed importance sampling for arbitrarily tight bounds.
+
+''Connection to EM:'' The EM algorithm can be seen as coordinate ascent on the ELBO — the E-step optimizes $q$ (tightens the bound), the M-step optimizes $\theta$ (raises the bound). When $q = p(z|x)$ exactly, the E-step makes the bound tight.
+
+''Amortized inference:'' Classical [[Variational Inference]] optimizes a separate $q$ for each data point. VAEs ''amortize'' this by training a single neural network $q_\phi(z|x)$ that outputs variational parameters for any input $x$. This is faster but introduces an amortization gap.
+
+''Score function estimator vs. reparameterization:'' For continuous $z$, the reparameterization trick gives low-variance gradients. For discrete $z$, one must use REINFORCE-style estimators (high variance) or continuous relaxations like Gumbel-Softmax.
+
+!! Quiz
+
+<span id="elbo-q1">''1. What does the ELBO provide a lower bound on?''
+
+<<button "A. The prior p(z)">><<replace "#elbo-q1">>A. The prior p(z) — No. The prior is a chosen distribution, not something we bound.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The log evidence log p(x)">><<replace "#elbo-q1">>B. The log evidence log p(x) — Correct. The ELBO is a lower bound on the log marginal likelihood of the observed data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The KL divergence between q and p">><<replace "#elbo-q1">>C. The KL divergence — No. The KL divergence is the gap above the ELBO, not what the ELBO bounds.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The reconstruction error">><<replace "#elbo-q1">>D. The reconstruction error — No. Reconstruction is one component of the ELBO, not what it bounds.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q2">''2. What is the gap between log p(x) and the ELBO?''
+
+<<button "A. The reconstruction error">><<replace "#elbo-q2">>A. Reconstruction error — No. The gap is a KL divergence, not reconstruction error.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The entropy of q(z|x)">><<replace "#elbo-q2">>B. Entropy of q — No. Entropy appears inside the ELBO but is not the gap itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. D_KL(q(z|x) ‖ p(z|x))">><<replace "#elbo-q2">>C. D_KL(q(z|x) ‖ p(z|x)) — Correct. The gap is the KL divergence between the approximate and true posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. D_KL(q(z|x) ‖ p(z))">><<replace "#elbo-q2">>D. D_KL(q(z|x) ‖ p(z)) — No. This is the regularization term inside the ELBO, not the gap above it.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q3">''3. The ELBO's reconstruction term encourages the model to:''
+
+<<button "A. Push q(z|x) toward the prior p(z)">><<replace "#elbo-q3">>A. Push toward prior — No. That is the regularization term's role.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Minimize the entropy of the latent space">><<replace "#elbo-q3">>B. Minimize entropy — No. The reconstruction term is about data fidelity, not latent entropy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Encode enough information in z to reconstruct x via p(x|z)">><<replace "#elbo-q3">>C. Reconstruct x from z — Correct. E_q[log p(x|z)] rewards latent codes that faithfully decode back to the data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Maximize the KL divergence">><<replace "#elbo-q3">>D. Maximize KL — No. Maximizing KL would be counterproductive to the ELBO objective.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q4">''4. In the reparameterization trick, z is sampled as:''
+
+<<button "A. z ~ p(z) directly, ignoring q">><<replace "#elbo-q4">>A. Direct prior sampling — No. We need samples from q(z|x), not the prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. z = mu(x) + sigma(x) * epsilon, where epsilon ~ N(0,I)">><<replace "#elbo-q4">>B. z = mu + sigma * epsilon — Correct. This makes z a deterministic function of the parameters plus external noise, enabling backpropagation through mu and sigma.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. z = argmax_z q(z|x)">><<replace "#elbo-q4">>C. argmax — No. Taking the mode loses the stochasticity needed for the expectation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. z is obtained via Gibbs sampling from p(z|x)">><<replace "#elbo-q4">>D. Gibbs sampling — No. That would require the true posterior, which is intractable.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q5">''5. What is posterior collapse in a VAE?''
+
+<<button "A. The decoder diverges to infinite loss">><<replace "#elbo-q5">>A. Infinite loss — No. Posterior collapse refers to the encoder ignoring its input, not loss divergence.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The encoder q(z|x) collapses to the prior p(z), and z carries no information about x">><<replace "#elbo-q5">>B. Encoder collapses to prior — Correct. The KL term goes to zero, but the latent codes become useless because a powerful decoder ignores them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The ELBO exceeds log p(x), violating the bound">><<replace "#elbo-q5">>C. Bound violation — No. The ELBO can never exceed log p(x) by construction.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Gradients vanish in the decoder">><<replace "#elbo-q5">>D. Vanishing gradients — No. Posterior collapse is about information flow, not gradient magnitude.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q6">''6. How does the importance-weighted ELBO (IWAE) improve on the standard ELBO?''
+
+<<button "A. It uses a discriminator to sharpen the bound">><<replace "#elbo-q6">>A. Discriminator — No. IWAE is not adversarial; it uses importance weighting.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It averages p(x,z)/q(z|x) over K samples inside the log, giving a tighter bound as K grows">><<replace "#elbo-q6">>B. K-sample averaging inside log — Correct. By Jensen's inequality, log(1/K sum ...) >= 1/K sum log(...), so IWAE is tighter than the standard single-sample ELBO.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It replaces the KL term with a Wasserstein distance">><<replace "#elbo-q6">>C. Wasserstein — No. IWAE still uses the same probabilistic framework, just with importance weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It removes the need for a prior p(z)">><<replace "#elbo-q6">>D. No prior — No. IWAE still requires a prior in the joint p(x,z) = p(x|z)p(z).<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q7">''7. In the EM algorithm, how does the E-step relate to the ELBO?''
+
+<<button "A. The E-step maximizes the ELBO with respect to model parameters theta">><<replace "#elbo-q7">>A. Maximizes over theta — No. That is the M-step. The E-step optimizes the approximate posterior q.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The E-step sets q(z|x) = p(z|x,theta), making the ELBO tight">><<replace "#elbo-q7">>B. Sets q = p(z|x), tightening the bound — Correct. With the exact posterior, the KL gap becomes zero and ELBO = log p(x).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The E-step computes log p(x) exactly, bypassing the ELBO">><<replace "#elbo-q7">>C. Exact log p(x) — No. The E-step works through the ELBO framework, not by computing log p(x) directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The E-step is unrelated to the ELBO">><<replace "#elbo-q7">>D. Unrelated — No. EM can be understood entirely as coordinate ascent on the ELBO.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="elbo-q8">''8. In a Beta-VAE with beta > 1, what happens compared to the standard VAE?''
+
+<<button "A. The reconstruction quality improves while regularization decreases">><<replace "#elbo-q8">>A. Better reconstruction — No. Higher beta means //more// regularization pressure, which typically //hurts// reconstruction.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The KL term is weighted more heavily, encouraging disentangled representations at the cost of reconstruction">><<replace "#elbo-q8">>B. Heavier KL, more disentanglement — Correct. Upweighting the KL forces each latent dimension to capture independent factors, but the decoder receives less informative codes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The ELBO becomes an upper bound instead of a lower bound">><<replace "#elbo-q8">>C. Upper bound — No. Changing beta does not flip the direction of the bound; it changes the optimization landscape.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The model switches from variational inference to maximum likelihood">><<replace "#elbo-q8">>D. Switches to MLE — No. Beta-VAE is still variational; it just reweights the ELBO components.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

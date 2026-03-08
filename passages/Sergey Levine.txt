@@ -1,0 +1,153 @@
+<<include "Header">>
+! Sergey Levine
+<img src="assets/sergey_levine.svg" alt="Sergey Levine" width="800">
+
+Imagine you want to teach a robot to pick up a coffee mug. You could write thousands of lines of code specifying exactly how each joint should move -- or you could let the robot //learn// by trying, failing, and improving, the same way a toddler figures out how to grasp a spoon. ''Sergey Levine'' is one of the researchers who made this second approach actually work. As a professor at UC Berkeley and former member of Google Brain's robotics team, Levine has been at the forefront of turning [[Reinforcement Learning|Reinforcement Learning]] from a theoretical curiosity into a practical tool for real-world robotic systems. His work bridges the gap between algorithms that excel in simulation and machines that must operate in messy, unpredictable physical environments.
+
+!! Key Contributions
+
+Levine's research spans several foundational areas of modern robot learning:
+
+* ''Deep RL for Robotics'' -- Among the first to demonstrate that deep [[Reinforcement Learning|Reinforcement Learning]] could control real robotic arms to perform complex manipulation tasks, moving beyond toy domains and game-playing benchmarks.
+
+* ''Offline / Batch RL'' -- Pioneered methods for learning policies entirely from previously collected datasets, without any further environment interaction. His ''Conservative Q-Learning'' (CQL) algorithm became a standard baseline for offline RL research.
+
+* ''Model-Based RL'' -- Developed techniques where robots learn an internal model of the world's dynamics, then use that model to plan actions, dramatically improving sample efficiency over model-free methods. See [[Model-Based RL|Model-Based RL]].
+
+* ''Robotic Grasping at Scale'' -- Led the landmark Google Brain experiment where a fleet of robotic arms collectively attempted over 800,000 grasps, learning a generalizable grasping policy from raw camera images with minimal human supervision.
+
+* ''Decision Transformer'' -- Co-developed the insight that RL problems can be reframed as sequence modeling, applying [[Transformers|Transformers]] architecture to generate actions conditioned on desired returns, connecting RL with modern language model techniques.
+
+* ''RAIL Lab at Berkeley'' -- Founded and directs the Robotic AI & Learning (RAIL) laboratory, producing a steady stream of influential research and training the next generation of robotics researchers.
+
+!! The Core Insight
+
+The central thread running through Levine's work is a deceptively simple idea: //robots should learn from data, not just from simulation//. Traditional robotics relied on hand-engineered controllers or on RL agents that trained for millions of episodes in simulated environments. Levine recognized two critical problems with this: simulators are never perfect (the ''sim-to-real gap''), and requiring online interaction is expensive and often dangerous for physical robots.
+
+His solution attacks both problems. First, by developing [[Policy Gradient|Policy Gradient]] and [[Actor-critic|Actor-critic]] methods robust enough to train directly on real hardware. Second, by creating offline RL algorithms that learn from logged data -- recordings of past robot behavior, human demonstrations, or even failed attempts. This means a robot can improve its policy by studying what it already tried, without needing to break anything new.
+
+This philosophy connects [[Imitation Learning|Imitation Learning]] (learning from demonstrations) with reinforcement learning (learning from rewards) into a unified framework where //all experience is useful data//.
+
+!! What the Math Is Actually Doing
+
+At the heart of Levine's contributions are three mathematical frameworks:
+
+''Offline RL Objective'' -- Standard RL maximizes expected return through interaction: $J(\pi) = \mathbb{E}_{\pi}\left[\sum_{t=0}^{T} \gamma^t r(s_t, a_t)\right]$. Offline RL must do this using only a fixed dataset $\mathcal{D} = \{(s_t, a_t, r_t, s_{t+1})\}$ collected by some other policy $\pi_\beta$. The challenge is ''distributional shift'' -- the learned policy $\pi$ may visit states never seen in $\mathcal{D}$, causing catastrophic overestimation.
+
+''Conservative Q-Learning (CQL)'' -- CQL addresses this by adding a regularizer that penalizes Q-values on out-of-distribution actions:
+
+$$\min_Q \; \alpha \left(\mathbb{E}_{s \sim \mathcal{D}, a \sim \mu(a|s)}[Q(s,a)] - \mathbb{E}_{s,a \sim \mathcal{D}}[Q(s,a)]\right) + \frac{1}{2}\mathbb{E}_{s,a,s' \sim \mathcal{D}}\left[(Q(s,a) - \mathcal{B}^\pi \hat{Q}(s,a))^2\right]$$
+
+The first term pushes down Q-values for actions the current policy $\mu$ would take while pushing up Q-values for actions actually in the dataset. The second term is the standard Bellman error. The hyperparameter $\alpha$ controls conservatism.
+
+''Policy Gradient for Continuous Control'' -- For real robots with continuous action spaces, Levine's work heavily uses the ''Soft Actor-Critic'' (SAC) framework, which augments the standard objective with an entropy bonus:
+
+$$J(\pi) = \sum_{t=0}^{T} \mathbb{E}_{(s_t,a_t) \sim \rho_\pi}\left[r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot|s_t))\right]$$
+
+The entropy term $\mathcal{H}(\pi(\cdot|s_t))$ encourages exploration and prevents premature convergence to deterministic policies -- critical when a robotic arm must discover diverse grasping strategies rather than committing to a single fragile approach.
+
+!! Impact on the Field
+
+Levine's influence radiates outward from Berkeley across multiple dimensions:
+
+* ''UC Berkeley RAIL Lab'' -- Trained dozens of PhD students who now lead robotics research at major labs including Google DeepMind, Meta AI, NVIDIA, and top universities.
+
+* ''Google Brain Robotics'' -- His time at Google Brain produced foundational results in large-scale robotic learning, culminating in systems like ''RT-1'' and ''RT-2'' that use vision-language models to control robots with natural language instructions.
+
+* ''Bridging the Sim-to-Real Gap'' -- Developed domain adaptation and domain randomization techniques that allow policies trained partly in simulation to transfer to real hardware, a critical practical advance for [[Deep Learning|Deep Learning]] in robotics.
+
+* ''Democratizing Robot Learning'' -- Released open-source codebases (rlkit, d4rl benchmark) that became standard tools for the research community, making offline RL research accessible beyond a handful of well-funded labs.
+
+!! When Robot Learning Breaks Down
+
+''1. Distribution Shift in Offline RL'' -- When the deployment environment differs substantially from the data collection environment, even conservative algorithms like CQL can produce poor policies. A grasping policy trained on data from one set of objects may fail entirely on novel shapes, because the Q-function has no reliable signal for truly unseen states.
+
+''2. Reward Specification Failures'' -- RL is only as good as its reward signal. In robotic manipulation, defining what "success" means is deceptively hard. A robot optimizing "move the mug to coordinate (x,y)" might smash through obstacles to get there. Reward misspecification is amplified in real-world settings where the cost of failure is physical damage.
+
+''3. Sample Efficiency Barriers'' -- Despite enormous progress, learning dexterous manipulation from scratch on real hardware remains prohibitively slow for many tasks. Model-based methods help but introduce model bias -- the learned dynamics model is never perfect, and planning through a flawed model can compound errors over long horizons.
+
+!! Technical Details
+
+''Key Papers:''
+* "End-to-End Training of Deep Visuomotor Policies" (2016) -- showed neural networks could map raw image pixels to robotic motor torques
+* "Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL with a Stochastic Actor" (SAC, 2018) -- the most widely used continuous-control RL algorithm
+* "Conservative Q-Learning for Offline RL" (CQL, 2020) -- established the offline RL field's most cited baseline
+* "Decision Transformer" (2021) -- recast RL as sequence modeling using [[Transformers|Transformers]]
+* "RT-2: Vision-Language-Action Models" (2023) -- bridging large language models and robotic control
+
+''Awards and Recognition:''
+* MIT Technology Review 35 Under 35 (2019)
+* Sloan Research Fellowship
+* Multiple best paper awards at top venues (NeurIPS, ICRA, CoRL)
+
+''Affiliations:'' UC Berkeley EECS (Associate Professor), formerly Google Brain, Stanford PhD under Andrew Ng
+
+''Research Group:'' RAIL (Robotic AI & Learning) Lab, one of the most prolific robotics labs globally, with research spanning RL, [[Imitation Learning|Imitation Learning]], computer vision for manipulation, and language-conditioned robot policies.
+
+!! Quiz
+
+<div id="q1">''1. What is the primary challenge that offline RL addresses compared to standard RL?''
+
+<<button "A) Faster convergence in simulation">><<replace "#q1">>''1.'' Incorrect. Offline RL is not primarily about simulation speed -- it is about learning without //any// further environment interaction, using only a fixed dataset. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Learning from a fixed dataset without further environment interaction">><<replace "#q1">>''1.'' Correct! Offline RL learns policies entirely from previously collected data, avoiding the need for costly or dangerous online exploration. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Reducing the number of neural network parameters">><<replace "#q1">>''1.'' Incorrect. Model size is orthogonal to the offline RL problem. The key challenge is distributional shift from a fixed dataset. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Eliminating the need for reward functions">><<replace "#q1">>''1.'' Incorrect. Offline RL still uses reward signals -- it simply learns from pre-recorded transitions rather than collecting new ones. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What does Conservative Q-Learning (CQL) specifically penalize?''
+
+<<button "A) High entropy in the policy">><<replace "#q2">>''2.'' Incorrect. CQL actually encourages exploration in some formulations. It specifically penalizes Q-values on out-of-distribution actions. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Large neural network weights">><<replace "#q2">>''2.'' Incorrect. CQL's conservatism is about Q-value estimates, not weight regularization. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Q-values for actions not well-represented in the dataset">><<replace "#q2">>''2.'' Correct! CQL pushes down Q-values for out-of-distribution actions to prevent the policy from exploiting overestimated values in unseen regions. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Transitions with low reward">><<replace "#q2">>''2.'' Incorrect. CQL does not specifically target low-reward transitions. It addresses distributional shift by being conservative about unfamiliar state-action pairs. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What role does the entropy term play in Soft Actor-Critic (SAC)?''
+
+<<button "A) It forces the policy to be deterministic">><<replace "#q3">>''3.'' Incorrect -- the entropy bonus does the opposite. It encourages stochastic, exploratory behavior. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It penalizes large Q-values">><<replace "#q3">>''3.'' Incorrect. The entropy term operates on the policy distribution, not on Q-values directly. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It encourages exploration and prevents premature convergence">><<replace "#q3">>''3.'' Correct! The entropy bonus $\alpha \mathcal{H}(\pi(\cdot|s))$ rewards policies that maintain diversity in action selection, which is critical for discovering multiple viable strategies. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It reduces computational cost during training">><<replace "#q3">>''3.'' Incorrect. Entropy regularization actually adds a small computational overhead. Its purpose is to improve exploration. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What was distinctive about the Google Brain robotic grasping experiment?''
+
+<<button "A) It used a single robot arm with perfect simulation">><<replace "#q4">>''4.'' Incorrect. The experiment used a //fleet// of robot arms learning collectively in the real world, not in simulation. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A fleet of robots collectively performed over 800,000 grasps to learn a general policy">><<replace "#q4">>''4.'' Correct! The experiment demonstrated that large-scale real-world data collection across multiple robots could yield a generalizable grasping policy from raw images. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It relied entirely on human demonstrations">><<replace "#q4">>''4.'' Incorrect. While some human data was used, the key innovation was self-supervised learning through massive trial-and-error across many robots. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It solved robotic grasping perfectly for all objects">><<replace "#q4">>''4.'' Incorrect. While impressive, the system did not achieve perfect generalization. It demonstrated that scale helps but did not solve all grasping scenarios. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What is the Decision Transformer's key insight?''
+
+<<button "A) Transformers cannot be applied to RL problems">><<replace "#q5">>''5.'' Incorrect -- the Decision Transformer showed exactly the opposite. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) RL problems can be reframed as sequence modeling conditioned on desired returns">><<replace "#q5">>''5.'' Correct! The Decision Transformer treats trajectories as sequences and conditions action generation on the desired cumulative reward, using the [[Transformers|Transformers]] architecture. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Q-learning is superior to policy gradient methods">><<replace "#q5">>''5.'' Incorrect. The Decision Transformer actually sidesteps the Q-learning vs. policy gradient debate entirely by using supervised sequence modeling. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Robots should only learn from simulation">><<replace "#q5">>''5.'' Incorrect. Levine's work broadly argues for learning from real-world data, and the Decision Transformer can use offline real-world trajectories. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What is the "sim-to-real gap"?''
+
+<<button "A) The difference in computational cost between simulation and real execution">><<replace "#q6">>''6.'' Incorrect. The sim-to-real gap refers to performance differences, not computational cost. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The performance drop when a policy trained in simulation is deployed on real hardware">><<replace "#q6">>''6.'' Correct! Simulators inevitably differ from reality in physics, visual appearance, and sensor noise, causing policies to underperform when transferred to real robots. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The time delay between running a simulation and getting results">><<replace "#q6">>''6.'' Incorrect. The gap is about fidelity and performance transfer, not latency. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A hardware limitation of modern GPUs">><<replace "#q6">>''6.'' Incorrect. The sim-to-real gap is a problem of environment mismatch, not hardware capability. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What problem does model bias introduce in model-based RL?''
+
+<<button "A) The model requires too much memory">><<replace "#q7">>''7.'' Incorrect. Model bias is not about memory usage but about accuracy of the learned dynamics. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Errors in the learned dynamics model compound when planning over long horizons">><<replace "#q7">>''7.'' Correct! Even small inaccuracies in a learned world model accumulate over multi-step predictions, causing planned trajectories to diverge from what would actually happen. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The model always overfits to the training data">><<replace "#q7">>''7.'' Incorrect. While overfitting can happen, model bias more specifically refers to systematic inaccuracies that compound during planning. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It makes the algorithm model-free">><<replace "#q7">>''7.'' Incorrect. Model bias is a challenge //within// model-based approaches, not something that converts them to model-free methods. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. Which of these is NOT a research area closely associated with Sergey Levine?''
+
+<<button "A) Offline reinforcement learning">><<replace "#q8">>''8.'' Incorrect -- offline RL (and CQL in particular) is one of Levine's most cited contributions. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Large language model pre-training from scratch">><<replace "#q8">>''8.'' Correct! While Levine has connected RL with language models (Decision Transformer, RT-2), his primary focus is on robotic learning and RL, not on pre-training LLMs from scratch. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Soft Actor-Critic for continuous control">><<replace "#q8">>''8.'' Incorrect -- SAC is one of Levine's most impactful contributions to continuous-control RL. <</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Vision-language-action models for robotics">><<replace "#q8">>''8.'' Incorrect -- RT-2 and related work connecting vision, language, and robotic action are central to Levine's recent research. <</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

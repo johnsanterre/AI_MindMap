@@ -1,0 +1,185 @@
+<<include "Header">>
+
+! Attention Mechanisms
+
+[img[assets/attention_mechanisms.svg]]
+
+Imagine reading a long legal contract to answer one specific question. You do not read every word with equal care -- your eyes jump to the clauses that matter, skim the boilerplate, and linger on the paragraph that actually contains the answer. Attention mechanisms give neural networks this same ability. Instead of compressing an entire input into a single fixed-size summary (the way early sequence models did), attention lets a model //look back// at every part of the input and decide, on the fly, how much weight each part deserves for the task at hand.
+
+---
+
+!! The Core Insight
+
+The central idea is ''dynamic, content-dependent weighting''. In a traditional encoder-decoder architecture, the decoder receives a single context vector -- a lossy summary of the entire input sequence. Bahdanau et al. (2014) showed that this bottleneck could be removed by letting the decoder, at each time step, compute a weighted combination of //all// encoder hidden states. The weights are not fixed; they are learned functions of the current decoder state and each encoder state, so different decoder steps attend to different input positions.
+
+This simple change solved the long-sequence degradation problem in machine translation almost overnight. But the real revolution came when Vaswani et al. (2017) asked: what if attention is //all// you need? The [[Transformers]] architecture discarded recurrence entirely, using ''self-attention'' to let every token in a sequence attend to every other token. That architectural bet -- replacing sequential processing with parallel, attention-based processing -- underpins virtually every modern large language model, from BERT to GPT-4 and beyond.
+
+The attention mechanism has three learned projections: ''Query'' (what am I looking for?), ''Key'' (what do I contain?), and ''Value'' (what information do I carry?). Matching queries against keys produces relevance scores; those scores, after [[Softmax]] normalisation, determine how much of each value contributes to the output. This Q-K-V framework is the universal language of modern attention, from [[Self-Attention]] within a single sequence to cross-attention between an encoder and decoder.
+
+---
+
+!! From Additive to Scaled Dot-Product
+
+The original attention mechanism from Bahdanau et al. (2014) used ''additive attention'' (also called //concatenation-based// attention). Given a decoder hidden state $s_t$ and an encoder hidden state $h_j$, the alignment score was:
+
+$$e_{t,j} = v^T \tanh(W_1 s_t + W_2 h_j)$$
+
+This is a small feedforward network with learnable weight matrices $W_1$, $W_2$ and a weight vector $v$. Additive attention is flexible -- the tanh nonlinearity lets it model complex alignment patterns -- but it is slow because each score requires a full matrix multiply and a nonlinearity.
+
+Luong et al. (2015) introduced ''multiplicative attention'' (dot-product attention), which computes scores as:
+
+$$e_{t,j} = s_t^T h_j$$
+
+This is much faster because it can be parallelised as a single matrix multiplication across all positions. However, raw dot products grow with the dimensionality of the vectors: when $d_k$ is large, the dot products can become very large in magnitude, pushing the softmax into regions where its gradients are vanishingly small.
+
+Vaswani et al. (2017) fixed this with ''scaled dot-product attention'', dividing by $\sqrt{d_k}$:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right) V$$
+
+The $\sqrt{d_k}$ scaling keeps the variance of the dot products roughly constant regardless of dimension, preventing gradient saturation. This is the form used in virtually all modern [[Transformers]], and it is the foundation for [[Multi-Head Attention]], where multiple independent attention heads each project Q, K, V into smaller subspaces and attend in parallel.
+
+---
+
+!! What the Math Is Actually Doing
+
+Given input matrices $Q \in \mathbb{R}^{n \times d_k}$, $K \in \mathbb{R}^{m \times d_k}$, and $V \in \mathbb{R}^{m \times d_v}$, scaled dot-product attention computes:
+
+$$A = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right) \in \mathbb{R}^{n \times m}$$
+
+$$\text{Output} = A \cdot V \in \mathbb{R}^{n \times d_v}$$
+
+Each row of $A$ is a probability distribution over the $m$ key positions. The entry $A_{i,j}$ tells you how much query $i$ attends to key $j$. Multiplying $A$ by $V$ produces, for each query position, a weighted average of all value vectors -- a ''soft lookup'' into a differentiable memory.
+
+The softmax ensures two properties: (1) all weights are non-negative, and (2) they sum to one, forming a valid probability distribution. The $\sqrt{d_k}$ scaling factor corrects for the expected magnitude of the dot products. If the entries of $Q$ and $K$ are i.i.d. with mean 0 and variance 1, their dot product has mean 0 and variance $d_k$. Dividing by $\sqrt{d_k}$ restores unit variance:
+
+$$\text{Var}\!\left(\frac{q \cdot k}{\sqrt{d_k}}\right) = \frac{d_k}{d_k} = 1$$
+
+Without this scaling, large $d_k$ would cause some softmax outputs to approach 0 or 1, creating near-one-hot distributions that block gradient flow. The scaling keeps the softmax operating in its sensitive, gradient-rich regime.
+
+In ''multi-head attention'', the model runs $h$ independent attention functions in parallel, each with its own learned projections $W_i^Q$, $W_i^K$, $W_i^V$, then concatenates and linearly projects the results:
+
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O$$
+
+where $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$. Each head can specialise: one might track syntactic dependencies, another semantic similarity, another positional proximity.
+
+---
+
+!! Attention Variants
+
+''Self-attention'' (intra-attention) is when queries, keys, and values all come from the same sequence. Every token attends to every other token (including itself), building context-aware representations. [[Self-Attention]] is the core operation in both encoder-only models (BERT) and decoder-only models (GPT). In autoregressive (decoder) models, a ''causal mask'' sets all entries above the diagonal to $-\infty$ before the softmax, preventing tokens from attending to future positions.
+
+''Cross-attention'' occurs between two different sequences -- for example, a decoder attending to encoder outputs in machine translation. The queries come from the decoder; the keys and values come from the encoder. This is the mechanism that lets a translation model selectively look back at the source sentence while generating each target word.
+
+''Multi-head attention'' runs several attention operations in parallel with independent projections, as described above. [[Multi-Head Attention]] lets the model jointly attend to information from different representation subspaces. A typical transformer uses 8 to 128 heads depending on model size.
+
+''Sparse attention'' restricts each token to attend only to a subset of positions -- local windows, dilated patterns, or learned sparse masks. This reduces the quadratic cost to $O(N \sqrt{N})$ or even $O(N \log N)$. Longformer, BigBird, and related architectures use structured sparsity to handle documents of 4K to 16K tokens.
+
+''Linear attention'' replaces the softmax with a kernel function $\phi$, allowing the computation to be rewritten as $\phi(Q)(\phi(K)^T V)$, which can be computed in $O(N)$ time by exploiting associativity. Performers and Random Feature Attention use this trick, though they typically sacrifice some quality compared to full softmax attention.
+
+''[[Flash Attention]]'' is not a different //type// of attention but an IO-aware //implementation// of exact scaled dot-product attention that avoids materialising the full $N \times N$ score matrix in GPU memory. It delivers identical outputs with dramatically reduced memory and wall-clock time.
+
+---
+
+!! When Attention Breaks Down
+
+''Quadratic cost at long sequences:'' The $N \times N$ score matrix means that computation and memory scale as $O(N^2)$ in sequence length. At $N = 32{,}768$ with 32-bit floats, the score matrix alone is 4 GB. This makes standard attention impractical for very long documents, genomic sequences, or high-resolution images without sparse approximations or efficient implementations like [[Flash Attention]]. The quadratic wall is the single biggest limitation of the transformer architecture.
+
+''Attention collapse and entropy degradation:'' In deep transformers, attention distributions can become excessively peaked (near one-hot) or excessively uniform across layers. Peaked attention means the model ignores most of the context; uniform attention means it treats every token as equally relevant, degrading to a bag-of-words. Both failure modes reduce the model's effective context window. Techniques like attention dropout, layer normalisation, and careful initialisation mitigate this, but it remains an active area of research.
+
+''Positional insensitivity without explicit encoding:'' Raw attention is ''permutation-equivariant'' -- swapping two tokens in the input swaps their outputs but does not change the attention scores. Without positional encodings or positional biases, attention has no concept of word order, which is obviously catastrophic for language. Sinusoidal encodings (Vaswani et al., 2017), learned position embeddings, ALiBi, and RoPE each address this differently, but every solution introduces its own tradeoffs for generalisation to unseen sequence lengths.
+
+---
+
+!! Technical Details
+
+''Original papers:'' Bahdanau, Cho, Bengio (2014) "Neural Machine Translation by Jointly Learning to Align and Translate" introduced additive attention. Luong, Pham, Manning (2015) "Effective Approaches to Attention-based Neural Machine Translation" introduced multiplicative/dot-product attention. Vaswani et al. (2017) "Attention Is All You Need" introduced scaled dot-product attention, multi-head attention, and the transformer architecture.
+
+''Complexity:'' Standard self-attention is $O(N^2 d)$ in time and $O(N^2 + Nd)$ in memory, where $N$ is sequence length and $d$ is model dimension. The $N^2$ term dominates at long sequences. Multi-head attention with $h$ heads and head dimension $d_k = d/h$ has the same total cost as single-head attention with dimension $d$.
+
+''Head dimension:'' In practice, $d_k = d_v = d_{\text{model}} / h$. For GPT-3 ($d = 12288$, $h = 96$), each head operates in $d_k = 128$ dimensions. Smaller head dimensions allow more heads (more diverse attention patterns) but reduce per-head capacity.
+
+''Attention masking:'' Causal (autoregressive) masking adds $-\infty$ to upper-triangular entries of $QK^T / \sqrt{d_k}$ before softmax, zeroing those attention weights. Padding masks similarly zero out attention to padding tokens. Both are applied additively before softmax.
+
+''KV caching:'' During autoregressive generation, keys and values from previous tokens are cached so that each new token only computes its own Q and attends to the growing cache. This reduces per-token generation from $O(N^2 d)$ to $O(Nd)$ but requires $O(N \cdot h \cdot d_k \cdot 2)$ memory for the cache (factor of 2 for K and V).
+
+''Grouped Query Attention (GQA):'' Introduced by Ainslie et al. (2023), GQA shares key-value heads across multiple query heads, reducing KV cache size by a factor equal to the grouping ratio. Llama 2 70B uses GQA with 8 KV heads shared across 64 query heads (8:1 ratio). This dramatically reduces memory during inference with minimal quality loss.
+
+''Temperature scaling:'' Some implementations replace $\sqrt{d_k}$ with a learned or tuned temperature parameter $\tau$, computing $\text{softmax}(QK^T / \tau)$. Lower $\tau$ sharpens attention (more peaked distributions); higher $\tau$ flattens it (more uniform). This generalises the fixed $\sqrt{d_k}$ scaling.
+
+---
+
+!! Quiz
+
+<span id="attn-q1">''1. What problem did Bahdanau attention originally solve?''
+
+A. Vanishing gradients in very deep networks
+B. The information bottleneck of compressing an entire input sequence into a single fixed-size vector
+C. The inability of CNNs to process sequential data
+D. Overfitting in small-data regimes
+
+<<button "A">><<replace "#attn-q1">>Incorrect. Vanishing gradients are a real problem in deep networks but are addressed by techniques like residual connections and LSTMs, not by attention.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q1">>Correct! Bahdanau attention let the decoder look back at all encoder hidden states instead of relying on a single compressed context vector, eliminating the information bottleneck that degraded translation quality on long sentences.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q1">>Incorrect. CNNs can process sequential data (e.g., 1D convolutions); attention was designed for RNN-based encoder-decoder models that already handled sequences.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q1">>Incorrect. Overfitting is addressed by regularisation techniques like dropout and weight decay, not by the attention mechanism itself.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q2">''2. In scaled dot-product attention, why is the dot product divided by $\sqrt{d_k}$?''
+
+A. To make the output vectors unit-length
+B. To ensure the attention weights sum to one
+C. To prevent dot products from growing too large and pushing softmax into low-gradient regions
+D. To reduce the computational cost from $O(N^2)$ to $O(N \log N)$
+
+<<button "A">><<replace "#attn-q2">>Incorrect. The scaling affects the softmax input magnitudes, not the norm of the output vectors. Output vector norms depend on the value vectors and attention weights.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q2">>Incorrect. The softmax function ensures the weights sum to one regardless of scaling. The scaling controls the //sharpness// of the distribution, not the normalisation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q2">>Correct! When $d_k$ is large, dot products have high variance, causing softmax outputs to saturate near 0 or 1. Dividing by $\sqrt{d_k}$ restores unit variance and keeps the softmax in its gradient-rich regime.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q2">>Incorrect. The $\sqrt{d_k}$ divisor does not change the asymptotic complexity; it is a scalar division that affects numerical stability, not algorithmic efficiency.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q3">''3. What are the three learned projections in the Q-K-V attention framework?''
+
+A. Encoder, Decoder, and Classifier
+B. Query, Key, and Value
+C. Mean, Variance, and Covariance
+D. Input, Hidden, and Output
+
+<<button "A">><<replace "#attn-q3">>Incorrect. Encoder and decoder are architectural components, not the projections used within an attention layer.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q3">>Correct! Query represents "what am I looking for?", Key represents "what do I contain?", and Value represents "what information do I carry?" Matching Q against K produces scores that weight the retrieval of V.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q3">>Incorrect. Mean, variance, and covariance are statistical quantities used in methods like batch normalisation, not in the attention mechanism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q3">>Incorrect. Input, hidden, and output describe layers of a generic neural network, not the specific projections within an attention mechanism.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q4">''4. What makes self-attention different from cross-attention?''
+
+A. Self-attention uses softmax while cross-attention uses sigmoid
+B. In self-attention, Q, K, and V all come from the same sequence; in cross-attention, Q comes from one sequence and K, V from another
+C. Self-attention is only used during training; cross-attention is only used during inference
+D. Self-attention operates on individual tokens; cross-attention operates on entire sentences
+
+<<button "A">><<replace "#attn-q4">>Incorrect. Both self-attention and cross-attention use softmax normalisation. The normalisation function is the same; the //source// of the inputs differs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q4">>Correct! In self-attention, a sequence attends to itself (Q, K, V all derived from the same input). In cross-attention, the queries come from one sequence (e.g., decoder) while keys and values come from another (e.g., encoder).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q4">>Incorrect. Both types of attention are used during both training and inference. The distinction is about the source of the inputs, not the phase of computation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q4">>Incorrect. Both self-attention and cross-attention operate at the token level, computing pairwise interactions between individual positions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q5">''5. Why is standard self-attention described as permutation-equivariant?''
+
+A. It randomly shuffles tokens during training for data augmentation
+B. It produces the same attention scores regardless of the order of tokens in the input
+C. Swapping two input tokens swaps their outputs, but attention scores between them are unchanged
+D. It requires sorted input sequences to function correctly
+
+<<button "A">><<replace "#attn-q5">>Incorrect. Attention does not shuffle tokens; permutation equivariance is a mathematical property of the function, not a training strategy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q5">>Incorrect. The attention //scores// do depend on which tokens are present, but the mechanism has no inherent sense of position -- it treats position 1 and position 100 identically without positional encodings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q5">>Correct! Permutation equivariance means that if you permute the input, the output is permuted in the same way. Attention computes pairwise scores based on content, not position, so it cannot distinguish word order without explicit positional encodings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q5">>Incorrect. Attention works on any ordering of input tokens; it does not require sorting. The point is that it is //too// flexible about order, which is why positional encodings are necessary.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q6">''6. What is the time complexity of standard self-attention with respect to sequence length $N$ and model dimension $d$?''
+
+A. $O(N d)$
+B. $O(N^2 d)$
+C. $O(N \log N)$
+D. $O(N^3)$
+
+<<button "A">><<replace "#attn-q6">>Incorrect. $O(Nd)$ would be linear in sequence length, which is the cost of a simple feedforward layer, not self-attention. The $QK^T$ multiplication alone is $O(N^2 d_k)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q6">>Correct! Computing $QK^T$ requires $O(N^2 d_k)$ operations, and multiplying the $N \times N$ attention matrix by $V$ requires $O(N^2 d_v)$. Total: $O(N^2 d)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q6">>Incorrect. $O(N \log N)$ is the complexity of some approximate attention methods (e.g., certain sparse patterns), but standard full attention is quadratic in $N$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q6">>Incorrect. $O(N^3)$ would be the cost of matrix inversion or naive matrix multiplication of $N \times N$ matrices; attention is $O(N^2 d)$, which is less than $O(N^3)$ when $d < N$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q7">''7. How does multi-head attention differ from single-head attention?''
+
+A. Multi-head attention uses multiple different activation functions
+B. It runs several independent attention operations with separate Q, K, V projections, then concatenates the results
+C. It applies attention only to the most important tokens, ignoring the rest
+D. Multi-head attention replaces softmax with a learned gating mechanism
+
+<<button "A">><<replace "#attn-q7">>Incorrect. All heads use the same softmax-based attention function. The difference is in the //number// of parallel attention computations, not the activation function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q7">>Correct! Each head has its own learned projection matrices $W_i^Q$, $W_i^K$, $W_i^V$, allowing different heads to attend to different types of relationships. The outputs are concatenated and linearly projected via $W^O$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q7">>Incorrect. All heads attend to all tokens (in full attention); multi-head does not introduce sparsity. The multiple heads capture different //aspects// of the relationships between tokens.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q7">>Incorrect. Multi-head attention still uses softmax within each head. Gating mechanisms exist in other architectures (e.g., LSTMs) but are not what distinguishes multi-head from single-head attention.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="attn-q8">''8. What does Grouped Query Attention (GQA) reduce compared to standard multi-head attention?''
+
+A. The number of query heads
+B. The sequence length that can be processed
+C. The size of the key-value cache by sharing KV heads across multiple query heads
+D. The depth of the transformer by eliminating attention in some layers
+
+<<button "A">><<replace "#attn-q8">>Incorrect. GQA keeps the full number of query heads; it is the key and value heads that are shared. Each query head still computes its own attention pattern.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#attn-q8">>Incorrect. GQA does not directly limit sequence length. It reduces //memory// usage, which can indirectly allow longer sequences, but the mechanism is about KV head sharing.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#attn-q8">>Correct! GQA groups multiple query heads to share a single set of key-value heads. For example, Llama 2 70B uses 64 query heads sharing 8 KV heads, reducing the KV cache by 8x with minimal quality loss.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#attn-q8">>Incorrect. GQA does not remove attention layers or change the model depth. It modifies how heads share parameters //within// each attention layer.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

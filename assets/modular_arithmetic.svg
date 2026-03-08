@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Modular Arithmetic: Numbers on a Clock</text>
+
+  <!-- ===== LEFT PANEL: Clock / number circle mod 12 ===== -->
+  <text x="190" y="60" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">Integers mod 12</text>
+
+  <!-- Clock circle -->
+  <circle cx="190" cy="210" r="120" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <circle cx="190" cy="210" r="4" fill="#5C3D1E"/>
+
+  <!-- Clock numbers 0-11 positioned around circle -->
+  <!-- 0 (top) -->
+  <circle cx="190" cy="78" r="16" fill="#2D5A8E" fill-opacity="0.12"/>
+  <text x="190" y="83" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E" text-anchor="middle">0</text>
+  <!-- 1 -->
+  <circle cx="250" cy="90" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="250" y="95" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">1</text>
+  <!-- 2 -->
+  <circle cx="298" cy="130" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="298" y="135" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">2</text>
+  <!-- 3 -->
+  <circle cx="322" cy="210" r="16" fill="#C4A87A" fill-opacity="0.2"/>
+  <text x="322" y="215" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">3</text>
+  <!-- 4 -->
+  <circle cx="298" cy="290" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="298" y="295" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">4</text>
+  <!-- 5 -->
+  <circle cx="250" cy="330" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="250" y="335" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">5</text>
+  <!-- 6 -->
+  <circle cx="190" cy="342" r="16" fill="#C4A87A" fill-opacity="0.2"/>
+  <text x="190" y="347" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">6</text>
+  <!-- 7 -->
+  <circle cx="130" cy="330" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="130" y="335" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">7</text>
+  <!-- 8 -->
+  <circle cx="82" cy="290" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="82" y="295" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">8</text>
+  <!-- 9 -->
+  <circle cx="58" cy="210" r="16" fill="#C4A87A" fill-opacity="0.2"/>
+  <text x="58" y="215" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">9</text>
+  <!-- 10 -->
+  <circle cx="82" cy="130" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="82" y="135" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">10</text>
+  <!-- 11 -->
+  <circle cx="130" cy="90" r="16" fill="#FDFAF4" fill-opacity="0"/>
+  <text x="130" y="95" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">11</text>
+
+  <!-- Arrow showing 7 + 8 = 15 ≡ 3 (mod 12) -->
+  <!-- Curved arrow from 7 sweeping clockwise past 8,9,10,11,0,1,2 to 3 -->
+  <path d="M 142,318 A 125,125 0 1,1 310,140" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <polygon points="310,140 302,150 314,148" fill="#7C2530"/>
+
+  <!-- Annotation -->
+  <text x="190" y="385" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">7 + 8 = 15 ≡ 3 (mod 12)</text>
+
+  <!-- ===== RIGHT PANEL: Congruence classes and operations ===== -->
+  <!-- Divider -->
+  <line x1="390" y1="50" x2="390" y2="375" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+  <!-- Panel label -->
+  <text x="595" y="60" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">Congruence Classes mod 5</text>
+
+  <!-- Five boxes showing residue classes -->
+  <!-- Class [0] -->
+  <rect x="420" y="80" width="150" height="38" fill="#2D5A8E" fill-opacity="0.1" rx="4" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="435" y="103" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">[0]</text>
+  <text x="465" y="103" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">= {..., 0, 5, 10, 15, ...}</text>
+
+  <!-- Class [1] -->
+  <rect x="420" y="125" width="150" height="38" fill="#7C2530" fill-opacity="0.1" rx="4" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="435" y="148" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">[1]</text>
+  <text x="465" y="148" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">= {..., 1, 6, 11, 16, ...}</text>
+
+  <!-- Class [2] -->
+  <rect x="420" y="170" width="150" height="38" fill="#C4A87A" fill-opacity="0.2" rx="4" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="435" y="193" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">[2]</text>
+  <text x="465" y="193" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">= {..., 2, 7, 12, 17, ...}</text>
+
+  <!-- Class [3] -->
+  <rect x="420" y="215" width="150" height="38" fill="#2D5A8E" fill-opacity="0.1" rx="4" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="435" y="238" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">[3]</text>
+  <text x="465" y="238" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">= {..., 3, 8, 13, 18, ...}</text>
+
+  <!-- Class [4] -->
+  <rect x="420" y="260" width="150" height="38" fill="#7C2530" fill-opacity="0.1" rx="4" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="435" y="283" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">[4]</text>
+  <text x="465" y="283" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">= {..., 4, 9, 14, 19, ...}</text>
+
+  <!-- Operation example -->
+  <rect x="590" y="100" width="185" height="75" fill="#C4A87A" fill-opacity="0.15" rx="5" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="682" y="120" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Addition mod 5</text>
+  <text x="682" y="140" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">[3] + [4] = [2]</text>
+  <text x="682" y="158" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">since 3 + 4 = 7 ≡ 2</text>
+
+  <!-- Multiplication example -->
+  <rect x="590" y="190" width="185" height="75" fill="#2D5A8E" fill-opacity="0.1" rx="5" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="682" y="210" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Multiplication mod 5</text>
+  <text x="682" y="230" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">[3] x [4] = [2]</text>
+  <text x="682" y="248" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">since 3 x 4 = 12 ≡ 2</text>
+
+  <!-- Key insight box -->
+  <rect x="430" y="315" width="350" height="60" fill="#7C2530" fill-opacity="0.08" rx="5" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="605" y="336" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">When n is prime: every nonzero element</text>
+  <text x="605" y="354" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">has a multiplicative inverse → finite field</text>
+  <text x="605" y="370" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">e.g. mod 5: 3 x 2 = 6 ≡ 1, so 3⁻¹ = 2</text>
+</svg>

@@ -1,0 +1,147 @@
+<<include "Header">>
+
+! Beam Search
+
+<img src="assets/beam_search.svg" alt="Diagram illustrating Beam Search with k best hypotheses kept at each decoding step" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are navigating a maze, but instead of committing to one path at each fork, you send out a small team of scouts who each explore a different promising route simultaneously. At every junction, only the two or three scouts on the most promising paths continue — the rest are called back. That is ''beam search'': an approximate decoding strategy for sequence models that maintains $k$ best partial hypotheses at each time step, where $k$ is the ''beam width''. It sits squarely between greedy search (keeping only the single best token at each step, $k=1$) and exhaustive search (keeping every possible continuation, which is computationally impossible for any realistic vocabulary).
+
+---
+
+!! The Core Insight
+
+Autoregressive sequence models — <<link "Language Models" "Language Models">><</link>>, <<link "Transformers" "Transformers">><</link>>, and earlier recurrent architectures — generate output one token at a time by sampling or selecting from a probability distribution over the vocabulary. Greedy decoding picks the highest-probability token at each step, but this is locally optimal: the best token //right now// may lead to a poor sequence overall. Consider a translation model where the most probable first word forces an awkward continuation, while a slightly less probable first word opens a path to a much better sentence.
+
+Exhaustive search would consider every possible sequence of length $T$ from a vocabulary of size $V$, which means evaluating $V^T$ candidates — a number that grows exponentially and is utterly intractable. For a vocabulary of 50,000 tokens and a sequence of length 20, this is $50{,}000^{20}$, a number with roughly 94 digits.
+
+Beam search provides a practical middle ground. At each time step, it expands every current hypothesis by all $V$ vocabulary items, scores the resulting $k \times V$ candidates, and keeps only the top $k$. The total work per step is $O(k \times V)$ rather than exponential, and in practice $k$ is small — typically between 4 and 10. This makes beam search the dominant decoding strategy for machine translation, speech recognition, and any task where output quality depends on finding a globally coherent sequence rather than a locally greedy one. See <<link "Search Algorithms" "Search Algorithms">><</link>> and <<link "Dynamic Programming" "Dynamic Programming">><</link>> for related algorithmic foundations.
+
+---
+
+!! How Beam Search Operates Step by Step
+
+At time step $t=1$, the model produces a distribution over the full vocabulary given the input context. The top $k$ tokens become the initial $k$ hypotheses. Each hypothesis carries a cumulative ''log-probability'' score: $\text{score}(y_{1:t}) = \sum_{i=1}^{t} \log p(y_i \mid y_{1:i-1}, x)$.
+
+At each subsequent step $t$, every hypothesis is extended by every token in the vocabulary, producing $k \times V$ candidate continuations. Each candidate's score is the parent's cumulative log-probability plus the log-probability of the new token. The candidates are sorted by score, and only the top $k$ survive. This process repeats until all $k$ beams have produced an end-of-sequence token or a maximum length is reached.
+
+The final output is the completed hypothesis with the highest score. In practice, because longer sequences accumulate more negative log-probability terms, a ''length normalization'' factor is applied: the score is divided by $T^\alpha$ where $T$ is the sequence length and $\alpha$ is a tunable parameter (often 0.6 to 1.0). Without length normalization, beam search is biased toward shorter outputs.
+
+The <<link "Tokenizer" "Tokenizer">><</link>> determines the vocabulary $V$ over which these distributions are computed — subword tokenizers like BPE produce vocabularies of 30,000 to 100,000 tokens, and beam search operates directly at this token level.
+
+---
+
+!! What the Math Is Actually Doing
+
+The objective of decoding is to find the sequence $y^*$ that maximizes the conditional probability:
+
+$$y^* = \arg\max_{y} \; p(y \mid x) = \arg\max_{y} \; \prod_{t=1}^{T} p(y_t \mid y_{1:t-1}, x)$$
+
+Taking logarithms converts this to an additive score:
+
+$$y^* = \arg\max_{y} \; \sum_{t=1}^{T} \log p(y_t \mid y_{1:t-1}, x)$$
+
+Beam search approximates this argmax by pruning the search space at each step. At step $t$, let $\mathcal{B}_t$ denote the set of $k$ active hypotheses. The expansion and pruning operation is:
+
+$$\mathcal{B}_{t+1} = \text{top-}k \Big\{ (h \circ v, \; S(h) + \log p(v \mid h, x)) \;\Big|\; h \in \mathcal{B}_t, \; v \in V \Big\}$$
+
+where $h \circ v$ denotes appending token $v$ to hypothesis $h$, and $S(h)$ is the cumulative log-probability of $h$.
+
+With length normalization, the final scoring becomes:
+
+$$\text{score}(y) = \frac{1}{T^\alpha} \sum_{t=1}^{T} \log p(y_t \mid y_{1:t-1}, x)$$
+
+The total computation per step is $O(k \times V)$ for scoring plus $O(k \times V \times \log k)$ for selecting the top $k$ — linear in vocabulary size and beam width, repeated for $T$ steps.
+
+---
+
+!! Beam Search in Practice
+
+In ''neural machine translation'', beam search with $k=4$ to $k=8$ is standard. Systems like the original Transformer (Vaswani et al., 2017) used beam search with $k=4$ and a length penalty to produce final translations. Increasing $k$ beyond about 10 typically yields diminishing returns and can even degrade quality due to the ''beam search curse'': very high-probability sequences under the model are sometimes degenerate (empty, repetitive, or overly generic).
+
+In ''speech recognition'' (ASR), beam search operates over subword or character vocabularies, often combined with an external language model that re-scores hypotheses. The beam width is commonly 10 to 20.
+
+In ''text generation'' with large language models, beam search is less common than sampling-based methods (top-$k$ sampling, nucleus sampling) because beam search tends to produce text that is fluent but bland and repetitive. The highest-probability sequence is often not the most interesting or human-like one. Modern LLM inference typically uses sampling for open-ended generation and reserves beam search for constrained tasks like translation or summarization.
+
+---
+
+!! When Beam Search Breaks Down
+
+''The beam search curse — larger beams, worse output.'' Counterintuitively, increasing beam width can degrade output quality. The highest-scoring sequence under the model may be a degenerate output — an empty string, an endlessly repeated phrase, or a generic hedge. This happens because the model's probability distribution is not perfectly calibrated: it assigns too much mass to certain pathological sequences. With a small beam, these sequences are pruned by accident; with a large beam, they survive. This is well-documented in neural machine translation (Koehn and Knowles, 2017) and is sometimes called the ''curse of beam search''.
+
+''Length bias distorts the ranking.'' Because log-probabilities are negative, longer sequences accumulate lower scores purely by virtue of having more terms in the sum. Without proper length normalization, beam search systematically favors shorter outputs. The normalization factor $T^\alpha$ mitigates this, but choosing $\alpha$ is itself a tuning problem — too large, and the model prefers verbose output; too small, and it truncates prematurely. There is no universally correct value.
+
+''Beam search cannot backtrack.'' Once a partial hypothesis is pruned at step $t$, it is gone forever. If the globally optimal sequence required a token that ranked outside the top $k$ at some early step, beam search will never find it. This makes beam search fundamentally a ''local'' approximation to global search. For tasks with long-range dependencies where critical decisions happen early in the sequence, beam search can miss the best output entirely, and no amount of increasing $k$ short of exhaustive search guarantees finding it.
+
+---
+
+!! Technical Details
+
+Beam search was used in statistical machine translation long before neural sequence models. Its adoption in neural MT was popularized by Sutskever, Vinyals, and Le (2014), "Sequence to Sequence Learning with Neural Networks," and Bahdanau, Cho, and Bengio (2015), "Neural Machine Translation by Jointly Learning to Align and Translate."
+
+The beam search curse was studied by Koehn and Knowles (2017), "Six Challenges for Neural Machine Translation," and further analyzed by Murray and Chiang (2018). Diverse beam search (Vijayakumar et al., 2018) modifies the selection step to encourage diversity among the $k$ beams, reducing the problem of near-duplicate hypotheses. Constrained beam search (Post and Vilar, 2018) forces specific tokens or phrases to appear in the output — useful for terminology enforcement in translation.
+
+The relationship between beam search and exact search is studied by Stahlberg and Byrne (2019), who showed that exact search (finding the true argmax) often produces worse output than beam search, because the model's highest-probability sequence is pathological. This reveals that beam search's pruning acts as an implicit regularizer.
+
+Common implementation details: hypotheses that emit an end-of-sequence token are removed from the active beam and placed in a completed set; the search continues until all beams are complete or a maximum length is reached; the completed set is re-ranked with length normalization to produce the final output. Efficient implementations use batched matrix operations to score all $k \times V$ candidates simultaneously on GPU.
+
+---
+
+!! Quiz
+
+<span id="bs-q1">What is the beam width $k$ in beam search?</span>
+A. The size of the vocabulary
+B. The number of best partial hypotheses maintained at each step
+C. The maximum sequence length
+D. The number of layers in the transformer
+<<button "A">><<replace "#bs-q1">>Incorrect. The vocabulary size $V$ determines how many extensions each hypothesis has. The beam width $k$ is how many hypotheses survive pruning at each step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q1">>Correct! The beam width $k$ is the number of top-scoring partial hypotheses that are kept alive at each decoding step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q1">>Incorrect. Maximum sequence length is a separate stopping criterion. Beam width controls how many candidate sequences run in parallel.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q1">>Incorrect. The number of transformer layers is a model architecture choice, unrelated to decoding strategy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q2">What score does beam search use to rank partial hypotheses?</span>
+A. The probability of only the most recent token
+B. The cumulative sum of log-probabilities of all tokens in the hypothesis
+C. The perplexity of the entire input sequence
+D. The cosine similarity between token embeddings
+<<button "A">><<replace "#bs-q2">>Incorrect. Using only the most recent token's probability would be equivalent to greedy search. Beam search accumulates scores across all steps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q2">>Correct! The score is $\sum_{t=1}^{T} \log p(y_t \mid y_{1:t-1}, x)$, the cumulative log-probability, optionally with length normalization.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q2">>Incorrect. Perplexity of the input is a property of the model's understanding of the prompt, not the decoding score for the output.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q2">>Incorrect. Cosine similarity between embeddings is used in retrieval tasks, not in autoregressive decoding scoring.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q3">How many candidate continuations does beam search evaluate at each time step?</span>
+A. $k$
+B. $V$
+C. $k \times V$
+D. $V^T$
+<<button "A">><<replace "#bs-q3">>Incorrect. $k$ is the number of surviving hypotheses. Each one is extended by all $V$ tokens, giving $k \times V$ total candidates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q3">>Incorrect. $V$ would be the number of expansions from a single hypothesis. With $k$ hypotheses, the total is $k \times V$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q3">>Correct! Each of the $k$ active hypotheses is extended by every token in the vocabulary $V$, producing $k \times V$ candidates, from which the top $k$ are kept.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q3">>Incorrect. $V^T$ is the size of exhaustive search. Beam search avoids this exponential blowup by pruning at each step.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q4">Why is length normalization applied to beam search scores?</span>
+A. To penalize hypotheses that contain rare tokens
+B. To prevent the model from favoring shorter sequences due to fewer negative log-probability terms
+C. To ensure all beams finish at exactly the same length
+D. To convert log-probabilities back to raw probabilities
+<<button "A">><<replace "#bs-q4">>Incorrect. Length normalization addresses length bias, not token rarity. Rare tokens are handled by the model's probability distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q4">>Correct! Since log-probabilities are negative, longer sequences accumulate lower scores. Dividing by $T^\alpha$ compensates for this length bias.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q4">>Incorrect. Length normalization does not force equal lengths. Different beams can still have different lengths; normalization just makes their scores more comparable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q4">>Incorrect. Length normalization divides the cumulative log-probability by a length factor. It does not convert log-probabilities to probabilities.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q5">What is the "beam search curse"?</span>
+A. Beam search always produces the worst possible output
+B. Increasing beam width can paradoxically degrade output quality because the model's highest-probability sequences may be degenerate
+C. Beam search requires exponentially more memory as the beam width grows
+D. Beam search cannot be used with transformer models
+<<button "A">><<replace "#bs-q5">>Incorrect. Beam search typically produces good output. The curse refers to the specific phenomenon where larger beams sometimes produce worse results, not that results are always bad.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q5">>Correct! The beam search curse occurs because the model's true highest-probability sequences can be degenerate (empty, repetitive, generic). A small beam accidentally avoids them; a large beam finds them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q5">>Incorrect. Memory grows linearly with beam width, not exponentially. The curse refers to output quality degradation, not resource consumption.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q5">>Incorrect. Beam search is widely used with transformers, especially in machine translation. The curse is about quality at high beam widths.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q6">What happens when beam search is set to $k=1$?</span>
+A. It becomes exhaustive search
+B. It becomes greedy decoding, always selecting the single most probable token
+C. It becomes random sampling
+D. It produces no output
+<<button "A">><<replace "#bs-q6">>Incorrect. Exhaustive search would require keeping all $V^T$ candidates. $k=1$ is the opposite extreme: only one hypothesis survives at each step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q6">>Correct! With $k=1$, beam search reduces to greedy decoding — always picking the single highest-probability token at each step with no alternatives.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q6">>Incorrect. Random sampling draws tokens from the probability distribution. $k=1$ beam search deterministically picks the argmax at each step.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q6">>Incorrect. $k=1$ still produces a complete sequence — it just follows the single greediest path through the search space.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q7">Why is beam search less commonly used than sampling for open-ended text generation with large language models?</span>
+A. Beam search is too slow for large models
+B. Beam search tends to produce fluent but bland and repetitive text, since the highest-probability sequence is often not the most interesting
+C. Beam search cannot handle vocabularies larger than 10,000 tokens
+D. Sampling is always more accurate than beam search
+<<button "A">><<replace "#bs-q7">>Incorrect. Beam search with small $k$ is computationally cheap. The reason it is avoided for open-ended generation is output quality, not speed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q7">>Correct! The MAP (most probable) sequence under a language model is often generic and repetitive. Sampling introduces variation that produces more interesting, human-like text for creative tasks.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q7">>Incorrect. Beam search works with any vocabulary size. Modern LLMs use 50,000+ token vocabularies and beam search handles them without issue.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q7">>Incorrect. Sampling is not "more accurate" — it produces different outputs each time. The preference is about text quality and diversity, not accuracy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bs-q8">What is a fundamental limitation of beam search's pruning strategy?</span>
+A. It uses too much memory to be practical
+B. It cannot process sequences longer than the beam width
+C. Once a hypothesis is pruned, it can never be recovered — beam search cannot backtrack
+D. It requires the model to output probabilities in sorted order
+<<button "A">><<replace "#bs-q8">>Incorrect. Beam search memory is $O(k \times T)$, which is very manageable. The fundamental limitation is its inability to recover pruned hypotheses.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bs-q8">>Incorrect. Sequence length and beam width are independent parameters. Beam search can produce sequences of any length regardless of $k$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bs-q8">>Correct! Beam search is a greedy-in-width approximation. If the globally optimal sequence required a token that was pruned at an early step, beam search will never find it. It cannot backtrack.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bs-q8">>Incorrect. Beam search sorts candidates itself after scoring. The model just needs to output a probability distribution over the vocabulary; no pre-sorting is required.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

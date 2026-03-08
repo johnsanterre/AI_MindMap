@@ -1,0 +1,127 @@
+<<include "Header">>
+
+! Chinese Remainder Theorem
+
+<img src="assets/chinese_remainder_theorem.svg" alt="Diagram showing simultaneous congruences, ring isomorphism, and applications of the Chinese Remainder Theorem" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a mysterious number, and all you know is what remainder it leaves when divided by 3, by 5, and by 7. A friend tells you: the remainder is 2 when divided by 3, 3 when divided by 5, and 1 when divided by 7. Remarkably, that is enough information to pin down the number exactly — at least up to multiples of $3 \times 5 \times 7 = 105$. The ''Chinese Remainder Theorem'' (CRT) says that if your divisors share no common factors, these remainders uniquely determine the number modulo their product. It is one of the oldest results in [[Modular Arithmetic|Modular Arithmetic]], dating back to the Chinese mathematician Sunzi in the 3rd century CE, and it remains one of the most practically useful theorems in number theory, powering everything from [[RSA Cryptography|RSA Cryptography]] to fast computer arithmetic.
+
+!! The Core Insight
+
+The CRT is fundamentally a statement about ''decomposition''. A single hard problem involving a large modulus can be broken into several easy problems involving smaller moduli, solved independently, and then reassembled. The theorem guarantees two things: (1) a solution always exists, and (2) it is unique modulo the product of the moduli.
+
+More precisely: if $m_1, m_2, \ldots, m_k$ are pairwise coprime (meaning $\gcd(m_i, m_j) = 1$ for all $i \neq j$), then for //any// choice of remainders $a_1, a_2, \ldots, a_k$, there exists a unique $x$ modulo $N = m_1 m_2 \cdots m_k$ satisfying all the congruences simultaneously. The key intuition is that pairwise coprimality prevents conflicts — the constraints live in "orthogonal" directions, so they never contradict each other.
+
+!! The Ring Isomorphism Perspective
+
+The deeper algebraic statement of the CRT is an ''isomorphism of rings'':
+
+$$\mathbb{Z}/N\mathbb{Z} \;\cong\; \mathbb{Z}/m_1\mathbb{Z} \times \mathbb{Z}/m_2\mathbb{Z} \times \cdots \times \mathbb{Z}/m_k\mathbb{Z}$$
+
+This is not just a bijection of sets — it preserves both addition and multiplication. Working with a single large ring $\mathbb{Z}/N\mathbb{Z}$ is //equivalent// to working with several smaller rings simultaneously. Every arithmetic operation (add, subtract, multiply) in the big ring corresponds to doing the same operation independently in each small ring.
+
+This perspective transforms the CRT from a curiosity about congruences into a structural principle: large algebraic objects decompose into products of smaller ones when the components are "independent" (coprime). The same idea recurs throughout algebra — in the classification of finite abelian groups, in the structure of [[Finite Fields|Finite Fields]], and in the factorization of ideals in number rings.
+
+!! What the Math Is Actually Doing
+
+Given pairwise coprime moduli $m_1, \ldots, m_k$ with $N = \prod_i m_i$, and target remainders $a_1, \ldots, a_k$, the explicit construction proceeds as follows. Define:
+
+$$M_i = \frac{N}{m_i}$$
+
+Each $M_i$ is the product of all moduli //except// $m_i$. Since $\gcd(M_i, m_i) = 1$ (the other moduli are coprime to $m_i$), the ''modular inverse'' $y_i = M_i^{-1} \pmod{m_i}$ exists. Then the solution is:
+
+$$x = \sum_{i=1}^{k} a_i \, M_i \, y_i \pmod{N}$$
+
+Why does this work? Consider the $i$-th term $a_i M_i y_i$. Modulo $m_i$, we have $M_i y_i \equiv 1$, so this term contributes $a_i$. Modulo any other $m_j$ (where $j \neq i$), $M_i \equiv 0$ because $M_i$ contains $m_j$ as a factor. So each term "activates" for exactly one modulus and vanishes for the others — it is an //orthogonal decomposition// in modular arithmetic.
+
+Finding modular inverses uses the ''extended Euclidean algorithm'': given $\gcd(a, m) = 1$, it finds integers $s, t$ such that $as + mt = 1$, which means $s \equiv a^{-1} \pmod{m}$. This runs in $O(\log^2 m)$ time — extremely fast.
+
+For two moduli, the formula simplifies. If $x \equiv a_1 \pmod{m_1}$ and $x \equiv a_2 \pmod{m_2}$:
+
+$$x = a_1 + m_1 \bigl((a_2 - a_1) \cdot m_1^{-1} \bmod m_2\bigr) \pmod{m_1 m_2}$$
+
+This ''Garner's algorithm'' form generalizes to $k$ moduli iteratively and avoids computing large intermediate products, making it the preferred method in practice.
+
+!! Practical Applications
+
+''RSA decryption speedup.'' In [[RSA Cryptography|RSA Cryptography]], the modulus $N = pq$ is a product of two large primes. Decrypting $c^d \bmod N$ directly requires exponentiating modulo a 2048-bit number. Using CRT, you instead compute $c^{d_p} \bmod p$ and $c^{d_q} \bmod q$ separately (where $d_p = d \bmod (p-1)$, $d_q = d \bmod (q-1)$), then combine via Garner's formula. Since modular exponentiation is roughly cubic in the bit-length, two half-sized exponentiations are about 4 times faster than one full-sized one.
+
+''Residue number systems.'' For parallel arithmetic in digital signal processing, large integers are represented as tuples of residues modulo small coprime numbers. Addition and multiplication happen independently on each component with no carry propagation — enabling massive parallelism. The CRT guarantees the representation is faithful (no information loss) as long as the number stays below the product of the moduli.
+
+''Secret sharing.'' The Asmuth-Bloom scheme distributes a secret $S$ as residues modulo $k$ coprime numbers chosen from a larger set of $n$ moduli. Any $k$ shares suffice to reconstruct $S$ via CRT, but fewer than $k$ shares leave $S$ information-theoretically undetermined — a threshold secret-sharing scheme with unconditional security.
+
+''Polynomial interpolation.'' Over [[Finite Fields|Finite Fields]] and polynomial rings, the CRT takes the form: given pairwise coprime polynomials $p_1(x), \ldots, p_k(x)$ and target remainders $r_1(x), \ldots, r_k(x)$, there is a unique polynomial modulo $\prod p_i(x)$ matching all remainders. When each $p_i(x) = x - \alpha_i$, this reduces to Lagrange interpolation — the CRT is the structural reason interpolation works.
+
+!! When the Chinese Remainder Theorem Breaks Down
+
+''Moduli are not pairwise coprime.'' If $\gcd(m_i, m_j) > 1$ for some pair, the theorem simply does not apply. The system $x \equiv 2 \pmod{6}$ and $x \equiv 3 \pmod{4}$ has no solution because $\gcd(6,4) = 2$, and $2 \not\equiv 3 \pmod{2}$ — the two constraints conflict on their shared factor. A generalized version exists: a solution exists if and only if $a_i \equiv a_j \pmod{\gcd(m_i, m_j)}$ for all pairs, but the solution is then unique modulo $\text{lcm}(m_1, \ldots, m_k)$, not the product.
+
+''Comparison and ordering are lost.'' Residue number systems sacrifice the ability to compare numbers. Given $(2, 3, 1)$ and $(1, 4, 5)$ as residue representations, determining which underlying integer is larger requires reconstructing them via CRT — an expensive operation. This makes residue systems unsuitable for algorithms that rely heavily on comparisons, branching, or division.
+
+''Reconstruction cost grows.'' While arithmetic in residue representation is cheap and parallel, converting back to a standard integer representation via CRT requires $O(k^2)$ modular multiplications (using Garner's algorithm) or $O(k \log^2 k)$ with fast algorithms. For applications where you frequently need the actual number — not just its residues — this reconstruction overhead can dominate the savings from parallel arithmetic.
+
+!! Technical Details
+
+The CRT first appears in //Sunzi Suanjing// (~3rd century CE), phrased as: "There are certain things whose number is unknown. If counted by threes, the remainder is 2; by fives, 3; by sevens, 2. What is the number?" The systematic algorithm was refined by Qin Jiushao (1247) in //Shushu Jiuzhang//.
+
+Algebraic generalization: the CRT holds in any commutative ring $R$ for ideals $I_1, \ldots, I_k$ that are pairwise ''comaximal'' ($I_i + I_j = R$ for $i \neq j$). Then $R/(I_1 \cap \cdots \cap I_k) \cong R/I_1 \times \cdots \times R/I_k$. For $R = \mathbb{Z}$ and $I_i = m_i\mathbb{Z}$, comaximality is exactly coprimality.
+
+Euler's totient via CRT: the isomorphism $(\mathbb{Z}/N\mathbb{Z})^\times \cong \prod_i (\mathbb{Z}/m_i\mathbb{Z})^\times$ immediately gives $\phi(N) = \prod_i \phi(m_i)$ when the $m_i$ are pairwise coprime — the multiplicativity of Euler's totient function.
+
+Computational complexity: the explicit CRT construction runs in $O(k \cdot \log^2 N)$ bit operations using the extended Euclidean algorithm for each inverse. Garner's iterative method uses $O(k^2)$ modular operations but avoids large intermediate values.
+
+Connection to Lagrange interpolation: over $\mathbb{F}_q[x]$, the CRT with moduli $(x - \alpha_1), \ldots, (x - \alpha_k)$ yields exactly the Lagrange interpolation formula. The basis polynomials $L_i(x) = \prod_{j \neq i} \frac{x - \alpha_j}{\alpha_i - \alpha_j}$ are the polynomial analogues of $M_i y_i$.
+
+Connected topics: [[Modular Arithmetic|Modular Arithmetic]], [[RSA Cryptography|RSA Cryptography]], [[Finite Fields|Finite Fields]], <<link "Number Theory" "Number Theory">><</link>>, <<link "Abstract Algebra" "Abstract Algebra">><</link>>.
+
+!! Quiz
+
+<span id="crt-q1">''Question 1:'' The Chinese Remainder Theorem requires which condition on the moduli $m_1, \ldots, m_k$?
+<<button "A. They must all be prime numbers">><<replace "#crt-q1">>Incorrect. The moduli need not be prime — they only need to be pairwise coprime. For example, $m_1 = 4, m_2 = 9, m_3 = 25$ works perfectly since $\gcd(4,9) = \gcd(4,25) = \gcd(9,25) = 1$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. They must be pairwise coprime: $\gcd(m_i, m_j) = 1$ for all $i \neq j$">><<replace "#crt-q1">>Correct. Pairwise coprimality is the essential condition. It ensures the constraints are independent — each modulus constrains a "direction" that no other modulus touches, guaranteeing existence and uniqueness of the solution modulo $N = \prod m_i$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Their product must be prime">><<replace "#crt-q1">>Incorrect. The product $N = m_1 \cdots m_k$ is never prime when $k > 1$ (since it has at least two factors). The condition is pairwise coprimality of the moduli.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They must be consecutive integers">><<replace "#crt-q1">>Incorrect. Consecutive integers greater than 1 are actually often not coprime (e.g., consecutive even numbers share factor 2). The requirement is pairwise coprimality.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q2">''Question 2:'' If $x \equiv 2 \pmod{3}$ and $x \equiv 3 \pmod{5}$, what is $x \pmod{15}$?
+<<button "A. $x \equiv 5 \pmod{15}$">><<replace "#crt-q2">>Incorrect. Check: $5 \bmod 3 = 2$ works, but $5 \bmod 5 = 0 \neq 3$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $x \equiv 8 \pmod{15}$">><<replace "#crt-q2">>Correct. Verify: $8 \bmod 3 = 2$ and $8 \bmod 5 = 3$. Both congruences are satisfied. By CRT, this is the unique solution modulo $15$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $x \equiv 11 \pmod{15}$">><<replace "#crt-q2">>Incorrect. Check: $11 \bmod 3 = 2$ works, but $11 \bmod 5 = 1 \neq 3$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $x \equiv 13 \pmod{15}$">><<replace "#crt-q2">>Incorrect. Check: $13 \bmod 3 = 1 \neq 2$. The first congruence is not satisfied.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q3">''Question 3:'' The CRT establishes that $\mathbb{Z}/N\mathbb{Z} \cong \prod_i \mathbb{Z}/m_i\mathbb{Z}$. What kind of mathematical structure does this isomorphism preserve?
+<<button "A. Only the additive group structure">><<replace "#crt-q3">>Incorrect. The CRT isomorphism preserves more than just addition — it is a ring isomorphism.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Only the multiplicative group structure">><<replace "#crt-q3">>Incorrect. It preserves multiplication, but it also preserves addition. The full ring structure is preserved.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Both addition and multiplication — it is a ring isomorphism">><<replace "#crt-q3">>Correct. The CRT map is a ring isomorphism: if $x \mapsto (x \bmod m_1, \ldots, x \bmod m_k)$, then $(x+y) \mapsto$ the componentwise sum and $(xy) \mapsto$ the componentwise product. This is why arithmetic in the residue representation works independently on each component.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Only the ordering of elements">><<replace "#crt-q3">>Incorrect. In fact, the residue representation //destroys// ordering — you cannot easily compare two numbers from their residue tuples. The isomorphism preserves algebraic operations (addition and multiplication), not order.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q4">''Question 4:'' In the CRT construction, what role does $M_i = N / m_i$ play?
+<<button "A. $M_i$ is the modular inverse of $m_i$">><<replace "#crt-q4">>Incorrect. $M_i = N/m_i$ is the product of all moduli except $m_i$. The modular inverse $y_i = M_i^{-1} \pmod{m_i}$ is a separate quantity computed from $M_i$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $M_i$ is divisible by every $m_j$ except $m_i$, so the $i$-th term vanishes modulo all other moduli">><<replace "#crt-q4">>Correct. Since $M_i = \prod_{j \neq i} m_j$, it is divisible by $m_j$ for every $j \neq i$, making $a_i M_i y_i \equiv 0 \pmod{m_j}$. But $\gcd(M_i, m_i) = 1$, so modulo $m_i$ the term can be made to equal $a_i$ by choosing $y_i = M_i^{-1}$. This orthogonality is the mechanism of the construction.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $M_i$ is the greatest common divisor of all moduli">><<replace "#crt-q4">>Incorrect. $M_i$ is a product, not a GCD. Since the moduli are pairwise coprime, their GCD is 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $M_i$ ensures the solution is always less than $N$">><<replace "#crt-q4">>Incorrect. The solution is reduced modulo $N$ as a final step. $M_i$'s role is structural — creating orthogonal basis elements for the construction.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q5">''Question 5:'' How does RSA decryption use the CRT?
+<<button "A. It factors the RSA modulus $N$ into primes">><<replace "#crt-q5">>Incorrect. Factoring $N$ is what an attacker needs to do. The legitimate key holder already knows $p$ and $q$, and uses CRT to speed up the decryption exponentiation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It replaces one large exponentiation mod $N$ with two smaller exponentiations mod $p$ and mod $q$, then combines them">><<replace "#crt-q5">>Correct. Since $N = pq$ and $\gcd(p,q) = 1$, computing $c^d \bmod N$ is equivalent to computing $c^{d_p} \bmod p$ and $c^{d_q} \bmod q$ separately (where $d_p = d \bmod (p-1)$). Two half-sized exponentiations are roughly 4 times faster than one full-sized one, since modular exponentiation is cubic in the bit-length.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It encrypts the message using multiple public keys simultaneously">><<replace "#crt-q5">>Incorrect. CRT is used during //decryption// (by the private key holder who knows the factors $p, q$), not during encryption.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It generates the prime numbers used in RSA">><<replace "#crt-q5">>Incorrect. Prime generation uses probabilistic primality tests (like Miller-Rabin), not the CRT. CRT is applied after key generation to accelerate decryption.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q6">''Question 6:'' What happens when the moduli are NOT pairwise coprime?
+<<button "A. The CRT still works but gives multiple solutions">><<replace "#crt-q6">>Incorrect. The standard CRT does not apply at all. A generalized version exists: solutions exist if and only if the target remainders are consistent on shared factors ($a_i \equiv a_j \pmod{\gcd(m_i, m_j)}$), and the solution is unique modulo $\text{lcm}(m_1, \ldots, m_k)$, not the product.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The system always has a solution, just not a unique one">><<replace "#crt-q6">>Incorrect. The system may have //no// solution at all. For example, $x \equiv 2 \pmod{6}$ and $x \equiv 3 \pmod{4}$ is impossible because $2 \not\equiv 3 \pmod{2}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The system may have no solution, or a solution unique modulo $\text{lcm}(m_1, \ldots, m_k)$">><<replace "#crt-q6">>Correct. Without pairwise coprimality, consistency must be checked: $a_i \equiv a_j \pmod{\gcd(m_i, m_j)}$ for all pairs. If consistent, the solution exists and is unique modulo the LCM (which is strictly less than the product when GCDs exceed 1).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The modular inverses become negative, causing numerical instability">><<replace "#crt-q6">>Incorrect. The issue is not numerical — it is structural. When $\gcd(M_i, m_i) > 1$, the modular inverse $M_i^{-1} \pmod{m_i}$ simply does not exist, and the construction formula cannot be applied.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q7">''Question 7:'' What major disadvantage do residue number systems (RNS) have?
+<<button "A. Addition and multiplication are slower than standard binary">><<replace "#crt-q7">>Incorrect. Addition and multiplication are //faster// in RNS because they happen independently on small components with no carry propagation — this is the whole advantage.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The representation wastes memory by storing redundant information">><<replace "#crt-q7">>Incorrect. RNS representations are actually compact — the total storage is comparable to the original number. The issue lies in operations, not storage.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Magnitude comparison and division are expensive because they require CRT reconstruction">><<replace "#crt-q7">>Correct. While addition and multiplication are cheap and parallel in RNS, determining which of two numbers is larger, detecting overflow, or performing division all require reconstructing the actual integer value via CRT — an $O(k^2)$ operation. This makes RNS unsuitable for algorithms that rely heavily on comparisons or branching.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. They only work for prime moduli">><<replace "#crt-q7">>Incorrect. RNS works with any pairwise coprime moduli, not just primes. Powers of distinct primes, for instance, are valid choices.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="crt-q8">''Question 8:'' The CRT for polynomial rings over a field, with moduli $(x - \alpha_1), \ldots, (x - \alpha_k)$, reduces to which classical result?
+<<button "A. Taylor series expansion">><<replace "#crt-q8">>Incorrect. Taylor expansion uses derivatives at a single point, not values at multiple points. The polynomial CRT with linear moduli is about matching values at distinct points.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The fundamental theorem of algebra">><<replace "#crt-q8">>Incorrect. The fundamental theorem of algebra concerns the existence of roots of polynomials over $\mathbb{C}$. The polynomial CRT concerns reconstruction from remainders.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Lagrange interpolation">><<replace "#crt-q8">>Correct. Each modulus $(x - \alpha_i)$ specifies the polynomial's value at $\alpha_i$. The CRT reconstruction formula becomes exactly the Lagrange interpolation formula, with the basis polynomials $L_i(x) = \prod_{j \neq i} \frac{x - \alpha_j}{\alpha_i - \alpha_j}$ playing the role of the $M_i y_i$ terms in the integer CRT.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Euclidean division algorithm">><<replace "#crt-q8">>Incorrect. The Euclidean algorithm is used to compute GCDs and modular inverses, which are //tools// in the CRT construction, but the structural result that CRT reduces to is Lagrange interpolation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

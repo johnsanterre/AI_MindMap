@@ -1,0 +1,163 @@
+<<include "Header">>
+
+! Backtracking
+
+<img src="assets/backtracking.svg" alt="Search tree diagram showing backtracking: nodes explored depth-first with pruned branches marked by red X, a backtrack arrow, and a solution node highlighted in gold" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are navigating a maze. At every fork you pick a direction and walk. If you hit a dead end, you retrace your steps to the last fork and try a different path. You do not restart from scratch — you //undo// only the most recent choice. ''Backtracking'' is exactly this strategy applied to computational problems: build a solution one decision at a time, test whether the partial solution can still lead somewhere valid, and if not, reverse the last decision and try the next option. It is the disciplined art of //giving up early// on dead ends so you can focus on paths that might actually work.
+
+!! The Core Insight
+
+Backtracking converts a brute-force exhaustive search into a structured depth-first traversal of a ''decision tree''. Each node represents a partial assignment of choices (e.g., which color to assign to the next vertex, which queen to place on the next row). At every node, before descending further, the algorithm checks a ''constraint test'' — a quick evaluation of whether this partial solution //could possibly// extend to a valid complete solution. If the answer is no, the entire subtree below is //pruned//: skipped without examination. This single idea — test early, abandon early — can reduce an exponential search space by orders of magnitude.
+
+The power of backtracking lies in its ''pruning ratio''. In the best case, clever constraint checking can eliminate huge portions of the search tree. In the worst case, no pruning occurs and backtracking degenerates to brute force. The quality of the constraint test — how cheaply and aggressively it can rule out dead ends — determines everything.
+
+!! Anatomy of a Backtracking Algorithm
+
+Every backtracking algorithm follows the same skeleton:
+
+''1. Choose:'' Select the next decision variable (which row to place a queen, which vertex to color, which variable to assign).
+
+''2. Explore:'' For each possible value of that variable, make the assignment and check constraints.
+
+''3. Constrain:'' If the partial assignment violates any constraint, prune this branch immediately — do not recurse deeper.
+
+''4. Recurse:'' If constraints are satisfied, recurse to make the next decision.
+
+''5. Undo:'' If the recursive call returns failure (no valid extension exists), ''undo'' the current assignment and try the next value. This is the actual "backtracking" step.
+
+''6. Report:'' If all values are exhausted with no success, report failure to the caller (triggering backtracking one level higher).
+
+Classic examples include the ''N-Queens problem'' (place $N$ queens on an $N \times N$ chessboard so no two attack each other), [[Graph Coloring]] (assign colors to vertices so no adjacent vertices share a color), ''Sudoku solving'' (fill a $9 \times 9$ grid satisfying row, column, and box constraints), and solving instances of [[Satisfiability]] (finding variable assignments that make a Boolean formula true).
+
+!! What the Math Is Actually Doing
+
+Consider a problem with $n$ decision variables, each with domain size $d$. The ''complete search tree'' has $d^n$ leaves — every possible combination. Backtracking explores this tree depth-first, but prunes subtrees rooted at nodes that fail the constraint test.
+
+Let $T(n)$ denote the number of nodes visited. Without pruning:
+
+$$T_{\text{brute}} = \sum_{k=0}^{n} d^k = \frac{d^{n+1} - 1}{d - 1} = O(d^n)$$
+
+With a constraint test that prunes a fraction $p$ of branches at each level, the effective branching factor drops from $d$ to $(1-p)d$:
+
+$$T_{\text{pruned}} = O\bigl(((1-p)d)^n\bigr)$$
+
+Even modest pruning has exponential payoff. If $d = 10$ and $p = 0.5$, the search space shrinks from $10^n$ to $5^n$ — for $n = 20$, that is the difference between $10^{20}$ and roughly $10^{14}$ nodes.
+
+For constraint satisfaction problems (CSPs), the backtracking recurrence is:
+
+$$\text{Backtrack}(X, D, C, A) = \begin{cases} A & \text{if } |A| = n \text{ and } A \text{ satisfies } C \\ \text{failure} & \text{if constraint violated} \\ \text{Backtrack}(X, D, C, A \cup \{x_i = v\}) & \text{for each } v \in D_i \end{cases}$$
+
+where $X = \{x_1, \ldots, x_n\}$ are variables, $D = \{D_1, \ldots, D_n\}$ are domains, $C$ is the constraint set, and $A$ is the current partial assignment.
+
+''Constraint propagation'' enhances basic backtracking. ''Forward checking'' removes values from the domains of unassigned variables that conflict with the current assignment. ''Arc consistency'' (AC-3) goes further: for each constraint between variables $x_i$ and $x_j$, it removes any value $a \in D_i$ for which no value $b \in D_j$ satisfies the constraint. The time complexity of AC-3 is $O(e \cdot d^3)$ where $e$ is the number of constraints — cheap compared to the exponential tree it prunes.
+
+!! Practical Enhancements and Applications
+
+Several heuristics dramatically improve backtracking performance in practice:
+
+''Variable ordering (MRV):'' The ''Minimum Remaining Values'' heuristic selects the variable with the fewest remaining legal values. This "fail-first" principle detects dead ends early — a variable with only one legal value forces a choice, while a variable with zero legal values triggers immediate backtracking.
+
+''Value ordering (LCV):'' The ''Least Constraining Value'' heuristic picks the value that rules out the fewest options for neighboring variables, maximizing the chance that the remaining subproblem is solvable.
+
+''Backjumping:'' Standard backtracking retreats one level at a time. ''Conflict-directed backjumping'' identifies which earlier decisions actually caused the failure and jumps back directly to the most recent conflicting decision, skipping irrelevant intermediate levels.
+
+''Applications in AI and ML:'' Backtracking is foundational to SAT solvers (via DPLL and CDCL algorithms) used in formal verification, planning, and scheduling. It underlies [[Satisfiability]] solving and is central to solving NP-complete problems in practice. Constraint satisfaction via backtracking powers logic programming (Prolog), automated theorem proving, and combinatorial optimization when paired with branch-and-bound. In [[P vs NP]] terms, backtracking is the practical tool for attacking problems whose worst-case complexity is exponential.
+
+!! When Backtracking Breaks Down
+
+''1. Weak constraint propagation.'' If the constraint test cannot detect dead ends until deep in the tree, backtracking degenerates to brute-force enumeration. For example, in some formulations of scheduling problems, constraint violations only become apparent after nearly all variables are assigned. The pruning ratio $p$ approaches zero, and the algorithm visits $O(d^n)$ nodes — no better than trying every combination. The fix is to reformulate constraints to propagate earlier or to apply stronger consistency techniques like MAC (Maintaining Arc Consistency).
+
+''2. Exponential blowup from structure.'' Some problem structures create exponentially many near-solutions that differ in only a few variables, causing backtracking to thrash — repeatedly exploring similar failing branches. This "heavy-tailed" runtime behavior means some instances are solved in milliseconds while structurally similar ones take hours. Random restarts with randomized variable ordering can mitigate thrashing, and are standard in modern SAT solvers like those used for [[Satisfiability]].
+
+''3. No good heuristic ordering exists.'' Backtracking efficiency depends heavily on the order in which variables and values are tried. For some domains, no known heuristic provides consistently good ordering, and the algorithm explores an exponential portion of the tree regardless. [[Greedy Algorithms]] may then provide faster approximate solutions, trading optimality for tractability. For problems where the search space is vast and constraint structure is weak, stochastic local search (e.g., WalkSAT) or metaheuristics (simulated annealing, genetic algorithms) often outperform systematic backtracking.
+
+!! Technical Details
+
+''Time complexity:'' Worst case $O(d^n)$ for $n$ variables with domain size $d$. Average case highly problem-dependent — for random 3-SAT at the satisfiability threshold (clause-to-variable ratio $\approx 4.27$), empirical runtimes are exponential but with a smaller base than brute force.
+
+''Space complexity:'' $O(n)$ for the recursion stack (depth-first), plus $O(nd)$ if maintaining domain information for constraint propagation.
+
+''DPLL algorithm:'' Davis-Putnam-Logemann-Loveland (1962) — backtracking for SAT with ''unit propagation'' (a clause with one unset literal forces that literal) and ''pure literal elimination''. Foundation of all modern SAT solvers.
+
+''CDCL:'' Conflict-Driven Clause Learning — extends DPLL by analyzing conflicts to learn new ''conflict clauses'' that prevent the solver from exploring the same dead end again. Enables ''non-chronological backjumping''. Powers solvers like MiniSat and CryptoMiniSat that solve industrial SAT instances with millions of variables.
+
+''Branch-and-bound:'' Backtracking for optimization: at each node, compute a bound (lower bound for minimization) on the best possible solution in the subtree. If the bound is worse than the best known solution, prune. Used for integer programming, traveling salesman, and job-shop scheduling.
+
+''Relationship to other paradigms:'' Backtracking explores the search tree depth-first; ''BFS-based'' approaches (e.g., beam search) explore breadth-first with a width limit. Dynamic programming avoids redundant computation when subproblems overlap, which backtracking does not exploit. See also [[Graph Coloring]] for a canonical backtracking application and [[P vs NP]] for the complexity-theoretic context.
+
+!! Quiz
+
+<span id="bt-q1">What is the primary mechanism by which backtracking improves on brute-force search?</span>
+
+A. It uses randomization to skip branches
+B. It prunes subtrees early when a partial solution cannot lead to a valid complete solution
+C. It uses dynamic programming to cache subproblem results
+D. It searches breadth-first instead of depth-first
+
+<<button "A">><<replace "#bt-q1">>Incorrect. Backtracking is a deterministic, systematic search. Randomization can be added (random restarts) but is not the core mechanism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q1">>Correct! Backtracking tests constraints on partial solutions and prunes entire subtrees that cannot possibly lead to valid solutions. This early abandonment is the source of its efficiency over brute force.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q1">>Incorrect. Caching subproblem results is the hallmark of dynamic programming, not backtracking. Backtracking does not exploit overlapping subproblems.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q1">>Incorrect. Backtracking searches //depth//-first, not breadth-first. Depth-first traversal is what enables its $O(n)$ space complexity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q2">In the N-Queens problem, what does the constraint test check at each step?</span>
+
+A. Whether the queen is placed on a white square
+B. Whether any previously placed queen attacks the newly placed queen (same row, column, or diagonal)
+C. Whether the total number of queens exceeds $N$
+D. Whether the queen is adjacent to another queen
+
+<<button "A">><<replace "#bt-q2">>Incorrect. Square color is irrelevant to the N-Queens problem — the constraint is about mutual non-attack.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q2">>Correct! The constraint test verifies that no previously placed queen shares the same row, column, or diagonal with the new queen. Failure triggers immediate backtracking without exploring further placements.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q2">>Incorrect. Since queens are placed one per row, the count is always tracked implicitly. The constraint concerns //attack positions//, not count.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q2">>Incorrect. Queens attack along entire rows, columns, and diagonals — not just adjacent squares. The constraint is about lines of attack, not adjacency.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q3">If a problem has $n = 15$ variables, each with domain size $d = 10$, and constraint propagation prunes 60% of branches at each level, approximately how many nodes does backtracking visit?</span>
+
+A. $10^{15}$ nodes
+B. $4^{15} \approx 10^9$ nodes
+C. $6^{15} \approx 4.7 \times 10^{11}$ nodes
+D. $15 \times 10 = 150$ nodes
+
+<<button "A">><<replace "#bt-q3">>Incorrect. $10^{15}$ is the brute-force count with //no// pruning. With 60% pruning, the effective branching factor drops dramatically.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q3">>Correct! With 60% pruning, the effective branching factor is $(1 - 0.6) \times 10 = 4$. So the tree has roughly $4^{15} \approx 1.07 \times 10^9$ nodes — six orders of magnitude fewer than brute force.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q3">>Incorrect. This uses an effective branching factor of 6, which would correspond to 40% pruning, not 60%.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q3">>Incorrect. $15 \times 10 = 150$ is the total number of variable-value pairs, not the number of tree nodes explored.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q4">What is the Minimum Remaining Values (MRV) heuristic?</span>
+
+A. Choose the variable whose current domain has the fewest remaining legal values
+B. Choose the variable with the largest domain to maximize flexibility
+C. Choose the value that constrains the fewest other variables
+D. Choose the variable that appears in the fewest constraints
+
+<<button "A">><<replace "#bt-q4">>Correct! MRV selects the most constrained variable — the one with the fewest remaining legal values. This "fail-first" strategy triggers backtracking as early as possible, pruning large portions of the search tree.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q4">>Incorrect. MRV does the opposite — it picks the variable with the //smallest// domain. Choosing the largest domain delays failure detection.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q4">>Incorrect. This describes the Least Constraining Value (LCV) heuristic, which is a //value// ordering heuristic, not a //variable// ordering heuristic like MRV.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q4">>Incorrect. The number of constraints a variable appears in is related to the "degree" heuristic, not MRV. MRV concerns the remaining domain size.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q5">What does Conflict-Driven Clause Learning (CDCL) add to basic backtracking for SAT solving?</span>
+
+A. It converts the SAT problem to a polynomial-time problem
+B. It analyzes conflicts to learn new clauses that prevent re-exploring the same dead end, enabling non-chronological backjumping
+C. It replaces depth-first search with breadth-first search
+D. It eliminates the need for constraint propagation
+
+<<button "A">><<replace "#bt-q5">>Incorrect. SAT is NP-complete; CDCL does not change the problem's worst-case complexity class. It is a practical speedup, not a polynomial-time algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q5">>Correct! CDCL analyzes why a conflict occurred, generates a new //conflict clause// encoding the lesson, adds it to the formula, and backjumps to the decision level where the conflict can actually be resolved — skipping irrelevant intermediate levels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q5">>Incorrect. CDCL still uses depth-first search as its backbone. The innovation is clause learning and non-chronological backjumping, not a change in traversal order.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q5">>Incorrect. CDCL //relies heavily// on constraint propagation (unit propagation). It adds clause learning on top of propagation, not as a replacement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q6">How does branch-and-bound extend basic backtracking?</span>
+
+A. It applies backtracking only to feasibility problems, not optimization
+B. It computes a bound on the best achievable solution in each subtree and prunes when the bound is worse than the current best
+C. It eliminates the need for a constraint test
+D. It guarantees polynomial-time solutions for NP-hard problems
+
+<<button "A">><<replace "#bt-q6">>Incorrect. Branch-and-bound specifically extends backtracking //to// optimization problems — that is its entire purpose.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q6">>Correct! Branch-and-bound maintains the best solution found so far and computes an optimistic bound at each node. If the bound shows that no solution in this subtree can beat the current best, the subtree is pruned. This extends pruning from constraint feasibility to objective optimality.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q6">>Incorrect. Branch-and-bound //adds// bound-based pruning on top of constraint testing — it does not remove constraints.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q6">>Incorrect. Branch-and-bound does not change the worst-case complexity — NP-hard problems remain NP-hard. It provides practical speedups, not asymptotic guarantees.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q7">What is the space complexity of backtracking using depth-first search?</span>
+
+A. $O(d^n)$ — exponential in the number of variables
+B. $O(n \cdot d)$ — linear in variables times domain size
+C. $O(n)$ for the recursion stack, plus $O(nd)$ with constraint propagation
+D. $O(1)$ — constant space
+
+<<button "A">><<replace "#bt-q7">>Incorrect. $O(d^n)$ is the //time// complexity in the worst case. Space complexity of depth-first search is proportional to the depth, not the total tree size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q7">>Partially correct but incomplete. $O(nd)$ captures the domain storage but misses the recursion stack analysis.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q7">>Correct! Depth-first search requires stack space proportional to the maximum depth $n$. If constraint propagation maintains domain information for each variable, add $O(nd)$ for storing the reduced domains. This is vastly better than BFS, which would require exponential space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q7">>Incorrect. At minimum, backtracking needs $O(n)$ space for the recursion stack to track the current path through the decision tree.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="bt-q8">Why do modern SAT solvers use random restarts alongside backtracking?</span>
+
+A. Restarts convert exponential problems to polynomial ones
+B. Random restarts help escape heavy-tailed runtime distributions where some variable orderings lead to thrashing
+C. Restarts eliminate the need for clause learning
+D. Random restarts are only used for unsatisfiable instances
+
+<<button "A">><<replace "#bt-q8">>Incorrect. Restarts do not change the complexity class. SAT remains NP-complete; restarts provide a practical improvement in expected runtime.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#bt-q8">>Correct! Empirical studies show that backtracking runtimes on SAT instances follow heavy-tailed distributions — some runs get stuck for exponentially long. Random restarts with different variable orderings cut off these long tails, dramatically improving median solve times.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#bt-q8">>Incorrect. Modern solvers use restarts //together with// clause learning. Learned clauses persist across restarts, so previous work is not lost.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#bt-q8">>Incorrect. Random restarts benefit both satisfiable and unsatisfiable instances. The heavy-tail phenomenon affects both cases.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

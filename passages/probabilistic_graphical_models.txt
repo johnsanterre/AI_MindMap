@@ -1,0 +1,133 @@
+<<include "Header">>
+! Probabilistic Graphical Models
+[img[assets/probabilistic_graphical_models.svg]]
+
+Imagine you are trying to diagnose why your car will not start. You consider the battery, the fuel level, the starter motor, and the weather. Each of these factors influences others in a web of cause and effect: cold weather drains the battery, a dead battery prevents the starter from turning, and no fuel means no combustion regardless. ''Probabilistic Graphical Models'' (PGMs) are a framework for representing exactly these kinds of tangled dependencies as a graph, where nodes are variables and edges encode how they influence one another. Instead of wrestling with one enormous joint probability table, PGMs let you break the problem into small, local relationships and then stitch them together using the mathematics of probability and graph theory.
+
+!! The Core Insight
+
+The central idea behind PGMs is that //structure reveals independence//. In most real-world problems, not every variable depends on every other variable. Your car's fuel level has nothing to do with the weather once you account for your driving habits. PGMs exploit these ''conditional independencies'' to factor a massive joint distribution into a product of small, manageable pieces. The graph itself is both a visual map of the problem and a precise mathematical statement about which variables can be ignored when reasoning about others. This factorization is what makes inference tractable in systems with hundreds or thousands of variables, from medical diagnosis to speech recognition to protein folding.
+
+!! Directed vs Undirected Models
+
+PGMs come in two major flavors, each with its own semantics and strengths.
+
+''Directed models'', also called <<link "Bayesian Networks" "Bayesian Networks">><</link>>, use arrows to represent causal or generative relationships. An arrow from node $A$ to node $B$ means that $A$ directly influences $B$, and $B$'s local distribution is specified as a conditional probability $P(B \mid A)$. The joint distribution factors as a product of these conditionals, one per node. Directed models are natural for encoding causal stories: a disease causes symptoms, genes influence traits, or a latent topic generates words in a document. <<link "Hidden Markov Models" "Hidden Markov Models">><</link>> are a classic example, where a hidden state sequence generates an observed output sequence.
+
+''Undirected models'', also called <<link "Markov Random Fields" "Markov Random Fields">><</link>>, use plain edges with no arrows. Instead of conditional probabilities, they define ''potential functions'' over cliques (fully connected subsets) of the graph. These potentials measure compatibility between variable configurations but are not probabilities themselves. The joint distribution is the product of all clique potentials divided by a normalizing constant $Z$ called the ''partition function''. Undirected models are natural for problems where influence is symmetric, such as pixel interactions in an image or spatial correlations in a physical system.
+
+The key structural difference is how independence works. In directed models, independence is read off using ''d-separation'' rules that account for the direction of arrows. In undirected models, independence follows simple ''graph separation'': if removing a set of nodes disconnects two groups, those groups are conditionally independent given the removed nodes.
+
+!! What the Math Is Actually Doing
+
+For a directed model (Bayesian network) with variables $X_1, X_2, \ldots, X_n$, the joint distribution factors as:
+
+$$P(X_1, X_2, \ldots, X_n) = \prod_{i=1}^{n} P(X_i \mid \text{Pa}(X_i))$$
+
+where $\text{Pa}(X_i)$ denotes the parents of node $X_i$ in the graph. Each factor is a conditional probability table (or parameterized function) that depends only on a node and its direct parents.
+
+For an undirected model (Markov random field) with cliques $C_1, C_2, \ldots, C_K$, the joint distribution is:
+
+$$P(X_1, X_2, \ldots, X_n) = \frac{1}{Z} \prod_{k=1}^{K} \psi_k(X_{C_k})$$
+
+where $\psi_k$ is the potential function for clique $C_k$ and $Z = \sum_{\mathbf{x}} \prod_k \psi_k(X_{C_k})$ is the partition function ensuring the distribution sums to one. Computing $Z$ exactly is often intractable because it requires summing over all possible configurations.
+
+The ''Hammersley-Clifford theorem'' provides the bridge: a positive distribution satisfying the Markov properties with respect to an undirected graph can always be written as a product of clique potentials.
+
+Inference in PGMs means computing quantities like the marginal $P(X_i)$, the conditional $P(X_i \mid \text{evidence})$, or the most probable configuration $\arg\max_{\mathbf{x}} P(\mathbf{x})$. These computations reduce to summing or maximizing over the factored representation.
+
+!! Inference Algorithms
+
+Exact inference is possible when the graph structure is favorable. <<link "Belief Propagation" "Belief Propagation">><</link>> (also called the sum-product algorithm) passes messages along edges of a tree-structured graph. Each message from node $i$ to node $j$ summarizes everything the rest of the graph says about $j$ through $i$. On trees, belief propagation converges in a single pass and yields exact marginals. The ''junction tree algorithm'' extends this to general graphs by clustering nodes into a tree of cliques, though the cost grows exponentially with the ''treewidth'' of the original graph.
+
+When exact inference is too expensive, approximate methods step in. <<link "Variational Inference" "Variational Inference">><</link>> recasts inference as optimization: find a simpler distribution $q$ that is closest to the true posterior in KL divergence. Mean-field variational inference assumes $q$ fully factorizes, turning the problem into iterating coordinate-wise updates. ''Loopy belief propagation'' runs the message-passing algorithm on graphs with cycles, which is not guaranteed to converge but works surprisingly well in practice for problems like error-correcting codes and image denoising.
+
+''Sampling methods'' (MCMC) provide another route. Gibbs sampling repeatedly resamples each variable from its conditional given the current values of its neighbors in the graph. Because PGMs make these conditionals explicit, sampling is straightforward to implement, though convergence can be slow in tightly coupled models.
+
+!! When PGMs Break Down
+
+//1. The curse of treewidth.// Exact inference scales exponentially with the treewidth of the graph. For densely connected models, such as a fully connected Markov random field over an image, the junction tree approach becomes computationally impossible. Practitioners must resort to approximate methods, which introduce errors that are hard to bound.
+
+//2. Structure learning is fragile.// Learning the graph structure from data requires searching an enormous space of possible graphs. Score-based methods can get trapped in local optima, and constraint-based methods rely on statistical independence tests that become unreliable with limited data. A wrong edge or a missing edge changes the independence assumptions and can lead to badly biased inference.
+
+//3. Scalability limits versus deep learning.// PGMs require explicit specification of variables and their relationships. For high-dimensional unstructured data like raw images or audio, hand-designing the graph is impractical, and learning it is intractable. Deep learning approaches bypass this by learning distributed representations end-to-end, which is why neural methods have largely supplanted PGMs in perception tasks. However, PGMs remain powerful for problems where interpretability and principled uncertainty quantification matter.
+
+!! Technical Details
+
+''Exponential families and PGMs:'' Many PGM distributions belong to the exponential family: $P(\mathbf{x}; \boldsymbol{\theta}) = \exp(\boldsymbol{\theta}^\top \boldsymbol{\phi}(\mathbf{x}) - A(\boldsymbol{\theta}))$, where $\boldsymbol{\phi}$ are sufficient statistics and $A$ is the log-partition function. This connection means inference (computing expectations of $\boldsymbol{\phi}$) and learning (fitting $\boldsymbol{\theta}$) are dual problems.
+
+''D-separation rules:'' In a directed graph, $X$ and $Y$ are d-separated given $Z$ if every path between them is blocked. A path is blocked if it contains (a) a chain $A \to B \to C$ or fork $A \leftarrow B \to C$ where $B \in Z$, or (b) a collider $A \to B \leftarrow C$ where $B \notin Z$ and no descendant of $B$ is in $Z$.
+
+''Moralization:'' To convert a directed model to an undirected one, "marry" the parents of each node (add edges between co-parents) and drop arrow directions. This can introduce spurious dependencies.
+
+''Factor graphs:'' A unifying representation where both variables and factors are nodes in a bipartite graph. Belief propagation on factor graphs generalizes message passing for both directed and undirected models.
+
+''Learning:'' Given a fixed structure, maximum likelihood estimation for directed models decomposes into independent optimizations for each conditional. For undirected models, the partition function $Z(\boldsymbol{\theta})$ couples all parameters, making learning harder and typically requiring gradient-based methods with approximate inference in the inner loop.
+
+!! Quiz
+
+<span id="pgm-q1">''1. What is the key insight that makes PGMs computationally tractable?''
+
+<<button "A) They eliminate all randomness from the model">><<replace "#pgm-q1">>''1.'' Incorrect. PGMs are fundamentally probabilistic. The key insight is exploiting conditional independencies to factorize the joint distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) They exploit conditional independencies to factor the joint distribution">><<replace "#pgm-q1">>''1.'' Correct! PGMs use the graph structure to identify conditional independencies, breaking a huge joint distribution into a product of small local factors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) They only work with binary variables">><<replace "#pgm-q1">>''1.'' Incorrect. PGMs handle discrete and continuous variables of any cardinality. The key insight is factorization via conditional independence.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) They require fully connected graphs">><<replace "#pgm-q1">>''1.'' Incorrect. A fully connected graph would encode no independence assumptions and offer no computational savings. PGMs gain power from sparse structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q2">''2. In a Bayesian network, what does an arrow from node A to node B represent?''
+
+<<button "A) B causes A">><<replace "#pgm-q2">>''2.'' Incorrect. The arrow direction matters: $A \to B$ means $A$ directly influences $B$, not the reverse.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A and B are always independent">><<replace "#pgm-q2">>''2.'' Incorrect. An edge between them indicates a direct dependency, not independence.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A directly influences B, and B's distribution is conditioned on A">><<replace "#pgm-q2">>''2.'' Correct! In a Bayesian network, $A \to B$ means $B$ is specified via the conditional $P(B \mid A)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A and B share the same probability distribution">><<replace "#pgm-q2">>''2.'' Incorrect. The arrow encodes a conditional dependency $P(B \mid A)$, not shared distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q3">''3. What is the partition function $Z$ in a Markov random field?''
+
+<<button "A) The number of nodes in the graph">><<replace "#pgm-q3">>''3.'' Incorrect. $Z$ is a normalizing constant, not a count of nodes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A normalizing constant ensuring the distribution sums to one">><<replace "#pgm-q3">>''3.'' Correct! $Z = \sum_{\mathbf{x}} \prod_k \psi_k(X_{C_k})$ ensures the product of potentials defines a valid probability distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The maximum clique size">><<replace "#pgm-q3">>''3.'' Incorrect. That describes treewidth (roughly). $Z$ is the sum over all configurations that normalizes the distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The learning rate for parameter estimation">><<replace "#pgm-q3">>''3.'' Incorrect. $Z$ is a normalizing constant in the probability distribution, not a learning hyperparameter.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q4">''4. On what type of graph does belief propagation give exact results?''
+
+<<button "A) Fully connected graphs">><<replace "#pgm-q4">>''4.'' Incorrect. Fully connected graphs have high treewidth, making exact inference intractable. Belief propagation is exact on trees.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Graphs with cycles">><<replace "#pgm-q4">>''4.'' Incorrect. On graphs with cycles (loopy BP), message passing is approximate and may not converge.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Tree-structured graphs">><<replace "#pgm-q4">>''4.'' Correct! On trees (graphs with no cycles), belief propagation converges in a single pass and produces exact marginals.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Graphs with exactly four nodes">><<replace "#pgm-q4">>''4.'' Incorrect. The number of nodes does not matter; the absence of cycles (tree structure) is what guarantees exactness.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q5">''5. What does moralization do when converting a directed model to undirected?''
+
+<<button "A) Removes all edges">><<replace "#pgm-q5">>''5.'' Incorrect. Moralization adds edges between co-parents of each node and then drops arrow directions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Reverses all arrow directions">><<replace "#pgm-q5">>''5.'' Incorrect. Moralization does not reverse arrows. It connects co-parents with undirected edges and removes directionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Adds edges between co-parents and drops arrow directions">><<replace "#pgm-q5">>''5.'' Correct! Moralization "marries" parents that share a child and converts all edges to undirected, potentially introducing spurious dependencies.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Splits each node into two copies">><<replace "#pgm-q5">>''5.'' Incorrect. That is not part of moralization. Moralization connects co-parents and removes directionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q6">''6. Why have deep learning methods largely replaced PGMs for perception tasks?''
+
+<<button "A) Deep learning models are always more accurate">><<replace "#pgm-q6">>''6.'' Incorrect. Accuracy depends on the problem. The main issue is that PGMs require explicit variable and structure specification, which is impractical for raw high-dimensional data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) PGMs cannot represent probability distributions">><<replace "#pgm-q6">>''6.'' Incorrect. PGMs are explicitly probabilistic. The issue is scalability to unstructured high-dimensional inputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Hand-designing graph structure is impractical for high-dimensional unstructured data">><<replace "#pgm-q6">>''6.'' Correct! For raw images or audio, specifying the graph structure manually is infeasible and learning it is intractable. Neural networks bypass this by learning representations end-to-end.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) PGMs require quantum computers">><<replace "#pgm-q6">>''6.'' Incorrect. PGMs run on classical hardware. The limitation is the difficulty of specifying structure for high-dimensional unstructured data.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q7">''7. In variational inference, what is the optimization objective?''
+
+<<button "A) Maximize the number of graph edges">><<replace "#pgm-q7">>''7.'' Incorrect. Variational inference minimizes KL divergence between an approximate distribution $q$ and the true posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Minimize the KL divergence between an approximate distribution and the true posterior">><<replace "#pgm-q7">>''7.'' Correct! Variational inference finds a tractable $q$ that is as close as possible to the true posterior by minimizing $\text{KL}(q \| p)$, equivalently maximizing the ELBO.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Maximize the partition function">><<replace "#pgm-q7">>''7.'' Incorrect. The partition function is a normalizing constant, not the optimization target. Variational inference minimizes KL divergence.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Minimize the number of variables in the model">><<replace "#pgm-q7">>''7.'' Incorrect. Variational inference does not reduce variables. It approximates the posterior with a simpler distribution by minimizing KL divergence.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="pgm-q8">''8. What does the Hammersley-Clifford theorem guarantee?''
+
+<<button "A) Every graph has a unique probability distribution">><<replace "#pgm-q8">>''8.'' Incorrect. Many distributions can share the same graph structure. The theorem relates Markov properties to clique factorizations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Belief propagation always converges">><<replace "#pgm-q8">>''8.'' Incorrect. Belief propagation may not converge on loopy graphs. The theorem is about the equivalence of Markov properties and Gibbs factorization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A positive distribution obeying the Markov properties of a graph can be factored as a product of clique potentials">><<replace "#pgm-q8">>''8.'' Correct! The Hammersley-Clifford theorem establishes that positivity plus Markov properties with respect to an undirected graph implies factorization over cliques.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Directed and undirected models are always equivalent">><<replace "#pgm-q8">>''8.'' Incorrect. Converting between them can introduce or lose independence information (e.g., moralization adds edges). The theorem concerns undirected models and clique factorization specifically.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

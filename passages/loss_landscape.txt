@@ -1,0 +1,145 @@
+<<include "Header">>
+
+! Loss Landscape
+
+[img[assets/loss_landscape.svg]]
+
+Imagine you are hiking through a mountain range at night with only a flashlight. You can see the slope under your feet but not the entire terrain. You step downhill wherever the ground falls away, hoping to reach the valley floor — but you cannot tell whether you are heading into the deepest valley or just a shallow depression between two ridges. This is what an optimizer experiences when navigating a ''loss landscape'': a vast, high-dimensional surface where elevation represents prediction error and every coordinate axis represents a model parameter. The shape of this terrain — its valleys, ridges, saddle points, and plateaus — determines whether training succeeds, fails, or merely stalls.
+
+---
+
+!! The Core Insight
+
+A ''loss landscape'' is the function $\mathcal{L}(\theta)$ that maps every possible setting of model parameters $\theta$ to a scalar loss value. For a neural network with millions of parameters, this surface lives in a space of millions of dimensions — impossible to visualize directly, but governed by geometric principles that we can analyze and exploit. The goal of <<link "Gradient Descent" "Gradient Descent">><</link>> is to descend this surface to a low point, but the geometry of the surface dictates how easy or hard that descent will be.
+
+The central discovery of modern loss landscape research is that ''not all minima are equal''. Sharp minima — narrow valleys where the loss rises steeply in every direction — tend to generalize poorly because even a slight shift in parameters (caused by new data at test time) sends the loss shooting upward. ''Flat minima'' — broad valleys where the loss stays low over a wide neighborhood — tend to generalize well because the solution is robust to perturbation. This distinction between sharp and flat minima is one of the most important connections between optimization and <<link "Generalization" "Generalization">><</link>>.
+
+In high dimensions, the landscape has an additional surprise: ''saddle points vastly outnumber local minima''. A point where the gradient is zero might be a minimum in some directions and a maximum in others. In a network with $n$ parameters, a critical point has $n$ curvature directions, and the probability that all $n$ are positive (a true local minimum) shrinks exponentially. This means that optimizers rarely get trapped in bad local minima — the real obstacle is navigating through or around saddle points, where gradients are small and progress is slow.
+
+---
+
+!! Saddle Points, Minima, and Flatness
+
+A ''saddle point'' is a critical point where the gradient vanishes but the <<link "Hessian" "Hessian">><</link>> has both positive and negative eigenvalues. At a saddle, the surface curves upward in some parameter directions and downward in others, like the center of a horse's saddle. The ''index'' of a saddle point is the number of negative eigenvalues — the number of directions along which the surface descends. High-index saddle points are easy to escape because many directions lead downhill; low-index saddle points near good minima are harder.
+
+The distinction between ''sharp'' and ''flat'' minima is formalized through the eigenvalues of the Hessian at the minimum. A sharp minimum has large positive eigenvalues — the surface curves steeply upward, so the basin of attraction is narrow. A flat minimum has small positive eigenvalues — the surface is nearly level, so the basin is wide. Research by Keskar et al. (2017) showed that large-batch <<link "Stochastic Gradient Descent" "Stochastic Gradient Descent">><</link>> tends to converge to sharper minima, while small-batch SGD finds flatter ones. The noise in small-batch gradients acts as an implicit regularizer, bouncing the optimizer out of sharp basins and into broader ones.
+
+''Mode connectivity'' is a striking structural property of loss landscapes: distinct minima found by different training runs are often connected by low-loss paths through parameter space. Garipov et al. (2018) showed that these paths are not straight lines but gentle curves along which the loss stays nearly constant. This suggests that the loss landscape is not a collection of isolated valleys but a connected terrain with ridges and passes. <<link "Mode Connectivity" "Mode Connectivity">><</link>> has practical implications for model ensembling and for understanding why different initializations produce models with similar performance.
+
+---
+
+!! What the Math Is Actually Doing
+
+The loss landscape is defined by the function $\mathcal{L}: \mathbb{R}^n \to \mathbb{R}$, where $n$ is the number of parameters. At any point $\theta$, the gradient $\nabla \mathcal{L}(\theta)$ gives the direction of steepest ascent, and the Hessian $H = \nabla^2 \mathcal{L}(\theta)$ captures the local curvature.
+
+At a critical point where $\nabla \mathcal{L}(\theta) = 0$, the nature of the point is determined by the eigenvalues $\{\lambda_1, \ldots, \lambda_n\}$ of $H$:
+
+$$\text{Local minimum: all } \lambda_i > 0 \quad \text{Saddle point: mixed signs} \quad \text{Local maximum: all } \lambda_i < 0$$
+
+The ''sharpness'' of a minimum can be quantified by the spectral norm of the Hessian:
+
+$$\text{sharpness} \approx \lambda_{\max}(H)$$
+
+or by the trace $\text{tr}(H) = \sum_i \lambda_i$, which measures the average curvature across all directions. Flat minima have small $\lambda_{\max}$ and small trace.
+
+A second-order Taylor expansion around a minimum $\theta^*$ shows why sharpness matters:
+
+$$\mathcal{L}(\theta^* + \delta) \approx \mathcal{L}(\theta^*) + \frac{1}{2} \delta^T H \delta$$
+
+If $\lambda_{\max}$ is large, even small perturbations $\delta$ produce large loss increases — the solution is fragile. The ''PAC-Bayesian'' generalization bound formalizes this: flatter minima permit wider posterior distributions over parameters, yielding tighter generalization guarantees.
+
+For random Gaussian loss functions in $n$ dimensions, the expected number of critical points at loss level $\mathcal{L}$ follows from random matrix theory. The fraction of critical points that are true local minima (index 0) decreases exponentially with $n$, while saddle points of moderate index dominate. This is why high-dimensional landscapes are ''saddle-point-dominated'' rather than local-minimum-dominated.
+
+---
+
+!! Visualizing and Navigating Loss Landscapes
+
+Direct visualization of a million-dimensional surface is impossible, but clever projections reveal its structure. Li et al. (2018) introduced ''filter-normalized direction'' plots: choose two random directions in parameter space, normalize them to account for scale differences between layers, then evaluate the loss along a 2D grid. The resulting contour plots show the qualitative shape of the landscape — whether it is smooth, chaotic, or dominated by a single basin.
+
+These visualizations revealed that ''skip connections'' in [[ResNets]] dramatically smooth the loss landscape. Without skip connections, the surface is rough and riddled with sharp oscillations. With skip connections, the surface becomes nearly convex around the solution, explaining why deeper residual networks train more easily than their plain counterparts.
+
+''Learning rate warmup'' and ''cyclical learning rates'' exploit landscape geometry. A high learning rate prevents the optimizer from settling into sharp minima early in training, acting as a form of exploration. Later, reducing the learning rate allows fine-grained convergence into a flat basin. Stochastic Weight Averaging (SWA) takes this further by averaging the weights visited during training, effectively finding a point near the center of a flat region rather than at a sharp edge.
+
+The relationship between batch size and landscape navigation is governed by the ''noise scale'' of SGD: $g = \epsilon (\frac{N}{B} - 1)$, where $\epsilon$ is the learning rate, $N$ the dataset size, and $B$ the batch size. This ratio controls the temperature of the implicit exploration. Reducing it (by increasing batch size without adjusting learning rate) narrows the exploration, biasing toward sharper minima.
+
+---
+
+!! When Loss Landscape Analysis Breaks Down
+
+''Scale sensitivity of sharpness measures:'' The Hessian eigenvalues are not invariant to reparameterization. Multiplying all weights in one layer by a constant $\alpha$ and dividing the next layer by $\alpha$ leaves the network's function unchanged but alters the Hessian spectrum. This means that ''sharpness'' as measured by $\lambda_{\max}$ can be made arbitrarily large or small without changing the model's predictions or generalization. Dinh et al. (2017) demonstrated this pathology, showing that sharp and flat minima can represent the same function. Reparameterization-invariant sharpness measures exist but are more complex and less widely used, so many flatness-based conclusions must be interpreted with caution.
+
+''Low-dimensional projections are misleading:'' Visualizing a million-dimensional surface along two random directions captures an infinitesimal fraction of the geometry. The landscape may appear smooth in a chosen 2D slice while being highly irregular in orthogonal directions. Important features like narrow escape channels from saddle points, rare sharp directions at otherwise flat minima, or thin low-loss tunnels connecting basins can be invisible in any low-dimensional projection. Conclusions drawn from 2D contour plots should be treated as qualitative intuition, not quantitative characterization.
+
+''Theory-practice gap for saddle points:'' The random-function analysis predicting saddle-point dominance assumes the loss surface behaves like a random Gaussian field. Real neural network loss surfaces have highly structured correlations imposed by the data, the architecture, and the parameterization. Empirically, modern networks rarely show clear evidence of being stuck at saddle points — adaptive optimizers like Adam and momentum-based SGD navigate past them efficiently. The theoretical concern about saddle points may overstate their practical importance relative to other training difficulties such as vanishing gradients, poor conditioning, and pathological curvature.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Li et al. (2018), //Visualizing the Loss Landscape of Neural Nets//, NeurIPS — introduced filter-normalized 2D loss surface plots and showed that skip connections smooth the landscape. Keskar et al. (2017), //On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima//, ICLR — demonstrated that large-batch SGD converges to sharper minima with worse generalization. Garipov et al. (2018), //Loss Surfaces, Mode Connectivity, and Fast Ensembling of DNNs//, NeurIPS — discovered that independently trained minima are connected by low-loss curves. Dinh et al. (2017), //Sharp Minima Can Generalize For Deep Nets//, ICML — showed that sharpness measures are not reparameterization-invariant.
+
+The ''Hessian spectrum'' of large neural networks has a characteristic structure: a bulk of near-zero eigenvalues (corresponding to directions the loss is nearly invariant to) and a small number of large outlier eigenvalues (corresponding to the few important directions). Sagun et al. (2017) showed that the number of large eigenvalues roughly corresponds to the number of classes in a classification task. This spectral structure means the effective dimensionality of the loss landscape is much lower than the parameter count.
+
+''Sharpness-Aware Minimization'' (SAM) by Foret et al. (2021) directly optimizes for flat minima by solving a minimax problem: at each step, SAM first finds the perturbation $\epsilon$ that maximizes the loss within a neighborhood, then takes a gradient step to minimize that worst-case loss:
+
+$$\min_\theta \max_{\|\epsilon\| \leq \rho} \mathcal{L}(\theta + \epsilon)$$
+
+This procedure consistently improves generalization across architectures and datasets, providing direct evidence that landscape flatness causally affects generalization.
+
+The ''loss landscape'' connects to the theory of ''spin glasses'' in statistical physics. The energy landscape of a disordered magnetic system shares structural features with neural network loss surfaces: exponentially many critical points, a hierarchy of basins within basins, and ultrametric structure among low-energy states. Tools from statistical mechanics — replica theory, the cavity method, and the Kac-Rice formula — have been adapted to analyze neural network landscapes, particularly in simplified settings like two-layer networks with random data.
+
+''Elastic Weight Consolidation'' (EWC) uses the loss landscape to combat catastrophic forgetting in continual learning: it penalizes movement away from a previous solution in directions where the Hessian has large eigenvalues (important directions), while allowing free movement in flat directions. This exploits the low effective dimensionality of the loss landscape to find solutions that perform well on multiple tasks simultaneously.
+
+---
+
+!! Quiz
+
+<span id="ll-q1">''1. In a neural network with $n$ parameters, why are saddle points far more common than local minima?'' <<button "A">><<replace "#ll-q1">>Correct. At a critical point, each of $n$ curvature directions can independently be positive or negative. The probability that all $n$ are positive (true minimum) shrinks exponentially with $n$, so saddle points dominate.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q1">>Incorrect. Saddle point prevalence is about the combinatorics of curvature directions, not learning rate. A smaller learning rate does not change the geometry of the landscape.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q1">>Incorrect. SGD noise affects which points the optimizer visits, but does not determine the relative frequency of saddle points versus minima on the surface itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q1">>Incorrect. Loss functions are typically smooth. The dominance of saddle points comes from high-dimensional geometry, not non-differentiability.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. Each curvature direction can independently be positive or negative, and requiring all $n$ to be positive becomes exponentially unlikely
+B. The learning rate is usually too small to escape saddle points, so they accumulate
+C. Stochastic gradient noise creates saddle points that would not exist in full-batch training
+D. Non-differentiable activation functions introduce saddle points at kink locations
+
+<span id="ll-q2">''2. What distinguishes a flat minimum from a sharp minimum?'' <<button "A">><<replace "#ll-q2">>Incorrect. The loss value at the minimum says nothing about sharpness. A sharp minimum and a flat minimum can have exactly the same loss — they differ in curvature, not depth.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q2">>Correct. A flat minimum has small Hessian eigenvalues (low curvature), meaning the loss stays low over a wide neighborhood of parameter values. A sharp minimum has large eigenvalues and a narrow basin.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q2">>Incorrect. The number of parameters is a property of the model, not the minimum. Both sharp and flat minima exist in the same parameter space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q2">>Incorrect. Flat minima are not necessarily global minima. They are characterized by curvature (Hessian eigenvalues), not by having the lowest loss value overall.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. A flat minimum has a lower loss value than a sharp minimum
+B. A flat minimum has small Hessian eigenvalues, meaning the loss changes slowly in all directions around it
+C. A flat minimum uses fewer effective parameters than a sharp minimum
+D. A flat minimum is always the global minimum of the loss surface
+
+<span id="ll-q3">''3. Why does small-batch SGD tend to find flatter minima than large-batch SGD?'' <<button "A">><<replace "#ll-q3">>Incorrect. Small batches do not change the loss function itself. The gradient noise affects which parts of the landscape the optimizer explores, not the shape of the surface.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q3">>Incorrect. Small-batch training typically takes more wall-clock time per epoch, not less. The flatness advantage comes from gradient noise, not speed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q3">>Correct. The noise in small-batch gradient estimates acts as implicit regularization. It creates random perturbations that push the optimizer out of narrow sharp basins, which are unstable under noise, and into broad flat basins, which are stable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q3">>Incorrect. Small-batch SGD typically converges to similar or lower loss than large-batch. The issue is the geometry of where it converges, not the final loss value.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. Small batches create a smoother loss surface with fewer sharp minima
+B. Small batches allow more gradient updates per second, reaching flatter regions faster
+C. Gradient noise from small batches destabilizes sharp minima, effectively bouncing the optimizer into broader basins
+D. Small batches always find a lower loss, which corresponds to flatter geometry
+
+<span id="ll-q4">''4. What does mode connectivity reveal about the loss landscape?'' <<button "A">><<replace "#ll-q4">>Incorrect. Mode connectivity shows that distinct solutions are connected by low-loss //curves//, not straight lines. The connecting paths are typically nonlinear.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q4">>Correct. Garipov et al. showed that independently trained minima can be connected by curved paths along which the loss remains low. This reveals that the landscape is not a collection of isolated valleys but a connected structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q4">>Incorrect. Mode connectivity is about the structure connecting different minima, not about whether minima have the same loss value.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q4">>Incorrect. Mode connectivity exists in networks of finite width. It is an empirical discovery about real trained networks, not just a theoretical infinite-width result.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. All minima found by SGD are connected by straight lines of constant loss
+B. Distinct minima found by different training runs are connected by low-loss curved paths through parameter space
+C. All local minima have exactly the same loss value
+D. Mode connectivity only holds for infinitely wide networks
+
+<span id="ll-q5">''5. What is the fundamental problem with using Hessian eigenvalues to measure sharpness?'' <<button "A">><<replace "#ll-q5">>Incorrect. The Hessian is well-defined and computable (though expensive) for neural networks. The problem is that its eigenvalues change under reparameterization, not that it cannot be computed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q5">>Incorrect. While computational cost is a practical concern, the fundamental //conceptual// problem is reparameterization invariance, not computational expense.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q5">>Correct. Dinh et al. (2017) showed that rescaling weights between layers (e.g., multiplying one layer by $\alpha$ and dividing the next by $\alpha$) preserves the function but changes the Hessian spectrum. This means sharpness can be made arbitrarily large or small without affecting the model.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q5">>Incorrect. The Hessian measures curvature at any critical point — minima, maxima, and saddle points alike. The problem is that the measurement is not invariant to reparameterization.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. The Hessian is undefined for non-differentiable activation functions like ReLU
+B. Computing the full Hessian is too expensive, so all measurements are approximations
+C. Hessian eigenvalues are not reparameterization-invariant — rescaling weights between layers changes sharpness without changing the function
+D. The Hessian only captures curvature at local minima, not at saddle points
+
+<span id="ll-q6">''6. In the second-order Taylor expansion $\mathcal{L}(\theta^* + \delta) \approx \mathcal{L}(\theta^*) + \frac{1}{2}\delta^T H \delta$, what determines how sensitive the loss is to perturbation $\delta$?'' <<button "A">><<replace "#ll-q6">>Incorrect. The gradient is zero at $\theta^*$ (it is a minimum), so it does not appear in the expansion. Sensitivity is governed by the Hessian, the second-order term.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q6">>Incorrect. $\mathcal{L}(\theta^*)$ is the loss at the minimum — a constant offset. It tells you how good the solution is, not how sensitive it is to perturbation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q6">>Correct. The quadratic form $\delta^T H \delta$ is dominated by the largest eigenvalue of $H$. If $\lambda_{\max}$ is large, perturbations aligned with that eigenvector produce large loss increases, making the solution fragile.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q6">>Incorrect. The dimensionality $n$ determines the number of directions, but sensitivity in any particular direction depends on the corresponding Hessian eigenvalue, not the total parameter count.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. The gradient $\nabla \mathcal{L}(\theta^*)$
+B. The loss value $\mathcal{L}(\theta^*)$ at the minimum
+C. The eigenvalues of the Hessian $H$, particularly $\lambda_{\max}$
+D. The number of parameters $n$
+
+<span id="ll-q7">''7. What does Sharpness-Aware Minimization (SAM) optimize?'' <<button "A">><<replace "#ll-q7">>Incorrect. SAM does not add an $\ell_2$ penalty to the parameters. It solves a minimax problem that explicitly seeks flat regions by minimizing the worst-case loss within a neighborhood.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q7">>Incorrect. SAM does not compute the full Hessian. It uses a first-order approximation to the inner maximization problem, finding the worst-case perturbation direction using only gradients.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q7">>Correct. SAM solves $\min_\theta \max_{\|\epsilon\| \leq \rho} \mathcal{L}(\theta + \epsilon)$: it finds the perturbation that maximizes loss within a ball of radius $\rho$, then takes a gradient step to minimize that worst-case loss. This drives the optimizer toward flat minima.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q7">>Incorrect. SAM modifies the optimization objective, not the learning rate schedule. It can be combined with any learning rate schedule.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. The standard loss plus an $\ell_2$ weight penalty
+B. The minimum eigenvalue of the Hessian at each step
+C. The worst-case loss within a neighborhood: $\min_\theta \max_{\|\epsilon\| \leq \rho} \mathcal{L}(\theta + \epsilon)$
+D. The loss with a cosine-annealed learning rate to avoid sharp minima
+
+<span id="ll-q8">''8. Why do skip connections in ResNets improve optimization from a loss landscape perspective?'' <<button "A">><<replace "#ll-q8">>Incorrect. Skip connections do not reduce the parameter count. They add connections that change the landscape geometry without reducing model capacity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ll-q8">>Incorrect. Skip connections do not make the loss surface convex. They smooth it — reducing roughness and chaotic oscillations — but the surface remains non-convex.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ll-q8">>Incorrect. Skip connections change the landscape geometry itself, not just the path the optimizer takes. Li et al. showed that the actual loss surface becomes smoother, not just the trajectory.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ll-q8">>Correct. Li et al. (2018) showed via filter-normalized visualizations that skip connections dramatically smooth the loss surface, eliminating the rough oscillations and sharp features present in plain networks. This makes gradient-based optimization much more reliable.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+A. They reduce the number of parameters, simplifying the landscape
+B. They make the loss surface perfectly convex
+C. They only affect the optimizer trajectory, not the landscape shape
+D. They smooth the loss surface, eliminating rough oscillations and sharp features that hinder gradient-based optimization
+
+<<include "Footer">>

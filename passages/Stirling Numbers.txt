@@ -1,0 +1,173 @@
+<<include "Header">>
+
+! Stirling Numbers
+
+<img src="assets/stirling_numbers.svg" alt="Diagram showing Stirling numbers of first kind (permutations into cycles) and second kind (set partitions into non-empty subsets) side by side" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a group of people and need to seat them at round tables. How many ways can you split them into a given number of tables, where each table's seating is circular? That is exactly what ''Stirling numbers'' count. There are two flavors: the ''first kind'' counts ways to arrange $n$ elements into $k$ ''cycles'' (round tables), and the ''second kind'' counts ways to split $n$ elements into $k$ ''non-empty subsets'' (teams where order does not matter). Together they form a bridge between [[Permutations and Combinations|Permutations and Combinations]] and [[Partition Theory|Partition Theory]], connecting the algebra of polynomials to the combinatorics of grouping.
+
+!! The Core Insight
+
+Stirling numbers emerge from a single structural question: //what happens when you decompose a set?// Every permutation of $n$ elements can be uniquely written as a product of disjoint cycles. The ''unsigned Stirling number of the first kind'' $\left[\begin{smallmatrix}n\\k\end{smallmatrix}\right]$ (also written $|s(n,k)|$ or $c(n,k)$) counts the number of permutations of $n$ elements having exactly $k$ cycles. The ''Stirling number of the second kind'' $\left\{\begin{smallmatrix}n\\k\end{smallmatrix}\right\}$ (also written $S(n,k)$) counts the number of ways to partition an $n$-element set into exactly $k$ non-empty subsets. One is about ''arrangement'' (order within groups matters cyclically), the other is about ''grouping'' (only membership matters). Both satisfy elegant recurrences that encode a simple combinatorial choice: what does the last element do?
+
+!! Two Kinds, Two Stories
+
+''First kind -- cycles:'' When you add element $n$ to a permutation of $\{1, \ldots, n-1\}$, it either starts a ''new cycle by itself'' (contributing $\left[\begin{smallmatrix}n-1\\k-1\end{smallmatrix}\right]$) or ''inserts into an existing cycle'' in one of $(n-1)$ positions (contributing $(n-1)\left[\begin{smallmatrix}n-1\\k\end{smallmatrix}\right]$). This gives the recurrence:
+
+$$\left[\begin{matrix}n\\k\end{matrix}\right] = \left[\begin{matrix}n-1\\k-1\end{matrix}\right] + (n-1)\left[\begin{matrix}n-1\\k\end{matrix}\right]$$
+
+''Second kind -- partitions:'' When you add element $n$ to a partition of $\{1, \ldots, n-1\}$, it either forms a ''new singleton subset'' ($S(n-1, k-1)$) or ''joins one of the existing $k$ subsets'' ($k \cdot S(n-1, k)$):
+
+$$S(n,k) = S(n-1, k-1) + k \cdot S(n-1, k)$$
+
+The factor $(n-1)$ vs. $k$ is the key difference: in cycles, there are $(n-1)$ positions to insert into; in partitions, there are $k$ subsets to join.
+
+!! What the Math Is Actually Doing
+
+''Falling and rising factorials:'' The first-kind Stirling numbers are the coefficients connecting powers of $x$ to falling factorials:
+
+$$x^{(n)} = x(x-1)(x-2)\cdots(x-n+1) = \sum_{k=0}^{n} s(n,k)\, x^k$$
+
+where $s(n,k) = (-1)^{n-k}\left[\begin{smallmatrix}n\\k\end{smallmatrix}\right]$ is the //signed// Stirling number of the first kind. Conversely, the second kind converts in the opposite direction:
+
+$$x^n = \sum_{k=0}^{n} S(n,k)\, x^{(k)}$$
+
+These are ''change-of-basis'' formulas between the monomial basis $\{x^n\}$ and the falling factorial basis $\{x^{(n)}\}$ of the polynomial ring.
+
+''Explicit formula for the second kind:''
+
+$$S(n,k) = \frac{1}{k!}\sum_{j=0}^{k} (-1)^{k-j}\binom{k}{j} j^n$$
+
+This is an inclusion-exclusion over surjections from an $n$-set onto a $k$-set, divided by $k!$ to forget the labeling of the subsets.
+
+''Bell numbers:'' The total number of partitions of an $n$-set (into any number of subsets) is the ''Bell number'':
+
+$$B(n) = \sum_{k=0}^{n} S(n,k)$$
+
+The first few Bell numbers are $B_0 = 1, B_1 = 1, B_2 = 2, B_3 = 5, B_4 = 15, B_5 = 52$. The exponential [[Generating Functions|Generating Functions]] for Bell numbers is $\sum_{n \geq 0} B(n) \frac{x^n}{n!} = e^{e^x - 1}$.
+
+!! Stirling Numbers in Machine Learning
+
+''Clustering enumeration:'' When [[K-Means Clustering|K-Means Clustering]] assigns $n$ data points to $k$ clusters, the number of //combinatorially distinct// assignments (ignoring cluster labels) is exactly $S(n,k)$. This grows explosively -- $S(20,4) = 45{,}232{,}115{,}901$ -- which is why exhaustive search over cluster assignments is infeasible and heuristic methods are essential.
+
+''Bell numbers and model complexity:'' The total number of possible clusterings of $n$ points is $B(n)$. This quantifies the //model space// that unsupervised methods must navigate. $B(20) = 51{,}724{,}158{,}235{,}372$, making brute-force evaluation impossible even for modest datasets.
+
+''Partition-based methods:'' Spectral clustering, hierarchical clustering, and community detection all operate over the lattice of set partitions. The algebraic structure of this lattice -- whose size is counted by Bell numbers and whose $k$-level is counted by $S(n,k)$ -- determines the computational complexity of partition refinement and merging operations.
+
+''Polynomial feature conversion:'' The change-of-basis between $x^n$ and $x^{(n)}$ via Stirling numbers appears when converting between //raw moments// and //factorial moments// in discrete probability, which matters for Poisson regression and count-based models.
+
+!! When Stirling Numbers Break Down
+
+''Combinatorial explosion.'' Both $\left[\begin{smallmatrix}n\\k\end{smallmatrix}\right]$ and $S(n,k)$ grow super-exponentially. For moderate $n$, the numbers exceed what standard 64-bit integers can represent, requiring arbitrary-precision arithmetic. In clustering, this means the partition space becomes computationally intractable long before $n$ reaches typical dataset sizes -- motivating greedy and stochastic optimization rather than enumeration.
+
+''Unlabeled vs. labeled partitions.'' Stirling numbers of the second kind count //labeled// partitions (which element goes where), but in clustering the subsets are usually //unlabeled// (cluster 1 vs. cluster 2 is arbitrary). The number of //labeled// partitions is $k! \cdot S(n,k)$ (the number of surjections), and confusing the two leads to incorrect likelihood calculations in mixture models.
+
+''Asymptotic approximation difficulty.'' Unlike binomial coefficients, which have clean asymptotic forms (Stirling's approximation for factorials, the normal approximation), Stirling numbers have complicated saddle-point asymptics. The leading-order approximation $S(n,k) \sim \frac{k^n}{k!}$ is only accurate when $k$ is fixed and $n \to \infty$. For $k$ growing with $n$, the analysis becomes much more delicate, and naive asymptotic formulas can be wildly inaccurate.
+
+!! Technical Details
+
+''Triangle structure:'' Both kinds form triangles analogous to Pascal's triangle. The first-kind triangle (unsigned) begins:
+- $n=1$: 1
+- $n=2$: 1, 1
+- $n=3$: 2, 3, 1
+- $n=4$: 6, 11, 6, 1
+
+The second-kind triangle begins:
+- $n=1$: 1
+- $n=2$: 1, 1
+- $n=3$: 1, 3, 1
+- $n=4$: 1, 7, 6, 1
+
+''Row sums:'' For the first kind, $\sum_k \left[\begin{smallmatrix}n\\k\end{smallmatrix}\right] = n!$ (every permutation has some number of cycles). For the second kind, $\sum_k S(n,k) = B(n)$.
+
+''Orthogonality:'' The two Stirling number matrices are inverses of each other (with appropriate signs), reflecting the inverse change-of-basis between $\{x^n\}$ and $\{x^{(n)}\}$.
+
+''Dobinski's formula:'' $B(n) = \frac{1}{e}\sum_{k=0}^{\infty} \frac{k^n}{k!}$, expressing Bell numbers as a weighted sum, useful for computation and for connecting to [[Combinatorics|Combinatorics]] and Poisson distributions.
+
+''Historical note:'' James Stirling introduced these numbers in his 1730 //Methodus Differentialis//. The modern notation $\left[\begin{smallmatrix}n\\k\end{smallmatrix}\right]$ and $\left\{\begin{smallmatrix}n\\k\end{smallmatrix}\right\}$ was popularized by Knuth in //The Art of Computer Programming//.
+
+''Connections:'' [[Combinatorics|Combinatorics]] | [[Permutations and Combinations|Permutations and Combinations]] | [[Partition Theory|Partition Theory]] | [[Generating Functions|Generating Functions]] | [[K-Means Clustering|K-Means Clustering]]
+
+!! Quiz
+
+<span id="sn-q1">''Question 1.'' What does the Stirling number of the second kind $S(n,k)$ count?</span>
+
+<<button "A. The number of permutations of $n$ elements with $k$ cycles">><<replace "#sn-q1">>Incorrect. That is the Stirling number of the //first// kind. The second kind counts set partitions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The number of ways to partition an $n$-element set into $k$ non-empty subsets">><<replace "#sn-q1">>Correct! $S(n,k)$ counts unordered partitions of $\{1, \ldots, n\}$ into exactly $k$ non-empty, disjoint subsets whose union is the whole set.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of $k$-element subsets of an $n$-element set">><<replace "#sn-q1">>Incorrect. That is the binomial coefficient $\binom{n}{k}$, not a Stirling number.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The number of ways to arrange $n$ objects in $k$ ordered lists">><<replace "#sn-q1">>Incorrect. Ordered lists correspond to surjections or compositions, not Stirling numbers of the second kind.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q2">''Question 2.'' In the recurrence $S(n,k) = S(n-1,k-1) + k \cdot S(n-1,k)$, what does the factor $k$ represent?</span>
+
+<<button "A. The number of positions where element $n$ can be inserted in a cycle">><<replace "#sn-q2">>Incorrect. That factor $(n-1)$ appears in the first-kind recurrence. In the second kind, $k$ is the number of existing subsets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The number of existing subsets that element $n$ can join">><<replace "#sn-q2">>Correct! When the previous $n-1$ elements are already split into $k$ subsets, element $n$ can join any one of those $k$ subsets, giving $k \cdot S(n-1,k)$ possibilities.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of ways to relabel the subsets">><<replace "#sn-q2">>Incorrect. Subsets in a partition are unlabeled; there is no relabeling factor in the recurrence.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The number of elements already placed">><<replace "#sn-q2">>Incorrect. The number of previously placed elements is $n-1$, not $k$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q3">''Question 3.'' What is the Bell number $B(n)$?</span>
+
+<<button "A. The largest Stirling number in row $n$">><<replace "#sn-q3">>Incorrect. The Bell number is the //sum// of all Stirling numbers of the second kind in row $n$, not the maximum.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The total number of partitions of an $n$-element set into any number of non-empty subsets">><<replace "#sn-q3">>Correct! $B(n) = \sum_{k=0}^{n} S(n,k)$ sums over all possible numbers of subsets, giving the total count of set partitions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of permutations of $n$ elements">><<replace "#sn-q3">>Incorrect. The number of permutations is $n!$, which is the row sum of the //first-kind// (unsigned) Stirling numbers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The $n$-th Catalan number">><<replace "#sn-q3">>Incorrect. Catalan numbers count different combinatorial structures (binary trees, valid parenthesizations, etc.).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q4">''Question 4.'' How do Stirling numbers relate to falling factorials?</span>
+
+<<button "A. $S(n,k)$ is the coefficient of $x^k$ in the expansion of $x^{(n)}$">><<replace "#sn-q4">>Incorrect. That role belongs to the //signed// Stirling numbers of the first kind $s(n,k)$, not the second kind.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The first-kind numbers convert powers to falling factorials; the second kind converts falling factorials to powers">><<replace "#sn-q4">>Correct! $x^{(n)} = \sum_k s(n,k)\, x^k$ uses the first kind, while $x^n = \sum_k S(n,k)\, x^{(k)}$ uses the second kind. They are inverse change-of-basis transformations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Both kinds appear in the binomial theorem">><<replace "#sn-q4">>Incorrect. The binomial theorem involves binomial coefficients, not Stirling numbers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. They are unrelated to falling factorials">><<replace "#sn-q4">>Incorrect. The connection to falling and rising factorials is one of the defining properties of Stirling numbers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q5">''Question 5.'' Why is exhaustive enumeration of cluster assignments infeasible for $k$-means?</span>
+
+<<button "A. Because $S(n,k)$ grows polynomially, making it slow but tractable">><<replace "#sn-q5">>Incorrect. $S(n,k)$ grows much faster than polynomially -- it is super-exponential -- making exhaustive search completely infeasible.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Because the number of distinct assignments is $S(n,k)$, which grows super-exponentially">><<replace "#sn-q5">>Correct! For example, $S(20,4) \approx 4.5 \times 10^{10}$, and for realistic dataset sizes the number is astronomically large, forcing the use of heuristic algorithms like Lloyd's algorithm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Because $k$-means requires computing eigenvalues">><<replace "#sn-q5">>Incorrect. Standard $k$-means does not involve eigenvalue computation; that is spectral clustering.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Because the number of clusters $k$ is always unknown">><<replace "#sn-q5">>Incorrect. Even when $k$ is known, the number of possible assignments $S(n,k)$ makes enumeration infeasible.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q6">''Question 6.'' What is the row sum $\sum_{k=0}^{n} \left[\begin{smallmatrix}n\\k\end{smallmatrix}\right]$ of the unsigned Stirling numbers of the first kind?</span>
+
+<<button "A. $B(n)$, the Bell number">><<replace "#sn-q6">>Incorrect. Bell numbers are row sums of the //second//-kind Stirling numbers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $2^n$">><<replace "#sn-q6">>Incorrect. $2^n$ is the number of subsets of an $n$-set, not the total count of permutations by cycle structure.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $n!$">><<replace "#sn-q6">>Correct! Every permutation of $n$ elements has some number of cycles, so summing over all possible cycle counts gives the total number of permutations, which is $n!$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $n^2$">><<replace "#sn-q6">>Incorrect. The row sum grows factorially, far faster than $n^2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q7">''Question 7.'' What is the exponential generating function for Bell numbers?</span>
+
+<<button "A. $\frac{1}{1-x}$">><<replace "#sn-q7">>Incorrect. That is the OGF for the constant sequence $a_n = 1$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $e^x$">><<replace "#sn-q7">>Incorrect. $e^x$ is the EGF for the sequence $a_n = 1$, not for Bell numbers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $e^{e^x - 1}$">><<replace "#sn-q7">>Correct! $\sum_{n \geq 0} B(n)\frac{x^n}{n!} = e^{e^x - 1}$. This follows from the exponential formula in combinatorics, treating a set partition as a set of non-empty subsets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $(1+x)^n$">><<replace "#sn-q7">>Incorrect. That is the generating function for binomial coefficients, not Bell numbers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sn-q8">''Question 8.'' What is the key difference between the recurrences for the first kind and second kind?</span>
+
+<<button "A. The first kind uses a factor of $(n-1)$ for insertion into cycles; the second kind uses a factor of $k$ for joining subsets">><<replace "#sn-q8">>Correct! In $\left[\begin{smallmatrix}n\\k\end{smallmatrix}\right]$, element $n$ can insert into any of $(n-1)$ positions in existing cycles. In $S(n,k)$, element $n$ can join any of the $k$ existing subsets. This structural difference -- positions vs. groups -- is what distinguishes the two kinds.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The first kind has no recurrence; only the second kind does">><<replace "#sn-q8">>Incorrect. Both kinds satisfy clean recurrences with the same structure but different coefficients.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The second kind uses $(n-1)$ as the multiplier">><<replace "#sn-q8">>Incorrect. The second kind uses $k$, not $(n-1)$. The first kind uses $(n-1)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. There is no difference; both recurrences are identical">><<replace "#sn-q8">>Incorrect. The multipliers differ: $(n-1)$ for the first kind, $k$ for the second kind, reflecting the different combinatorial interpretations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

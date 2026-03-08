@@ -1,0 +1,127 @@
+<<include "Header">>
+
+! Bayesian Inference
+
+<img src="assets/bayesian_inference.svg" alt="Bayesian Inference" width="800">
+
+Imagine you hear a strange noise outside your window at night. Your first thought might be "probably a cat" — that's your prior belief. Then you peek outside and see a knocked-over trash can with claw marks too large for a cat. That evidence shifts your belief toward "raccoon" or something bigger. You didn't throw away your original guess entirely — you //updated// it based on new information. That's the essence of ''Bayesian inference'': a formal framework for updating beliefs in the face of evidence, combining what you already suspect with what the data tells you.
+
+!! The Core Insight
+
+Classical ([[frequentist|Maximum Likelihood]]) statistics treats model parameters as fixed, unknown constants and asks "what's the probability of seeing this data, given a particular parameter value?" ''Bayesian inference'' flips the question: "given the data I've observed, what should I believe about the parameter?" This reversal is profound. Parameters become ''random variables'' with their own [[probability distributions|Probability Distributions]], and learning from data means transforming a ''prior distribution'' (what you believed before seeing data) into a ''posterior distribution'' (what you believe after).
+
+This means every Bayesian analysis produces not a single best guess but a //full distribution// over possible parameter values. You get a complete picture of uncertainty — not just "the mean is probably 5.2" but "I'm 90% sure the mean is between 4.8 and 5.6, with 5.2 being the most likely." This is what makes [[Bayesian Methods]] fundamentally different: uncertainty is a first-class citizen, carried through every calculation.
+
+!! Updating Beliefs with Data
+
+The Bayesian update cycle has three ingredients. First, the ''prior'' encodes everything you know (or assume) before seeing data. It might be vague — "the coin's bias could be anything from 0 to 1" — or informed by domain expertise — "most coins are very close to fair." Second, the ''likelihood'' measures how well each possible parameter value explains the observed data. Third, combining these via [[Bayes' Theorem]] yields the ''posterior'' — your updated belief.
+
+The beauty of sequential updating is that today's posterior becomes tomorrow's prior. If you flip a coin 10 times and get 7 heads, you compute a posterior. Tomorrow you flip 10 more times and get 4 heads — you use yesterday's posterior as today's prior and update again. The result is //identical// to having processed all 20 flips at once. This makes Bayesian inference naturally suited to streaming data and online learning.
+
+As more data accumulates, posteriors sharpen. A vague prior — spread across many values — gets overwhelmed by a strong likelihood from hundreds of observations. This is the ''washing out of the prior'': with enough data, two people with very different priors will converge to nearly identical posteriors. The data speaks loudly enough to drown out initial disagreements.
+
+!! What the Math Is Actually Doing
+
+[[Bayes' Theorem]] gives us the posterior:
+
+$$P(\theta \mid D) = \frac{P(D \mid \theta) \, P(\theta)}{P(D)}$$
+
+where $\theta$ represents the parameters, $D$ is the observed data, $P(\theta)$ is the prior, $P(D \mid \theta)$ is the likelihood, and $P(D) = \int P(D \mid \theta) P(\theta) \, d\theta$ is the ''marginal likelihood'' (or ''evidence''). Since the evidence is constant with respect to $\theta$, we often write:
+
+$$P(\theta \mid D) \propto P(D \mid \theta) \times P(\theta)$$
+
+This "posterior is proportional to likelihood times prior" is the workhorse formula.
+
+''[[Conjugate priors|Conjugate Priors]]'' make the math tractable. When the prior and posterior belong to the same distribution family, updates have closed-form solutions. The ''Beta-Binomial'' conjugacy is the classic example: if your prior on a coin's bias $p$ is $\text{Beta}(\alpha, \beta)$ and you observe $k$ heads in $n$ flips, the posterior is $\text{Beta}(\alpha + k, \, \beta + n - k)$. The [[Beta Distribution]] parameters simply absorb the counts. Similarly, a Normal prior on a mean with Normal likelihood yields a Normal posterior (''Normal-Normal'' conjugacy), where the posterior mean is a precision-weighted average of the prior mean and the sample mean.
+
+The ''marginal likelihood'' $P(D)$ is crucial for [[Bayesian model comparison|Bayesian Optimization]]. It measures how well the //entire model// (prior + likelihood family) predicted the data, integrating over all parameter values. Models that spread probability too thinly (overly complex) or concentrate it in the wrong places (too simple) both score poorly — an automatic Occam's razor.
+
+!! Bayesian Inference in Practice
+
+When [[conjugate priors|Conjugate Priors]] apply, posteriors are computed analytically — fast and exact. But most real models lack conjugacy. For these, ''Markov Chain [[Monte Carlo|Monte Carlo Methods]]'' ([[MCMC]]) methods draw samples from the posterior by constructing a Markov chain whose stationary distribution is the target posterior. [[Gibbs Sampling]] updates one parameter at a time from its conditional distribution. Metropolis-Hastings proposes random jumps and accepts or rejects them based on the posterior ratio. These methods are exact in the limit of infinite samples but can be slow for high-dimensional models.
+
+For large-scale problems — millions of data points, thousands of parameters — [[Variational Inference]] trades exactness for speed. It approximates the posterior with a simpler distribution (often factored Gaussians) by minimizing the KL divergence. This turns inference into optimization, enabling Bayesian methods to scale to deep learning contexts like [[Bayesian Neural Networks]].
+
+Choosing priors is both an art and a science. ''Uninformative priors'' (flat or Jeffreys priors) try to "let the data speak," but can be improper or lead to paradoxes. ''Weakly informative priors'' gently regularize — for example, a $\text{Normal}(0, 10)$ prior on regression coefficients says "we don't expect coefficients to be astronomically large." ''Empirical Bayes'' estimates hyperparameters from the data itself, using the marginal likelihood — a pragmatic shortcut that blurs the line between Bayesian and frequentist thinking.
+
+The ''[[Maximum A Posteriori]]'' (MAP) estimate takes the posterior's mode as a point estimate. It's a bridge between Bayesian and frequentist worlds: MAP with a flat prior is just [[Maximum Likelihood]], while MAP with a Gaussian prior is equivalent to L2 regularization (ridge regression). But MAP discards the posterior's shape, losing the uncertainty quantification that makes Bayesian inference valuable. Full [[Bayesian Regression]] keeps the entire posterior and uses it for prediction.
+
+!! When Bayesian Inference Breaks Down
+
+* ''Computational intractability in high dimensions.'' The marginal likelihood integral $P(D) = \int P(D \mid \theta) P(\theta) \, d\theta$ becomes impossible to compute analytically for complex models. MCMC can explore these spaces, but convergence may take prohibitively long when parameters number in the thousands or when the posterior has multiple isolated modes. Even variational methods may find only local optima, giving overconfident and inaccurate approximations.
+
+* ''Prior sensitivity with small data.'' When data is scarce, the posterior is dominated by the prior. If the prior is poorly chosen — too narrow, centered on the wrong value, or structurally wrong — the posterior can be badly misleading. Unlike large-data regimes where priors wash out, small-data Bayesian inference demands careful prior specification, and two analysts with different priors can reach contradictory conclusions from the same data.
+
+* ''Model misspecification.'' Bayes' theorem updates beliefs about parameters //within// a model, but it cannot rescue a fundamentally wrong model. If the true data-generating process isn't in your model family, the posterior will concentrate on whichever parameter value is "least wrong" — and the posterior uncertainty will be misleadingly narrow, suggesting false confidence. [[Bayesian Nonparametrics]] partially address this by allowing model complexity to grow with data, but even they make structural assumptions.
+
+!! Technical Details
+
+''Computational methods'' span a wide range. ''Hamiltonian Monte Carlo'' (HMC) uses gradient information to propose moves along the posterior surface, dramatically improving efficiency over random-walk Metropolis in high dimensions. The ''No-U-Turn Sampler'' (NUTS), used by Stan and PyMC, automatically tunes HMC's trajectory length. The ''Laplace approximation'' fits a Gaussian at the posterior mode — fast but only accurate for unimodal, roughly symmetric posteriors.
+
+''Model comparison'' uses ''Bayes factors'': the ratio of marginal likelihoods $BF_{12} = P(D \mid M_1) / P(D \mid M_2)$. A Bayes factor above 10 is "strong evidence" for model 1. Unlike p-values, Bayes factors can provide evidence //for// a null hypothesis, not just against it. Computation requires the marginal likelihood, which is often the hardest quantity to estimate.
+
+''Credible intervals'' vs ''confidence intervals'': a 95% Bayesian credible interval means "there is a 95% probability the parameter lies in this interval, given the data." A 95% frequentist confidence interval means "if we repeated the experiment many times, 95% of such intervals would contain the true parameter." The Bayesian version directly answers the question practitioners usually want.
+
+The ''Bernstein-von Mises theorem'' provides asymptotic justification: under regularity conditions, the posterior converges to a Gaussian centered at the true parameter value as sample size grows, regardless of the prior. This means Bayesian and frequentist answers agree in the large-sample limit — the prior is eventually overwhelmed by data.
+
+''Posterior predictive checks'' validate Bayesian models by simulating data from the posterior predictive distribution $P(\tilde{D} \mid D) = \int P(\tilde{D} \mid \theta) P(\theta \mid D) \, d\theta$ and comparing against observed data patterns.
+
+!! Quiz
+
+<div id="q1">''1. In Bayesian inference, what does the posterior distribution represent?''
+<<button "A) The probability of the data given the model">><<replace "#q1">>That describes the likelihood, not the posterior. The posterior is the updated belief about parameters after seeing data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The updated belief about parameters after observing data">><<replace "#q1">>Correct! The posterior $P(\theta \mid D)$ combines prior beliefs with the evidence from data to give an updated distribution over parameter values.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The initial assumption before seeing any data">><<replace "#q1">>That describes the prior distribution, not the posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The probability of the data under all possible models">><<replace "#q1">>That describes the marginal likelihood (evidence), not the posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What does the "washing out of the prior" refer to?''
+<<button "A) Priors must be removed before analysis">><<replace "#q2">>Priors are never removed — they are always part of the computation. "Washing out" means their influence diminishes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Uninformative priors are always preferred">><<replace "#q2">>This is a preference some analysts have, but it's not what "washing out" means.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) With enough data, the posterior becomes insensitive to the choice of prior">><<replace "#q2">>Correct! As data accumulates, the likelihood dominates and different priors lead to nearly identical posteriors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The prior distribution becomes uniform over time">><<replace "#q2">>The prior itself doesn't change — it's the posterior that becomes dominated by the likelihood as data grows.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. If your prior on a coin's bias is $\text{Beta}(2, 2)$ and you observe 3 heads in 5 flips, what is the posterior?''
+<<button "A) Beta(3, 4)">><<replace "#q3">>Check the update rule: $\alpha' = \alpha + k$ and $\beta' = \beta + n - k$. With $\alpha=2, k=3, \beta=2, n-k=2$, the posterior is $\text{Beta}(5, 4)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Beta(5, 4)">><<replace "#q3">>Correct! Using conjugacy: $\text{Beta}(2+3, \, 2+2) = \text{Beta}(5, 4)$. The prior parameters simply absorb the counts.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Beta(2, 2)">><<replace "#q3">>That's still the prior — it hasn't been updated with the data at all.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Beta(5, 7)">><<replace "#q3">>Check the formula: $\beta' = \beta + (n - k) = 2 + 2 = 4$, not 7.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What makes MAP estimation different from full Bayesian inference?''
+<<button "A) MAP uses a prior; full Bayesian does not">><<replace "#q4">>Both use priors. The difference is that MAP takes a single point estimate while full Bayesian inference keeps the entire posterior distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) MAP returns the posterior mode as a point estimate, discarding uncertainty">><<replace "#q4">>Correct! MAP finds the single most probable parameter value but throws away the shape of the posterior, losing uncertainty information.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) MAP is always more accurate than full Bayesian inference">><<replace "#q4">>MAP can be less accurate because it ignores posterior uncertainty, which is especially important with limited data or multimodal posteriors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) MAP does not use Bayes' theorem">><<replace "#q4">>MAP does use Bayes' theorem — it just takes the mode of the resulting posterior rather than using the full distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What is the key advantage of Hamiltonian Monte Carlo over random-walk Metropolis?''
+<<button "A) It does not require computing gradients">><<replace "#q5">>HMC specifically //requires// gradients — that's what makes it work. It uses gradient information to make smarter proposals.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It always produces exact posterior samples">><<replace "#q5">>Like all MCMC methods, HMC produces exact samples only in the limit. Its advantage is efficiency, not exactness.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It uses gradient information to explore the posterior more efficiently in high dimensions">><<replace "#q5">>Correct! HMC follows the geometry of the posterior surface using gradients, avoiding the random-walk behavior that makes Metropolis slow in high dimensions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It works only for conjugate models">><<replace "#q5">>Conjugate models don't need MCMC at all — they have closed-form posteriors. HMC is for non-conjugate models.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. How does a 95% Bayesian credible interval differ from a 95% frequentist confidence interval?''
+<<button "A) They are mathematically identical">><<replace "#q6">>They can numerically coincide (especially with flat priors and large samples), but their interpretations are fundamentally different.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The credible interval says there is 95% probability the parameter is in the interval; the confidence interval refers to long-run coverage">><<replace "#q6">>Correct! The Bayesian credible interval makes a direct probability statement about the parameter. The frequentist confidence interval says that 95% of intervals constructed this way would contain the true value across repeated experiments.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Confidence intervals are always wider than credible intervals">><<replace "#q6">>The relative width depends on the prior and the data — neither is systematically wider.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Credible intervals don't require a prior">><<replace "#q6">>Credible intervals are derived from the posterior, which always requires a prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What does the Bernstein-von Mises theorem guarantee?''
+<<button "A) Bayesian and frequentist methods always disagree">><<replace "#q7">>The theorem shows the opposite — they converge asymptotically.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The posterior converges to a Gaussian centered at the true parameter as sample size grows">><<replace "#q7">>Correct! Under regularity conditions, the posterior becomes approximately Gaussian centered at the true value, regardless of the prior — meaning Bayesian and frequentist answers agree asymptotically.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) MCMC always converges in finite time">><<replace "#q7">>MCMC convergence is a separate topic. The Bernstein-von Mises theorem is about the shape of the posterior as data grows.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Conjugate priors always exist">><<replace "#q7">>Conjugate priors don't always exist, and this has nothing to do with the Bernstein-von Mises theorem.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. In variational inference, what is optimized?''
+<<button "A) The marginal likelihood directly">><<replace "#q8">>Variational inference optimizes a lower bound on the marginal likelihood (the ELBO), not the marginal likelihood itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The KL divergence between an approximate distribution and the true posterior">><<replace "#q8">>Correct! Variational inference finds a simpler distribution that is as close as possible to the true posterior, measured by KL divergence. In practice this is done by maximizing the ELBO.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The prior distribution">><<replace "#q8">>The prior is fixed before inference. Variational inference optimizes the approximate posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The number of MCMC samples">><<replace "#q8">>Variational inference is an alternative to MCMC, not an extension of it.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

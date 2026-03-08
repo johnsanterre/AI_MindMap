@@ -1,0 +1,159 @@
+<<include "Header">>
+
+! Permutations and Combinations
+
+<img src="assets/permutations_and_combinations.svg" alt="Diagram comparing permutations (ordered arrangements) and combinations (unordered selections) with visual examples, Pascal's triangle, and ML applications" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a shelf of books. A ''permutation'' asks: in how many ways can you arrange some of those books in a row? A ''combination'' asks: in how many ways can you //choose// some books to take on a trip, where you don't care about the order in your suitcase? The entire difference between these two ideas comes down to a single question: //does the order matter?// If you're seating people in chairs, order matters — that's a permutation. If you're picking team members, order doesn't — that's a combination. This distinction, simple as it sounds, is the engine behind everything from counting search spaces in [[Combinatorics|Combinatorics]] to understanding why the [[Binomial Distribution|Binomial Distribution]] looks the way it does.
+
+!! The Core Insight
+
+The number of ways to choose $k$ items from $n$ and arrange them is $P(n,k) = \frac{n!}{(n-k)!}$. But every //group// of $k$ items gets counted $k!$ times (once per ordering), so the number of //unordered// selections is $C(n,k) = \binom{n}{k} = \frac{n!}{k!(n-k)!}$. The relationship $P(n,k) = k! \cdot C(n,k)$ captures the heart of the matter: ''permutations overcount by exactly $k!$'' relative to combinations. This is not merely a formula — it's a //principle//. Every time you encounter a counting problem, the first question is whether you're counting ordered or unordered structures, and the answer determines whether to divide by $k!$.
+
+!! The Building Blocks
+
+''The factorial'' $n! = n \times (n-1) \times \cdots \times 1$ counts the number of ways to arrange $n$ distinct objects in a line. By convention, $0! = 1$ (there is exactly one way to arrange nothing). The factorial grows ferociously: $10! = 3{,}628{,}800$, $20! \approx 2.4 \times 10^{18}$, and $100!$ has 158 digits. This explosive growth is why brute-force enumeration becomes impossible so quickly.
+
+''Permutations'' $P(n,k) = \frac{n!}{(n-k)!}$: you fill $k$ positions from $n$ candidates. The first position has $n$ choices, the second $n-1$, and so on — the product telescope gives the formula.
+
+''Combinations'' $\binom{n}{k} = \frac{n!}{k!(n-k)!}$: the binomial coefficient. It satisfies the symmetry $\binom{n}{k} = \binom{n}{n-k}$ (choosing what to //include// is the same as choosing what to //exclude//) and the recursion $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$, which generates ''Pascal's triangle''.
+
+''Permutations with repetition:'' If you have $n$ objects where there are $n_1$ of type 1, $n_2$ of type 2, ..., $n_r$ of type $r$, the number of distinct arrangements is the ''multinomial coefficient'' $\binom{n}{n_1, n_2, \ldots, n_r} = \frac{n!}{n_1! n_2! \cdots n_r!}$.
+
+!! What the Math Is Actually Doing
+
+''The binomial theorem'' connects combinations to algebra:
+
+$$(a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^k$$
+
+Setting $a = b = 1$ yields $\sum_{k=0}^{n} \binom{n}{k} = 2^n$: a set of $n$ elements has exactly $2^n$ subsets. Setting $a = 1, b = -1$ yields $\sum_{k} (-1)^k \binom{n}{k} = 0$: the even-sized and odd-sized subsets are equinumerous.
+
+''Stars and bars:'' The number of ways to distribute $n$ identical objects into $k$ distinct bins is:
+
+$$\binom{n+k-1}{k-1}$$
+
+This is equivalent to counting ''multiset coefficients'' — the number of multisets of size $n$ drawn from $k$ types. The formula arises by representing a distribution as a string of $n$ stars and $k-1$ bars, then counting arrangements of that string.
+
+''Vandermonde's identity'' encodes convolution of binomial coefficients:
+
+$$\binom{m+n}{r} = \sum_{k=0}^{r} \binom{m}{k}\binom{n}{r-k}$$
+
+This identity appears naturally in the product of [[Generating Functions|Generating Functions]] and in the convolution structure of [[Probability Distributions|Probability Distributions]].
+
+''Stirling's approximation'' tames the factorial: $n! \approx \sqrt{2\pi n} \left(\frac{n}{e}\right)^n$. From this, $\log \binom{n}{k} \approx n \cdot H(k/n)$ where $H(p) = -p\log p - (1-p)\log(1-p)$ is the binary entropy. This connects counting to information theory.
+
+!! Permutations and Combinations in Machine Learning
+
+''Feature subset selection:'' With $d$ features, there are $\binom{d}{k}$ possible subsets of size $k$ and $2^d$ total subsets. For $d = 100$, $\binom{100}{10} \approx 1.7 \times 10^{13}$ — exhaustive search is hopeless, which is why greedy algorithms, LASSO, and random feature subsampling are necessary.
+
+''Hyperparameter search space:'' If you have $m$ hyperparameters with $|H_1|, |H_2|, \ldots, |H_m|$ possible values, grid search evaluates $\prod_i |H_i|$ configurations (product rule). Switching from 10 values per parameter to 20 values per parameter with 5 hyperparameters inflates the grid from $10^5$ to $20^5 = 3.2 \times 10^6$ — a 32× blowup. This is why Bayesian optimization and random search outperform grid search in high dimensions.
+
+''Data augmentation counting:'' For $n$ training examples with $t$ possible transformations (flips, crops, color jitter), the augmented dataset can have up to $n \cdot t$ entries per epoch. When augmentations compose (rotate THEN crop), the count becomes $n \cdot t_1 \cdot t_2 \cdots t_m$ — a permutation-style product.
+
+''Multinomial in NLP:'' The number of distinct orderings of a bag of $n$ words with $n_w$ copies of word $w$ is the multinomial coefficient $\frac{n!}{\prod_w n_w!}$. This is exactly the normalizing factor in the multinomial naive Bayes model.
+
+''The [[Pigeonhole Principle|Pigeonhole Principle]] connection:'' If $\binom{n}{k} < $ the number of configurations you need to distinguish, then $k$ items cannot cover all cases — a direct link between counting and impossibility arguments.
+
+!! When Permutations and Combinations Break Down
+
+''Combinatorial explosion.'' The formulas themselves never "break," but the //numbers they produce// quickly exceed any computational budget. $\binom{1000}{500} \approx 2.7 \times 10^{299}$ is larger than the number of atoms in the observable universe. Any algorithm that enumerates all subsets or permutations is doomed for even moderate $n$. In ML, this is why exhaustive feature selection, architecture search, and permutation tests must be replaced by sampling or heuristic approaches. The formulas tell you //how doomed// you are — which is itself useful information.
+
+''Indistinguishable vs. distinct objects.'' The most common error in applied counting is misidentifying whether items are distinguishable. Distributing 5 identical balls into 3 boxes uses stars-and-bars ($\binom{7}{2} = 21$), while distributing 5 //labeled// balls uses the product rule ($3^5 = 243$). Confusing the two produces off-by-$k!$ errors that silently corrupt probability calculations. In ML, this matters when computing the number of distinct partitions in $k$-fold cross-validation or the number of distinct clusterings in $k$-means.
+
+''Continuous analogues.'' Combinatorics counts discrete objects. When features are continuous, the number of "possible subsets" is uncountably infinite and the combinatorial framework must be replaced by measure-theoretic tools. The beta function $B(a,b) = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$ is the continuous generalization of the binomial coefficient (replacing factorials with the Gamma function), and it appears in the [[Binomial Distribution|Binomial Distribution]]'s conjugate prior.
+
+!! Technical Details
+
+''Pascal's triangle properties:'' Row $n$ sums to $2^n$. The entries along diagonals give Fibonacci numbers. The central binomial coefficient $\binom{2n}{n} \sim \frac{4^n}{\sqrt{\pi n}}$ appears in random walk return probabilities.
+
+''Double counting (bijective proofs):'' Many combinatorial identities are best proved by counting the same set in two ways. The identity $k\binom{n}{k} = n\binom{n-1}{k-1}$ is proved by noting both sides count ways to choose a committee of $k$ from $n$ people and then pick a chair.
+
+''Multiset coefficient:'' The number of ways to choose $k$ items from $n$ types //with repetition// is $\left(\!\binom{n}{k}\!\right) = \binom{n+k-1}{k}$. This is the stars-and-bars formula in different notation.
+
+''Derangements:'' The number of permutations of $n$ elements with //no// fixed points is $D_n = n! \sum_{i=0}^{n} \frac{(-1)^i}{i!} \approx n!/e$. This uses the inclusion-exclusion principle.
+
+''Connections:'' [[Combinatorics|Combinatorics]] | [[Binomial Distribution|Binomial Distribution]] | [[Generating Functions|Generating Functions]] | [[Pigeonhole Principle|Pigeonhole Principle]] | [[Probability Distributions|Probability Distributions]]
+
+!! Quiz
+
+<span id="pc-q1">''Question 1.'' How many ways can you arrange 3 books chosen from a shelf of 8?</span>
+
+<<button "A. 56">><<replace "#pc-q1">>Incorrect. That is $\binom{8}{3} = 56$, which counts unordered selections (combinations), not ordered arrangements.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. 336">><<replace "#pc-q1">>Correct! $P(8,3) = \frac{8!}{5!} = 8 \times 7 \times 6 = 336$. Order matters when arranging books on a shelf.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. 512">><<replace "#pc-q1">>Incorrect. $512 = 8^3$ counts selections with replacement where order matters, not permutations without replacement.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. 40320">><<replace "#pc-q1">>Incorrect. That is $8!$, the number of ways to arrange all 8 books, not just 3 of them.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q2">''Question 2.'' What is the relationship between $P(n,k)$ and $C(n,k)$?</span>
+
+<<button "A. $P(n,k) = C(n,k) + k!$">><<replace "#pc-q2">>Incorrect. The relationship is multiplicative, not additive.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $P(n,k) = k! \cdot C(n,k)$">><<replace "#pc-q2">>Correct! Each combination of $k$ items can be arranged in $k!$ ways, so the number of permutations is $k!$ times the number of combinations.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $C(n,k) = k! \cdot P(n,k)$">><<replace "#pc-q2">>Incorrect. This is backwards. Combinations are fewer than permutations, so $C(n,k) = P(n,k) / k!$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $P(n,k) = C(n,k)^2$">><<replace "#pc-q2">>Incorrect. There is no squaring relationship between these quantities.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q3">''Question 3.'' What does setting $a = b = 1$ in the binomial theorem $(a+b)^n$ tell you?</span>
+
+<<button "A. The sum of all binomial coefficients in row $n$ equals $2^n$">><<replace "#pc-q3">>Correct! $(1+1)^n = \sum_{k=0}^{n} \binom{n}{k} = 2^n$. This means a set of $n$ elements has exactly $2^n$ subsets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Each binomial coefficient equals 2">><<replace "#pc-q3">>Incorrect. Only $\binom{1}{0}$ and $\binom{1}{1}$ are related to 2 in this way.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The alternating sum of binomial coefficients is $2^n$">><<replace "#pc-q3">>Incorrect. The alternating sum (using $a=1, b=-1$) gives $0^n = 0$ for $n \geq 1$, not $2^n$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Pascal's triangle has $2^n$ rows">><<replace "#pc-q3">>Incorrect. Pascal's triangle has infinitely many rows; $2^n$ is the sum of entries in row $n$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q4">''Question 4.'' Using stars and bars, how many ways can you distribute 10 identical balls into 4 distinct boxes?</span>
+
+<<button "A. $\binom{10}{4} = 210$">><<replace "#pc-q4">>Incorrect. Stars and bars requires $\binom{n+k-1}{k-1}$, not $\binom{n}{k}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $\binom{13}{3} = 286$">><<replace "#pc-q4">>Correct! Stars and bars: $\binom{10+4-1}{4-1} = \binom{13}{3} = 286$. We arrange 10 stars and 3 bars.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $4^{10} = 1{,}048{,}576$">><<replace "#pc-q4">>Incorrect. $4^{10}$ counts distributions of 10 //distinct// balls into 4 boxes, not identical ones.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $\binom{14}{4} = 1001$">><<replace "#pc-q4">>Incorrect. The formula is $\binom{n+k-1}{k-1} = \binom{13}{3}$, not $\binom{n+k}{k}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q5">''Question 5.'' With 50 features, how many subsets of size 5 exist?</span>
+
+<<button "A. $50^5 = 312{,}500{,}000$">><<replace "#pc-q5">>Incorrect. This counts ordered selections with replacement, not unordered subsets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $\frac{50!}{45!} = 254{,}251{,}200$">><<replace "#pc-q5">>Incorrect. This is $P(50,5)$, which counts ordered selections. Feature subsets are unordered.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $\binom{50}{5} = 2{,}118{,}760$">><<replace "#pc-q5">>Correct! Feature subsets are unordered, so we use the combination formula. Even this "modest" number makes exhaustive evaluation expensive for costly model training.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $2^{50} \approx 10^{15}$">><<replace "#pc-q5">>Incorrect. $2^{50}$ counts all possible subsets of any size, not just those of size 5.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q6">''Question 6.'' Why does $\binom{n}{k} = \binom{n}{n-k}$?</span>
+
+<<button "A. Because the factorial function is symmetric">><<replace "#pc-q6">>Incorrect. The factorial itself is not symmetric; the symmetry comes from the combinatorial interpretation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Because choosing $k$ items to include is the same as choosing $n-k$ items to exclude">><<replace "#pc-q6">>Correct! Every subset of size $k$ corresponds to a unique complementary subset of size $n-k$. This bijection proves the symmetry.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Because Pascal's triangle is printed in a triangular shape">><<replace "#pc-q6">>Incorrect. The visual shape of Pascal's triangle is a consequence of the symmetry, not the cause.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Because $k! = (n-k)!$ for all valid $k$">><<replace "#pc-q6">>Incorrect. $k! = (n-k)!$ only when $k = n-k$, i.e., $k = n/2$. The symmetry holds for all $k$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q7">''Question 7.'' What does the multinomial coefficient $\frac{n!}{n_1! n_2! \cdots n_r!}$ count?</span>
+
+<<button "A. The number of ways to choose $r$ items from $n$">><<replace "#pc-q7">>Incorrect. That would be a binomial coefficient, not a multinomial one.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The number of distinct arrangements of $n$ objects where there are $n_i$ identical copies of type $i$">><<replace "#pc-q7">>Correct! The multinomial coefficient divides out the redundant orderings within each group of identical items. It appears in the multinomial theorem $(x_1 + \cdots + x_r)^n$ and in multinomial naive Bayes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of subsets of a multiset">><<replace "#pc-q7">>Incorrect. Subsets of a multiset are counted differently, using generating functions or inclusion-exclusion.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The number of derangements of $n$ objects">><<replace "#pc-q7">>Incorrect. Derangements are permutations with no fixed points, counted by $D_n = n! \sum (-1)^i / i!$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pc-q8">''Question 8.'' Stirling's approximation implies $\log \binom{n}{k} \approx n \cdot H(k/n)$ where $H$ is the binary entropy. What does this connection mean?</span>
+
+<<button "A. Binomial coefficients grow polynomially">><<replace "#pc-q8">>Incorrect. Binomial coefficients grow exponentially in $n$; the entropy formula gives the exponential growth rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The number of subsets of a given fractional size grows exponentially, with the rate governed by information-theoretic entropy">><<replace "#pc-q8">>Correct! $\binom{n}{\alpha n} \approx 2^{n H(\alpha)}$ where $H(\alpha) = -\alpha \log_2 \alpha - (1-\alpha)\log_2(1-\alpha)$. This bridges combinatorics and information theory: the "most numerous" subsets are those of size $n/2$, where $H = 1$, giving $\approx 2^n$ subsets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Entropy is defined as a factorial">><<replace "#pc-q8">>Incorrect. Entropy is $-\sum p_i \log p_i$; the connection to factorials comes through Stirling's approximation, but they are not the same thing.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Stirling's approximation is exact for binomial coefficients">><<replace "#pc-q8">>Incorrect. Stirling's approximation is asymptotic — very accurate for large $n$ but never exact.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

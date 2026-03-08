@@ -1,0 +1,137 @@
+<<include "Header">>
+! Sufficient Statistics
+<img src="assets/sufficient_statistics.svg" alt="Sufficient Statistics" width="800">
+
+Imagine you have a thousand photographs of a sunset and someone asks you to describe its color. You don't need every pixel from every photo — a single well-chosen color swatch captures everything relevant about the hue. That's what a ''sufficient statistic'' does: it squeezes a mountain of raw data down to a compact summary while preserving //every last drop// of information about the parameter you care about. You could throw the original data away entirely, and you'd be no worse off for estimating the parameter. It's lossless compression, but only with respect to a specific question.
+
+!! The Core Insight
+
+A statistic $T(X)$ is ''sufficient'' for a parameter $\theta$ if the conditional distribution of the data $X$ given $T(X)$ does not depend on $\theta$. In plain language: once you know $T(X)$, the remaining randomness in the data tells you //nothing more// about $\theta$. The statistic has captured the entire "signal" about the parameter, leaving behind only noise that is independent of what you're trying to learn.
+
+This is a remarkably powerful idea. In a world drowning in data, sufficiency tells you exactly what you can safely ignore — and guarantees you'll pay no price for doing so.
+
+!! Compression Without Loss
+
+The magic of sufficient statistics is that they achieve ''data reduction without information loss''. Consider drawing $n$ samples from a [[Exponential Family|Exponential Family]] distribution. You might have millions of data points, but a sufficient statistic compresses them into a fixed-dimensional summary — often just one or two numbers — that retains everything the data can tell you about the parameter.
+
+This connects to a deep principle in [[Statistics]]: not all aspects of data are equally relevant. A sufficient statistic partitions the sample space into equivalence classes. All datasets that share the same value of $T(X)$ are //interchangeable// from the standpoint of inference about $\theta$. The specific arrangement of data within each class is pure noise.
+
+''Minimal sufficiency'' takes this further. A ''minimal sufficient statistic'' achieves the //greatest possible compression// — it creates the coarsest partition of the sample space that is still sufficient. It's the most aggressive lossless compression you can perform. Any further reduction would discard information about $\theta$.
+
+!! What the Math Is Actually Doing
+
+The formal definition rests on the ''Fisher-Neyman Factorization Theorem'': a statistic $T(X)$ is sufficient for $\theta$ if and only if the likelihood can be factored as:
+
+$$p(x \mid \theta) = h(x) \cdot g(T(x), \theta)$$
+
+Here $h(x)$ depends only on the data (not $\theta$), and $g$ depends on $\theta$ only through $T(x)$. The entire dependence of the likelihood on $\theta$ is channeled through the statistic.
+
+''Gaussian mean example:'' For $X_1, \ldots, X_n \sim \mathcal{N}(\mu, \sigma^2)$ with known $\sigma^2$:
+
+$$p(x \mid \mu) = \left(\frac{1}{2\pi\sigma^2}\right)^{n/2} \exp\left(-\frac{\sum x_i^2}{2\sigma^2}\right) \cdot \exp\left(-\frac{n\mu^2 - 2\mu \sum x_i}{2\sigma^2}\right)$$
+
+The term involving $\mu$ depends on the data only through $T(X) = \sum_{i=1}^n X_i$. So the sample sum (or equivalently the sample mean $\bar{X}$) is sufficient for $\mu$.
+
+''Bernoulli example:'' For $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$:
+
+$$p(x \mid p) = p^{\sum x_i}(1-p)^{n - \sum x_i} = 1 \cdot p^{T}(1-p)^{n-T}$$
+
+where $T = \sum x_i$. The total count of successes is sufficient — the //order// in which successes occurred is irrelevant for learning $p$.
+
+''Poisson example:'' For $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$:
+
+$$p(x \mid \lambda) = \frac{1}{\prod x_i!} \cdot \frac{e^{-n\lambda} \lambda^{\sum x_i}}{1}$$
+
+Again $T = \sum x_i$ is sufficient for $\lambda$. The factorization separates the $\lambda$-dependent piece cleanly.
+
+In each case, the sufficient statistic has the same dimension regardless of $n$ — a dramatic compression that grows more impressive as data accumulates.
+
+!! Sufficiency in ML and Statistics
+
+''Exponential families and natural parameters:'' The [[Exponential Family]] distributions have the form $p(x \mid \theta) = h(x) \exp(\eta(\theta)^T T(x) - A(\theta))$. The vector $T(x)$ is automatically a sufficient statistic — this is //why// exponential families are so central to statistics. The natural parameters $\eta$ and sufficient statistics $T$ are conjugate pairs.
+
+''Bayesian connections:'' In [[Bayesian Inference|Bayesian Inference]], sufficiency means the posterior depends on data only through $T(X)$: $p(\theta \mid x) \propto p(\theta) \cdot g(T(x), \theta)$. This is precisely why [[Bayesian Methods|Bayesian Methods]] work so cleanly with exponential families — the ''conjugate prior'' structure emerges naturally when you update using sufficient statistics.
+
+''[[Maximum Likelihood|Maximum Likelihood]] estimation:'' The MLE depends on data only through the sufficient statistic. This is immediate from the factorization theorem: maximizing $g(T(x), \theta)$ over $\theta$ requires only $T(x)$.
+
+''[[Fisher Information|Fisher Information]]:'' The sufficient statistic carries all the Fisher information about $\theta$. Any other statistic of the same dimension must carry strictly //less// information, formalizing the sense in which sufficiency means "no information loss."
+
+!! When Sufficiency Breaks Down
+
+- ''No finite-dimensional sufficient statistic exists for many non-exponential-family models.'' For instance, the uniform distribution $\text{Uniform}(0, \theta)$ has sufficient statistics (the order statistics), but mixture models and heavy-tailed distributions like the Cauchy often lack low-dimensional sufficient statistics. When the data cannot be usefully compressed, every individual observation matters.
+
+- ''Sufficiency is always relative to a specific model and parameter.'' A statistic sufficient for the mean of a Gaussian is //not// sufficient if you also need to learn the variance. Model misspecification — using the wrong distributional assumption — can make your chosen sufficient statistic discard exactly the information that matters.
+
+- ''In high-dimensional and nonparametric settings, sufficiency becomes vacuous.'' When the parameter space is as rich as the data space, the only sufficient statistic is the data itself. This is why modern deep learning, which operates in effectively nonparametric regimes, cannot rely on classical sufficient statistics and must process raw data directly.
+
+!! Technical Details
+
+''Rao-Blackwell Theorem:'' Given any unbiased estimator $\delta(X)$ of $\theta$ and a sufficient statistic $T$, the conditional expectation $\delta^*(T) = E[\delta(X) \mid T]$ is also unbiased and has variance no greater than $\delta$. This provides a systematic way to improve estimators by "Rao-Blackwellizing" them — conditioning on a sufficient statistic can never hurt and typically helps. Combined with completeness, it yields the unique best unbiased estimator.
+
+''Completeness:'' A sufficient statistic $T$ is ''complete'' if $E[g(T)] = 0$ for all $\theta$ implies $g(T) = 0$ almost surely. Completeness rules out "redundancy" in the statistic. A statistic that is both complete and sufficient is called ''boundedly complete sufficient'', and the Lehmann-Scheffe theorem guarantees that any unbiased function of it is the uniformly minimum variance unbiased estimator (UMVUE).
+
+''Ancillary statistics:'' A statistic $S(X)$ is ''ancillary'' if its distribution does not depend on $\theta$ — it carries no information about the parameter by itself, yet may still be useful for conditional inference. Ancillary statistics are in a sense the "opposite" of sufficient statistics.
+
+''Basu's Theorem:'' If $T$ is a complete sufficient statistic and $S$ is ancillary, then $T$ and $S$ are //independent//. This elegant result connects three seemingly different concepts — completeness, sufficiency, and ancillarity — and provides a powerful shortcut for proving independence in many statistical problems.
+
+''Information inequality connection:'' The Cramer-Rao lower bound states that no unbiased estimator can have variance below $1/I(\theta)$ where $I(\theta)$ is the [[Fisher Information|Fisher Information]]. When a complete sufficient statistic exists, the UMVUE based on it achieves this bound, making it //efficient//. Not all models admit efficient estimators, but when they do, sufficiency is the mechanism.
+
+!! Quiz
+
+<div id="q1">''1. What does it mean for $T(X)$ to be sufficient for $\theta$?''
+<<button "A) $T(X)$ is the maximum likelihood estimator of $\theta$">><<replace "#q1">>That's not right. The MLE depends on the sufficient statistic, but sufficiency is about information preservation, not point estimation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The conditional distribution of $X$ given $T(X)$ does not depend on $\theta$">><<replace "#q1">>✅ Correct! This is the definition: once you know $T(X)$, the remaining randomness in the data is independent of $\theta$, meaning $T(X)$ captures all information about the parameter.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $T(X)$ has minimum variance among all statistics">><<replace "#q1">>Not quite. Minimum variance is about efficiency and the Rao-Blackwell theorem. Sufficiency is about information preservation, not variance minimization directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $T(X)$ is an unbiased estimator of $\theta$">><<replace "#q1">>Incorrect. Sufficiency says nothing about bias. A sufficient statistic captures all information about $\theta$ but may not equal $\theta$ in expectation.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. The Fisher-Neyman factorization theorem states that $T(X)$ is sufficient if and only if:''
+<<button "A) $p(x|\theta) = h(x) \cdot g(T(x), \theta)$">><<replace "#q2">>✅ Correct! The likelihood factors into a piece $h(x)$ that depends only on $x$ and a piece $g(T(x), \theta)$ that depends on $\theta$ only through $T(x)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $p(x|\theta) = T(x) \cdot \theta$">><<replace "#q2">>No. This is far too restrictive and doesn't represent the factorization theorem. The theorem allows general functions $h$ and $g$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $E[T(X)] = \theta$ for all $\theta$">><<replace "#q2">>Incorrect. That's the condition for unbiasedness, not sufficiency. The factorization theorem is about how the likelihood decomposes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $\text{Var}(T(X)) \leq \text{Var}(X)$">><<replace "#q2">>No. Sufficiency is not defined through variance comparisons. It's about the factorization structure of the likelihood function.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. For $n$ independent Bernoulli($p$) trials, what is a sufficient statistic for $p$?''
+<<button "A) The sample variance">><<replace "#q3">>Not the best answer. The sample variance alone doesn't capture all information about $p$. The total count of successes does.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The largest observation">><<replace "#q3">>Incorrect. For Bernoulli trials (0 or 1), the maximum is just an indicator of whether //any// success occurred — it discards most information about $p$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The sum $\sum X_i$">><<replace "#q3">>✅ Correct! By the factorization theorem, $p(x|p) = p^{\sum x_i}(1-p)^{n-\sum x_i}$, and the entire dependence on $p$ flows through $\sum X_i$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The ordered sample">><<replace "#q3">>Not the best choice. While the ordered sample is sufficient (trivially), it's not //minimally// sufficient. The sum $\sum X_i$ achieves maximum compression.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What does the Rao-Blackwell theorem guarantee?''
+<<button "A) Sufficient statistics always exist">><<replace "#q4">>No. Rao-Blackwell is about improving estimators, not about the existence of sufficient statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Conditioning an unbiased estimator on a sufficient statistic cannot increase its variance">><<replace "#q4">>✅ Correct! The Rao-Blackwellized estimator $E[\delta(X)|T]$ preserves unbiasedness while achieving variance less than or equal to the original estimator.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The MLE is always sufficient">><<replace "#q4">>Incorrect. While the MLE depends on the sufficient statistic, Rao-Blackwell is about variance reduction through conditioning, not about the MLE.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Complete statistics are always minimal sufficient">><<replace "#q4">>That's actually true as a fact, but it's not what Rao-Blackwell states. Rao-Blackwell is about improving estimators by conditioning on sufficient statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. Basu's theorem states that if $T$ is complete sufficient and $S$ is ancillary, then:''
+<<button "A) $S$ is also sufficient">><<replace "#q5">>No. Ancillary statistics carry no information about $\theta$ by themselves — they're essentially the opposite of sufficient.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $T$ and $S$ are independent">><<replace "#q5">>✅ Correct! Basu's theorem elegantly connects completeness, sufficiency, and ancillarity: a complete sufficient statistic is independent of every ancillary statistic.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $T + S$ is minimal sufficient">><<replace "#q5">>Incorrect. Basu's theorem is about independence between complete sufficient and ancillary statistics, not about combining them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $S$ has zero variance">><<replace "#q5">>No. Ancillary statistics can have nonzero variance — their defining property is that their //distribution// doesn't depend on $\theta$, not that they're constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. Why are exponential family distributions particularly important for sufficiency?''
+<<button "A) They are the only distributions with sufficient statistics">><<replace "#q6">>Not true. All parametric families have sufficient statistics (at minimum, the data itself). Exponential families are special because they have //fixed-dimensional// sufficient statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) They automatically have fixed-dimensional sufficient statistics via their natural parameters">><<replace "#q6">>✅ Correct! The exponential family form $p(x|\theta) = h(x)\exp(\eta(\theta)^T T(x) - A(\theta))$ immediately gives $T(x)$ as a sufficient statistic with dimension equal to the number of natural parameters, regardless of sample size.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) They always yield unbiased estimators">><<replace "#q6">>Incorrect. Exponential families don't guarantee unbiasedness. Their importance for sufficiency is the automatic existence of low-dimensional sufficient statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) They are the only distributions used in machine learning">><<replace "#q6">>No. Many ML models use non-exponential-family distributions. Exponential families are important but certainly not the only option.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. A minimal sufficient statistic achieves:''
+<<button "A) The smallest possible variance">><<replace "#q7">>Not exactly. Minimal sufficiency is about maximum data //compression//, not minimum variance directly. The UMVUE (via completeness) addresses variance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Unbiased estimation of the parameter">><<replace "#q7">>No. Minimal sufficiency is a property of data compression, not estimation bias. A minimal sufficient statistic may or may not be unbiased for the parameter.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The greatest data reduction while preserving all information about $\theta$">><<replace "#q7">>✅ Correct! A minimal sufficient statistic is a function of every other sufficient statistic — it achieves the coarsest possible partition of the sample space that is still sufficient.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Independence from all other statistics">><<replace "#q7">>Incorrect. Independence from ancillary statistics requires //completeness// (via Basu's theorem), not just minimal sufficiency.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. When does sufficiency become vacuous (the entire dataset is the only sufficient statistic)?''
+<<button "A) When the sample size is very large">><<replace "#q8">>No. Large sample sizes actually make sufficient statistics //more// powerful — you compress more data into the same low-dimensional summary.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) When using Bayesian methods">><<replace "#q8">>Incorrect. Bayesian methods work beautifully with sufficient statistics — the posterior depends on data only through them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) In nonparametric settings where the parameter space is as rich as the data space">><<replace "#q8">>✅ Correct! When the model is so flexible that the parameter space is effectively infinite-dimensional, no compression is possible without losing information — the data //is// the minimal sufficient statistic.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) When the data are independent">><<replace "#q8">>No. Independence actually helps — i.i.d. data from exponential families have particularly clean sufficient statistics. Independence is not the issue.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

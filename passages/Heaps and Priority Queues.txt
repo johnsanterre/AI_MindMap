@@ -1,0 +1,170 @@
+<<include "Header">>
+
+! Heaps and Priority Queues
+
+<img src="assets/heaps_and_priority_queues.svg" alt="Diagram showing a binary min-heap as a tree with nodes 1,3,5,7,9,8,12, its array representation, and key operations with their time complexities" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine an emergency room where patients are not seen in the order they arrive, but in order of severity — the most critical case always goes first, even if they walked in last. That is exactly what a ''priority queue'' does with data. And the most elegant way to build one is a ''heap'': a tree-shaped data structure that keeps its most important element always sitting at the very top, ready to be grabbed in constant time. Heaps are deceptively simple — just an array with a clever indexing trick — yet they power some of the most important algorithms in computer science and machine learning, from [[Shortest Path Algorithms]] to beam search in language models.
+
+!! The Core Insight
+
+A ''binary heap'' is a complete binary tree stored as a flat array, where every parent is smaller (in a min-heap) or larger (in a max-heap) than its children. This single rule — the ''heap property'' — guarantees that the minimum (or maximum) element is always at the root, retrievable in $O(1)$ time. When you insert or remove an element, you restore the heap property by "bubbling" elements up or down the tree, which takes at most $O(\log n)$ swaps because the tree has $\log n$ levels.
+
+The genius is the array trick: node at index $i$ has children at $2i+1$ and $2i+2$, and its parent at $\lfloor(i-1)/2\rfloor$. No pointers, no wasted memory — just arithmetic on array indices. This makes heaps extraordinarily cache-friendly compared to pointer-based trees like [[Binary Search Trees]].
+
+A ''priority queue'' is the abstract interface — "give me the highest-priority item" — and a heap is the standard concrete implementation. The distinction matters: you could implement a priority queue with a sorted list (slow insert) or an unsorted list (slow extraction), but heaps give $O(\log n)$ for both, which is the optimal tradeoff for comparison-based structures.
+
+!! Heap Variants and Extensions
+
+The basic binary heap is just the beginning. Several variants exist for specialized use cases:
+
+''d-ary heaps'' generalize binary heaps to $d$ children per node. The tree becomes shallower (height $\log_d n$), speeding up bubble-up to $O(\log_d n)$ but slowing bubble-down to $O(d \log_d n)$ since you must compare against all $d$ children. A 4-ary heap often outperforms a binary heap in practice for Dijkstra's algorithm because decrease-key (bubble-up) is more frequent than extract-min.
+
+''Fibonacci heaps'' achieve $O(1)$ amortized time for insert and decrease-key, and $O(\log n)$ amortized for extract-min. This makes them theoretically optimal for algorithms like Dijkstra and Prim's [[Minimum Spanning Trees]] algorithm, reducing their runtime from $O((V+E)\log V)$ to $O(E + V\log V)$. In practice, the constant factors and complexity of Fibonacci heaps often make simpler binary heaps faster for moderate graph sizes.
+
+''Binomial heaps'' support efficient merging of two heaps in $O(\log n)$ time — something binary heaps cannot do without $O(n)$ work. ''Pairing heaps'' offer a simpler alternative to Fibonacci heaps with excellent empirical performance, though their theoretical bounds are not as tight.
+
+''Min-max heaps'' support both find-min and find-max in $O(1)$ by alternating min-levels and max-levels in the tree. This is useful when you need access to both extremes, such as maintaining a sliding window of values.
+
+!! What the Math Is Actually Doing
+
+The heap property for a min-heap can be stated formally:
+
+$$\forall i > 0: A\left[\left\lfloor\frac{i-1}{2}\right\rfloor\right] \leq A[i]$$
+
+Every element is at most as large as its descendants. This is a ''partial order'' — unlike a [[Binary Search Trees|binary search tree]], a heap does not maintain a total order among siblings. The left child can be larger or smaller than the right child. This relaxation is what makes heaps faster to maintain: you only need to fix one path from root to leaf, not keep the entire structure sorted.
+
+''Build-heap'' (Floyd's algorithm) runs in $O(n)$ despite each sift-down taking up to $O(\log n)$. The key insight is that most nodes are near the bottom and have very little to sift. Formally:
+
+$$T(n) = \sum_{h=0}^{\lfloor \log n \rfloor} \left\lceil \frac{n}{2^{h+1}} \right\rceil \cdot O(h) = O\!\left(n \sum_{h=0}^{\infty} \frac{h}{2^h}\right) = O(n)$$
+
+The sum $\sum_{h=0}^{\infty} h/2^h = 2$ converges, giving linear time. This is why heapsort's first phase (building the heap) costs only $O(n)$, and the $O(n \log n)$ cost comes entirely from the $n$ extract-min operations.
+
+''Decrease-key'' — lowering the priority of an element already in the heap — requires knowing the element's position. In a binary heap, this takes $O(\log n)$ via bubble-up. In a Fibonacci heap, it takes $O(1)$ amortized by cutting the node from its parent and adding it to the root list, using a clever ''cascading cut'' mechanism.
+
+!! Heaps in Algorithms and ML
+
+Heaps are the backbone of several algorithms central to machine learning:
+
+''Dijkstra's algorithm'' for [[Shortest Path Algorithms]] maintains a priority queue of unvisited nodes, always expanding the closest one. With a binary heap, this runs in $O((V + E) \log V)$. Every graph-based ML method that needs shortest paths — from knowledge graph embeddings to network analysis — relies on this.
+
+''Beam search'' in sequence-to-sequence models and large language models uses a priority queue to maintain the top-$k$ partial hypotheses at each step. Only the $k$ highest-scoring beams survive to the next timestep, and a heap efficiently identifies which beams to keep.
+
+''Heapsort'' is an in-place, $O(n \log n)$ [[Sorting Algorithms|sorting algorithm]] with guaranteed worst-case performance — unlike quicksort, which degrades to $O(n^2)$ on adversarial inputs. Build a max-heap, then repeatedly extract the maximum. It is not stable and has poor cache behavior compared to mergesort, but its $O(1)$ extra space is sometimes decisive.
+
+''Top-K selection'' — finding the $k$ largest elements from $n$ candidates — takes $O(n \log k)$ with a min-heap of size $k$. Scan the data once, maintaining a heap of the $k$ largest seen so far. Each new element is compared to the heap's minimum; if larger, it replaces the min via extract-and-insert. This is used in nearest-neighbor search, recommendation systems, and selecting the top-$k$ predictions from a model.
+
+''Huffman coding'' for data compression greedily merges the two lowest-frequency symbols using a min-heap, building an optimal prefix-free code. The algorithm runs in $O(n \log n)$ for $n$ symbols.
+
+''Prim's algorithm'' for [[Minimum Spanning Trees]] uses a priority queue identically to Dijkstra, but keyed on edge weights rather than distances.
+
+!! When Heaps and Priority Queues Break Down
+
+''1. Search is expensive.'' A heap can find the minimum in $O(1)$ and insert/extract in $O(\log n)$, but //searching// for an arbitrary element takes $O(n)$ — you must scan the entire array. If you frequently need to look up whether a specific element is present or find its current priority, a heap alone is insufficient. You need an auxiliary hash map to track positions, which adds complexity. When search is the dominant operation, a [[Binary Search Trees|balanced BST]] is more appropriate, offering $O(\log n)$ for search, insert, and delete.
+
+''2. Merging two heaps is slow for binary heaps.'' Combining two binary heaps of sizes $m$ and $n$ requires $O(m + n)$ — essentially rebuilding from scratch. If your application frequently merges priority queues (e.g., parallel graph algorithms, external memory sorting), binary heaps are a poor fit. Binomial heaps merge in $O(\log n)$ and Fibonacci heaps in $O(1)$.
+
+''3. Decrease-key with position tracking.'' Many graph algorithms (Dijkstra, Prim) need to //update// the priority of an element already in the heap. A basic binary heap provides no way to find an element by key — you need a separate index mapping elements to their heap positions, and you must maintain this index through every swap. This bookkeeping is error-prone and adds constant-factor overhead. Fibonacci heaps solve this elegantly in theory, but their practical complexity often makes indexed binary heaps the pragmatic choice.
+
+!! Technical Details
+
+''Time complexities (binary min-heap):''
+- Insert: $O(\log n)$ worst-case
+- Extract-min: $O(\log n)$ worst-case
+- Peek (find-min): $O(1)$
+- Build-heap: $O(n)$ via Floyd's algorithm
+- Decrease-key: $O(\log n)$ with index tracking
+- Delete arbitrary: $O(\log n)$ with index tracking
+- Search: $O(n)$
+
+''Fibonacci heap (amortized):''
+- Insert: $O(1)$
+- Extract-min: $O(\log n)$
+- Decrease-key: $O(1)$
+- Merge: $O(1)$
+
+''Space:'' $O(n)$ for all heap variants. Binary heaps use a contiguous array with zero pointer overhead — just $n$ elements.
+
+''Heapsort'' is not stable (equal elements may be reordered). Its $O(n \log n)$ worst-case is better than quicksort's worst case, but quicksort is faster on average due to better cache locality and smaller constant factors.
+
+''Heap as an implicit data structure:'' because a complete binary tree of $n$ nodes has a unique shape, no structural metadata is stored — the tree topology is implicit in the array indices. This is why heaps are one of the most space-efficient tree structures.
+
+''Python:'' `heapq` module provides a min-heap. For max-heap, negate values. `heapq.heappush()`, `heapq.heappop()`, `heapq.heapify()` (in-place, $O(n)$), `heapq.nlargest(k, iterable)`.
+
+Related topics: [[Sorting Algorithms]], [[Binary Search Trees]], [[Shortest Path Algorithms]], [[Minimum Spanning Trees]].
+
+!! Quiz
+
+<span id="hpq-q1">What is the time complexity of finding the minimum element in a binary min-heap?</span>
+
+A. $O(\log n)$
+B. $O(n)$
+C. $O(1)$
+D. $O(n \log n)$
+
+<<button "A">><<replace "#hpq-q1">>Incorrect. $O(\log n)$ is the cost of //inserting// or //extracting// an element. The minimum is always at the root and can be read directly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q1">>Incorrect. $O(n)$ would be needed to //search// for an arbitrary element. The minimum sits at the root, index 0.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q1">>Correct! The heap property guarantees the minimum is always at the root (index 0), so finding it is a single array access — $O(1)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q1">>Incorrect. $O(n \log n)$ is the cost of heapsort, not a simple find-min. The minimum is always at the root.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q2">In a binary heap stored as an array, what are the indices of the children of the node at index $i$?</span>
+
+A. $i+1$ and $i+2$
+B. $2i$ and $2i+1$
+C. $2i+1$ and $2i+2$
+D. $i/2$ and $i/2+1$
+
+<<button "A">><<replace "#hpq-q2">>Incorrect. Adjacent indices would give a linked-list layout, not a tree. The heap uses a multiplicative formula to encode the tree structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q2">>Incorrect. $2i$ and $2i+1$ is the formula for 1-indexed arrays. For 0-indexed arrays (used in most implementations), it is $2i+1$ and $2i+2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q2">>Correct! In a 0-indexed array, node $i$ has left child at $2i+1$ and right child at $2i+2$. The parent of node $i$ is at $\lfloor(i-1)/2\rfloor$. This arithmetic relationship eliminates the need for pointers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q2">>Incorrect. $\lfloor i/2 \rfloor$ is related to finding the //parent// (in 1-indexed arrays), not the children.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q3">Why does Floyd's build-heap algorithm run in $O(n)$ rather than $O(n \log n)$?</span>
+
+A. It uses a divide-and-conquer approach that parallelizes automatically
+B. Most nodes are near the bottom of the tree and require very few swaps during sift-down
+C. It skips leaf nodes entirely and only processes the root
+D. It uses randomization to avoid worst-case scenarios
+
+<<button "A">><<replace "#hpq-q3">>Incorrect. Build-heap does process subtrees bottom-up, but the $O(n)$ bound comes from the distribution of work across tree levels, not from parallelism.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q3">>Correct! Half the nodes are leaves (sift-down cost 0), a quarter need at most 1 swap, an eighth need at most 2, and so on. The total work sums to $n \sum h/2^h = 2n = O(n)$ because the geometric series converges. Most of the work is trivially cheap.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q3">>Incorrect. Build-heap does skip leaves, but it processes //all// internal nodes via sift-down, not just the root. The $O(n)$ bound comes from the math of how sift-down costs distribute across levels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q3">>Incorrect. Build-heap is a deterministic algorithm with no randomization. Its $O(n)$ runtime is a worst-case guarantee.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q4">What is the primary advantage of a Fibonacci heap over a binary heap?</span>
+
+A. Fibonacci heaps use less memory
+B. Fibonacci heaps have $O(1)$ amortized decrease-key, improving Dijkstra's runtime
+C. Fibonacci heaps are simpler to implement
+D. Fibonacci heaps have $O(1)$ worst-case extract-min
+
+<<button "A">><<replace "#hpq-q4">>Incorrect. Fibonacci heaps actually use //more// memory per node (storing degree, mark bit, and sibling/child pointers) compared to a binary heap's zero-overhead array.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q4">>Correct! The $O(1)$ amortized decrease-key in Fibonacci heaps reduces Dijkstra's algorithm from $O((V+E) \log V)$ to $O(E + V \log V)$, which matters for dense graphs. The cascading cut mechanism achieves this by lazily deferring structural repairs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q4">>Incorrect. Fibonacci heaps are notoriously //complex// to implement — cascading cuts, degree tracking, and doubly-linked circular lists make them far harder than binary heaps.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q4">>Incorrect. Extract-min in a Fibonacci heap is $O(\log n)$ amortized, not $O(1)$. Only insert and decrease-key achieve $O(1)$ amortized.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q5">You need to repeatedly find the top-$k$ elements from a stream of $n$ values. What is the optimal approach?</span>
+
+A. Sort the entire stream, then take the last $k$ elements: $O(n \log n)$
+B. Use a max-heap of size $n$, extract $k$ times: $O(n + k \log n)$
+C. Maintain a min-heap of size $k$, comparing each new element to the heap's minimum: $O(n \log k)$
+D. Use a hash table to count elements, then scan: $O(n)$
+
+<<button "A">><<replace "#hpq-q5">>Not wrong in correctness, but sorting does $O(n \log n)$ work and requires storing all $n$ elements. For streaming data, the min-heap approach is both faster ($O(n \log k)$ when $k \ll n$) and uses only $O(k)$ space.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q5">>This works but uses $O(n)$ space for the heap. The min-heap-of-size-$k$ approach uses only $O(k)$ space and $O(n \log k)$ time, which is better when $k \ll n$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q5">>Correct! Keep a min-heap of the $k$ largest elements seen so far. For each new element: if it exceeds the heap's minimum, pop the min and push the new element — $O(\log k)$ per operation, $O(n \log k)$ total. This uses only $O(k)$ space and works on streaming data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q5">>Incorrect. A hash table finds //frequencies//, not the top-$k$ by value. Even if counting frequencies, you still need to find the top-$k$ counts, which brings you back to a heap.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q6">Why is a binary heap a poor choice when you need to frequently search for specific elements?</span>
+
+A. The heap property only guarantees the root is minimal, so searching requires scanning the entire array in $O(n)$
+B. Binary heaps cannot store duplicate elements
+C. The array representation prevents random access
+D. Heaps cannot hold more than $2^{16}$ elements
+
+<<button "A">><<replace "#hpq-q6">>Correct! Unlike a binary search tree, a heap imposes only a partial order: you know a parent is smaller than its children, but you cannot determine which subtree contains your target. In the worst case, the element could be anywhere, requiring an $O(n)$ scan. This is why Dijkstra implementations use an auxiliary hash map to track element positions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q6">>Incorrect. Heaps handle duplicates without any issue — the heap property ($\leq$) is not strict, so equal elements coexist naturally.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q6">>Incorrect. The array representation provides excellent random access — the problem is that the heap property does not give you enough information to know //where// to look for a specific element.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q6">>Incorrect. Heaps have no inherent size limit. They can grow as large as available memory allows.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q7">In heapsort, after building a max-heap in $O(n)$, the remaining $n$ extract-max operations cost:</span>
+
+A. $O(n)$ total
+B. $O(n \log n)$ total
+C. $O(n^2)$ total
+D. $O(\log n)$ total
+
+<<button "A">><<replace "#hpq-q7">>Incorrect. Each extract-max requires sifting down through up to $O(\log n)$ levels, and you do this $n$ times. The total cannot be linear.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q7">>Correct! Each of the $n$ extract-max operations requires $O(\log n)$ sift-down work, giving $O(n \log n)$ total. Combined with the $O(n)$ build-heap phase, heapsort's overall complexity is $O(n \log n)$ — matching the theoretical lower bound for comparison-based sorting.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q7">>Incorrect. $O(n^2)$ would be the cost of a naive sorting algorithm like insertion sort. Heapsort's extraction phase is $O(n \log n)$ because the heap structure limits each extraction to $O(\log n)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q7">>Incorrect. $O(\log n)$ is the cost of a //single// extraction. Doing $n$ extractions costs $O(n \log n)$ in total.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="hpq-q8">Which algorithm uses a priority queue to greedily merge the two lowest-frequency symbols?</span>
+
+A. Dijkstra's shortest path
+B. Kruskal's minimum spanning tree
+C. Huffman coding
+D. Quickselect
+
+<<button "A">><<replace "#hpq-q8">>Incorrect. Dijkstra uses a priority queue keyed on //distances//, not frequencies. It extracts the nearest unvisited node, not the lowest-frequency one.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#hpq-q8">>Incorrect. Kruskal's algorithm sorts edges by weight and uses union-find, not a priority queue merge of frequency-based symbols.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#hpq-q8">>Correct! Huffman coding repeatedly extracts the two symbols with the lowest frequency from a min-heap, merges them into a new internal node, and reinserts it. This greedy process builds an optimal prefix-free binary code in $O(n \log n)$ time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#hpq-q8">>Incorrect. Quickselect finds the $k$-th smallest element using partitioning (like quicksort), not a priority queue.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

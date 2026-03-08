@@ -1,0 +1,157 @@
+<<include "Header">>
+
+! Policy Gradient
+
+[img[assets/policy_gradient.svg]]
+
+Imagine you are coaching an athlete who has never played tennis before. You cannot hand them a rulebook and expect them to win — instead, you watch them play, note which swings led to points, and tell them to do more of those and less of the others. Over thousands of rallies the athlete gradually learns a style of play that wins. ''Policy gradient'' methods work on exactly this principle: an agent tries actions in the world, observes what reward follows, and directly adjusts the probabilities of its decisions to favor what worked. There is no lookup table, no memorized value for every situation — just a parameterized decision-making strategy that gets nudged, step by step, in the direction of higher reward.
+
+---
+
+!! The Core Insight
+
+Most <<link "Reinforcement Learning" "Reinforcement Learning">><</link>> algorithms learn //indirectly//. They first estimate how good each state or action is (a value function), and then derive a policy from those estimates. Policy gradient methods flip this around: they optimize the policy //directly//, treating it as a differentiable function of parameters $\theta$ and maximizing expected reward with gradient ascent.
+
+A ''policy'' $\pi_\theta(a \mid s)$ is a probability distribution over actions given the current state, parameterized by a neural network with weights $\theta$. When the agent is in state $s$, it samples an action $a$ from this distribution, takes it, and receives a reward. The algorithm then asks: "should I have made this action more likely or less likely?" If the reward was good, push $\theta$ so that $\pi_\theta(a \mid s)$ increases. If the reward was bad, push $\theta$ to decrease it.
+
+The elegant surprise is that this intuition is mathematically exact. The gradient of expected reward with respect to $\theta$ turns out to be computable from sampled trajectories alone — no model of the environment, no dynamic programming, no exhaustive value estimates required. Policy gradient methods handle continuous action spaces naturally, because the policy outputs a distribution (such as a Gaussian) over real-valued actions rather than a discrete set. These properties made them the foundation for modern deep RL in robotics, game playing, and language model alignment via <<link "PPO" "Proximal Policy Optimization">><</link>>.
+
+---
+
+!! REINFORCE and Variance Reduction
+
+The ''REINFORCE algorithm'' (Williams, 1992) is the simplest policy gradient method. Collect a complete episode $\{(s_t, a_t, r_t)\}_{t=0}^T$. Compute discounted returns $G_t = \sum_{k=t}^{T} \gamma^{k-t} r_k$ for each time step. Then update:
+
+$$\theta \leftarrow \theta + \alpha \sum_{t=0}^{T} G_t \, \nabla_\theta \log \pi_\theta(a_t \mid s_t)$$
+
+This is an unbiased estimate of the true policy gradient, but it suffers from ''extremely high variance''. A single trajectory is a noisy sample of the world — the same policy run twice will produce wildly different returns. This noise feeds directly into the gradient estimate, making training unstable and slow.
+
+The single most important variance reduction technique is subtracting a ''baseline'' $b(s_t)$ from the return:
+
+$$\hat{g} = \frac{1}{N} \sum_{i=1}^{N} \sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \left(G_t - b(s_t)\right)$$
+
+Any baseline that does not depend on $a_t$ can be shown to leave the expected gradient unchanged — the extra term has zero expectation — while dramatically reducing variance. The optimal baseline is the state value function $V^\pi(s_t)$, which turns the weighting into the ''advantage'' $A(s_t, a_t) = G_t - V(s_t)$. Now the gradient signal becomes: "was this action better or worse //than average// from this state?" — a much more precise signal than "was the total return high or low?"
+
+Additional variance reduction techniques include: using multiple trajectories per update (batching), normalizing advantages to zero mean and unit variance within each batch, and ''Generalized Advantage Estimation'' (GAE), which interpolates between low-bias Monte Carlo returns and low-variance bootstrapped estimates using a parameter $\lambda$.
+
+---
+
+!! What the Math Is Actually Doing
+
+The core result is the ''policy gradient theorem''. For a policy $\pi_\theta$ and expected return $J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[R(\tau)]$, the gradient is:
+
+$$\nabla_\theta J(\theta) = \mathbb{E}_{\pi_\theta}\!\left[ \sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot G_t \right]$$
+
+The key identity that makes this work is the ''score function trick'' (also called the log-derivative trick). You cannot backpropagate through a random sample, but the identity $\nabla_\theta p(\tau \mid \theta) = p(\tau \mid \theta) \cdot \nabla_\theta \log p(\tau \mid \theta)$ converts the gradient of a probability into an expectation that can be estimated from sampled trajectories.
+
+When you expand $\log p(\tau \mid \theta)$, the environment transition probabilities cancel out, leaving only the policy terms:
+
+$$\nabla_\theta \log p(\tau \mid \theta) = \sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_t \mid s_t)$$
+
+This is what makes policy gradient methods ''model-free'': you do not need to know or learn the environment's dynamics. The gradient estimate uses only the log-probabilities of actions the policy actually chose.
+
+The term $\nabla_\theta \log \pi_\theta(a_t \mid s_t)$ is the ''score function'' — it points in the direction in parameter space that would make action $a_t$ more likely. When multiplied by $G_t$, rewarding actions get amplified and poor actions get suppressed. The full update is equivalent to ''weighted maximum likelihood'': treat each $(s_t, a_t)$ pair as a training example with weight $G_t$.
+
+The variance of the REINFORCE estimator scales roughly as $T^2 \cdot \text{Var}[r]$ where $T$ is the horizon. Adding a baseline reduces this to approximately $T \cdot \text{Var}[A]$. GAE further reduces it by trading a small amount of bias for much lower variance.
+
+---
+
+!! Actor-Critic Methods
+
+Pure REINFORCE must wait until the end of an episode to compute $G_t$, since it needs all future rewards. ''Actor-critic'' methods break this constraint by learning a ''critic'' $V_\phi(s)$ that estimates future return, allowing updates at every time step rather than only at episode boundaries.
+
+The ''actor'' is the policy $\pi_\theta$ — the decision maker. The ''critic'' is a value function $V_\phi(s)$ — the evaluator. At each step the critic provides a bootstrapped estimate of future reward, and the actor updates using the ''TD advantage'':
+
+$$\hat{A}_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+
+This replaces the Monte Carlo return $G_t$ with a one-step estimate, trading some bias for much lower variance and enabling online (non-episodic) learning. The critic is trained to minimize $\|V_\phi(s_t) - G_t\|^2$ or its bootstrapped equivalent.
+
+Modern actor-critic algorithms build on this foundation. ''A2C/A3C'' (Mnih et al., 2016) run multiple parallel environments for data diversity. ''TRPO'' (Schulman et al., 2015) constrains policy updates via a KL divergence trust region. <<link "PPO" "Proximal Policy Optimization">><</link>> (Schulman et al., 2017) replaces the TRPO constraint with a clipped surrogate objective, becoming the default algorithm for most applications. <<link "Soft Actor-Critic" "Soft Actor-Critic">><</link>> adds an entropy bonus to produce stochastic policies for continuous control. All of these are policy gradient methods at their core — they differ only in how they estimate advantages and constrain updates.
+
+---
+
+!! When Policy Gradients Break Down
+
+''Catastrophic variance in sparse-reward environments.'' When rewards are rare — a robot gets +1 only upon task completion, zero otherwise — most sampled trajectories return $G_t = 0$ for every time step. The gradient estimate is almost always zero, and the rare nonzero estimates are extremely noisy because a single lucky trajectory dominates the signal. Training stalls for tens of thousands of episodes. The fix is reward shaping (adding dense intermediate rewards), intrinsic motivation (rewarding novelty or prediction error), or hierarchical decomposition of the task.
+
+''Policy collapse from large updates.'' Unlike value-based methods, policy gradient directly changes the probability distribution over actions. A single large gradient step can make the policy near-deterministic, collapsing all probability mass onto one action. Once collapsed, the policy stops exploring, the gradient estimate becomes even noisier (because all trajectories look identical), and recovery is very slow. The standard remedies are clipping updates (as in <<link "PPO" "Proximal Policy Optimization">><</link>>) or imposing a KL divergence constraint on how much the policy can change per step (as in TRPO).
+
+''Reward hacking through degenerate strategies.'' Policy gradients optimize the //exact// objective you specify. If that objective has an unintended shortcut — a way to get high reward without actually solving the task — the policy will find it. A famous example: a boat-racing agent learned to spin in circles collecting powerup tokens rather than finishing the race, because the powerups gave more reward per second than crossing the finish line. Unlike value-based methods, which have some implicit smoothing through the Bellman equation, policy gradients will exploit any gap between your reward function and your true intent.
+
+---
+
+!! Technical Details
+
+''REINFORCE (Williams, 1992).'' The foundational algorithm. On-policy, unbiased, but high variance. Requires full episode completion before any update (Monte Carlo, not TD). Update: $\theta \leftarrow \theta + \alpha \sum_t G_t \nabla_\theta \log \pi_\theta(a_t \mid s_t)$.
+
+''Natural Policy Gradient (Kakade, 2002).'' Preconditions the gradient by the inverse Fisher information matrix $F(\theta)^{-1}$, giving updates that move a fixed KL distance in distribution space regardless of parameterization: $\theta \leftarrow \theta + \alpha F(\theta)^{-1} \nabla_\theta J(\theta)$. More stable and efficient than vanilla gradient ascent.
+
+''TRPO (Schulman et al., 2015).'' Adds a hard KL constraint: maximize $J(\theta)$ subject to $\mathbb{E}_s[\text{KL}[\pi_{\theta_\text{old}} \| \pi_\theta]] \leq \delta$. Solved via conjugate gradient and a line search. Guarantees monotonic improvement under certain conditions. Largely superseded by <<link "PPO" "Proximal Policy Optimization">><</link>> in practice.
+
+''<<link "PPO" "Proximal Policy Optimization">><</link>> (Schulman et al., 2017).'' Replaces the TRPO constraint with a clipped surrogate objective: $L^{\text{CLIP}}(\theta) = \mathbb{E}_t[\min(r_t \hat{A}_t, \text{clip}(r_t, 1-\varepsilon, 1+\varepsilon)\hat{A}_t)]$ where $r_t = \pi_\theta(a_t \mid s_t) / \pi_{\theta_\text{old}}(a_t \mid s_t)$. First-order method; the current default policy gradient algorithm across most domains.
+
+''Connection to <<link "Soft Actor-Critic" "Soft Actor-Critic">><</link>>.'' SAC augments the policy gradient objective with an entropy bonus $\alpha \mathcal{H}(\pi)$, producing stochastic policies that maintain exploration. It operates off-policy with a replay buffer, giving 5-10x better sample efficiency than on-policy methods like PPO on continuous control benchmarks.
+
+''On-policy vs. off-policy.'' Vanilla policy gradients and PPO are on-policy: data is discarded after each update. This is sample-inefficient but avoids distribution mismatch. Off-policy corrections (importance sampling) allow reuse of old data but introduce their own variance. SAC sidesteps this with the maximum entropy framework.
+
+---
+
+!! Quiz
+
+<span id="pg-q1">''1. What is the core objective that policy gradient methods directly optimize?''
+
+<<button "A) The Bellman error of the state-value function">><<replace "#pg-q1">>Wrong. Minimizing Bellman error is the objective of value-based methods like Q-learning. Policy gradients bypass the value function and optimize expected return directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The expected cumulative discounted reward $J(\theta) = \mathbb{E}_{\pi_\theta}[R(\tau)]$">><<replace "#pg-q1">>Correct! Policy gradient methods treat the policy as a differentiable function of parameters $\theta$ and perform gradient ascent on the expected return. This directness is both its main strength and main weakness (noisy gradient estimates).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The KL divergence between the current policy and a target policy">><<replace "#pg-q1">>Wrong. KL divergence constraints appear in TRPO as a constraint on policy updates, not as the primary objective being maximized.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The cross-entropy between the policy and expert demonstrations">><<replace "#pg-q1">>Wrong. That describes behavioral cloning (imitation learning), not policy gradient reinforcement learning.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q2">''2. What does the score function trick (log-derivative trick) enable?''
+
+<<button "A) It removes the need to discount future rewards">><<replace "#pg-q2">>Wrong. Discounting is handled by the return $G_t$; the log-derivative trick addresses a different problem entirely.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It allows gradient computation through sampling by rewriting $\nabla_\theta p(\tau|\theta)$ as $p(\tau|\theta) \nabla_\theta \log p(\tau|\theta)$">><<replace "#pg-q2">>Correct! You cannot backpropagate through a discrete sample, but this identity converts the gradient into an expectation estimable from sampled trajectories. The environment dynamics cancel out, leaving only the policy's log-probabilities.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It replaces the discount factor with an entropy term">><<replace "#pg-q2">>Wrong. Entropy regularization is a separate technique; the log-derivative trick is about differentiating through sampling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It converts the problem into second-order optimization">><<replace "#pg-q2">>Wrong. The log-derivative trick enables first-order gradient estimation. Second-order methods like Natural Policy Gradient use the Fisher information matrix separately.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q3">''3. Why must vanilla REINFORCE wait until episode end before updating?''
+
+<<button "A) Neural network weights can only be updated once per episode">><<replace "#pg-q3">>Wrong. There is no such rule; the reason concerns the return estimate, not update frequency.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It uses Monte Carlo returns $G_t = \sum_{k=t}^T \gamma^{k-t} r_k$, which require all future rewards">><<replace "#pg-q3">>Correct! The return $G_t$ sums rewards from time $t$ to the end. Until the episode ends, future rewards are unknown. Actor-critic methods break this constraint by bootstrapping with a learned value function.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The environment resets its state at episode end, invalidating earlier data">><<replace "#pg-q3">>Wrong. State resets are a property of episodic environments but do not determine when gradient updates can be computed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The log-derivative trick only applies at the last time step">><<replace "#pg-q3">>Wrong. The log-derivative trick applies at every time step; the episode-completion requirement comes from the return calculation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q4">''4. Subtracting a baseline $b(s_t)$ from the return $G_t$ changes which property of the gradient estimate?''
+
+<<button "A) It reduces variance without changing the expected gradient">><<replace "#pg-q4">>Correct! Any baseline $b(s_t)$ independent of $a_t$ has zero expected contribution to the gradient. The estimator remains unbiased while variance drops dramatically, especially when the baseline approximates $V^\pi(s)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It introduces bias to achieve lower variance">><<replace "#pg-q4">>Wrong. Subtracting a state-dependent baseline introduces no bias — this is mathematically provable. The variance reduction comes for free.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It changes the learning rate needed for convergence">><<replace "#pg-q4">>Wrong. The baseline affects gradient variance, not the appropriate learning rate directly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It makes the gradient estimate deterministic">><<replace "#pg-q4">>Wrong. The estimate remains stochastic — it is still computed from sampled trajectories. The baseline only reduces the variance of those random estimates.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q5">''5. Why do policy gradient methods handle continuous action spaces more naturally than Q-learning?''
+
+<<button "A) Policy gradients do not require a discount factor">><<replace "#pg-q5">>Wrong. Policy gradients do use a discount factor $\gamma$ in the return $G_t$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Q-learning requires $\arg\max_a Q(s,a)$, which is intractable over continuous actions, whereas policy gradient outputs distribution parameters directly">><<replace "#pg-q5">>Correct! Q-learning must maximize $Q(s,a)$ over all actions — an optimization problem at every step in continuous spaces. Policy gradient outputs parameters of a distribution (e.g., Gaussian mean and variance), and sampling is trivial.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Continuous action spaces have lower variance returns">><<replace "#pg-q5">>Wrong. Continuous action spaces do not inherently have lower variance; they often make exploration harder.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Policy gradient methods access transition dynamics directly">><<replace "#pg-q5">>Wrong. Policy gradient methods are model-free — transition dynamics cancel out in the gradient and are never used.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q6">''6. In actor-critic methods, what role does the critic $V_\phi(s)$ play?''
+
+<<button "A) It selects actions for the agent during exploration">><<replace "#pg-q6">>Wrong. The actor (policy) selects actions. The critic evaluates states, not actions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It estimates the expected future return from each state, providing a baseline for advantage computation">><<replace "#pg-q6">>Correct! The critic approximates $V^\pi(s)$, which serves as a baseline. The TD advantage $\hat{A}_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$ replaces the high-variance Monte Carlo return with a lower-variance bootstrapped estimate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It replaces the policy entirely once training is complete">><<replace "#pg-q6">>Wrong. The critic is never used to select actions; only the actor (policy) makes decisions at deployment time.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It computes the Fisher information matrix for natural gradient updates">><<replace "#pg-q6">>Wrong. The Fisher information matrix is a separate concept used in Natural Policy Gradient and TRPO, not the standard role of the critic.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q7">''7. What is the key practical difference between TRPO and PPO?''
+
+<<button "A) TRPO uses discrete actions; PPO uses continuous actions">><<replace "#pg-q7">>Wrong. Both work with either action space type; the distinction is in how they constrain updates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) TRPO is on-policy; PPO is off-policy with a replay buffer">><<replace "#pg-q7">>Wrong. Both are on-policy methods; PPO reuses each batch for multiple gradient epochs but does not maintain a replay buffer across updates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) TRPO enforces a hard KL constraint via second-order optimization; PPO uses a clipped objective with first-order optimizers">><<replace "#pg-q7">>Correct! TRPO requires the Fisher information matrix and conjugate gradient — expensive and complex. PPO replaces this with a simple clipped surrogate maximized by Adam or SGD, achieving similar stability at a fraction of the cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) TRPO collects more trajectories per update than PPO">><<replace "#pg-q7">>Wrong. Both can use similar data budgets; the defining difference is the constraint mechanism.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="pg-q8">''8. A policy gradient agent in a sparse-reward maze returns $G_t = 0$ for nearly every trajectory. What is the most direct remedy?''
+
+<<button "A) Switch to a deterministic policy to reduce exploration">><<replace "#pg-q8">>Wrong. A deterministic policy would make exploration harder — the agent would commit to one path and never discover the goal.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Increase the discount factor $\gamma$ above 1.0">><<replace "#pg-q8">>Wrong. $\gamma > 1$ causes returns to grow without bound and destabilizes training. The discount factor must stay in $[0, 1)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Add dense intermediate rewards (reward shaping) or intrinsic motivation">><<replace "#pg-q8">>Correct! Sparse rewards starve the gradient of signal. Reward shaping (e.g., distance-to-goal decreasing) or intrinsic motivation (rewarding novel states) provide gradient signal on every trajectory, enabling learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Reduce the number of trajectories per update to speed up iteration">><<replace "#pg-q8">>Wrong. Fewer trajectories would make the gradient estimate even noisier, compounding the sparse-reward problem.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

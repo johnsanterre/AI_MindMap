@@ -1,0 +1,171 @@
+<<include "Header">>
+
+! Metropolis-Hastings
+
+<img src="assets/metropolis_hastings.svg" alt="Metropolis-Hastings diagram showing proposal distribution, accept-reject mechanism, and chain convergence to target" style="width:100%;max-width:780px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are lost in a vast mountain range at night with no map, trying to figure out the shape of the terrain. You can check the altitude where you stand, and you can take a step in a random direction and check the altitude there. If the new spot is higher, you go. If it is lower, you sometimes go anyway — flipping a biased coin weighted by how much lower it is. Over thousands of steps, the places you visit most often trace out the mountain peaks. This is ''Metropolis-Hastings'': an algorithm that explores a probability distribution by proposing random moves and accepting or rejecting them, ultimately producing samples that reveal the distribution's shape without ever needing to see the whole landscape at once.
+
+!! The Core Insight
+
+Many problems in statistics and machine learning require sampling from a ''target distribution'' $p(x)$ that is too complex to sample from directly. You might know $p(x)$ only up to a normalizing constant — you can evaluate $p(x) \propto f(x)$ at any point, but you cannot compute the integral $\int f(x)\,dx$ needed to normalize it. This is exactly the situation in <<link "Bayesian Inference" "Bayesian Inference">><</link>>, where the posterior $p(\theta \mid D) \propto p(D \mid \theta)\,p(\theta)$ involves an intractable marginal likelihood.
+
+Metropolis-Hastings solves this by constructing a <<link "Markov Chains" "Markov Chains">><</link>> whose ''stationary distribution'' is exactly $p(x)$. Run the chain long enough, and the samples it generates are draws from $p(x)$ — no normalization required. The algorithm belongs to the family of <<link "MCMC" "MCMC">><</link>> methods, which are among the most important computational tools in modern statistics.
+
+The key insight: you only ever need the ''ratio'' $p(x')/p(x)$, and normalizing constants cancel in ratios. This means you can sample from distributions you cannot even write down in closed form.
+
+!! The Accept-Reject Mechanism
+
+The algorithm works in a simple loop:
+
+''1. Propose.'' From the current state $x_t$, draw a candidate $x'$ from a ''proposal distribution'' $q(x' \mid x_t)$. This proposal can be almost anything — a Gaussian centered at $x_t$, a uniform ball around $x_t$, or something more creative.
+
+''2. Compute the acceptance ratio.'' Calculate:
+
+$$\alpha = \min\!\left(1,\;\frac{p(x')\,q(x_t \mid x')}{p(x_t)\,q(x' \mid x_t)}\right)$$
+
+If the proposal is ''symmetric'' — meaning $q(x' \mid x_t) = q(x_t \mid x')$ — the $q$ terms cancel and this simplifies to the original Metropolis ratio: $\alpha = \min(1, p(x')/p(x_t))$. This symmetric case is the ''Metropolis algorithm''; the general case with asymmetric proposals is ''Metropolis-Hastings''.
+
+''3. Accept or reject.'' Draw $u \sim \text{Uniform}(0, 1)$. If $u < \alpha$, accept: set $x_{t+1} = x'$. Otherwise reject: set $x_{t+1} = x_t$ (stay put).
+
+Why does this work? Because the acceptance ratio is carefully designed to enforce ''detailed balance'' with respect to $p(x)$: the probability of being at $x$ and moving to $x'$ equals the probability of being at $x'$ and moving to $x$. Detailed balance guarantees that $p(x)$ is the stationary distribution of the chain. See <<link "Markov Chains" "Markov Chains">><</link>> for the theory.
+
+''Moves uphill'' (to regions of higher density) are always accepted. ''Moves downhill'' are accepted with probability proportional to the density ratio — occasional downhill moves prevent the chain from getting permanently trapped at a local mode and allow it to explore the full distribution.
+
+!! What the Math Is Actually Doing
+
+The algorithm constructs a transition kernel $T(x' \mid x)$ with two components:
+
+$$T(x' \mid x) = q(x' \mid x)\,\alpha(x, x') \quad \text{for } x' \neq x$$
+
+where $\alpha(x, x')$ is the acceptance probability. The probability of staying at $x$ absorbs all rejections:
+
+$$T(x \mid x) = 1 - \int q(x' \mid x)\,\alpha(x, x')\,dx'$$
+
+''Detailed balance'' is the key equation:
+
+$$p(x)\,T(x' \mid x) = p(x')\,T(x \mid x')$$
+
+Substituting the Hastings acceptance ratio:
+
+$$\alpha(x, x') = \min\!\left(1,\;\frac{p(x')\,q(x \mid x')}{p(x)\,q(x' \mid x)}\right)$$
+
+you can verify that detailed balance holds by checking two cases. If $p(x')\,q(x \mid x') \geq p(x)\,q(x' \mid x)$, then $\alpha(x, x') = 1$ and $\alpha(x', x) = \frac{p(x)\,q(x' \mid x)}{p(x')\,q(x \mid x')}$. Multiplying out both sides of the detailed balance equation confirms equality.
+
+The ''ergodic theorem'' for Markov chains then guarantees:
+
+$$\frac{1}{N}\sum_{t=1}^{N} g(x_t) \;\xrightarrow{N \to \infty}\; \mathbb{E}_{p}[g(x)]$$
+
+So time averages along the chain converge to expectations under $p$ — this is how we estimate posterior means, variances, and quantiles from <<link "Monte Carlo Methods" "Monte Carlo Methods">><</link>>.
+
+!! MCMC in Practice
+
+''Choosing the proposal distribution'' is the central practical decision. A Gaussian random walk $q(x' \mid x_t) = \mathcal{N}(x_t, \sigma^2 I)$ is the most common choice. The step size $\sigma$ controls everything:
+
+- ''Too small'': Nearly all proposals are accepted (high acceptance rate), but the chain takes tiny steps and explores slowly. Autocorrelation between samples is high, and effective sample size is low.
+- ''Too large'': The chain proposes dramatic jumps into low-density regions, most are rejected, and the chain barely moves. Again, exploration is slow.
+- ''Optimal'': For a $d$-dimensional Gaussian target, the optimal acceptance rate is approximately ''23.4%'' (the famous Roberts-Gelman-Gilks result). This provides a practical tuning target.
+
+''Burn-in'' refers to discarding the first $B$ samples before the chain has reached stationarity. The initial samples are influenced by the arbitrary starting point and do not represent $p(x)$. Diagnosing convergence — deciding when burn-in is over — is notoriously difficult. Common diagnostics include trace plots, the Gelman-Rubin $\hat{R}$ statistic (running multiple chains and comparing within-chain to between-chain variance), and effective sample size calculations.
+
+''Thinning'' means keeping every $k$th sample to reduce autocorrelation. While thinning produces more independent-looking samples, it discards information. Modern practice often favors keeping all samples and reporting effective sample size explicitly.
+
+For high-dimensional problems, Metropolis-Hastings with a random walk proposal struggles because acceptance rates drop exponentially with dimension. More sophisticated methods like ''Hamiltonian Monte Carlo'' (HMC) use gradient information to make informed proposals, and <<link "Gibbs Sampling" "Gibbs Sampling">><</link>> updates one coordinate at a time using conditional distributions.
+
+!! When Metropolis-Hastings Breaks Down
+
+''Multimodal targets with isolated modes'': When the target distribution has well-separated peaks with deep valleys of near-zero density between them, the chain can get trapped in a single mode for an impractically long time. The proposal must cross the valley — a low-density region where proposals are almost always rejected — to reach the other mode. The chain //will// eventually cross (ergodicity guarantees it), but "eventually" might mean billions of iterations. Parallel tempering, which runs chains at different "temperatures" and swaps states between them, is one remedy.
+
+''High-dimensional parameter spaces'': In $d$ dimensions, a random walk proposal must navigate a $d$-dimensional space, and the optimal step size shrinks as $O(d^{-1/2})$. The chain needs $O(d)$ steps to produce one effectively independent sample, making plain Metropolis-Hastings impractical for problems with hundreds or thousands of parameters. This is the primary motivation for gradient-based methods like HMC, which scale as $O(d^{5/4})$ instead of $O(d^2)$.
+
+''Poor proposal tuning leading to misleading convergence'': If the step size is badly calibrated, the chain may appear converged — trace plots look stationary, autocorrelation seems reasonable — but it has actually explored only a small fraction of the support. This is especially dangerous when the target has heavy tails or elongated correlations that the proposal does not match. The chain "converges" to a wrong answer with convincing-looking diagnostics. Running multiple chains from dispersed starting points (and computing $\hat{R}$) is the primary defense.
+
+!! Technical Details
+
+''History'': The Metropolis algorithm was introduced by Nicholas Metropolis, Arianna and Marshall Rosenbluth, and Augusta and Edward Teller in 1953 for simulating equations of state of chemical systems on the MANIAC computer at Los Alamos. W. K. Hastings generalized it to asymmetric proposals in 1970. The algorithm is consistently ranked among the most important algorithms of the 20th century.
+
+''Reversible vs. irreversible chains'': Standard Metropolis-Hastings produces a reversible chain (detailed balance). Recent research shows that ''non-reversible'' MCMC methods — which break detailed balance while preserving the correct stationary distribution — can mix faster by avoiding the diffusive random-walk behavior of reversible chains.
+
+''Adaptive Metropolis'': The proposal covariance can be adapted during the run based on the sample history: $\Sigma_t = (2.38^2/d)\,\hat{\Sigma}_t + \epsilon I$, where $\hat{\Sigma}_t$ is the empirical covariance of samples so far. This auto-tunes the proposal but requires care to preserve ergodicity (adaptation must diminish over time).
+
+''Metropolis-adjusted Langevin algorithm (MALA)'': Uses gradient information to bias proposals toward high-density regions: $x' = x_t + (\tau/2)\nabla \log p(x_t) + \sqrt{\tau}\,\epsilon$, with $\epsilon \sim \mathcal{N}(0, I)$. The Metropolis acceptance step corrects for discretization error, combining the efficiency of gradient-based moves with the exactness of MCMC.
+
+''Independence sampler'': A special case where $q(x' \mid x) = q(x')$ — proposals ignore the current state entirely. Works well only when $q$ closely approximates $p$; otherwise acceptance rates collapse.
+
+''Theoretical convergence rate'': For a $d$-dimensional Gaussian target with random walk proposals optimally tuned, mixing time scales as $O(d)$. For MALA, it scales as $O(d^{1/3})$. For HMC, it scales as $O(d^{1/4})$. These scalings motivate the use of gradient-based samplers in high dimensions.
+
+!! Quiz
+
+<span id="mh-q1">''1. What problem does Metropolis-Hastings solve?''
+
+A. Finding the maximum of a probability distribution
+B. Sampling from a distribution known only up to a normalizing constant
+C. Computing exact posterior distributions analytically
+D. Optimizing neural network weights
+
+<<button "A">><<replace "#mh-q1">>Incorrect. Finding the maximum is //optimization// (e.g., gradient ascent). Metropolis-Hastings is about //sampling// — generating representative points from the entire distribution, not just its peak.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q1">>Correct. Metropolis-Hastings constructs a Markov chain whose stationary distribution is the target $p(x)$, requiring only the ability to evaluate $p(x)$ up to a constant. The normalizing constant cancels in the acceptance ratio.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q1">>Incorrect. If you could compute the posterior analytically, you would not need MCMC at all. Metropolis-Hastings is precisely for the case where analytic computation is intractable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q1">>Incorrect. Neural network optimization uses gradient descent, not MCMC sampling. Metropolis-Hastings generates samples from probability distributions, which is a fundamentally different task.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q2">''2. In the Metropolis algorithm (symmetric proposal), the acceptance ratio is:''
+
+A. $\alpha = p(x') + p(x_t)$
+B. $\alpha = \min(1,\; p(x') / p(x_t))$
+C. $\alpha = p(x') \cdot p(x_t)$
+D. $\alpha = |p(x') - p(x_t)|$
+
+<<button "A">><<replace "#mh-q2">>Incorrect. Adding densities has no probabilistic meaning here. The acceptance ratio uses a //ratio// of densities: $\alpha = \min(1, p(x')/p(x_t))$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q2">>Correct. For a symmetric proposal where $q(x'|x) = q(x|x')$, the proposal terms cancel and the acceptance ratio reduces to $\alpha = \min(1, p(x')/p(x_t))$. Moves to higher density are always accepted; moves to lower density are accepted proportionally.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q2">>Incorrect. Multiplying densities would not produce a valid acceptance probability. The correct formula is $\alpha = \min(1, p(x')/p(x_t))$ — a ratio, not a product.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q2">>Incorrect. The absolute difference of densities is not used. The acceptance ratio is $\alpha = \min(1, p(x')/p(x_t))$, which is a ratio clamped to $[0, 1]$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q3">''3. Why does the normalizing constant of $p(x)$ not matter for Metropolis-Hastings?''
+
+A. The algorithm computes it automatically during burn-in.
+B. It cancels in the acceptance ratio $p(x')/p(x_t)$.
+C. The proposal distribution provides the normalization.
+D. The algorithm only works with already-normalized distributions.
+
+<<button "A">><<replace "#mh-q3">>Incorrect. Metropolis-Hastings never computes the normalizing constant at any stage. The entire point is that it is not needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q3">>Correct. If $p(x) = f(x)/Z$, then $p(x')/p(x_t) = f(x')/f(x_t)$ — the constant $Z$ cancels. This is why Metropolis-Hastings can sample from Bayesian posteriors where the marginal likelihood is intractable.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q3">>Incorrect. The proposal distribution $q$ is separate from the target $p$. It does not normalize $p$ — rather, the normalizing constant simply cancels in the acceptance ratio.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q3">>Incorrect. The opposite is true — Metropolis-Hastings is specifically designed for unnormalized distributions. If $p$ were already normalized, you might use simpler methods.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q4">''4. What is the approximately optimal acceptance rate for a random walk Metropolis in high dimensions?''
+
+A. 100% — accept every proposal
+B. 50%
+C. 23.4%
+D. 1%
+
+<<button "A">><<replace "#mh-q4">>Incorrect. A 100% acceptance rate means the step size is too small — the chain takes tiny steps, explores slowly, and samples are highly autocorrelated. Some rejections are necessary for efficiency.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q4">>Incorrect. While 50% might seem like a natural balance, the theoretical optimum for high-dimensional targets is lower: approximately 23.4%, derived by Roberts, Gelman, and Gilks (1997).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q4">>Correct. The Roberts-Gelman-Gilks result shows that for $d$-dimensional Gaussian targets, the optimal acceptance rate is approximately 0.234. This serves as a practical tuning guideline for random walk Metropolis.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q4">>Incorrect. A 1% acceptance rate means the step size is far too large — the chain proposes wild jumps that are almost always rejected, and it barely moves. The optimal rate is about 23.4%.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q5">''5. What mathematical property guarantees that the chain's stationary distribution is the target $p(x)$?''
+
+A. The central limit theorem
+B. Detailed balance: $p(x)\,T(x'|x) = p(x')\,T(x|x')$
+C. The law of large numbers
+D. Jensen's inequality
+
+<<button "A">><<replace "#mh-q5">>Incorrect. The CLT describes the distribution of sample means, not the convergence of Markov chains to their stationary distribution. The relevant property is detailed balance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q5">>Correct. Detailed balance ensures that $p(x)$ is invariant under the transition kernel $T$. The acceptance ratio is specifically designed so that $p(x)\,T(x'|x) = p(x')\,T(x|x')$ holds, making $p$ the stationary distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q5">>Incorrect. The law of large numbers justifies using sample averages to estimate expectations, but the fundamental guarantee that the chain targets $p(x)$ comes from detailed balance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q5">>Incorrect. Jensen's inequality relates convex functions to expectations. The property ensuring correct stationary distribution is detailed balance: $p(x)\,T(x'|x) = p(x')\,T(x|x')$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q6">''6. What is "burn-in" in the context of MCMC?''
+
+A. The computational cost of evaluating the target density
+B. Discarding initial samples before the chain has reached stationarity
+C. The process of normalizing the target distribution
+D. Running multiple chains simultaneously
+
+<<button "A">><<replace "#mh-q6">>Incorrect. Density evaluation cost is a computational concern, but it is not what burn-in refers to. Burn-in is about discarding early, non-representative samples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q6">>Correct. The chain starts from an arbitrary point that may be far from the high-density region of $p(x)$. The initial samples reflect the starting point, not the target. Burn-in discards these transient samples so that the retained samples better approximate $p$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q6">>Incorrect. Metropolis-Hastings never normalizes the target — that is precisely its advantage. Burn-in refers to discarding early samples before convergence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q6">>Incorrect. Running multiple chains is a convergence diagnostic strategy (used for computing $\hat{R}$), not burn-in itself. Burn-in is the practice of discarding early samples from each chain.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q7">''7. Why does random walk Metropolis-Hastings struggle in high dimensions?''
+
+A. The acceptance ratio cannot be computed in high dimensions.
+B. The optimal step size shrinks as $O(d^{-1/2})$, requiring $O(d)$ steps per effective sample.
+C. Detailed balance does not hold in more than 3 dimensions.
+D. The proposal distribution must be uniform, which is impossible in high dimensions.
+
+<<button "A">><<replace "#mh-q7">>Incorrect. The acceptance ratio is a simple scalar computation regardless of dimension. The difficulty is that most proposed moves land in low-density regions and are rejected.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q7">>Correct. As dimension $d$ grows, the step size must shrink to maintain a reasonable acceptance rate, and the chain diffuses slowly through the space. The number of steps to produce one independent sample scales as $O(d)$, making it impractical for large $d$. This motivates gradient-based methods like HMC.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q7">>Incorrect. Detailed balance holds in any number of dimensions — it is a property of the transition kernel, not of the dimensionality. The problem is slow mixing due to the random walk's diffusive behavior.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q7">>Incorrect. The proposal can be any distribution, not just uniform. A Gaussian random walk is the most common choice. The problem is that //any// isotropic random walk mixes slowly in high dimensions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="mh-q8">''8. How does the Hastings extension generalize the original Metropolis algorithm?''
+
+A. It allows the use of gradient information in proposals.
+B. It permits asymmetric proposal distributions by including $q(x_t|x')/q(x'|x_t)$ in the acceptance ratio.
+C. It removes the need for a proposal distribution entirely.
+D. It guarantees convergence in a fixed number of steps.
+
+<<button "A">><<replace "#mh-q8">>Incorrect. Gradient-based proposals are used in methods like MALA and HMC, which are separate extensions. Hastings's contribution was handling asymmetric proposals by correcting the acceptance ratio.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#mh-q8">>Correct. The original Metropolis algorithm assumed a symmetric proposal $q(x'|x) = q(x|x')$, so the proposal terms canceled. Hastings showed that for asymmetric proposals, including the ratio $q(x_t|x')/q(x'|x_t)$ in $\alpha$ restores detailed balance. This opens up a much wider class of proposal strategies.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#mh-q8">>Incorrect. Metropolis-Hastings still requires a proposal distribution. The Hastings extension is about //generalizing// which proposals are valid, not removing them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#mh-q8">>Incorrect. No MCMC method guarantees convergence in a fixed number of steps. Convergence is asymptotic. Hastings's contribution was extending the algorithm to asymmetric proposal distributions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

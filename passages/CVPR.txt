@@ -1,0 +1,146 @@
+<<include "Header">>
+
+! CVPR — Computer Vision and Pattern Recognition
+
+<img src="assets/cvpr.svg" alt="CVPR landmark papers timeline" width="800">
+
+Imagine a single annual gathering where the researchers who taught machines to see — to recognize faces, drive cars, and generate photorealistic images — come together to share what they have discovered. That is ''CVPR'', the Conference on Computer Vision and Pattern Recognition. It is the largest and most influential venue in [[Computer Vision|Computer Vision]], and arguably the most impactful conference in all of [[Deep Learning|Deep Learning]]. If a breakthrough changes how machines interpret the visual world, there is a strong chance it was first presented at CVPR.
+
+!! The Core Insight
+
+CVPR became the dominant computer vision venue because it sits at a unique intersection: //rigorous enough// for academic credibility, //applied enough// to attract massive industry investment, and //large enough// to function as the central marketplace of ideas for an entire field. While other conferences carved out niches — theory here, systems there — CVPR swallowed the whole pipeline from low-level pixel processing to high-level scene understanding. Its timing was also fortunate: the conference was already well-established when the deep learning revolution hit in 2012, and it became the natural home for the flood of [[Neural Networks|Neural Networks]]-based vision research that followed. Today, CVPR acceptance is considered a gold standard on any CV researcher's publication record.
+
+!! Landmark Papers
+
+Several papers presented at CVPR (or its close sibling venues) fundamentally reshaped the field:
+
+- ''[[AlexNet|AlexNet]] (2012):'' The paper that launched the deep learning era. By winning the [[ImageNet|ImageNet]] Large Scale Visual Recognition Challenge with a [[CNN|CNN]] trained on GPUs, Krizhevsky, Sutskever, and Hinton demonstrated that deep networks could dramatically outperform hand-engineered features. Every major trend in computer vision since traces back to this moment.
+
+- ''ResNet (2015/2016):'' He et al. introduced residual connections that allowed networks to scale to 152 layers and beyond. ResNet won the ImageNet challenge with superhuman performance and its skip-connection architecture became the default backbone for nearly all subsequent vision models.
+
+- ''YOLO (2016):'' Redmon et al. reframed [[Object Detection|Object Detection]] as a single regression problem, achieving real-time detection at 45 frames per second. YOLO proved that speed and accuracy were not mutually exclusive, enabling practical deployment in robotics, surveillance, and autonomous driving.
+
+- ''Mask R-CNN (2017):'' He et al. extended object detection to instance-level [[Image Segmentation|Image Segmentation]], cleanly separating every individual object in an image. It became the backbone of countless applied vision systems.
+
+- ''[[Vision Transformers|Vision Transformers]] (ViT, 2020-2021):'' Dosovitskiy et al. showed that the transformer architecture — originally designed for language — could match or beat CNNs on image classification when trained on sufficient data. This sparked a paradigm shift away from convolutions.
+
+- ''SAM — Segment Anything Model (2023):'' Kirillov et al. at Meta AI introduced a foundation model for segmentation that could segment //any// object in //any// image with zero-shot prompting, demonstrating that foundation model thinking had arrived in vision.
+
+!! What Makes CVPR Unique
+
+''Scale:'' CVPR is the largest computer vision conference and one of the largest machine learning venues overall. Recent editions have drawn over 10,000 attendees, with thousands of paper submissions. The 2023 edition received over 9,000 submissions.
+
+''Review process:'' CVPR uses double-blind peer review with area chairs coordinating reviewer panels. Papers go through a rebuttal phase where authors can respond to reviewer concerns before final decisions. Despite this rigor, the sheer volume means the process is imperfect.
+
+''Acceptance rates:'' Acceptance rates have tightened over time — from roughly 30% in the early 2000s to around 20-25% in recent years. A CVPR acceptance remains highly competitive.
+
+''Workshop ecosystem:'' CVPR hosts dozens of workshops and tutorials covering specialized topics: autonomous driving, medical imaging, [[3D Point Clouds|3D Point Clouds]], video understanding, and more. Many important ideas first surface in workshop papers before appearing as full conference submissions.
+
+''Industry presence:'' Major technology companies — Google, Meta, Microsoft, NVIDIA, Apple — are among the top publishers at CVPR and invest heavily in sponsorship. The exhibition hall resembles a tech trade show as much as an academic conference.
+
+!! The CVPR Ecosystem
+
+CVPR sits at the center of the ''Big Three'' computer vision conferences:
+
+- ''CVPR'' (annual, typically June) — the largest and most prestigious
+- ''ICCV'' (International Conference on Computer Vision, biennial) — considered equally prestigious per-paper, but smaller
+- ''ECCV'' (European Conference on Computer Vision, biennial) — the European counterpart, alternating years with ICCV
+
+Together, these three venues publish the majority of top-tier computer vision research. CVPR also maintains close ties to [[NeurIPS|NeurIPS]] and ICML, though those conferences cover machine learning more broadly. A researcher working on [[Generative Adversarial Networks|Generative Adversarial Networks]] for image synthesis or [[Transfer Learning|Transfer Learning]] for visual features might publish at any of these venues.
+
+The ''ImageNet Large Scale Visual Recognition Challenge (ILSVRC)'', hosted at CVPR from 2010 to 2017, was the competition that catalyzed the deep learning revolution. When [[AlexNet|AlexNet]] crushed the competition in 2012, it was at an [[ImageNet|ImageNet]] workshop co-located with ECCV — but the resulting wave of research landed squarely at CVPR.
+
+Notable ''Best Paper Award'' winners include Deformable Parts Models (2010), ResNet (2016), Mask R-CNN (2017), and several foundational works in 3D vision, generative modeling, and neural rendering.
+
+!! When Conference Culture Breaks Down
+
+''1. The review lottery:'' With thousands of submissions and a limited reviewer pool, paper acceptance can feel stochastic. Studies have shown that re-submitting the same paper to the same conference could yield a different outcome, and top researchers openly acknowledge the randomness involved. Borderline papers live or die based on reviewer assignment rather than scientific merit.
+
+''2. The compute arms race:'' As state-of-the-art results increasingly require massive computational resources — thousands of GPU-hours, proprietary datasets, billion-parameter models — CVPR risks becoming a venue where only well-funded industry labs and elite universities can compete. Researchers at smaller institutions may be systematically disadvantaged, narrowing the diversity of ideas.
+
+''3. Benchmark gaming:'' The pressure to show state-of-the-art numbers on standard benchmarks (ImageNet, COCO, ADE20K) can distort research priorities. Teams optimize for marginal gains on established metrics rather than pursuing genuinely novel ideas. This creates a culture of incremental improvement where a 0.3% accuracy gain is publishable, but a creative approach that does not beat the leaderboard is rejected.
+
+!! Technical Details
+
+''Founded:'' 1983, making it one of the oldest computer vision conferences. Early editions were small workshops; the conference grew substantially through the 1990s and exploded after 2012.
+
+''Sponsor:'' IEEE Computer Society, often in association with the Computer Vision Foundation (CVF). Proceedings are published through IEEE and are freely available via the CVF Open Access repository.
+
+''Acceptance rates by era:''
+- Early 2000s: ~30%
+- 2010-2015: ~25-30%
+- 2016-2020: ~22-25%
+- 2021-2025: ~20-25% (with submission counts exceeding 9,000)
+
+''Typical locations:'' Rotates among major US cities (Las Vegas, New Orleans, Seattle, Nashville, Salt Lake City) with occasional international venues.
+
+''Key associated workshops:'' CVPR Workshops (CVPR-W) cover specialized tracks including action recognition, face analysis, autonomous vehicles, medical imaging, low-level vision, and efficient inference. Workshop papers are separately peer-reviewed and published in the proceedings.
+
+''h-index:'' CVPR consistently ranks among the top publication venues by h-index and citation impact across all of computer science, not just vision.
+
+!! Quiz
+
+<div id="q1">''1. In what year was CVPR first held?''
+<<button "A) 1975">><<replace "#q1">>That is too early. CVPR was founded in 1983.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 1983">><<replace "#q1">>Correct! CVPR was first held in 1983, making it one of the oldest computer vision conferences.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) 1998">><<replace "#q1">>That is too late. CVPR was already well-established by 1998.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 2005">><<replace "#q1">>No, CVPR had been running for over two decades by 2005.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. Which paper is widely credited with launching the deep learning revolution at the ImageNet challenge?''
+<<button "A) ResNet">><<replace "#q2">>ResNet came later in 2015. The deep learning revolution started with AlexNet in 2012.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) VGGNet">><<replace "#q2">>VGGNet was important but came after the initial breakthrough. AlexNet in 2012 was the catalyst.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) AlexNet">><<replace "#q2">>Correct! AlexNet by Krizhevsky, Sutskever, and Hinton won the 2012 ImageNet challenge by a huge margin, demonstrating the power of deep CNNs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) GoogLeNet">><<replace "#q2">>GoogLeNet came in 2014. AlexNet in 2012 was the paper that started it all.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. Which three conferences make up the "Big Three" of computer vision?''
+<<button "A) CVPR, NeurIPS, ICML">><<replace "#q3">>NeurIPS and ICML are general machine learning conferences. The Big Three in vision are CVPR, ICCV, and ECCV.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) CVPR, ICCV, ECCV">><<replace "#q3">>Correct! CVPR, ICCV (International Conference on Computer Vision), and ECCV (European Conference on Computer Vision) form the Big Three of computer vision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) CVPR, AAAI, IJCAI">><<replace "#q3">>AAAI and IJCAI are general AI conferences. The Big Three in vision are CVPR, ICCV, and ECCV.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) CVPR, SIGGRAPH, ICLR">><<replace "#q3">>SIGGRAPH focuses on graphics and ICLR on representation learning. The Big Three are CVPR, ICCV, and ECCV.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What innovation did YOLO introduce to object detection?''
+<<button "A) Multi-scale feature pyramids">><<replace "#q4">>Feature pyramids came from FPN. YOLO's key insight was framing detection as a single regression problem for real-time speed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Anchor boxes">><<replace "#q4">>Anchor boxes were used in Faster R-CNN. YOLO reframed detection as a single-pass regression problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Framing detection as a single regression problem for real-time speed">><<replace "#q4">>Correct! YOLO treated the entire detection pipeline as one regression from image pixels to bounding box coordinates and class probabilities, achieving real-time performance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Using transformers instead of CNNs">><<replace "#q4">>YOLO used CNNs. Its innovation was treating detection as a single regression problem rather than a multi-stage pipeline.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What does SAM (2023) stand for and what does it do?''
+<<button "A) Self-Attention Mechanism — improves transformer efficiency">><<replace "#q5">>That is not SAM. SAM is the Segment Anything Model, a foundation model for image segmentation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Segment Anything Model — a foundation model for zero-shot image segmentation">><<replace "#q5">>Correct! SAM (Segment Anything Model) from Meta AI can segment any object in any image with zero-shot prompting, representing the arrival of foundation models in computer vision.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Spatial Aggregation Module — combines multi-scale features">><<replace "#q5">>That is not SAM. SAM is the Segment Anything Model for zero-shot image segmentation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Supervised Alignment Method — aligns vision and language">><<replace "#q5">>That is not SAM. SAM is the Segment Anything Model, a foundation model for segmentation.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What is the approximate acceptance rate at recent CVPR conferences?''
+<<button "A) 5-10%">><<replace "#q6">>That is lower than CVPR's rate. Recent acceptance rates have been around 20-25%.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 20-25%">><<replace "#q6">>Correct! Recent CVPR acceptance rates have hovered around 20-25%, though submission counts have grown enormously.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) 40-50%">><<replace "#q6">>That is too high. CVPR is quite selective, with recent acceptance rates around 20-25%.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 60-70%">><<replace "#q6">>That is far too high. CVPR is highly competitive with acceptance rates around 20-25%.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. Which organization sponsors CVPR?''
+<<button "A) ACM">><<replace "#q7">>ACM sponsors conferences like SIGGRAPH and CHI. CVPR is sponsored by the IEEE Computer Society.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) IEEE Computer Society">><<replace "#q7">>Correct! CVPR is sponsored by the IEEE Computer Society, often in association with the Computer Vision Foundation (CVF).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) AAAI">><<replace "#q7">>AAAI runs its own conference. CVPR is sponsored by the IEEE Computer Society.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Google DeepMind">><<replace "#q7">>No industry lab sponsors CVPR. It is sponsored by the IEEE Computer Society.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. What key architectural innovation did ResNet introduce?''
+<<button "A) Dropout layers">><<replace "#q8">>Dropout was introduced earlier by Hinton et al. ResNet's key innovation was residual (skip) connections.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Batch normalization">><<replace "#q8">>Batch normalization was introduced by Ioffe and Szegedy. ResNet's innovation was residual connections.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Inception modules">><<replace "#q8">>Inception modules were from GoogLeNet. ResNet introduced residual (skip) connections.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Residual (skip) connections">><<replace "#q8">>Correct! ResNet introduced skip connections that allowed gradients to flow through shortcut paths, enabling training of networks with over 100 layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q9">''9. Which of these is a commonly cited failure mode of the CVPR review process?''
+<<button "A) Papers are reviewed in single-blind fashion">><<replace "#q9">>CVPR actually uses double-blind review. A common criticism is the review lottery — acceptance can feel stochastic due to reviewer assignment variability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The review lottery — acceptance outcomes can depend on random reviewer assignment">><<replace "#q9">>Correct! Studies have shown that the same paper could receive different decisions depending on which reviewers are assigned, making acceptance feel partly random.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Only industry papers are accepted">><<replace "#q9">>That is not true. Both academic and industry papers are accepted, though compute requirements can disadvantage smaller labs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Papers must be at least 20 pages">><<replace "#q9">>There is no such requirement. A common criticism is the review lottery due to variable reviewer quality and assignment.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

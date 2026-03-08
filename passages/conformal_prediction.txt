@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Conformal Prediction
+
+<img src="assets/conformal_prediction.svg" alt="Diagram illustrating conformal prediction bands with guaranteed coverage around a model prediction curve" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you ask a weather forecaster for tomorrow's temperature. A point prediction of 72°F is precise but almost certainly wrong. A prediction of "somewhere between absolute zero and the surface of the sun" is guaranteed correct but useless. ''Conformal prediction'' is the framework that finds the sweet spot: it wraps //any// predictive model — neural network, random forest, linear regression, anything — in a calibration layer that produces prediction sets with a mathematically ''guaranteed'' coverage rate. If you ask for 90% coverage, at least 90% of future observations will fall inside the prediction set. No distributional assumptions. No retraining. No trust required in the model's own confidence scores.
+
+---
+
+!! The Core Insight
+
+Most models produce predictions without honest error bars. A neural network's softmax outputs look like probabilities but are often wildly miscalibrated — a model that says "95% confident" may be wrong 30% of the time. <<link "Model Calibration" "Model Calibration">><</link>> techniques try to fix this, but they typically require distributional assumptions or only hold approximately. Conformal prediction sidesteps the calibration problem entirely by making a much weaker assumption: the data points are ''exchangeable'' — roughly, their joint distribution does not depend on the order in which they appear. This is weaker than assuming independence and is satisfied by i.i.d. data and many other practical settings.
+
+The method works by using a held-out ''calibration set'' to measure how wrong the model is on data it has not seen. These errors — called ''nonconformity scores'' — are sorted, and a threshold is chosen at the appropriate quantile. At test time, the prediction set for a new input is the collection of all labels whose nonconformity score falls below that threshold. The coverage guarantee follows directly from the exchangeability assumption and the properties of order statistics — it is a finite-sample result, not an asymptotic one. This means it holds for any sample size, any model, and any data distribution.
+
+The elegance is that conformal prediction treats the underlying model as a complete black box. Whether the model is a carefully tuned transformer or a coin flip, the coverage guarantee holds. The model's quality affects only the ''size'' of the prediction sets — a better model produces tighter sets — never the validity of the coverage.
+
+---
+
+!! From Scores to Sets
+
+The mechanics of conformal prediction are surprisingly simple. You begin with a pre-trained model $\hat{f}$ and a calibration dataset $\{(X_1, Y_1), \ldots, (X_n, Y_n)\}$ that the model has never seen. You define a ''nonconformity score'' function $s(X, Y)$ that measures how poorly the model's prediction for input $X$ matches the true label $Y$. Common choices include the absolute residual $|Y - \hat{f}(X)|$ for regression and $1 - \hat{f}(X)_Y$ (one minus the predicted probability of the true class) for classification.
+
+You compute the score for every calibration point: $s_i = s(X_i, Y_i)$ for $i = 1, \ldots, n$. You then find the threshold $\hat{q}$ as the $\lceil (1 - \alpha)(n + 1) \rceil / n$ quantile of the scores, where $\alpha$ is the desired miscoverage rate (e.g., $\alpha = 0.1$ for 90% coverage). For a new test input $X_{n+1}$, the prediction set is:
+
+$$C(X_{n+1}) = \{ y : s(X_{n+1}, y) \leq \hat{q} \}$$
+
+For regression with absolute residuals, this becomes the interval $[\hat{f}(X_{n+1}) - \hat{q},\ \hat{f}(X_{n+1}) + \hat{q}]$. For classification, it is the set of all classes whose predicted probability exceeds $1 - \hat{q}$. The key theorem guarantees:
+
+$$P(Y_{n+1} \in C(X_{n+1})) \geq 1 - \alpha$$
+
+This holds in finite samples under only the exchangeability assumption. No assumptions about the model, the dimensionality of the data, or the shape of the distribution are needed.
+
+---
+
+!! What the Math Is Actually Doing
+
+The coverage guarantee rests on a single elegant argument. If $(X_1, Y_1), \ldots, (X_{n+1}, Y_{n+1})$ are exchangeable, then the scores $s_1, \ldots, s_{n+1}$ are also exchangeable. By symmetry, the rank of $s_{n+1}$ among all $n + 1$ scores is uniformly distributed over $\{1, 2, \ldots, n+1\}$. Therefore:
+
+$$P\!\left(s_{n+1} \leq \hat{q}\right) = P\!\left(\text{rank of } s_{n+1} \leq \lceil (1-\alpha)(n+1) \rceil\right) \geq 1 - \alpha$$
+
+This is a combinatorial fact about ranks — it requires no calculus, no limit theorems, and no parametric assumptions. The proof is essentially one line once exchangeability is established.
+
+The ''split conformal'' method described above sacrifices some calibration data. ''Full conformal prediction'' avoids this by retraining the model $n+1$ times (once for each possible label of the test point), which is exact but computationally prohibitive for large models. ''Cross-conformal'' and ''jackknife+'' methods offer intermediate trade-offs, using <<link "Cross Validation" "Cross Validation">><</link>> folds to avoid both data waste and full retraining.
+
+The ''adaptive'' variant replaces the fixed-width interval with locally varying sets. In ''conformalized quantile regression'', the underlying model is a <<link "Quantile Regression" "Quantile Regression">><</link>> model that predicts the $\alpha/2$ and $1 - \alpha/2$ quantiles. The nonconformity score becomes $\max(\hat{q}_{\alpha/2}(X) - Y,\ Y - \hat{q}_{1-\alpha/2}(X))$, and the conformal correction adjusts these quantile estimates to restore exact coverage. This produces prediction intervals that are wider where the model is uncertain and narrower where it is confident — ''adaptive'' rather than constant-width.
+
+The relationship to <<link "Confidence Intervals" "Confidence Intervals">><</link>> is important: traditional confidence intervals make parametric assumptions and provide coverage over repeated sampling of the data. Conformal prediction sets provide ''marginal coverage'' over a single new test point, with no parametric assumptions. They are distribution-free but not assumption-free — exchangeability is the price of admission.
+
+---
+
+!! Practical Deployment
+
+Conformal prediction is increasingly used in high-stakes applications. In medical diagnosis, a conformal classifier might output $\{\text{benign}, \text{malignant}\}$ when the model is unsure, rather than committing to a single label with false confidence. In drug discovery, conformal regression intervals around predicted binding affinities tell chemists which predictions to trust. In autonomous driving, conformal sets around object detections quantify localization uncertainty.
+
+The practical workflow is straightforward: (1) train any model on training data; (2) set aside a calibration set (typically 500–5000 points suffice); (3) compute nonconformity scores on the calibration set; (4) find the quantile threshold; (5) at test time, output prediction sets using that threshold. The entire calibration step is fast — it requires one forward pass through the calibration data plus sorting.
+
+A critical practical consideration is that conformal prediction provides ''marginal'' coverage — averaged over the test distribution — not ''conditional'' coverage for each subgroup. A 90% conformal predictor might have 99% coverage on easy examples and 70% coverage on hard ones, while averaging to 90% overall. This gap between marginal and conditional coverage is a known limitation. Mondrian conformal prediction addresses this partially by calibrating separately within predefined groups, ensuring coverage within each group at the cost of slightly wider prediction sets.
+
+The prediction set size is a natural measure of model quality: a perfect model produces singleton prediction sets (or zero-width intervals), while a random model produces sets containing nearly all labels. Monitoring set sizes in production reveals when the model is struggling — large sets signal high uncertainty even when the coverage guarantee still holds.
+
+---
+
+!! When Conformal Prediction Breaks Down
+
+''Exchangeability violation (distribution shift):'' The coverage guarantee is void the moment exchangeability fails. If the calibration data comes from one distribution but test data comes from another — as happens in deployment drift, covariate shift, or temporal non-stationarity — conformal prediction can silently produce sets with coverage far below the nominal level. The method has no built-in mechanism to detect or correct for distribution shift. Weighted conformal prediction and online conformal methods address this partially, but they require explicit knowledge of the shift mechanism or sequential updating, adding complexity.
+
+''Marginal vs. conditional coverage gap:'' The guarantee is marginal — averaged over the full test distribution. For any specific subpopulation or difficult region of input space, actual coverage can be arbitrarily bad. A medical diagnostic system with 90% marginal coverage might have only 60% coverage on rare diseases that dominate the tails. Achieving approximate conditional coverage requires additional assumptions (smoothness of the conditional distribution) and more sophisticated algorithms, and exact conditional coverage is provably impossible without distributional assumptions. <<link "Hypothesis Testing" "Hypothesis Testing">><</link>> faces a parallel challenge: guarantees that hold marginally may fail conditionally.
+
+''Uninformative sets from weak models:'' Conformal prediction guarantees coverage regardless of model quality, but a weak model pays for this guarantee with enormous prediction sets. A random classifier at 90% coverage on a 10-class problem will output prediction sets containing 9 of 10 classes — technically valid but useless. The framework cannot rescue a bad model; it can only honestly report how bad the model is via set size. This is a feature, not a bug, but practitioners must understand that conformal prediction amplifies model quality into set informativeness without improving the model itself.
+
+---
+
+!! Technical Details
+
+''Origins:'' Conformal prediction was introduced by Vladimir Vovk, Alex Gammerman, and Glenn Shafer in the early 2000s, building on earlier work on transductive inference and algorithmic randomness. The comprehensive reference is Vovk, Gammerman, and Shafer, //Algorithmic Learning in a Random World// (2005, second edition 2022). The split conformal method was popularized by Lei et al. (2018), //Distribution-Free Predictive Inference for Regression//, JASA.
+
+''Nonconformity score design'' is the primary lever for practical performance. For regression, common scores include the absolute residual $|Y - \hat{f}(X)|$, the normalized residual $|Y - \hat{f}(X)| / \hat{\sigma}(X)$ (where $\hat{\sigma}$ estimates local variability), and the conformalized quantile regression score. For classification, scores include $1 - \hat{f}(X)_Y$ (inverse probability), the ''adaptive prediction set'' (APS) score that accumulates sorted class probabilities, and the ''regularized APS'' (RAPS) score that penalizes large prediction sets.
+
+''Coverage is marginally exact'' in the sense that $P(Y_{n+1} \in C(X_{n+1})) \geq 1 - \alpha$ and $P(Y_{n+1} \in C(X_{n+1})) \leq 1 - \alpha + 1/(n+1)$. The gap of $1/(n+1)$ means that with even a modest calibration set ($n = 999$), the actual coverage is between $1 - \alpha$ and $1 - \alpha + 0.001$. This finite-sample tightness is remarkable and distinguishes conformal prediction from asymptotic methods.
+
+''Conformal prediction under covariate shift'' can be handled by ''weighted conformal prediction'': if the likelihood ratio $w(X) = p_{\text{test}}(X) / p_{\text{cal}}(X)$ is known, the quantile is computed using weighted ranks. This preserves the coverage guarantee under the shifted distribution but requires knowledge of the density ratio, which is itself a challenging estimation problem.
+
+''Connections to other frameworks:'' Conformal prediction sets are related to <<link "Confidence Intervals" "Confidence Intervals">><</link>> but are distinct: confidence intervals target a fixed parameter, while prediction sets target a future observable. The Bayesian analogue is the ''credible interval'', which requires a prior. Tolerance intervals from classical statistics provide similar guarantees but assume parametric models. Conformal prediction is the distribution-free, finite-sample member of this family.
+
+''Computational considerations:'' Split conformal requires a single pass over the calibration set (cost: $O(n \log n)$ for sorting). Full conformal requires retraining the model $O(n \cdot |Y|)$ times, where $|Y|$ is the label space size. For classification with $K$ classes, the cost is $O(nK)$ model evaluations. Jackknife+ and CV+ offer intermediate costs of $O(K)$ model trainings (one per fold), with slightly wider prediction sets than full conformal but much better than split conformal in data efficiency.
+
+---
+
+!! Quiz
+
+<span id="cp-q1">What assumption does conformal prediction require for its coverage guarantee?</span>
+A. The data must be normally distributed
+B. The model must be well-calibrated
+C. The data points must be exchangeable
+D. The model must be trained with maximum likelihood
+<<button "A">><<replace "#cp-q1">>Incorrect. Conformal prediction is distribution-free — it makes no assumption about normality or any other distributional shape. The only requirement is exchangeability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q1">>Incorrect. One of the main strengths of conformal prediction is that it works even when the model is poorly calibrated. It treats the model as a black box.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q1">>Correct! Exchangeability — roughly, that the joint distribution of the data does not depend on ordering — is the sole assumption. This is weaker than independence and is satisfied by i.i.d. data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q1">>Incorrect. Conformal prediction is agnostic to how the model was trained. Any training procedure works — the coverage guarantee depends only on exchangeability of the data.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q2">In split conformal prediction, what is the role of the calibration set?</span>
+A. To retrain the model with updated hyperparameters
+B. To compute nonconformity scores and determine the quantile threshold for prediction sets
+C. To validate that the model's softmax outputs are well-calibrated
+D. To augment the training data with additional examples
+<<button "A">><<replace "#cp-q2">>Incorrect. The calibration set is never used to retrain the model. In split conformal, the model is fixed; only the nonconformity scores are computed on calibration data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q2">>Correct! The calibration set is used to compute nonconformity scores and find the quantile threshold $\hat{q}$ that determines the size of prediction sets at test time.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q2">>Incorrect. Conformal prediction does not attempt to calibrate softmax outputs. It uses the model's predictions only to compute nonconformity scores, bypassing calibration entirely.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q2">>Incorrect. The calibration set is held out from training entirely. Using it for training would violate the separation required for the coverage guarantee.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q3">For regression with absolute residual scores, the conformal prediction interval takes the form:</span>
+A. $[\hat{f}(X) - 1.96\sigma,\ \hat{f}(X) + 1.96\sigma]$
+B. $[\hat{f}(X) - \hat{q},\ \hat{f}(X) + \hat{q}]$ where $\hat{q}$ is the calibration quantile of residuals
+C. $[\hat{f}(X) \cdot (1 - \alpha),\ \hat{f}(X) \cdot (1 + \alpha)]$
+D. $[\min(Y_{\text{cal}}),\ \max(Y_{\text{cal}})]$
+<<button "A">><<replace "#cp-q3">>Incorrect. The 1.96 factor comes from the normal distribution assumption used in classical confidence intervals. Conformal prediction is distribution-free and uses the empirical quantile of calibration residuals instead.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q3">>Correct! The prediction interval centers on the model prediction and extends by $\hat{q}$ in both directions, where $\hat{q}$ is the empirical quantile of absolute residuals computed on the calibration set.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q3">>Incorrect. Conformal intervals are not proportional to the prediction value. They are additive, based on the empirical residual quantile from the calibration set.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q3">>Incorrect. Using the range of calibration labels would ignore the model entirely and produce an interval far wider than necessary. Conformal prediction leverages the model's predictions through the nonconformity scores.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q4">Why does conformal prediction's coverage guarantee fail under distribution shift?</span>
+A. Because the model's weights become outdated
+B. Because the exchangeability assumption between calibration and test data is violated
+C. Because the nonconformity scores become too large to compute
+D. Because the calibration set size shrinks over time
+<<button "A">><<replace "#cp-q4">>Incorrect. The model's weights are not the issue — conformal prediction treats the model as a black box. The failure is in the statistical assumption, not the model itself.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q4">>Correct! Distribution shift means the test point is drawn from a different distribution than the calibration data, breaking exchangeability. Without exchangeability, the rank argument that guarantees coverage no longer holds.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q4">>Incorrect. Nonconformity scores are always computable regardless of distribution shift. The issue is that the calibration quantile no longer corresponds to the correct threshold for the shifted test distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q4">>Incorrect. The calibration set size is fixed at the time of calibration and does not change. Distribution shift is about the relationship between calibration and test distributions, not sample sizes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q5">What distinguishes conformal prediction sets from traditional confidence intervals?</span>
+A. Conformal sets are always narrower than confidence intervals
+B. Confidence intervals target a fixed parameter; conformal sets target a future observable, with no parametric assumptions
+C. Confidence intervals provide finite-sample guarantees while conformal sets are asymptotic
+D. Conformal sets require Bayesian priors while confidence intervals do not
+<<button "A">><<replace "#cp-q5">>Incorrect. Conformal sets can be wider or narrower than confidence intervals depending on the setting. The distinction is conceptual (what they cover) and methodological (assumptions required).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q5">>Correct! Confidence intervals cover a fixed population parameter across repeated sampling and typically require parametric assumptions. Conformal prediction sets cover a future random observation and require only exchangeability — no parametric model needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q5">>Incorrect. It is the reverse: conformal prediction provides finite-sample guarantees, while many classical confidence intervals rely on asymptotic approximations (e.g., relying on the CLT).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q5">>Incorrect. Conformal prediction is a frequentist, distribution-free method. It requires no priors. Bayesian credible intervals are the framework that requires priors.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q6">In conformalized quantile regression, why are the prediction intervals adaptive rather than constant-width?</span>
+A. Because the quantile regression model predicts different upper and lower bounds for different inputs
+B. Because the calibration set is split into subgroups by input value
+C. Because the nonconformity scores are weighted by the model's confidence
+D. Because the method uses a different alpha level for each test point
+<<button "A">><<replace "#cp-q6">>Correct! The underlying quantile regression model estimates conditional quantiles that vary with the input, producing intervals that are naturally wider in high-uncertainty regions and narrower in low-uncertainty regions. The conformal correction then adjusts these to ensure exact marginal coverage.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q6">>Incorrect. Conformalized quantile regression does not split the calibration set by input value. It uses a single calibration set but leverages the quantile model's input-dependent predictions for adaptivity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q6">>Incorrect. The nonconformity scores are not weighted by confidence. The adaptivity comes from the quantile regression model's varying predictions, not from score weighting.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q6">>Incorrect. The same alpha level is used for all test points. The adaptivity comes from the model's predictions, not from varying the miscoverage rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q7">How tight is the finite-sample coverage guarantee of split conformal prediction?</span>
+A. Coverage equals exactly $1 - \alpha$ for any calibration set size
+B. Coverage is between $1 - \alpha$ and $1 - \alpha + 1/(n+1)$, where $n$ is the calibration set size
+C. Coverage converges to $1 - \alpha$ only as the calibration set grows to infinity
+D. Coverage is at least $1 - 2\alpha$ for finite samples and approaches $1 - \alpha$ asymptotically
+<<button "A">><<replace "#cp-q7">>Incorrect. Coverage is not exactly $1 - \alpha$ due to the discreteness of the quantile over $n+1$ points. There is a small upward gap of at most $1/(n+1)$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q7">>Correct! The coverage is bounded below by $1 - \alpha$ and above by $1 - \alpha + 1/(n+1)$. With even a modest calibration set of $n = 999$, the gap is at most 0.001 — remarkably tight for a distribution-free method.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q7">>Incorrect. Conformal prediction provides a finite-sample guarantee — coverage is at least $1 - \alpha$ for any calibration set size, not just asymptotically.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q7">>Incorrect. The lower bound is $1 - \alpha$, not $1 - 2\alpha$. The guarantee is not loosened for finite samples — it holds exactly as stated.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="cp-q8">What does the size of a conformal prediction set tell you about the underlying model?</span>
+A. Larger sets indicate that the coverage guarantee is failing
+B. Larger sets indicate that the model is uncertain or inaccurate for that input — the guarantee holds but the predictions are less informative
+C. Set size is independent of model quality and depends only on the calibration set size
+D. Smaller sets indicate that the exchangeability assumption is satisfied
+<<button "A">><<replace "#cp-q8">>Incorrect. The coverage guarantee holds regardless of set size. Large sets mean the model is uncertain, not that coverage is failing — the guarantee is always maintained under exchangeability.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#cp-q8">>Correct! Prediction set size reflects model quality: a strong model produces small, informative sets while a weak model produces large, uninformative ones. The coverage guarantee holds either way, but informativeness varies with model accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#cp-q8">>Incorrect. Set size depends directly on the nonconformity scores, which are determined by how well the model predicts. A better model produces smaller residuals and therefore smaller prediction sets.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#cp-q8">>Incorrect. Set size says nothing about whether exchangeability holds. Exchangeability is a property of the data-generating process, not of the prediction set sizes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

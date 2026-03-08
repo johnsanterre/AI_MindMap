@@ -1,0 +1,136 @@
+<<include "Header">>
+! Lipschitz Continuity
+<img src="assets/lipschitz_continuity.svg" alt="Lipschitz Continuity" width="800">
+
+Imagine you are driving on a highway with a strict speed limit. No matter where you are on the road, you cannot change your position faster than that limit allows. ''Lipschitz continuity'' is exactly this idea applied to functions: there is a maximum rate at which the output can change relative to the input. A function might wiggle, curve, and bend all it wants, but if it is Lipschitz continuous, there is a hard ceiling on //how steeply// it can do so. This single constraint — a universal speed limit on change — turns out to be one of the most powerful guarantees in optimization, stability analysis, and modern deep learning.
+
+!! The Core Insight
+
+The heart of Lipschitz continuity is a ''cone constraint''. Pick any point on a Lipschitz function's graph and plant a double-sided cone with slopes $+L$ and $-L$. The entire rest of the curve must stay inside that cone. The number $L$ is the ''Lipschitz constant'' — the tightest speed limit that still contains the function. A small $L$ means the function changes gently; a large $L$ means it can change rapidly but still not //infinitely// fast. Functions that violate this — like $f(x) = \sqrt{x}$ near zero, where the slope blows up to infinity — are //not// Lipschitz on any interval containing the origin. This distinction between "fast but bounded" and "unbounded" change is what makes Lipschitz continuity so useful: it converts vague notions of "well-behaved" into a single, checkable number.
+
+!! Why Bounded Change Matters
+
+In [[Gradient Descent|Gradient Descent]], convergence proofs almost always assume that the gradient of the [[Loss Functions|Loss Functions]] is Lipschitz continuous. Why? Because a Lipschitz gradient means the loss surface has no infinitely sharp cliffs or cusps — you can trust that a step of size $\eta$ will not catapult you from a gentle valley into a wildly different region. Formally, if $\nabla f$ is $L$-Lipschitz, then a learning rate $\eta < 1/L$ guarantees that each gradient step decreases the loss. Without this bound, no fixed step size is safe.
+
+In [[Generative Adversarial Networks|Generative Adversarial Networks]], the Wasserstein distance between real and generated distributions is only a valid training signal when the discriminator (critic) is 1-Lipschitz. If the critic can have arbitrarily steep slopes, it exploits tiny distribution differences with enormous outputs, making the gradient signal meaningless. Enforcing the Lipschitz constraint //stabilizes// the adversarial game, which was the key breakthrough of the WGAN framework.
+
+More broadly, Lipschitz bounds appear wherever we need ''stability'': a small perturbation in the input should produce only a proportionally small change in the output. This is critical for robustness to adversarial examples, for ensuring that [[Regularization|Regularization]] actually constrains model capacity, and for guaranteeing that iterative algorithms converge via the [[Contraction Mapping|Contraction Mapping]] theorem — which requires the mapping to be Lipschitz with $L < 1$.
+
+!! What the Math Is Actually Doing
+
+A function $f: X \to Y$ between metric spaces is ''$L$-Lipschitz continuous'' if there exists a constant $L \geq 0$ such that for all $x, y \in X$:
+
+$$|f(x) - f(y)| \leq L \|x - y\|$$
+
+The smallest such $L$ is the ''Lipschitz constant'' of $f$, sometimes written $\text{Lip}(f)$:
+
+$$\text{Lip}(f) = \sup_{x \neq y} \frac{|f(x) - f(y)|}{\|x - y\|}$$
+
+For differentiable functions, the Lipschitz constant equals the supremum of the gradient norm:
+
+$$\text{Lip}(f) = \sup_x \|\nabla f(x)\|$$
+
+This connects Lipschitz continuity directly to gradient bounds. If $\|\nabla f(x)\| \leq L$ everywhere, then $f$ is $L$-Lipschitz. Conversely, if a function is $L$-Lipschitz and differentiable, its gradient cannot exceed $L$ in norm.
+
+//Examples://
+* $f(x) = 3x + 2$ is 3-Lipschitz (the slope is exactly 3).
+* $f(x) = \sin(x)$ is 1-Lipschitz (the derivative $\cos(x)$ has maximum absolute value 1).
+* $f(x) = x^2$ on $\mathbb{R}$ is //not// Lipschitz — the derivative $2x$ is unbounded. But on $[-B, B]$ it is $2B$-Lipschitz.
+* $f(x) = \sqrt{x}$ on $[0, \infty)$ is //not// Lipschitz — the derivative $1/(2\sqrt{x})$ diverges at $x=0$.
+
+When we say the //gradient// is Lipschitz (called ''$L$-smoothness''), we mean:
+
+$$\|\nabla f(x) - \nabla f(y)\| \leq L \|x - y\|$$
+
+This is the key assumption behind the standard convergence rate $O(1/T)$ for gradient descent in [[Convex Optimization|Convex Optimization]].
+
+!! Lipschitz Constraints in Practice
+
+''Spectral normalization'' is the dominant technique for enforcing Lipschitz constraints in neural networks, particularly in WGANs. Each weight matrix $W$ is divided by its largest singular value $\sigma_1(W)$, ensuring the operator norm $\|W\|_2 = 1$. Since a composition of 1-Lipschitz layers is itself 1-Lipschitz, normalizing every layer makes the entire network 1-Lipschitz. This is far more principled than the original WGAN approach of ''weight clipping'' (clamping all weights to $[-c, c]$), which crudely limits capacity and biases the critic toward overly simple functions.
+
+''Gradient penalty'' (WGAN-GP) takes a different approach: instead of hard-constraining the architecture, it adds a penalty term $\lambda \, \mathbb{E}[(\|\nabla_{\hat{x}} D(\hat{x})\| - 1)^2]$ to the loss, encouraging the gradient norm to be close to 1 at interpolated points $\hat{x}$ between real and fake samples. This is a //soft// Lipschitz constraint — it does not guarantee the bound but works well in practice.
+
+Beyond GANs, Lipschitz constraints appear in:
+* ''Robustness certification'' — a network with Lipschitz constant $L$ changes its output by at most $L\epsilon$ under an $\epsilon$-perturbation, giving provable adversarial robustness bounds.
+* ''Gradient clipping'' — truncating gradients to a maximum norm during training is an implicit Lipschitz constraint on the effective update rule.
+* ''Residual networks'' — constraining each residual block to be a [[Contraction Mapping|Contraction Mapping]] (Lipschitz constant $< 1$) guarantees the existence of a unique fixed point, enabling ''deep equilibrium models''.
+
+!! When Lipschitz Assumptions Break Down
+
+* ''ReLU networks without normalization'' can have arbitrarily large Lipschitz constants that grow exponentially with depth. Each layer multiplies the Lipschitz constant, so a 100-layer network with per-layer constant 1.1 has an overall constant of $1.1^{100} \approx 10^{4}$. This means tiny input changes can cause enormous output swings — the network is highly sensitive and training is unstable. Spectral normalization or careful initialization is needed to tame this growth.
+
+* ''The Lipschitz constant is a worst-case measure'' and can be overly pessimistic. A network might have a huge Lipschitz constant driven by a single pathological direction in input space that never appears in real data. Methods that compute //local// Lipschitz constants or data-dependent bounds give tighter and more useful estimates, but they are computationally expensive and harder to enforce during training.
+
+* ''Strict Lipschitz constraints reduce expressiveness.'' Forcing a discriminator to be exactly 1-Lipschitz prevents it from modeling sharp decision boundaries. In practice, the optimal critic for the Wasserstein distance is 1-Lipschitz and often has gradient norm exactly 1 almost everywhere — it saturates the constraint. If the constraint is too tight relative to the data complexity, the critic underfits, the gradient signal degrades, and the generator stalls. Balancing the constraint strength against model capacity is a persistent challenge in [[Generative Adversarial Networks|Generative Adversarial Networks]] training.
+
+!! Technical Details
+
+''Rademacher complexity'' provides the theoretical link between Lipschitz constraints and generalization. For a function class $\mathcal{F}$ of $L$-Lipschitz functions mapping from a bounded domain, the empirical Rademacher complexity scales as $O(L / \sqrt{n})$, where $n$ is the sample size. This means controlling the Lipschitz constant directly controls the generalization gap — a key reason why spectral normalization acts as effective [[Regularization|Regularization]] even outside the GAN setting.
+
+''Kirszbraun's theorem'' (1934) states that any $L$-Lipschitz function defined on a subset $S \subseteq \mathbb{R}^n$ can be extended to the entire space $\mathbb{R}^n$ while preserving the same Lipschitz constant $L$. This is a deep result in [[Functional Analysis|Functional Analysis]] — it says that Lipschitz functions are never "trapped" on subsets. The theorem generalizes to Hilbert spaces but fails in general Banach spaces, making the choice of norm significant.
+
+''Lipschitz extension'' in practice: when a neural network is trained only on observed data, Kirszbraun's theorem guarantees that a Lipschitz-constrained network's behavior between data points is bounded — it cannot suddenly spike. This provides implicit interpolation guarantees that unconstrained networks lack.
+
+''Relationship to Holder continuity:'' Lipschitz continuity is the special case $\alpha = 1$ of ''Holder continuity'', which requires $|f(x) - f(y)| \leq C\|x - y\|^\alpha$ for $\alpha \in (0, 1]$. Functions like $f(x) = x^{1/2}$ are $\frac{1}{2}$-Holder but not Lipschitz. The Holder exponent $\alpha$ measures how "rough" a function can be — smaller $\alpha$ permits more irregularity. Brownian motion paths are $\alpha$-Holder for any $\alpha < 1/2$ but not for $\alpha = 1/2$, illustrating the hierarchy.
+
+''Lipschitz constant computation'' is NP-hard for general ReLU networks. Exact computation requires solving a combinatorial optimization over all activation patterns. Upper bounds via the product of per-layer spectral norms are cheap but loose; tighter semidefinite programming (SDP) relaxations exist (LipSDP) but scale poorly beyond a few hundred neurons.
+
+!! Quiz
+
+<div id="q1">''1. A function $f$ is $L$-Lipschitz if for all $x, y$:''
+<<button "A) $|f(x) - f(y)| = L\|x - y\|$">><<replace "#q1">>That would mean the function changes at //exactly// rate $L$, which is too restrictive. The Lipschitz condition is an inequality, not an equality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $|f(x) - f(y)| \leq L\|x - y\|$">><<replace "#q1">>Correct! The Lipschitz condition bounds the rate of change from above — the function can change //at most// $L$ times as fast as the input changes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $|f(x) - f(y)| \geq L\|x - y\|$">><<replace "#q1">>This is backwards — it would require the function to change at //least// as fast as $L$, which is a co-Lipschitz or bi-Lipschitz lower bound, not the standard Lipschitz condition.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $|f(x) - f(y)| \leq L\|x - y\|^2$">><<replace "#q1">>The exponent 2 would make this a different condition. The standard Lipschitz condition uses $\|x - y\|$ to the first power, not squared.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. Why must the WGAN critic be 1-Lipschitz?''
+<<button "A) To make the generator loss convex">><<replace "#q2">>Convexity of the generator loss is not the reason. The Lipschitz constraint is needed for the Kantorovich-Rubinstein duality that defines the Wasserstein distance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) To ensure the Kantorovich-Rubinstein duality gives the Wasserstein distance">><<replace "#q2">>Correct! The Wasserstein-1 distance equals $\sup_{\text{Lip}(f) \leq 1} \mathbb{E}[f(x_{\text{real}})] - \mathbb{E}[f(x_{\text{fake}})]$. Without the 1-Lipschitz constraint, the supremum is infinite and meaningless.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) To prevent mode collapse in the generator">><<replace "#q2">>While WGANs do help with mode collapse, the 1-Lipschitz constraint exists specifically because the Wasserstein distance is defined via a supremum over 1-Lipschitz functions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) To reduce the number of parameters">><<replace "#q2">>The Lipschitz constraint does not reduce parameter count — it constrains the //function// the network represents, not its architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What does spectral normalization do to a weight matrix $W$?''
+<<button "A) Sets all singular values to zero">><<replace "#q3">>That would make the matrix zero, destroying all information. Spectral normalization divides by the largest singular value, not zeroing them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Clips all weights to $[-1, 1]$">><<replace "#q3">>That is weight clipping, not spectral normalization. Weight clipping is the cruder method used in the original WGAN paper.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Divides $W$ by its largest singular value $\sigma_1(W)$">><<replace "#q3">>Correct! This ensures $\|W\|_2 = 1$, making each layer a 1-Lipschitz linear map. Composing all such layers gives a 1-Lipschitz network.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Adds a penalty term to the loss function">><<replace "#q3">>That describes the gradient penalty approach (WGAN-GP), not spectral normalization. Spectral normalization directly modifies the weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. For a differentiable function, the Lipschitz constant equals:''
+<<button "A) The average of all gradient norms">><<replace "#q4">>The Lipschitz constant is a worst-case (supremum) measure, not an average. A function with a small average gradient but one huge spike has a large Lipschitz constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The minimum gradient norm">><<replace "#q4">>The minimum gradient gives the slowest rate of change, not the fastest. The Lipschitz constant captures the maximum rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The supremum of the gradient norm">><<replace "#q4">>Correct! $\text{Lip}(f) = \sup_x \|\nabla f(x)\|$. The Lipschitz constant is the worst-case gradient magnitude over the entire domain.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The determinant of the Hessian">><<replace "#q4">>The Hessian determinant measures curvature, not the rate of change. The Lipschitz constant of $f$ depends on the gradient norm, not second derivatives.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. Which function is NOT Lipschitz on $[0, \infty)$?''
+<<button "A) $f(x) = \sin(x)$">><<replace "#q5">>$\sin(x)$ is 1-Lipschitz everywhere since $|\cos(x)| \leq 1$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $f(x) = 5x + 3$">><<replace "#q5">>This linear function is 5-Lipschitz — the slope is constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $f(x) = \sqrt{x}$">><<replace "#q5">>Correct! The derivative $1/(2\sqrt{x})$ diverges as $x \to 0^+$, so no finite Lipschitz constant exists on $[0, \infty)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $f(x) = |x|$">><<replace "#q5">>$|x|$ is 1-Lipschitz. Despite the kink at zero, the slope magnitude is always exactly 1.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What does Kirszbraun's theorem guarantee?''
+<<button "A) Every continuous function is Lipschitz">><<replace "#q6">>This is false — continuity does not imply Lipschitz continuity ($\sqrt{x}$ is continuous but not Lipschitz).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) An $L$-Lipschitz function on a subset can be extended to the whole space with the same constant $L$">><<replace "#q6">>Correct! Kirszbraun's theorem says you can always extend a Lipschitz function from a subset to the full space without increasing its Lipschitz constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The Lipschitz constant of a composition equals the product of individual constants">><<replace "#q6">>While $\text{Lip}(f \circ g) \leq \text{Lip}(f) \cdot \text{Lip}(g)$ is true, this is a basic composition bound, not Kirszbraun's theorem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Every Lipschitz function is differentiable">><<replace "#q6">>Rademacher's theorem says Lipschitz functions are differentiable //almost everywhere//, but not everywhere (e.g., $|x|$ at zero). And this is Rademacher's theorem, not Kirszbraun's.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. Lipschitz continuity is the special case $\alpha = 1$ of which broader condition?''
+<<button "A) Uniform continuity">><<replace "#q7">>Lipschitz implies uniform continuity, but uniform continuity is not parameterized by an exponent $\alpha$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Holder continuity">><<replace "#q7">>Correct! Holder continuity requires $|f(x) - f(y)| \leq C\|x - y\|^\alpha$. Setting $\alpha = 1$ recovers the Lipschitz condition exactly.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Absolute continuity">><<replace "#q7">>Absolute continuity is a stronger condition related to integration, not parameterized by a Holder exponent.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Equicontinuity">><<replace "#q7">>Equicontinuity describes uniform continuity across a //family// of functions, not a single function with an exponent.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. Why is computing the exact Lipschitz constant of a ReLU network hard?''
+<<button "A) ReLU is not differentiable">><<replace "#q8">>ReLU is non-differentiable only at zero, which is a measure-zero set. The real difficulty is combinatorial, not about a single point of non-differentiability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It requires enumerating exponentially many activation patterns">><<replace "#q8">>Correct! Each neuron can be active or inactive, creating $2^n$ possible linear regions. The worst-case gradient might occur in any region, making exact computation NP-hard.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The network has infinite parameters">><<replace "#q8">>Neural networks have a finite number of parameters. The difficulty is the combinatorial explosion of activation patterns, not parameter count.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The Lipschitz constant is always infinite for ReLU networks">><<replace "#q8">>ReLU networks with finite weights always have a finite Lipschitz constant. The difficulty is //computing// it exactly, not its existence.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

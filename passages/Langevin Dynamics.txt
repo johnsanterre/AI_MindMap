@@ -1,0 +1,173 @@
+<<include "Header">>
+! Langevin Dynamics
+<img src="assets/langevin_dynamics.svg" alt="Langevin Dynamics" width="800">
+
+Imagine you are blindfolded on a hilly landscape and you want to figure out where the valleys are—not just the single deepest valley, but //all// the valleys, weighted by how deep they are. If you simply roll downhill, you will get stuck in the first dip you find. But what if, at every step, you follow gravity //and// get randomly jostled by a crowd of invisible particles? The jostling lets you escape shallow valleys, while gravity keeps pulling you toward deeper ones. Over time, the fraction of time you spend in each valley reflects exactly how deep it is. That is ''Langevin dynamics'': gradient descent plus calibrated noise, turning optimization into sampling.
+
+The technique originates in statistical physics, where Paul Langevin described how a pollen grain buffeted by water molecules drifts under an external force while being randomly kicked by thermal fluctuations. Machine learning repurposes this same equation to draw samples from probability distributions that are too complex to sample from directly—exactly the situation encountered in [[Bayesian Inference|Bayesian Inference]], energy-based models, and [[Diffusion Models|Diffusion Models]].
+
+!! The Core Insight
+
+''Gradient descent finds modes; Langevin dynamics finds the whole distribution.'' The single addition of Gaussian noise, scaled correctly, transforms a deterministic optimizer into a sampler whose long-run histogram converges to the target density $p(x)$. The gradient term acts as a drift toward high-probability regions, and the noise term ensures the particle explores broadly enough to visit all such regions in proportion to their probability mass. This is the bridge between //optimization// and //inference//: the same score function $\nabla \log p(x)$ that points toward the mode also guides a noisy particle to sample the entire distribution.
+
+Crucially, you never need to know the normalizing constant of $p(x)$. Because the gradient of $\log p(x)$ depends only on the unnormalized density, Langevin dynamics sidesteps the intractable integral that plagues so many Bayesian methods. You only need access to the ''score function''—the gradient of the log-density—which connects Langevin dynamics directly to [[Score Matching|Score Matching]].
+
+!! Gradient Plus Noise Equals Sampling
+
+Why does adding noise to [[Gradient Descent|Gradient Descent]] convert it from an optimizer into a sampler? The answer lies in the balance between two competing forces.
+
+''The gradient term'' $\frac{\epsilon}{2}\nabla\log p(x_t)$ pushes the particle toward regions where $p(x)$ is large. On its own, this would simply climb to the nearest mode and stop—pure optimization.
+
+''The noise term'' $\sqrt{\epsilon}\,\eta_t$ with $\eta_t \sim \mathcal{N}(0, I)$ injects random energy that lets the particle escape local modes and explore the full landscape. On its own, this would be a pure random walk—no preference for any region.
+
+Together, these two forces reach a //detailed balance//: the rate at which the particle flows into any region equals the rate at which it flows out, and the resulting stationary distribution is exactly $p(x)$. The step size $\epsilon$ controls the trade-off: smaller $\epsilon$ means more faithful sampling but slower exploration; larger $\epsilon$ means faster movement but greater discretization error.
+
+This is conceptually different from [[MCMC|MCMC]] methods like Metropolis-Hastings, which propose-then-accept. Langevin dynamics proposes moves that are //already informed by the gradient//, so proposals are much more likely to land in high-probability regions. The Metropolis-adjusted variant (MALA) adds an accept/reject step to correct for discretization error, giving exact sampling at the cost of occasional rejected steps.
+
+!! What the Math Is Actually Doing
+
+The ''Langevin diffusion'' is the continuous-time stochastic differential equation (SDE):
+
+$$dX_t = \frac{1}{2}\nabla\log p(X_t)\,dt + dW_t$$
+
+where $W_t$ is a standard [[Brownian Motion|Brownian Motion]] (Wiener process). This is a [[Stochastic Processes|stochastic process]] whose stationary distribution is $p(x)$.
+
+Discretizing with step size $\epsilon$ gives the ''unadjusted Langevin algorithm'' (ULA):
+
+$$x_{t+1} = x_t + \frac{\epsilon}{2}\nabla\log p(x_t) + \sqrt{\epsilon}\,\eta_t, \quad \eta_t \sim \mathcal{N}(0, I)$$
+
+The evolution of the probability density $\rho_t(x)$ of the particle is governed by the ''Fokker-Planck equation'':
+
+$$\frac{\partial \rho_t}{\partial t} = -\nabla \cdot \left(\rho_t \cdot \frac{1}{2}\nabla\log p\right) + \frac{1}{2}\Delta \rho_t$$
+
+At stationarity $\frac{\partial \rho}{\partial t} = 0$, the solution is $\rho = p$, confirming that the target distribution is indeed the fixed point.
+
+The ''score function'' $s(x) = \nabla_x \log p(x)$ plays the central role. In practice, if $p(x) \propto \exp(-U(x))$ for some energy function $U$, then $\nabla\log p(x) = -\nabla U(x)$, and the update becomes:
+
+$$x_{t+1} = x_t - \frac{\epsilon}{2}\nabla U(x_t) + \sqrt{\epsilon}\,\eta_t$$
+
+This reveals Langevin dynamics as ''gradient descent on the energy $U(x)$ plus thermal noise''. The "temperature" is implicitly 1; scaling the noise by $\sqrt{T}$ samples from $p(x)^{1/T}$, sharpening ($T < 1$) or flattening ($T > 1$) the distribution—a technique called //annealing//.
+
+!! Langevin Dynamics in ML
+
+''Score-based generative models.'' The revolution in [[Diffusion Models|Diffusion Models]] rests directly on Langevin dynamics. In score-based models (Song and Ermon, 2019), a neural network is trained via [[Score Matching|Score Matching]] to estimate $\nabla_x \log p(x)$ at multiple noise levels. At generation time, samples are produced by running annealed Langevin dynamics: start from pure noise, and iteratively denoise using the learned score. The DDPM framework (Ho et al., 2020) can be viewed through this lens—its reverse process is a discretized Langevin SDE with a learned drift.
+
+''Stochastic Gradient Langevin Dynamics (SGLD).'' Welling and Teh (2011) showed that simply adding appropriately scaled Gaussian noise to stochastic gradient descent yields approximate posterior samples in [[Bayesian Inference|Bayesian Inference]]. Instead of computing a point estimate of neural network weights, SGLD produces a //distribution// over weights, capturing uncertainty. The update is:
+
+$$\theta_{t+1} = \theta_t + \frac{\epsilon_t}{2}\nabla\log p(\theta_t | \text{data}) + \sqrt{\epsilon_t}\,\eta_t$$
+
+With a decaying step size $\epsilon_t \to 0$, the Metropolis-Hastings correction becomes unnecessary because the discretization error vanishes.
+
+''Energy-based models.'' Sampling from energy-based models $p(x) \propto \exp(-E_\theta(x))$ is intractable by direct methods. Langevin dynamics provides a practical [[MCMC|MCMC]] sampler: run the update using $\nabla_x E_\theta(x)$ from backpropagation. This is the standard approach in contrastive divergence training variants and modern EBM research.
+
+''Sampling in latent spaces.'' Langevin dynamics can also operate in the latent space of a variational autoencoder or normalizing flow, refining approximate posterior samples by running a few Langevin steps initialized at the encoder output.
+
+!! When Langevin Dynamics Breaks Down
+
+''Multimodal distributions with high barriers.'' When $p(x)$ has well-separated modes divided by regions of near-zero probability, the noise term is unlikely to push the particle over the energy barrier between modes. The particle gets trapped in one mode and the sampler exhibits poor //mixing//. Tempering, parallel chains, or replica exchange methods are needed to traverse the landscape. This is the same challenge faced by naive [[MCMC|MCMC]] methods, and it is measured by the ''mixing time''.
+
+''High dimensionality and vanishing gradients.'' In very high-dimensional spaces, the gradient $\nabla\log p(x)$ can become noisy or ill-conditioned. The isotropic Gaussian noise $\eta_t$ is also increasingly unlikely to push the particle in a useful direction as dimension grows—most of the noise is orthogonal to the important subspace. Preconditioning (using the Fisher information matrix or a learned metric) helps, leading to ''Riemannian Langevin dynamics''.
+
+''Large step sizes and discretization error.'' The ULA update is only exact in the $\epsilon \to 0$ limit. For any finite step size, the discretized chain does not have $p(x)$ as its exact stationary distribution—it converges to a biased approximation. The bias is $O(\epsilon)$ in the Wasserstein distance. The Metropolis-adjusted Langevin algorithm (MALA) corrects this by adding an accept/reject step, but at the cost of reduced step sizes in high dimensions because the acceptance rate drops.
+
+!! Technical Details
+
+''Discretization error.'' For strongly log-concave targets with $L$-Lipschitz gradients and strong convexity parameter $m$, the ULA achieves $\epsilon_{\text{TV}} < \delta$ total variation error after $O\left(\frac{d}{\delta^2}\frac{L^2}{m^2}\right)$ iterations, where $d$ is the dimension.
+
+''Metropolis-adjusted Langevin algorithm (MALA).'' Uses the ULA proposal $q(x'|x) = \mathcal{N}\!\left(x + \frac{\epsilon}{2}\nabla\log p(x),\, \epsilon I\right)$ and accepts with probability $\min\!\left(1, \frac{p(x')q(x|x')}{p(x)q(x'|x)}\right)$. This guarantees the correct stationary distribution for any $\epsilon$, but the optimal acceptance rate scales as $O(d^{-1/3})$ per step.
+
+''Underdamped (kinetic) Langevin dynamics.'' Introduces a momentum variable $v$:
+$$dx = v\,dt, \quad dv = -\gamma v\,dt + \nabla\log p(x)\,dt + \sqrt{2\gamma}\,dW_t$$
+The momentum carries the particle through low-probability regions, dramatically improving mixing across modes. This is the continuous-time analog of Hamiltonian Monte Carlo.
+
+''Mixing time and log-Sobolev inequalities.'' Convergence rates are controlled by the ''log-Sobolev constant'' $\alpha$ of the target distribution. If $p$ satisfies a log-Sobolev inequality with constant $\alpha$, then the KL divergence contracts as $D_{\text{KL}}(\rho_t \| p) \leq e^{-2\alpha t}D_{\text{KL}}(\rho_0 \| p)$. For a Gaussian with covariance $\Sigma$, $\alpha = \lambda_{\min}(\Sigma^{-1})$.
+
+''Annealed Langevin dynamics.'' Run Langevin at a sequence of noise levels $\sigma_1 > \sigma_2 > \cdots > \sigma_K$, using the score $\nabla_x \log p_{\sigma_i}(x)$ at each level. The high-noise levels enable global exploration; the low-noise levels refine to the true distribution. This is the backbone of score-based generative modeling.
+
+!! Quiz
+
+<div id="langevin-quiz">
+
+''1. What does Langevin dynamics add to gradient descent to convert it from optimization to sampling?''
+(A) A momentum term
+(B) Calibrated Gaussian noise
+(C) A learning rate schedule
+(D) Batch normalization
+
+<div id="q1-answer" style="display:none">
+<<button "Show Answer">><<replace "#q1-answer">>''Answer: (B)'' Langevin dynamics adds Gaussian noise scaled by $\sqrt{\epsilon}$ to the gradient step. This noise is what transforms deterministic optimization into a stochastic process whose stationary distribution matches the target density.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''2. What information about $p(x)$ is required to run Langevin dynamics?''
+(A) The normalizing constant
+(B) The cumulative distribution function
+(C) The score function $\nabla_x \log p(x)$
+(D) The moment generating function
+
+<div id="q2-answer" style="display:none">
+<<button "Show Answer">><<replace "#q2-answer">>''Answer: (C)'' Only the score function (gradient of the log-density) is needed. The normalizing constant cancels when taking the gradient of the log, which is a key practical advantage.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''3. The Fokker-Planck equation describes:''
+(A) The trajectory of a single particle
+(B) The evolution of the probability density of the particle's position
+(C) The gradient of the energy function
+(D) The learning rate decay schedule
+
+<div id="q3-answer" style="display:none">
+<<button "Show Answer">><<replace "#q3-answer">>''Answer: (B)'' The Fokker-Planck equation governs how the probability density $\rho_t(x)$ evolves over time. At stationarity, $\rho = p$, confirming the target is the fixed point.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''4. What is the main problem with ULA (unadjusted Langevin algorithm) at finite step sizes?''
+(A) It requires the normalizing constant
+(B) It converges to a biased approximation of $p(x)$
+(C) It cannot handle continuous distributions
+(D) It always diverges
+
+<div id="q4-answer" style="display:none">
+<<button "Show Answer">><<replace "#q4-answer">>''Answer: (B)'' The discretization introduces $O(\epsilon)$ bias in the stationary distribution. Only in the limit $\epsilon \to 0$ does ULA converge to the true target. MALA corrects this with an accept/reject step.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''5. Stochastic Gradient Langevin Dynamics (SGLD) is used in ML primarily for:''
+(A) Training GANs
+(B) Approximate Bayesian posterior sampling over neural network weights
+(C) Data augmentation
+(D) Dimensionality reduction
+
+<div id="q5-answer" style="display:none">
+<<button "Show Answer">><<replace "#q5-answer">>''Answer: (B)'' SGLD adds noise to SGD to produce approximate posterior samples, enabling Bayesian deep learning by capturing weight uncertainty rather than finding a single point estimate.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''6. Why does Langevin dynamics struggle with multimodal distributions?''
+(A) The gradient points away from all modes
+(B) The noise overwhelms the gradient signal
+(C) High energy barriers between modes prevent the particle from transitioning
+(D) The score function is undefined at modes
+
+<div id="q6-answer" style="display:none">
+<<button "Show Answer">><<replace "#q6-answer">>''Answer: (C)'' When modes are separated by regions of very low probability (high energy), the random noise is unlikely to push the particle over the barrier, leading to poor mixing between modes.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''7. Underdamped Langevin dynamics improves over standard (overdamped) Langevin by:''
+(A) Removing the noise term entirely
+(B) Introducing a momentum variable that carries the particle through low-probability regions
+(C) Using a larger step size
+(D) Replacing the gradient with a Hessian
+
+<div id="q7-answer" style="display:none">
+<<button "Show Answer">><<replace "#q7-answer">>''Answer: (B)'' Momentum allows the particle to maintain velocity through energy barriers, greatly improving mixing between modes. This is the continuous-time version of Hamiltonian Monte Carlo.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+''8. In score-based diffusion models, Langevin dynamics is used to:''
+(A) Train the neural network's weights
+(B) Compute the loss function
+(C) Generate samples by iteratively denoising from pure noise using a learned score
+(D) Evaluate the FID metric
+
+<div id="q8-answer" style="display:none">
+<<button "Show Answer">><<replace "#q8-answer">>''Answer: (C)'' At generation time, annealed Langevin dynamics starts from noise and uses the neural network's estimated score to iteratively move toward the data distribution, producing realistic samples.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+</div>
+
+<<include "Footer">>

@@ -1,0 +1,173 @@
+<<include "Header">>
+
+! Bayes Theorem
+
+[img[assets/bayes_theorem.svg]]
+
+Imagine you are a doctor who knows that a certain disease affects 1 in 1,000 people. A patient walks in with a positive test result, and the test is 99% accurate. Your gut screams "this patient almost certainly has the disease!" But your gut is wrong. Because the disease is so rare, even a highly accurate test produces far more false positives than true positives — and the actual chance the patient is sick is only about 9%. ''Bayes' theorem'' is the mathematical machinery that corrects this intuition. It tells you how to //update// what you believe about the world when you encounter new evidence, combining what you already knew (the prior) with what the data is telling you (the likelihood) to arrive at a revised belief (the posterior).
+
+---
+
+!! The Core Insight
+
+Most of everyday reasoning runs on a flawed shortcut: we see evidence and immediately jump to conclusions, ignoring how likely those conclusions were //before// we saw the evidence. Bayes' theorem forces you to account for both pieces of information.
+
+The theorem says: the probability of a hypothesis $H$ given observed data $D$ is proportional to how well the hypothesis explains the data, //weighted by how plausible the hypothesis was in the first place//. In symbols:
+
+$$P(H|D) = \frac{P(D|H) \cdot P(H)}{P(D)}$$
+
+Each piece has a name and a role:
+* ''$P(H)$ — the prior:'' your belief about $H$ before seeing data.
+* ''$P(D|H)$ — the likelihood:'' how probable the observed data would be //if// $H$ were true.
+* ''$P(D)$ — the evidence (marginal likelihood):'' the total probability of seeing this data under all possible hypotheses. It acts as a normalizing constant.
+* ''$P(H|D)$ — the posterior:'' your updated belief after seeing the data.
+
+The insight is that beliefs should not be binary — they are //degrees of confidence// that shift smoothly as evidence arrives.
+
+---
+
+!! Prior, Likelihood, and Posterior
+
+Think of these three components as the three acts of a reasoning story.
+
+''Act 1: The Prior.'' Before any data arrives, you have some background expectation. In the medical example, the prior is $P(\text{sick}) = 0.001$. In machine learning, the prior might encode a preference for simpler models, smaller weights, or smoother functions. A ''strong prior'' concentrates probability on a narrow range of hypotheses; a ''weak prior'' (also called ''uninformative'') spreads probability broadly, letting the data speak for itself. The choice of prior is where domain knowledge enters the model — and also where subjectivity lives, which is both Bayesian reasoning's greatest strength and its most debated feature.
+
+''Act 2: The Likelihood.'' This is the data's voice. Given a specific hypothesis, the likelihood tells you how expected or surprising the data would be. A hypothesis that makes the observed data very probable earns a high likelihood score. In the disease example, $P(\text{positive test} | \text{sick}) = 0.99$ — high. But $P(\text{positive test} | \text{healthy}) = 0.01$ is also nonzero, and because there are so many healthy people, this small number produces a flood of false positives. The likelihood alone is //not// the answer; it must be combined with the prior.
+
+''Act 3: The Posterior.'' Multiply the prior by the likelihood, normalize by $P(D)$, and you get the posterior — your revised belief. The posterior is a compromise between prior and likelihood. With little data, the prior dominates. With mountains of data, the likelihood overwhelms the prior and the posterior converges to the truth (assuming the true hypothesis is in your model). This tug-of-war between prior and likelihood is the engine of Bayesian learning.
+
+The posterior from one round of evidence becomes the prior for the next. This is the Bayesian update cycle: observe, update, repeat. Each new data point sharpens your beliefs, and the math guarantees that this process is //coherent// — it cannot produce self-contradictory beliefs.
+
+---
+
+!! What the Math Is Actually Doing
+
+Start from the definition of <<link "conditional probability" "Conditional Probability">><</link>>:
+
+$$P(H|D) = \frac{P(H \cap D)}{P(D)}$$
+
+By symmetry, $P(H \cap D) = P(D|H) \cdot P(H)$, so:
+
+$$P(H|D) = \frac{P(D|H) \cdot P(H)}{P(D)}$$
+
+The denominator $P(D)$ is computed by summing (or integrating) over all hypotheses:
+
+$$P(D) = \sum_{i} P(D|H_i) \cdot P(H_i)$$
+
+or in the continuous case:
+
+$$P(D) = \int P(D|H) \cdot P(H) \, dH$$
+
+For the medical test example with $P(\text{sick}) = 0.001$, $P(+|\text{sick}) = 0.99$, $P(+|\text{healthy}) = 0.01$:
+
+$$P(\text{sick}|+) = \frac{0.99 \times 0.001}{0.99 \times 0.001 + 0.01 \times 0.999} = \frac{0.00099}{0.01098} \approx 0.09$$
+
+Only about 9% — the low prior overwhelms the high likelihood.
+
+In the continuous parameter setting used throughout machine learning, Bayes' theorem becomes:
+
+$$p(\theta | \mathcal{D}) = \frac{p(\mathcal{D}|\theta) \, p(\theta)}{p(\mathcal{D})}$$
+
+where $\theta$ is a parameter vector. The <<link "maximum likelihood" "Maximum Likelihood">><</link>> estimate ignores the prior and maximizes $p(\mathcal{D}|\theta)$ alone. The ''MAP estimate'' (maximum a posteriori) finds the mode of the posterior $p(\theta|\mathcal{D})$. Full <<link "Bayesian inference" "Bayesian Inference">><</link>> goes further: instead of a point estimate, it integrates over the entire posterior to make predictions.
+
+---
+
+!! Bayesian Reasoning in ML
+
+Bayes' theorem is not just a formula — it is a //framework// that shapes how many ML systems are designed.
+
+''Regularization as a prior.'' When you add an L2 penalty to a loss function (Ridge regression), you are implicitly placing a Gaussian prior on the weights: $p(\mathbf{w}) = \mathcal{N}(\mathbf{0}, \tau^2\mathbf{I})$. The MAP estimate under this prior is exactly the Ridge solution. Similarly, an L1 penalty corresponds to a Laplace prior, encouraging sparsity. Bayesian reasoning //explains// regularization rather than treating it as an ad hoc trick.
+
+''<<link "Bayesian networks" "Bayesian Networks">><</link>>.'' These graphical models represent joint probability distributions over many variables using conditional dependencies. Every inference query in a Bayesian network — computing the probability of one variable given observations of others — is an application of Bayes' theorem propagated through the graph.
+
+''Naive Bayes classifiers.'' One of the simplest and most effective classifiers applies Bayes' theorem directly: $P(\text{class}|x) \propto P(x|\text{class}) \cdot P(\text{class})$, with the "naive" assumption that features are conditionally independent given the class. Despite this strong assumption, Naive Bayes works surprisingly well for text classification, spam filtering, and medical diagnosis.
+
+''<<link "Prior distributions" "Prior Distribution">><</link>> in deep learning.'' Bayesian deep learning places distributions over neural network weights. While exact inference is intractable, techniques like variational inference and Monte Carlo dropout approximate the posterior, providing uncertainty estimates that are critical for safety-critical applications like autonomous driving and medical imaging.
+
+---
+
+!! When Bayesian Reasoning Breaks Down
+
+''1. Intractable posteriors.'' For complex models — deep neural networks, large graphical models — the integral $P(D) = \int P(D|\theta)P(\theta) d\theta$ has no closed-form solution and the posterior landscape is high-dimensional and multimodal. Approximate methods (MCMC, variational inference) are needed, but they introduce their own biases. Variational methods tend to underestimate uncertainty; MCMC can be prohibitively slow. The elegant formula on paper becomes a computational nightmare in practice.
+
+''2. Sensitivity to prior choice.'' In low-data regimes, the posterior is dominated by the prior. If the prior is wrong — too narrow, centered on implausible values, or structurally mismatched to the problem — the posterior will be confidently wrong. Two analysts with different priors can reach different conclusions from the same data, which critics argue makes Bayesian reasoning subjective. With enough data the prior washes out, but "enough" can mean thousands or millions of observations depending on the problem.
+
+''3. Model misspecification.'' Bayes' theorem tells you the best hypothesis //within your model//, but if the true data-generating process is not in your hypothesis space, the posterior concentrates on the least-wrong option rather than the truth. Worse, the posterior can become extremely confident in this wrong answer, giving well-calibrated uncertainty //for the wrong model//. Bayesian reasoning does not protect you from asking the wrong question.
+
+---
+
+!! Technical Details
+
+''Derivation from axioms:'' Bayes' theorem follows directly from the product rule of probability. If $P(A,B) = P(A|B)P(B) = P(B|A)P(A)$, then dividing both sides by $P(B)$ gives $P(A|B) = P(B|A)P(A)/P(B)$.
+
+''Odds form:'' An alternative formulation uses odds ratios. The ''posterior odds'' equal the ''prior odds'' times the ''likelihood ratio'' (Bayes factor): $\frac{P(H|D)}{P(\neg H|D)} = \frac{P(H)}{P(\neg H)} \cdot \frac{P(D|H)}{P(D|\neg H)}$. This form is often more intuitive: a Bayes factor of 10 means the data is 10 times more likely under $H$ than under $\neg H$.
+
+''Conjugate priors:'' When the prior and posterior belong to the same distribution family, the prior is called ''conjugate'' to the likelihood. Examples: Beta-Binomial, Gaussian-Gaussian, Dirichlet-Multinomial. Conjugacy enables closed-form updates and is the foundation of tractable Bayesian models.
+
+''Sequential updating:'' If data arrives in batches $D_1, D_2, \ldots$, the posterior after $D_1$ becomes the prior for $D_2$: $p(\theta|D_1,D_2) \propto p(D_2|\theta) \cdot p(\theta|D_1)$. This gives identical results to processing all data at once — order does not matter.
+
+''Bayesian model comparison:'' Given two models $M_1$ and $M_2$, their posterior ratio is $\frac{P(M_1|D)}{P(M_2|D)} = \frac{P(D|M_1)}{P(D|M_2)} \cdot \frac{P(M_1)}{P(M_2)}$. The ratio $P(D|M_1)/P(D|M_2)$ is the ''Bayes factor'' and implements an automatic Occam's razor: complex models that spread probability over many data patterns are penalized relative to simpler models that concentrate probability on the observed data.
+
+''Connection to information theory:'' The KL divergence $D_\text{KL}(p(\theta|D) \| p(\theta))$ measures how much information the data provides about the parameters. A large KL divergence means the data was highly informative; a small one means the prior was already close to the posterior.
+
+---
+
+!! Quiz
+
+<span id="bay-q1">''1. In Bayes' theorem, what does the term P(D|H) represent?''
+
+<<button "A) The prior probability of the hypothesis">><<replace "#bay-q1">>Incorrect. $P(H)$ is the prior probability. $P(D|H)$ is the ''likelihood'' — the probability of observing the data //given// the hypothesis is true.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The probability of the data given the hypothesis (the likelihood)">><<replace "#bay-q1">>Correct! $P(D|H)$ is the likelihood — it measures how probable the observed data would be if hypothesis $H$ were true. It is the data's voice in the Bayesian update.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The posterior probability after updating">><<replace "#bay-q1">>Incorrect. The posterior is $P(H|D)$, not $P(D|H)$. The likelihood $P(D|H)$ measures how well the hypothesis explains the observed data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The total probability of the data">><<replace "#bay-q1">>Incorrect. The total probability of the data is $P(D)$, the denominator. $P(D|H)$ is the likelihood — the probability of the data under a specific hypothesis.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q2">''2. A disease affects 1 in 1,000 people. A test is 99% accurate (both sensitivity and specificity). What is approximately P(sick | positive test)?''
+
+<<button "A) 99%">><<replace "#bay-q2">>Incorrect. This is a common confusion between $P(+|\text{sick})$ and $P(\text{sick}|+)$. The low base rate means most positive tests come from the 999 healthy people. The correct answer is about 9%.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 50%">><<replace "#bay-q2">>Incorrect. Applying Bayes' theorem: $P(\text{sick}|+) = (0.99 \times 0.001)/(0.99 \times 0.001 + 0.01 \times 0.999) \approx 0.09$, or about 9%.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) About 9%">><<replace "#bay-q2">>Correct! $P(\text{sick}|+) = \frac{0.99 \times 0.001}{0.99 \times 0.001 + 0.01 \times 0.999} \approx 9\%$. The very low prior (1 in 1,000) means even a 99%-accurate test produces mostly false positives. This is the base-rate fallacy that Bayes' theorem corrects.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) About 1%">><<replace "#bay-q2">>Incorrect. While the base rate is 0.1%, the positive test does shift your belief upward significantly. The correct posterior is about 9%, computed via Bayes' theorem.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q3">''3. What role does P(D) play in Bayes' theorem?''
+
+<<button "A) It encodes your prior beliefs">><<replace "#bay-q3">>Incorrect. Prior beliefs are encoded by $P(H)$. $P(D)$ is the marginal likelihood or evidence — it acts as a normalizing constant ensuring the posterior sums to 1 over all hypotheses.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It is a normalizing constant ensuring the posterior sums to 1">><<replace "#bay-q3">>Correct! $P(D) = \sum_i P(D|H_i)P(H_i)$ is the total probability of the data across all hypotheses. It ensures the posterior is a valid probability distribution. It also serves as the basis for Bayesian model comparison.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It determines which hypothesis is most likely">><<replace "#bay-q3">>Incorrect. The most likely hypothesis is determined by the numerator $P(D|H)P(H)$. $P(D)$ is the same for all hypotheses and serves as a normalizing constant.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It measures how much data you have collected">><<replace "#bay-q3">>Incorrect. $P(D)$ is the total probability of observing the data, summed over all possible hypotheses. It is a normalizing constant, not a measure of data quantity.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q4">''4. What happens to the posterior as more and more data is observed?''
+
+<<button "A) It always becomes identical to the prior">><<replace "#bay-q4">>Incorrect. With more data, the likelihood dominates and the prior's influence fades. The posterior concentrates around the true parameter values, not the prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The prior dominates and the data is ignored">><<replace "#bay-q4">>Incorrect. The prior dominates only with very little data. As data grows, the likelihood overwhelms the prior and the posterior concentrates on the truth.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The likelihood dominates and the posterior concentrates on the truth">><<replace "#bay-q4">>Correct! As data accumulates, the likelihood term grows in influence while the prior becomes relatively negligible. The posterior concentrates around the true parameter values — this is the Bayesian consistency guarantee (under correct model specification).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The posterior oscillates without converging">><<replace "#bay-q4">>Incorrect. Under standard regularity conditions, the posterior converges smoothly. More data makes it narrower and more concentrated around the truth.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q5">''5. How does L2 regularization relate to Bayesian reasoning?''
+
+<<button "A) L2 regularization is equivalent to using a uniform prior">><<replace "#bay-q5">>Incorrect. A uniform (flat) prior corresponds to //no// regularization — plain maximum likelihood. L2 regularization corresponds to a Gaussian prior on the weights, penalizing large values.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) L2 regularization corresponds to a Gaussian prior on the weights">><<replace "#bay-q5">>Correct! Adding an L2 penalty $\lambda\|\mathbf{w}\|^2$ to the loss is equivalent to placing a Gaussian prior $\mathcal{N}(\mathbf{0}, \tau^2\mathbf{I})$ on the weights, where $\lambda = \sigma^2/\tau^2$. The MAP estimate under this prior gives the Ridge regression solution.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) L2 regularization eliminates the need for Bayes' theorem">><<replace "#bay-q5">>Incorrect. L2 regularization is actually a special case of Bayesian reasoning — it corresponds to the MAP estimate under a Gaussian prior. Bayes' theorem explains //why// regularization works.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) L2 regularization corresponds to a Laplace prior">><<replace "#bay-q5">>Incorrect. A Laplace prior corresponds to L1 regularization (Lasso), which encourages sparsity. L2 regularization corresponds to a Gaussian prior, which encourages small but nonzero weights.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q6">''6. What is a conjugate prior?''
+
+<<button "A) A prior that contradicts the likelihood">><<replace "#bay-q6">>Incorrect. A conjugate prior is one where the posterior belongs to the same distribution family as the prior. For example, a Beta prior combined with a Binomial likelihood yields a Beta posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A prior chosen so the posterior has the same distributional form as the prior">><<replace "#bay-q6">>Correct! Conjugacy means the prior and posterior are in the same family. Beta-Binomial, Gaussian-Gaussian, and Dirichlet-Multinomial are classic examples. This enables closed-form Bayesian updates without numerical integration.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A prior that always equals the posterior">><<replace "#bay-q6">>Incorrect. The prior and posterior have the same //form// (e.g., both Gaussian) but different //parameters//. The data shifts the parameters from prior to posterior values.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A prior that makes the evidence P(D) equal to 1">><<replace "#bay-q6">>Incorrect. $P(D)$ is determined by the data and model, not by conjugacy. A conjugate prior simply ensures the posterior belongs to the same distribution family as the prior, enabling analytical updates.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q7">''7. In the odds form of Bayes' theorem, what is the Bayes factor?''
+
+<<button "A) The ratio of posterior to prior probability">><<replace "#bay-q7">>Incorrect. The ratio of posterior to prior odds is the result of multiplying prior odds by the Bayes factor. The Bayes factor itself is the likelihood ratio $P(D|H)/P(D|\neg H)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The prior odds of the hypothesis">><<replace "#bay-q7">>Incorrect. The prior odds are $P(H)/P(\neg H)$. The Bayes factor is the likelihood ratio $P(D|H)/P(D|\neg H)$, which measures how much the data favors one hypothesis over another.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The likelihood ratio P(D|H) / P(D|not-H)">><<replace "#bay-q7">>Correct! The Bayes factor $\frac{P(D|H)}{P(D|\neg H)}$ measures the relative evidence the data provides for $H$ versus $\neg H$. Posterior odds = prior odds $\times$ Bayes factor. A Bayes factor of 10 means the data is 10 times more likely under $H$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The normalizing constant P(D)">><<replace "#bay-q7">>Incorrect. The normalizing constant appears in the standard form. In the odds form, it cancels out. The Bayes factor is the likelihood ratio $P(D|H)/P(D|\neg H)$.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="bay-q8">''8. Why can Bayesian reasoning produce confidently wrong posteriors?''
+
+<<button "A) Because the formula itself contains an error">><<replace "#bay-q8">>Incorrect. The formula is mathematically airtight. The problem is ''model misspecification'' — if the true data-generating process is not among your hypotheses, the posterior concentrates on the least-wrong hypothesis and can be very confident about it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because the prior always dominates the likelihood">><<replace "#bay-q8">>Incorrect. With enough data the likelihood dominates. Confidently wrong posteriors arise from model misspecification — the true hypothesis is not in your model, so the posterior concentrates on the best available (but wrong) alternative.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because model misspecification means the true hypothesis is not in the model">><<replace "#bay-q8">>Correct! If the true data-generating process lies outside your hypothesis space, Bayes' theorem finds the closest match within your model — and can become increasingly confident in this wrong answer as data accumulates. The math is correct, but it is answering the wrong question.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because more data always increases uncertainty">><<replace "#bay-q8">>Incorrect. More data decreases uncertainty (narrows the posterior). The issue is model misspecification: confidence grows around the //wrong// answer when the true hypothesis is not in your model.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

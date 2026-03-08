@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Graph Coloring: No Adjacent Vertices Share a Color</text>
+
+  <!-- ===== LEFT: Uncolored graph ===== -->
+  <text x="160" y="70" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Uncolored Graph</text>
+
+  <!-- Edges (left graph) -->
+  <line x1="100" y1="130" x2="220" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="100" y1="130" x2="60"  y2="230" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="100" y1="130" x2="160" y2="250" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="220" y1="130" x2="160" y2="250" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="220" y1="130" x2="260" y2="230" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="60"  y1="230" x2="160" y2="250" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="160" y1="250" x2="260" y2="230" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="60"  y1="230" x2="260" y2="230" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Nodes (left graph, all gray) -->
+  <circle cx="100" cy="130" r="18" fill="#BBBBBB" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="220" cy="130" r="18" fill="#BBBBBB" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="60"  cy="230" r="18" fill="#BBBBBB" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="160" cy="250" r="18" fill="#BBBBBB" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="260" cy="230" r="18" fill="#BBBBBB" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Node labels -->
+  <text x="100" y="135" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">A</text>
+  <text x="220" y="135" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">B</text>
+  <text x="60"  y="235" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">C</text>
+  <text x="160" y="255" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">D</text>
+  <text x="260" y="235" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">E</text>
+
+  <text x="160" y="310" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">5 vertices, 8 edges</text>
+
+  <!-- Arrow -->
+  <text x="350" y="195" font-family="Georgia, serif" font-size="28" fill="#5C3D1E" text-anchor="middle">&#8594;</text>
+  <text x="350" y="220" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">color it</text>
+
+  <!-- ===== RIGHT: Properly colored graph ===== -->
+  <text x="560" y="70" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">3-Coloring (&#967;(G) = 3)</text>
+
+  <!-- Edges (right graph) -->
+  <line x1="500" y1="130" x2="620" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="500" y1="130" x2="460" y2="230" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="500" y1="130" x2="560" y2="250" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="620" y1="130" x2="560" y2="250" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="620" y1="130" x2="660" y2="230" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="460" y1="230" x2="560" y2="250" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="560" y1="250" x2="660" y2="230" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="460" y1="230" x2="660" y2="230" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Nodes (right graph, properly colored with 3 colors) -->
+  <!-- A=red, B=navy, C=navy, D=brown, E=red -->
+  <!-- Check: A-B (red-navy OK), A-C (red-navy OK), A-D (red-brown OK), B-D (navy-brown OK), B-E (navy-red OK), C-D (navy-brown OK), D-E (brown-red OK), C-E (navy-red OK) -->
+  <circle cx="500" cy="130" r="18" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="620" cy="130" r="18" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="460" cy="230" r="18" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="560" cy="250" r="18" fill="#C4A87A" stroke="#5C3D1E" stroke-width="2"/>
+  <circle cx="660" cy="230" r="18" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Node labels -->
+  <text x="500" y="135" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">A</text>
+  <text x="620" y="135" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">B</text>
+  <text x="460" y="235" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">C</text>
+  <text x="560" y="255" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">D</text>
+  <text x="660" y="235" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle">E</text>
+
+  <!-- Legend -->
+  <rect x="475" y="296" width="170" height="50" rx="4" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <circle cx="495" cy="312" r="7" fill="#7C2530"/>
+  <text x="510" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Color 1</text>
+  <circle cx="560" cy="312" r="7" fill="#2D5A8E"/>
+  <text x="575" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Color 2</text>
+  <circle cx="625" cy="312" r="7" fill="#C4A87A"/>
+  <text x="640" y="316" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Color 3</text>
+  <text x="560" y="336" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">No two neighbors share a color</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="380" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">The chromatic number &#967;(G) is the minimum number of colors needed for a proper coloring</text>
+</svg>

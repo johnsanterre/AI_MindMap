@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Inclusion-Exclusion Principle</text>
+
+  <!-- ===== LEFT: Venn Diagram of 3 Sets ===== -->
+  <!-- Circle A -->
+  <circle cx="240" cy="200" r="110" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <!-- Circle B -->
+  <circle cx="340" cy="200" r="110" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <!-- Circle C -->
+  <circle cx="290" cy="290" r="110" fill="#5C3D1E" opacity="0.12" stroke="#5C3D1E" stroke-width="2"/>
+
+  <!-- Set labels -->
+  <text x="175" y="155" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#7C2530" text-anchor="middle">A</text>
+  <text x="405" y="155" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2D5A8E" text-anchor="middle">B</text>
+  <text x="290" y="370" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E" text-anchor="middle">C</text>
+
+  <!-- Region labels: only-A, only-B, only-C -->
+  <text x="195" y="210" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">A only</text>
+  <text x="385" y="210" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">B only</text>
+  <text x="290" y="340" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">C only</text>
+
+  <!-- Pairwise intersections -->
+  <text x="290" y="175" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">A∩B</text>
+  <text x="242" y="265" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">A∩C</text>
+  <text x="338" y="265" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">B∩C</text>
+
+  <!-- Triple intersection -->
+  <text x="290" y="230" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530" text-anchor="middle">A∩B∩C</text>
+
+  <!-- ===== RIGHT: Formula Panel ===== -->
+  <rect x="470" y="48" width="310" height="140" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="625" y="70" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530" text-anchor="middle">The Formula (n = 3)</text>
+
+  <text x="488" y="95" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">|A∪B∪C| =</text>
+  <text x="510" y="115" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">+ |A| + |B| + |C|</text>
+  <text x="510" y="135" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">− |A∩B| − |A∩C| − |B∩C|</text>
+  <text x="510" y="155" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-weight="bold">+ |A∩B∩C|</text>
+  <text x="625" y="178" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-style="italic">add singles, subtract pairs, add triple</text>
+
+  <!-- ===== BOTTOM RIGHT: General Formula ===== -->
+  <rect x="470" y="200" width="310" height="80" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="625" y="222" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E" text-anchor="middle">General Formula (n sets)</text>
+
+  <text x="488" y="248" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">|A₁∪…∪Aₙ| = Σ|Aᵢ| − Σ|Aᵢ∩Aⱼ|</text>
+  <text x="530" y="268" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">+ Σ|Aᵢ∩Aⱼ∩Aₖ| − … + (−1)ⁿ⁺¹|A₁∩…∩Aₙ|</text>
+
+  <!-- ===== BOTTOM: Applications ===== -->
+  <rect x="470" y="296" width="145" height="80" rx="6" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="542" y="316" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">Derangements</text>
+  <text x="542" y="334" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Dₙ = n! Σ (−1)ᵏ/k!</text>
+  <text x="542" y="350" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">no element in its</text>
+  <text x="542" y="364" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">original position</text>
+
+  <rect x="635" y="296" width="145" height="80" rx="6" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="707" y="316" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Euler's Totient</text>
+  <text x="707" y="334" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">φ(n) = n Π (1 − 1/p)</text>
+  <text x="707" y="350" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">count integers</text>
+  <text x="707" y="364" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">coprime to n</text>
+
+  <!-- Alternating sign annotation -->
+  <text x="290" y="52" font-family="Georgia, serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-style="italic">alternating signs correct for overcounting</text>
+</svg>

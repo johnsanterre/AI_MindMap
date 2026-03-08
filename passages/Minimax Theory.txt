@@ -1,0 +1,141 @@
+<<include "Header">>
+! Minimax Theory
+<img src="assets/minimax_theory.svg" alt="Minimax Theory" width="800">
+
+Imagine two generals on opposite sides of a battlefield, each choosing positions simultaneously. One general wants to minimize casualties; the other wants to maximize them. Neither knows the other's move in advance, so each must prepare for the //worst case//. Minimax theory is the mathematics of this standoff — it tells you the best you can guarantee when an adversary is actively working against you. Rather than hoping for favorable conditions, you plan for the most hostile ones, and the theory reveals a remarkable fact: under the right conditions, the order in which "minimize" and "maximize" happen doesn't matter. The cautious player and the aggressive player converge on the same value.
+
+!! The Core Insight
+
+The central revelation of minimax theory is the ''minimax theorem'': in zero-sum games with mixed strategies, the value a player can guarantee by minimizing their maximum loss equals the value the opponent can guarantee by maximizing their minimum gain. Symbolically, $\min_x \max_y f(x,y) = \max_y \min_x f(x,y)$. This equality — far from obvious — means that a well-defined ''value'' of the game exists. Neither player can do better by deviating from their optimal (minimax) strategy, and neither has reason to regret their choice after seeing the opponent's move. This is the ''saddle point'': the point where the surface curves up in one direction and down in the other, like the center of a horse's saddle.
+
+!! Two Players, One Objective
+
+In a ''zero-sum game'', one player's gain is exactly the other's loss. The payoff matrix $A$ gives Player 1's payoff for every combination of strategies. Player 1 (the ''minimizer'') picks a row to minimize the payoff; Player 2 (the ''maximizer'') picks a column to maximize it.
+
+With ''pure strategies'' (deterministic choices), a saddle point may not exist — the order of min and max matters, and $\min_x \max_y f \geq \max_y \min_x f$ is typically strict. But von Neumann's breakthrough was showing that with ''mixed strategies'' (probability distributions over actions), equality always holds.
+
+The ''saddle point'' $(x^*, y^*)$ satisfies: $f(x^*, y) \leq f(x^*, y^*) \leq f(x, y^*)$ for all $x, y$. Player 1 cannot reduce the payoff below $f(x^*, y^*)$, and Player 2 cannot raise it above that value. This connects directly to the concept of [[Nash Equilibrium|Nash Equilibrium]] — in a two-player zero-sum game, every Nash equilibrium is a minimax solution.
+
+The adversarial mindset extends far beyond parlor games. Whenever you face uncertainty that could be //hostile// rather than random — an adversary crafting inputs to fool your classifier, nature choosing the hardest distribution for your estimator — minimax thinking applies.
+
+!! What the Math Is Actually Doing
+
+The minimax problem seeks:
+
+$$\min_x \max_y f(x, y)$$
+
+where $x \in X$ and $y \in Y$ are strategy sets. The ''minimax inequality'' always holds:
+
+$$\max_y \min_x f(x,y) \leq \min_x \max_y f(x,y)$$
+
+The left side is the ''maximin value'' (what the maximizer can guarantee), and the right side is the ''minimax value'' (what the minimizer must concede). When equality holds, we say ''strong duality'' obtains and a saddle point exists.
+
+''Von Neumann's Minimax Theorem'' (1928): If $X$ and $Y$ are simplices of mixed strategies over finite action sets, and $f(x,y) = x^\top A y$ is bilinear, then:
+
+$$\min_x \max_y \, x^\top A y = \max_y \min_x \, x^\top A y$$
+
+The proof leverages the linearity of expectation in mixed strategies and fixed-point arguments. The connection to ''strong duality'' in [[Convex Optimization|Convex Optimization]] is deep: the minimax theorem is equivalent to LP duality when the game is represented as a linear program.
+
+In statistics, ''minimax rates'' characterize the best worst-case performance of any estimator. For estimating a parameter $\theta$ under loss $L$:
+
+$$R^* = \inf_{\hat{\theta}} \sup_{\theta \in \Theta} \, E[L(\hat{\theta}, \theta)]$$
+
+This minimax risk $R^*$ is the benchmark: no estimator can uniformly beat it across the parameter space $\Theta$. It captures the fundamental difficulty of the estimation problem itself, independent of any particular method.
+
+!! Minimax in Machine Learning
+
+''Generative Adversarial Networks'' ([[Generative Adversarial Networks|GANs]]) are the most prominent minimax formulation in modern ML. The generator $G$ minimizes and the discriminator $D$ maximizes:
+
+$$\min_G \max_D \, E_{x \sim p_{\text{data}}}[\log D(x)] + E_{z \sim p_z}[\log(1 - D(G(z)))]$$
+
+Training alternates between optimizing $D$ and $G$, seeking the saddle point where $G$ produces realistic samples and $D$ cannot distinguish real from fake. The instabilities of GAN training — mode collapse, oscillation — reflect the difficulty of finding saddle points in high-dimensional, non-convex landscapes.
+
+''Adversarial robustness'' frames robust classification as a minimax problem. Given a classifier with parameters $\theta$ and perturbation budget $\epsilon$:
+
+$$\min_\theta \, E_{(x,y)} \left[ \max_{\|\delta\| \leq \epsilon} L(f_\theta(x + \delta), y) \right]$$
+
+The inner maximization finds the worst-case perturbation; the outer minimization trains the model to withstand it. This connects to the broader field of ''robust optimization'', where decisions must perform well under worst-case uncertainty.
+
+''Minimax optimal estimators'' in statistics achieve the minimax rate $R^*$. For example, the James-Stein estimator is minimax for estimating a multivariate normal mean when the dimension $d \geq 3$. Kernel density estimators achieve minimax rates over Sobolev and Holder classes, and these rates reveal fundamental statistical limits tied to smoothness and dimensionality.
+
+In [[Hypothesis Testing|Hypothesis Testing]], minimax ideas appear through the Neyman-Pearson framework and the connection between testing and estimation lower bounds.
+
+!! When Minimax Breaks Down
+
+* ''Non-zero-sum settings'': When players' interests are not perfectly opposed, minimax strategies become overly conservative. In cooperative or general-sum games, Nash equilibria need not coincide with minimax solutions, and the minimax theorem does not apply. Real-world ML problems — multi-agent systems, multi-task learning — often lack the zero-sum structure that makes minimax clean.
+
+* ''Computational intractability'': Finding minimax solutions requires solving the inner maximization //exactly// at every step. In deep learning (e.g., GANs), both the min and max are over non-convex sets, so gradient-based methods find only approximate saddle points. The result is oscillation, cycling, and mode collapse rather than convergence to the theoretical equilibrium.
+
+* ''Excessive conservatism'': Minimax optimizes for the absolute worst case, which may be astronomically unlikely. An estimator or policy tuned for worst-case performance can sacrifice enormous average-case quality. Bayesian approaches or distributionally robust methods with constrained uncertainty sets often provide better practical tradeoffs, accepting slightly worse worst-case guarantees for much better typical performance.
+
+!! Technical Details
+
+''Sion's Minimax Theorem'' generalizes von Neumann's result beyond bilinear functions: if $X$ is compact and convex, $Y$ is convex, $f$ is quasi-convex and upper semicontinuous in $x$, and quasi-concave and lower semicontinuous in $y$, then $\min_x \max_y f = \max_y \min_x f$. This covers many continuous [[Game Theory|Game Theory]] and optimization settings.
+
+''Minimax rates for nonparametric estimation'': For a $\beta$-smooth function class in $d$ dimensions, the minimax rate for $L^2$ estimation is $R^* \asymp n^{-2\beta/(2\beta + d)}$, exhibiting the curse of dimensionality. This rate is achieved by kernel estimators, local polynomials, and wavelet estimators with appropriate tuning.
+
+''Le Cam's method'' (two-point testing): To lower-bound the minimax risk, construct two parameter values $\theta_0, \theta_1$ that are hard to distinguish. If $\|P_{\theta_0}^n \wedge P_{\theta_1}^n\|$ (the affinity) is bounded away from zero, then $R^* \geq \frac{1}{4} L(\theta_0, \theta_1) \cdot \|P_{\theta_0}^n \wedge P_{\theta_1}^n\|$.
+
+''Fano's inequality'': For multiple hypotheses $\{\theta_1, \ldots, \theta_M\}$, if the mutual information $I(\theta; X^n) \leq \beta$, then the minimax risk satisfies $R^* \geq \frac{\delta}{2}\left(1 - \frac{\beta + \log 2}{\log M}\right)$ where $\delta$ is the minimum separation under the [[Loss Functions|loss function]].
+
+''Assouad's lemma'': For parameter spaces with a hypercube structure (indexed by $\{0,1\}^d$), the minimax risk decomposes into $d$ coordinate-wise testing problems. This yields tight lower bounds for problems with product structure, such as estimating a $d$-dimensional vector or a function at $d$ grid points. The bound takes the form $R^* \geq \frac{d \delta}{2} \min_{j} (1 - \|P_{+j} - P_{-j}\|_{TV})$.
+
+!! Quiz
+
+<div id="q1">''1. What does von Neumann's minimax theorem guarantee for finite zero-sum games with mixed strategies?''
+<<button "A) The game has a unique pure strategy equilibrium">><<replace "#q1">>That is not correct. The theorem addresses mixed strategies, not pure strategies. Pure strategy saddle points may not exist.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) min max = max min, so a well-defined game value exists">><<replace "#q1">>Correct! Von Neumann proved that with mixed strategies in finite zero-sum games, the minimax and maximin values coincide, establishing a unique game value.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Both players always have dominant strategies">><<replace "#q1">>That is not correct. Dominant strategies are a much stronger condition; most games lack them. The theorem guarantees equality of minimax values, not dominance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The game cannot be solved in polynomial time">><<replace "#q1">>That is not correct. Two-player zero-sum games can actually be solved efficiently via linear programming. The theorem is about existence of a value, not computational complexity.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. At a saddle point $(x^*, y^*)$, which condition holds?''
+<<button "A) $f(x^*, y^*) \geq f(x, y)$ for all $x, y$">><<replace "#q2">>That is not correct. That would make it a global maximum. A saddle point is a minimum in one direction and a maximum in the other.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $f(x^*, y) \leq f(x^*, y^*) \leq f(x, y^*)$ for all $x, y$">><<replace "#q2">>Correct! The saddle point is a maximum over $y$ (Player 2's direction) and a minimum over $x$ (Player 1's direction), creating the characteristic saddle shape.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Both partial derivatives are positive">><<replace "#q2">>That is not correct. At a saddle point the gradient is zero (first-order condition), but the Hessian has mixed curvature — positive in one direction, negative in the other.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The function is convex in both variables">><<replace "#q2">>That is not correct. If $f$ were convex in both variables, the saddle structure would not exist. A saddle requires convexity in $x$ and concavity in $y$ (or vice versa).<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. In the GAN objective, which player is the minimizer?''
+<<button "A) The discriminator">><<replace "#q3">>That is not correct. The discriminator is the maximizer — it tries to maximize its ability to distinguish real from generated data.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The training algorithm">><<replace "#q3">>That is not correct. The training algorithm alternates updates for both players; it is not one of the players in the minimax game.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The generator">><<replace "#q3">>Correct! The generator minimizes the objective, trying to produce samples that fool the discriminator. The GAN game is $\min_G \max_D V(D, G)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The data distribution">><<replace "#q3">>That is not correct. The data distribution is fixed; it is not a player in the game. The two players are the generator and discriminator networks.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What is the minimax rate for estimating a $\beta$-smooth function in $d$ dimensions under $L^2$ loss?''
+<<button "A) $n^{-1/2}$">><<replace "#q4">>That is not correct. The parametric rate $n^{-1/2}$ applies to finite-dimensional problems. Nonparametric rates depend on smoothness $\beta$ and dimension $d$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $n^{-2\beta/(2\beta + d)}$">><<replace "#q4">>Correct! This is the classical nonparametric minimax rate, showing that smoother functions (larger $\beta$) are easier to estimate, but higher dimension $d$ makes estimation harder — the curse of dimensionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $n^{-\beta/d}$">><<replace "#q4">>That is not correct. The correct rate is $n^{-2\beta/(2\beta + d)}$, which balances bias (controlled by smoothness) and variance (controlled by sample size and dimension).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $e^{-n}$">><<replace "#q4">>That is not correct. Exponential rates do not appear in nonparametric function estimation. The rate is polynomial in $n$, specifically $n^{-2\beta/(2\beta + d)}$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. Le Cam's two-point method establishes minimax lower bounds by:''
+<<button "A) Finding the maximum likelihood estimator">><<replace "#q5">>That is not correct. Le Cam's method is about lower bounds on risk, not about constructing estimators. It reduces estimation to a hypothesis testing problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Solving the dual linear program of the game">><<replace "#q5">>That is not correct. Le Cam's method is a statistical technique for proving lower bounds, not an optimization approach to game theory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Reducing estimation to testing between two carefully chosen hypotheses">><<replace "#q5">>Correct! Le Cam's method constructs two parameter values that are well-separated in loss but statistically hard to distinguish, converting the estimation problem into a binary hypothesis test.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Computing the Fisher information matrix">><<replace "#q5">>That is not correct. While Fisher information appears in other lower bound techniques (Cramer-Rao), Le Cam's method uses total variation or affinity between distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. Why does the minimax approach sometimes fail in practice?''
+<<button "A) It requires infinite data">><<replace "#q6">>That is not correct. Minimax theory applies to finite samples. The practical issue is that worst-case optimization can be overly conservative for typical inputs.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It optimizes for worst-case scenarios that may be extremely unlikely">><<replace "#q6">>Correct! Minimax strategies guard against the absolute worst case, which may sacrifice substantial average-case performance for protection against scenarios that occur with negligible probability.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It only works for supervised learning">><<replace "#q6">>That is not correct. Minimax theory applies broadly — to games, estimation, optimization, and many other domains. The limitation is conservatism, not scope.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It cannot handle continuous strategy spaces">><<replace "#q6">>That is not correct. Sion's theorem extends minimax results to continuous, compact, convex strategy spaces. The issue is practical conservatism, not mathematical scope.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. Sion's minimax theorem extends von Neumann's result by requiring:''
+<<button "A) Finite strategy sets and bilinear payoffs">><<replace "#q7">>That is not correct. Those are von Neumann's original conditions. Sion's theorem //relaxes// these to broader function classes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Compact convex sets and quasi-convex/quasi-concave payoffs">><<replace "#q7">>Correct! Sion's theorem requires $X$ compact convex, $Y$ convex, $f$ quasi-convex-upper-semicontinuous in $x$ and quasi-concave-lower-semicontinuous in $y$ — a significant generalization beyond bilinear functions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Differentiable payoff functions only">><<replace "#q7">>That is not correct. Sion's theorem does not require differentiability — only semicontinuity conditions, which are weaker than continuity itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Strictly convex strategy sets">><<replace "#q7">>That is not correct. Convexity is required but not strict convexity. The key conditions are on compactness and the quasi-convexity/concavity of the payoff function.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. In adversarial robustness, the inner maximization over $\|\delta\| \leq \epsilon$ represents:''
+<<button "A) The learning rate schedule">><<replace "#q8">>That is not correct. The inner maximization has nothing to do with optimization hyperparameters. It represents finding the worst-case input perturbation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Regularization of the model weights">><<replace "#q8">>That is not correct. While robust training has a regularization effect, the inner max explicitly searches for the most damaging perturbation within the allowed budget.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Finding the worst-case adversarial perturbation">><<replace "#q8">>Correct! The inner maximization finds the perturbation $\delta$ within the $\epsilon$-ball that causes maximum loss — the adversary's best attack. The outer minimization then trains the model to withstand such attacks.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Sampling from the data distribution">><<replace "#q8">>That is not correct. Data sampling is separate from the adversarial perturbation. The inner max searches for the worst perturbation of a given input, not new data points.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

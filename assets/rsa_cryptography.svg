@@ -1,0 +1,71 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">RSA Encryption &amp; Decryption</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arr-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+
+  <!-- Key Generation Box -->
+  <rect x="280" y="55" width="240" height="100" rx="8" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="78" font-family="Georgia, serif" font-size="15" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Key Generation</text>
+  <text x="400" y="100" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">Pick primes p, q</text>
+  <text x="400" y="118" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">n = p &times; q</text>
+  <text x="400" y="136" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle">&phi;(n) = (p&minus;1)(q&minus;1)</text>
+
+  <!-- Arrow down-left to Public Key -->
+  <line x1="340" y1="155" x2="180" y2="200" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr-blue)"/>
+  <!-- Arrow down-right to Private Key -->
+  <line x1="460" y1="155" x2="620" y2="200" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- Public Key Box -->
+  <rect x="80" y="200" width="200" height="70" rx="8" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="180" y="225" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Public Key</text>
+  <text x="180" y="248" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle">(e, n)</text>
+  <text x="180" y="263" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">shared openly</text>
+
+  <!-- Private Key Box -->
+  <rect x="520" y="200" width="200" height="70" rx="8" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="620" y="225" font-family="Georgia, serif" font-size="15" fill="#7C2530" text-anchor="middle" font-weight="bold">Private Key</text>
+  <text x="620" y="248" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle">(d, n)</text>
+  <text x="620" y="263" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">kept secret</text>
+
+  <!-- Encrypt flow -->
+  <rect x="45" y="310" width="130" height="45" rx="6" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="110" y="330" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Plaintext M</text>
+  <text x="110" y="346" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">"Hello"</text>
+
+  <line x1="175" y1="332" x2="240" y2="332" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+  <rect x="240" y="310" width="150" height="45" rx="6" fill="#2D5A8E" fill-opacity="0.08" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="315" y="328" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Encrypt</text>
+  <text x="315" y="346" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">C = M&#x1D49; mod n</text>
+
+  <line x1="390" y1="332" x2="430" y2="332" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Ciphertext -->
+  <rect x="430" y="310" width="120" height="45" rx="6" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="490" y="330" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Ciphertext C</text>
+  <text x="490" y="346" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">&#x1F512; scrambled</text>
+
+  <line x1="550" y1="332" x2="590" y2="332" stroke="#7C2530" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- Decrypt -->
+  <rect x="590" y="310" width="160" height="45" rx="6" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="670" y="328" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Decrypt</text>
+  <text x="670" y="346" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle">M = C&#x1D48; mod n</text>
+
+  <!-- Bottom formula -->
+  <text x="400" y="390" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">Security rests on the difficulty of factoring n = p &times; q</text>
+</svg>

@@ -1,0 +1,152 @@
+<<include "Header">>
+! Michael I. Jordan
+<img src="assets/michael_jordan.svg" alt="Michael I. Jordan" width="800">
+
+Imagine you are an architect who insists that skyscrapers need proper foundations before anyone starts hanging curtain walls. While the rest of the field was racing to stack more layers and chase benchmark scores, ''Michael I. Jordan'' was the person who kept asking: "But do we actually understand //why// this works?" A professor at UC Berkeley with joint appointments in computer science and statistics, Jordan spent decades arguing that machine learning is not merely an engineering discipline — it is a branch of applied mathematics that demands the same rigor you would expect from statistical physics or information theory. His influence is so pervasive that in 2016, //Science// magazine named him the "world's most influential computer scientist," and his academic family tree reads like a who's-who of modern ML: [[Andrew Ng|Andrew Ng]], David Blei, Zoubin Ghahramani, and many others learned their craft under his mentorship.
+
+!! Key Contributions
+
+Jordan's contributions span an extraordinary range, but a handful of themes dominate:
+
+* ''[[Variational Inference|Variational Inference]] for [[Probabilistic Graphical Models|Probabilistic Graphical Models]]'' — Jordan and his collaborators (especially Tommi Jaakkola and Zoubin Ghahramani) turned variational methods from a niche physics trick into the standard toolkit for approximate inference in complex Bayesian models. Before their work, computing posterior distributions in large graphical models was often intractable; afterward, researchers had a principled, scalable alternative to brute-force sampling.
+
+* ''[[Latent Dirichlet Allocation|Latent Dirichlet Allocation]] (LDA)'' — Together with David Blei and Andrew Ng, Jordan introduced LDA in 2003, a generative probabilistic model for discovering latent topics in text corpora. LDA became one of the most cited papers in all of computer science and launched the entire field of probabilistic topic modeling.
+
+* ''[[Bayesian Nonparametrics|Bayesian Nonparametrics]]'' — Jordan championed models like the Dirichlet process mixture and the hierarchical Dirichlet process, which let the data decide how many clusters or components a model should have, rather than forcing the analyst to choose in advance.
+
+* ''Mixture of Experts'' — In the early 1990s, Jordan (with Robert Jacobs) developed the mixture-of-experts architecture, where different sub-networks specialize on different parts of the input space and a gating network decides which expert to trust. This idea has resurfaced spectacularly in modern large language models.
+
+* ''Bridging Statistics and ML'' — Jordan has been one of the most vocal advocates for treating ML as an extension of statistics, not a replacement for it. His 2015 essay on the "AI revolution" cautioned against hype and called for deeper engagement with statistical decision theory, causal inference, and uncertainty quantification.
+
+* ''Berkeley and BAIR'' — As a founding member of the Berkeley Artificial Intelligence Research (BAIR) lab, Jordan helped build one of the world's premier ML research groups, shaping the next generation of researchers and practitioners.
+
+!! The Core Insight
+
+Jordan's central thesis is deceptively simple: ''machine learning is fundamentally a statistical and computational problem that needs principled foundations, not just clever engineering.'' Many practitioners treat neural networks as black boxes — pour in data, turn the crank, and hope the predictions are good. Jordan argues this is dangerous. Without a proper understanding of uncertainty, without knowing //when// your model's outputs can be trusted and when they cannot, you are building on sand. His life's work has been to import the rigorous inferential machinery of [[Bayesian Methods|Bayesian Methods]] — posterior distributions, marginal likelihoods, principled model comparison — into the heart of machine learning.
+
+This is not mere academic pedantry. When a self-driving car must decide whether a shape ahead is a pedestrian or a shadow, the //confidence// of that prediction matters as much as the prediction itself. When a medical diagnostic system flags a tumor, the doctor needs to know the probability that the flag is correct. Jordan's framework says: treat your model as a probabilistic object, compute (or approximate) the posterior, and let the mathematics of probability tell you how much to trust your answers.
+
+!! What the Math Is Actually Doing
+
+The ''Evidence Lower Bound (ELBO)'' is the cornerstone of [[Variational Inference|Variational Inference]]. When the true posterior $p(z \mid x)$ is intractable, we introduce an approximate distribution $q(z)$ and maximize:
+
+$$\text{ELBO}(q) = \mathbb{E}_{q(z)}[\log p(x, z)] - \mathbb{E}_{q(z)}[\log q(z)]$$
+
+This is equivalent to minimizing the KL divergence between $q(z)$ and the true posterior:
+
+$$\text{KL}(q(z) \| p(z \mid x)) = \log p(x) - \text{ELBO}(q)$$
+
+Since $\log p(x)$ is fixed, maximizing the ELBO tightens the approximation. The ''mean-field approximation'' assumes $q(z) = \prod_i q_i(z_i)$, factoring the posterior into independent components. Each factor is updated in turn:
+
+$$q_i^*(z_i) \propto \exp\left(\mathbb{E}_{q_{-i}}[\log p(x, z)]\right)$$
+
+where $q_{-i}$ denotes all factors except the $i$-th. This coordinate-ascent procedure is guaranteed to converge to a local optimum of the ELBO.
+
+For ''[[Latent Dirichlet Allocation|Latent Dirichlet Allocation]]'', the generative model posits that each document $d$ draws a topic distribution $\theta_d \sim \text{Dir}(\alpha)$, then for each word position, draws a topic $z_{dn} \sim \text{Cat}(\theta_d)$ and a word $w_{dn} \sim \text{Cat}(\beta_{z_{dn}})$. The joint probability is:
+
+$$p(\theta, z, w \mid \alpha, \beta) = \prod_d p(\theta_d \mid \alpha) \prod_n p(z_{dn} \mid \theta_d)\, p(w_{dn} \mid \beta_{z_{dn}})$$
+
+The posterior over topics given observed words is computed via variational inference or collapsed Gibbs sampling, revealing the latent thematic structure of the corpus.
+
+!! Impact on the Field
+
+Jordan is consistently ranked among the most cited researchers in all of computer science and statistics. His impact is measured not just in papers but in //people//:
+
+* ''[[Andrew Ng|Andrew Ng]]'' — co-founder of Google Brain, former chief scientist at Baidu, creator of the most popular ML course in history
+* ''David Blei'' — co-inventor of LDA, leader in probabilistic modeling and variational inference at Columbia
+* ''Zoubin Ghahramani'' — former chief scientist at Uber AI, leading Bayesian ML researcher at Cambridge
+* ''Percy Liang'' — Stanford professor, founder of the HELM benchmark for language models
+* ''Ben Taskar'' (1977–2013) — pioneering work on structured prediction
+
+Jordan received the IJCAI Research Excellence Award (2016), the IEEE John von Neumann Medal (2020), and the World Laureates Association Prize in Computer Science (2022). He was elected to the National Academy of Sciences, the National Academy of Engineering, and the American Academy of Arts and Sciences — a rare triple membership that reflects his unique position at the intersection of multiple disciplines.
+
+!! When Bayesian ML Faces Challenges
+
+''1. Computational cost at scale.'' Variational inference and MCMC methods can become prohibitively expensive for modern-scale models with billions of parameters. The mean-field assumption may be too restrictive to capture complex posterior dependencies, yet richer approximations blow up the computational budget. This tension between fidelity and speed remains a central challenge.
+
+''2. Model misspecification.'' Bayesian inference gives you the best answer //within your model class//, but if the model is fundamentally wrong — if the generative assumptions do not match reality — then the posterior concentrates on the "least wrong" explanation, which can be confidently incorrect. A beautiful posterior over a bad model is still a bad answer.
+
+''3. Prior sensitivity in small-data regimes.'' When data is abundant, the prior washes out. When data is scarce — exactly when you most need [[Bayesian Methods|Bayesian Methods]] — the choice of prior dominates the posterior. Selecting priors that encode genuine knowledge without smuggling in unwarranted assumptions is more art than science, and different priors can yield wildly different conclusions.
+
+!! Technical Details
+
+''Key Papers:''
+* Jordan et al. (1994) — "Hierarchical Mixtures of Experts and the EM Algorithm"
+* Jordan et al. (1999) — "An Introduction to Variational Methods for Graphical Models" (//Machine Learning//)
+* Blei, Ng & Jordan (2003) — "Latent Dirichlet Allocation" (//JMLR//)
+* Teh, Jordan et al. (2006) — "Hierarchical Dirichlet Processes" (//JASA//)
+* Jordan (2004) — "Graphical Models" (//Statistical Science//)
+
+''Career:'' BS in Psychology (LSU), MS in Mathematics (ASU), PhD in Cognitive Science (UCSD, 1985). Faculty at MIT (1988–1998), then UC Berkeley (1998–present). Joint appointment in EECS and Statistics.
+
+''Awards:'' IJCAI Research Excellence Award (2016), IEEE John von Neumann Medal (2020), World Laureates Association Prize (2022), ACM Fellow, IMS Fellow.
+
+''Notable intellectual lineage:'' Jordan's work connects [[Expectation Maximization|Expectation Maximization]], [[Variational Inference|Variational Inference]], [[Probabilistic Graphical Models|Probabilistic Graphical Models]], and [[Bayesian Nonparametrics|Bayesian Nonparametrics]] into a coherent framework. His emphasis on the statistical foundations of [[Deep Learning|Deep Learning]] has influenced how the field thinks about generalization, uncertainty, and robustness.
+
+!! Quiz
+
+<div id="q1">''1. What optimization objective is central to variational inference?''
+
+<<button "A. Cross-entropy loss">><<replace "#q1">>''1.'' A. Cross-entropy loss — Incorrect. Cross-entropy is used in discriminative training, not variational inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Evidence Lower Bound (ELBO)">><<replace "#q1">>''1.'' B. Evidence Lower Bound (ELBO) — Correct! The ELBO provides a tractable lower bound on the log-evidence, and maximizing it tightens the approximation to the true posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Mean squared error">><<replace "#q1">>''1.'' C. Mean squared error — Incorrect. MSE is a regression loss function, not a variational objective.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Hinge loss">><<replace "#q1">>''1.'' D. Hinge loss — Incorrect. Hinge loss is used in SVMs, not variational inference.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What does the mean-field approximation assume about the posterior?''
+
+<<button "A. It is Gaussian">><<replace "#q2">>''2.'' A. It is Gaussian — Incorrect. Mean-field does not assume a Gaussian form; it assumes factorization over variables.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It factorizes into independent components">><<replace "#q2">>''2.'' B. It factorizes into independent components — Correct! Mean-field assumes $q(z) = \prod_i q_i(z_i)$, treating latent variables as independent under the approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It has a single mode">><<replace "#q2">>''2.'' C. It has a single mode — Incorrect. While mean-field often finds a single mode, that is a consequence, not the defining assumption.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It matches the prior exactly">><<replace "#q2">>''2.'' D. It matches the prior exactly — Incorrect. The variational distribution is optimized to approximate the posterior, not the prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. In LDA, what does $\theta_d$ represent?''
+
+<<button "A. The global word distribution">><<replace "#q3">>''3.'' A. The global word distribution — Incorrect. The global word distributions are the topic-word matrices $\beta_k$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The topic distribution for document $d$">><<replace "#q3">>''3.'' B. The topic distribution for document $d$ — Correct! Each document has its own topic proportion vector $\theta_d$ drawn from a Dirichlet prior.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The word embedding vector">><<replace "#q3">>''3.'' C. The word embedding vector — Incorrect. LDA does not use word embeddings; it models words as discrete categorical draws.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The learning rate">><<replace "#q3">>''3.'' D. The learning rate — Incorrect. $\theta_d$ is a latent variable, not a hyperparameter.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. Which of the following was NOT one of Jordan's doctoral students or postdocs?''
+
+<<button "A. Andrew Ng">><<replace "#q4">>''4.'' A. Andrew Ng — Incorrect guess; Ng was indeed Jordan's PhD student at Berkeley.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. David Blei">><<replace "#q4">>''4.'' B. David Blei — Incorrect guess; Blei was Jordan's PhD student at Berkeley.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Geoffrey Hinton">><<replace "#q4">>''4.'' C. Geoffrey Hinton — Correct! Hinton was not a student or postdoc of Jordan. Hinton is a contemporary who developed his own independent research program in neural networks and deep learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Zoubin Ghahramani">><<replace "#q4">>''4.'' D. Zoubin Ghahramani — Incorrect guess; Ghahramani was Jordan's postdoc.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What is the mixture-of-experts architecture?''
+
+<<button "A. An ensemble of identical models">><<replace "#q5">>''5.'' A. An ensemble of identical models — Incorrect. In mixture-of-experts, each expert //specializes// on different regions of the input space.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. A single deep network with dropout">><<replace "#q5">>''5.'' B. A single deep network with dropout — Incorrect. Dropout is a regularization technique, not an expert architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Multiple specialized sub-networks with a learned gating function">><<replace "#q5">>''5.'' C. Multiple specialized sub-networks with a learned gating function — Correct! The gating network routes inputs to different expert sub-networks based on the input characteristics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. A Bayesian model averaging scheme">><<replace "#q5">>''5.'' D. A Bayesian model averaging scheme — Incorrect. While conceptually related, mixture-of-experts uses a learned gating network rather than Bayesian posterior weighting.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. Why did Jordan argue ML needs statistical foundations?''
+
+<<button "A. To make models slower but more interpretable">><<replace "#q6">>''6.'' A. To make models slower but more interpretable — Incorrect. Speed is not the primary concern; principled uncertainty quantification and reliability are.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. To properly quantify uncertainty and ensure reliable predictions">><<replace "#q6">>''6.'' B. To properly quantify uncertainty and ensure reliable predictions — Correct! Jordan's core argument is that without statistical rigor, ML systems cannot communicate how confident their predictions are.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. To replace neural networks with linear regression">><<replace "#q6">>''6.'' C. To replace neural networks with linear regression — Incorrect. Jordan does not advocate abandoning complex models, but rather grounding them in statistical principles.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. To reduce the number of parameters in models">><<replace "#q6">>''6.'' D. To reduce the number of parameters in models — Incorrect. Model size is not the central issue in Jordan's argument.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What does Bayesian nonparametrics allow that standard parametric models do not?''
+
+<<button "A. Faster training convergence">><<replace "#q7">>''7.'' A. Faster training convergence — Incorrect. Bayesian nonparametrics is about model flexibility, not training speed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The model complexity to grow with the data">><<replace "#q7">>''7.'' B. The model complexity to grow with the data — Correct! Nonparametric models like Dirichlet process mixtures let the number of components be determined by the data rather than fixed in advance.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Deterministic predictions with no uncertainty">><<replace "#q7">>''7.'' C. Deterministic predictions with no uncertainty — Incorrect. Bayesian nonparametrics still produces posterior distributions with full uncertainty quantification.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Training without any data">><<replace "#q7">>''7.'' D. Training without any data — Incorrect. All Bayesian methods require data to update the prior into a posterior.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. What is a key failure mode of Bayesian inference when the model is misspecified?''
+
+<<button "A. The posterior becomes uniform">><<replace "#q8">>''8.'' A. The posterior becomes uniform — Incorrect. A misspecified model typically still produces a concentrated posterior, just around the wrong answer.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The posterior concentrates confidently on the wrong answer">><<replace "#q8">>''8.'' B. The posterior concentrates confidently on the wrong answer — Correct! When the true data-generating process lies outside the model class, Bayesian inference finds the "least wrong" model and can be highly confident about it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The ELBO diverges to infinity">><<replace "#q8">>''8.'' C. The ELBO diverges to infinity — Incorrect. The ELBO is bounded above by the log-evidence and does not diverge.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The prior is automatically corrected">><<replace "#q8">>''8.'' D. The prior is automatically corrected — Incorrect. Bayesian inference does not self-correct for model misspecification; it works within the assumed model class.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

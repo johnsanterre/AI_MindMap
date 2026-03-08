@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4" rx="6"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="4"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Catalan Numbers — Three Interpretations</text>
+  <line x1="120" y1="48" x2="680" y2="48" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Section 1: Balanced Parentheses (left) -->
+  <text x="140" y="78" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Balanced Parentheses</text>
+
+  <!-- C_1 = 1 -->
+  <text x="60" y="108" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="start" font-style="italic">C&#x2081; = 1</text>
+  <text x="60" y="126" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="start">( )</text>
+
+  <!-- C_2 = 2 -->
+  <text x="60" y="152" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="start" font-style="italic">C&#x2082; = 2</text>
+  <text x="60" y="170" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="start">( )( )</text>
+  <text x="60" y="190" font-family="Georgia, serif" font-size="16" fill="#7C2530" text-anchor="start">(( ))</text>
+
+  <!-- C_3 = 5 -->
+  <text x="60" y="216" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="start" font-style="italic">C&#x2083; = 5</text>
+  <text x="60" y="234" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="start">( )( )( )</text>
+  <text x="60" y="252" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="start">(( ))( )</text>
+  <text x="60" y="270" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="start">( )(( ))</text>
+  <text x="60" y="288" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="start">(( )( ))</text>
+  <text x="60" y="306" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="start">((( )))</text>
+
+  <!-- Divider -->
+  <line x1="265" y1="65" x2="265" y2="370" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Section 2: Binary Trees (center) -->
+  <text x="410" y="78" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Binary Trees (C&#x2083; = 5)</text>
+
+  <!-- Tree 1: left-left chain -->
+  <circle cx="310" cy="115" r="6" fill="#7C2530"/>
+  <line x1="306" y1="120" x2="296" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="293" cy="145" r="6" fill="#7C2530"/>
+  <line x1="289" y1="150" x2="279" y2="170" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="276" cy="175" r="6" fill="#7C2530"/>
+
+  <!-- Tree 2: left-right -->
+  <circle cx="370" cy="115" r="6" fill="#2D5A8E"/>
+  <line x1="366" y1="120" x2="356" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="353" cy="145" r="6" fill="#2D5A8E"/>
+  <line x1="357" y1="150" x2="367" y2="170" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="370" cy="175" r="6" fill="#2D5A8E"/>
+
+  <!-- Tree 3: balanced -->
+  <circle cx="430" cy="115" r="6" fill="#7C2530"/>
+  <line x1="426" y1="120" x2="416" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <line x1="434" y1="120" x2="444" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="413" cy="145" r="6" fill="#7C2530"/>
+  <circle cx="447" cy="145" r="6" fill="#7C2530"/>
+
+  <!-- Tree 4: right-left -->
+  <circle cx="490" cy="115" r="6" fill="#2D5A8E"/>
+  <line x1="494" y1="120" x2="504" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="507" cy="145" r="6" fill="#2D5A8E"/>
+  <line x1="503" y1="150" x2="493" y2="170" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="490" cy="175" r="6" fill="#2D5A8E"/>
+
+  <!-- Tree 5: right-right chain -->
+  <circle cx="545" cy="115" r="6" fill="#7C2530"/>
+  <line x1="549" y1="120" x2="559" y2="140" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="562" cy="145" r="6" fill="#7C2530"/>
+  <line x1="566" y1="150" x2="576" y2="170" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="579" cy="175" r="6" fill="#7C2530"/>
+
+  <!-- Labels under trees -->
+  <text x="410" y="200" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Each distinct shape = one Catalan structure</text>
+
+  <!-- Divider -->
+  <line x1="265" y1="210" x2="555" y2="210" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Section 3: Dyck Path (bottom center-right) -->
+  <text x="410" y="232" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Dyck Path (n = 4)</text>
+
+  <!-- Grid -->
+  <g stroke="#D4C5A9" stroke-width="0.5">
+    <line x1="290" y1="250" x2="290" y2="370"/><line x1="320" y1="250" x2="320" y2="370"/>
+    <line x1="350" y1="250" x2="350" y2="370"/><line x1="380" y1="250" x2="380" y2="370"/>
+    <line x1="410" y1="250" x2="410" y2="370"/><line x1="440" y1="250" x2="440" y2="370"/>
+    <line x1="470" y1="250" x2="470" y2="370"/><line x1="500" y1="250" x2="500" y2="370"/>
+    <line x1="530" y1="250" x2="530" y2="370"/>
+    <line x1="290" y1="370" x2="530" y2="370"/><line x1="290" y1="340" x2="530" y2="340"/>
+    <line x1="290" y1="310" x2="530" y2="310"/><line x1="290" y1="280" x2="530" y2="280"/>
+    <line x1="290" y1="250" x2="530" y2="250"/>
+  </g>
+
+  <!-- Diagonal (must not cross) -->
+  <line x1="290" y1="370" x2="530" y2="250" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="535" y="258" font-family="Georgia, serif" font-size="10" fill="#C4A87A" font-style="italic">y = x</text>
+
+  <!-- Dyck path: UUUDDUUDD pattern staying above diagonal -->
+  <polyline points="290,370 290,340 320,340 320,310 350,310 350,280 380,280 380,310 410,310 410,280 440,280 440,250 470,250 470,310 500,310 500,370 530,370"
+    fill="none" stroke="#7C2530" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Start/End labels -->
+  <circle cx="290" cy="370" r="4" fill="#2D5A8E"/>
+  <circle cx="530" cy="370" r="4" fill="#2D5A8E"/>
+  <text x="282" y="385" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">(0,0)</text>
+  <text x="530" y="385" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">(n,n)</text>
+
+  <text x="410" y="395" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Path must never cross below the diagonal</text>
+
+  <!-- Formula box (right side) -->
+  <rect x="580" y="65" width="200" height="310" fill="none" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="680" y="90" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle" font-weight="bold">Formulas</text>
+
+  <text x="680" y="120" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Closed form:</text>
+  <text x="680" y="142" font-family="Georgia, serif" font-size="15" fill="#2D5A8E" text-anchor="middle">C(n) = C(2n,n)/(n+1)</text>
+
+  <text x="680" y="175" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Recurrence:</text>
+  <text x="680" y="197" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle">C(n+1) = &#x2211; C(i)C(n-i)</text>
+  <text x="680" y="215" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">i = 0 .. n</text>
+
+  <text x="680" y="248" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Sequence:</text>
+  <text x="680" y="270" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle">1, 1, 2, 5, 14, 42,</text>
+  <text x="680" y="290" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle">132, 429, 1430 ...</text>
+
+  <text x="680" y="325" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Generating function:</text>
+  <text x="680" y="348" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" text-anchor="middle">C(x) = (1-&#x221A;(1-4x))/2x</text>
+</svg>

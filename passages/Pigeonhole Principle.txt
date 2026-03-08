@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Pigeonhole Principle
+
+<img src="assets/pigeonhole_principle.svg" alt="Diagram showing n+1 pigeons mapping into n holes, with one hole necessarily containing two pigeons" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have six socks but only five drawers. No matter how cleverly you distribute them, at least one drawer must contain two socks. That is the ''pigeonhole principle'' in its entirety — and despite being arguably the simplest theorem in all of mathematics, it is one of the most powerful. Formally stated: if you place $n+1$ objects into $n$ containers, at least one container must hold at least two objects. The principle, also called ''Dirichlet's box principle'' after Peter Gustav Lejeune Dirichlet who formalized it in 1834, requires no advanced machinery to prove. It follows directly from contradiction: if every container held at most one object, you could accommodate at most $n$ objects, contradicting the fact that you have $n+1$. Yet this trivial observation powers deep results in [[Combinatorics|Combinatorics]], number theory, [[Ramsey Theory|Ramsey Theory]], and — perhaps surprisingly — machine learning.
+
+---
+
+!! The Core Insight
+
+The pigeonhole principle is an ''existence guarantee''. It tells you that a certain configuration //must// exist without telling you //where// it is or //how// to find it. This makes it a fundamentally non-constructive tool: you know a collision exists, but you may have no efficient way to locate it.
+
+This existential character is what makes the principle so useful in impossibility proofs. Want to show that a lossless compression algorithm cannot shrink every possible input? The pigeonhole principle settles it instantly: if there are $2^n$ possible inputs of length $n$ and only $2^{n-1}$ possible outputs of length $n-1$, then at least two distinct inputs must map to the same shorter output. Any scheme that claims to compress //everything// is lying — the pigeonhole principle forbids it.
+
+The principle scales naturally. The ''generalized pigeonhole principle'' states: if $N$ objects are placed into $k$ containers, at least one container must hold at least $\lceil N/k \rceil$ objects. This generalization is what connects the simple counting argument to quantitative bounds in hashing, load balancing, and data distribution.
+
+---
+
+!! From Counting to Collisions
+
+The pigeonhole principle shows up wherever a mapping from a large set to a smaller set is forced to create collisions.
+
+''Birthday paradox.'' In a room of 23 people, there is a greater than 50% chance that two share a birthday. With 367 people (366 days + 1), the pigeonhole principle //guarantees// a shared birthday with certainty. The probabilistic version — which gives high collision probability even with far fewer items than containers — is the birthday paradox, a cornerstone of [[Probability Distributions|Probability Distributions]] and cryptographic analysis.
+
+''Hash collisions.'' A hash function maps an infinite (or very large) input space to a finite output space of size $m$. By the pigeonhole principle, collisions are unavoidable: if you hash $m+1$ distinct inputs, at least two must collide. The entire theory of [[Hashing|Hashing]] — from collision-resistant hash functions to hash table load analysis — is built on managing this inevitability rather than eliminating it.
+
+''Ramsey theory.'' [[Ramsey Theory|Ramsey Theory]] asks: how large must a structure be before it necessarily contains a particular ordered substructure? The pigeonhole principle is the simplest Ramsey-type result. The full Ramsey theorem — that any sufficiently large complete graph, with edges colored in $k$ colors, must contain a monochromatic complete subgraph of any desired size — is proved by iterated application of the pigeonhole principle.
+
+---
+
+!! What the Math Is Actually Doing
+
+The formal statement is deceptively simple. Let $f: A \to B$ be a function where $|A| > |B|$. Then $f$ is not injective — there exist $a_1 \neq a_2$ in $A$ such that $f(a_1) = f(a_2)$.
+
+''Proof by contradiction:'' Assume $f$ is injective. Then $|f(A)| = |A|$. But $f(A) \subseteq B$, so $|f(A)| \leq |B| < |A|$. Contradiction.
+
+The ''generalized'' version: if $f: A \to B$ with $|A| = N$ and $|B| = k$, then there exists some $b \in B$ such that $|f^{-1}(b)| \geq \lceil N/k \rceil$. Proof: if every fiber had size at most $\lceil N/k \rceil - 1$, the total count would be at most $k(\lceil N/k \rceil - 1) < N$, contradicting $|A| = N$.
+
+In the language of [[Information Theory|Information Theory]], the pigeonhole principle is a statement about the impossibility of injective coding when the source alphabet is larger than the code alphabet. If you have $N$ messages and only $k < N$ codewords, at least two messages share a codeword, and the receiver cannot distinguish them. This is the foundation of source coding limits: lossless compression of $n$-bit strings into fewer than $n$ bits is impossible for all strings simultaneously.
+
+For hash functions $h: \mathcal{U} \to \{0, 1, \ldots, m-1\}$ with $|\mathcal{U}| \gg m$, the principle guarantees that the maximum bucket size under any hash function is at least $\lceil |\mathcal{U}|/m \rceil$. For a //random// hash function with $n$ items hashed into $m$ buckets, the expected maximum load is $\Theta(\log n / \log \log n)$ when $n = m$ — far above 1, confirming the pigeonhole intuition that collisions are not just possible but frequent.
+
+The birthday bound formalizes the probabilistic version. If $n$ items are hashed uniformly at random into $m$ buckets, the probability of at least one collision exceeds 50% when $n \approx 1.2 \sqrt{m}$. For $m = 2^{128}$ (a 128-bit hash), a collision is likely after about $2^{64}$ hashes — the square root of the output space. This is why cryptographic hash functions need output lengths at least twice the desired security level.
+
+$$P(\text{no collision among } n \text{ items in } m \text{ bins}) = \prod_{i=0}^{n-1} \frac{m-i}{m} \approx e^{-n(n-1)/(2m)}$$
+
+---
+
+!! Pigeonhole Limits in Machine Learning
+
+The pigeonhole principle imposes hard limits on several ML operations:
+
+''Dimensionality reduction.'' Any mapping from $\mathbb{R}^d$ to $\mathbb{R}^k$ with $k < d$ must collapse distinct points. The Johnson-Lindenstrauss lemma provides a probabilistic guarantee that //distances// are approximately preserved, but the pigeonhole principle ensures that exact preservation of all points is impossible. When you use PCA, t-SNE, or UMAP to reduce dimensions, you accept collisions — the question is whether the collisions are between points you care about distinguishing.
+
+''Data compression and autoencoders.'' An autoencoder with a bottleneck of $k$ dimensions cannot losslessly represent all inputs from a space of dimension $d > k$. The pigeonhole principle guarantees that some distinct inputs will share the same latent representation. The reconstruction loss measures how badly these forced collisions damage the output.
+
+''Hashing in approximate nearest neighbor search.'' Locality-sensitive hashing (LSH) maps similar items to the same bucket. But the pigeonhole principle means dissimilar items will also collide. The false positive rate is bounded below by the ratio of items to buckets — you cannot hash more items than buckets without collisions among non-neighbors.
+
+''Quantization.'' When model weights or activations are quantized from 32-bit floats to 4-bit integers, you map $2^{32}$ possible values to $2^4 = 16$ values. The pigeonhole principle guarantees massive collisions — each quantization bin absorbs $2^{28}$ original values. Quantization-aware training and calibration are strategies for choosing //which// collisions to tolerate.
+
+---
+
+!! When the Pigeonhole Principle Breaks Down
+
+''Infinite sets.'' The pigeonhole principle as stated requires finite sets. For infinite sets, the situation is radically different: there exist bijections from the integers to the even integers, from the naturals to the rationals, and other counterintuitive mappings that "fit" a larger-seeming set into a smaller-seeming one. The infinite pigeonhole principle (if infinitely many objects go into finitely many containers, at least one container gets infinitely many) still holds, but the finite counting argument does not generalize to infinite cardinalities without the axiom of choice.
+
+''Probabilistic near-misses.'' The deterministic pigeonhole principle guarantees a collision at $n+1$ items in $n$ bins, but in practice, collisions become //probable// long before the hard limit. The birthday paradox shows collisions at $O(\sqrt{n})$ items. Systems designed around the worst-case pigeonhole bound ($n+1$) rather than the expected collision threshold ($O(\sqrt{n})$) dramatically overestimate their safety margin. Conversely, systems that assume "no collisions because $n$ items in $m \gg n$ bins" ignore the birthday bound and get surprised by early collisions.
+
+''Constructive gaps.'' The pigeonhole principle proves existence but not constructibility. In complexity theory, pigeonhole arguments show that short circuits for certain Boolean functions must exist, but finding those circuits may be computationally intractable. The ''TFNP'' complexity class (total function NP) includes problems where a solution is guaranteed to exist by pigeonhole-type arguments, yet no efficient algorithm is known for finding it. The ''PPP'' (Polynomial Pigeonhole Principle) subclass captures this gap precisely.
+
+---
+
+!! Technical Details
+
+''Historical note:'' The principle is attributed to Dirichlet (1834), who called it the //Schubfachprinzip// (drawer principle). The name "pigeonhole principle" comes from the English tradition of pigeon-roost cubbyholes used for sorting mail.
+
+''Ramsey numbers:'' The simplest Ramsey result — $R(3,3) = 6$ — follows from repeated pigeonhole application. Among 6 people, each pair either friends or strangers, some person has at least 3 friends or 3 strangers (pigeonhole on 5 relationships into 2 categories). Among those 3, either two are mutual friends (forming a friend-triangle with the original person) or all three are mutual strangers (a stranger-triangle). Larger Ramsey numbers remain notoriously hard to compute.
+
+''Load balancing bound:'' When $n$ balls are thrown uniformly at random into $n$ bins, the maximum bin load is $\Theta(\log n / \log \log n)$ with high probability. The "power of two choices" paradigm — placing each ball in the less loaded of two random bins — drops the maximum to $\Theta(\log \log n)$, an exponential improvement. This result drives hash table design, distributed systems load balancing, and task scheduling.
+
+''Connection to the Borsuk-Ulam theorem:'' The pigeonhole principle can be viewed as a discrete version of topological fixed-point results. The Borsuk-Ulam theorem — that any continuous map from $S^n$ to $\mathbb{R}^n$ must send two antipodal points to the same image — is a "continuous pigeonhole" statement. The discrete and continuous versions share the same philosophical core: when the domain is "larger" than the codomain in the right sense, collisions are forced.
+
+''Entropy argument:'' From an information-theoretic perspective, a function $f: A \to B$ with $|A| > |B|$ satisfies $H(f(X)) \leq \log_2 |B| < \log_2 |A| = H(X)$ for uniform $X$, so $f$ must lose information. The pigeonhole principle is the special case where any information loss implies at least one collision.
+
+''Cryptographic applications:'' The birthday bound $O(\sqrt{m})$ for collision finding in an $m$-sized output space determines the security level of hash functions. A 256-bit hash provides 128-bit collision resistance. This is why SHA-256 provides 128-bit security against collision attacks, not 256-bit.
+
+---
+
+!! Quiz
+
+<span id="ph-q1">If 13 people are in a room, what can you guarantee about their birth months?</span>
+A. At least two were born in the same month
+B. Every month has exactly one person
+C. At most one month has two people
+D. Nothing can be guaranteed without knowing the actual birth months
+<<button "A">><<replace "#ph-q1">>Correct! By the pigeonhole principle, 13 people into 12 months guarantees at least one month contains at least 2 people. This requires no knowledge of the actual distribution.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q1">>Incorrect. With 13 people and 12 months, it is impossible for every month to have exactly one person — there are more people than months.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q1">>Incorrect. While at least one month must have two people, the principle does not limit collisions to just one month. Multiple months could have shared birthdays.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q1">>Incorrect. The pigeonhole principle gives a guarantee regardless of the specific distribution. With 13 people and 12 months, a collision is certain.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q2">What does the generalized pigeonhole principle state about $N$ objects in $k$ containers?</span>
+A. Exactly $N/k$ objects will be in each container
+B. At least one container holds at least $\lceil N/k \rceil$ objects
+C. At most one container can hold more than one object
+D. The average container holds $N/k$ objects, but nothing is guaranteed about the maximum
+<<button "A">><<replace "#ph-q2">>Incorrect. The principle says nothing about uniform distribution. Objects can be distributed unevenly; the guarantee is only about the maximum, not the exact count per container.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q2">>Correct! The generalized pigeonhole principle guarantees at least one container has $\lceil N/k \rceil$ or more objects. If every container had fewer, the total would be less than $N$, a contradiction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q2">>Incorrect. Multiple containers can hold multiple objects. The principle establishes a lower bound on the maximum load, not an upper bound on how many containers are crowded.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q2">>Incorrect. The average is indeed $N/k$, but the generalized pigeonhole principle does guarantee something about the maximum: at least one container holds at least $\lceil N/k \rceil$ objects.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q3">Why is lossless compression of ALL $n$-bit strings to fewer than $n$ bits impossible?</span>
+A. Because some strings are inherently random and cannot be described more compactly
+B. Because there are $2^n$ possible inputs but fewer than $2^n$ possible shorter outputs, so by pigeonhole, two inputs must share an output
+C. Because compression algorithms have exponential time complexity
+D. Because the decompression function cannot be stored in fewer than $n$ bits
+<<button "A">><<replace "#ph-q3">>That is true but not the pigeonhole argument. The pigeonhole principle gives a cleaner proof: $2^n$ inputs mapped to fewer than $2^n$ outputs means collisions, which means ambiguous decompression.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q3">>Correct! There are $2^n$ distinct $n$-bit strings but only $2^0 + 2^1 + \cdots + 2^{n-1} = 2^n - 1$ strings shorter than $n$ bits. By pigeonhole, at least two inputs must map to the same output, making lossless recovery impossible for both.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q3">>Incorrect. Compression time complexity is a separate issue. The impossibility is about the number of possible inputs versus outputs, not about how long the algorithm takes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q3">>Incorrect. The decompression function is fixed and does not change with the input. The impossibility comes from having more inputs than outputs, not from storage of the algorithm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q4">At approximately how many random hashes into an $m$-bucket space does a collision become likely (>50%)?</span>
+A. $m/2$
+B. $m - 1$
+C. $\sqrt{m}$
+D. $\log m$
+<<button "A">><<replace "#ph-q4">>Incorrect. Collisions become likely far earlier than $m/2$. The birthday bound shows collisions at the square root of the space size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q4">>Incorrect. That is close to the deterministic pigeonhole guarantee ($m+1$), but probabilistic collisions happen much sooner — around $\sqrt{m}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q4">>Correct! The birthday bound shows that after approximately $1.2\sqrt{m}$ random insertions, the probability of at least one collision exceeds 50%. This is why a 128-bit hash only provides 64-bit collision resistance.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q4">>Incorrect. $\log m$ is far too small. The birthday bound threshold is $O(\sqrt{m})$, which is exponentially larger than $\log m$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q5">How does the pigeonhole principle relate to autoencoder bottlenecks?</span>
+A. It guarantees the decoder can perfectly reconstruct all inputs
+B. It proves that some distinct inputs must share the same latent representation when the bottleneck dimension is smaller than the input dimension
+C. It shows that deeper autoencoders always outperform shallow ones
+D. It ensures that the latent space is uniformly distributed
+<<button "A">><<replace "#ph-q5">>Incorrect. The opposite is true — the pigeonhole principle guarantees that perfect reconstruction is //impossible// when the bottleneck has fewer dimensions than the input.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q5">>Correct! A mapping from a higher-dimensional input space through a lower-dimensional bottleneck cannot be injective. By the pigeonhole principle, distinct inputs must collide in the latent space, making perfect reconstruction of all inputs impossible.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q5">>Incorrect. The pigeonhole principle says nothing about network depth. It concerns the fundamental impossibility of injective mappings from larger to smaller sets.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q5">>Incorrect. The pigeonhole principle does not address the distribution of the latent space. It addresses the impossibility of distinct representations when the bottleneck is too small.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q6">What is the simplest Ramsey-type result that follows from the pigeonhole principle?</span>
+A. Among any 6 people, there must exist 3 mutual friends or 3 mutual strangers
+B. Every infinite sequence of real numbers contains a monotone subsequence
+C. Any graph with more edges than vertices contains a cycle
+D. Every continuous function on a closed interval attains its maximum
+<<button "A">><<replace "#ph-q6">>Correct! $R(3,3) = 6$ is proved by pigeonhole: among 5 relationships from one person, at least 3 are the same type (friends or strangers). Among those 3, either a pair shares the same relationship type (forming a monochromatic triangle) or all three form the opposite type.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q6">>Incorrect. While related to Ramsey theory, the Erdos-Szekeres theorem about monotone subsequences requires more than a simple pigeonhole argument. The $R(3,3) = 6$ result is the most direct application.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q6">>Incorrect. This is a graph theory fact, but it is not a Ramsey-type result. Ramsey theory concerns the inevitable emergence of order in sufficiently large structures.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q6">>Incorrect. The extreme value theorem is an analysis result, not a Ramsey-type result. Ramsey theory is about combinatorial inevitability, not continuity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q7">Why does the pigeonhole principle fail for infinite sets?</span>
+A. Infinite sets do not exist in mathematics
+B. There exist bijections between infinite sets and proper subsets of themselves, so "more objects than containers" does not force collisions
+C. The axiom of choice prevents its application
+D. Infinite sets cannot be mapped to other sets
+<<button "A">><<replace "#ph-q7">>Incorrect. Infinite sets are a well-established part of mathematics, from the natural numbers onward. The pigeonhole principle simply does not apply in the same way to them.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q7">>Correct! The natural numbers biject with the even numbers ($n \mapsto 2n$), so a "larger-seeming" set maps injectively into a "smaller-seeming" one. For infinite sets, having more elements does not preclude injective mappings, which is why the finite pigeonhole argument fails.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q7">>Incorrect. The axiom of choice is relevant to some infinite combinatorics, but the failure of pigeonhole for infinite sets is more fundamental — infinite sets can biject with proper subsets.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q7">>Incorrect. Infinite sets can absolutely be mapped to other sets. The issue is that these mappings can be injective even when the domain appears "larger" than the codomain.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="ph-q8">In the "power of two choices" load balancing paradigm, what happens to the maximum bin load?</span>
+A. It stays at $\Theta(\log n / \log \log n)$ — the same as random placement
+B. It drops to $\Theta(\log \log n)$, an exponential improvement over single random choice
+C. It drops to exactly 1, eliminating all collisions
+D. It increases because checking two bins adds overhead
+<<button "A">><<replace "#ph-q8">>Incorrect. $\Theta(\log n / \log \log n)$ is the maximum load for single random placement. The power of two choices provides a dramatic improvement.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#ph-q8">>Correct! By placing each ball in the less loaded of two randomly chosen bins, the maximum load drops from $\Theta(\log n / \log \log n)$ to $\Theta(\log \log n)$. This exponential improvement from a simple change is one of the most celebrated results in randomized algorithms.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#ph-q8">>Incorrect. The pigeonhole principle guarantees that when $n$ balls go into $n$ bins, collisions must occur (unless each bin gets exactly one, which is astronomically unlikely with random placement). No simple strategy eliminates all collisions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#ph-q8">>Incorrect. The overhead of checking two bins is negligible. The maximum load actually decreases dramatically — from $\Theta(\log n / \log \log n)$ to $\Theta(\log \log n)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

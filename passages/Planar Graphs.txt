@@ -1,0 +1,159 @@
+<<include "Header">>
+
+! Planar Graphs
+
+<img src="assets/planar_graphs.svg" alt="Diagram comparing a planar graph embedding with non-planar K5 and K3,3 graphs showing Kuratowski's theorem" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine drawing a subway map where no two lines cross except at actual stations. If you can do it, your network is ''planar'' — it can be laid flat on a sheet of paper with no edge crossings. This seemingly simple geometric constraint turns out to have deep mathematical consequences: it controls how many edges a graph can have, how many colours you need to colour a map, and whether a circuit board can be manufactured on a single layer. Planarity is one of the oldest questions in [[Graph Theory|Graph Theory]], and its modern applications stretch from chip design to mesh-based physics simulations to specialised graph neural networks.
+
+!! The Core Insight
+
+A graph is ''planar'' if it can be drawn in the plane so that its edges meet only at their endpoints — no crossings. Such a crossing-free drawing is called a ''planar embedding''. The same graph may have many different planar embeddings (think of rearranging the subway map without introducing crossings), but the key topological fact is binary: either //at least one// crossing-free drawing exists, or //none// does.
+
+The central result is ''Euler's formula for planar graphs'': for any connected planar graph with $V$ vertices, $E$ edges, and $F$ faces (regions bounded by edges, including the outer infinite face),
+
+$$V - E + F = 2$$
+
+This deceptively simple equation has enormous power. It immediately implies that a simple planar graph satisfies $E \leq 3V - 6$, which means planar graphs are ''sparse'' — a planar graph on $n$ vertices can have at most $O(n)$ edges, never $O(n^2)$. This sparsity is precisely why many algorithms run faster on planar graphs than on general graphs.
+
+!! Forbidden Subgraphs and Kuratowski's Theorem
+
+How do you tell if a graph is //not// planar? ''Kuratowski's theorem'' (1930) gives a complete characterisation: a graph is planar if and only if it contains no ''subdivision'' of $K_5$ (the complete graph on 5 vertices) or $K_{3,3}$ (the complete bipartite graph with parts of size 3).
+
+$K_5$ has 5 vertices and 10 edges — since $10 > 3(5) - 6 = 9$, it violates Euler's bound and cannot be planar. $K_{3,3}$ has 6 vertices and 9 edges — it satisfies $E \leq 3V - 6 = 12$, but it still fails planarity because it has no triangles, so the tighter bound $E \leq 2V - 4$ applies, and $9 > 2(6) - 4 = 8$.
+
+The equivalent ''Wagner's theorem'' uses ''graph minors'' instead of subdivisions: a graph is planar if and only if it has no $K_5$ or $K_{3,3}$ //minor//. This connects to the deep Robertson-Seymour theorem, which shows that //every// minor-closed graph property can be characterised by a finite set of forbidden minors.
+
+!! What the Math Is Actually Doing
+
+Euler's formula arises from a topological invariant — the ''Euler characteristic'' $\chi$ of the surface on which the graph is embedded. For the plane (or equivalently the sphere), $\chi = 2$:
+
+$$V - E + F = \chi = 2$$
+
+For a graph embedded on a surface of genus $g$ (a surface with $g$ handles, like a torus with $g = 1$), the generalised formula is:
+
+$$V - E + F = 2 - 2g$$
+
+This means graphs that are not planar may still embed on higher-genus surfaces. The ''genus'' of a graph is the minimum $g$ such that it can be embedded on a surface of genus $g$ without crossings. For $K_5$, the genus is 1 — it embeds on a torus.
+
+The ''dual graph'' $G^*$ of a planar graph $G$ places a vertex in each face of $G$ and connects two vertices whenever the corresponding faces share an edge. Euler's formula guarantees the dual is well-defined for planar embeddings. The dual satisfies:
+
+$$V^* = F, \quad E^* = E, \quad F^* = V$$
+
+so $V^* - E^* + F^* = F - E + V = 2$. Duality swaps ''cuts'' and ''cycles'': a minimum cut in $G$ corresponds to a shortest cycle in $G^*$, enabling efficient algorithms for maximum flow in planar networks via shortest-path computations in the dual.
+
+For planarity testing, the key algorithmic insight is that an embedding can be constructed incrementally. The ''left-right planarity test'' (de Fraysseix and Rosenstiehl) performs a DFS and tracks constraints on which side of the DFS tree each back-edge must lie. This yields a linear-time $O(V + E)$ decision algorithm.
+
+!! Connections to Colouring and ML
+
+The ''four colour theorem'' states that every planar graph can be properly coloured with at most 4 colours — no two adjacent vertices share a colour. This is equivalent to saying every map can be coloured with 4 colours. Proved by Appel and Haken (1976) using computer-assisted case analysis, it remains one of the most famous results connecting planarity to [[Graph Coloring|Graph Coloring]].
+
+In ML and engineering, planarity appears in several contexts:
+
+''Circuit layout (VLSI design):'' a single-layer circuit board requires a planar interconnection graph. When the graph is non-planar, the designer must add vias (layer crossings), and minimising crossings is an NP-hard problem. Planarity testing determines whether a single-layer layout is even possible.
+
+''Mesh generation for physics simulation:'' finite element methods discretise 2D domains into triangular or polygonal meshes, which are planar graphs. The quality of the mesh (element shape, degree distribution) directly affects simulation accuracy. Delaunay triangulations produce planar graphs with good angle properties.
+
+''Planar graph neural networks:'' standard GNNs treat all graphs uniformly, but planar graphs have special structure that can be exploited. Architectures like ''Planar Graph Networks'' use face information from the planar embedding as additional features. Since faces are only defined for planar graphs, these models encode topological structure that generic message-passing GNNs cannot access. Dual-graph convolutions — applying message passing on $G^*$ alongside $G$ — capture complementary information.
+
+''Planar separators:'' the ''planar separator theorem'' (Lipton-Tarjan 1979) guarantees that every planar graph on $n$ vertices has a balanced separator of size $O(\sqrt{n})$. This enables divide-and-conquer algorithms and is the foundation for efficient nested dissection solvers for sparse linear systems arising from planar meshes.
+
+Cross-references: [[Graph Theory|Graph Theory]] | [[Graph Coloring|Graph Coloring]] | [[Combinatorics|Combinatorics]] | [[Topology|Topology]]
+
+!! When Planar Graphs Break Down
+
+''(1) Most real-world graphs are not planar:'' social networks, citation graphs, protein interaction networks, and knowledge graphs are almost never planar. They contain dense subgraphs, long-range connections, and high-degree hubs that inevitably produce $K_5$ or $K_{3,3}$ minors. Algorithms and theory designed for planar graphs simply do not apply to the graphs most commonly encountered in ML. The planar separator theorem, dual graph constructions, and efficient flow algorithms all fail on non-planar inputs.
+
+''(2) Planar embeddings are not unique:'' a planar graph can have exponentially many distinct planar embeddings (different orderings of edges around each vertex). Algorithms that depend on the embedding — face enumeration, dual construction, planar GNN features — must choose a specific embedding, and different choices can yield different results. For 3-connected graphs, Whitney's theorem guarantees a unique embedding (up to reflection), but many graphs of interest are not 3-connected.
+
+''(3) Near-planarity is hard to exploit:'' a graph that becomes planar after removing just one edge is "almost planar," but this near-miss does not unlock planar algorithms. There is no smooth degradation: the crossing number (minimum crossings in any drawing) can jump from 0 to 1, and suddenly Euler's formula, the separator theorem, and dual-graph techniques no longer apply. Bounded-genus and bounded-treewidth generalizations exist but are substantially more complex.
+
+!! Technical Details
+
+''Historical roots:'' Euler's formula appears in his 1758 work on polyhedra. Kuratowski published his planarity characterization in 1930. The four colour conjecture was posed by Guthrie in 1852 and proved by Appel and Haken in 1976 — the first major theorem proved with essential computer assistance. A simpler proof was given by Robertson, Sanders, Seymour, and Thomas in 1997.
+
+''Planarity testing algorithms:'' the first linear-time algorithm was by Hopcroft and Tarjan (1974). Modern implementations use the left-right planarity test (de Fraysseix, de Mendez, Rosenstiehl 2006) or the Boyer-Myrvold algorithm (2004). Both run in $O(V + E)$ time and either confirm planarity with a valid embedding or output a $K_5$ or $K_{3,3}$ subdivision as a certificate of non-planarity.
+
+''Crossing number:'' for non-planar graphs, the ''crossing number'' $\text{cr}(G)$ is the minimum number of edge crossings in any drawing. Computing $\text{cr}(G)$ is NP-hard. The crossing lemma gives a lower bound: for $E > 4V$, $\text{cr}(G) \geq \frac{E^3}{64V^2}$.
+
+''Minor theory:'' the Robertson-Seymour theorem (proved over 1983–2004 in 23 papers) shows that graphs are ''well-quasi-ordered'' by the minor relation — every minor-closed property has a finite forbidden minor characterisation. Planarity (forbidden: $K_5$, $K_{3,3}$) is the simplest nontrivial example. Linkless embeddability requires the ''Petersen family'' of 7 forbidden minors.
+
+''Planar GNNs:'' Bouritsas et al. (2022) showed that incorporating structural features from planar embeddings (face cycles, dual-graph adjacency) into GNN architectures improves expressiveness beyond the Weisfeiler-Leman hierarchy on planar graph benchmarks. This connects to broader work on making GNNs more powerful than 1-WL.
+
+''Connections:'' [[Graph Theory|Graph Theory]] | [[Graph Coloring|Graph Coloring]] | [[Combinatorics|Combinatorics]] | [[Topology|Topology]]
+
+!! Quiz
+
+<span id="pg-q1">Euler's formula for a connected planar graph states:</span>
+
+A. $V + E - F = 2$
+B. $V - E + F = 2$
+C. $V - E - F = 0$
+D. $V + E + F = 2$
+
+<<button "A">><<replace "#pg-q1">>Incorrect. The signs matter: it is $V - E + F = 2$, not $V + E - F$. Adding edges should decrease the quantity, not increase it.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q1">>Correct. Euler's formula states $V - E + F = 2$ for any connected planar graph. For example, a triangle has $V=3$, $E=3$, $F=2$ (one inner face, one outer), giving $3 - 3 + 2 = 2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q1">>Incorrect. This would give 0 for most graphs, but Euler's formula gives 2. The correct formula is $V - E + F = 2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q1">>Incorrect. $V + E + F$ would always be a large positive number. Euler's formula subtracts edges: $V - E + F = 2$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q2">According to Kuratowski's theorem, a graph is non-planar if and only if it contains a subdivision of:</span>
+
+A. $K_4$ or $K_{2,3}$
+B. $K_5$ or $K_{3,3}$
+C. $K_6$ or $K_{4,4}$
+D. Any complete bipartite graph
+
+<<button "A">><<replace "#pg-q2">>Incorrect. $K_4$ is planar (it is the tetrahedron graph, which can be drawn without crossings), and $K_{2,3}$ is also planar. The forbidden subgraphs are $K_5$ and $K_{3,3}$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q2">>Correct. Kuratowski's theorem (1930) states that a graph is planar if and only if it contains no subdivision of $K_5$ (complete graph on 5 vertices) or $K_{3,3}$ (complete bipartite graph with parts of size 3). These are the two minimal non-planar graphs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q2">>Incorrect. $K_6$ and $K_{4,4}$ are non-planar, but they are not the minimal obstructions. The correct forbidden subgraphs are $K_5$ and $K_{3,3}$ — the smallest non-planar complete and complete bipartite graphs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q2">>Incorrect. Many complete bipartite graphs are planar (e.g., $K_{2,3}$ and $K_{1,n}$ for any $n$). Only $K_{3,3}$ specifically serves as a forbidden subgraph for planarity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q3">What is the maximum number of edges in a simple planar graph with $n$ vertices (for $n \geq 3$)?</span>
+
+A. $n^2$
+B. $n(n-1)/2$
+C. $3n - 6$
+D. $2n - 4$
+
+<<button "A">><<replace "#pg-q3">>Incorrect. $n^2$ edges would be far too many. A complete graph has $n(n-1)/2$ edges, but planar graphs are much sparser — Euler's formula constrains them to at most $3n - 6$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q3">>Incorrect. $n(n-1)/2$ is the number of edges in a complete graph $K_n$. Most complete graphs are not planar. The correct bound from Euler's formula is $E \leq 3n - 6$, which is linear, not quadratic.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q3">>Correct. Euler's formula $V - E + F = 2$ combined with the fact that each face is bounded by at least 3 edges gives $E \leq 3V - 6$. This means planar graphs have $O(n)$ edges — they are inherently sparse.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q3">>Incorrect. $2n - 4$ is the tighter bound for triangle-free planar graphs (bipartite planar graphs). The general bound for simple planar graphs is $3n - 6$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q4">The four colour theorem states that:</span>
+
+A. Every graph can be properly coloured with 4 colours
+B. Every planar graph can be properly coloured with at most 4 colours
+C. Every planar graph requires exactly 4 colours
+D. Every bipartite graph needs at most 4 colours
+
+<<button "A">><<replace "#pg-q4">>Incorrect. Non-planar graphs can require arbitrarily many colours (e.g., $K_n$ requires $n$ colours). The four colour theorem applies only to planar graphs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q4">>Correct. The four colour theorem, proved by Appel and Haken in 1976, states that every planar graph is 4-colourable — no two adjacent vertices need share a colour if 4 colours are available.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q4">>Incorrect. Many planar graphs need fewer than 4 colours. A tree needs only 2, and a cycle of even length needs 2. The theorem says 4 colours always //suffice//, not that they are always //required//.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q4">>Incorrect. Bipartite graphs need only 2 colours by definition. The four colour theorem is specifically about planar graphs, a broader class.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q5">The dual graph $G^*$ of a planar graph $G$ is constructed by:</span>
+
+A. Reversing the direction of all edges in $G$
+B. Placing a vertex in each face of $G$ and connecting vertices whose faces share an edge
+C. Removing all vertices of degree less than 3
+D. Taking the complement graph of $G$
+
+<<button "A">><<replace "#pg-q5">>Incorrect. Reversing edge directions is only meaningful for directed graphs. The dual construction is specifically about faces of the planar embedding, not edge directions.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q5">>Correct. The dual $G^*$ has one vertex per face of $G$ (including the outer face), and two dual vertices are connected whenever the corresponding faces share an edge. This swaps the roles of vertices and faces: $V^* = F$ and $F^* = V$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q5">>Incorrect. Removing low-degree vertices is a graph reduction operation, not dual construction. The dual is a fundamentally topological construction based on the face structure of the planar embedding.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q5">>Incorrect. The complement graph connects vertices that are //not// adjacent in $G$. The dual is a completely different construction based on the faces of the planar embedding.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q6">The planar separator theorem guarantees that every planar graph on $n$ vertices has a balanced separator of size:</span>
+
+A. $O(\log n)$
+B. $O(\sqrt{n})$
+C. $O(n)$
+D. $O(n \log n)$
+
+<<button "A">><<replace "#pg-q6">>Incorrect. $O(\log n)$ separators exist for trees but not for general planar graphs. A $\sqrt{n} \times \sqrt{n}$ grid graph (which is planar) requires a separator of size $\Omega(\sqrt{n})$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q6">>Correct. The Lipton-Tarjan planar separator theorem (1979) states that every planar graph on $n$ vertices has a separator of size $O(\sqrt{n})$ whose removal splits the graph into two parts each with at most $2n/3$ vertices. This enables efficient divide-and-conquer algorithms.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q6">>Incorrect. A separator of size $O(n)$ is trivial — you could just remove all vertices. The power of the planar separator theorem is that only $O(\sqrt{n})$ vertices suffice, which is sublinear.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q6">>Incorrect. $O(n \log n)$ is even larger than the trivial bound. Planar graphs have much better separators: $O(\sqrt{n})$, thanks to their sparse, locally structured topology.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q7">Why is $K_{3,3}$ non-planar even though it has only 9 edges and 6 vertices (satisfying $E \leq 3V - 6 = 12$)?</span>
+
+A. It has too many vertices of high degree
+B. It is bipartite and therefore has no triangles, so the tighter bound $E \leq 2V - 4 = 8$ applies, and $9 > 8$
+C. Its adjacency matrix has negative eigenvalues
+D. It cannot be embedded on any surface
+
+<<button "A">><<replace "#pg-q7">>Incorrect. Vertex degree alone does not determine planarity. Many planar graphs have high-degree vertices. The issue is that $K_{3,3}$ is triangle-free, triggering a tighter edge bound.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q7">>Correct. Since $K_{3,3}$ is bipartite, it contains no triangles (odd cycles). In a triangle-free planar graph, each face has at least 4 boundary edges, giving the tighter bound $E \leq 2V - 4$. With $V = 6$, this gives $E \leq 8$, but $K_{3,3}$ has 9 edges — contradiction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q7">>Incorrect. Many planar graphs also have negative eigenvalues in their adjacency matrices. Eigenvalue signs do not determine planarity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q7">>Incorrect. $K_{3,3}$ can be embedded on the torus (genus 1) without crossings. It simply cannot be embedded on the //plane// (genus 0).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="pg-q8">How do planar graph neural networks exploit planarity?</span>
+
+A. They restrict message passing to only nearest neighbours
+B. They use face information from the planar embedding as additional features and apply dual-graph convolutions
+C. They reduce all graphs to planar subgraphs before processing
+D. They use planar separators to partition batches during training
+
+<<button "A">><<replace "#pg-q8">>Incorrect. Standard GNNs already perform message passing with neighbours. Planar GNNs go further by incorporating //face structure// — topological information that only exists for planar embeddings.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#pg-q8">>Correct. Planar GNNs leverage the unique structure of planar embeddings: they extract face cycles, construct the dual graph $G^*$, and run message passing on both $G$ and $G^*$ simultaneously. This captures topological information (face adjacency, face sizes) that generic message-passing GNNs cannot access.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#pg-q8">>Incorrect. Reducing to planar subgraphs would discard important edges and connections. Planar GNNs are designed for graphs that are //already// planar, not for making non-planar graphs planar.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#pg-q8">>Incorrect. While planar separators are useful for divide-and-conquer algorithms, planar GNNs exploit face structure and dual-graph convolutions, not separator-based partitioning.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

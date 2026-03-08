@@ -1,0 +1,162 @@
+<<include "Header">>
+! Softmax
+[img[assets/softmax.svg]]
+
+Imagine a panel of judges each holding up a scorecard — one writes 3.1, another writes 2.0, another 0.5. These raw scores don't immediately tell you who won //as a percentage//. Softmax is the announcer who takes those scores, exponentiates them to widen the gaps, then divides by the total so the results become a proper probability distribution summing to 1. The highest score still wins, but now every contestant has a precise share of the probability pie.
+
+!! The Core Insight
+
+''Softmax'' converts a vector of unbounded real numbers (''logits'') into a valid probability distribution. Every output is strictly positive and the outputs sum to exactly 1. Unlike simple normalization (dividing by the sum), softmax first exponentiates each value, which amplifies differences between large and small logits. This creates a "soft" version of the argmax function — the largest input dominates, but the others retain non-zero probability.
+
+The function was introduced under the name "normalized exponential" and has become the standard output activation for multi-class classification and a critical component inside <<link "Attention Mechanisms" "Attention Mechanisms">><</link>>.
+
+See also: <<link "Cross-Entropy" "Cross-Entropy">><</link>>, <<link "Logits" "Logits">><</link>>, <<link "Sigmoid" "Sigmoid">><</link>>, <<link "Temperature" "Temperature">><</link>>.
+
+!! Temperature and Sharpness
+
+Softmax has a ''temperature'' parameter $T$ that controls how peaked or flat the output distribution is:
+
+$$\text{softmax}(z_i; T) = \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}$$
+
+- ''Low temperature'' ($T \to 0$): the distribution sharpens toward a one-hot vector — the largest logit gets nearly all the probability mass. In the limit, this becomes a hard argmax.
+- ''High temperature'' ($T \to \infty$): the distribution flattens toward uniform — all classes get roughly equal probability regardless of logit values.
+- ''Standard'' ($T = 1$): the default softmax behavior.
+
+Temperature scaling is used in knowledge distillation (Hinton et al. 2015), where a high temperature produces softer teacher distributions that reveal inter-class structure. It also appears in language model sampling, where $T < 1$ makes generation more deterministic and $T > 1$ makes it more creative.
+
+!! What the Math Is Actually Doing
+
+Given a vector of logits $\mathbf{z} = [z_1, z_2, \ldots, z_K]$, softmax computes:
+
+$$\sigma(z_i) = \frac{e^{z_i}}{\sum_{k=1}^{K} e^{z_k}}$$
+
+The exponential function $e^{z_i}$ maps any real number to a positive value, ensuring all outputs are strictly greater than zero. The denominator normalizes the result so that $\sum_i \sigma(z_i) = 1$.
+
+''Numerical stability:'' in practice, we subtract the maximum logit before exponentiating to avoid overflow:
+
+$$\sigma(z_i) = \frac{e^{z_i - \max(\mathbf{z})}}{\sum_{k=1}^{K} e^{z_k - \max(\mathbf{z})}}$$
+
+This is mathematically identical because the $e^{-\max(\mathbf{z})}$ factor cancels in numerator and denominator.
+
+''Jacobian:'' the derivative of softmax output $i$ with respect to logit $j$ is:
+
+$$\frac{\partial \sigma_i}{\partial z_j} = \sigma_i (\delta_{ij} - \sigma_j)$$
+
+where $\delta_{ij}$ is the Kronecker delta. This means that increasing logit $j$ increases $\sigma_j$ but //decreases// all other $\sigma_i$ — the outputs are coupled through the normalization, creating inherent competition among classes.
+
+''Connection to <<link "Cross-Entropy" "Cross-Entropy">><</link>>:'' combining softmax with cross-entropy loss yields a clean gradient: $\frac{\partial \mathcal{L}}{\partial z_i} = \sigma_i - y_i$, where $y_i$ is the target. This simplicity is one reason the pairing is ubiquitous.
+
+!! Softmax in Practice
+
+''Classification:'' the final layer of nearly every multi-class classifier applies softmax to produce class probabilities. The predicted class is $\arg\max_i \sigma(z_i)$.
+
+''Attention mechanisms:'' in the Transformer architecture, softmax converts raw attention scores (dot products of queries and keys) into attention weights that sum to 1 across the sequence. This determines how much each position contributes to the output representation.
+
+''Reinforcement learning:'' softmax over action logits produces a stochastic policy $\pi(a|s) = \text{softmax}(z_a)$, enabling exploration while favoring higher-valued actions.
+
+''Gumbel-Softmax:'' a reparameterization trick (Jang et al. 2017, Maddison et al. 2017) that enables differentiable sampling from a categorical distribution by adding Gumbel noise to logits before applying softmax. This allows discrete choices to be trained with gradient descent.
+
+''Binary case:'' for two classes, softmax reduces to the <<link "Sigmoid" "Sigmoid">><</link>> function: $\sigma(z_1) = \frac{1}{1 + e^{-(z_1 - z_2)}}$. This is why binary classifiers use sigmoid rather than softmax.
+
+!! When Softmax Breaks Down
+
+''Overconfidence from large logits:'' when logit magnitudes grow large (e.g., due to unconstrained weight growth), softmax concentrates nearly all probability on one class, producing predictions that are far more confident than warranted. This degrades calibration and makes the model brittle. Mitigation: temperature scaling, label smoothing, or weight decay.
+
+''The uniform assumption:'' softmax forces all $K$ classes to compete in a single probability simplex, assuming they are mutually exclusive and exhaustive. For multi-label problems (where an image can be both "cat" and "pet"), softmax is fundamentally wrong — independent sigmoids are needed instead.
+
+''Computational cost at scale:'' when $K$ is very large (e.g., vocabulary size of 50,000+ in language models), computing the full softmax denominator $\sum_k e^{z_k}$ becomes expensive. Approximations like hierarchical softmax, sampled softmax, and adaptive softmax trade exactness for efficiency.
+
+!! Technical Details
+
+- ''Bridle 1990'' — formalized softmax as a neural network output function for classification
+- ''Hinton et al. 2015'' — temperature-scaled softmax for knowledge distillation
+- ''Jang et al. 2017; Maddison et al. 2017'' — Gumbel-Softmax for differentiable discrete sampling
+- ''Blanc & Rendle 2018'' — adaptive softmax for efficient large-vocabulary models
+- Softmax is invariant to adding a constant to all logits: $\text{softmax}(\mathbf{z} + c) = \text{softmax}(\mathbf{z})$
+- Log-softmax ($\log \sigma(z_i) = z_i - \log \sum_k e^{z_k}$) is numerically more stable and preferred for NLLLoss in PyTorch
+- The softmax function is the gradient of the LogSumExp function: $\nabla_{\mathbf{z}} \text{LSE}(\mathbf{z}) = \text{softmax}(\mathbf{z})$
+- Time complexity: $O(K)$ for $K$ classes; memory: $O(K)$
+
+!! Quiz
+
+<span id="sm-q1">''1. What does softmax guarantee about its output values?''
+
+A) They are all between -1 and 1
+B) They are all non-negative and sum to 1
+C) They are all integers
+D) They are all between 0 and the maximum logit</span>
+<<button "Show answer">><<replace "#sm-q1">>''1. What does softmax guarantee about its output values?''
+
+✅ B) They are all non-negative and sum to 1 — the exponential ensures positivity and the denominator normalizes the sum to exactly 1, producing a valid probability distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q2">''2. What happens to the softmax distribution as temperature $T \to 0$?''
+
+A) It becomes uniform across all classes
+B) It approaches a one-hot vector (hard argmax)
+C) All outputs approach 0.5
+D) It becomes undefined</span>
+<<button "Show answer">><<replace "#sm-q2">>''2. What happens to the softmax distribution as temperature $T \to 0$?''
+
+✅ B) It approaches a one-hot vector (hard argmax) — dividing logits by a very small $T$ magnifies differences, so the largest logit dominates completely.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q3">''3. Why is $\max(\mathbf{z})$ subtracted from all logits before computing softmax in practice?''
+
+A) To make the output distribution sharper
+B) To ensure the result sums to 1
+C) To prevent numerical overflow in the exponentials
+D) To reduce the number of classes</span>
+<<button "Show answer">><<replace "#sm-q3">>''3. Why is $\max(\mathbf{z})$ subtracted from all logits before computing softmax in practice?''
+
+✅ C) To prevent numerical overflow in the exponentials — $e^{z}$ can overflow for large $z$; subtracting the max makes all exponents non-positive without changing the result.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q4">''4. What is the gradient of cross-entropy loss with respect to logit $z_i$ when combined with softmax?''
+
+A) $\sigma_i^2 - y_i$
+B) $\sigma_i - y_i$
+C) $z_i - y_i$
+D) $\log(\sigma_i) - y_i$</span>
+<<button "Show answer">><<replace "#sm-q4">>''4. What is the gradient of cross-entropy loss with respect to logit $z_i$ when combined with softmax?''
+
+✅ B) $\sigma_i - y_i$ — the softmax-cross-entropy combination yields this elegant gradient: simply the predicted probability minus the target.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q5">''5. For a two-class problem, softmax reduces to which function?''
+
+A) ReLU
+B) Tanh
+C) Sigmoid
+D) Softplus</span>
+<<button "Show answer">><<replace "#sm-q5">>''5. For a two-class problem, softmax reduces to which function?''
+
+✅ C) Sigmoid — with two classes, $\text{softmax}(z_1) = \frac{1}{1 + e^{-(z_1 - z_2)}}$, which is exactly the sigmoid function applied to the logit difference.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q6">''6. Why is softmax inappropriate for multi-label classification?''
+
+A) It cannot handle more than two classes
+B) It forces outputs to sum to 1, assuming mutual exclusivity
+C) It produces negative values for some classes
+D) It requires one-hot encoded inputs</span>
+<<button "Show answer">><<replace "#sm-q6">>''6. Why is softmax inappropriate for multi-label classification?''
+
+✅ B) It forces outputs to sum to 1, assuming mutual exclusivity — when multiple labels can be true simultaneously, independent sigmoids should be used instead.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q7">''7. What role does softmax play in the Transformer attention mechanism?''
+
+A) It generates the query and key vectors
+B) It converts attention scores into weights that sum to 1
+C) It computes the final classification output
+D) It normalizes the input embeddings</span>
+<<button "Show answer">><<replace "#sm-q7">>''7. What role does softmax play in the Transformer attention mechanism?''
+
+✅ B) It converts attention scores into weights that sum to 1 — after computing dot products between queries and keys, softmax produces a valid distribution over positions for weighted aggregation of values.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="sm-q8">''8. Softmax is the gradient of which function?''
+
+A) Cross-entropy
+B) Mean squared error
+C) LogSumExp
+D) KL divergence</span>
+<<button "Show answer">><<replace "#sm-q8">>''8. Softmax is the gradient of which function?''
+
+✅ C) LogSumExp — $\nabla_{\mathbf{z}} \log \sum_k e^{z_k} = \text{softmax}(\mathbf{z})$, a useful identity in optimization and convex analysis.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

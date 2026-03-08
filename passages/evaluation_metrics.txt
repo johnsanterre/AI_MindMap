@@ -1,0 +1,117 @@
+<<include "Header">>
+
+! Evaluation Metrics
+
+[img[assets/evaluation_metrics.svg]]
+
+Imagine you are a doctor screening patients for a rare disease. You could declare everyone healthy and be right 99% of the time — your ''accuracy'' would be stellar, but every sick patient would slip through. Alternatively, you could flag everyone as sick and catch every case, but your waiting room would overflow with false alarms. ''Evaluation metrics'' are the scorecards that tell you //which kind of right// and //which kind of wrong// your model is producing. No single number captures the full picture — every metric encodes a value judgment about what matters most. Choosing the right metric is as consequential as choosing the right model.
+
+---
+
+!! The Core Insight
+
+A model's predictions can be correct in different ways and wrong in different ways. The ''confusion matrix'' — a two-by-two table of true positives, false positives, true negatives, and false negatives — is the atom from which nearly every classification metric is built. Each metric is a different weighted summary of these four cells, and each weighting reflects a different cost structure. <<link "Precision and Recall" "Precision and Recall">><</link>> are the two most fundamental axes: precision asks "of the items I flagged, how many were truly positive?" while recall asks "of the truly positive items, how many did I find?"
+
+The tension between precision and recall is not a flaw — it is the central design choice. A spam filter that maximizes precision never flags a legitimate email, but lets some spam through. A spam filter that maximizes recall catches every spam message, but occasionally buries important mail. The ''F1 score'' is the harmonic mean of precision and recall, a single number that punishes models severely if either metric is low.
+
+For regression tasks, the confusion matrix does not apply. Instead, metrics like ''mean squared error'' (MSE) and ''mean absolute error'' (MAE) measure how far predictions land from truth. For ranking tasks — search engines, recommendation systems — metrics like ''AUC-ROC'', ''NDCG'', and ''MAP'' evaluate whether the model orders items correctly, not just whether it classifies them. The right metric family depends on whether you are classifying, predicting a number, or sorting a list.
+
+---
+
+!! Classification, Regression, and Ranking Metrics
+
+''Classification metrics'' all derive from the confusion matrix. ''Accuracy'' is the fraction of correct predictions overall: $(TP + TN) / (TP + TN + FP + FN)$. It works well when classes are balanced but becomes misleading with imbalanced data. ''Precision'' $= TP / (TP + FP)$ rewards conservative predictions — you only claim positive when you are sure. ''Recall'' (also called //sensitivity//) $= TP / (TP + FN)$ rewards thoroughness — you catch every positive case. ''Specificity'' $= TN / (TN + FP)$ measures how well you identify negatives. The <<link "ROC Curve" "ROC Curve">><</link>> plots recall against (1 - specificity) across all thresholds, and the area under it (''AUC'') summarizes threshold-independent discriminative power.
+
+''Regression metrics'' measure the gap between predicted and actual values. ''MSE'' penalizes large errors quadratically, making it sensitive to outliers. ''MAE'' treats all errors linearly, providing robustness. ''R-squared'' ($R^2$) measures the proportion of variance explained, giving a normalized view of fit quality. ''RMSE'' (root of MSE) restores the original units of the target, making it more interpretable than raw MSE.
+
+''Ranking metrics'' care about order rather than exact values. The <<link "ROC Curve" "ROC Curve">><</link>>'s AUC measures how often a randomly chosen positive example is ranked above a randomly chosen negative one. ''NDCG'' (Normalized Discounted Cumulative Gain) accounts for the position of relevant items: items ranked higher contribute more. ''MAP'' (Mean Average Precision) averages precision at each rank where a relevant item appears. These are critical in information retrieval, recommendation, and any system that must present a sorted list.
+
+---
+
+!! What the Math Is Actually Doing
+
+The harmonic mean that defines ''F1'' has a specific mathematical consequence. For two non-negative numbers $P$ and $R$:
+
+$$F_1 = \frac{2PR}{P + R}$$
+
+The harmonic mean is always less than or equal to the arithmetic mean. This means F1 is //dominated by whichever of precision or recall is lower//. If precision is 0.95 and recall is 0.10, F1 is about 0.18 — the harmonic mean drags the score toward the weaker axis. This is the mathematical encoding of the intuition that a model must perform well on //both// dimensions to earn a high F1.
+
+The generalization is the ''F-beta score'':
+
+$$F_\beta = \frac{(1 + \beta^2) \cdot P \cdot R}{\beta^2 \cdot P + R}$$
+
+When $\beta = 1$, precision and recall are weighted equally. When $\beta = 2$, recall is weighted twice as heavily — useful in medical screening where missing a case is costly. When $\beta = 0.5$, precision dominates — useful in spam detection where false alarms are annoying.
+
+For regression, MSE is:
+
+$$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+
+The squaring means that doubling an error quadruples its contribution. This makes MSE sensitive to outliers but also makes it differentiable everywhere, which is why it serves as the backbone <<link "Loss Function" "Loss Function">><</link>> for many regression models. MAE ($\frac{1}{n}\sum|y_i - \hat{y}_i|$) is not differentiable at zero, but is more robust to heavy-tailed error distributions.
+
+AUC-ROC has an elegant probabilistic interpretation: it equals the probability that a uniformly random positive example receives a higher predicted score than a uniformly random negative example. Formally, $\text{AUC} = P(\hat{y}_{+} > \hat{y}_{-})$. This connects the geometric area under the curve to a meaningful statistical quantity.
+
+---
+
+!! Choosing the Right Metric
+
+The right metric depends on the ''cost structure'' of your problem. Ask: is a false positive or a false negative more dangerous?
+
+In ''medical diagnosis'', missing a cancer case (false negative) can be fatal. Recall should dominate. Use $F_2$ or set a low classification threshold and monitor recall. In ''fraud detection'', falsely blocking a legitimate transaction (false positive) damages customer trust, but missing fraud (false negative) costs money. The tradeoff requires careful calibration, often using precision-recall curves rather than a single threshold. In ''search ranking'', the user only sees the top results, so NDCG at rank 10 or MAP matters more than global accuracy.
+
+For ''imbalanced datasets'' — where one class is rare — accuracy is almost useless. A model predicting "no fraud" on every transaction achieves 99.9% accuracy but catches nothing. Precision, recall, F1, and AUC are far more informative. <<link "Cross-Validation" "Cross-Validation">><</link>> helps ensure that metric estimates are stable and not artifacts of a lucky train-test split.
+
+When comparing models during <<link "Model Selection" "Model Selection">><</link>>, choose the metric //before// you start experimenting. Switching metrics mid-experiment is a form of p-hacking — you will inevitably find a metric that makes your preferred model look best.
+
+---
+
+!! When Metrics Mislead
+
+''Accuracy on imbalanced data:'' This is the most common trap. With 1% positive examples, a model that always predicts negative achieves 99% accuracy. The metric gives a false sense of success because it is dominated by the majority class. Precision, recall, and the confusion matrix itself reveal the truth that accuracy hides. Always inspect the confusion matrix before trusting a single scalar metric.
+
+''Optimizing a proxy instead of the goal:'' Goodhart's Law applies to metrics: "When a measure becomes a target, it ceases to be a good measure." A recommendation system optimized for click-through rate may learn to surface clickbait. A language model optimized for BLEU score may produce grammatically correct but semantically empty translations. The metric you optimize shapes what the model learns, and the gap between the metric and the real-world objective is where failure hides. Regular qualitative evaluation — looking at actual predictions — is irreplaceable.
+
+''Threshold-dependent metrics on uncalibrated models:'' Precision, recall, and F1 all depend on the classification threshold. If the model's predicted probabilities are poorly calibrated — saying 0.8 when the true probability is 0.5 — then the threshold that maximizes F1 on the validation set may not generalize. AUC-ROC is threshold-invariant, which makes it robust to calibration issues, but it can be misleading when classes are severely imbalanced. In such cases, the ''precision-recall AUC'' (PR-AUC) is often more informative than ROC-AUC, because it focuses attention on the minority class.
+
+---
+
+!! Technical Details
+
+''Micro vs. macro averaging'' in multiclass settings: micro-averaging pools all true positives, false positives, and false negatives across classes before computing a single precision and recall. Macro-averaging computes precision and recall per class, then takes the unweighted mean. Micro favors large classes; macro treats all classes equally regardless of size. Weighted macro-averaging uses class frequency as weights, providing a middle ground.
+
+''Cohen's Kappa'' ($\kappa$) adjusts accuracy for the probability of agreement by chance: $\kappa = (p_o - p_e) / (1 - p_e)$, where $p_o$ is observed agreement and $p_e$ is expected agreement under random guessing. A kappa of 0 means performance is no better than chance; 1 means perfect agreement. It is particularly useful for multi-rater annotation tasks and imbalanced classification.
+
+''Log loss'' (cross-entropy loss) evaluates predicted //probabilities//, not just predicted classes: $-\frac{1}{n}\sum[y_i \log \hat{p}_i + (1 - y_i)\log(1 - \hat{p}_i)]$. Unlike accuracy or F1, log loss penalizes confident wrong predictions severely. A model that predicts 0.99 for a true negative receives a much larger penalty than one that predicts 0.6. This makes log loss the preferred <<link "Loss Function" "Loss Function">><</link>> for training probabilistic classifiers and a strong evaluation metric when calibrated probabilities matter.
+
+''Matthews Correlation Coefficient'' (MCC) is considered one of the most balanced metrics for binary classification: $\text{MCC} = \frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$. It returns values between $-1$ and $+1$, where $+1$ is perfect, $0$ is random, and $-1$ is perfectly wrong. Unlike F1, MCC uses all four quadrants of the confusion matrix and is informative even under severe class imbalance.
+
+''Calibration'' can be assessed with reliability diagrams (plotting predicted probability vs. observed frequency) and summarized with the ''Brier score'': $\frac{1}{n}\sum(\hat{p}_i - y_i)^2$. A well-calibrated model's predicted probabilities match empirical frequencies. Calibration is distinct from discrimination (AUC): a model can rank well but assign wrong probabilities, or assign correct probabilities but rank poorly.
+
+---
+
+!! Quiz
+
+<span id="em-q1">''1. A dataset has 990 negatives and 10 positives. A model that always predicts negative achieves what accuracy?''
+<<button "A) 50%">><<replace "#em-q1">>Incorrect. 50% would require equal numbers of correct and incorrect predictions. Since 990 out of 1000 are negative, always predicting negative yields 99% accuracy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) 99%">><<replace "#em-q1">>Correct! 990 out of 1000 predictions are right, giving 99% accuracy — but the model catches zero positives. This is why accuracy misleads on imbalanced data.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) 1%">><<replace "#em-q1">>Incorrect. 1% would be the accuracy of a model that always predicts //positive//. Always predicting negative gets 990/1000 = 99% right.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) 0%">><<replace "#em-q1">>Incorrect. 0% accuracy would mean every prediction is wrong. The model correctly identifies all 990 negatives, so accuracy is 99%.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q2">''2. If precision = 0.90 and recall = 0.10, what is approximately the F1 score?''
+<<button "A) 0.50">><<replace "#em-q2">>Incorrect. 0.50 would be the arithmetic mean, but F1 uses the harmonic mean, which penalizes low values much more severely.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) 0.18">><<replace "#em-q2">>Correct! $F_1 = 2 \times 0.90 \times 0.10 / (0.90 + 0.10) = 0.18$. The harmonic mean drags the score toward the weaker value — low recall destroys F1 even with high precision.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) 0.45">><<replace "#em-q2">>Incorrect. The harmonic mean is always less than or equal to the arithmetic mean. $F_1 = 2 \times 0.90 \times 0.10 / (0.90 + 0.10) = 0.18$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) 0.90">><<replace "#em-q2">>Incorrect. F1 cannot equal precision when recall is much lower. The harmonic mean pulls the score down to about 0.18.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q3">''3. What does AUC-ROC measure, probabilistically?''
+<<button "A) The probability that the model's accuracy exceeds 50%">><<replace "#em-q3">>Incorrect. AUC-ROC has nothing to do with accuracy exceeding a threshold. It measures how well the model ranks positives above negatives.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The probability that a random positive example is scored higher than a random negative example">><<replace "#em-q3">>Correct! AUC equals $P(\hat{y}_{+} > \hat{y}_{-})$ — the probability that a uniformly random positive receives a higher score than a uniformly random negative. An AUC of 0.5 is random guessing; 1.0 is perfect separation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The probability that precision exceeds recall">><<replace "#em-q3">>Incorrect. AUC-ROC is not about the relationship between precision and recall. It measures discriminative ability across all thresholds.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The total area of the confusion matrix">><<replace "#em-q3">>Incorrect. The confusion matrix is a table of counts, not a curve. AUC-ROC is the area under the Receiver Operating Characteristic curve, which plots TPR vs FPR.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q4">''4. When would you prefer F2 over F1?''
+<<button "A) When false positives are more costly than false negatives">><<replace "#em-q4">>Incorrect. When false positives are costly, you want higher precision weighting, which means $F_{0.5}$, not $F_2$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) When false negatives are more costly than false positives">><<replace "#em-q4">>Correct! $F_2$ weights recall twice as heavily as precision. This is appropriate when missing a positive case is dangerous — such as in medical screening — because $F_2$ penalizes low recall more severely than $F_1$ does.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) When the dataset is perfectly balanced">><<replace "#em-q4">>Incorrect. Class balance does not determine whether to use $F_1$ or $F_2$. The choice depends on the relative cost of false positives vs. false negatives.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) When you need a threshold-independent metric">><<replace "#em-q4">>Incorrect. $F_2$ still depends on the classification threshold. AUC-ROC is the standard threshold-independent metric.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q5">''5. Why is MSE more sensitive to outliers than MAE?''
+<<button "A) MSE uses absolute values which amplify large errors">><<replace "#em-q5">>Incorrect. MAE uses absolute values. MSE uses squared errors, and it is the squaring that amplifies large deviations.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) MSE squares errors, so doubling an error quadruples its contribution">><<replace "#em-q5">>Correct! Squaring means a prediction that is off by 10 contributes 100 to MSE, while one off by 20 contributes 400 — a 4x increase for a 2x error. MAE would only double. This quadratic growth makes MSE disproportionately sensitive to large errors.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) MSE normalizes by the number of classes">><<replace "#em-q5">>Incorrect. MSE normalizes by the number of samples, not classes. Its sensitivity to outliers comes from squaring the error terms.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) MSE uses logarithmic scaling">><<replace "#em-q5">>Incorrect. Log loss uses logarithmic scaling. MSE uses quadratic (squared) scaling, which is why it amplifies large errors.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q6">''6. In a multiclass setting, which averaging method gives equal importance to every class regardless of size?''
+<<button "A) Micro-averaging">><<replace "#em-q6">>Incorrect. Micro-averaging pools all predictions together, so large classes dominate the result. It does not weight classes equally.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Weighted-averaging">><<replace "#em-q6">>Incorrect. Weighted-averaging explicitly uses class frequency as weights, so larger classes contribute more.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Macro-averaging">><<replace "#em-q6">>Correct! Macro-averaging computes the metric independently for each class, then takes the unweighted mean. A class with 10 samples and a class with 10,000 samples contribute equally to the final score.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Harmonic averaging">><<replace "#em-q6">>Incorrect. Harmonic averaging is the technique used within F1 to combine precision and recall, not a multiclass averaging strategy.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q7">''7. What does a Matthews Correlation Coefficient (MCC) of 0 indicate?''
+<<button "A) Perfect classification">><<replace "#em-q7">>Incorrect. Perfect classification gives MCC = +1. An MCC of 0 is far worse than perfect.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The model performs no better than random guessing">><<replace "#em-q7">>Correct! MCC = 0 means the model's predictions have no correlation with the true labels — equivalent to random chance. MCC ranges from $-1$ (perfectly wrong) through $0$ (random) to $+1$ (perfect).<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Precision equals recall">><<replace "#em-q7">>Incorrect. MCC = 0 does not imply any specific relationship between precision and recall. It indicates predictions are uncorrelated with truth.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The model has zero false positives">><<replace "#em-q7">>Incorrect. Zero false positives would likely produce a positive MCC. MCC = 0 means overall predictions are no better than chance.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="em-q8">''8. Why might precision-recall AUC (PR-AUC) be preferred over ROC-AUC for severely imbalanced data?''
+<<button "A) PR-AUC is always higher than ROC-AUC">><<replace "#em-q8">>Incorrect. PR-AUC is not necessarily higher or lower than ROC-AUC. The preference is about informativeness, not magnitude.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) ROC-AUC can look optimistic because the large number of true negatives makes the false positive rate appear low">><<replace "#em-q8">>Correct! With many negatives, even a large number of false positives produces a small FPR, so the ROC curve looks good. The PR curve focuses on the positive class directly — precision and recall both involve only the positives and the model's positive predictions — revealing weaknesses that ROC-AUC hides.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) PR-AUC does not require a classification threshold">><<replace "#em-q8">>Incorrect. Both ROC-AUC and PR-AUC are threshold-independent — they sweep across all thresholds. The difference is about which aspects of performance they emphasize.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) PR-AUC uses all four cells of the confusion matrix while ROC-AUC only uses two">><<replace "#em-q8">>Incorrect. Both metrics can be derived from confusion matrix quantities. The key difference is that PR-AUC focuses on the positive class, while ROC-AUC incorporates the true negative rate, which can mask poor performance on the minority class.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

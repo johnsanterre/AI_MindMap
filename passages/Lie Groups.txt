@@ -1,0 +1,159 @@
+<<include "Header">>
+! Lie Groups
+<img src="assets/lie_groups.svg" alt="Lie Groups" width="800">
+
+Imagine spinning a basketball on your fingertip. You can rotate it by any angle — a tenth of a degree, thirty-seven degrees, a full revolution — and each rotation blends smoothly into the next. There are no "clicks" or discrete stops. Now notice something deeper: if you do one rotation and then another, you get a third rotation. You can undo any rotation. And doing nothing at all counts as a rotation (the trivial one). That smooth, continuous family of transformations, equipped with the algebraic structure of a group, is the essence of a ''Lie group'' (pronounced "Lee"). Lie groups are the mathematical objects that capture ''continuous symmetry'' — the kind of symmetry that matters most in physics, robotics, and modern deep learning.
+
+!! The Core Insight
+
+A Lie group is a //group// that is simultaneously a //smooth manifold//. This is a remarkable fusion of two branches of mathematics: algebra (the group operation — combining transformations) and geometry/topology (the smooth manifold structure — the transformations form a continuous "surface" you can do calculus on). The key payoff is that you can study an inherently global, potentially complicated curved object (the group) by examining a //flat, linear approximation// at a single point — the ''Lie algebra''. This is analogous to how a tangent line approximates a curve: the Lie algebra is the tangent space at the identity element, and it tells you nearly everything about the group's local behaviour.
+
+!! Continuous Symmetry
+
+A ''symmetry'' is a transformation that leaves some structure unchanged. Discrete symmetries — like reflecting a square — come in finite sets. ''Continuous symmetries'' form families parameterised by one or more real numbers that vary smoothly. Rotations of a circle are parameterised by one angle $\theta \in [0, 2\pi)$. Rotations of a sphere need three parameters (e.g., Euler angles). Translations in $\mathbb{R}^n$ need $n$ parameters.
+
+What makes these groups //and// manifolds?
+
+* ''Group axioms:'' closure (composing two rotations gives a rotation), associativity, an identity element (do nothing), and inverses (reverse the rotation).
+* ''Manifold structure:'' the set of all rotations forms a smooth "surface" — for SO(2) it is a circle $S^1$, for SO(3) it is a three-dimensional manifold (topologically $\mathbb{RP}^3$). The group operations (multiplication and inversion) are smooth maps on this manifold.
+
+Prototypical examples:
+
+* ''SO(2):'' rotations of the plane. One parameter ($\theta$). The group manifold is a circle.
+* ''SO(3):'' rotations of 3D space. Three parameters. Used everywhere in robotics, graphics, and physics.
+* ''SE(3):'' rigid motions of 3D space (rotations + translations). Six parameters. The workhorse of robot kinematics.
+* ''GL(n, $\mathbb{R}$):'' all invertible $n \times n$ real matrices. The general linear group — the ambient group from which most matrix Lie groups are carved.
+
+These continuous symmetries are not merely aesthetic: Noether's theorem guarantees that every continuous symmetry of a physical system corresponds to a conserved quantity. Rotational symmetry gives conservation of angular momentum. Translational symmetry gives conservation of linear momentum. Lie groups make these connections precise.
+
+!! What the Math Is Actually Doing
+
+A ''Lie group'' $G$ satisfies both:
+
+$$\text{Group axioms: } \forall\, g,h \in G,\; g \cdot h \in G,\quad \exists\, e \in G,\quad \exists\, g^{-1} \text{ for each } g$$
+
+$$\text{Smooth manifold: the maps } (g,h) \mapsto g \cdot h \text{ and } g \mapsto g^{-1} \text{ are } C^\infty$$
+
+The ''Lie algebra'' $\mathfrak{g}$ is the tangent space $T_e G$ at the identity element $e$. It is a //vector space// equipped with a bilinear, antisymmetric operation called the ''Lie bracket'' $[\cdot, \cdot]$:
+
+$$[X, Y] = -[Y, X], \qquad [X, [Y, Z]] + [Y, [Z, X]] + [Z, [X, Y]] = 0$$
+
+The second identity is the ''Jacobi identity''. For matrix Lie groups the bracket is simply the matrix commutator $[X, Y] = XY - YX$.
+
+The ''exponential map'' connects algebra to group:
+
+$$\exp : \mathfrak{g} \to G, \qquad \exp(X) = \sum_{k=0}^{\infty} \frac{X^k}{k!}$$
+
+For matrix groups this is the ordinary matrix exponential. Geometrically, $\exp(tX)$ traces out a one-parameter subgroup — a "geodesic" on the group manifold starting at the identity in direction $X$.
+
+''Example — SO(3):'' The Lie algebra $\mathfrak{so}(3)$ consists of $3 \times 3$ skew-symmetric matrices. Any such matrix can be written:
+
+$$[\omega]_\times = \begin{pmatrix} 0 & -\omega_3 & \omega_2 \\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0 \end{pmatrix}$$
+
+The exponential map $\exp([\omega]_\times)$ gives a rotation matrix — this is ''Rodrigues' rotation formula''. The vector $\omega \in \mathbb{R}^3$ encodes the axis and angle of rotation.
+
+''Example — SE(3):'' The Lie algebra $\mathfrak{se}(3)$ is six-dimensional: three dimensions for angular velocity (the $\mathfrak{so}(3)$ part) and three for linear velocity. The exponential map produces a $4 \times 4$ homogeneous transformation matrix representing a rigid-body motion.
+
+The ''logarithmic map'' $\log : G \to \mathfrak{g}$ is the (local) inverse of $\exp$, mapping group elements back to the algebra. Together, $\exp$ and $\log$ let you move between the curved group manifold and the flat vector space of the Lie algebra, where optimisation and interpolation are straightforward.
+
+!! Lie Groups in ML
+
+Lie groups have become central to several frontiers of machine learning:
+
+''Equivariant Neural Networks.'' Standard neural networks are not inherently aware of symmetry. If you rotate an input, the output changes unpredictably. ''Equivariant'' networks are architecturally constrained so that applying a group transformation to the input produces a corresponding, predictable transformation of the output. [[Group Equivariance|Group Equivariance]] formalises this: a map $f$ is equivariant to a group $G$ if $f(\rho_{\text{in}}(g) \cdot x) = \rho_{\text{out}}(g) \cdot f(x)$ for all $g \in G$. Building these constraints from Lie group representations yields networks that generalise better with less data, because they do not waste capacity re-learning known symmetries.
+
+''[[Geometric Deep Learning|Geometric Deep Learning]].'' This emerging framework unifies CNNs, graph neural networks, transformers, and more under a single principle: all are equivariant architectures for different symmetry groups acting on different geometric domains. Lie groups provide the language for specifying //which// symmetries a domain possesses — translations for grids (CNNs), permutations for graphs (GNNs), and the Euclidean or special Euclidean group for point clouds and molecules.
+
+''Robot Kinematics and Pose Estimation.'' Robot joint configurations, camera poses, and object orientations live naturally on Lie groups — typically SO(3) or SE(3). Optimisation on these manifolds uses the Lie algebra as a local coordinate chart: perturb in the tangent space, then map back to the group via $\exp$. This avoids singularities (gimbal lock) and constraint-violation problems that plague Euler-angle or quaternion parameterisations. Frameworks like GTSAM and Ceres exploit this "optimise-on-the-Lie-algebra" pattern for SLAM and bundle adjustment.
+
+''Gauge Equivariance.'' In the most sophisticated geometric deep learning models, features on curved surfaces are represented in local coordinate frames. Changing the frame is a //gauge transformation//, and the network must be ''gauge equivariant'' — its output must not depend on arbitrary coordinate choices. This is modelled with fibre bundles and structure groups, both built from Lie groups. The same mathematics governs gauge theories in physics (electromagnetism, the Standard Model).
+
+''Normalising Flows on Lie Groups.'' Generative models sometimes need to produce samples on non-Euclidean spaces — distributions over rotations, for instance. Normalising flows adapted to Lie groups use the exponential map and Haar measure to define valid probability densities on the group manifold.
+
+!! When Lie Group Methods Break Down
+
+''1. Discrete or Finite Symmetries.'' Lie groups model //continuous// symmetry. If the relevant symmetry is discrete — permutations of atoms in a molecule, reflections of a crystal lattice — you need finite groups or discrete group theory instead. Hybrid approaches exist (semi-direct products mixing continuous and discrete parts), but pure Lie group machinery does not apply to purely discrete symmetries.
+
+''2. Global Topology Complications.'' The exponential map is only a //local// diffeomorphism. For groups with non-trivial topology (SO(3) is not simply connected; its universal cover is SU(2)/the unit quaternions), the logarithm is multi-valued, and global optimisation on the group can encounter topological obstructions. Naively applying Lie algebra perturbations can miss distant solutions or produce discontinuities.
+
+''3. Computational Cost of Equivariant Layers.'' Enforcing exact Lie group equivariance in neural networks can be expensive. Computing Clebsch-Gordan coefficients for higher-order representations, performing group convolutions, or integrating over non-compact groups all add computational overhead. In practice, approximate equivariance (via data augmentation or soft constraints) is sometimes preferred when exact symmetry is too costly to enforce.
+
+!! Technical Details
+
+''Matrix Lie Groups.'' Most Lie groups encountered in practice are ''matrix Lie groups'' — closed subgroups of $\text{GL}(n, \mathbb{R})$ or $\text{GL}(n, \mathbb{C})$. By the closed subgroup theorem (Cartan's theorem), every closed subgroup of a Lie group is itself a Lie group with the induced smooth structure. This means you can define groups like SO(n), SU(n), Sp(n) simply as sets of matrices satisfying algebraic constraints, and the manifold structure comes for free.
+
+''Baker-Campbell-Hausdorff (BCH) Formula.'' When the exponential map is not a homomorphism ($\exp(X)\exp(Y) \neq \exp(X+Y)$ in general for non-commutative groups), the BCH formula expresses the product:
+
+$$\exp(X)\exp(Y) = \exp\!\Big(X + Y + \tfrac{1}{2}[X,Y] + \tfrac{1}{12}\big([X,[X,Y]] - [Y,[X,Y]]\big) + \cdots\Big)$$
+
+This infinite series converges when $X$ and $Y$ are sufficiently small. It shows that the Lie bracket completely determines local group multiplication — the Lie algebra encodes the group's local structure.
+
+''Adjoint Representation.'' Every Lie group acts on its own Lie algebra via conjugation: $\text{Ad}_g(X) = gXg^{-1}$ (for matrix groups). This ''adjoint representation'' $\text{Ad}: G \to \text{GL}(\mathfrak{g})$ is fundamental in representation theory and appears in the transformation laws of angular velocity, in the structure of semi-simple Lie algebras (via the Killing form $B(X,Y) = \text{tr}(\text{ad}_X \circ \text{ad}_Y)$), and in the construction of equivariant network layers.
+
+''Homogeneous Spaces.'' Many important geometric spaces are ''homogeneous spaces'' $G/H$, quotients of a Lie group $G$ by a closed subgroup $H$. The sphere $S^2 \cong \text{SO}(3)/\text{SO}(2)$, the space of positive definite matrices $\cong \text{GL}(n)/\text{O}(n)$, and Grassmannians are all homogeneous spaces. Working on these quotients connects Lie groups to [[Riemannian Geometry|Riemannian Geometry]] and provides natural domains for geometric deep learning on curved spaces.
+
+''Gauge Theory Connections.'' In differential geometry and physics, a ''principal bundle'' $P \to M$ with structure group $G$ (a Lie group) formalises the idea of attaching a copy of $G$ to every point of a manifold $M$. A ''connection'' on this bundle tells you how to parallel-transport group elements and defines curvature. In gauge-equivariant neural networks, the same structure ensures that learned features transform correctly under local frame changes. This links Lie groups to [[Topology|Topology]], fibre bundles, and modern gauge-equivariant architectures.
+
+''Classification.'' Simple Lie algebras over $\mathbb{C}$ are fully classified by Dynkin diagrams into four infinite families ($A_n, B_n, C_n, D_n$) and five exceptional cases ($G_2, F_4, E_6, E_7, E_8$). This classification underlies the structure of [[Linear Matrix Transformations|Linear Matrix Transformations]] and representation theory used in equivariant ML.
+
+See also: [[Geometric Deep Learning|Geometric Deep Learning]], [[Riemannian Geometry|Riemannian Geometry]], [[Linear Matrix Transformations|Linear Matrix Transformations]], [[Topology|Topology]], [[Branches of Mathematics|Branches of Mathematics]], [[Group Equivariance|Group Equivariance]].
+
+!! Quiz
+
+<div id="q1">''1. What distinguishes a Lie group from an ordinary group?''
+<br>A) It must be finite
+<br>B) It is also a smooth manifold, with smooth group operations
+<br>C) It must be abelian (commutative)
+<br>D) It only contains diagonal matrices
+<<button "Show Answer">><<replace "#q1">>''1.'' @@color:green;''B) It is also a smooth manifold, with smooth group operations.''@@ A Lie group fuses algebraic structure (group axioms) with geometric structure (smooth manifold), and the group operations must be smooth maps.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q2">''2. The Lie algebra of a Lie group $G$ is:''
+<br>A) The set of all subgroups of $G$
+<br>B) The tangent space at the identity element, equipped with the Lie bracket
+<br>C) The center of the group
+<br>D) The set of eigenvalues of $G$
+<<button "Show Answer">><<replace "#q2">>''2.'' @@color:green;''B) The tangent space at the identity element, equipped with the Lie bracket.''@@ The Lie algebra $\mathfrak{g} = T_e G$ is a vector space with a bracket operation that encodes the group's local structure.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q3">''3. What does the exponential map $\exp: \mathfrak{g} \to G$ do geometrically?''
+<br>A) Projects the group onto a lower-dimensional subspace
+<br>B) Maps tangent vectors at the identity to elements of the group along one-parameter subgroups
+<br>C) Computes eigenvalues of group elements
+<br>D) Flattens the group manifold into Euclidean space
+<<button "Show Answer">><<replace "#q3">>''3.'' @@color:green;''B) Maps tangent vectors at the identity to elements of the group along one-parameter subgroups.''@@ $\exp(tX)$ traces a curve (one-parameter subgroup) on the group manifold starting at the identity in direction $X$.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q4">''4. The Lie algebra $\mathfrak{so}(3)$ consists of:''
+<br>A) $3 \times 3$ orthogonal matrices
+<br>B) $3 \times 3$ skew-symmetric matrices
+<br>C) $3 \times 3$ symmetric positive definite matrices
+<br>D) $3 \times 3$ diagonal matrices
+<<button "Show Answer">><<replace "#q4">>''4.'' @@color:green;''B) $3 \times 3$ skew-symmetric matrices.''@@ These satisfy $A^T = -A$, forming a 3-dimensional vector space. The exponential map sends them to rotation matrices in SO(3).<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q5">''5. Why are Lie groups important for equivariant neural networks?''
+<br>A) They make networks train faster by reducing the learning rate
+<br>B) They specify the continuous symmetries the network should respect, so equivariance constraints can be built into the architecture
+<br>C) They eliminate the need for activation functions
+<br>D) They guarantee the network will converge to a global minimum
+<<button "Show Answer">><<replace "#q5">>''5.'' @@color:green;''B) They specify the continuous symmetries the network should respect.''@@ Lie group representations define how inputs and outputs transform, enabling architectural constraints that enforce equivariance and improve data efficiency.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q6">''6. The Baker-Campbell-Hausdorff formula shows that:''
+<br>A) $\exp(X)\exp(Y) = \exp(X+Y)$ always
+<br>B) The product of two exponentials can be expressed as a single exponential involving nested Lie brackets
+<br>C) Every Lie group is abelian
+<br>D) The exponential map is always surjective
+<<button "Show Answer">><<replace "#q6">>''6.'' @@color:green;''B) The product of two exponentials can be expressed as a single exponential involving nested Lie brackets.''@@ The BCH formula gives $\exp(X)\exp(Y) = \exp(X + Y + \frac{1}{2}[X,Y] + \cdots)$, demonstrating that the bracket controls how the group deviates from commutativity.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q7">''7. Which is NOT a valid reason Lie group methods can break down in ML?''
+<br>A) The symmetry of interest is discrete rather than continuous
+<br>B) The exponential map has global topological obstructions
+<br>C) The Lie algebra is a vector space
+<br>D) Exact equivariance can be computationally expensive for higher-order representations
+<<button "Show Answer">><<replace "#q7">>''7.'' @@color:green;''C) The Lie algebra is a vector space.''@@ That the Lie algebra is a vector space is a //feature//, not a failure — it is precisely what makes local computation tractable. The other three are genuine limitations.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q8">''8. The homogeneous space SO(3)/SO(2) is isomorphic to:''
+<br>A) The real line $\mathbb{R}$
+<br>B) The 2-sphere $S^2$
+<br>C) The torus $T^2$
+<br>D) The projective plane $\mathbb{RP}^2$
+<<button "Show Answer">><<replace "#q8">>''8.'' @@color:green;''B) The 2-sphere $S^2$.''@@ SO(3) acts transitively on the sphere, and the stabiliser of any point (rotations fixing that point) is a copy of SO(2). The quotient SO(3)/SO(2) $\cong S^2$.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<<include "Footer">>

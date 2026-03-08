@@ -1,0 +1,148 @@
+<<include "Header">>
+! Takeo Kanade
+<img src="assets/takeo_kanade.svg" alt="Takeo Kanade" width="800">
+
+''Takeo Kanade'' is one of the founding figures of modern [[Computer Vision|Computer Vision]]. Born in Hyogo, Japan in 1945, Kanade built his career at the intersection of mathematical rigor and engineered systems that actually work in the real world. His PhD thesis at Kyoto University in 1974 produced one of the earliest computational models of face recognition. He then moved to [[Carnegie Mellon University|Carnegie Mellon University]], where he would spend decades shaping the field — first as a researcher, then as the director of the Robotics Institute, the largest robotics research center in the world. If you have ever watched a sports replay from a swooping virtual camera angle, tracked a face through a video, or read about a self-driving car, you have encountered ideas Kanade pioneered.
+
+!! Key Contributions
+
+Kanade's work spans an unusually broad range of computer vision and robotics:
+
+* ''Lucas-Kanade Optical Flow (1981):'' Co-developed with Bruce Lucas, this method estimates the motion of pixels between video frames by solving a local least-squares problem. It remains one of the most widely used [[Optical Flow|Optical Flow]] algorithms in both research and industry, forming the backbone of video stabilization, motion tracking, and visual odometry systems.
+
+* ''Face Detection and Tracking:'' Kanade's group produced some of the earliest reliable face detection systems. His work on facial feature tracking, including the Kanade-Lucas-Tomasi (KLT) feature tracker, laid the groundwork for modern facial analysis pipelines that feed into everything from [[Object Detection|Object Detection]] to expression recognition.
+
+* ''3D Reconstruction:'' His research on shape-from-shading, stereo vision, and multi-view geometry contributed foundational methods for recovering [[3D Point Clouds|3D Point Clouds]] and surface models from 2D images.
+
+* ''Navlab Autonomous Vehicle:'' In the late 1980s, Kanade led the Navlab project at CMU — one of the earliest autonomous driving programs. Navlab 5 famously completed a coast-to-coast drive across the United States in 1995 with computer-controlled steering for 98.2% of the journey, decades before modern self-driving cars.
+
+* ''EyeVision Multi-Camera System:'' Debuted at Super Bowl XXXV in 2001, this system used 33 synchronized cameras to create smooth virtual camera movements around a live event — the ancestor of modern "bullet time" replay technology in sports broadcasting.
+
+* ''CMU Robotics Institute Leadership:'' As director from 1992 to 2001, Kanade expanded the Robotics Institute into a powerhouse that trained many of the field's leading researchers and engineers.
+
+!! The Core Insight
+
+Kanade's approach can be summarized in a principle he has repeated throughout his career: //``Do the right thing at the right level.''// Where many vision researchers chase elegant theory in isolation, Kanade insists that the value of an algorithm is measured by whether it can be built into a system that solves a real problem. His Lucas-Kanade method is a perfect example — it does not try to solve the full, intractable optical flow problem globally. Instead, it makes a sensible local assumption (that nearby pixels share the same motion), applies straightforward linear algebra, and produces a method robust enough to run in real-time systems for decades. This philosophy — mathematical clarity in service of engineered reality — runs through all his major contributions.
+
+!! What the Math Is Actually Doing
+
+The ''Lucas-Kanade method'' estimates optical flow by assuming that the displacement $(d_x, d_y)$ of a pixel between two frames is small and constant within a local window. Starting from the brightness constancy constraint:
+
+$$I(x, y, t) = I(x + d_x, y + d_y, t + 1)$$
+
+A first-order Taylor expansion yields the optical flow equation:
+
+$$I_x \, d_x + I_y \, d_y + I_t = 0$$
+
+where $I_x$, $I_y$ are spatial image gradients and $I_t$ is the temporal gradient. One equation with two unknowns is underdetermined, so Lucas-Kanade collects this constraint across all $n$ pixels in a local window and solves the overdetermined system via least squares:
+
+$$\begin{bmatrix} d_x \\ d_y \end{bmatrix} = (A^T A)^{-1} A^T b$$
+
+where $A = \begin{bmatrix} I_{x_1} & I_{y_1} \\ \vdots & \vdots \\ I_{x_n} & I_{y_n} \end{bmatrix}$ and $b = -\begin{bmatrix} I_{t_1} \\ \vdots \\ I_{t_n} \end{bmatrix}$.
+
+The matrix $A^T A$ is a $2 \times 2$ structure tensor. When both eigenvalues are large, the local patch has strong gradients in two directions — exactly the condition that makes a good feature to track (the ''Shi-Tomasi'' corner criterion). When one eigenvalue is near zero, you have an edge where motion is ambiguous along it — the classic //aperture problem//.
+
+For ''template matching'' in face tracking, the KLT tracker minimizes the sum of squared differences between a template $T$ and an image patch $I$ warped by an affine transformation $W$:
+
+$$\min_{p} \sum_{x} \left[ I(W(x; p)) - T(x) \right]^2$$
+
+This is solved iteratively using a Gauss-Newton update, connecting Kanade's tracking work directly to optimization methods in [[CNN|CNN]] training.
+
+!! Impact on the Field
+
+Kanade's influence radiates outward through three major channels:
+
+''Computer Vision Foundations:'' The Lucas-Kanade method and KLT tracker are taught in virtually every computer vision course worldwide. They appear in OpenCV, MATLAB, and dozens of commercial systems. His work on face detection helped establish facial analysis as a viable research area long before deep learning made it mainstream.
+
+''Autonomous Driving:'' The Navlab project demonstrated that autonomous driving was feasible decades before the DARPA Grand Challenges of the 2000s. Many researchers who worked in Kanade's lab went on to lead autonomous vehicle programs at companies like Google, Uber, and Aurora.
+
+''Research Culture:'' By building the CMU Robotics Institute into the world's premier robotics research center, Kanade created an environment that produced generations of leading researchers. His emphasis on building complete systems — not just publishing papers — shaped an engineering-forward culture that distinguishes CMU's approach to AI and robotics.
+
+!! When Vision Systems Break Down
+
+''1. The Brightness Constancy Violation:'' The Lucas-Kanade method assumes pixel intensity is preserved between frames. When lighting changes suddenly — a cloud passing over a scene, a camera auto-adjusting exposure — the brightness constancy equation breaks down and flow estimates become unreliable. Shadows, reflections, and transparent surfaces all violate this assumption systematically.
+
+''2. Large Displacements Defeat Local Windows:'' Because Lucas-Kanade uses a first-order Taylor approximation, it only works when motion between frames is small (typically a few pixels). Fast-moving objects or low frame rates produce displacements that exceed the linear approximation range. Coarse-to-fine pyramid schemes mitigate this but cannot fully solve it for very large motions.
+
+''3. Textureless Regions Have No Signal:'' When the local window falls on a region with little texture — a white wall, a clear sky — the spatial gradients $I_x$ and $I_y$ are near zero, making $A^T A$ singular or nearly so. No local method can estimate motion where there is no visual structure to track. This is not a bug in the algorithm but a fundamental limit of local appearance-based approaches.
+
+!! Technical Details
+
+''Awards and Honors:''
+* Bower Award and Prize for Achievement in Science (2017)
+* Franklin Institute Medal
+* IEEE Robotics and Automation Pioneer Award
+* Elected to the National Academy of Engineering, American Academy of Arts and Sciences
+* Over 25 best paper awards at major conferences
+* Received the Kyoto Prize in Advanced Technology (2016)
+
+''Key Papers:''
+* Lucas & Kanade, "An Iterative Image Registration Technique with an Application to Stereo Vision" (1981) — the foundational optical flow paper
+* Kanade, "Picture Processing System by Computer Complex and Recognition of Human Faces" (PhD thesis, 1973)
+* Tomasi & Kanade, "Detection and Tracking of Point Features" (1991) — the KLT tracker
+* Baker & Matthews, "Lucas-Kanade 20 Years On: A Unifying Framework" (2004) — comprehensive survey of Lucas-Kanade variants
+
+''Notable Students and Collaborators:''
+Kanade has supervised or mentored many researchers who became leaders in vision and robotics, including Carlo Tomasi (Duke University), Simon Baker (Microsoft Research), and Martial Hebert (CMU RI director after Kanade). His lab's alumni network extends through virtually every major computer vision research group.
+
+''CMU Robotics Institute:'' Founded in 1979 by Raj Reddy, the RI grew under Kanade's directorship (1992–2001) to become the largest university-based robotics center in the world, with hundreds of researchers and dozens of spin-off companies.
+
+!! Quiz
+
+<div id="q1">''1. What fundamental assumption does the Lucas-Kanade optical flow method rely on?''
+<<button "A) Objects maintain constant velocity">><<replace "#q1">>That is a possible modeling assumption but not the core constraint of Lucas-Kanade. The method assumes ''brightness constancy'' — that a pixel's intensity does not change between frames.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Pixel brightness is preserved between frames">><<replace "#q1">>Correct! The brightness constancy constraint $I(x,y,t) = I(x+d_x, y+d_y, t+1)$ is the foundation of Lucas-Kanade optical flow.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) All pixels move in the same direction">><<replace "#q1">>That would be a global motion model. Lucas-Kanade assumes constant motion within a ''local window'', not across the entire image.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The camera remains stationary">><<replace "#q1">>Lucas-Kanade works with moving cameras as well. The core assumption is brightness constancy, not camera stationarity.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. Who co-developed the Lucas-Kanade method with Takeo Kanade?''
+<<button "A) Carlo Tomasi">><<replace "#q2">>Tomasi collaborated with Kanade on the KLT tracker (1991), not the original optical flow paper. The co-author was ''Bruce Lucas'' (1981).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Raj Reddy">><<replace "#q2">>Raj Reddy founded the CMU Robotics Institute, but did not co-author the optical flow method. It was ''Bruce Lucas''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Bruce Lucas">><<replace "#q2">>Correct! Bruce Lucas and Takeo Kanade published their optical flow method in 1981.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Simon Baker">><<replace "#q2">>Baker co-authored the influential "Lucas-Kanade 20 Years On" survey in 2004, but the original method was co-developed with ''Bruce Lucas''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What was the Navlab project?''
+<<button "A) A multi-camera broadcast system">><<replace "#q3">>That describes the EyeVision system. Navlab was CMU's ''autonomous driving'' research program.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A facial recognition database">><<replace "#q3">>Navlab was not related to face recognition. It was an ''autonomous vehicle'' project that completed a coast-to-coast drive in 1995.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) An early autonomous vehicle program at CMU">><<replace "#q3">>Correct! Navlab was one of the earliest autonomous driving programs. Navlab 5 drove coast-to-coast in 1995 with computer-controlled steering for 98.2% of the trip.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A robotic surgery system">><<replace "#q3">>Navlab was focused on autonomous driving, not surgery. It was a landmark project in self-driving vehicle research.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What condition makes the Lucas-Kanade system unsolvable in a local window?''
+<<button "A) Too many moving objects">><<replace "#q4">>Multiple moving objects can cause issues, but the fundamental problem is when the region is ''textureless'' — spatial gradients near zero make $A^T A$ singular.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The region is textureless (low spatial gradients)">><<replace "#q4">>Correct! When $I_x$ and $I_y$ are near zero throughout the window, the matrix $A^T A$ becomes singular and there is no visual structure to track.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The frame rate is too high">><<replace "#q4">>High frame rates actually help Lucas-Kanade by keeping displacements small. The problem is ''textureless regions'' where gradients vanish.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The image is in color rather than grayscale">><<replace "#q4">>Color vs. grayscale is not the issue. Lucas-Kanade fails when the local region has ''no texture'' — making the gradient matrix singular.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What event featured the debut of Kanade's EyeVision system?''
+<<button "A) The 2000 Olympics">><<replace "#q5">>EyeVision was not debuted at the Olympics. It first appeared at ''Super Bowl XXXV'' in 2001.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Super Bowl XXXV (2001)">><<replace "#q5">>Correct! EyeVision debuted at Super Bowl XXXV in January 2001, using 33 synchronized cameras to create virtual camera sweeps around live plays.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The 1998 World Cup">><<replace "#q5">>EyeVision was not used at the World Cup. Its debut was at ''Super Bowl XXXV'' in 2001.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The 2004 DARPA Grand Challenge">><<replace "#q5">>The DARPA Grand Challenge involved autonomous vehicles. EyeVision was a multi-camera system debuted at ''Super Bowl XXXV''.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. In the Lucas-Kanade framework, what does the matrix $A^T A$ represent?''
+<<button "A) The image Hessian">><<replace "#q6">>The Hessian involves second derivatives. $A^T A$ is the ''structure tensor'' — a $2 \times 2$ matrix of summed gradient products over the local window.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The structure tensor of the local window">><<replace "#q6">>Correct! $A^T A$ is the $2 \times 2$ structure tensor whose eigenvalues indicate whether the local patch has enough texture for reliable tracking.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The covariance of pixel colors">><<replace "#q6">>$A^T A$ is not about color covariance. It is the ''structure tensor'' formed from spatial image gradients in the local window.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The camera calibration matrix">><<replace "#q6">>Camera calibration is unrelated. $A^T A$ is the ''structure tensor'' — the sum of outer products of gradient vectors in the window.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What role did Kanade hold at CMU from 1992 to 2001?''
+<<button "A) Dean of Computer Science">><<replace "#q7">>Kanade was not the CS dean. He served as ''Director of the Robotics Institute'' from 1992 to 2001.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Director of the Robotics Institute">><<replace "#q7">>Correct! Kanade directed the CMU Robotics Institute from 1992 to 2001, growing it into the world's largest university-based robotics research center.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) President of the university">><<replace "#q7">>Kanade was not CMU's president. He was ''Director of the Robotics Institute''.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Chair of Electrical Engineering">><<replace "#q7">>Kanade's leadership role was as ''Director of the Robotics Institute'', not the EE department chair.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. What percentage of steering was computer-controlled during Navlab 5's coast-to-coast drive in 1995?''
+<<button "A) 75.5%">><<replace "#q8">>That is too low. Navlab 5 achieved ''98.2%'' computer-controlled steering on its cross-country trip.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 88.0%">><<replace "#q8">>Close but not correct. The figure was ''98.2%'' — nearly all steering was autonomous.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) 98.2%">><<replace "#q8">>Correct! Navlab 5 completed its coast-to-coast drive with computer-controlled steering for 98.2% of the journey, a remarkable achievement for 1995.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 100%">><<replace "#q8">>Not quite — a human still handled some steering. The actual figure was ''98.2%'' autonomous steering.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

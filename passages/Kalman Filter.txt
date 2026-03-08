@@ -1,0 +1,150 @@
+<<include "Header">>
+! Kalman Filter
+<img src="assets/kalman_filter.svg" alt="Kalman Filter" width="800">
+
+Imagine you are trying to figure out where a friend is standing in a foggy field. You have two clues: a rough guess based on where they were a moment ago and which way they were walking (your ''prediction''), and a noisy reading from a GPS tracker (your ''measurement''). Neither clue is perfect, but if you blend them — trusting the more confident one a little more — you get a better estimate than either alone. The ''Kalman filter'' repeats this trick at every time step, fusing prediction and measurement into an ever-improving estimate of a hidden state you cannot observe directly.
+
+Invented by Rudolf Kalman in 1960, the filter played a starring role in the Apollo guidance computer and remains one of the most widely deployed algorithms in engineering, robotics, and [[Time Series|Time Series]] analysis. Its elegance comes from the fact that, for linear systems with [[Gaussian Distribution|Gaussian Distribution]] noise, the Kalman filter is provably //optimal// — no other estimator can do better.
+
+!! The Core Insight
+
+A Kalman filter maintains a ''belief'' about a hidden state, represented as a Gaussian distribution with a mean (best guess) and a covariance (uncertainty). At every time step it performs exactly two operations:
+
+# ''Predict'' — push the belief forward using a model of how the state evolves, which //increases// uncertainty because the model is imperfect.
+# ''Update'' — incorporate a new measurement, which //decreases// uncertainty because you have gained information.
+
+The result is a narrow posterior Gaussian that is more certain than either the prediction or the measurement alone. This predict-update cycle is the heartbeat of the filter and connects directly to [[Bayesian Inference|Bayesian Inference]]: the prediction is the prior, the measurement is the likelihood, and the update produces the posterior.
+
+!! Predict Then Correct
+
+The two-step cycle can be understood without any math at all:
+
+''Prediction step.'' You know your robot was at position 10 m, moving at 2 m/s. One second later, you //predict// it is at 12 m — but you are not perfectly sure, so your uncertainty grows. The prediction carries forward everything you knew, degraded slightly by process noise (wind gusts, wheel slip, model error).
+
+''Update step.'' A laser rangefinder says the robot is at 11.8 m. That measurement has its own noise, but combining it with your prediction narrows the uncertainty. The ''Kalman gain'' $K$ controls the blend: when your prediction is very uncertain, $K$ is large and you trust the sensor more; when the sensor is noisy, $K$ is small and you lean on the prediction.
+
+This two-step rhythm repeats indefinitely. Over time, if the system is ''observable'' (sensors provide enough information), the uncertainty converges to a steady state, and the filter tracks the true hidden state closely.
+
+State estimation under noise appears everywhere: tracking aircraft on radar, smoothing IMU readings, fusing GPS with accelerometers, and even modeling neural dynamics. Any time you have a dynamical system plus noisy observations, the Kalman filter (or a nonlinear cousin) is often the first tool to reach for.
+
+!! What the Math Is Actually Doing
+
+Let the hidden state at time $k$ be $x_k$, with state transition matrix $F$, process noise covariance $Q$, observation matrix $H$, and measurement noise covariance $R$.
+
+''Predict:''
+
+$$\hat{x}_{k|k-1} = F\hat{x}_{k-1|k-1}$$
+
+$$P_{k|k-1} = F P_{k-1|k-1} F^T + Q$$
+
+The predicted mean $\hat{x}_{k|k-1}$ is the old estimate pushed through the dynamics. The predicted covariance $P_{k|k-1}$ grows because $Q$ is added — the model is uncertain.
+
+''Update:''
+
+The ''innovation'' (surprise) is $y_k = z_k - H\hat{x}_{k|k-1}$, the gap between the actual measurement $z_k$ and what the model expected.
+
+$$K_k = P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}$$
+
+$$\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k y_k$$
+
+$$P_{k|k} = (I - K_k H) P_{k|k-1}$$
+
+The ''Kalman gain'' $K_k$ is the ratio of prediction uncertainty to total uncertainty (prediction + measurement). When $R$ is small (good sensor), $K$ is large and the filter snaps toward the measurement. When $R$ is large (noisy sensor), $K$ shrinks and the filter trusts its own prediction.
+
+Notice that $P_{k|k}$ is always smaller (in the positive-definite sense) than $P_{k|k-1}$ — the update step //always// reduces uncertainty. This is the mathematical expression of ''information gain''.
+
+!! Kalman Filters in Practice
+
+''Tracking and navigation.'' The Kalman filter was literally built for this: estimating position and velocity of spacecraft. Modern GPS receivers run Kalman filters internally to fuse satellite pseudorange measurements. Inertial navigation systems combine accelerometers and gyroscopes via Kalman filtering for aircraft, submarines, and autonomous vehicles.
+
+''Sensor fusion.'' When multiple sensors observe the same quantity (camera, LiDAR, radar), the Kalman framework provides a principled way to merge them. Each sensor contributes an observation model $H_i$ and noise $R_i$; the filter optimally weights them.
+
+''Econometrics and time series.'' [[Time Series|Time Series]] models like dynamic linear models are Kalman filters in disguise. The filter estimates latent trend, seasonal, and regression components from noisy observations.
+
+''Connection to [[Recurrent Neural Networks|Recurrent Neural Networks]].'' An RNN maintains a hidden state $h_t$ updated at each step — structurally identical to the Kalman predict-update pattern. Recent ''[[State Space Models|State Space Models]]'' (S4, Mamba) make this connection explicit, using linear recurrences that can be viewed as learned Kalman-like filters, gaining both the efficiency of recurrence and the parallelism of convolutions.
+
+''Control systems.'' The Kalman filter pairs naturally with the Linear-Quadratic Regulator (LQR) to form the LQG (Linear-Quadratic-Gaussian) controller — the filter estimates the state, and the controller acts on that estimate.
+
+!! When Kalman Filters Break Down
+
+''Nonlinearity.'' The classic Kalman filter assumes linear dynamics ($F$) and linear observations ($H$). Real systems — a turning car, a tumbling satellite — are nonlinear. The Gaussians get distorted into banana-shaped distributions that the filter cannot represent. Remedies include the Extended Kalman Filter (linearize locally) and the Unscented Kalman Filter (propagate sigma points), but both are approximations that can diverge if nonlinearity is severe.
+
+''Non-Gaussian noise.'' The optimality proof assumes Gaussian noise. Heavy-tailed noise (outlier measurements from a malfunctioning sensor) can yank the estimate wildly. Robust variants use M-estimators or switch to particle filters that represent arbitrary distributions, at much higher computational cost.
+
+''Model mismatch.'' If the matrices $F$, $H$, $Q$, or $R$ are wrong — the dynamics model is too simple, or the noise statistics are mis-specified — the filter becomes overconfident and its covariance $P$ no longer reflects reality. This is arguably the most dangerous failure: the filter //thinks// it knows the answer but is systematically biased. Adaptive Kalman filters attempt to learn $Q$ and $R$ online, but correct modeling remains the practitioner's primary responsibility.
+
+!! Technical Details
+
+''Extended Kalman Filter (EKF).'' Replaces $F$ and $H$ with Jacobians of the nonlinear functions $f$ and $h$ evaluated at the current estimate. First-order accurate; can diverge for highly nonlinear systems. Still the workhorse in many robotics applications.
+
+''Unscented Kalman Filter (UKF).'' Selects a small set of deterministic ''sigma points'' around the mean, propagates them through the true nonlinear function, then recovers the Gaussian statistics. Second-order accurate without computing Jacobians. Often more robust than the EKF with similar cost.
+
+''Kalman smoother.'' The standard filter is //causal// — it only uses past and present data. The ''Rauch-Tung-Striebel smoother'' runs a backward pass after the forward filter, producing estimates that use the //entire// dataset. Smoothed estimates have lower variance and are preferred for offline analysis.
+
+''Connection to [[Bayesian Inference|Bayesian Inference]].'' The predict step is exactly the Chapman-Kolmogorov equation for propagating a prior through a transition kernel. The update step is Bayes' theorem with a Gaussian likelihood. The Kalman filter is the closed-form special case of the general Bayesian filtering recursion — possible only because Gaussians are closed under linear transformations and conditioning.
+
+''Riccati equation.'' In steady state the covariance update becomes the discrete algebraic Riccati equation (DARE): $P = FPF^T + Q - FPH^T(HPH^T+R)^{-1}HP F^T$. Solving DARE gives the steady-state Kalman gain, avoiding repeated covariance updates. The existence of a stabilizing solution is equivalent to the system being detectable and stabilizable — deep connections to control theory.
+
+''Information filter.'' An algebraically equivalent form that propagates the inverse covariance (information matrix) $\Omega = P^{-1}$. Advantageous when fusing many sensors, because information from independent sources simply adds. Used in multi-robot SLAM.
+
+''[[Hidden Markov Models|Hidden Markov Models]]'' can be seen as the discrete-state analogue of the Kalman filter: the forward algorithm plays the role of predict-update, but over a finite set of states rather than a continuous Gaussian.
+
+!! Quiz
+
+<div id="q1">''1. What two steps make up the Kalman filter cycle?''
+<br>A) Train and test
+<br>B) Predict and update
+<br>C) Encode and decode
+<br>D) Forward and backward
+<<button "Show Answer">><<replace "#q1">>''B) Predict and update.'' The filter alternates between predicting the next state (increasing uncertainty) and updating with a measurement (decreasing uncertainty).<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q2">''2. What distribution does the Kalman filter use to represent belief about the state?''
+<br>A) Uniform
+<br>B) Poisson
+<br>C) Gaussian
+<br>D) Bernoulli
+<<button "Show Answer">><<replace "#q2">>''C) Gaussian.'' The belief is a Gaussian parameterized by mean $\hat{x}$ and covariance $P$.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q3">''3. What does the Kalman gain $K$ control?''
+<br>A) The learning rate of a neural network
+<br>B) The blend between prediction and measurement
+<br>C) The number of hidden states
+<br>D) The dimensionality of the observation
+<<button "Show Answer">><<replace "#q3">>''B) The blend between prediction and measurement.'' When $K$ is large, the filter trusts the measurement more; when small, it trusts the prediction.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q4">''4. What happens to the covariance $P$ during the prediction step?''
+<br>A) It decreases
+<br>B) It stays the same
+<br>C) It increases
+<br>D) It becomes zero
+<<button "Show Answer">><<replace "#q4">>''C) It increases.'' Process noise $Q$ is added: $P_{k|k-1} = FPF^T + Q$, reflecting growing uncertainty about where the state has moved.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q5">''5. Why does the standard Kalman filter fail on nonlinear systems?''
+<br>A) It cannot handle multidimensional states
+<br>B) Gaussians become distorted under nonlinear transformations
+<br>C) It requires too much memory
+<br>D) It only works with discrete states
+<<button "Show Answer">><<replace "#q5">>''B) Gaussians become distorted under nonlinear transformations.'' The filter assumes linearity to keep the belief Gaussian; nonlinear functions warp Gaussians into non-Gaussian shapes the filter cannot represent.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q6">''6. How does the Unscented Kalman Filter handle nonlinearity?''
+<br>A) By computing Jacobians of the dynamics
+<br>B) By using particle sampling with thousands of points
+<br>C) By propagating deterministic sigma points through the nonlinear function
+<br>D) By switching to a discrete state space
+<<button "Show Answer">><<replace "#q6">>''C) By propagating deterministic sigma points through the nonlinear function.'' A small set of carefully chosen points captures the mean and covariance to second order without Jacobians.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q7">''7. What is the Kalman smoother?''
+<br>A) A filter that uses only future data
+<br>B) A forward-backward algorithm that uses the entire dataset for lower-variance estimates
+<br>C) A method that removes outliers before filtering
+<br>D) A technique for reducing the state dimension
+<<button "Show Answer">><<replace "#q7">>''B) A forward-backward algorithm that uses the entire dataset for lower-variance estimates.'' The smoother adds a backward pass, conditioning each estimate on all data, not just past observations.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<div id="q8">''8. Which of these is the discrete-state analogue of the Kalman filter?''
+<br>A) Principal Component Analysis
+<br>B) [[Hidden Markov Models|Hidden Markov Models]]
+<br>C) Support Vector Machines
+<br>D) Gradient Descent
+<<button "Show Answer">><<replace "#q8">>''B) [[Hidden Markov Models|Hidden Markov Models]].'' HMMs perform predict-update (the forward algorithm) over a finite set of discrete hidden states, just as the Kalman filter does over a continuous Gaussian state.<</replace>><<script>>typesetMath();<</script>><</button>></div>
+
+<<include "Footer">>

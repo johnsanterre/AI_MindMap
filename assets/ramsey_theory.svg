@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect x="0" y="0" width="800" height="400" rx="12" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">R(3,3) = 6: Every 2-coloring of K6 contains a monochromatic triangle</text>
+
+  <!-- K6 vertices in a hexagon, centered at (280, 220), radius 140 -->
+  <!-- v1=(280,80) v2=(401.2,150) v3=(401.2,290) v4=(280,360) v5=(158.8,290) v6=(158.8,150) -->
+
+  <!-- Blue edges (non-triangle edges) -->
+  <line x1="280" y1="80" x2="401.2" y2="150" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="280" y1="80" x2="158.8" y2="150" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="280" y1="80" x2="280" y2="360" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="401.2" y1="150" x2="158.8" y2="290" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="401.2" y1="150" x2="280" y2="360" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="401.2" y1="290" x2="158.8" y2="150" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="401.2" y1="290" x2="280" y2="360" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="158.8" y1="290" x2="280" y2="360" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+  <line x1="158.8" y1="150" x2="280" y2="360" stroke="#2D5A8E" stroke-width="2" opacity="0.5"/>
+
+  <!-- Red edges -->
+  <line x1="280" y1="80" x2="401.2" y2="290" stroke="#7C2530" stroke-width="2" opacity="0.5"/>
+  <line x1="280" y1="80" x2="158.8" y2="290" stroke="#7C2530" stroke-width="2" opacity="0.5"/>
+  <line x1="401.2" y1="150" x2="401.2" y2="290" stroke="#7C2530" stroke-width="2" opacity="0.5"/>
+  <line x1="401.2" y1="150" x2="158.8" y2="150" stroke="#7C2530" stroke-width="2" opacity="0.5"/>
+  <line x1="158.8" y1="150" x2="158.8" y2="290" stroke="#7C2530" stroke-width="2" opacity="0.5"/>
+
+  <!-- Highlighted red monochromatic triangle: v3=(401.2,290), v5=(158.8,290), v1=(280,80) -->
+  <polygon points="401.2,290 158.8,290 280,80" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="4"/>
+
+  <!-- Vertices -->
+  <circle cx="280" cy="80" r="14" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="280" y="85" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">1</text>
+
+  <circle cx="401.2" cy="150" r="14" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="401.2" y="155" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">2</text>
+
+  <circle cx="401.2" cy="290" r="14" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="401.2" y="295" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">3</text>
+
+  <circle cx="280" cy="360" r="14" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="280" y="365" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">4</text>
+
+  <circle cx="158.8" cy="290" r="14" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="158.8" y="295" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">5</text>
+
+  <circle cx="158.8" cy="150" r="14" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="158.8" y="155" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">6</text>
+
+  <!-- Legend and annotation on the right -->
+  <rect x="500" y="80" width="270" height="260" rx="8" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="635" y="110" font-family="Georgia, serif" font-size="16" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Ramsey's Theorem</text>
+
+  <line x1="530" y1="130" x2="570" y2="130" stroke="#7C2530" stroke-width="3"/>
+  <text x="580" y="135" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="start">Red edges</text>
+
+  <line x1="530" y1="155" x2="570" y2="155" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="580" y="160" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="start">Blue edges</text>
+
+  <polygon points="545,175 555,175 550,185" fill="#7C2530" fill-opacity="0.15" stroke="#7C2530" stroke-width="2"/>
+  <text x="580" y="185" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="start">Forced triangle</text>
+
+  <text x="520" y="220" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="start">Among 6 people, there must</text>
+  <text x="520" y="238" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="start">exist 3 mutual friends or</text>
+  <text x="520" y="256" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" text-anchor="start">3 mutual strangers.</text>
+
+  <text x="520" y="286" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="start" font-style="italic">Each vertex has 5 edges.</text>
+  <text x="520" y="304" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="start" font-style="italic">By pigeonhole, at least 3</text>
+  <text x="520" y="322" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="start" font-style="italic">share one color -- forming</text>
+  <text x="520" y="340" font-family="Georgia, serif" font-size="12" fill="#C4A87A" text-anchor="start" font-style="italic">a monochromatic triangle.</text>
+</svg>

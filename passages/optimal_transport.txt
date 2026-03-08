@@ -1,0 +1,135 @@
+<<include "Header">>
+
+! Optimal Transport
+
+<img src="assets/optimal_transport.svg" alt="Optimal Transport diagram showing two distributions connected by a transport plan with cost arrows" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you run two warehouses full of goods and need to resupply a chain of stores across the city. Each warehouse has a known stock, each store has a known demand, and shipping costs depend on distance. Your job is to decide how much to ship from each warehouse to each store so that total shipping cost is minimized and every store gets exactly what it needs. ''Optimal transport'' is the mathematical framework that solves this problem — except the "warehouses" and "stores" are points in a probability distribution, and the "goods" are probability mass.
+
+!! The Core Insight
+
+At its heart, optimal transport asks: //what is the cheapest way to reshape one probability distribution into another?// Unlike [[KL Divergence]] or total variation distance, which compare distributions pointwise, optimal transport respects the ''geometry'' of the underlying space. Two distributions that are close in space but have non-overlapping support get a small transport cost, while KL divergence would say they are infinitely far apart.
+
+This geometric sensitivity is what makes the ''Wasserstein distance'' (the cost of the optimal transport plan) so useful in machine learning. It provides a smooth, meaningful gradient signal even when distributions do not overlap — precisely the situation where KL-based losses fail. This property was the key motivation behind the [[GANs|Wasserstein GAN]].
+
+The framework connects deeply to [[Convex Optimization]], [[Linear Programming]], [[Measure Theory]], and [[Probability Theory]], sitting at a crossroads that has attracted attention from pure mathematicians, statisticians, and machine learning researchers alike.
+
+!! Moving Probability Mass
+
+The original formulation is due to ''Gaspard Monge (1781)'', who asked: given a pile of sand (source distribution $\mu$) and a hole to fill (target distribution $\nu$), find a ''transport map'' $T: \mathcal{X} \to \mathcal{Y}$ that pushes $\mu$ onto $\nu$ — written $T_\# \mu = \nu$ — while minimizing total cost $\int c(x, T(x))\,d\mu(x)$. The catch: Monge's formulation requires a deterministic map, meaning each grain of sand goes to exactly one location. This makes the problem non-convex and sometimes infeasible (e.g., mapping a continuous distribution to a discrete one).
+
+''Leonid Kantorovich (1942)'' relaxed the problem by allowing mass to be //split//. Instead of a map $T$, he introduced a ''coupling'' (or transport plan) $\gamma \in \Pi(\mu, \nu)$ — a joint distribution over $\mathcal{X} \times \mathcal{Y}$ whose marginals are $\mu$ and $\nu$. The entry $\gamma(x,y)$ says how much mass moves from $x$ to $y$. This relaxation turns the problem into a [[Linear Programming]] problem, which is always feasible and always has a solution. Kantorovich received the Nobel Prize in Economics (1975) partly for this insight — it is the mathematical foundation of resource allocation.
+
+When the cost is the squared Euclidean distance $c(x,y) = \|x - y\|^2$ and the distributions are absolutely continuous, ''Brenier's theorem'' guarantees that the Kantorovich optimum is actually achieved by a Monge map $T = \nabla \varphi$ for some convex function $\varphi$. This beautiful result connects optimal transport to convex analysis and the geometry of [[Measure Theory|measure spaces]].
+
+!! What the Math Is Actually Doing
+
+The ''Kantorovich problem'' minimizes expected transport cost over all valid couplings:
+
+$$W_p(\mu, \nu) = \left(\inf_{\gamma \in \Pi(\mu, \nu)} \int_{\mathcal{X} \times \mathcal{Y}} c(x,y)^p \, d\gamma(x,y)\right)^{1/p}$$
+
+where $\Pi(\mu, \nu) = \{\gamma : \gamma(\cdot, \mathcal{Y}) = \mu,\; \gamma(\mathcal{X}, \cdot) = \nu\}$. For $p=1$ with cost $c(x,y)=\|x-y\|$, we get the ''Earth Mover's Distance'' (EMD); for $p=2$ with $c=\|x-y\|^2$, the ''2-Wasserstein distance''.
+
+The ''Kantorovich-Rubinstein duality'' provides an equivalent formulation for $W_1$:
+
+$$W_1(\mu, \nu) = \sup_{\|f\|_{\text{Lip}} \leq 1} \left[\int f\,d\mu - \int f\,d\nu\right]$$
+
+The supremum is over all 1-Lipschitz functions $f$. This dual form is what the ''Wasserstein GAN'' (WGAN) exploits: the critic network approximates the optimal $f$, and the Lipschitz constraint is enforced via weight clipping or gradient penalty.
+
+For computational tractability, ''Cuturi (2013)'' introduced ''entropic regularization'':
+
+$$W_\varepsilon(\mu, \nu) = \inf_{\gamma \in \Pi(\mu, \nu)} \int c(x,y)\,d\gamma(x,y) + \varepsilon \, \text{KL}(\gamma \| \mu \otimes \nu)$$
+
+Adding the entropy term $\varepsilon \, \text{KL}(\gamma \| \mu \otimes \nu)$ makes the problem strictly convex with a unique solution computable via the ''Sinkhorn algorithm'' — alternating row and column normalizations of the kernel matrix $K_{ij} = e^{-c(x_i, y_j)/\varepsilon}$. Sinkhorn iterations converge in $O(n^2 / \varepsilon)$ time, dramatically faster than the $O(n^3 \log n)$ of exact linear programming solvers.
+
+The ''Sinkhorn divergence'' $S_\varepsilon(\mu,\nu) = W_\varepsilon(\mu,\nu) - \frac{1}{2}W_\varepsilon(\mu,\mu) - \frac{1}{2}W_\varepsilon(\nu,\nu)$ corrects the entropic bias so that $S_\varepsilon(\mu,\mu) = 0$, giving a proper divergence that interpolates between $W_p$ (as $\varepsilon \to 0$) and maximum mean discrepancy (as $\varepsilon \to \infty$).
+
+!! Optimal Transport in Practice
+
+''Wasserstein GANs:'' The original [[GANs|GAN]] minimizes a Jensen-Shannon divergence, which can saturate when generator and data distributions have disjoint supports — producing vanishing gradients. WGAN replaces this with $W_1$ via the dual form, providing stable gradients everywhere. WGAN-GP (Gulrajani et al. 2017) enforces the Lipschitz constraint with a gradient penalty rather than weight clipping.
+
+''Distribution comparison:'' Optimal transport provides a natural metric for comparing point clouds, histograms, and empirical distributions. In computational biology, it measures distances between single-cell gene expression profiles across experimental conditions. In NLP, it compares document embeddings (Word Mover's Distance). In computer vision, it compares image color distributions and texture descriptors.
+
+''Domain adaptation and [[Distribution Shift]]:'' When training and test distributions differ, optimal transport can learn a map from source to target domain. ''DeepJDOT'' and related methods minimize a joint OT-classification loss, aligning feature distributions while preserving label information.
+
+''Fairness:'' Optimal transport can quantify and correct demographic disparities by computing the Wasserstein distance between outcome distributions across groups, or by learning fair representations that minimize transport cost to a reference distribution.
+
+''Generative modeling beyond GANs:'' Wasserstein autoencoders (WAE) use OT as a regularizer. Flow-based models can be trained with OT losses. Schr&ouml;dinger bridges — the entropic OT problem in continuous time — connect to [[Diffusion Models]] and score-based generative models.
+
+!! When Optimal Transport Breaks Down
+
+''Computational cost:'' Exact OT between $n$-point distributions costs $O(n^3 \log n)$ via network simplex. Even Sinkhorn requires $O(n^2)$ memory for the cost matrix, which is prohibitive when $n$ exceeds tens of thousands. Mini-batch OT, sliced Wasserstein distances (projecting to 1D), and tree-based approximations are common workarounds, but each introduces bias or variance.
+
+''Curse of dimensionality:'' The sample complexity of estimating $W_p$ from empirical samples scales as $O(n^{-1/d})$, where $d$ is the ambient dimension. In high dimensions, you need exponentially many samples to get an accurate Wasserstein estimate. This makes raw Wasserstein distances unreliable for high-dimensional data without dimensionality reduction or regularization.
+
+''Sensitivity to outliers:'' Because optimal transport accounts for geometry, a single outlier far from the main mass can dominate the Wasserstein distance. Robust variants like partial OT (which allows a fraction of mass to be left untransported) or unbalanced OT (which relaxes the marginal constraints) address this but add hyperparameters.
+
+!! Technical Details
+
+''Key references:'' Villani 2003 & 2009 (comprehensive monographs); Kantorovich 1942 (relaxation to couplings); Brenier 1991 (polar factorization theorem); Cuturi 2013 (Sinkhorn distances); Arjovsky et al. 2017 (WGAN); Gulrajani et al. 2017 (WGAN-GP); P&eacute;yr&eacute; & Cuturi 2019 (Computational OT textbook).
+
+''Sliced Wasserstein distance:'' projects distributions onto random 1D directions, computes exact 1D OT (which is just sorting), and averages. Cost is $O(Ln\log n)$ for $L$ projections. Provides an unbiased, scalable approximation to $W_p$.
+
+''Wasserstein barycenters:'' the Fr&eacute;chet mean in Wasserstein space — the distribution minimizing average $W_2^2$ to a set of input distributions. Used for averaging shapes, textures, and probability models.
+
+''Gromov-Wasserstein distance:'' compares distributions on //different// metric spaces by matching relational structure rather than point positions. Useful for graph matching and cross-domain alignment.
+
+''OT and [[Convex Optimization]]:'' the Kantorovich problem is a linear program; its dual involves optimizing over potential functions $(\varphi, \psi)$ satisfying $\varphi(x) + \psi(y) \leq c(x,y)$. The entropic version is a strictly convex program solvable by Sinkhorn (matrix scaling). Semi-discrete OT (continuous source, discrete target) reduces to a convex optimization over cell weights.
+
+!! Quiz
+
+<span id="ot-q1">''1. What distinguishes the Wasserstein distance from KL divergence when comparing distributions?''
+<<button "A) Wasserstein distance is always smaller than KL divergence">><<replace "#ot-q1">>A) Not necessarily true — the two are not directly comparable in magnitude since they have different units and scales.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Wasserstein distance is defined only for discrete distributions">><<replace "#ot-q1">>B) Incorrect. Wasserstein distance is defined for both continuous and discrete distributions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Wasserstein distance respects the geometry of the space, giving finite values even for non-overlapping distributions">><<replace "#ot-q1">>C) Correct. KL divergence is infinite when supports do not overlap, while Wasserstein distance measures the geometric cost of moving mass, always giving a finite, meaningful value.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Wasserstein distance is symmetric while KL divergence is not">><<replace "#ot-q1">>D) While true that KL is asymmetric and Wasserstein is symmetric, this is not the key distinguishing property — the geometric sensitivity is the fundamental difference.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q2">''2. How did Kantorovich relax Monge's original transport problem?''
+<<button "A) By restricting transport to nearest-neighbor assignments">><<replace "#ot-q2">>A) No. Nearest-neighbor is a heuristic, not Kantorovich's relaxation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) By allowing mass at a source point to be split across multiple targets via a coupling">><<replace "#ot-q2">>B) Correct. Monge required a deterministic map (each source goes to one target). Kantorovich introduced joint distributions (couplings) that allow splitting, turning the problem into a linear program.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) By removing the cost function entirely">><<replace "#ot-q2">>C) No. The cost function $c(x,y)$ is central to both formulations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) By discretizing continuous distributions into histograms">><<replace "#ot-q2">>D) No. Kantorovich's formulation works for both continuous and discrete distributions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q3">''3. What does the Kantorovich-Rubinstein duality express $W_1$ as?''
+<<button "A) The infimum over transport maps of the total cost">><<replace "#ot-q3">>A) That is the primal (Monge) formulation, not the dual.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The supremum over 1-Lipschitz functions of the difference in expectations">><<replace "#ot-q3">>B) Correct. $W_1(\mu,\nu) = \sup_{\|f\|_{\text{Lip}} \leq 1}[\int f\,d\mu - \int f\,d\nu]$. This is what WGAN exploits with its critic network.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The KL divergence between the coupling and the product measure">><<replace "#ot-q3">>C) No. That KL term appears in the entropic regularization, not in the KR duality.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The trace of the optimal transport matrix">><<replace "#ot-q3">>D) No. The trace has no special role in the dual formulation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q4">''4. What does Cuturi's entropic regularization add to the Kantorovich problem?''
+<<button "A) An L2 penalty on the transport plan">><<replace "#ot-q4">>A) No. The penalty is an entropy (KL) term, not L2.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A KL divergence term between the coupling and the product of marginals">><<replace "#ot-q4">>B) Correct. Adding $\varepsilon \,\text{KL}(\gamma \| \mu \otimes \nu)$ makes the problem strictly convex and solvable via the Sinkhorn algorithm with alternating row/column normalizations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A constraint that the transport map must be invertible">><<replace "#ot-q4">>C) No. Invertibility is not part of entropic OT.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A nuclear norm penalty to encourage low-rank transport plans">><<replace "#ot-q4">>D) No. Low-rank OT is a separate line of work; entropic regularization uses entropy, not nuclear norm.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q5">''5. Why did the Wasserstein GAN (WGAN) replace the Jensen-Shannon divergence with $W_1$?''
+<<button "A) $W_1$ is faster to compute than JS divergence">><<replace "#ot-q5">>A) No. $W_1$ requires training a critic network and is not inherently faster.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) $W_1$ provides meaningful gradients even when generator and data distributions have disjoint supports">><<replace "#ot-q5">>B) Correct. JS divergence saturates (becomes constant) when supports do not overlap, yielding zero gradients. $W_1$ always provides a smooth gradient signal proportional to how far apart the distributions are.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) $W_1$ does not require a discriminator network">><<replace "#ot-q5">>C) Incorrect. WGAN still uses a critic (discriminator) network to approximate the dual variable.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) $W_1$ guarantees global convergence of the generator">><<replace "#ot-q5">>D) No. WGAN improves training stability but does not guarantee global convergence.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q6">''6. What is the main computational bottleneck of exact optimal transport between $n$-point distributions?''
+<<button "A) It requires computing eigenvalues of an $n \times n$ matrix">><<replace "#ot-q6">>A) No. OT is a linear program, not an eigenvalue problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It scales as $O(n^3 \log n)$ via network simplex, and the cost matrix requires $O(n^2)$ memory">><<replace "#ot-q6">>B) Correct. The cubic time complexity and quadratic memory for the cost matrix make exact OT infeasible for large point sets. Sinkhorn reduces time but still needs $O(n^2)$ memory.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It requires sampling from the coupling, which is intractable">><<replace "#ot-q6">>C) No. The coupling is the solution of a linear program, not something we sample from during optimization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The Lipschitz constraint cannot be enforced exactly">><<replace "#ot-q6">>D) This is a challenge for the dual form (WGAN), not for exact primal OT solvers.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q7">''7. What does the sliced Wasserstein distance do to make OT scalable?''
+<<button "A) Approximates OT by solving it on random mini-batches">><<replace "#ot-q7">>A) No. That is mini-batch OT, a different approximation strategy.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Projects distributions onto random 1D directions and computes exact 1D OT (sorting)">><<replace "#ot-q7">>B) Correct. In 1D, OT is solved exactly by sorting both distributions and pairing quantiles. Averaging over random projections gives the sliced Wasserstein distance at cost $O(Ln\log n)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Uses a neural network to learn the transport map directly">><<replace "#ot-q7">>C) No. Neural OT is a separate approach; sliced Wasserstein is a closed-form approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Restricts the transport plan to be a permutation matrix">><<replace "#ot-q7">>D) No. Permutation matrices correspond to Monge maps for discrete distributions, not the sliced approach.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q8">''8. What does Brenier's theorem guarantee when the cost is squared Euclidean distance and distributions are absolutely continuous?''
+<<button "A) The Kantorovich optimum is achieved by a deterministic Monge map that is the gradient of a convex function">><<replace "#ot-q8">>A) Correct. Brenier's theorem states $T = \nabla\varphi$ for a convex $\varphi$, connecting optimal transport to convex analysis. The optimal coupling concentrates on the graph of this map.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The optimal coupling is always uniform">><<replace "#ot-q8">>B) No. The optimal coupling depends on the specific distributions being compared.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The Wasserstein distance equals the KL divergence">><<replace "#ot-q8">>C) No. These are fundamentally different quantities with different properties.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) No deterministic transport map exists">><<replace "#ot-q8">>D) The opposite is true — Brenier's theorem guarantees a deterministic map exists under these conditions.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ot-q9">''9. Why does estimating $W_p$ from samples suffer in high dimensions?''
+<<button "A) The cost function is undefined in high dimensions">><<replace "#ot-q9">>A) No. The cost function (e.g., Euclidean distance) is perfectly well-defined in any dimension.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Sample complexity scales as $O(n^{-1/d})$, requiring exponentially many samples as dimension $d$ grows">><<replace "#ot-q9">>B) Correct. This curse of dimensionality means empirical Wasserstein estimates converge very slowly in high dimensions, making raw estimates unreliable without regularization or projection.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The Sinkhorn algorithm does not converge in high dimensions">><<replace "#ot-q9">>C) No. Sinkhorn converges regardless of dimension; the issue is statistical, not algorithmic.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) High-dimensional distributions always have infinite Wasserstein distance">><<replace "#ot-q9">>D) No. The Wasserstein distance is finite whenever the distributions have finite $p$-th moments.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

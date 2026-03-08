@@ -1,0 +1,183 @@
+<<include "Header">>
+
+! Matroid Theory
+
+<img src="assets/matroid_theory.svg" alt="Diagram showing a graphic matroid with spanning tree highlighted and the lattice of independent sets" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have a set of tools and you want to pick a useful subset — but some tools are redundant with each other. Vectors can be linearly dependent; edges in a graph can form cycles; features in a dataset can carry overlapping information. ''Matroid theory'' captures the abstract essence of "independence" that all these situations share. It strips away the specifics of vectors, graphs, and features, leaving only the combinatorial skeleton: which subsets are independent, which are not, and what happens when you try to extend one independent set using elements from another. The payoff is that algorithms proven correct for matroids — especially the ''greedy algorithm'' — automatically work in every concrete setting that forms a matroid.
+
+!! The Core Insight
+
+A ''matroid'' $M = (E, \mathcal{I})$ consists of a finite ground set $E$ and a collection $\mathcal{I} \subseteq 2^E$ of ''independent sets'' satisfying three axioms:
+
+1. ''Non-emptiness:'' $\emptyset \in \mathcal{I}$.
+2. ''Hereditary property:'' If $A \in \mathcal{I}$ and $B \subseteq A$, then $B \in \mathcal{I}$. Every subset of an independent set is independent.
+3. ''Augmentation (exchange) axiom:'' If $A, B \in \mathcal{I}$ and $|A| < |B|$, there exists $e \in B \setminus A$ such that $A \cup \{e\} \in \mathcal{I}$.
+
+The augmentation axiom is the key — it says you can always grow a smaller independent set by borrowing an element from a larger one. This single property is what makes the greedy algorithm optimal for matroid optimization. A maximal independent set is called a ''basis'', and the augmentation axiom guarantees all bases have the same cardinality, called the ''rank'' of the matroid.
+
+The two canonical examples are the ''linear matroid'' (ground set = columns of a matrix, independent = linearly independent columns) and the ''graphic matroid'' (ground set = edges of a graph, independent = acyclic edge sets, bases = spanning trees). Whitney introduced matroids in 1935 precisely to capture what these two settings have in common.
+
+!! Independence, Bases, and Rank
+
+The ''rank function'' $r: 2^E \to \mathbb{Z}_{\geq 0}$ maps each subset $S \subseteq E$ to the size of the largest independent set contained in $S$:
+
+$$r(S) = \max\{|A| : A \subseteq S, \, A \in \mathcal{I}\}$$
+
+The rank function satisfies three properties that equivalently define a matroid: (i) $0 \leq r(S) \leq |S|$, (ii) if $S \subseteq T$ then $r(S) \leq r(T)$, and (iii) ''submodularity'':
+
+$$r(S \cup T) + r(S \cap T) \leq r(S) + r(T)$$
+
+A ''circuit'' is a minimal dependent set — removing any element from a circuit makes it independent. In the graphic matroid, circuits are exactly the cycles of the graph. The ''closure'' (or span) of a set $S$ is $\text{cl}(S) = \{e \in E : r(S \cup \{e\}) = r(S)\}$ — the elements that are "spanned" by $S$, analogous to the span of a set of vectors.
+
+The ''dual matroid'' $M^* = (E, \mathcal{I}^*)$ has the same ground set but declares $A$ independent if and only if $E \setminus A$ contains a basis of $M$. The dual of a graphic matroid on a planar graph is the graphic matroid of the planar dual graph. Duality exchanges bases with complements of bases and swaps circuits with cocircuits.
+
+!! What the Math Is Actually Doing
+
+The ''greedy algorithm'' for matroid optimization works as follows. Given weights $w: E \to \mathbb{R}$ and a matroid $M = (E, \mathcal{I})$, to maximize $\sum_{e \in S} w(e)$ over all bases $S$:
+
+1. Sort elements by weight: $w(e_1) \geq w(e_2) \geq \cdots \geq w(e_n)$.
+2. Initialize $S = \emptyset$.
+3. For each $e_i$ in order: if $S \cup \{e_i\} \in \mathcal{I}$, add $e_i$ to $S$.
+
+''Theorem (Rado 1957, Edmonds 1971):'' The greedy algorithm produces an optimal basis if and only if $\mathcal{I}$ forms a matroid. This is remarkable — the greedy algorithm's optimality //characterizes// matroids. If you have a hereditary set system where greedy works for every weight function, it must be a matroid.
+
+For the graphic matroid with edge weights, greedy gives Kruskal's algorithm for the minimum spanning tree. For the linear matroid, greedy selects a maximum-weight linearly independent set of columns.
+
+''Matroid intersection'' extends the theory to optimizing over the intersection of two matroids. Given matroids $M_1 = (E, \mathcal{I}_1)$ and $M_2 = (E, \mathcal{I}_2)$ on the same ground set, finding a maximum-weight common independent set $S \in \mathcal{I}_1 \cap \mathcal{I}_2$ is solvable in polynomial time via an augmenting-path algorithm (Edmonds 1970). This is powerful: many combinatorial optimization problems — bipartite matching, arborescences, colorful spanning trees — reduce to matroid intersection.
+
+The ''matroid polytope'' is the convex hull of characteristic vectors of independent sets:
+
+$$P(M) = \text{conv}\{\mathbf{1}_S : S \in \mathcal{I}\}$$
+
+Edmonds showed that this polytope has a compact description using the rank function:
+
+$$P(M) = \{x \in \mathbb{R}^E_{\geq 0} : \sum_{e \in S} x_e \leq r(S) \text{ for all } S \subseteq E\}$$
+
+The fact that the greedy algorithm solves linear programs over this polytope connects matroid theory to [[Linear Programming|Linear Programming]] and the theory of total dual integrality.
+
+''Submodularity'' of the rank function is fundamental. A set function $f: 2^E \to \mathbb{R}$ is ''submodular'' if $f(S \cup T) + f(S \cap T) \leq f(S) + f(T)$. Submodular functions are the discrete analog of convex functions (for minimization) and concave functions (for maximization). The rank function of a matroid is both submodular and monotone, placing matroid optimization squarely within the framework of [[Convex Optimization|Convex Optimization]] over discrete structures.
+
+!! Matroids in Machine Learning
+
+''Submodular optimization and the greedy guarantee.'' Many ML objectives — facility location for data summarization, entropy for [[Active Learning|Active Learning]], mutual [[Information Theory|Information Theory]] for feature selection — are submodular. When the feasible set forms a matroid (e.g., a cardinality constraint is a ''uniform matroid'' $U_{k,n}$), the greedy algorithm achieves a $(1 - 1/e) \approx 0.63$ approximation ratio for maximizing a monotone submodular function. This classic result (Nemhauser, Wolsey, Fisher 1978) is tight and widely used in practice.
+
+''Feature selection.'' Given $n$ features and a budget of $k$, selecting the most informative subset is NP-hard in general. But when the objective is submodular (mutual information with the target, or determinantal diversity), the problem is maximization of a submodular function subject to a uniform matroid constraint. The greedy $(1 - 1/e)$ guarantee applies. ''Partition matroids'' enforce that you select at most one feature from each correlated group — preventing redundancy in the selected feature set.
+
+''Diversified sampling and DPPs.'' ''Determinantal point processes'' (DPPs) define distributions over subsets that favor diversity. A DPP on $n$ items with kernel matrix $L$ assigns probability $\det(L_S)$ (up to normalization) to subset $S$. The family of subsets with nonzero probability forms a matroid when $L$ is a projection matrix. DPP sampling and MAP inference exploit matroid structure for efficient algorithms in recommendation systems, document summarization, and minibatch selection.
+
+''[[Regularization|Regularization]] and structured sparsity.'' The group lasso and structured sparsity penalties can be viewed through the lens of matroids. A ''laminar matroid'' constraint enforces hierarchical sparsity: you can select features from nested groups subject to group-level budgets. The matroid framework provides polynomial-time algorithms for these structured selection problems that would otherwise require integer programming.
+
+!! When Matroid Methods Break Down
+
+''The intersection of three or more matroids is NP-hard.'' While optimizing over the intersection of two matroids is polynomial, the intersection of three matroids can encode NP-complete problems like Hamiltonian path. Many real-world constraints — selecting features that are diverse //and// cheap //and// group-balanced — require three or more matroid constraints simultaneously. In these cases, matroid theory provides no efficient exact algorithms, and one must resort to approximation or heuristics.
+
+''Not all natural constraints are matroid constraints.'' Matroid structure requires the hereditary and augmentation properties, which many practical constraints violate. A budget constraint where items have variable costs is //not// a matroid (it is a ''knapsack constraint''). Connectivity constraints on graphs are not matroids. When the feasible set is not a matroid, the greedy algorithm loses its optimality guarantee, and the $(1 - 1/e)$ approximation ratio may not hold. Recognizing whether a constraint system forms a matroid is itself a nontrivial problem.
+
+''Scalability of independence oracles.'' Matroid algorithms assume access to an ''independence oracle'' — a black box that answers "is $S$ independent?" in unit time. For linear matroids, this requires checking linear independence (Gaussian elimination, $O(n^2 k)$ per query). For large-scale ML problems with millions of features, the oracle cost dominates the greedy algorithm's runtime. Approximate oracles (e.g., sketching for linear independence) introduce errors that propagate through the greedy selection, and the theoretical guarantees degrade gracefully but not always predictably.
+
+!! Technical Details
+
+''Historical development:'' Whitney (1935) introduced matroids to axiomatize the notion of dependence common to graphs and matrices. Tutte (1958, 1965) developed the theory of matroid minors and representability. Edmonds (1970, 1971) established the polynomial-time solvability of matroid intersection and the connection between matroids, greedy algorithms, and polyhedral combinatorics. The Oxley textbook (1992, 2011) is the standard modern reference.
+
+''Matroid types:'' ''Uniform matroid'' $U_{k,n}$: every set of size $\leq k$ is independent. ''Graphic matroid'' $M(G)$: independent sets are acyclic edge subsets. ''Linear (representable) matroid'': independent sets are linearly independent column subsets over a field $\mathbb{F}$. ''Transversal matroid'': independent sets are partial systems of distinct representatives of a bipartite graph. ''Gammoid'': defined via directed reachability. Not all matroids are representable over every field — the Vamos matroid is not representable over any field.
+
+''Matroid union theorem (Nash-Williams 1967):'' The union of $k$ matroids $M_1, \ldots, M_k$ on the same ground set has rank $\min_{S \subseteq E} \left(|E \setminus S| + \sum_{i=1}^{k} r_i(S)\right)$. This generalizes the result that the edge set of a graph can be partitioned into $k$ forests if and only if every subgraph on $m$ vertices has at most $k(m-1)$ edges.
+
+''Connections to [[Core Linear Algebra|Core Linear Algebra]]:'' The rank function of a linear matroid is the column rank of a matrix. Matroid duality for graphic matroids on planar graphs corresponds to orthogonal complements in the cycle and cut spaces of the graph.
+
+''Key references:'' Whitney, H. (1935). //On the abstract properties of linear dependence//. Edmonds, J. (1971). //Matroids and the greedy algorithm//. Oxley, J. (2011). //Matroid Theory// (2nd ed.). Schrijver, A. (2003). //Combinatorial Optimization//, Vol. B.
+
+Cross-references: [[Core Linear Algebra|Core Linear Algebra]] · [[Convex Optimization|Convex Optimization]] · [[Linear Programming|Linear Programming]] · [[Regularization|Regularization]] · [[Active Learning|Active Learning]] · [[Information Theory|Information Theory]]
+
+!! Quiz
+
+<span id="mr-q1">''Question 1:'' Which axiom distinguishes a matroid from an arbitrary hereditary set system?
+
+<<button "A. The empty set is independent">><<replace "#mr-q1">>Incorrect. The empty set being independent is necessary but shared by all hereditary set systems.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Every subset of an independent set is independent">><<replace "#mr-q1">>Incorrect. This is the hereditary property — it defines hereditary set systems, not matroids specifically.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The augmentation axiom: a smaller independent set can always be extended by an element from a larger one">><<replace "#mr-q1">>Correct! The augmentation (exchange) axiom is the defining property that elevates a hereditary system to a matroid. It guarantees all bases have equal size and makes the greedy algorithm optimal.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Every element belongs to at least one basis">><<replace "#mr-q1">>Incorrect. This can fail in matroids (loops are in no independent set), and it does not characterize matroids among hereditary systems.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q2">''Question 2:'' In a graphic matroid $M(G)$, what are the bases?
+
+<<button "A. All subsets of edges with no repeated vertices">><<replace "#mr-q2">>Incorrect. That describes a matching, not a matroid basis. In a graphic matroid, independent sets are acyclic edge sets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Spanning trees of $G$">><<replace "#mr-q2">>Correct! The bases of a graphic matroid are the spanning trees (or spanning forests if $G$ is disconnected). They are the maximal acyclic edge subsets.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Hamiltonian cycles of $G$">><<replace "#mr-q2">>Incorrect. Hamiltonian cycles contain a cycle and thus are dependent sets, not bases, in the graphic matroid.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Minimum cuts of $G$">><<replace "#mr-q2">>Incorrect. Minimum cuts relate to the cocircuits of the graphic matroid, not its bases.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q3">''Question 3:'' What is the key property of the matroid rank function $r$?
+
+<<button "A. It is supermodular: $r(S \cup T) + r(S \cap T) \geq r(S) + r(T)$">><<replace "#mr-q3">>Incorrect. The rank function is submodular (inequality goes the other direction), not supermodular.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It is submodular: $r(S \cup T) + r(S \cap T) \leq r(S) + r(T)$">><<replace "#mr-q3">>Correct! Submodularity of the rank function is the key property. It captures diminishing returns: the marginal contribution of adding elements to a larger set is at most as much as adding them to a smaller set.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. It is additive: $r(S \cup T) = r(S) + r(T)$">><<replace "#mr-q3">>Incorrect. Additivity would imply no interaction between elements. The rank function is subadditive, not additive, in general.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It is convex over the real-valued extension">><<replace "#mr-q3">>Incorrect. The Lovasz extension of a submodular function is convex (for minimization), but the rank function itself is a discrete set function characterized by submodularity.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q4">''Question 4:'' The greedy algorithm finds an optimal basis for every weight function if and only if the set system is a:
+
+<<button "A. Knapsack constraint">><<replace "#mr-q4">>Incorrect. Knapsack constraints do not form matroids, and greedy is not optimal for knapsack problems in general.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Matroid">><<replace "#mr-q4">>Correct! The Rado-Edmonds theorem states that greedy optimality for all weight functions is equivalent to the set system being a matroid. This is a characterization theorem — it works both directions.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Any hereditary set system">><<replace "#mr-q4">>Incorrect. Not all hereditary set systems are matroids. The greedy algorithm can fail on hereditary systems that lack the augmentation axiom.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Polymatroid">><<replace "#mr-q4">>Incorrect. Polymatroids generalize matroids to real-valued set functions, but greedy optimality for all weight functions characterizes matroids specifically.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q5">''Question 5:'' What approximation ratio does the greedy algorithm achieve for maximizing a monotone submodular function subject to a matroid constraint?
+
+<<button "A. $1/2$">><<replace "#mr-q5">>Incorrect. The $1/2$ ratio applies to maximizing submodular functions under more general constraints (e.g., two matroid constraints). For a single matroid, greedy does better.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $1 - 1/e \approx 0.63$">><<replace "#mr-q5">>Correct! For maximizing a monotone submodular function subject to a single matroid constraint (including the uniform matroid / cardinality constraint), the greedy algorithm achieves a $(1 - 1/e)$ approximation, and this bound is tight.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Exactly optimal">><<replace "#mr-q5">>Incorrect. Greedy is exactly optimal only when the objective is //linear// (modular). For submodular objectives, it gives a $(1 - 1/e)$ approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $1 - 1/k$ where $k$ is the rank">><<replace "#mr-q5">>Incorrect. The $(1 - 1/e)$ bound does not depend on the rank in this way. It is a universal constant for monotone submodular maximization under a matroid constraint.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q6">''Question 6:'' What happens when you try to optimize over the intersection of three or more matroids?
+
+<<button "A. The greedy algorithm still gives a $(1-1/e)$ approximation">><<replace "#mr-q6">>Incorrect. The greedy algorithm's guarantee breaks down entirely for three-matroid intersection, which can encode NP-hard problems.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. It remains polynomial-time solvable via augmenting paths">><<replace "#mr-q6">>Incorrect. While two-matroid intersection is polynomial (Edmonds 1970), three-matroid intersection is NP-hard in general.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The problem becomes NP-hard">><<replace "#mr-q6">>Correct! The intersection of three matroids can encode NP-complete problems like Hamiltonian path. This is a fundamental complexity barrier — two-matroid intersection is the frontier of efficient exact optimization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. It is equivalent to linear programming">><<replace "#mr-q6">>Incorrect. Three-matroid intersection is harder than LP. The matroid polytope has nice LP structure for one or two matroids, but not for three.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q7">''Question 7:'' In the context of feature selection, a ''uniform matroid'' $U_{k,n}$ enforces which constraint?
+
+<<button "A. Features must come from at most $k$ predefined groups">><<replace "#mr-q7">>Incorrect. Group constraints correspond to partition matroids, not uniform matroids.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. At most $k$ features total may be selected">><<replace "#mr-q7">>Correct! The uniform matroid $U_{k,n}$ declares every subset of size $\leq k$ independent. This is exactly a cardinality constraint: select at most $k$ features from $n$ candidates.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Selected features must be linearly independent">><<replace "#mr-q7">>Incorrect. Linear independence defines a linear matroid, not a uniform matroid. The uniform matroid only cares about set size.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Features must form a tree structure">><<replace "#mr-q7">>Incorrect. Tree structures relate to graphic matroids, not uniform matroids.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="mr-q8">''Question 8:'' The dual matroid $M^*$ has the same ground set as $M$, and a set $A$ is a basis of $M^*$ if and only if:
+
+<<button "A. $A$ is a circuit of $M$">><<replace "#mr-q8">>Incorrect. Circuits are minimal dependent sets. The dual matroid's bases are complements of bases, not circuits.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $E \setminus A$ is a basis of $M$">><<replace "#mr-q8">>Correct! The dual matroid exchanges bases with their complements. If $B$ is a basis of $M$, then $E \setminus B$ is a basis of $M^*$. For planar graphs, this corresponds to the graphic matroid of the planar dual graph.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $A$ is an independent set of $M$ with maximum weight">><<replace "#mr-q8">>Incorrect. Maximum-weight independent sets are still bases of $M$ (with appropriate weights), not related to dual bases.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $A$ has rank equal to $|E| - r(M)$">><<replace "#mr-q8">>This is true as a consequence (dual bases have size $|E| - r(M)$), but it is not the //definition// of a dual basis. The correct characterization is that $E \setminus A$ is a basis of $M$.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

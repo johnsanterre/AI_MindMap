@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Recurrence Relations: From Present to Future</text>
+
+  <!-- ===== LEFT PANEL: The Recurrence Pattern ===== -->
+  <rect x="16" y="48" width="240" height="200" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="136" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">The Pattern</text>
+
+  <!-- Term boxes in a chain -->
+  <rect x="28" y="82" width="44" height="30" rx="4" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="50" y="101" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">a(0)</text>
+
+  <line x1="76" y1="97" x2="90" y2="97" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="88,92 98,97 88,102" fill="#C4A87A"/>
+
+  <rect x="100" y="82" width="44" height="30" rx="4" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="122" y="101" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">a(1)</text>
+
+  <line x1="148" y1="97" x2="162" y2="97" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="160,92 170,97 160,102" fill="#C4A87A"/>
+
+  <rect x="172" y="82" width="44" height="30" rx="4" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="194" y="101" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" text-anchor="middle">a(2)</text>
+
+  <text x="230" y="101" font-family="Georgia, serif" font-size="14" fill="#5C3D1E" text-anchor="middle">...</text>
+
+  <!-- Feedback arrow -->
+  <path d="M 194,116 C 194,150 50,150 50,116" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="122" y="158" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">each term depends on previous</text>
+
+  <!-- Examples list -->
+  <line x1="28" y1="170" x2="240" y2="170" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="136" y="188" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Classic Examples</text>
+  <text x="136" y="204" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">Fibonacci: a(n) = a(n-1) + a(n-2)</text>
+  <text x="136" y="220" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">Tower of Hanoi: T(n) = 2T(n-1) + 1</text>
+  <text x="136" y="236" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Merge sort: T(n) = 2T(n/2) + n</text>
+
+  <!-- ===== MIDDLE PANEL: Solving Methods ===== -->
+  <rect x="268" y="48" width="260" height="200" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="398" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Solution Methods</text>
+
+  <!-- Method 1: Characteristic Equation -->
+  <rect x="280" y="78" width="236" height="50" rx="4" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="398" y="94" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">Characteristic Equation</text>
+  <text x="398" y="110" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">a(n) = c₁a(n-1) + c₂a(n-2)</text>
+  <text x="398" y="122" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">solve r² = c₁r + c₂ for roots</text>
+
+  <!-- Method 2: Master Theorem -->
+  <rect x="280" y="134" width="236" height="50" rx="4" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="398" y="150" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Master Theorem</text>
+  <text x="398" y="166" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">T(n) = aT(n/b) + f(n)</text>
+  <text x="398" y="178" font-family="Georgia, serif" font-size="9.5" fill="#7C2530" text-anchor="middle">compare f(n) with n^(log_b a)</text>
+
+  <!-- Method 3: Generating Functions -->
+  <rect x="280" y="190" width="236" height="50" rx="4" fill="#5C3D1E" opacity="0.08" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="398" y="206" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-weight="bold">Generating Functions</text>
+  <text x="398" y="222" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">G(x) = Σ a(n) xⁿ</text>
+  <text x="398" y="234" font-family="Georgia, serif" font-size="9.5" fill="#2D5A8E" text-anchor="middle">algebraic manipulation → closed form</text>
+
+  <!-- ===== RIGHT PANEL: Fibonacci Closed Form ===== -->
+  <rect x="540" y="48" width="242" height="200" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="661" y="68" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530" text-anchor="middle">Fibonacci: Solved</text>
+
+  <!-- Recurrence -->
+  <text x="661" y="92" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">F(n) = F(n-1) + F(n-2)</text>
+
+  <!-- Arrow -->
+  <line x1="661" y1="100" x2="661" y2="116" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="655,114 661,124 667,114" fill="#C4A87A"/>
+
+  <!-- Characteristic eq -->
+  <text x="661" y="138" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">r² = r + 1</text>
+  <text x="661" y="154" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">roots: φ = (1+√5)/2, ψ = (1-√5)/2</text>
+
+  <!-- Arrow -->
+  <line x1="661" y1="162" x2="661" y2="176" stroke="#C4A87A" stroke-width="2"/>
+  <polygon points="655,174 661,184 667,174" fill="#C4A87A"/>
+
+  <!-- Closed form -->
+  <rect x="560" y="186" width="202" height="32" rx="5" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="661" y="206" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">F(n) = (φⁿ - ψⁿ) / √5</text>
+
+  <text x="661" y="232" font-family="Georgia, serif" font-size="9.5" fill="#5C3D1E" text-anchor="middle" font-style="italic">|ψ| &lt; 1, so F(n) ≈ φⁿ/√5 for large n</text>
+
+  <!-- ===== BOTTOM PANEL: Recursion Tree ===== -->
+  <rect x="16" y="262" width="766" height="112" rx="6" fill="#FFF8EE" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="50" y="280" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530">Master Theorem: T(n) = 2T(n/2) + n (Merge Sort)</text>
+
+  <!-- Tree level 0 -->
+  <rect x="350" y="288" width="80" height="24" rx="4" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="390" y="304" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle">n</text>
+  <text x="480" y="304" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">cost: n</text>
+
+  <!-- Branches -->
+  <line x1="370" y1="312" x2="300" y2="324" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="410" y1="312" x2="480" y2="324" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Tree level 1 -->
+  <rect x="260" y="324" width="70" height="22" rx="4" fill="#7C2530" opacity="0.1" stroke="#7C2530" stroke-width="1"/>
+  <text x="295" y="339" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">n/2</text>
+
+  <rect x="450" y="324" width="70" height="22" rx="4" fill="#7C2530" opacity="0.1" stroke="#7C2530" stroke-width="1"/>
+  <text x="485" y="339" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">n/2</text>
+
+  <text x="575" y="339" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">cost: n</text>
+
+  <!-- Branches level 2 -->
+  <line x1="275" y1="346" x2="240" y2="356" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="315" y1="346" x2="340" y2="356" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="465" y1="346" x2="440" y2="356" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="505" y1="346" x2="530" y2="356" stroke="#C4A87A" stroke-width="1"/>
+
+  <!-- Tree level 2 -->
+  <rect x="216" y="356" width="50" height="18" rx="3" fill="#5C3D1E" opacity="0.1" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="241" y="369" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">n/4</text>
+
+  <rect x="320" y="356" width="50" height="18" rx="3" fill="#5C3D1E" opacity="0.1" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="345" y="369" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">n/4</text>
+
+  <rect x="416" y="356" width="50" height="18" rx="3" fill="#5C3D1E" opacity="0.1" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="441" y="369" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">n/4</text>
+
+  <rect x="510" y="356" width="50" height="18" rx="3" fill="#5C3D1E" opacity="0.1" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="535" y="369" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">n/4</text>
+
+  <text x="575" y="369" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">cost: n</text>
+
+  <!-- Result -->
+  <rect x="640" y="300" width="130" height="56" rx="5" fill="#7C2530" opacity="0.1" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="705" y="318" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-weight="bold">log₂(n) levels</text>
+  <text x="705" y="334" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">n work per level</text>
+  <text x="705" y="350" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">T(n) = O(n log n)</text>
+
+  <!-- Left annotation -->
+  <text x="80" y="310" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" text-anchor="middle" font-weight="bold">a = 2, b = 2, f(n) = n</text>
+  <text x="80" y="328" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">n^(log_b a) = n^1 = n</text>
+  <text x="80" y="346" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">f(n) = Θ(n^(log_b a))</text>
+  <text x="80" y="364" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Case 2: T(n) = Θ(n log n)</text>
+</svg>

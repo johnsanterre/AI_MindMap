@@ -1,0 +1,157 @@
+<<include "Header">>
+
+! Fine-Tuning
+
+[img[assets/fine_tuning.svg]]
+
+Imagine you hire a world-class chef who has mastered every cuisine on earth. She can prepare anything — but she doesn't know //your// kitchen, //your// menu, or //your// customers' allergies. Fine-tuning is the process of letting her cook in your restaurant for a few weeks: she keeps all the skills she already has but learns the specific dishes, plating style, and dietary constraints that make her effective in //your// environment. The general expertise stays; the specific adaptation is layered on top. That is the core idea behind fine-tuning a neural network — taking a model pretrained on vast general data and adjusting its weights so it excels at a particular downstream task.
+
+---
+
+!! The Core Insight
+
+A pretrained model — whether a <<link "Transfer Learning" "Transfer Learning">> backbone like BERT or a billion-parameter <<link "Large Language Models" "Large Language Models">> — has already learned rich representations of language, images, or other modalities from massive datasets. These representations encode grammar, facts, visual features, and reasoning patterns. But the model was not trained for //your// task: it does not know that "positive" means a 5-star review, that a lung nodule is cancerous, or that a particular code snippet is buggy.
+
+Fine-tuning bridges this gap. You take the pretrained weights as your starting point and continue training on a much smaller, task-specific dataset. Because the model already understands the structure of the domain, it needs far fewer examples and far less compute to adapt than training from scratch would require. A language model pretrained on hundreds of billions of tokens might need only a few thousand labeled examples to become a state-of-the-art sentiment classifier.
+
+The key tension in fine-tuning is ''plasticity versus stability'': the model must change enough to learn the new task but not so much that it forgets the general knowledge it acquired during pretraining. This tension drives all the practical decisions — learning rate, number of epochs, which layers to update, and whether to use parameter-efficient methods.
+
+---
+
+!! Full Fine-Tuning vs Parameter-Efficient Methods
+
+''Full fine-tuning'' updates //every// parameter in the pretrained model. The entire weight matrix is unfrozen, and gradients flow through all layers. This gives maximum expressiveness: the model can reshape any internal representation to suit the downstream task. For small-to-medium models (up to a few hundred million parameters), full fine-tuning remains the standard approach and often delivers the best results.
+
+The downside scales with model size. A 7-billion-parameter model requires storing the full weights, gradients, and optimizer states (Adam's $m$ and $v$ accumulators), which can exceed 100 GB of GPU memory. Full fine-tuning also risks ''catastrophic forgetting'': aggressive updates on a narrow dataset can overwrite the general knowledge that made the pretrained model valuable in the first place.
+
+''Parameter-efficient fine-tuning'' (PEFT) methods address both problems by updating only a small fraction of the parameters:
+
+- ''<<link "LoRA" "LoRA">>'' (Low-Rank Adaptation) injects trainable low-rank matrices $B \in \mathbb{R}^{d \times r}$ and $A \in \mathbb{R}^{r \times k}$ alongside the frozen pretrained weights, so the effective weight becomes $W' = W + BA$ with rank $r \ll \min(d,k)$. Typically 0.1-1% of parameters are trainable.
+
+- ''<<link "QLoRA" "QLoRA">>'' combines LoRA with 4-bit quantization of the frozen base weights, enabling fine-tuning of 65B-parameter models on a single consumer GPU.
+
+- ''<<link "Prefix Tuning" "Prefix Tuning">>'' prepends trainable continuous vectors (soft prompts) to the input at each transformer layer, steering the model's attention without touching the pretrained weights.
+
+- ''Adapter layers'' insert small bottleneck modules between existing transformer layers; only these adapters receive gradient updates.
+
+The practical implication is stark: PEFT methods make fine-tuning accessible on consumer hardware, eliminate catastrophic forgetting by keeping the base model frozen, and produce modular, composable adaptations — you can swap LoRA adapters in and out at serving time without reloading the base model.
+
+---
+
+!! What the Math Is Actually Doing
+
+Fine-tuning minimizes a task-specific loss $\mathcal{L}_{\text{task}}$ starting from pretrained weights $\theta_0$:
+
+$$\theta^* = \arg\min_\theta \mathcal{L}_{\text{task}}(\theta) \quad \text{initialized at } \theta = \theta_0$$
+
+For classification tasks, this is typically cross-entropy over labeled examples:
+
+$$\mathcal{L} = -\frac{1}{N}\sum_{i=1}^{N} \sum_{c=1}^{C} y_{ic} \log p_\theta(c \mid x_i)$$
+
+where $y_{ic}$ is the one-hot label and $p_\theta(c \mid x_i)$ is the model's predicted probability for class $c$.
+
+For ''language model fine-tuning'' (e.g., <<link "Instruction Tuning" "Instruction Tuning">>), the loss is next-token prediction, often with the instruction tokens masked:
+
+$$\mathcal{L} = -\sum_{t \in \text{response}} \log p_\theta(y_t \mid x, y_{<t})$$
+
+The critical hyperparameter is the ''learning rate''. Fine-tuning learning rates are typically 10-100x smaller than pretraining learning rates — commonly $1 \times 10^{-5}$ to $5 \times 10^{-5}$ for transformer models — because we want to nudge the weights, not reinitialize them. ''Learning rate warmup'' followed by linear or cosine decay is standard practice.
+
+For LoRA, the gradient update applies only to the adapter matrices:
+
+$$\frac{\partial \mathcal{L}}{\partial A} = B^\top \frac{\partial \mathcal{L}}{\partial y} x^\top, \quad \frac{\partial \mathcal{L}}{\partial B} = \frac{\partial \mathcal{L}}{\partial y} (Ax)^\top$$
+
+The frozen base weights $W$ contribute to the forward pass but accumulate no gradients and require no optimizer state — this is where the memory savings come from. At inference time, the LoRA product $BA$ can be merged into the base weights ($W' = W + BA$), adding zero latency overhead.
+
+---
+
+!! Fine-Tuning Best Practices
+
+''Start with the smallest effective intervention.'' Before committing to full fine-tuning, try LoRA or even prompt engineering. If the task is well-represented in the pretraining data, a few well-crafted prompts may suffice. If not, LoRA with rank $r = 8$ or $r = 16$ often matches full fine-tuning performance at a fraction of the cost.
+
+''Use a low learning rate with warmup.'' A learning rate of $2 \times 10^{-5}$ with 5-10% warmup steps and cosine decay is a reliable starting point for transformer fine-tuning. If the training loss drops too quickly, the learning rate is too high and you risk overfitting or forgetting.
+
+''Early stopping is essential.'' Fine-tuning datasets are small, so the model can memorize them in a few epochs. Monitor validation loss and stop training when it begins to rise. Three to five epochs is typical; more than ten is a warning sign.
+
+''Freeze lower layers first.'' Lower transformer layers capture general features (syntax, basic semantics); upper layers capture task-specific representations. A common strategy is to freeze the bottom layers and fine-tune only the top layers, gradually unfreezing more layers if performance plateaus.
+
+''Data quality dominates data quantity.'' A carefully curated set of 1,000 high-quality labeled examples consistently outperforms 100,000 noisy ones. Label noise in the fine-tuning data is especially damaging because the model is powerful enough to memorize incorrect labels.
+
+---
+
+!! When Fine-Tuning Breaks Down
+
+''Catastrophic Forgetting:'' When all parameters are updated aggressively on a narrow dataset, the model loses its general capabilities. A language model fine-tuned exclusively on legal text may forget how to write casual English, produce coherent code, or answer basic factual questions. The general representations that took billions of tokens to learn are overwritten by a few thousand domain-specific examples. Mitigation strategies include using PEFT methods that keep base weights frozen, mixing a small fraction of general-domain data into the fine-tuning dataset, or applying explicit regularization such as elastic weight consolidation (EWC) that penalizes large deviations from pretrained weights.
+
+''Overfitting on Small Datasets:'' Fine-tuning datasets are often tiny relative to the model's capacity. A 7-billion-parameter model fine-tuned on 500 examples can perfectly memorize every training sample while producing nonsense on held-out data. The training loss drops to near zero while validation performance degrades — the classic overfitting signature. Aggressive dropout, weight decay ($\lambda = 0.01$ to $0.1$), LoRA (which constrains the update space to a low-rank manifold), and early stopping are all necessary defenses. Data augmentation and synthetic data generation can also help by expanding the effective training set.
+
+''Distribution Shift Between Fine-Tuning and Deployment:'' The fine-tuning dataset may not represent the actual inputs the model will encounter in production. A chatbot fine-tuned on polished, grammatically correct instruction-response pairs may fail on real user queries that contain typos, slang, incomplete sentences, or adversarial prompts. The model has learned the fine-tuning distribution faithfully but that distribution differs from deployment reality. Addressing this requires collecting fine-tuning data that reflects real usage patterns, including edge cases and failure modes in the training set, and continuously evaluating on production traffic.
+
+---
+
+!! Technical Details
+
+''Historical context:'' Fine-tuning neural networks predates the transformer era. Early examples include fine-tuning ImageNet-pretrained CNNs for medical imaging (Tajbakhsh et al., 2016). The practice became dominant with BERT (Devlin et al., 2019), which established the pretrain-then-fine-tune paradigm for NLP. GPT-2 and GPT-3 popularized prompt-based alternatives, but fine-tuning remains essential when the task diverges significantly from the pretraining distribution.
+
+''ULMFiT (Howard and Ruder, 2018):'' Introduced discriminative fine-tuning (different learning rates per layer), slanted triangular learning rate schedules, and gradual unfreezing — techniques that remain best practices today.
+
+''Full fine-tuning memory budget:'' For a model with $P$ parameters in FP16, full fine-tuning requires approximately $2P$ bytes for weights + $2P$ bytes for gradients + $8P$ bytes for Adam optimizer states ($m$ and $v$ in FP32) = $12P$ bytes total. A 7B model therefore needs roughly 84 GB — exceeding a single A100-40GB GPU.
+
+''LoRA hyperparameters:'' Common settings are rank $r \in \{4, 8, 16, 32, 64\}$ applied to query and value projections. Scaling factor $\alpha$ is typically set equal to $r$. Higher ranks increase capacity but also increase trainable parameter count and risk of overfitting.
+
+''Adapter tuning (Houlsby et al., 2019):'' Inserts two-layer bottleneck modules (down-project to dimension $m$, nonlinearity, up-project back to $d$) after each transformer sub-layer. Typical bottleneck dimension $m = 64$ adds about 3.6% parameters to BERT-base.
+
+''Evaluation:'' Always evaluate fine-tuned models on a held-out test set that was not used for hyperparameter selection. For generative models, use both automated metrics (perplexity, ROUGE, BLEU) and human evaluation. Monitor for regression on general capabilities using a separate benchmark suite.
+
+---
+
+!! Quiz
+
+<span id="ft-q1">''1. What is the primary advantage of fine-tuning over training from scratch?''
+<<button "A) It uses a larger model">><<replace "#ft-q1">>1. A) — ''Incorrect.'' Fine-tuning does not change the model size. Its advantage is leveraging pretrained knowledge to achieve strong performance with less data and compute.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It leverages pretrained representations so fewer task-specific examples and less compute are needed">><<replace "#ft-q1">>1. B) — ''Correct!'' The pretrained model already encodes general knowledge of language, structure, or vision. Fine-tuning only needs to adapt this existing knowledge to the specific task.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It eliminates the need for labeled data">><<replace "#ft-q1">>1. C) — ''Incorrect.'' Fine-tuning still requires task-specific labeled data (or demonstrations). It just requires far less than training from scratch.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It always outperforms models trained from scratch">><<replace "#ft-q1">>1. D) — ''Incorrect.'' With enough domain-specific data and compute, training from scratch can match or exceed fine-tuning. Fine-tuning's advantage is efficiency, not a guaranteed performance ceiling.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q2">''2. Why are fine-tuning learning rates typically 10-100x smaller than pretraining learning rates?''
+<<button "A) To save computational resources">><<replace "#ft-q2">>2. A) — ''Incorrect.'' The learning rate does not significantly affect compute cost per step. It controls the magnitude of weight updates.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because fine-tuning datasets are always smaller">><<replace "#ft-q2">>2. B) — ''Partially correct but not the core reason.'' The fundamental reason is to make small adjustments that preserve pretrained knowledge, not just to match dataset size.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) To nudge weights toward the task without overwriting the general knowledge learned during pretraining">><<replace "#ft-q2">>2. C) — ''Correct!'' Large learning rates would destructively overwrite the pretrained representations. Small learning rates allow the model to adapt incrementally while preserving the knowledge encoded in the pretrained weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because the optimizer requires it">><<replace "#ft-q2">>2. D) — ''Incorrect.'' The optimizer (typically Adam) works at any learning rate. The choice is driven by the need to balance plasticity and stability.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q3">''3. What is catastrophic forgetting in the context of fine-tuning?''
+<<button "A) When the model forgets the fine-tuning data">><<replace "#ft-q3">>3. A) — ''Incorrect.'' Catastrophic forgetting refers to losing //pretrained// knowledge, not the fine-tuning data. In fact, overfitting to fine-tuning data is the opposite problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) When gradient updates on a narrow task-specific dataset overwrite the general-purpose representations learned during pretraining">><<replace "#ft-q3">>3. B) — ''Correct!'' Aggressive fine-tuning on a small domain can destroy the broad knowledge the model acquired from billions of training tokens, degrading performance on unrelated tasks.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) When the model's weights are quantized to lower precision">><<replace "#ft-q3">>3. C) — ''Incorrect.'' Quantization reduces numerical precision but is a separate concern from catastrophic forgetting, which involves gradient-driven weight changes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) When the training data is accidentally deleted">><<replace "#ft-q3">>3. D) — ''Incorrect.'' Catastrophic forgetting is a property of the optimization process, not a data management issue.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q4">''4. In LoRA, what does the equation $W' = W + BA$ represent?''
+<<button "A) A new randomly initialized weight matrix">><<replace "#ft-q4">>4. A) — ''Incorrect.'' $W$ is the frozen pretrained weight. The LoRA matrices $B$ and $A$ add a low-rank update, not a random initialization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The effective weight after adding a low-rank trainable update to the frozen pretrained weights">><<replace "#ft-q4">>4. B) — ''Correct!'' $W$ remains frozen from pretraining. The product $BA$ (with rank $r \ll \min(d,k)$) is the only trainable component, constraining the update to a low-rank subspace while preserving the original knowledge in $W$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A quantization formula that compresses weights">><<replace "#ft-q4">>4. C) — ''Incorrect.'' LoRA is about adding low-rank trainable matrices, not about quantization. QLoRA combines LoRA with quantization but that is a separate technique.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A dropout regularization applied to the weight matrix">><<replace "#ft-q4">>4. D) — ''Incorrect.'' LoRA does not perform dropout on the weight matrix. It adds a structured low-rank perturbation.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q5">''5. Why does full fine-tuning of a 7B-parameter model in FP16 require approximately 84 GB of memory?''
+<<button "A) Because FP16 weights alone take 84 GB">><<replace "#ft-q5">>5. A) — ''Incorrect.'' FP16 weights for 7B parameters take only about 14 GB ($2 \times 7 \times 10^9$ bytes). The rest comes from gradients and optimizer states.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because of the combined cost of weights (2P bytes), gradients (2P bytes), and Adam optimizer states (8P bytes for FP32 m and v)">><<replace "#ft-q5">>5. B) — ''Correct!'' The total is $2P + 2P + 8P = 12P$ bytes. For $P = 7 \times 10^9$, that is $12 \times 7 = 84$ GB. The optimizer states dominate because Adam maintains two FP32 accumulators per parameter.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because activation checkpointing doubles the memory requirement">><<replace "#ft-q5">>5. C) — ''Incorrect.'' Activation checkpointing actually //reduces// memory by recomputing activations during the backward pass. The 84 GB figure comes from weights, gradients, and optimizer states.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because the model needs to store the entire training dataset in GPU memory">><<replace "#ft-q5">>5. D) — ''Incorrect.'' Training data is loaded in mini-batches and does not need to reside entirely in GPU memory. The 84 GB is model-side memory.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q6">''6. What does prefix tuning modify during fine-tuning?''
+<<button "A) The attention mechanism's architecture">><<replace "#ft-q6">>6. A) — ''Incorrect.'' Prefix tuning does not change the architecture of the attention mechanism. It adds trainable vectors to the input context.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The tokenizer vocabulary">><<replace "#ft-q6">>6. B) — ''Incorrect.'' The tokenizer is unchanged. Prefix tuning operates on continuous vector representations, not discrete tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It prepends trainable continuous vectors (soft prompts) at each transformer layer to steer model behavior without updating pretrained weights">><<replace "#ft-q6">>6. C) — ''Correct!'' Prefix tuning introduces learnable prefix vectors that are prepended to the keys and values at each attention layer, guiding the model's computation while leaving all pretrained parameters frozen.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The loss function used during training">><<replace "#ft-q6">>6. D) — ''Incorrect.'' Prefix tuning modifies the model's inputs, not its loss function. The same task-specific loss is used regardless of the fine-tuning method.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q7">''7. Which of the following is NOT a recommended fine-tuning best practice?''
+<<button "A) Using a low learning rate with warmup">><<replace "#ft-q7">>7. A) — ''This IS a best practice.'' Low learning rates with warmup help preserve pretrained knowledge while adapting to the new task.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Training for 50+ epochs to ensure convergence">><<replace "#ft-q7">>7. B) — ''Correct! This is NOT a best practice.'' Fine-tuning datasets are small relative to model capacity, so training for many epochs leads to severe overfitting. Three to five epochs is typical; more than ten is usually a warning sign. Early stopping based on validation loss is essential.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Monitoring validation loss for early stopping">><<replace "#ft-q7">>7. C) — ''This IS a best practice.'' Early stopping prevents overfitting on the small fine-tuning dataset.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Prioritizing data quality over data quantity">><<replace "#ft-q7">>7. D) — ''This IS a best practice.'' High-quality labeled examples consistently outperform noisy, large datasets for fine-tuning.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="ft-q8">''8. How does LoRA prevent catastrophic forgetting?''
+<<button "A) By using a larger learning rate to converge faster">><<replace "#ft-q8">>8. A) — ''Incorrect.'' A larger learning rate would increase forgetting, not prevent it. LoRA's protection comes from its architecture, not its learning rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) By training on a mixture of old and new data">><<replace "#ft-q8">>8. B) — ''Incorrect.'' Data mixing is a separate mitigation strategy. LoRA's protection is structural: it keeps the original weights intact.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) By keeping all pretrained weights frozen and constraining adaptation to a low-rank subspace via small trainable matrices">><<replace "#ft-q8">>8. C) — ''Correct!'' Since the original pretrained weights $W$ are never modified, all the knowledge they encode is perfectly preserved. The low-rank matrices $BA$ can only //add// to the pretrained representations, not overwrite them.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) By applying dropout to all layers during fine-tuning">><<replace "#ft-q8">>8. D) — ''Incorrect.'' Dropout is a general regularization technique. LoRA's specific mechanism for preventing forgetting is keeping the pretrained weights frozen.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

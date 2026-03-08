@@ -1,0 +1,193 @@
+<<include "Header">>
+
+! Language Models
+
+<img src="assets/language_models.svg" alt="Evolution of language models from n-grams to neural to transformer architectures" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you are texting a friend and your phone suggests the next word. It does not understand your conversation — it has simply learned, from billions of messages, which words tend to follow which. That predictive instinct is the essence of a ''language model'': a system that assigns probabilities to sequences of words. Given the phrase "the cat sat on the," a language model knows that "mat" and "floor" are far more likely continuations than "rocket" or "seventeen." This single idea — predicting the next token — turns out to be powerful enough to underpin machine translation, speech recognition, text generation, and the large-scale AI systems reshaping technology today.
+
+---
+
+!! The Core Insight
+
+A language model defines a probability distribution over sequences of tokens. Given a sequence $w_1, w_2, \ldots, w_{t-1}$, the model estimates $P(w_t \mid w_1, \ldots, w_{t-1})$ — the probability of the next token given everything that came before. By the chain rule of probability, the likelihood of an entire sentence factors into a product of these conditional probabilities:
+
+$$P(w_1, w_2, \ldots, w_T) = \prod_{t=1}^{T} P(w_t \mid w_1, \ldots, w_{t-1})$$
+
+Every language model in history — from the simplest bigram counter to the largest <<link "Transformers" "Transformers">><</ link>> — is an attempt to estimate this conditional distribution more accurately. The differences lie entirely in //how// they represent context and //how much// context they can effectively use.
+
+The breakthrough realization of the 2010s and 2020s was that training a model to do nothing but predict the next token, at sufficient scale, produces systems that appear to "understand" grammar, facts, reasoning, and even aspects of common sense — all as a byproduct of compression. A model that can predict text well must have built internal representations of the concepts that generated that text.
+
+---
+
+!! From N-grams to Neural LMs
+
+''N-gram models'' (1980s–2000s) were the first practical language models. An n-gram model approximates the full context by truncating it to the previous $n - 1$ words:
+
+$$P(w_t \mid w_1, \ldots, w_{t-1}) \approx P(w_t \mid w_{t-n+1}, \ldots, w_{t-1})$$
+
+Probabilities are estimated by counting: how often does the sequence $(w_{t-n+1}, \ldots, w_t)$ appear in the training corpus, divided by how often the prefix $(w_{t-n+1}, \ldots, w_{t-1})$ appears? This works remarkably well for $n = 2$ (bigram) or $n = 3$ (trigram), but suffers from the ''curse of dimensionality'' — the number of possible n-grams grows exponentially with $n$, so most sequences are never observed. Smoothing techniques like Kneser-Ney interpolation redistribute probability mass to unseen n-grams, but fundamental context limitations remain.
+
+''Neural language models'' (Bengio et al., 2003) replaced discrete counts with learned continuous representations. Each word maps to a dense vector (an //embedding//), and a neural network takes the embeddings of context words as input to predict the next word. This solved the sparsity problem: similar words get similar embeddings, so observing "the dog ran" helps the model generalize to "the cat ran" even if the latter was never seen in training. Recurrent architectures (RNNs, LSTMs) extended context beyond a fixed window by maintaining a hidden state that theoretically carries information across arbitrary distances — though in practice, information degrades over long sequences due to vanishing gradients.
+
+''Transformer language models'' (Vaswani et al., 2017; Radford et al., 2018) replaced recurrence with ''self-attention'', allowing every token to attend directly to every other token in the context window. This eliminated the sequential bottleneck of RNNs and enabled massive parallelization during training. GPT (2018) demonstrated that a transformer trained on next-token prediction alone could be fine-tuned for diverse NLP tasks. GPT-2 and GPT-3 showed that scaling this approach to billions of parameters and hundreds of billions of tokens produced models with remarkable few-shot learning abilities — no fine-tuning required, just a text prompt. The <<link "Scaling Laws" "Scaling Laws">><</link>> governing this progression turned language modeling from an art into a predictable engineering discipline.
+
+---
+
+!! What the Math Is Actually Doing
+
+The training objective for an autoregressive language model is to maximize the log-likelihood of the training corpus:
+
+$$\mathcal{L}(\theta) = \sum_{t=1}^{T} \log P_\theta(w_t \mid w_1, \ldots, w_{t-1})$$
+
+This is equivalent to minimizing the cross-entropy between the true data distribution $p$ and the model distribution $q_\theta$:
+
+$$H(p, q_\theta) = -\mathbb{E}_{x \sim p}[\log q_\theta(x)]$$
+
+The model's quality is measured by ''<<link "Perplexity" "Perplexity">><</link>>'', the exponentiated average cross-entropy:
+
+$$\text{PPL} = 2^{H(p, q_\theta)} = \exp\left(-\frac{1}{T}\sum_{t=1}^{T} \log P_\theta(w_t \mid w_{<t})\right)$$
+
+A perplexity of $k$ means the model is, on average, as uncertain as if it were choosing uniformly among $k$ options at each step. Lower perplexity indicates better language modeling. State-of-the-art transformer LMs achieve perplexities in the low teens on standard benchmarks like Penn Treebank.
+
+For n-gram models, the probability estimate is:
+
+$$P(w_t \mid w_{t-n+1:t-1}) = \frac{\text{count}(w_{t-n+1:t})}{\text{count}(w_{t-n+1:t-1})}$$
+
+For neural models, the probability is computed via a softmax over the vocabulary:
+
+$$P(w_t = v \mid w_{<t}) = \frac{\exp(h_t^\top e_v)}{\sum_{v'} \exp(h_t^\top e_{v'})}$$
+
+where $h_t$ is the model's hidden representation at position $t$ and $e_v$ is the embedding of vocabulary item $v$. The computational cost of this softmax is $O(|V|)$ per token, which motivates efficient <<link "Tokenization" "Tokenization">><</link>> strategies like <<link "Byte Pair Encoding" "Byte Pair Encoding">><</link>> that keep vocabulary size manageable.
+
+---
+
+!! The Scaling Revolution
+
+The period from 2018 to the present revealed that language models improve predictably with scale. The key dimensions are ''model size'' (parameter count $N$), ''dataset size'' (token count $D$), and ''compute budget'' ($C \approx 6ND$ FLOPs). <<link "Scaling Laws" "Scaling Laws">><</link>> show that cross-entropy loss decreases as a power law in each dimension:
+
+$$L(N, D) = \frac{A}{N^\alpha} + \frac{B}{D^\beta} + L_\infty$$
+
+where $L_\infty$ is the irreducible entropy of natural language. This predictability enabled labs to plan training runs costing tens of millions of dollars with confidence in the outcome.
+
+The progression has been dramatic: GPT-1 (2018, 117M parameters), GPT-2 (2019, 1.5B), GPT-3 (2020, 175B), and subsequent models at even larger scales. Each generation showed qualitative leaps — from basic text completion to few-shot task solving to extended reasoning and instruction following. The Chinchilla result (Hoffmann et al., 2022) refined the recipe: instead of making models as large as possible, train //smaller// models on //more data//. A 70B model trained on 1.4T tokens outperformed a 280B model trained on 300B tokens using the same compute.
+
+Modern language models are further refined through ''instruction tuning'' (fine-tuning on human-written task completions) and ''reinforcement learning from human feedback'' (RLHF), which aligns the model's outputs with human preferences. These post-training stages transform a raw next-token predictor into a system that follows instructions, refuses harmful requests, and produces helpful, coherent responses.
+
+---
+
+!! When Language Models Break Down
+
+''Hallucination:'' Language models are trained to produce //plausible// text, not //true// text. When the training data contains no clear answer, the model fills the gap with confident-sounding fabrications — inventing citations, statistics, historical events, or technical claims that are entirely false. The model has no internal fact-checker; it assigns probability to sequences based on pattern similarity, not truth. This is the most dangerous failure mode for any application requiring factual reliability.
+
+''Context window limitations:'' Every language model operates within a finite context window — the maximum number of tokens it can attend to at once. N-gram models had windows of 2–5 tokens. Early transformers handled 512–2048 tokens. Modern models extend to 32K–128K tokens, but performance degrades on information positioned in the middle of very long contexts (the "lost in the middle" effect). The model cannot reason about information it cannot see, and even within the window, attention to distant tokens weakens.
+
+''Distributional bias and brittleness:'' Language models absorb the statistical patterns of their training data, including biases related to gender, race, culture, and ideology. They reflect the internet's skewed demographics and amplify frequent associations. Additionally, small changes in phrasing — reordering words, using synonyms, or adding irrelevant context — can produce dramatically different outputs. The model's behavior is sensitive to surface-level token patterns in ways that genuine understanding would not be, revealing that next-token prediction, even at scale, remains a fundamentally different process from human language comprehension.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Shannon (1948) — information-theoretic foundations; Jelinek & Mercer (1980) — n-gram language models for speech recognition; Bengio et al. (2003) — neural probabilistic language model; Mikolov et al. (2010) — RNN language models; Vaswani et al. (2017) — Transformer architecture; Radford et al. (2018, 2019) — GPT and GPT-2; Brown et al. (2020) — GPT-3 and in-context learning; Hoffmann et al. (2022) — Chinchilla scaling.
+
+''Autoregressive vs. masked:'' Autoregressive models (GPT family) predict left-to-right; masked language models (BERT) predict randomly masked tokens from bidirectional context. Autoregressive models are natural generators; masked models excel at representation learning for downstream tasks. Both are language models in the broad sense.
+
+''Vocabulary and tokenization:'' Modern LMs use subword tokenization — typically <<link "Byte Pair Encoding" "Byte Pair Encoding">><</link>> or SentencePiece — to balance vocabulary size against sequence length. GPT-2 uses a 50K BPE vocabulary; LLaMA uses 32K SentencePiece tokens. <<link "Tokenization" "Tokenization">><</link>> choices directly affect the model's ability to handle arithmetic, code, and non-English text.
+
+''Evaluation:'' <<link "Perplexity" "Perplexity">><</link>> measures language modeling quality directly. Downstream benchmarks (MMLU, HellaSwag, HumanEval, GSM8K) measure practical capabilities. The relationship between perplexity and benchmark scores is nonlinear — small perplexity improvements can yield large capability jumps once a threshold is crossed.
+
+''Decoding strategies:'' Greedy decoding selects the highest-probability token at each step. Beam search maintains $k$ candidate sequences. Sampling with temperature $\tau$ reshapes the distribution: $P(w) \propto \exp(\text{logit}(w)/\tau)$. Top-$k$ and nucleus (top-$p$) sampling truncate the distribution to avoid low-probability tokens, balancing diversity and coherence.
+
+---
+
+!! Quiz
+
+<span id="lm-q1">''1. What fundamental quantity does a language model estimate?''
+
+<<button "A. The sentiment of a sentence">><<replace "#lm-q1">>A. Sentiment analysis is a downstream application, not the core function of a language model. The core function is estimating $P(w_t \mid w_{<t})$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The probability of the next token given preceding context">><<replace "#lm-q1">>B. Correct! A language model defines $P(w_t \mid w_1, \ldots, w_{t-1})$ — the conditional probability of the next token given all previous tokens. Everything else follows from this.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The syntactic parse tree of a sentence">><<replace "#lm-q1">>C. Parsing is a separate NLP task. Language models may implicitly learn syntax, but their explicit output is a probability distribution over next tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The embedding vector for each word">><<replace "#lm-q1">>D. Embeddings are internal representations used by neural language models, but the model's output is a probability distribution, not an embedding.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q2">''2. Why do n-gram models struggle with long-range dependencies?''
+
+<<button "A. They use floating-point arithmetic that loses precision">><<replace "#lm-q2">>A. Numerical precision is not the issue. The fundamental problem is that n-gram models truncate context to a fixed window of $n-1$ words.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. They only condition on the previous n-1 words, and the number of possible n-grams grows exponentially">><<replace "#lm-q2">>B. Correct! An n-gram model uses $P(w_t \mid w_{t-n+1:t-1})$, ignoring all earlier context. Increasing $n$ causes exponential growth in possible sequences, most of which are never observed in training data.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. They cannot handle vocabularies larger than 10,000 words">><<replace "#lm-q2">>C. N-gram models can handle large vocabularies. The limitation is context length, not vocabulary size.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. They require GPU hardware that was unavailable in the 1990s">><<replace "#lm-q2">>D. N-gram models run on CPUs and were widely deployed in the 1990s. Their limitation is statistical, not computational.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q3">''3. What key advantage did neural language models (Bengio 2003) introduce over n-grams?''
+
+<<button "A. They eliminated the need for training data">><<replace "#lm-q3">>A. Neural LMs still require training data — often more than n-gram models. The advantage is in how they generalize from that data.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. They used continuous word embeddings, allowing generalization to unseen word combinations">><<replace "#lm-q3">>B. Correct! By mapping words to dense vectors, neural LMs can generalize: seeing "dog ran" helps predict after "cat ran" because the embeddings for "dog" and "cat" are similar. N-gram models treat every word as an unrelated symbol.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. They achieved zero perplexity on all benchmarks">><<replace "#lm-q3">>C. No model achieves zero perplexity — that would require perfect prediction of every token. Neural LMs improved perplexity but did not eliminate it.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. They removed the softmax computation">><<replace "#lm-q3">>D. Neural LMs introduced the softmax over vocabulary, which n-gram models did not use. The softmax is a core component, not something removed.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q4">''4. What does a perplexity of 25 mean?''
+
+<<button "A. The model makes 25 errors per sentence">><<replace "#lm-q4">>A. Perplexity is not an error count. It measures average uncertainty per token.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The model considers 25% of the vocabulary at each step">><<replace "#lm-q4">>B. Perplexity is not a percentage of vocabulary. It is the exponentiated average cross-entropy.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. On average, the model is as uncertain as choosing uniformly among 25 options per token">><<replace "#lm-q4">>C. Correct! Perplexity is $2^{H(p,q)}$. A perplexity of 25 means the model's uncertainty is equivalent to a uniform distribution over 25 choices at each prediction step. Lower is better.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The model needs 25 tokens of context to make accurate predictions">><<replace "#lm-q4">>D. Perplexity does not measure required context length. It measures average prediction uncertainty across the entire corpus.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q5">''5. How did transformers improve upon RNN-based language models?''
+
+<<button "A. By using smaller vocabularies">><<replace "#lm-q5">>A. Vocabulary size is independent of architecture. Transformers typically use the same or larger vocabularies as RNN models.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. By replacing sequential processing with self-attention, enabling parallelism and direct long-range connections">><<replace "#lm-q5">>B. Correct! Self-attention lets every token attend directly to every other token, eliminating the sequential bottleneck of RNNs. This enables massive parallelization on GPUs and preserves information across long distances without vanishing gradients.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. By eliminating the need for backpropagation">><<replace "#lm-q5">>C. Transformers are still trained with backpropagation. The improvement is architectural, not in the training algorithm.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. By using character-level tokenization exclusively">><<replace "#lm-q5">>D. Most transformer LMs use subword tokenization (BPE), not character-level. The architectural innovation is self-attention, not tokenization.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q6">''6. Why do language models hallucinate?''
+
+<<button "A. Because they run out of memory during generation">><<replace "#lm-q6">>A. Memory limits affect context window size but are not the cause of hallucination. The root cause is the training objective itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Because they are trained to produce plausible text, not necessarily true text">><<replace "#lm-q6">>B. Correct! The training objective maximizes $P(w_t \mid w_{<t})$ — the likelihood of observed text patterns. The model learns what //sounds right//, not what //is right//. When no clear factual pattern exists, it generates fluent but fabricated content.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Because their training data contains no factual information">><<replace "#lm-q6">>C. Training data contains vast amounts of factual information. The problem is that the model has no mechanism to distinguish fact from plausible fiction.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Because the softmax function always assigns some probability to wrong tokens">><<replace "#lm-q6">>D. While the softmax does assign non-zero probability to all tokens, this is not the fundamental cause of hallucination. The issue is deeper: the model optimizes for plausibility, not truth.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q7">''7. What did the Chinchilla paper reveal about training large language models?''
+
+<<button "A. Larger models always outperform smaller ones">><<replace "#lm-q7">>A. Chinchilla showed the opposite: a smaller model trained on more data can beat a larger model trained on less data, given equal compute.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Training data does not matter — only model size determines performance">><<replace "#lm-q7">>B. Chinchilla's central finding was that data matters //equally// to model size. Ignoring data scaling wastes compute.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Parameters and training tokens should scale equally for compute-optimal training">><<replace "#lm-q7">>C. Correct! Hoffmann et al. showed that $N^* \propto C^{0.5}$ and $D^* \propto C^{0.5}$ — parameters and data should grow in equal proportion. Most prior models were undertrained: too many parameters, too few tokens.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Transformer language models have reached their maximum possible performance">><<replace "#lm-q7">>D. Chinchilla showed how to use compute //more efficiently//, not that performance has peaked. Scaling further with proper allocation continues to improve loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<span id="lm-q8">''8. In the softmax output layer, what does temperature $\tau$ control?''
+
+<<button "A. The learning rate during training">><<replace "#lm-q8">>A. Temperature is a decoding-time parameter, not a training parameter. The learning rate is set separately.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The number of tokens generated per second">><<replace "#lm-q8">>B. Temperature affects the probability distribution, not generation speed.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The sharpness of the probability distribution — low $\tau$ concentrates mass on top tokens, high $\tau$ flattens toward uniform">><<replace "#lm-q8">>C. Correct! With $P(w) \propto \exp(\text{logit}(w)/\tau)$, low temperature sharpens the distribution (more deterministic), while high temperature flattens it (more random). At $\tau \to 0$, decoding becomes greedy; at $\tau \to \infty$, it becomes uniform.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The maximum sequence length the model can generate">><<replace "#lm-q8">>D. Maximum sequence length is determined by the context window, not temperature. Temperature only reshapes the per-token probability distribution.<</replace>><<script>>typesetMath();<</script>><</button>>
+</span>
+
+<<include "Footer">>

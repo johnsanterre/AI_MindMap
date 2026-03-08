@@ -1,0 +1,159 @@
+<<include "Header">>
+
+! Graph Isomorphism
+
+<img src="assets/graph_isomorphism.svg" alt="Two graphs G and H with different vertex labels but identical edge structure, connected by a bijection mapping showing they are isomorphic" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine you have two road maps of the same city, but one uses street numbers and the other uses street names. The intersections and connections are identical — only the labels differ. ''Graph isomorphism'' asks exactly this question: given two graphs, are they secretly the same graph wearing different name tags? Two graphs are ''isomorphic'' if you can relabel the vertices of one to perfectly match the other, preserving every edge. This deceptively simple question turns out to be one of the most fascinating problems in all of computer science — sitting in a mysterious zone where we cannot prove it is hard, yet no one has found a fast algorithm for it in general.
+
+!! The Core Insight
+
+The central idea is that a graph's ''structure'' — the pattern of connections — is independent of how you label its vertices. Two graphs $G$ and $H$ are isomorphic if there exists a bijection $f: V(G) \to V(H)$ such that vertices $u$ and $v$ are adjacent in $G$ if and only if $f(u)$ and $f(v)$ are adjacent in $H$. This bijection is the isomorphism itself.
+
+The difficulty arises from the search space. For graphs with $n$ vertices, there are $n!$ possible bijections to check. For $n = 20$, that is over $2.4 \times 10^{18}$ possibilities. For $n = 100$, it is astronomically larger than the number of atoms in the universe. The question is whether clever algorithms can avoid brute-force enumeration — and for most practical graphs, they can, using structural invariants as shortcuts.
+
+!! Invariants and the Refinement Strategy
+
+The standard approach to testing isomorphism relies on ''graph invariants'' — properties that must be identical in isomorphic graphs. If any invariant differs, the graphs cannot be isomorphic. Common invariants include:
+
+''Degree sequence:'' Sort the list of vertex degrees. Isomorphic graphs must have the same degree sequence. A graph with degree sequence $[2, 2, 3, 3]$ cannot be isomorphic to one with sequence $[1, 2, 3, 4]$.
+
+''Spectrum:'' The eigenvalues of the [[Graph Laplacian]] or adjacency matrix. Isomorphic graphs have the same spectrum — though non-isomorphic graphs can be ''cospectral'' (same eigenvalues, different structure).
+
+''Weisfeiler-Leman (WL) refinement:'' An iterative algorithm that colors vertices based on their neighborhoods. Initially, all vertices get the same color. Each round updates a vertex's color based on the multiset of its neighbors' colors. After convergence, the multiset of final colors is compared. The 1-WL test distinguishes most non-isomorphic graphs but fails on certain regular graphs. Higher-dimensional $k$-WL variants are more powerful but more expensive, running in $O(n^{k+1})$ time per iteration.
+
+''Substructure counts:'' Number of triangles, cycles of length $k$, cliques of size $k$. These are preserved by isomorphism but expensive to compute for large $k$.
+
+No single polynomial-time invariant is known to distinguish all non-isomorphic graphs. This is what makes the problem so subtle.
+
+!! What the Math Is Actually Doing
+
+Formally, graphs $G = (V_G, E_G)$ and $H = (V_H, E_H)$ are isomorphic ($G \cong H$) if there exists a bijection $f: V_G \to V_H$ satisfying:
+
+$$\{u, v\} \in E_G \iff \{f(u), f(v)\} \in E_H$$
+
+This can be expressed via adjacency matrices. If $A_G$ and $A_H$ are the adjacency matrices of $G$ and $H$, then $G \cong H$ if and only if there exists a permutation matrix $P$ such that:
+
+$$A_H = P \, A_G \, P^T$$
+
+This reformulation converts the problem into a search over the ''symmetric group'' $S_n$ (the group of all $n \times n$ permutation matrices). The ''automorphism group'' $\text{Aut}(G)$ — the set of permutations mapping $G$ to itself — plays a central role. Babai's algorithm exploits the group-theoretic structure of $\text{Aut}(G)$, using the classification of finite simple groups to bound the search.
+
+The ''Weisfeiler-Leman'' test computes iterated color refinements. At step $t$, vertex $v$ receives color:
+
+$$c^{(t)}(v) = \text{hash}\Big(c^{(t-1)}(v),\; \{\!\{ c^{(t-1)}(w) : w \in N(v) \}\!\}\Big)$$
+
+where $\{\!\{ \cdot \}\!\}$ denotes a multiset. If at any step the multiset of colors across $G$ differs from that across $H$, the graphs are not isomorphic. The converse is not guaranteed — WL can fail to distinguish certain non-isomorphic graphs, such as strongly regular graphs with the same parameters.
+
+!! Graph Isomorphism in ML and Applications
+
+Graph isomorphism is deeply connected to modern machine learning through ''graph neural networks'' (GNNs). Xu et al. (2019) proved that standard message-passing GNNs are //at most// as powerful as the 1-WL test for distinguishing graphs. This means GNNs inherit WL's blind spots: if two non-isomorphic graphs produce the same WL coloring, no standard GNN can tell them apart. The [[Graph Isomorphism Network]] was designed to be //maximally// expressive within this 1-WL bound, using sum aggregation and injective update functions.
+
+Beyond ML, graph isomorphism arises in:
+
+''Chemistry:'' Molecules are graphs (atoms = vertices, bonds = edges). Determining whether two molecular structures are identical requires isomorphism testing. Chemical databases like PubChem use canonical graph labeling (a harder problem than isomorphism) to index millions of compounds.
+
+''Network analysis:'' Detecting recurring motifs in biological networks, social networks, and communication networks requires counting subgraph isomorphisms — an NP-complete problem even when the full isomorphism problem is not known to be.
+
+''Compiler optimization:'' Detecting equivalent computation graphs enables reuse, memoization, and optimization in dataflow compilers.
+
+''Cryptography:'' Zero-knowledge proofs based on graph isomorphism allow a prover to demonstrate knowledge of an isomorphism without revealing it — one of the earliest examples of zero-knowledge protocols.
+
+!! When Graph Isomorphism Breaks Down
+
+''1. Highly regular graphs defeat simple invariants.'' Strongly regular graphs — where every vertex has the same degree, every pair of adjacent vertices shares the same number of common neighbors, and every pair of non-adjacent vertices also shares a fixed number — can be non-isomorphic yet indistinguishable by the 1-WL test, spectral methods, and standard GNNs. The Shrikhande graph and the $4 \times 4$ rook's graph are a classic non-isomorphic pair with identical degree sequences, spectra, and WL colorings. Only higher-dimensional WL or explicit structural decomposition can distinguish them.
+
+''2. Subgraph isomorphism is NP-complete.'' While graph isomorphism asks "are these two graphs the same?", ''subgraph isomorphism'' asks "does graph $G$ contain a copy of graph $H$?" This is NP-complete in general (it generalizes Hamiltonian cycle, clique detection, and many other hard problems). Confusing these two problems leads to incorrect assumptions about hardness. Graph isomorphism is believed to be easier — likely not NP-complete — but this is unproven.
+
+''3. Scaling to massive graphs remains impractical for worst cases.'' Babai's quasipolynomial algorithm runs in $e^{O((\log n)^c)}$ time, which is theoretically sub-exponential but can still be enormous for very large graphs. Practical tools like //nauty// and //bliss// are fast on most real-world graphs but exhibit exponential worst-case behavior on pathological inputs (e.g., unions of isomorphic strongly regular graphs). For graphs with millions of vertices — common in social networks and web graphs — even practical solvers can struggle without exploiting domain-specific structure.
+
+!! Technical Details
+
+''Complexity status:'' Graph isomorphism is in NP (a permutation serves as a certificate) and in Co-AM (it has a short interactive proof of non-isomorphism). It is not known to be NP-complete, and strong evidence suggests it is not: if GI is NP-complete, the polynomial hierarchy collapses to its second level (Boppana, Hastad, Zachos, 1987). GI is widely believed to be ''NP-intermediate'' — harder than P but easier than NP-complete — as predicted by Ladner's theorem if $P \neq NP$. See [[P vs NP]] and [[Complexity Classes]].
+
+''Babai's breakthrough (2015):'' Laszlo Babai proved that graph isomorphism can be solved in ''quasipolynomial time'' $e^{O((\log n)^c)}$, the most dramatic progress on the problem in decades. The algorithm uses individualization-refinement combined with deep results from group theory (the classification of finite simple groups). This places GI closer to P than to NP-complete but does not settle the question.
+
+''Practical algorithms:'' McKay's //nauty// (1981, updated) and Junttila-Kaski's //bliss// use canonical labeling via individualization-refinement with pruning. On typical graphs (bounded degree, sparse, planar), they run in nearly linear time. //Traces// (Piperno, 2008) extends these ideas with improved heuristics for difficult graph families.
+
+''Polynomial-time special cases:'' GI is solvable in polynomial time for planar graphs (Hopcroft & Wong, 1974), bounded-degree graphs (Luks, 1982), bounded treewidth graphs, and interval graphs. See [[Planar Graphs]] and [[Graph Coloring]] for related structural restrictions.
+
+''WL hierarchy and GNNs:'' The $k$-WL test runs in $O(n^{k+1})$ time per iteration. Standard message-passing GNNs match 1-WL expressiveness. Higher-order GNNs (e.g., $k$-GNN) match $k$-WL but require $O(n^k)$ memory, limiting scalability.
+
+''Graph canonicalization:'' A harder problem than isomorphism — computing a canonical form $\text{canon}(G)$ such that $G \cong H \iff \text{canon}(G) = \text{canon}(H)$. If you can canonicalize, you can test isomorphism by comparing canonical forms, but the converse is not known.
+
+Related topics: [[Graph Theory]], [[Graph Laplacian]], [[Graph Neural Network]], [[Graph Isomorphism Network]], [[Complexity Classes]].
+
+!! Quiz
+
+<span id="gi-q1">Two graphs are isomorphic if and only if:</span>
+
+A. They have the same number of vertices
+B. They have the same degree sequence
+C. There exists a bijection between their vertex sets that preserves adjacency
+D. Their adjacency matrices are equal
+
+<<button "A">><<replace "#gi-q1">>Incorrect. Same vertex count is necessary but far from sufficient — many non-isomorphic graphs share the same number of vertices.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q1">>Incorrect. Same degree sequence is necessary but not sufficient. Non-isomorphic graphs can share degree sequences — for example, the Shrikhande graph and the $4 \times 4$ rook's graph.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q1">>Correct! Isomorphism requires a bijection $f: V(G) \to V(H)$ such that $\{u,v\} \in E(G) \iff \{f(u),f(v)\} \in E(H)$. This is the definition — same structure, possibly different labels.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q1">>Incorrect. Equal adjacency matrices would mean the graphs are //identical// (same labels and same edges), which is stronger than isomorphism. Isomorphism allows relabeling: $A_H = P A_G P^T$ for some permutation matrix $P$.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q2">What is the complexity status of graph isomorphism?</span>
+
+A. It is known to be in P
+B. It is known to be NP-complete
+C. It is in NP but not known to be in P or NP-complete
+D. It is NP-hard but not in NP
+
+<<button "A">><<replace "#gi-q2">>Incorrect. No polynomial-time algorithm is known for general graph isomorphism. The best known is Babai's quasipolynomial algorithm.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q2">>Incorrect. GI is not known to be NP-complete, and strong evidence (polynomial hierarchy collapse) suggests it is not.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q2">>Correct! GI is in NP (a permutation is a polynomial-size certificate) but is not known to be in P or NP-complete. It is a prime candidate for an NP-intermediate problem, as predicted by Ladner's theorem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q2">>Incorrect. GI is in NP — given a proposed bijection, you can verify it preserves adjacency in polynomial time.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q3">Babai's 2015 breakthrough showed that graph isomorphism can be solved in:</span>
+
+A. Linear time for all graphs
+B. Polynomial time for all graphs
+C. Quasipolynomial time for all graphs
+D. Exponential time in the worst case only
+
+<<button "A">><<replace "#gi-q3">>Incorrect. Linear time is achieved only for very restricted graph families like trees or planar graphs, not general graphs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q3">>Incorrect. Babai's result is quasipolynomial — $e^{O((\log n)^c)}$ — which is sub-exponential but not polynomial.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q3">>Correct! Babai proved GI is solvable in quasipolynomial time $e^{O((\log n)^c)}$, placing it tantalizingly close to P without actually reaching it. This was the most significant progress on the problem in decades.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q3">>Incorrect. Exponential worst-case time was already known from brute-force search. Babai's contribution was showing a //sub-exponential// upper bound.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q4">The Weisfeiler-Leman (1-WL) color refinement test:</span>
+
+A. Solves graph isomorphism in polynomial time for all graphs
+B. Can distinguish all pairs of non-isomorphic graphs
+C. Iteratively refines vertex colors based on neighborhood multisets, but fails on some non-isomorphic graphs
+D. Is equivalent in power to 3-WL
+
+<<button "A">><<replace "#gi-q4">>Incorrect. 1-WL runs in polynomial time but does //not// solve isomorphism — it can fail to distinguish certain non-isomorphic graphs, such as strongly regular graphs with identical parameters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q4">>Incorrect. 1-WL fails on strongly regular graphs and other highly symmetric structures where non-isomorphic graphs produce identical color histograms.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q4">>Correct! 1-WL iteratively updates $c^{(t)}(v) = \text{hash}(c^{(t-1)}(v), \{\!\{c^{(t-1)}(w) : w \in N(v)\}\!\})$. It is a powerful heuristic that distinguishes most graph pairs but provably fails on certain regular graph families.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q4">>Incorrect. 1-WL is strictly weaker than 3-WL. Higher-dimensional WL variants can distinguish graphs that 1-WL cannot, at the cost of $O(n^{k+1})$ time per iteration for $k$-WL.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q5">Xu et al. (2019) proved that standard message-passing GNNs are at most as powerful as:</span>
+
+A. Exact isomorphism testing
+B. The 1-WL color refinement test
+C. The 3-WL test
+D. Spectral methods using graph Laplacian eigenvalues
+
+<<button "A">><<replace "#gi-q5">>Incorrect. Standard GNNs cannot solve exact isomorphism — they are bounded by the 1-WL test, which itself cannot solve isomorphism in general.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q5">>Correct! Xu et al. showed that message-passing GNNs can be //at most// as expressive as 1-WL. The Graph Isomorphism Network (GIN) was designed to be maximally expressive within this bound, using sum aggregation and injective updates.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q5">>Incorrect. Standard message-passing GNNs are bounded by 1-WL, not 3-WL. Higher-order GNNs (k-GNN) are needed to match k-WL expressiveness.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q5">>Incorrect. Spectral methods and GNNs are different frameworks. GNNs are bounded by WL, not by spectral methods, though both can fail on similar graph families.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q6">Why is subgraph isomorphism fundamentally harder than graph isomorphism?</span>
+
+A. Subgraph isomorphism requires comparing graphs of different sizes, which is always harder
+B. Subgraph isomorphism is NP-complete, while graph isomorphism is believed to be NP-intermediate
+C. Subgraph isomorphism cannot be verified in polynomial time
+D. Subgraph isomorphism only applies to directed graphs
+
+<<button "A">><<replace "#gi-q6">>Incorrect. While subgraph isomorphism often involves different-sized graphs, the difficulty comes from the combinatorial explosion of possible embeddings, not merely from size differences.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q6">>Correct! Subgraph isomorphism is NP-complete — it generalizes Hamiltonian cycle, clique, and other hard problems. Graph isomorphism, by contrast, is believed to sit between P and NP-complete. This is a crucial distinction that practitioners must not confuse.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q6">>Incorrect. Subgraph isomorphism //can// be verified in polynomial time (it is in NP) — you just check the proposed embedding preserves edges. It is the //finding// that is NP-hard.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q6">>Incorrect. Subgraph isomorphism applies to both directed and undirected graphs. Its hardness is unrelated to edge directionality.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q7">Which reformulation converts graph isomorphism into an algebraic search problem?</span>
+
+A. Finding an eigenvalue decomposition of the adjacency matrix
+B. Finding a permutation matrix P such that A_H = P A_G P^T
+C. Finding a rotation matrix that aligns the graph Laplacians
+D. Finding a diagonal matrix that scales vertex degrees to match
+
+<<button "A">><<replace "#gi-q7">>Incorrect. Eigenvalue decomposition gives spectral invariants but does not directly solve isomorphism — non-isomorphic cospectral graphs share eigenvalues.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q7">>Correct! Two graphs are isomorphic iff their adjacency matrices satisfy $A_H = P A_G P^T$ for some permutation matrix $P$. This converts the problem into a search over the symmetric group $S_n$, which Babai's algorithm exploits using group-theoretic techniques.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q7">>Incorrect. Rotation matrices are continuous transformations; graph isomorphism requires a //discrete// permutation matrix from $S_n$, not a continuous rotation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q7">>Incorrect. Diagonal scaling changes the graph structure. Isomorphism requires a //permutation// (relabeling), which is an orthogonal matrix with exactly one 1 per row and column.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="gi-q8">For which class of graphs is isomorphism known to be solvable in polynomial time?</span>
+
+A. Dense graphs with more than n^2/4 edges
+B. Random Erdos-Renyi graphs
+C. Planar graphs
+D. Graphs with chromatic number greater than 3
+
+<<button "A">><<replace "#gi-q8">>Incorrect. Edge density alone does not guarantee polynomial-time isomorphism testing. Dense graphs can still be difficult if they have complex symmetry structure.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B">><<replace "#gi-q8">>Incorrect. While random graphs are typically //easy// in practice (they have few symmetries), "random Erdos-Renyi graphs" is not a structural class with a proven polynomial-time algorithm in the worst case.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C">><<replace "#gi-q8">>Correct! Hopcroft and Wong (1974) gave a polynomial-time algorithm for planar graph isomorphism. Other tractable classes include bounded-degree graphs (Luks, 1982), bounded-treewidth graphs, and interval graphs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D">><<replace "#gi-q8">>Incorrect. Chromatic number does not determine the complexity of isomorphism testing. High chromatic number graphs can still be hard for isomorphism solvers.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

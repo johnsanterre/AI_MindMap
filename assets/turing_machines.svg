@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" rx="8"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2" rx="6"/>
+
+  <!-- Title -->
+  <text x="400" y="38" font-family="Georgia, serif" font-size="22" fill="#7C2530" text-anchor="middle" font-weight="bold">Turing Machine</text>
+
+  <!-- Tape -->
+  <rect x="60" y="60" width="680" height="50" fill="none" stroke="#D4C5A9" stroke-width="1.5" rx="3"/>
+  <!-- Tape cells -->
+  <line x1="128" y1="60" x2="128" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="196" y1="60" x2="196" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="264" y1="60" x2="264" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="332" y1="60" x2="332" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="400" y1="60" x2="400" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="468" y1="60" x2="468" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="536" y1="60" x2="536" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="604" y1="60" x2="604" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="672" y1="60" x2="672" y2="110" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Tape symbols -->
+  <text x="94" y="93" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="162" y="93" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle">0</text>
+  <text x="230" y="93" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="298" y="93" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle">1</text>
+  <!-- Active cell highlight -->
+  <rect x="332" y="60" width="68" height="50" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="366" y="93" font-family="Georgia, serif" font-size="18" fill="#2D5A8E" text-anchor="middle" font-weight="bold">0</text>
+  <text x="434" y="93" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle">1</text>
+  <text x="502" y="93" font-family="Georgia, serif" font-size="18" fill="#5C3D1E" text-anchor="middle">B</text>
+  <text x="570" y="93" font-family="Georgia, serif" font-size="18" fill="#C4A87A" text-anchor="middle">B</text>
+  <text x="638" y="93" font-family="Georgia, serif" font-size="18" fill="#C4A87A" text-anchor="middle">B</text>
+  <text x="706" y="93" font-family="Georgia, serif" font-size="18" fill="#C4A87A" text-anchor="middle">...</text>
+
+  <!-- Tape label -->
+  <text x="36" y="90" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">Tape</text>
+
+  <!-- Read/Write Head -->
+  <polygon points="366,118 356,138 376,138" fill="#7C2530"/>
+  <rect x="341" y="138" width="50" height="24" fill="#7C2530" rx="3"/>
+  <text x="366" y="155" font-family="Georgia, serif" font-size="11" fill="#FDFAF4" text-anchor="middle">Head</text>
+  <line x1="366" y1="162" x2="366" y2="185" stroke="#7C2530" stroke-width="2"/>
+
+  <!-- State Diagram -->
+  <!-- q0 -->
+  <circle cx="200" cy="270" r="32" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="200" y="275" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" text-anchor="middle" font-weight="bold">q&#x2080;</text>
+  <!-- Start arrow -->
+  <line x1="130" y1="270" x2="166" y2="270" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowBrown)"/>
+  <text x="130" y="260" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">start</text>
+
+  <!-- q1 -->
+  <circle cx="366" cy="220" r="32" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="366" y="225" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" text-anchor="middle" font-weight="bold">q&#x2081;</text>
+
+  <!-- q2 -->
+  <circle cx="366" cy="330" r="32" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="366" y="335" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" text-anchor="middle" font-weight="bold">q&#x2082;</text>
+
+  <!-- q_accept (double circle) -->
+  <circle cx="560" cy="270" r="32" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="560" cy="270" r="27" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="560" y="266" font-family="Georgia, serif" font-size="13" fill="#7C2530" text-anchor="middle" font-weight="bold">q</text>
+  <text x="560" y="282" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">accept</text>
+
+  <!-- q_reject -->
+  <circle cx="560" cy="370" r="24" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="560" y="366" font-family="Georgia, serif" font-size="11" fill="#C4A87A" text-anchor="middle">q</text>
+  <text x="560" y="380" font-family="Georgia, serif" font-size="9" fill="#C4A87A" text-anchor="middle" font-style="italic">reject</text>
+
+  <!-- Arrows / Transitions -->
+  <defs>
+    <marker id="arrowNavy" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowBrown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowTan" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#C4A87A"/>
+    </marker>
+  </defs>
+
+  <!-- q0 -> q1: 0/1,R -->
+  <path d="M228,252 Q290,200 334,220" fill="none" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arrowNavy)"/>
+  <text x="270" y="215" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">0/1, R</text>
+
+  <!-- q0 -> q2: 1/0,R -->
+  <path d="M228,290 Q290,340 334,330" fill="none" stroke="#2D5A8E" stroke-width="1.8" marker-end="url(#arrowNavy)"/>
+  <text x="265" y="335" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">1/0, R</text>
+
+  <!-- q1 -> q_accept: B/B,R -->
+  <path d="M398,220 Q470,230 528,260" fill="none" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+  <text x="448" y="228" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">B/B, R</text>
+
+  <!-- q2 -> q_accept: B/B,R -->
+  <path d="M398,325 Q470,300 530,278" fill="none" stroke="#7C2530" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+  <text x="448" y="316" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">B/B, R</text>
+
+  <!-- q1 -> q1 self-loop -->
+  <path d="M380,192 Q400,162 352,192" fill="none" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowNavy)"/>
+  <text x="366" y="172" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">1/1, R</text>
+
+  <!-- q2 -> q_reject -->
+  <path d="M394,345 Q470,375 534,372" fill="none" stroke="#C4A87A" stroke-width="1.5" marker-end="url(#arrowTan)"/>
+  <text x="460" y="373" font-family="Georgia, serif" font-size="11" fill="#C4A87A">0/0, L</text>
+
+  <!-- Connection line from head to state diagram -->
+  <line x1="366" y1="185" x2="366" y2="188" stroke="#7C2530" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- Labels -->
+  <text x="200" y="322" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Start State</text>
+  <text x="680" y="270" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Finite</text>
+  <text x="680" y="284" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Control</text>
+
+  <!-- Legend box -->
+  <rect x="620" y="60" width="160" height="100" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="1" rx="4"/>
+  <text x="700" y="80" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle" font-weight="bold">Components</text>
+  <text x="700" y="98" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Infinite Tape</text>
+  <text x="700" y="114" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Read/Write Head</text>
+  <text x="700" y="130" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Finite State Control</text>
+  <text x="700" y="148" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Transition Function &#x03B4;</text>
+</svg>

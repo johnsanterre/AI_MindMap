@@ -1,0 +1,129 @@
+<<include "Header">>
+
+! Active Learning
+
+[img[assets/active_learning.svg]]
+
+Imagine you are studying for a massive exam, but you only have time to ask a tutor ten questions. You would not pick those ten questions at random from the textbook — you would choose the ones you are most confused about, the ones where your understanding is shakiest. ''Active learning'' applies this same strategy to machine learning: instead of training on a randomly sampled dataset, the model itself chooses which examples to have labeled next, focusing the expensive annotation budget on the data points that will teach it the most. A model trained with active learning can often match the performance of one trained on the full dataset while using a fraction of the labels.
+
+---
+
+!! The Core Insight
+
+In standard [[Supervised Learning]], a model passively receives a fixed labeled dataset. The implicit assumption is that every labeled example is equally valuable. This is almost never true. Some examples fall in regions where the model is already confident and correct — labeling them teaches nothing. Others sit right on the decision boundary, or in unexplored territory, where a single label could dramatically shift the model's understanding.
+
+Active learning flips the relationship between the model and the dataset. Instead of the dataset being given to the model, the model //queries// an oracle (typically a human annotator) for labels on the examples it finds most informative. This creates a feedback loop: the model trains on a small labeled seed set, evaluates the unlabeled pool to identify the most useful candidates, requests labels for those candidates, retrains, and repeats. Each cycle adds exactly the data the model needs most, producing a much steeper learning curve — better accuracy per labeled example — than passive random sampling.
+
+The practical motivation is economic. In many domains — medical imaging, legal document review, satellite imagery, speech transcription — unlabeled data is abundant but labeling is expensive, slow, or requires specialized expertise. Active learning directly attacks this bottleneck by minimizing the number of labels required to reach a target performance level.
+
+---
+
+!! Query Strategies
+
+The heart of active learning is the ''query strategy'': the rule that decides which unlabeled examples to present to the oracle. Different strategies encode different notions of "informative."
+
+''Uncertainty sampling'' is the simplest and most widely used strategy. The model selects the example about which it is least certain. For a classifier, this typically means the example whose predicted class probability is closest to uniform. Common uncertainty measures include //least confidence// (highest predicted probability is low), //margin sampling// (difference between the top two predicted probabilities is small), and //entropy// (the full distribution over classes is spread out). Uncertainty sampling is cheap to compute but myopic — it only considers the model's current belief, not how much the model would change after seeing the label.
+
+''Query-by-committee'' (QBC) trains a committee of models on the current labeled set (for example, via [[Bayesian Inference]] to sample from the posterior, or by bootstrapping). The committee members vote on unlabeled examples, and the example with the highest disagreement is selected. Disagreement can be measured by vote entropy or KL divergence among the committee's predictions. QBC captures a richer notion of uncertainty than a single model's softmax output, because it reflects genuine model ambiguity rather than calibration artifacts.
+
+''Expected model change'' selects the example that, once labeled, would cause the largest update to the model's parameters. This is often approximated by the expected gradient length — the norm of the gradient of the loss with respect to the model's parameters, averaged over possible labels. This strategy directly targets examples that are maximally informative about the model's parameters, but it is computationally expensive because it requires computing gradients for every candidate.
+
+''Expected error reduction'' goes further: it selects the example that would minimize the model's expected generalization error on the entire unlabeled pool after retraining. This is the most theoretically principled strategy but also the most expensive, requiring a full retrain (or approximation thereof) for each candidate.
+
+''Diversity-based'' and ''batch-mode'' strategies address a practical limitation: if you greedily pick the $k$ most uncertain points, they may all cluster in the same region, providing redundant information. Batch-mode active learning selects a diverse batch that covers different informative regions, often combining an informativeness score with a diversity penalty. This connects active learning to the [[Multi-Armed Bandit]] exploration-exploitation tradeoff: each query must balance exploiting known uncertain regions against exploring unknown territory.
+
+---
+
+!! What the Math Is Actually Doing
+
+Consider a pool-based active learning setting with a classifier parameterized by $\theta$. Let $\mathcal{U}$ be the unlabeled pool, $\mathcal{L}$ the labeled set, and $P_\theta(y \mid x)$ the model's predictive distribution for input $x$.
+
+''Uncertainty sampling by entropy'' selects:
+
+$$x^* = \arg\max_{x \in \mathcal{U}} H[y \mid x, \theta] = \arg\max_{x \in \mathcal{U}} \left( -\sum_{c=1}^{C} P_\theta(y=c \mid x) \log P_\theta(y=c \mid x) \right)$$
+
+where $H$ is the Shannon entropy over $C$ classes. This is maximized when the predicted distribution is uniform and minimized when the model is fully confident.
+
+''Bayesian active learning by disagreement'' (BALD) uses the ''mutual information'' between the prediction $y$ and the model parameters $\theta$ given the data:
+
+$$x^* = \arg\max_{x \in \mathcal{U}} \; I(y; \theta \mid x, \mathcal{L}) = H[y \mid x, \mathcal{L}] - \mathbb{E}_{p(\theta \mid \mathcal{L})} \left[ H[y \mid x, \theta] \right]$$
+
+The first term is the total (predictive) uncertainty; the second is the ''expected data uncertainty'' (aleatoric noise). The difference — the ''epistemic uncertainty'' — is what BALD maximizes. Points with high aleatoric noise but low epistemic uncertainty (e.g., inherently ambiguous examples near a noisy boundary) are correctly deprioritized, because labeling them would not reduce the model's uncertainty about its own parameters. This connects directly to [[Uncertainty Quantification]] and [[Bayesian Inference]].
+
+''Expected gradient length'' (EGL) approximates expected model change:
+
+$$x^* = \arg\max_{x \in \mathcal{U}} \; \mathbb{E}_{P_\theta(y \mid x)} \left[ \left\| \nabla_\theta \mathcal{L}(\theta; x, y) \right\| \right]$$
+
+where the expectation is over the model's own predicted label distribution. Points that would produce large gradients — regardless of which label the oracle provides — are points where the model would learn the most.
+
+---
+
+!! Active Learning in Practice
+
+''Pool-based vs. stream-based vs. membership synthesis:'' Pool-based active learning assumes a fixed unlabeled pool from which to select. Stream-based (selective sampling) sees unlabeled examples one at a time and decides whether to query each. Membership query synthesis generates new input points to query, which is powerful in theory but often produces unnatural inputs that human annotators cannot label (e.g., random pixel arrangements in image tasks). Pool-based is by far the most common setting in practice.
+
+''Cold start:'' Active learning requires an initial model to estimate informativeness, but the initial model is trained on very few labels. If the seed set is too small or unrepresentative, the initial uncertainty estimates may be meaningless, leading the strategy to query uninformative or pathological examples in early rounds. Random sampling for the first few rounds, followed by active selection, is a common mitigation.
+
+''Deep active learning'' applies active learning to deep neural networks, which introduces challenges: neural networks are poorly calibrated (their softmax outputs do not reflect true uncertainty), making uncertainty sampling unreliable without calibration corrections. Monte Carlo dropout, deep ensembles, and other approximate [[Bayesian Inference]] methods are used to obtain better uncertainty estimates. Batch-mode selection is essential because retraining a deep network after each single query is prohibitively expensive.
+
+''Stopping criteria:'' Knowing when to stop querying is itself a challenge. Common heuristics include monitoring the informativeness of the most uncertain remaining examples (when even the "most informative" point is boring, stop) or tracking diminishing returns on a held-out validation set. There is no universally accepted stopping rule.
+
+Active learning interacts naturally with [[Semi-Supervised Learning]]: the large unlabeled pool can be exploited not only for query selection but also for unsupervised representation learning, pseudo-labeling, or consistency regularization, often producing gains beyond what either approach achieves alone.
+
+---
+
+!! When Active Learning Breaks Down
+
+''Sampling bias and missed regions:'' Active learning creates a biased training set by design — it deliberately oversamples uncertain or boundary regions and undersamples easy regions. If the model's initial uncertainty estimates are systematically wrong (e.g., the model is confidently incorrect in some region because that region was absent from the seed set), those regions will never be queried. The model becomes increasingly certain about a wrong decision boundary and never corrects itself. This is a fundamental failure mode: active learning can //entrench// errors that random sampling would eventually wash out. Diversity-based strategies partially mitigate this but do not eliminate it.
+
+''Noisy or adversarial oracles:'' The standard active learning loop assumes the oracle provides correct labels. When the oracle is noisy — a common reality with crowdsourced annotations or ambiguous tasks — actively selecting the hardest examples amplifies the noise problem. The examples queried are precisely those near decision boundaries where annotator disagreement is highest. The model receives a stream of noisy, contested labels in the most sensitive region of the input space, potentially degrading performance below passive random sampling. Robust active learning requires modeling annotator noise explicitly.
+
+''Distribution shift at deployment:'' Active learning optimizes the labeled set for the current model and the current unlabeled pool. If the deployment distribution differs from the pool distribution — a common situation in production systems where data drifts over time — the actively selected labels may not represent the deployment distribution well. A model trained on a carefully curated active learning set can underperform a model trained on a random sample that better represents the true deployment distribution, because the active set is biased toward the historical decision boundary rather than the future data distribution.
+
+---
+
+!! Technical Details
+
+''Key references:'' Settles (2009), //Active Learning Literature Survey//, University of Wisconsin-Madison Tech Report — the foundational survey that organized the field and defined the standard taxonomy of query strategies. Gal, Islam, and Ghahramani (2017), //Deep Bayesian Active Learning with Image Data//, ICML — introduced the use of Monte Carlo dropout for uncertainty estimation in deep active learning, showing that Bayesian uncertainty significantly outperforms softmax-based uncertainty sampling. Houlsby et al. (2011), //Bayesian Active Learning for Classification and Preference Learning//, introduced BALD (Bayesian Active Learning by Disagreement), establishing mutual information as the principled query criterion.
+
+''Theoretical guarantees:'' For certain model classes (e.g., linear classifiers, version space learners), active learning provably achieves exponential speedup in label complexity compared to passive learning. The version space — the set of hypotheses consistent with the labeled data — shrinks by a constant factor with each optimally chosen query, yielding a label complexity of $O(\log(1/\epsilon))$ versus $O(1/\epsilon)$ for passive learning. These guarantees generally do not hold for deep neural networks, where the hypothesis class is harder to characterize.
+
+''BatchBALD'' (Kirsch, van Amersfoort, Gal, 2019) extends BALD to batch selection by computing the mutual information of the joint query batch rather than greedily selecting individually informative points. This avoids the redundancy problem where greedy BALD selects multiple copies of nearly identical points. The joint mutual information is:
+
+$$I(y_1, \ldots, y_k; \theta \mid x_1, \ldots, x_k, \mathcal{L})$$
+
+which is submodular, enabling efficient greedy approximation with a $(1 - 1/e)$ optimality guarantee.
+
+''Core-set approaches'' (Sener and Savarese, 2018) frame batch active learning as a core-set selection problem: choose a subset of the unlabeled pool such that the maximum distance from any unlabeled point to its nearest labeled point is minimized. This purely geometric criterion provides diversity without requiring uncertainty estimation and works well in the feature space of a neural network's penultimate layer.
+
+''Expected improvement'' frameworks connect active learning to Bayesian optimization: the query strategy can be seen as an acquisition function over the input space, analogous to expected improvement or upper confidence bound in [[Multi-Armed Bandit]] and Bayesian optimization. This connection suggests transferring acquisition function design principles between the two fields.
+
+---
+
+!! Quiz
+
+<span id="al-q1">''1. What is the primary goal of active learning?''
+<<button "A) Train a model without any labeled data">><<replace "#al-q1">>Wrong. Active learning still requires labeled data — it just selects //which// data to label, minimizing the total labels needed. Training without labels is [[Semi-Supervised Learning]] or unsupervised learning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Minimize the number of labeled examples needed to reach a target performance">><<replace "#al-q1">>Correct! Active learning strategically selects the most informative examples for labeling, achieving better performance per label than random sampling.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Maximize the size of the training set">><<replace "#al-q1">>Wrong. Active learning does the opposite — it minimizes the labeled set size while maintaining performance, because labeling is expensive.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Replace human annotators with automated labeling">><<replace "#al-q1">>Wrong. Active learning still relies on a human oracle for labels. It reduces how many times the oracle must be consulted, not whether an oracle is needed.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q2">''2. In uncertainty sampling, which example does the model select for labeling?''
+<<button "A) The example with the highest predicted confidence">><<replace "#al-q2">>Wrong. High confidence means the model already knows the answer — labeling that example would teach nothing new.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) A random example from the unlabeled pool">><<replace "#al-q2">>Wrong. Random selection is the passive baseline. Uncertainty sampling is a specific strategy that targets low-confidence examples.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The example the model is least certain about">><<replace "#al-q2">>Correct! Uncertainty sampling selects the example where the model's predicted distribution is most spread out — least confidence, smallest margin, or highest entropy.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The example most similar to the current training set">><<replace "#al-q2">>Wrong. Selecting similar examples would be redundant. Uncertainty sampling targets the examples where the model's knowledge is weakest, which are typically different from what it has already seen.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q3">''3. What does BALD (Bayesian Active Learning by Disagreement) maximize?''
+<<button "A) The entropy of the predictive distribution">><<replace "#al-q3">>Wrong. Plain entropy captures total uncertainty (aleatoric + epistemic). BALD specifically maximizes the //mutual information// between predictions and model parameters, isolating epistemic uncertainty.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The mutual information between the prediction and the model parameters">><<replace "#al-q3">>Correct! BALD maximizes $I(y; \theta \mid x, \mathcal{L})$, which is the epistemic uncertainty — the part of uncertainty that can be reduced by observing the label. This correctly ignores irreducible aleatoric noise.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The KL divergence between the prior and posterior">><<replace "#al-q3">>Wrong. While KL divergence appears in Bayesian analysis, BALD specifically uses mutual information between predictions and parameters, not prior-posterior divergence.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The expected gradient norm">><<replace "#al-q3">>Wrong. Expected gradient length is a different query strategy (EGL). BALD uses an information-theoretic criterion based on mutual information.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q4">''4. Why is query-by-committee (QBC) often preferred over single-model uncertainty sampling?''
+<<button "A) It is faster to compute because it uses fewer models">><<replace "#al-q4">>Wrong. QBC trains //multiple// models, making it more expensive. Its advantage is better uncertainty estimation, not speed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Committee disagreement captures model ambiguity more reliably than a single model's softmax probabilities">><<replace "#al-q4">>Correct! A single model's softmax output is often poorly calibrated. Disagreement among committee members reflects genuine uncertainty about the correct hypothesis, providing a more robust informativeness signal.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) It eliminates the need for an oracle">><<replace "#al-q4">>Wrong. QBC still requires an oracle to label the selected examples. It only changes //which// examples are selected, not whether labels are needed.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) It guarantees convergence to the optimal classifier">><<replace "#al-q4">>Wrong. QBC has no such guarantee for general hypothesis classes. Its advantage is empirical — better uncertainty estimates lead to more informative queries.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q5">''5. What is the "cold start" problem in active learning?''
+<<button "A) The model cannot run on new hardware without pretraining">><<replace "#al-q5">>Wrong. Cold start in active learning refers to the bootstrapping problem of estimating informativeness with very few initial labels, not hardware compatibility.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The initial model has too few labels to produce meaningful uncertainty estimates, leading to poor early queries">><<replace "#al-q5">>Correct! With a tiny seed set, the model's uncertainty estimates are unreliable, so early queries may be uninformative or pathological. Random sampling in early rounds is a common mitigation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The unlabeled pool is too small to contain informative examples">><<replace "#al-q5">>Wrong. Cold start is about the model's inability to estimate informativeness early on, not about pool size. Active learning typically assumes a large unlabeled pool.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The oracle is unavailable at the start of training">><<replace "#al-q5">>Wrong. Cold start assumes the oracle is available but that the model cannot yet identify which examples to present to it.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q6">''6. Why can active learning perform worse than random sampling when the oracle is noisy?''
+<<button "A) Noisy oracles provide labels in a different format than the model expects">><<replace "#al-q6">>Wrong. The issue is not formatting — it is that active learning selects the hardest, most ambiguous examples, which are precisely where annotator disagreement and noise are highest.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Active learning selects the most ambiguous examples, which are exactly where noisy annotators are most likely to provide incorrect labels">><<replace "#al-q6">>Correct! The examples near the decision boundary — the ones active learning targets — are where annotation is hardest and noisiest. This concentrates label noise in the most sensitive region, potentially degrading the model more than random noise spread uniformly.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Noisy oracles always provide random labels regardless of the input">><<replace "#al-q6">>Wrong. Noisy oracles are not fully random — they are more likely to err on ambiguous examples. The interaction between selective querying and input-dependent noise is the core problem.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Active learning requires perfectly calibrated models to work with any oracle">><<replace "#al-q6">>Wrong. While calibration helps, the fundamental issue with noisy oracles is the correlation between query difficulty and annotation error rate, not model calibration per se.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q7">''7. In the expected gradient length (EGL) strategy, what does the model select?''
+<<button "A) The example whose gradient points most directly toward the global optimum">><<replace "#al-q7">>Wrong. EGL does not know where the global optimum is. It selects the example that would cause the largest parameter update, regardless of direction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The example with the smallest gradient, indicating a stable region">><<replace "#al-q7">>Wrong. Small gradients indicate the model would barely change — these are the //least// informative examples. EGL seeks the largest expected gradient.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The example that would produce the largest expected gradient norm when labeled">><<replace "#al-q7">>Correct! EGL computes $\mathbb{E}_{P_\theta(y \mid x)}[\|\nabla_\theta \mathcal{L}(\theta; x, y)\|]$ and selects the $x$ that maximizes it. Large expected gradients mean the model would learn the most from that example.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The example closest to the current decision boundary in input space">><<replace "#al-q7">>Wrong. While boundary proximity often correlates with large gradients, EGL directly measures expected parameter change, which is a more principled criterion than geometric distance to the boundary.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="al-q8">''8. What theoretical speedup can active learning achieve over passive learning for linear classifiers?''
+<<button "A) Constant factor improvement (e.g., 2x fewer labels)">><<replace "#al-q8">>Wrong. The theoretical advantage is much stronger than a constant factor for favorable hypothesis classes like linear classifiers.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Exponential speedup: $O(\log(1/\epsilon))$ labels instead of $O(1/\epsilon)$">><<replace "#al-q8">>Correct! For version space learners like linear classifiers, each optimal query halves the consistent hypothesis space, yielding logarithmic label complexity. Passive learning requires $O(1/\epsilon)$ labels for the same accuracy $\epsilon$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Polynomial speedup: $O(1/\sqrt{\epsilon})$ instead of $O(1/\epsilon)$">><<replace "#al-q8">>Wrong. The theoretical speedup for version space halving is exponential (logarithmic vs. polynomial), not merely a polynomial improvement.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) No theoretical speedup; active learning only helps empirically">><<replace "#al-q8">>Wrong. For certain model classes including linear classifiers, there are provable exponential speedups. The lack of theoretical guarantees applies to more complex classes like deep neural networks, not linear models.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

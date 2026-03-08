@@ -1,0 +1,147 @@
+<<include "Header">>
+! Hidden Markov Models
+[img[assets/hidden_markov_models.svg]]
+
+Imagine you are standing outside a room where a friend is flipping between different activities — reading, cooking, or exercising — but you cannot see them. All you can hear are the sounds coming through the door: page turning, pot clanging, or heavy breathing. From those sounds alone, you try to figure out what your friend is //actually doing// at each moment. That is a ''Hidden Markov Model'' (HMM): a system where the true states are invisible, but each state produces observable clues according to some probability, and the states themselves shift over time following their own probabilistic rules.
+
+HMMs were developed in the late 1960s and became the backbone of speech recognition, gene finding, and part-of-speech tagging for decades. They remain one of the most elegant examples of how probability theory handles sequences of uncertain information.
+
+!! The Core Insight
+
+The key idea behind an HMM is a clean separation between two layers of randomness. There is a ''hidden process'' — a <<link "Markov chain" "Markov Chains">><</link>> of states you never observe directly — and an ''observation process'' where each hidden state emits a visible symbol according to its own probability distribution. Because the hidden states follow the ''Markov property'' (the next state depends only on the current state, not the full history), the entire model is tractable despite the uncertainty. You can think of it as a two-tier probabilistic machine: the top tier drives the dynamics, and the bottom tier generates the data you actually see.
+
+!! The Three Problems: Evaluation, Decoding, Learning
+
+Every HMM practitioner faces three fundamental problems, each with its own classic algorithm:
+
+''1. Evaluation (Likelihood):'' Given a model and an observation sequence, what is the probability that the model produced those observations? This is solved by the ''Forward Algorithm'', a <<link "dynamic programming" "Dynamic Programming">><</link>> method that sums over all possible state paths efficiently.
+
+''2. Decoding (Best State Sequence):'' Given a model and observations, what is the single most likely sequence of hidden states? This is solved by the ''<<link "Viterbi Algorithm" "Viterbi Algorithm">><</link>>'', which finds the optimal path through the state trellis using dynamic programming.
+
+''3. Learning (Parameter Estimation):'' Given observations but unknown model parameters, how do you learn the transition and emission probabilities? This is solved by the ''Baum-Welch Algorithm'', a special case of <<link "Expectation Maximization" "Expectation Maximization">><</link>> that iteratively refines parameters until convergence.
+
+These three problems and their solutions are sometimes called the "holy trinity" of HMMs.
+
+!! What the Math Is Actually Doing
+
+An HMM is defined by five components: a set of $N$ hidden states, a set of $M$ observation symbols, a ''transition matrix'' $A$, an ''emission matrix'' $B$, and an ''initial state distribution'' $\pi$.
+
+The transition probability from state $i$ to state $j$ is:
+
+$$a_{ij} = P(q_{t+1} = S_j \mid q_t = S_i)$$
+
+The emission probability of observing symbol $v_k$ from state $j$ is:
+
+$$b_j(k) = P(O_t = v_k \mid q_t = S_j)$$
+
+The ''Forward Algorithm'' computes the forward variable $\alpha_t(i)$, the probability of seeing observations $O_1, O_2, \ldots, O_t$ and being in state $S_i$ at time $t$:
+
+$$\alpha_1(i) = \pi_i \cdot b_i(O_1)$$
+
+$$\alpha_{t+1}(j) = \left[\sum_{i=1}^{N} \alpha_t(i) \cdot a_{ij}\right] \cdot b_j(O_{t+1})$$
+
+The total likelihood of the observation sequence is then:
+
+$$P(O \mid \lambda) = \sum_{i=1}^{N} \alpha_T(i)$$
+
+The ''Viterbi Algorithm'' replaces the sum with a max to find the most probable state path:
+
+$$\delta_{t+1}(j) = \max_{i} \left[\delta_t(i) \cdot a_{ij}\right] \cdot b_j(O_{t+1})$$
+
+The ''Baum-Welch Algorithm'' uses both forward ($\alpha$) and backward ($\beta$) variables to compute expected transition and emission counts, then re-estimates:
+
+$$\hat{a}_{ij} = \frac{\sum_{t=1}^{T-1} \xi_t(i,j)}{\sum_{t=1}^{T-1} \gamma_t(i)}$$
+
+where $\gamma_t(i)$ is the probability of being in state $i$ at time $t$, and $\xi_t(i,j)$ is the probability of transitioning from $i$ to $j$ at time $t$.
+
+!! HMMs in Practice
+
+HMMs have been workhorses across many fields:
+
+''Speech Recognition:'' For decades, HMMs modeled phoneme sequences. Each hidden state represented a phoneme or sub-phoneme, and observations were acoustic feature vectors. Systems like Sphinx and HTK built entire speech pipelines around HMMs.
+
+''Bioinformatics:'' Profile HMMs identify protein families by modeling conserved sequence patterns. Gene-finding tools like GENSCAN use HMMs to locate exons, introns, and regulatory regions in DNA.
+
+''Part-of-Speech Tagging:'' In natural language processing, HMMs tag words with grammatical categories (noun, verb, adjective) by treating tags as hidden states and words as observations.
+
+''Finance:'' Regime-switching HMMs model market states (bull, bear, sideways) where each regime has different return distributions.
+
+HMMs connect naturally to the broader world of <<link "probabilistic graphical models" "Probabilistic Graphical Models">><</link>>, where they appear as the simplest chain-structured directed model.
+
+!! When HMMs Break Down
+
+''1. The Markov assumption is too restrictive.'' Real sequences often have long-range dependencies — a word in a sentence may depend on context from many positions back, not just the immediately preceding state. When the single-step memory of HMMs is insufficient, models like LSTMs or Transformers that capture long-range context will outperform them dramatically.
+
+''2. Discrete emission assumptions fail on complex data.'' Standard HMMs emit from a finite symbol set or a simple Gaussian. When observations are high-dimensional and have intricate structure (images, raw audio waveforms), the emission model cannot capture the richness of the data. Gaussian Mixture HMMs help somewhat, but deep generative models have largely replaced HMMs for complex observation spaces.
+
+''3. Baum-Welch converges to local optima.'' The EM-based learning algorithm is only guaranteed to find a //local// maximum of the likelihood, not the global one. With poor initialization, the learned model may be far from optimal. Multiple random restarts or informed initialization (e.g., from domain knowledge) are necessary but not guaranteed to solve the problem.
+
+!! Technical Details
+
+An HMM with $N$ states and $M$ observation symbols has $N^2 + N \cdot M - 1$ free parameters (accounting for row-stochastic constraints on $A$, $B$, and $\pi$). The Forward and Viterbi algorithms both run in $O(N^2 T)$ time, where $T$ is the sequence length — a massive improvement over the naive $O(N^T)$ enumeration of all state paths. The Backward algorithm, used in Baum-Welch, has the same $O(N^2 T)$ complexity.
+
+''Variants'' include ''left-right HMMs'' (states can only move forward, common in speech), ''ergodic HMMs'' (any state reachable from any other), ''hierarchical HMMs'' (states themselves contain sub-HMMs), and ''input-output HMMs'' where transitions depend on external input. ''Continuous-density HMMs'' replace discrete emission tables with Gaussian mixture models. The ''factorial HMM'' uses multiple independent hidden chains to model different factors simultaneously.
+
+HMMs are special cases of ''state-space models'': when states and emissions are both continuous and linear with Gaussian noise, the HMM reduces to a Kalman filter. When the hidden structure is a general directed acyclic graph rather than a chain, you get a ''Bayesian network''.
+
+The ''spectral learning'' method (Hsu, Kakade, Zhang 2009) provides a consistent, non-iterative alternative to Baum-Welch using observable operator models and singular value decomposition, avoiding the local-optima problem entirely.
+
+!! Quiz
+
+<span id="hmm-q1">''1. In an HMM, what does the Markov property refer to?''
+
+<<button "A. Observations depend only on the current hidden state">><<replace "#hmm-q1">>''1.'' A is incorrect. That describes the //emission// assumption, not the Markov property. The Markov property governs the hidden state transitions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The next hidden state depends only on the current hidden state">><<replace "#hmm-q1">>''1.'' Correct! The Markov property means the future state depends only on the present state, not on the sequence of states that preceded it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. All observations are independent of each other">><<replace "#hmm-q1">>''1.'' Incorrect. Observations are //conditionally// independent given the hidden states, but they are not marginally independent. The Markov property is about state transitions.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The model has no hidden variables">><<replace "#hmm-q1">>''1.'' Incorrect. The "Hidden" in HMM refers to unobserved states. The Markov property is about the memoryless transition structure among those hidden states.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q2">''2. Which algorithm finds the most likely sequence of hidden states?''
+
+<<button "A. Forward Algorithm">><<replace "#hmm-q2">>''2.'' Incorrect. The Forward Algorithm computes the total //likelihood// of the observation sequence, not the best state path.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Baum-Welch Algorithm">><<replace "#hmm-q2">>''2.'' Incorrect. Baum-Welch //learns// model parameters. Decoding the best state sequence is a different problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Viterbi Algorithm">><<replace "#hmm-q2">>''2.'' Correct! The Viterbi Algorithm uses dynamic programming to find the single most probable hidden state sequence given the observations.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Backward Algorithm">><<replace "#hmm-q2">>''2.'' Incorrect. The Backward Algorithm computes $\beta$ values used in Baum-Welch. It does not decode the optimal path.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q3">''3. What is the time complexity of the Forward Algorithm for $N$ states and sequence length $T$?''
+
+<<button "A. $O(N^T)$">><<replace "#hmm-q3">>''3.'' Incorrect. $O(N^T)$ is the naive brute-force cost of enumerating all possible state sequences. The Forward Algorithm avoids this through dynamic programming.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. $O(N^2 T)$">><<replace "#hmm-q3">>''3.'' Correct! At each of the $T$ time steps, the algorithm considers all $N^2$ possible state-to-state transitions, giving $O(N^2 T)$.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. $O(N T^2)$">><<replace "#hmm-q3">>''3.'' Incorrect. The quadratic dependence is on $N$ (states), not $T$ (time). Each time step processes $N^2$ transitions independently.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. $O(N \log T)$">><<replace "#hmm-q3">>''3.'' Incorrect. No divide-and-conquer logarithmic speedup applies here. The algorithm must process every time step sequentially.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q4">''4. The Baum-Welch Algorithm is a special case of which general method?''
+
+<<button "A. Gradient descent">><<replace "#hmm-q4">>''4.'' Incorrect. Baum-Welch does not use gradients. It uses closed-form re-estimation formulas derived from expected sufficient statistics.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Expectation Maximization">><<replace "#hmm-q4">>''4.'' Correct! Baum-Welch is EM applied to HMMs: the E-step computes expected state occupancies and transitions, and the M-step re-estimates parameters.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Markov Chain Monte Carlo">><<replace "#hmm-q4">>''4.'' Incorrect. MCMC is a sampling-based inference method. Baum-Welch uses exact computations via forward-backward, not sampling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Simulated annealing">><<replace "#hmm-q4">>''4.'' Incorrect. Simulated annealing is a stochastic optimization method. Baum-Welch uses deterministic re-estimation steps.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q5">''5. What is a key limitation of the standard Markov assumption in HMMs?''
+
+<<button "A. It requires continuous observations">><<replace "#hmm-q5">>''5.'' Incorrect. Standard HMMs work with discrete observations. The Markov assumption is about state memory, not observation type.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. It cannot model any temporal patterns">><<replace "#hmm-q5">>''5.'' Incorrect. HMMs do model temporal patterns — just with limited memory. They capture first-order dependencies very well.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. It only allows one-step memory for state dependencies">><<replace "#hmm-q5">>''5.'' Correct! The first-order Markov assumption means a state depends only on the immediately preceding state, missing long-range dependencies.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. It forces all states to have equal transition probabilities">><<replace "#hmm-q5">>''5.'' Incorrect. Transition probabilities can be any valid distribution. The Markov property constrains //memory//, not the values of the probabilities.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q6">''6. In the emission model $b_j(k) = P(O_t = v_k \mid q_t = S_j)$, what does this probability represent?''
+
+<<button "A. The chance of transitioning to state $S_j$">><<replace "#hmm-q6">>''6.'' Incorrect. That would be a transition probability $a_{ij}$. The emission probability concerns what the state //outputs//, not where it goes next.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. The chance of observing symbol $v_k$ given the system is in state $S_j$">><<replace "#hmm-q6">>''6.'' Correct! The emission probability gives the likelihood of a particular observation being generated by a specific hidden state.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. The probability of the initial state being $S_j$">><<replace "#hmm-q6">>''6.'' Incorrect. The initial state distribution is $\pi_j$. Emission probabilities describe observation generation, not initialization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. The joint probability of the observation and state sequences">><<replace "#hmm-q6">>''6.'' Incorrect. The joint probability involves all transitions and emissions multiplied together. $b_j(k)$ is a single conditional probability at one time step.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q7">''7. How does the Viterbi Algorithm differ from the Forward Algorithm?''
+
+<<button "A. Viterbi uses backward variables instead of forward variables">><<replace "#hmm-q7">>''7.'' Incorrect. Both algorithms process forward in time. The Backward Algorithm is a separate procedure used in Baum-Welch.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Viterbi has exponential complexity while Forward is polynomial">><<replace "#hmm-q7">>''7.'' Incorrect. Both have the same $O(N^2 T)$ polynomial complexity. They differ in the operation applied, not the complexity class.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Viterbi replaces the summation with a maximization">><<replace "#hmm-q7">>''7.'' Correct! The Forward Algorithm sums over all incoming paths (for total probability), while Viterbi takes the max (for the best single path).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Viterbi does not require emission probabilities">><<replace "#hmm-q7">>''7.'' Incorrect. Both algorithms use emission probabilities $b_j(O_t)$ at each step. Without emissions, neither could connect hidden states to observations.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<span id="hmm-q8">''8. What problem does the Baum-Welch algorithm solve?''
+
+<<button "A. Finding the most likely state at each individual time step">><<replace "#hmm-q8">>''8.'' Incorrect. That is posterior decoding using $\gamma_t(i)$. Baum-Welch uses $\gamma$ values, but its goal is parameter //learning//, not decoding.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B. Computing the observation sequence likelihood">><<replace "#hmm-q8">>''8.'' Incorrect. That is the evaluation problem, solved by the Forward Algorithm. Baum-Welch addresses a different problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C. Determining the number of hidden states">><<replace "#hmm-q8">>''8.'' Incorrect. Model selection (choosing $N$) requires separate methods like BIC or cross-validation. Baum-Welch assumes $N$ is already fixed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D. Learning the model parameters from observation data">><<replace "#hmm-q8">>''8.'' Correct! Baum-Welch iteratively re-estimates the transition matrix $A$, emission matrix $B$, and initial distribution $\pi$ to maximize the data likelihood.<</replace>><<script>>typesetMath();<</script>><</button>></span>
+
+<<include "Footer">>

@@ -1,0 +1,145 @@
+<<include "Header">>
+! Jure Leskovec
+<img src="assets/jure_leskovec.svg" alt="Jure Leskovec" width="800">
+
+Imagine you have a map of every friendship, every hyperlink, every molecular bond in a dataset — millions of nodes, billions of edges. ''Jure Leskovec'' is the computer scientist who figured out how to //teach machines to read these maps//. Rather than hand-engineering features from network topology, he showed that you can send random walkers wandering through a graph, record where they go, and use those trajectories to learn dense vector representations — [[Embeddings|Embeddings]] — that capture the structural role of every node. His work turned graph analysis from a niche corner of data mining into one of the fastest-growing areas in modern machine learning.
+
+!! Key Contributions
+
+''node2vec'' (2016) — A flexible algorithm for learning continuous feature representations for nodes in networks. By tuning two parameters that interpolate between breadth-first and depth-first random walks, node2vec can capture both local neighborhood structure (homophily) and global structural roles (structural equivalence). The learned [[Embeddings|Embeddings]] feed directly into downstream classifiers and link predictors.
+
+''GraphSAGE'' (2017) — Short for //Graph SAmple and aggreGatE//, this was the first scalable framework for //inductive// node embedding. Instead of learning a fixed embedding per node (transductive), GraphSAGE learns an ''aggregation function'' that samples and combines features from a node's neighbors. A new, never-before-seen node can be embedded instantly — a breakthrough that made [[Graph Neural Networks|Graph Neural Networks]] practical for production systems with billions of nodes.
+
+''SNAP'' (Stanford Network Analysis Platform) — An open-source library and dataset collection for large-scale network analysis. SNAP provides canonical benchmark graphs (social networks, web graphs, citation networks, biological networks) that have become the standard evaluation suite across the graph ML community. Thousands of papers cite SNAP datasets.
+
+''Network Evolution and Community Detection'' — Leskovec's early work characterized how real networks grow over time, discovering that communities have a characteristic size beyond which they stop being meaningful. His work on [[Community Detection|Community Detection]] revealed that large-scale network structure is far richer — and harder to decompose — than simple modularity optimization would suggest.
+
+''Information Diffusion'' — Pioneering studies on how information, influence, and memes propagate through social networks. His work with the SNAP team tracked cascades across millions of blog posts and news articles, establishing foundational models for viral spread.
+
+''Stanford and Pinterest'' — As a professor at Stanford University, Leskovec trains the next generation of graph ML researchers. As Chief Scientist at Pinterest, he led the deployment of PinSage — a GraphSAGE variant running on a graph with 3 billion nodes and 18 billion edges — to power visual recommendations at industrial scale.
+
+!! The Core Insight
+
+Most machine learning assumes data points are independent — each image, each sentence, each row in a table stands alone. But in reality, //relationships between data points carry as much information as the data points themselves//. Leskovec's central insight is that real-world networks have ''learnable structure'': the pattern of connections around a node is not random noise but a rich, compressible signal. If you can learn to encode that pattern into a vector, you unlock a universal representation that transfers across tasks — node classification, link prediction, [[Community Detection|Community Detection]], and recommendation.
+
+This is not just a technical trick. It represents a philosophical shift: from analyzing networks with hand-crafted statistics (degree distribution, clustering coefficient, betweenness centrality) to //letting the network teach you its own features//.
+
+!! What the Math Is Actually Doing
+
+''node2vec'' formulates graph embedding as an optimization problem inspired by Word2Vec's skip-gram model. For a graph $G = (V, E)$, the objective is to maximize the log-probability of observing a node's network neighborhood $N_S(u)$ conditioned on its embedding $f(u)$:
+
+$$\max_f \sum_{u \in V} \log P(N_S(u) \mid f(u))$$
+
+The neighborhood $N_S(u)$ is defined by a second-order random walk controlled by two parameters: the //return parameter// $p$ (likelihood of immediately revisiting a node) and the //in-out parameter// $q$ (bias toward inward vs. outward exploration). When $p$ is low, the walk stays local (BFS-like); when $q$ is low, the walk explores outward (DFS-like). The conditional probability uses a softmax:
+
+$$P(n_i \mid f(u)) = \frac{\exp(f(n_i) \cdot f(u))}{\sum_{v \in V} \exp(f(v) \cdot f(u))}$$
+
+which is approximated with negative sampling for computational tractability.
+
+''GraphSAGE'' replaces fixed embeddings with a learned aggregation. At each layer $k$, a node $v$ updates its representation by sampling neighbors and applying an aggregation function:
+
+$$h_v^{(k)} = \sigma\left(W^{(k)} \cdot \text{CONCAT}\left(h_v^{(k-1)},\; \text{AGG}_k\left(\{h_u^{(k-1)} : u \in \mathcal{N}(v)\}\right)\right)\right)$$
+
+where AGG can be a mean, LSTM, or max-pooling operation over sampled neighbor features. The key mathematical property is that this function is //inductive// — it generalizes to unseen nodes because it depends on the //aggregation function//, not on node identity.
+
+!! Impact on the Field
+
+''Stanford's Influence'' — Leskovec's CS224W (Machine Learning with Graphs) course has become one of the most popular ML courses worldwide, training thousands of students in graph representation learning and helping establish [[Graph Neural Networks|Graph Neural Network]] research as a mainstream subfield.
+
+''SNAP as Standard Infrastructure'' — The SNAP dataset collection serves as the de facto benchmark suite for network analysis. Datasets like Cora, CiteSeer, and the various social network graphs are cited in virtually every graph ML paper. The SNAP C++ library and its Python wrapper (SNAP.py) provide efficient primitives for network analysis at scale.
+
+''Pinterest and Industrial Graph ML'' — PinSage demonstrated that [[Graph Neural Networks|Graph Neural Networks]] could operate at the scale of billions of nodes. This was not merely an engineering achievement — it validated the entire paradigm of learned graph representations for production recommender systems, inspiring similar deployments at Uber, Alibaba, and other companies.
+
+''The Graph ML Explosion'' — The combination of node2vec, GraphSAGE, and the theoretical frameworks from Leskovec's group helped catalyze the modern explosion of graph ML research, including connections to [[Graph Laplacian|Graph Laplacian]] methods, [[Spectral Graph Theory|Spectral Graph Theory]], and [[Knowledge Graphs|Knowledge Graphs]].
+
+!! When Graph Methods Break Down
+
+''1. Sparse or degenerate graphs.'' When a graph has very low connectivity — many isolated nodes or near-complete disconnection — random walks cannot explore meaningful structure and learned embeddings collapse toward uniform vectors. Graph methods need //enough edges// to learn from; on very sparse graphs, simple feature-based baselines often outperform graph neural networks.
+
+''2. Dynamic, rapidly changing graphs.'' Transductive methods like node2vec must be retrained from scratch when the graph changes. Even inductive methods like GraphSAGE assume a relatively stable neighborhood structure. In graphs where edges appear and disappear at high frequency (high-frequency trading networks, real-time social feeds), the cost of re-aggregation can exceed the benefit of graph-based features.
+
+''3. Over-smoothing at depth.'' Stacking too many aggregation layers in GraphSAGE or other [[Graph Neural Networks|Graph Neural Networks]] causes all node representations to converge toward the same vector — a phenomenon called //over-smoothing//. After $k$ layers, each node's representation is influenced by its entire $k$-hop neighborhood, which for small-world graphs quickly becomes the entire graph. This limits practical GNN depth to 2–4 layers for most real networks.
+
+!! Technical Details
+
+''Key Papers:''
+* "node2vec: Scalable Feature Learning for Networks" (KDD 2016, with Grover)
+* "Inductive Representation Learning on Large Graphs" — GraphSAGE (NeurIPS 2017, with Hamilton and Ying)
+* "Graph Convolutional Neural Networks for Web-Scale Recommender Systems" — PinSage (KDD 2018, with Ying, He, Chen, and Eksombatchai)
+* "Defining and Evaluating Network Communities Based on Ground-Truth" (ICDM 2012, with Yang)
+* "Predicting Positive and Negative Links in Online Social Networks" (WWW 2010, with Liben-Nowell)
+* "Patterns of Temporal Variation in Online Media" (WSDM 2011, with Backstrom and Kleinberg)
+
+''Awards:'' ACM Prize in Computing (2023) — for foundational contributions to graph representation learning and large-scale network analysis. Multiple best paper awards at KDD, WWW, WSDM, and ICDM.
+
+''Career:'' Ph.D. from Carnegie Mellon University (2008, advisor: Christos Faloutsos). Associate Professor (now Full Professor) at Stanford University, Department of Computer Science. Chief Scientist at Pinterest. Co-founder of graph analytics startups.
+
+''Notable Students and Collaborators:'' Will Hamilton (GraphSAGE, now McGill professor), Aditya Grover (node2vec), Rex Ying (PinSage), Marinka Zitnik (biomedical graph ML, now Harvard professor).
+
+!! Quiz
+
+<div id="q1">''1. What does the return parameter $p$ in node2vec control?''
+
+<<button "A) The dimensionality of the embedding space">><<replace "#q1">>''1.'' Incorrect. $p$ does not control dimensionality. It controls the likelihood that the random walk immediately returns to the previous node. A low $p$ encourages local exploration (BFS-like).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The probability of the random walk returning to the previously visited node">><<replace "#q1">>''1.'' Correct! The return parameter $p$ controls the likelihood of immediately revisiting a node, interpolating between BFS-like (low $p$) and DFS-like exploration patterns.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The learning rate for the skip-gram objective">><<replace "#q1">>''1.'' Incorrect. $p$ is a random walk parameter, not a training hyperparameter. It governs how likely the walk is to backtrack to the previous node.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The number of negative samples used in training">><<replace "#q1">>''1.'' Incorrect. Negative sampling count is a separate hyperparameter. $p$ controls the walk's tendency to return to previously visited nodes.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What makes GraphSAGE "inductive" rather than "transductive"?''
+
+<<button "A) It uses supervised labels during training">><<replace "#q2">>''2.'' Incorrect. The inductive/transductive distinction is about generalization to unseen nodes, not about label usage.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It learns an aggregation function that generalizes to unseen nodes">><<replace "#q2">>''2.'' Correct! GraphSAGE learns a function (sample + aggregate) that can compute embeddings for new, previously unseen nodes by aggregating their neighbors' features, rather than learning a fixed look-up table of embeddings.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It uses deeper network architectures than node2vec">><<replace "#q2">>''2.'' Incorrect. Depth is not what makes a method inductive. The key is that GraphSAGE learns a generalizable aggregation function, not fixed per-node embeddings.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It trains on multiple graphs simultaneously">><<replace "#q2">>''2.'' Incorrect. While GraphSAGE can transfer across graphs, its inductive nature comes from learning aggregation functions rather than fixed node embeddings.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What is SNAP?''
+
+<<button "A) A graph neural network architecture">><<replace "#q3">>''3.'' Incorrect. SNAP is the Stanford Network Analysis Platform — a library and dataset collection for large-scale network analysis, not a neural network architecture.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) A reinforcement learning algorithm for graph optimization">><<replace "#q3">>''3.'' Incorrect. SNAP stands for Stanford Network Analysis Platform. It provides tools and benchmark datasets for network analysis research.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A Stanford library and dataset collection for network analysis">><<replace "#q3">>''3.'' Correct! SNAP (Stanford Network Analysis Platform) is an open-source library and canonical dataset collection that has become the standard benchmark suite for graph and network analysis research.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) A method for compressing graph embeddings">><<replace "#q3">>''3.'' Incorrect. SNAP is the Stanford Network Analysis Platform, providing tools and benchmark datasets, not a compression method.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What was PinSage's primary significance?''
+
+<<button "A) It was the first graph neural network ever proposed">><<replace "#q4">>''4.'' Incorrect. GNNs existed before PinSage. Its significance was demonstrating that graph neural networks could operate at industrial scale — 3 billion nodes and 18 billion edges.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It proved graph methods are always superior to collaborative filtering">><<replace "#q4">>''4.'' Incorrect. PinSage did not make such a universal claim. Its contribution was scaling GNNs to billions of nodes for production recommendation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It demonstrated GNNs at industrial scale with billions of nodes">><<replace "#q4">>''4.'' Correct! PinSage was a GraphSAGE variant deployed at Pinterest on a graph with 3 billion nodes and 18 billion edges, validating that learned graph representations could power production recommender systems at massive scale.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It introduced the concept of attention mechanisms to graphs">><<replace "#q4">>''4.'' Incorrect. Graph attention was introduced separately (GAT). PinSage's contribution was scaling GraphSAGE to billions of nodes at Pinterest.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What is the "over-smoothing" problem in graph neural networks?''
+
+<<button "A) The loss function becomes too smooth to optimize">><<replace "#q5">>''5.'' Incorrect. Over-smoothing refers to node representations, not the loss landscape. With too many layers, all node embeddings converge to similar vectors.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Too many layers cause all node representations to converge">><<replace "#q5">>''5.'' Correct! Over-smoothing occurs when stacking too many GNN layers causes every node's representation to incorporate information from the entire graph, making all embeddings converge toward the same vector. This limits practical GNN depth to about 2–4 layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The graph edges become weighted too uniformly">><<replace "#q5">>''5.'' Incorrect. Over-smoothing is about node //representations// converging, not edge weights becoming uniform.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Training data becomes too balanced across classes">><<replace "#q5">>''5.'' Incorrect. Over-smoothing has nothing to do with class balance. It describes the convergence of node embeddings when too many aggregation layers are stacked.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. In the node2vec objective, what does the in-out parameter $q$ control?''
+
+<<button "A) The balance between exploring outward and staying local">><<replace "#q6">>''6.'' Correct! The parameter $q$ controls whether the random walk is biased toward nodes closer to or farther from the starting node. Low $q$ encourages outward exploration (DFS-like), while high $q$ keeps the walk local (BFS-like).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The total number of random walks per node">><<replace "#q6">>''6.'' Incorrect. The number of walks is a separate hyperparameter. $q$ controls the walk's bias toward inward vs. outward exploration.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The embedding vector dimensionality">><<replace "#q6">>''6.'' Incorrect. Dimensionality is set separately. $q$ governs whether the random walk explores outward (DFS-like) or stays close (BFS-like).<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The convergence threshold for training">><<replace "#q6">>''6.'' Incorrect. $q$ is a walk-generation parameter, not a training convergence criterion. It biases exploration between inward and outward directions.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. Which aggregation methods does GraphSAGE support?''
+
+<<button "A) Only mean pooling">><<replace "#q7">>''7.'' Incorrect. GraphSAGE supports multiple aggregation functions, not just mean pooling.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Mean, LSTM, and max-pooling">><<replace "#q7">>''7.'' Correct! GraphSAGE defines three aggregator architectures — mean, LSTM, and max-pooling — each offering different trade-offs between expressiveness and computational cost.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Only attention-weighted aggregation">><<replace "#q7">>''7.'' Incorrect. Attention-weighted aggregation was introduced by GAT, not GraphSAGE. GraphSAGE uses mean, LSTM, and max-pooling aggregators.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Spectral convolution only">><<replace "#q7">>''7.'' Incorrect. Spectral methods operate in the frequency domain via the [[Graph Laplacian|Graph Laplacian]]. GraphSAGE is a spatial method using mean, LSTM, and max-pooling aggregation.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. What award did Leskovec receive in 2023?''
+
+<<button "A) Turing Award">><<replace "#q8">>''8.'' Incorrect. Leskovec received the ACM Prize in Computing in 2023, which is distinct from the Turing Award.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Fields Medal">><<replace "#q8">>''8.'' Incorrect. The Fields Medal is for mathematics. Leskovec received the ACM Prize in Computing (2023) for contributions to graph representation learning.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) ACM Prize in Computing">><<replace "#q8">>''8.'' Correct! Leskovec received the ACM Prize in Computing in 2023 for foundational contributions to graph representation learning and large-scale network analysis.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Nobel Prize in Physics">><<replace "#q8">>''8.'' Incorrect. There is no Nobel Prize for computer science. Leskovec received the ACM Prize in Computing in 2023.<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

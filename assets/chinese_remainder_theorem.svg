@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Chinese Remainder Theorem: Solving Simultaneous Congruences</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL 1: The Problem Setup
+       Left panel x: 18-290
+  ════════════════════════════════════════════════ -->
+  <rect x="18" y="42" width="272" height="320" rx="8" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="154" y="62" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">System of Congruences</text>
+
+  <!-- Congruence equations -->
+  <text x="154" y="92" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530" text-anchor="middle">x = 2 (mod 3)</text>
+  <text x="154" y="112" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#2D5A8E" text-anchor="middle">x = 3 (mod 5)</text>
+  <text x="154" y="132" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E" text-anchor="middle">x = 1 (mod 7)</text>
+
+  <!-- Arrow down -->
+  <line x1="154" y1="142" x2="154" y2="162" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+  <defs>
+    <marker id="arrowDown" markerWidth="8" markerHeight="8" refX="4" refY="8" orient="auto">
+      <path d="M0,0 L8,0 L4,8 z" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowRight" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Unique solution box -->
+  <rect x="64" y="166" width="180" height="36" rx="6" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="154" y="182" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Unique solution:</text>
+  <text x="154" y="196" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530" text-anchor="middle">x = 8 (mod 105)</text>
+
+  <!-- Why 105? -->
+  <text x="154" y="224" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">N = 3 x 5 x 7 = 105</text>
+  <text x="154" y="238" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Moduli must be pairwise coprime</text>
+  <text x="154" y="252" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">gcd(3,5) = gcd(3,7) = gcd(5,7) = 1</text>
+
+  <!-- Number line visual -->
+  <line x1="34" y1="290" x2="270" y2="290" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="154" y="275" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Solutions repeat every N = 105:</text>
+
+  <!-- Tick marks and labels -->
+  <line x1="52" y1="285" x2="52" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="52" y="306" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">0</text>
+  <circle cx="82" cy="290" r="4" fill="#7C2530"/>
+  <text x="82" y="306" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530" text-anchor="middle">8</text>
+  <line x1="157" y1="285" x2="157" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="157" y="306" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">105</text>
+  <circle cx="187" cy="290" r="4" fill="#7C2530"/>
+  <text x="187" y="306" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530" text-anchor="middle">113</text>
+  <line x1="255" y1="285" x2="255" y2="295" stroke="#5C3D1E" stroke-width="1"/>
+  <text x="255" y="306" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">210</text>
+
+  <text x="154" y="330" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">8, 113, 218, 323, ...</text>
+  <text x="154" y="348" font-family="Georgia, serif" font-size="9" font-style="italic" fill="#2D5A8E" text-anchor="middle">all = 8 mod 105</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL 2: The Isomorphism
+       Middle panel x: 300-530
+  ════════════════════════════════════════════════ -->
+  <rect x="300" y="42" width="230" height="320" rx="8" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="415" y="62" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Ring Isomorphism</text>
+
+  <!-- Big Z/105Z box -->
+  <rect x="340" y="78" width="150" height="40" rx="6" fill="#E8E0D0" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="415" y="102" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#5C3D1E" text-anchor="middle">Z/105Z</text>
+
+  <!-- Bidirectional arrow -->
+  <line x1="415" y1="122" x2="415" y2="152" stroke="#7C2530" stroke-width="2"/>
+  <text x="408" y="134" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle">~</text>
+  <text x="422" y="134" font-family="Georgia, serif" font-size="14" fill="#7C2530" text-anchor="middle">=</text>
+
+  <!-- Product of three rings -->
+  <rect x="316" y="156" width="198" height="40" rx="6" fill="#E8E0D0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="415" y="180" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530" text-anchor="middle">Z/3Z x Z/5Z x Z/7Z</text>
+
+  <!-- Decomposition arrows to three separate boxes -->
+  <line x1="355" y1="200" x2="335" y2="225" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="415" y1="200" x2="415" y2="225" stroke="#C4A87A" stroke-width="1.2"/>
+  <line x1="475" y1="200" x2="495" y2="225" stroke="#C4A87A" stroke-width="1.2"/>
+
+  <!-- Three factor boxes -->
+  <rect x="310" y="228" width="50" height="30" rx="4" fill="#D4B8C0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="335" y="247" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">Z/3Z</text>
+
+  <rect x="390" y="228" width="50" height="30" rx="4" fill="#BBCCE0" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="415" y="247" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle">Z/5Z</text>
+
+  <rect x="470" y="228" width="50" height="30" rx="4" fill="#E8E0D0" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="495" y="247" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle">Z/7Z</text>
+
+  <!-- Example mapping -->
+  <text x="415" y="280" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">Example: 8 in Z/105Z maps to</text>
+  <text x="335" y="300" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">2</text>
+  <text x="375" y="300" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">,</text>
+  <text x="415" y="300" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">3</text>
+  <text x="455" y="300" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">,</text>
+  <text x="495" y="300" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">1</text>
+
+  <text x="415" y="322" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Preserves + and x operations</text>
+  <text x="415" y="338" font-family="Georgia, serif" font-size="9" font-style="italic" fill="#2D5A8E" text-anchor="middle">Work in small rings, combine results</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PANEL 3: Applications
+       Right panel x: 540-782
+  ════════════════════════════════════════════════ -->
+  <rect x="540" y="42" width="242" height="320" rx="8" fill="#F5F0E6" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="661" y="62" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Applications</text>
+
+  <!-- RSA box -->
+  <rect x="554" y="74" width="214" height="80" rx="5" fill="#E8E0D0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="661" y="92" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530" text-anchor="middle">RSA Cryptography</text>
+  <text x="661" y="108" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">N = p . q (two large primes)</text>
+  <text x="661" y="122" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Decrypt via CRT: work mod p and mod q</text>
+  <text x="661" y="136" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">separately, then combine (4x speedup)</text>
+  <text x="661" y="150" font-family="Georgia, serif" font-size="8" font-style="italic" fill="#2D5A8E" text-anchor="middle">Garner's algorithm for reconstruction</text>
+
+  <!-- Hash / Error correction box -->
+  <rect x="554" y="162" width="214" height="68" rx="5" fill="#E8E0D0" stroke="#2D5A8E" stroke-width="1.2"/>
+  <text x="661" y="180" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E" text-anchor="middle">Secret Sharing</text>
+  <text x="661" y="196" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Asmuth-Bloom scheme: split a secret</text>
+  <text x="661" y="210" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">into residues mod coprime moduli</text>
+  <text x="661" y="224" font-family="Georgia, serif" font-size="8" font-style="italic" fill="#2D5A8E" text-anchor="middle">k-of-n shares needed for reconstruction</text>
+
+  <!-- Computer arithmetic box -->
+  <rect x="554" y="238" width="214" height="68" rx="5" fill="#E8E0D0" stroke="#5C3D1E" stroke-width="1.2"/>
+  <text x="661" y="256" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Residue Number Systems</text>
+  <text x="661" y="272" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">Represent large integers as tuples</text>
+  <text x="661" y="286" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle">of small residues for parallel +, x</text>
+  <text x="661" y="300" font-family="Georgia, serif" font-size="8" font-style="italic" fill="#2D5A8E" text-anchor="middle">Used in DSP &amp; big-integer arithmetic</text>
+
+  <!-- Key requirement -->
+  <rect x="554" y="314" width="214" height="36" rx="5" fill="#D4B8C0" stroke="#7C2530" stroke-width="1.2"/>
+  <text x="661" y="330" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#7C2530" text-anchor="middle">Requirement: pairwise coprime moduli</text>
+  <text x="661" y="344" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">gcd(m_i, m_j) = 1 for all i != j</text>
+
+  <!-- Bottom credit -->
+  <text x="400" y="392" font-family="Georgia, serif" font-size="9" fill="#A09080" text-anchor="middle">Sunzi Suanjing (~3rd century CE) : earliest known statement</text>
+</svg>

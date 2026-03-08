@@ -1,0 +1,147 @@
+<<include "Header">>
+! Demis Hassabis
+<img src="assets/demis_hassabis.svg" alt="Demis Hassabis" width="800">
+
+Imagine a chess prodigy who, instead of spending a lifetime mastering one game, asks a bigger question: //what if we could build a system that masters any game — and then turn that system loose on the hardest puzzles in science?// That is the through-line of ''Demis Hassabis'''s career. A child chess champion, a video game designer, a neuroscientist, and ultimately the co-founder of ''DeepMind'' — the lab that taught computers to play Atari from raw pixels, defeated the world champion at Go, and then predicted the 3D shapes of nearly every known protein. In 2024, this arc culminated in a ''Nobel Prize in Chemistry'', an almost unprecedented recognition that artificial intelligence had crossed from engineering curiosity into a tool capable of genuine scientific discovery.
+
+!! Key Contributions
+
+''DeepMind'' was founded in 2010 in London with a mission statement that sounded audacious at the time: "solve intelligence, and then use that to solve everything else." Hassabis, alongside Shane Legg and Mustafa Suleyman, bet that [[Reinforcement Learning|Reinforcement Learning]] — learning by trial and error — could be scaled far beyond toy problems.
+
+The first major proof came in 2013 with the ''Atari DQN'' paper. A single [[Deep Learning|Deep Learning]] agent, receiving nothing but raw screen pixels and a score signal, learned to play dozens of Atari 2600 games at superhuman levels. The key innovation was combining [[Q-Learning|Q-Learning]] with deep [[Neural Networks|Neural Networks]] — a ''Deep Q-Network'' — and stabilizing training with experience replay and a target network. This paper almost single-handedly reignited interest in deep reinforcement learning.
+
+In March 2016, DeepMind's ''AlphaGo'' defeated world Go champion Lee Sedol 4–1, a milestone many experts had predicted was still a decade away. Go's branching factor ($\sim 250$ moves per position, versus $\sim 35$ in chess) made brute-force search impossible. AlphaGo combined [[Monte Carlo Tree Search|Monte Carlo Tree Search]] with deep neural networks trained on both human expert games and self-play.
+
+The successor systems pushed the idea further. ''AlphaGo Zero'' learned entirely from self-play with no human data. ''AlphaZero'' generalized this to chess, shogi, and Go with a single algorithm. ''MuZero'' went a step beyond, learning even the rules of the environment from scratch — planning in a learned latent space without access to a simulator.
+
+The pivot to science came with ''AlphaFold''. Protein structure prediction — the problem of determining a protein's 3D shape from its amino acid sequence — had been an open grand challenge in biology for fifty years. AlphaFold 1 (2018) won the CASP13 competition by a wide margin. ''AlphaFold 2'' (2020) essentially solved the problem, predicting structures with accuracy rivaling experimental methods. The system used [[Attention Mechanisms|Attention Mechanisms]] and [[Transformers|Transformers]] applied to multiple sequence alignments and residue pair representations. In 2022, DeepMind released predicted structures for over 200 million proteins — nearly every known protein in nature.
+
+In 2024, Hassabis and John Jumper received the ''Nobel Prize in Chemistry'' for computational protein structure prediction, sharing the prize with David Baker. It was a landmark moment: AI as a method had been recognized by the oldest and most prestigious scientific award.
+
+!! The Core Insight
+
+Hassabis's guiding thesis is deceptively simple: //games are the ideal testbed for developing general-purpose intelligence, and general-purpose intelligence is the ultimate scientific instrument.//
+
+Games provide clean reward signals, well-defined rules, and measurable progress — perfect training grounds for algorithms. But the real bet was that the principles discovered in game-playing (search, planning, representation learning, self-improvement) would transfer to domains far messier than board games.
+
+This is not obvious. Many researchers argued that game AI was a parlor trick with no broader implications. AlphaFold proved the thesis: the same core ideas — learned representations, search over structured spaces, self-supervised training — could crack one of biology's deepest problems. The progression from Atari to Go to proteins was not a random walk; it was a deliberate strategy of increasing complexity and real-world relevance.
+
+!! What the Math Is Actually Doing
+
+'''DQN — Deep Q-Learning.''' The agent learns an action-value function $Q(s, a; \theta)$ parameterized by a neural network with weights $\theta$. Training minimizes the temporal-difference loss:
+
+$$L(\theta) = \mathbb{E}\left[\left(r + \gamma \max_{a'} Q(s', a'; \theta^{-}) - Q(s, a; \theta)\right)^2\right]$$
+
+where $\theta^{-}$ are the weights of a slowly-updated ''target network'' that stabilizes training, $\gamma$ is the discount factor, and the expectation is taken over transitions $(s, a, r, s')$ sampled from a ''replay buffer''.
+
+'''AlphaGo — MCTS + Neural Networks.''' AlphaGo uses two networks: a ''policy network'' $p_\sigma(a|s)$ that outputs a probability distribution over moves, and a ''value network'' $v_\theta(s)$ that estimates the probability of winning from state $s$. [[Monte Carlo Tree Search|Monte Carlo Tree Search]] uses $p_\sigma$ to guide exploration and $v_\theta$ (combined with rollout results) to evaluate leaf nodes. The tree search statistics are then used to select moves and generate improved training targets — a virtuous cycle of search and learning.
+
+'''AlphaFold — Attention over Residue Pairs.''' AlphaFold 2 represents the protein as two objects: a ''multiple sequence alignment (MSA) representation'' and a ''pair representation'' encoding relationships between every pair of residues $i, j$. It applies alternating rounds of attention:
+
+$$z_{ij} \leftarrow z_{ij} + \text{TriangleAttn}(z_{ik}, z_{kj})$$
+
+The ''triangle attention'' and ''triangle multiplicative updates'' enforce geometric consistency — if residue $i$ is close to $k$ and $k$ is close to $j$, the network learns to infer something about the $i$–$j$ relationship. The final 3D coordinates are produced by a structure module that applies equivariant [[Transformers|Transformers]] to predict atom positions.
+
+!! Impact on the Field
+
+DeepMind's acquisition by Google in 2014 for approximately $500 million was an early signal of how seriously the tech industry would take AI research. Hassabis retained unusual autonomy, running DeepMind as a semi-independent research lab.
+
+The ''Atari DQN'' result launched the modern deep RL era. Before 2013, reinforcement learning and deep learning were largely separate communities; after DQN, their merger became the default assumption.
+
+''AlphaGo's'' victory was a cultural watershed. Go had deep significance in East Asian culture, and the match against Lee Sedol was watched by over 200 million people. It shifted public perception of AI capabilities more dramatically than any result since Deep Blue.
+
+''AlphaFold'' changed biology. Structural biologists who had spent years determining a single protein structure could now get comparable predictions in minutes. Drug discovery, enzyme engineering, and evolutionary biology all accelerated. The release of the AlphaFold Protein Structure Database made these predictions freely available to the global scientific community.
+
+The ''Nobel Prize'' in 2024 ratified what practitioners already knew: AI-driven science was not a sideshow — it was becoming central to how discoveries are made.
+
+!! When AI for Science Faces Challenges
+
+''Distribution shift in scientific domains.'' Models trained on known protein structures may fail on truly novel folds or on proteins that are intrinsically disordered. Unlike games, science has no fixed rule set — the "rules" are whatever physics and chemistry actually do, and our training data only covers what has been observed so far. AlphaFold's confidence scores help, but they cannot flag unknown unknowns.
+
+''Reward specification in open-ended research.'' Games have clear win conditions. Science does not. When Hassabis's team moved from Go (binary win/loss) to protein folding (continuous structural accuracy), they had to import domain-specific metrics like GDT and lDDT scores. For more open-ended scientific questions — "discover a new material with property X" — defining the right objective is itself a research problem, and optimizing the wrong proxy can waste enormous compute.
+
+''Compute and data bottlenecks.'' AlphaFold 2 training required ~128 TPUv3 cores for several weeks. AlphaGo's self-play used thousands of TPUs. These resource requirements limit who can reproduce or extend the work. Furthermore, some scientific domains simply lack the large, curated datasets that proteins enjoy (thanks to decades of structural biology). Applying the same paradigm to areas with sparse or noisy data — climate modeling, materials science — demands fundamentally new approaches to data efficiency.
+
+!! Technical Details
+
+'''Background.''' Born in London in 1976 to a Greek-Cypriot father and a Chinese-Singaporean mother. Achieved chess master rating at age 13 and was the second-highest-rated player in the world for his age. Studied computer science at Cambridge, then earned a PhD in cognitive neuroscience at University College London (UCL), where his research on imagination and memory in the hippocampus was published in top journals including //Science// and //PNAS//.
+
+'''Industry career before DeepMind.''' Founded ''Elixir Studios'' in 1998, an independent video game company that produced the games //Republic: The Revolution// and //Evil Genius//. The studio closed in 2005 after commercial difficulties, but the experience gave Hassabis firsthand knowledge of simulation, planning, and AI in complex environments.
+
+'''Key papers.'''
+* Mnih, Kavukcuoglu, Silver, ..., Hassabis. "Playing Atari with Deep Reinforcement Learning" (2013). NIPS Deep Learning Workshop. The DQN paper.
+* Silver, Huang, Maddison, ..., Hassabis. "Mastering the game of Go with deep neural networks and tree search" (2016). //Nature// 529.
+* Silver, Schrittwieser, Simonyan, ..., Hassabis. "Mastering the game of Go without human knowledge" (2017). //Nature// 550. (AlphaGo Zero)
+* Silver, Hubert, Schrittwieser, ..., Hassabis. "A general reinforcement learning algorithm that masters chess, shogi, and Go through self-play" (2018). //Science// 362. (AlphaZero)
+* Schrittwieser, Antonoglou, Hubert, ..., Hassabis. "Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model" (2020). //Nature// 588. (MuZero)
+* Jumper, Evans, Pritzel, ..., Hassabis. "Highly accurate protein structure prediction with AlphaFold" (2021). //Nature// 596.
+
+'''Awards and honors.''' Royal Society Fellow (2018), CBE (2018), Nobel Prize in Chemistry (2024, shared with John Jumper and David Baker). Named to //Time// 100 multiple times.
+
+!! Quiz
+
+<div id="q1">''1. What was the name of Hassabis's video game company before DeepMind?''
+
+<<button "A) Elixir Studios">><<replace "#q1">>''1.'' @@color:green;Correct! Elixir Studios (1998–2005) produced //Republic: The Revolution// and //Evil Genius//.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) DeepPlay Games">><<replace "#q1">>''1.'' @@color:red;Incorrect. The company was Elixir Studios, founded in 1998.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Neuron Interactive">><<replace "#q1">>''1.'' @@color:red;Incorrect. The company was Elixir Studios.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) London AI Labs">><<replace "#q1">>''1.'' @@color:red;Incorrect. The company was Elixir Studios, a video game studio.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q2">''2. What stabilization technique did the DQN paper introduce for training deep Q-networks?''
+
+<<button "A) Dropout regularization">><<replace "#q2">>''2.'' @@color:red;Incorrect. DQN used a target network and experience replay buffer.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Batch normalization">><<replace "#q2">>''2.'' @@color:red;Incorrect. The key techniques were a target network (slow-updated copy of the Q-network) and experience replay.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Target network and experience replay">><<replace "#q2">>''2.'' @@color:green;Correct! The target network provides stable TD targets, and the replay buffer breaks temporal correlations in the training data.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Gradient clipping only">><<replace "#q2">>''2.'' @@color:red;Incorrect. The main innovations were the target network and experience replay buffer.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q3">''3. What was the score in the 2016 AlphaGo vs Lee Sedol match?''
+
+<<button "A) 5–0 AlphaGo">><<replace "#q3">>''3.'' @@color:red;Incorrect. Lee Sedol won one game — the famous Game 4.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) 4–1 AlphaGo">><<replace "#q3">>''3.'' @@color:green;Correct! AlphaGo won 4–1. Lee Sedol's victory in Game 4 is considered one of the greatest moves in Go history.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) 3–2 AlphaGo">><<replace "#q3">>''3.'' @@color:red;Incorrect. The score was 4–1 in favor of AlphaGo.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) 3–2 Lee Sedol">><<replace "#q3">>''3.'' @@color:red;Incorrect. AlphaGo won the match 4–1.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q4">''4. What distinguishes AlphaGo Zero from the original AlphaGo?''
+
+<<button "A) It used a larger neural network">><<replace "#q4">>''4.'' @@color:red;Incorrect. The key difference was that AlphaGo Zero used no human game data — it learned entirely from self-play.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It was trained entirely from self-play with no human data">><<replace "#q4">>''4.'' @@color:green;Correct! AlphaGo Zero started from random play and surpassed all previous versions using only self-play reinforcement learning.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It ran on GPUs instead of TPUs">><<replace "#q4">>''4.'' @@color:red;Incorrect. The breakthrough was eliminating all human expert data and learning purely from self-play.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It used a Monte Carlo approach without neural networks">><<replace "#q4">>''4.'' @@color:red;Incorrect. AlphaGo Zero still used neural networks; the key was training from self-play alone without human game data.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q5">''5. What biological problem did AlphaFold solve?''
+
+<<button "A) DNA sequence alignment">><<replace "#q5">>''5.'' @@color:red;Incorrect. AlphaFold solved protein structure prediction — determining 3D shape from amino acid sequence.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Protein structure prediction from amino acid sequence">><<replace "#q5">>''5.'' @@color:green;Correct! Predicting a protein's 3D structure from its sequence had been an open grand challenge for ~50 years.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Gene expression regulation">><<replace "#q5">>''5.'' @@color:red;Incorrect. AlphaFold tackled protein structure prediction.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Cell division modeling">><<replace "#q5">>''5.'' @@color:red;Incorrect. The problem was predicting protein 3D structures from amino acid sequences.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q6">''6. What mechanism does AlphaFold 2 use to enforce geometric consistency between residue pairs?''
+
+<<button "A) Convolutional filters">><<replace "#q6">>''6.'' @@color:red;Incorrect. AlphaFold 2 uses triangle attention and triangle multiplicative updates on the pair representation.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Recurrent connections">><<replace "#q6">>''6.'' @@color:red;Incorrect. The key mechanism is triangle attention, which enforces consistency: if residue $i$ is near $k$ and $k$ is near $j$, then the $i$–$j$ relationship is updated accordingly.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Triangle attention and triangle multiplicative updates">><<replace "#q6">>''6.'' @@color:green;Correct! These operations enforce geometric consistency across the pair representation by propagating information through triangles of residue relationships.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Graph convolution layers">><<replace "#q6">>''6.'' @@color:red;Incorrect. AlphaFold 2 uses triangle attention and triangle multiplicative updates for geometric consistency.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q7">''7. What did MuZero add beyond AlphaZero?''
+
+<<button "A) It used human expert data for initialization">><<replace "#q7">>''7.'' @@color:red;Incorrect. MuZero's innovation was learning a model of the environment without access to the game rules or a simulator.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It supported multiplayer games">><<replace "#q7">>''7.'' @@color:red;Incorrect. MuZero learned to plan in a latent space without needing the true environment dynamics.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It learned a model of the environment, planning without knowing the rules">><<replace "#q7">>''7.'' @@color:green;Correct! MuZero learned a latent dynamics model and planned entirely in learned representation space, without access to a game simulator or rules.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It used evolutionary strategies instead of gradient descent">><<replace "#q7">>''7.'' @@color:red;Incorrect. MuZero's key advance was learning its own environment model for planning, removing the need for a simulator.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<div id="q8">''8. With whom did Hassabis share the 2024 Nobel Prize in Chemistry?''
+
+<<button "A) Geoffrey Hinton and Yann LeCun">><<replace "#q8">>''8.'' @@color:red;Incorrect. He shared it with John Jumper (co-lead on AlphaFold 2) and David Baker (computational protein design).@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) John Jumper and David Baker">><<replace "#q8">>''8.'' @@color:green;Correct! Hassabis and Jumper were recognized for AlphaFold, while Baker was recognized for computational protein design.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Shane Legg and Mustafa Suleyman">><<replace "#q8">>''8.'' @@color:red;Incorrect. His DeepMind co-founders were not Nobel co-recipients. The prize was shared with John Jumper and David Baker.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) David Silver and Volodymyr Mnih">><<replace "#q8">>''8.'' @@color:red;Incorrect. The Nobel was shared with John Jumper and David Baker.@@<</replace>><<script>>typesetMath();<</script>><</button>>
+</div>
+
+<<include "Footer">>

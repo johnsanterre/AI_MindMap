@@ -1,0 +1,153 @@
+&lt;&lt;include &quot;Header&quot;&gt;&gt;
+! Cramér-Rao Bound
+&lt;img src=&quot;assets/cramer_rao_bound.svg&quot; alt=&quot;Cramér-Rao Bound&quot; width=&quot;800&quot;&gt;
+
+Imagine you are trying to weigh a squirming toddler on a bathroom scale. No matter how many times you repeat the measurement, there is a fundamental floor on how precise your estimate of the child&#39;s weight can be — set not by your patience but by the physics of the scale itself. The ''Cramér-Rao Bound'' (CRB) is exactly that floor for //any// estimation problem: it tells you the absolute best precision an unbiased estimator can ever achieve, given the statistical model you are working with. If your estimator already hits that floor, congratulations — you cannot do better. If it does not, you know there is room to improve.
+
+!! The Core Insight
+
+The CRB is a //speed limit// on estimation. It links two quantities: the ''variance'' of an estimator (how much it wobbles across repeated samples) and the ''[[Fisher Information|Fisher Information]]'' of the data-generating distribution (how much each observation tells you about the unknown parameter). More informative data means a tighter bound and, potentially, more precise estimates. The bound is universal — it applies to every unbiased estimator, regardless of how clever its construction.
+
+!! The Speed Limit of Estimation
+
+No unbiased estimator can have variance smaller than the reciprocal of the Fisher information. This is not a suggestion; it is a //theorem//. An estimator whose variance actually equals the bound is called ''efficient''. The [[Maximum Likelihood|Maximum Likelihood]] estimator (MLE) is often efficient or at least //asymptotically// efficient — meaning it reaches the bound as the sample size grows. This is one of the deepest reasons why MLE is so widely used: it is provably the best you can do in the large-sample limit.
+
+When an estimator is inefficient, its variance sits strictly above the CRB. The gap between the two quantifies exactly how much precision you are leaving on the table. This gap can guide you toward better estimators or reveal that your model is too complex for the data at hand.
+
+!! What the Math Is Actually Doing
+
+For a scalar parameter $\theta$, the CRB states:
+
+$$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
+
+where $\hat{\theta}$ is any unbiased estimator and $I(\theta)$ is the ''Fisher information'':
+
+$$I(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\log p(X|\theta)\right)^{\!2}\right]$$
+
+The quantity inside the expectation — the derivative of the log-likelihood — is called the ''score function''. Its variance is the Fisher information. Intuitively, if the log-likelihood surface is sharply curved around the true $\theta$, each data point carries a lot of information, Fisher information is large, and the bound is tight.
+
+An equivalent form uses the second derivative:
+
+$$I(\theta) = -E\!\left[\frac{\partial^2}{\partial\theta^2}\log p(X|\theta)\right]$$
+
+This connects the CRB to the //curvature// of the log-likelihood: more curvature means more information.
+
+For a ''vector parameter'' $\boldsymbol{\theta} \in \mathbb{R}^k$, the bound generalises to a matrix inequality:
+
+$$\text{Cov}(\hat{\boldsymbol{\theta}}) \succeq \mathbf{I}(\boldsymbol{\theta})^{-1}$$
+
+where $\mathbf{I}(\boldsymbol{\theta})$ is the $k \times k$ ''Fisher information matrix'' with entries $[\mathbf{I}]_{ij} = E\!\left[\frac{\partial \log p}{\partial \theta_i}\frac{\partial \log p}{\partial \theta_j}\right]$, and $\succeq$ means the difference of the two matrices is positive semi-definite. This tells you that no component of the estimator — and no linear combination of components — can beat its corresponding CRB.
+
+!! CRB in ML
+
+The Cramér-Rao Bound is far from a textbook curiosity; it appears throughout modern machine learning:
+
+''MLE efficiency.'' The asymptotic efficiency of [[Maximum Likelihood|Maximum Likelihood]] estimation means that, given enough data, no other unbiased method will give you tighter confidence intervals. This justifies the default use of MLE in everything from logistic regression to language-model pretraining.
+
+''Optimal experiment design.'' When you can choose //which// data points to collect (active learning, Bayesian optimisation), the Fisher information matrix tells you which experiments will shrink the CRB the most. Maximising a scalar summary of the Fisher information matrix — its determinant (D-optimality), trace (A-optimality), or minimum eigenvalue (E-optimality) — yields the most informative experiments.
+
+''Neural network Fisher information.'' The Fisher information matrix of a neural network&#39;s parameters is central to several modern techniques: Elastic Weight Consolidation (EWC) for continual learning uses a diagonal Fisher approximation to penalise changes to important weights; the ''[[Natural Gradient|Natural Gradient]]'' method replaces the ordinary gradient with $\mathbf{I}^{-1}\nabla\mathcal{L}$, accounting for the curvature of the parameter space and often converging faster; and the Laplace approximation for [[Bayesian Inference|Bayesian Inference]] in neural networks uses the Fisher (or Hessian) to construct a Gaussian posterior centred at the MLE.
+
+''Connections to information geometry.'' The Fisher information matrix defines a Riemannian metric on the space of probability distributions. The CRB then says that the variance of any estimator is lower-bounded by the inverse of this metric tensor — linking estimation theory to differential geometry.
+
+!! When the CRB Is Not Tight
+
+''Irregular models.'' The CRB requires //regularity conditions//: the support of $p(X|\theta)$ must not depend on $\theta$, the log-likelihood must be twice differentiable, and you must be able to exchange differentiation and integration. The uniform distribution $U(0,\theta)$ violates the first condition — its support changes with $\theta$ — and the MLE achieves variance that shrinks faster than $1/n$, actually //beating// the (inapplicable) CRB formula.
+
+''Biased estimators.'' The classical CRB applies only to //unbiased// estimators. In practice, many of the best estimators — ridge regression, shrinkage estimators, regularised MLEs — are deliberately biased to reduce mean squared error. The bound does not directly constrain them, though extensions (the biased CRB) exist.
+
+''Multimodal or flat likelihoods.'' When the likelihood has multiple modes or very flat regions, the Fisher information can be small or ill-conditioned. The CRB is still valid but may be so loose as to be uninformative — the true achievable variance is far above the bound, and tighter bounds such as the Bhattacharyya or Barankin bounds may be needed.
+
+!! Technical Details
+
+''Regularity conditions.'' The standard CRB requires: (1) the parameter space is an open subset of $\mathbb{R}^k$; (2) the support $\{x : p(x|\theta) &gt; 0\}$ does not depend on $\theta$; (3) $\log p(x|\theta)$ is twice continuously differentiable in $\theta$; (4) the order of integration and differentiation can be interchanged.
+
+''Bhattacharyya bound.'' By using higher-order derivatives of the log-likelihood, one obtains a sequence of increasingly tight bounds. The $m$-th order Bhattacharyya bound uses derivatives up to order $m$ and is never looser than the CRB (which is the first-order case).
+
+''Chapman-Robbins bound.'' This bound avoids the differentiability requirement entirely, using finite differences instead. It is always at least as tight as the CRB and applies to a broader class of models.
+
+''Van Trees inequality (Bayesian CRB).'' In the Bayesian setting, where $\theta$ itself has a prior $\pi(\theta)$, the van Trees inequality provides a lower bound on the //posterior// mean squared error:
+
+$$E[(\hat{\theta} - \theta)^2] \geq \frac{1}{E[I(\theta)] + I_\pi}$$
+
+where $I_\pi = \int (\pi&#39;(\theta))^2 / \pi(\theta)\,d\theta$ is the Fisher information of the prior. This elegantly combines data information and prior information.
+
+''Superefficiency.'' Hodges&#39; estimator shows that a //pointwise// estimator can beat the CRB at isolated parameter values, but the Hájek-Le Cam convolution theorem guarantees that no estimator can beat the CRB on a set of positive measure. Superefficiency is a mathematical curiosity, not a practical escape hatch.
+
+''[[Sufficient Statistics|Sufficient Statistics]] connection.'' An efficient estimator — one that achieves the CRB — must be a function of a sufficient statistic. If the model belongs to the exponential family, the MLE based on the sufficient statistic is efficient for all sample sizes, not just asymptotically.
+
+!! Quiz
+
+&lt;div id=&quot;crb-q1&quot;&gt;&lt;/div&gt;
+''1. The Cramér-Rao Bound provides:''
+(A) An upper limit on estimator bias
+(B) A lower limit on the variance of any unbiased estimator
+(C) The exact variance of the MLE
+(D) A lower limit on the mean squared error of biased estimators
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q1&quot;&gt;&gt;''Answer: (B)'' The CRB is a //lower bound// on the variance of any unbiased estimator.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q2&quot;&gt;&lt;/div&gt;
+''2. An estimator that achieves the CRB exactly is called:''
+(A) Consistent
+(B) Robust
+(C) Efficient
+(D) Sufficient
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q2&quot;&gt;&gt;''Answer: (C)'' An estimator whose variance equals $1/I(\theta)$ is called //efficient//.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q3&quot;&gt;&lt;/div&gt;
+''3. The Fisher information $I(\theta)$ measures:''
+(A) The prior probability of $\theta$
+(B) The variance of the score function
+(C) The bias of the MLE
+(D) The entropy of the data distribution
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q3&quot;&gt;&gt;''Answer: (B)'' The Fisher information is the variance of the score (derivative of the log-likelihood with respect to $\theta$).&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q4&quot;&gt;&lt;/div&gt;
+''4. Which condition would violate the regularity requirements for the standard CRB?''
+(A) The likelihood is Gaussian
+(B) The support of the distribution depends on $\theta$
+(C) The sample size is large
+(D) The parameter space is open
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q4&quot;&gt;&gt;''Answer: (B)'' If the support depends on $\theta$ (e.g., $U(0,\theta)$), the standard CRB does not apply.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q5&quot;&gt;&lt;/div&gt;
+''5. The MLE is said to be asymptotically efficient because:''
+(A) It is always unbiased
+(B) Its variance approaches $1/I(\theta)$ as $n \to \infty$
+(C) It minimises the prior
+(D) It has zero variance for large $n$
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q5&quot;&gt;&gt;''Answer: (B)'' Asymptotic efficiency means the MLE&#39;s variance converges to the CRB as sample size grows.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q6&quot;&gt;&lt;/div&gt;
+''6. In the multivariate CRB, the bound is expressed as:''
+(A) A scalar inequality on the determinant
+(B) A matrix inequality: $\text{Cov}(\hat{\boldsymbol{\theta}}) \succeq \mathbf{I}(\boldsymbol{\theta})^{-1}$
+(C) An equality between covariance and Fisher information
+(D) A bound on the trace of the Hessian
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q6&quot;&gt;&gt;''Answer: (B)'' The multivariate CRB states that the difference $\text{Cov}(\hat{\boldsymbol{\theta}}) - \mathbf{I}(\boldsymbol{\theta})^{-1}$ is positive semi-definite.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q7&quot;&gt;&lt;/div&gt;
+''7. The van Trees inequality extends the CRB to:''
+(A) Biased frequentist estimators
+(B) Non-parametric models
+(C) The Bayesian setting with a prior on $\theta$
+(D) Discrete parameter spaces
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q7&quot;&gt;&gt;''Answer: (C)'' The van Trees inequality is the Bayesian analogue of the CRB, incorporating prior information about $\theta$.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;div id=&quot;crb-q8&quot;&gt;&lt;/div&gt;
+''8. In neural networks, the Fisher information matrix is used for all of the following EXCEPT:''
+(A) Elastic Weight Consolidation for continual learning
+(B) Natural gradient descent
+(C) Dropout regularisation
+(D) Laplace approximation for Bayesian posteriors
+
+&lt;&lt;button &quot;Show Answer&quot;&gt;&gt;&lt;&lt;replace &quot;#crb-q8&quot;&gt;&gt;''Answer: (C)'' Dropout does not use the Fisher information matrix. EWC, natural gradient, and Laplace approximation all rely on it.&lt;&lt;/replace&gt;&gt;&lt;&lt;script&gt;&gt;typesetMath();&lt;/script&gt;&gt;&lt;/button&gt;&gt;
+
+&lt;&lt;include &quot;Footer&quot;&gt;&gt;

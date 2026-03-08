@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="34" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Maximum Flow Network</text>
+
+  <!-- ===== Flow Network Graph ===== -->
+
+  <!-- Edges with flow/capacity labels -->
+  <!-- s -> A -->
+  <line x1="80" y1="200" x2="195" y2="110" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="192,113 200,106 190,108" fill="#C4A87A"/>
+  <rect x="110" y="132" width="52" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="136" y="145" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">7 / 10</text>
+
+  <!-- s -> B -->
+  <line x1="80" y1="200" x2="195" y2="290" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="192,287 200,294 190,292" fill="#C4A87A"/>
+  <rect x="110" y="252" width="46" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="133" y="265" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">5 / 8</text>
+
+  <!-- A -> C -->
+  <line x1="230" y1="105" x2="345" y2="105" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="342,100 350,105 342,110" fill="#C4A87A"/>
+  <rect x="264" y="82" width="46" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="287" y="95" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">5 / 7</text>
+
+  <!-- A -> D -->
+  <line x1="230" y1="115" x2="345" y2="285" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="342,282 350,290 344,288" fill="#C4A87A"/>
+  <rect x="265" y="192" width="46" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="288" y="205" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">2 / 5</text>
+
+  <!-- B -> D -->
+  <line x1="230" y1="295" x2="345" y2="295" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="342,290 350,295 342,300" fill="#C4A87A"/>
+  <rect x="264" y="302" width="46" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="287" y="315" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">5 / 6</text>
+
+  <!-- C -> t -->
+  <line x1="380" y1="105" x2="488" y2="200" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="485,197 494,204 486,202" fill="#C4A87A"/>
+  <rect x="414" y="132" width="46" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="437" y="145" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">5 / 9</text>
+
+  <!-- D -> t -->
+  <line x1="380" y1="295" x2="488" y2="206" stroke="#C4A87A" stroke-width="2.5"/>
+  <polygon points="485,208 494,202 486,204" fill="#C4A87A"/>
+  <rect x="414" y="258" width="46" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="437" y="271" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">7 / 8</text>
+
+  <!-- B -> A (back edge) -->
+  <line x1="215" y1="280" x2="215" y2="125" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="211,128 215,118 219,128" fill="#D4C5A9"/>
+  <rect x="218" y="192" width="40" height="18" rx="3" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="238" y="205" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">0 / 3</text>
+
+  <!-- Nodes -->
+  <!-- Source s -->
+  <circle cx="70" cy="200" r="22" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="70" y="205" font-family="Georgia, serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">s</text>
+
+  <!-- Node A -->
+  <circle cx="210" cy="105" r="18" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="210" y="110" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">A</text>
+
+  <!-- Node B -->
+  <circle cx="210" cy="295" r="18" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="210" y="300" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">B</text>
+
+  <!-- Node C -->
+  <circle cx="365" cy="105" r="18" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="365" y="110" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">C</text>
+
+  <!-- Node D -->
+  <circle cx="365" cy="295" r="18" fill="#2D5A8E" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="365" y="300" font-family="Georgia, serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">D</text>
+
+  <!-- Sink t -->
+  <circle cx="500" cy="200" r="22" fill="#7C2530" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="500" y="205" font-family="Georgia, serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">t</text>
+
+  <!-- Labels -->
+  <text x="70" y="240" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">source</text>
+  <text x="500" y="240" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle" font-style="italic">sink</text>
+
+  <!-- Legend -->
+  <text x="287" y="365" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">flow / capacity</text>
+  <line x1="320" y1="358" x2="350" y2="358" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="395" y="365" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" text-anchor="middle">unused edge</text>
+
+  <!-- ===== Right Panel: Max-Flow Min-Cut ===== -->
+  <line x1="540" y1="40" x2="540" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <text x="670" y="64" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Max-Flow Min-Cut Theorem</text>
+
+  <!-- Cut illustration -->
+  <rect x="560" y="80" width="220" height="100" rx="6" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="670" y="102" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" text-anchor="middle" font-weight="bold">max flow value = min cut capacity</text>
+
+  <!-- Mini graph with cut line -->
+  <circle cx="600" cy="140" r="8" fill="#7C2530"/>
+  <text x="600" y="143" font-family="Georgia, serif" font-size="8" fill="white" text-anchor="middle">s</text>
+  <circle cx="640" cy="120" r="6" fill="#2D5A8E"/>
+  <circle cx="640" cy="160" r="6" fill="#2D5A8E"/>
+  <circle cx="700" cy="120" r="6" fill="#2D5A8E"/>
+  <circle cx="700" cy="160" r="6" fill="#2D5A8E"/>
+  <circle cx="740" cy="140" r="8" fill="#7C2530"/>
+  <text x="740" y="143" font-family="Georgia, serif" font-size="8" fill="white" text-anchor="middle">t</text>
+
+  <line x1="608" y1="140" x2="634" y2="122" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="608" y1="140" x2="634" y2="158" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="646" y1="120" x2="694" y2="120" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="646" y1="160" x2="694" y2="160" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="646" y1="122" x2="694" y2="158" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="706" y1="122" x2="732" y2="138" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="706" y1="158" x2="732" y2="142" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- Cut line -->
+  <line x1="670" y1="106" x2="670" y2="175" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="670" y="100" font-family="Georgia, serif" font-size="9" fill="#7C2530" text-anchor="middle">min cut</text>
+
+  <!-- S-side / T-side labels -->
+  <text x="625" y="174" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">S-side</text>
+  <text x="720" y="174" font-family="Georgia, serif" font-size="9" fill="#5C3D1E" text-anchor="middle" font-style="italic">T-side</text>
+
+  <!-- Algorithm summary -->
+  <text x="670" y="210" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Key Algorithms</text>
+
+  <rect x="560" y="220" width="220" height="145" rx="6" fill="#FFF8EC" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <text x="580" y="242" font-family="Georgia, serif" font-size="11" fill="#7C2530" font-weight="bold">Ford-Fulkerson</text>
+  <text x="580" y="256" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Find augmenting paths,</text>
+  <text x="580" y="269" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">push flow along them</text>
+
+  <line x1="570" y1="278" x2="770" y2="278" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="580" y="296" font-family="Georgia, serif" font-size="11" fill="#2D5A8E" font-weight="bold">Edmonds-Karp</text>
+  <text x="580" y="310" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">BFS shortest augmenting</text>
+  <text x="580" y="323" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">path &#8594; O(VE&#178;)</text>
+
+  <line x1="570" y1="332" x2="770" y2="332" stroke="#D4C5A9" stroke-width="1"/>
+
+  <text x="580" y="350" font-family="Georgia, serif" font-size="11" fill="#C4A87A" font-weight="bold">Push-Relabel</text>
+  <text x="580" y="362" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Local push ops &#8594; O(V&#178;E)</text>
+
+  <!-- Bottom caption -->
+  <text x="270" y="390" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">Maximum Flow: route flow from source to sink respecting edge capacities</text>
+</svg>

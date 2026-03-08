@@ -1,0 +1,149 @@
+<<include "Header">>
+
+! Mode Connectivity
+
+<img src="assets/mode_connectivity.svg" alt="Diagram showing two trained neural network solutions connected by a curved low-loss path through weight space" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Imagine two hikers who independently reach two different mountain lakes by different trails. A naive assumption is that walking in a straight line between the lakes would force you over a ridge. ''Mode connectivity'' is the surprising discovery that in neural network weight space, different trained solutions — different "lakes" — are connected by winding paths along which the loss stays low the entire way. You never have to climb over a high-loss ridge to get from one good model to another; you just have to take the scenic route.
+
+---
+
+!! The Core Insight
+
+When you train a neural network multiple times from different random initializations, you get different sets of weights that all achieve similarly low <<link "Loss Functions" "Loss Functions">><</link>>. Classical intuition from low-dimensional optimization suggested these solutions sit in isolated valleys separated by high-loss barriers. If you linearly interpolated the weights — walked a straight line in weight space between solution A and solution B — you would indeed encounter a spike in loss. This observation led researchers to believe the loss landscape was rugged, with many disconnected minima.
+
+In 2018, Draxler et al. and Garipov et al. independently showed this picture was wrong. The barriers between solutions are an artifact of insisting on //straight-line// paths. If you allow curved paths — parameterized by a simple low-degree polynomial or Bezier curve in weight space — you can connect virtually any two solutions found by <<link "Stochastic Gradient Descent" "Stochastic Gradient Descent">><</link>> through a corridor of near-zero excess loss. The loss landscape is not a collection of isolated lakes. It is more like a single, vast, connected basin with many puddles at the bottom.
+
+This insight transforms how we think about <<link "Optimization" "Optimization">><</link>> in deep learning. It means that the apparent diversity of trained models is somewhat illusory — they all live in the same functional neighborhood. It also provides the theoretical foundation for why <<link "Model Merging" "Model Merging">><</link>> and weight averaging work at all: if two solutions are connected by a low-loss path, points between them (including simple averages) can also have low loss.
+
+---
+
+!! The Geometry of Loss Landscapes
+
+The key to understanding mode connectivity is the distinction between ''linear'' and ''nonlinear'' paths in weight space.
+
+A ''linear path'' between two solutions $\theta_A$ and $\theta_B$ is the simple interpolation $\theta(t) = (1 - t)\theta_A + t\theta_B$ for $t \in [0, 1]$. When you evaluate the loss along this path, you typically see a bump — a loss barrier at some intermediate $t$. This barrier can be substantial, sometimes exceeding the loss of a randomly initialized network.
+
+A ''nonlinear path'' introduces a bend. Garipov et al. proposed finding a curve $\theta(t)$ parameterized by a few control points that is explicitly trained to minimize loss along the entire path. The simplest version uses a single midpoint $\theta_M$ and fits a quadratic Bezier curve through $\theta_A$, $\theta_M$, and $\theta_B$. Training only the midpoint $\theta_M$ — while keeping $\theta_A$ and $\theta_B$ fixed — is enough to find a low-loss corridor.
+
+''Linear mode connectivity'' is the stronger condition where even the straight-line path has no loss barrier. This holds when two solutions are found from the same initialization or from closely related training runs (e.g., two fine-tuned models from the same pre-trained checkpoint). This property is central to <<link "Model Merging" "Model Merging">><</link>> and stochastic weight averaging, where linear interpolation must work for the method to succeed.
+
+The ''permutation symmetry'' of neural networks complicates the picture: two networks can compute the same function but have their neurons in different orders, making them appear far apart in raw weight space. Accounting for permutation symmetry — finding the right neuron alignment — often converts nonlinear mode connectivity into near-linear mode connectivity.
+
+---
+
+!! What the Math Is Actually Doing
+
+Given two trained weight vectors $\theta_A, \theta_B \in \mathbb{R}^d$ and a loss function $\mathcal{L}$, the ''linear interpolation loss profile'' is:
+
+$$\ell(t) = \mathcal{L}(\theta(t)), \quad \theta(t) = (1-t)\theta_A + t\theta_B, \quad t \in [0,1]$$
+
+A ''loss barrier'' exists if $\max_{t} \ell(t) > \max\{\ell(0), \ell(1)\}$ by a significant margin.
+
+For curved paths, Garipov et al. parameterize a Bezier curve with a learnable midpoint $\theta_M$:
+
+$$\theta(t) = (1-t)^2 \theta_A + 2t(1-t)\theta_M + t^2 \theta_B$$
+
+The midpoint is trained by minimizing the expected loss along the curve:
+
+$$\min_{\theta_M} \mathbb{E}_{t \sim U[0,1]} \left[ \mathcal{L}(\theta(t)) \right]$$
+
+In practice, $t$ is sampled uniformly at each training step, and the loss at $\theta(t)$ is backpropagated only through $\theta_M$.
+
+''Stochastic Weight Averaging'' (SWA) exploits mode connectivity directly. Instead of using the final iterate of SGD, SWA averages multiple checkpoints from the later stages of training:
+
+$$\theta_{\text{SWA}} = \frac{1}{K} \sum_{i=1}^{K} \theta_{t_i}$$
+
+Because consecutive SGD iterates are linearly mode-connected (they lie in the same basin), their average also has low loss — and often generalizes better because it sits closer to the center of the flat region, away from the sharp edges.
+
+The ''loss barrier height'' between two solutions relates to the curvature of the loss surface. For a quadratic loss landscape $\mathcal{L}(\theta) = \frac{1}{2}\theta^T H \theta$, the barrier along the linear path is proportional to $(\theta_A - \theta_B)^T H (\theta_A - \theta_B)$. When the Hessian $H$ has many near-zero eigenvalues (as in overparameterized networks), most directions in weight space are "flat," and the barrier shrinks.
+
+---
+
+!! Practical Applications
+
+''Stochastic Weight Averaging (SWA):'' The most direct application. By cyclically or constantly decaying the learning rate and averaging checkpoints, SWA finds solutions in the center of flat basins. This consistently improves generalization by 0.5–1% on image classification benchmarks with essentially zero additional cost.
+
+''Fast geometric ensembling (FGE):'' Rather than averaging weights, FGE collects models along the low-loss path and uses them as an <<link "Ensemble Methods" "Ensemble Methods">><</link>> at inference. Because the path stays in a low-loss region, each checkpoint is a competent model, and their predictions are diverse enough to benefit from ensembling.
+
+''Model soups:'' Wortsman et al. (2022) showed that averaging the weights of multiple fine-tuned models (each with different hyperparameters) often outperforms the best individual model. This "model soup" approach works precisely because fine-tuned models from the same pre-trained checkpoint are linearly mode-connected.
+
+''Federated learning:'' When multiple clients train local models from the same initialization and the server averages their weights, mode connectivity is the reason this naive aggregation works at all. Understanding when mode connectivity holds (and breaks) is critical for designing robust federated learning algorithms.
+
+---
+
+!! When Mode Connectivity Breaks Down
+
+''Different architectures or incompatible initializations:'' Mode connectivity depends on the two solutions sharing enough structural similarity. Models with different architectures cannot be meaningfully interpolated in weight space. Even models of the same architecture but initialized from completely unrelated random seeds may have such severe permutation misalignment that no simple curve connects them without careful neuron matching — and finding the optimal permutation alignment is itself NP-hard.
+
+''Highly non-convex regions with true disconnection:'' While mode connectivity holds remarkably well for standard deep learning tasks, it is not a universal guarantee. Small networks trained on certain synthetic tasks can have genuinely disconnected modes where no low-loss path exists even with arbitrary curvature. As network width decreases and the loss landscape becomes less overparameterized, the basins narrow and the probability of finding a connecting path drops. The theoretical guarantees depend on sufficient overparameterization.
+
+''Distribution shift between training environments:'' When two models are trained on substantially different data distributions (not just different initializations on the same data), the loss landscape relevant to each model may be fundamentally different. Linear or curved interpolation evaluated on a //third// distribution may find neither endpoint satisfactory, and the path between them has no reason to stay in any meaningful low-loss region. This limits the applicability of mode connectivity reasoning in multi-domain or continual learning settings.
+
+---
+
+!! Technical Details
+
+''Key papers:'' Garipov et al. (2018), //Loss Surfaces, Mode Connectivity, and Fast Ensembling of DNNs// — introduced practical curve-finding methods, fast geometric ensembling, and SWA. Draxler et al. (2018), //Essentially No Barriers in Neural Network Energy Landscape// — independently demonstrated that loss barriers between modes can be eliminated with nonlinear paths, using nudged elastic band methods from computational chemistry. Frankle et al. (2020), //Linear Mode Connectivity and the Lottery Ticket Hypothesis// — showed that networks sharing early training trajectories exhibit linear mode connectivity, connecting to the lottery ticket hypothesis. Wortsman et al. (2022), //Model Soups: Averaging Weights of Multiple Fine-tuned Models Improves Accuracy Without Increasing Inference Time// — demonstrated practical large-scale weight averaging.
+
+''Permutation symmetry'' is a fundamental complication. A network with $n$ neurons in a hidden layer has $n!$ weight-space representations of the same function (one per permutation of neurons). Ainsworth et al. (2023) showed that after accounting for permutation symmetry via weight matching or activation matching, many apparently disconnected modes become linearly connected. This suggests that the "true" loss landscape (modulo symmetries) may be even simpler than the raw weight-space picture suggests.
+
+''Connection to the loss landscape literature:'' Li et al. (2018) introduced filter normalization for visualizing loss surfaces, revealing that well-trained networks sit in wide, flat basins. Mode connectivity is consistent with this picture — flat basins are large enough to contain paths connecting multiple solutions. The flatness of the basin also correlates with generalization (Keskar et al., 2017), linking mode connectivity, basin geometry, and generalization theory.
+
+''SWA variants:'' SWAG (SWA-Gaussian) fits a low-rank Gaussian distribution to the SGD trajectory and uses it for Bayesian-style uncertainty estimation. SWA with cyclical learning rates explores more of the basin, improving diversity. Multi-SWA runs multiple SWA procedures and averages the results, stacking the benefits.
+
+''Theoretical underpinning:'' For sufficiently wide networks, the loss landscape becomes increasingly convex-like in the sense that all global minima are connected. Kuditipudi et al. (2019) proved that for overparameterized networks satisfying certain conditions, any two global minima can be connected by a piecewise linear path of near-zero loss with at most one bend. This formalizes the empirical observation and connects mode connectivity to overparameterization theory and <<link "Optimization" "Optimization">><</link>> landscape analysis.
+
+---
+
+!! Quiz
+
+<span id="moc-q1">''1. What does mode connectivity refer to in neural network optimization?''</span>
+<<button "A) The ability to train a network in multiple modes (CPU, GPU, TPU)">><<replace "#moc-q1">>1. A) — ''Incorrect.'' Mode connectivity refers to the geometry of the loss landscape, not hardware training modes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) The existence of paths between different trained solutions along which loss stays low">><<replace "#moc-q1">>1. B) — ''Correct!'' Mode connectivity means different trained solutions (modes) are connected by paths in weight space where the loss remains near its minimum value.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The connection between different layers within a single network">><<replace "#moc-q1">>1. C) — ''Incorrect.'' Mode connectivity is about the relationship between different trained models in weight space, not about layer connectivity within one model.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The synchronization of weights during distributed training">><<replace "#moc-q1">>1. D) — ''Incorrect.'' Distributed training synchronization is a systems concern, not what mode connectivity describes.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q2">''2. Why does linear interpolation between two independently trained solutions typically show a loss barrier?''</span>
+<<button "A) Because the two models have different learning rates">><<replace "#moc-q2">>2. A) — ''Incorrect.'' The barrier exists because the straight-line path passes through regions of high loss, not because of learning rate differences.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because neural networks cannot generalize to unseen weight configurations">><<replace "#moc-q2">>2. B) — ''Incorrect.'' Intermediate weight configurations are not "unseen" in any meaningful sense — they are valid parameter settings that happen to produce high loss on the straight path.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because the straight-line path cuts through high-loss regions, but curved paths can avoid them">><<replace "#moc-q2">>2. C) — ''Correct!'' The loss barrier on the linear path is real but can be circumvented by allowing the path to curve through the low-loss basin. The barrier is an artifact of the straight-line constraint.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because the models must have different architectures">><<replace "#moc-q2">>2. D) — ''Incorrect.'' The barrier appears between models with identical architectures but different trained weights.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q3">''3. What is Stochastic Weight Averaging (SWA)?''</span>
+<<button "A) Randomly dropping weights during training">><<replace "#moc-q3">>3. A) — ''Incorrect.'' That describes dropout, not SWA. SWA averages checkpoint weights from training.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Averaging the weights of multiple checkpoints from later stages of SGD training">><<replace "#moc-q3">>3. B) — ''Correct!'' SWA collects checkpoints during training and averages their weights. Because consecutive SGD iterates are mode-connected, the average sits in the center of a flat basin and generalizes better.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Training with a stochastically varying architecture">><<replace "#moc-q3">>3. C) — ''Incorrect.'' SWA uses a fixed architecture; the "stochastic" refers to SGD producing the checkpoints, not architecture variation.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Averaging gradients instead of weights during optimization">><<replace "#moc-q3">>3. D) — ''Incorrect.'' Gradient averaging describes momentum-style optimizers. SWA averages the weights themselves.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q4">''4. What is linear mode connectivity, and when does it typically hold?''</span>
+<<button "A) It means all neural networks can be linearly interpolated without loss increase">><<replace "#moc-q4">>4. A) — ''Incorrect.'' Linear mode connectivity does not hold universally. Independently initialized models typically do //not// show it.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It means the loss stays low along the straight-line path between two solutions, typically when they share the same initialization or pre-trained checkpoint">><<replace "#moc-q4">>4. B) — ''Correct!'' Linear mode connectivity is the stronger condition where even straight-line interpolation works. It holds when models share early training or the same pre-trained base, which is why model merging and model soups succeed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) It refers to the linear layers in a network being connected to each other">><<replace "#moc-q4">>4. C) — ''Incorrect.'' Linear mode connectivity is about the loss landscape geometry, not about the architecture of individual layers.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) It means the loss function is linear in the weights">><<replace "#moc-q4">>4. D) — ''Incorrect.'' Neural network loss functions are highly nonlinear. Linear mode connectivity describes the behavior //along a specific path//, not the loss function itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q5">''5. How does permutation symmetry relate to mode connectivity?''</span>
+<<button "A) Permuting training examples creates new modes">><<replace "#moc-q5">>5. A) — ''Incorrect.'' Permutation symmetry refers to neurons, not training examples. Reordering neurons does not change the function computed.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) It is irrelevant — permutation symmetry only affects inference speed">><<replace "#moc-q5">>5. B) — ''Incorrect.'' Permutation symmetry fundamentally affects the apparent geometry of weight space and whether solutions appear connected or disconnected.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Two networks may compute the same function with permuted neurons, appearing far apart in weight space; aligning neurons can reveal hidden linear mode connectivity">><<replace "#moc-q5">>5. C) — ''Correct!'' Neuron permutation symmetry means functionally identical solutions can look distant in raw weight space. After proper alignment, many "disconnected" modes become linearly connected.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Permutation symmetry guarantees that all modes are connected">><<replace "#moc-q5">>5. D) — ''Incorrect.'' Accounting for permutation symmetry reveals //more// connectivity than the raw picture, but it does not guarantee universal connectivity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q6">''6. The Bezier curve method for finding low-loss paths trains which component?''</span>
+<<button "A) Both endpoint solutions and the midpoint jointly">><<replace "#moc-q6">>6. A) — ''Incorrect.'' The endpoint solutions $\theta_A$ and $\theta_B$ are held fixed. Only the midpoint is trained.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Only the midpoint control point, while keeping the two endpoint solutions fixed">><<replace "#moc-q6">>6. B) — ''Correct!'' The midpoint $\theta_M$ is the only learnable parameter. It is trained to minimize the expected loss along the curve connecting the two fixed endpoints.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) A separate classifier that selects which mode to use">><<replace "#moc-q6">>6. C) — ''Incorrect.'' The Bezier curve method finds a continuous path, not a discrete selection mechanism.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) The loss function itself, adapting it to remove barriers">><<replace "#moc-q6">>6. D) — ''Incorrect.'' The loss function is fixed. The method finds a path in weight space that avoids high-loss regions under the original loss.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q7">''7. Why do model soups (averaging fine-tuned models) work?''</span>
+<<button "A) Because averaging predictions is always better than any single predictor">><<replace "#moc-q7">>7. A) — ''Incorrect.'' Model soups average //weights//, not predictions. And averaging is only beneficial when the models are mode-connected.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Because fine-tuned models from the same pre-trained checkpoint are linearly mode-connected, so their weight average also has low loss">><<replace "#moc-q7">>7. B) — ''Correct!'' Linear mode connectivity between fine-tuned variants of the same base model ensures that weight interpolation stays in a low-loss region, enabling model soups to work.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) Because larger models always generalize better">><<replace "#moc-q7">>7. C) — ''Incorrect.'' Model soups do not increase model size. The averaged model has the same parameter count as each individual model.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Because the hyperparameter differences between models cancel out errors">><<replace "#moc-q7">>7. D) — ''Incorrect.'' While diversity helps, the fundamental reason model soups work is that the weight averages stay in a low-loss region due to mode connectivity.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="moc-q8">''8. What happens to mode connectivity as network width decreases?''</span>
+<<button "A) Mode connectivity improves because narrow networks have simpler landscapes">><<replace "#moc-q8">>8. A) — ''Incorrect.'' Narrower networks have more complex, rugged landscapes with less connectivity between modes.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "B) Width has no effect on mode connectivity">><<replace "#moc-q8">>8. B) — ''Incorrect.'' Width significantly affects mode connectivity through overparameterization.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "C) The basins narrow and connecting paths become harder to find, as mode connectivity depends on sufficient overparameterization">><<replace "#moc-q8">>8. C) — ''Correct!'' Overparameterization creates many flat directions in weight space that enable low-loss paths. As width decreases, the landscape becomes more rugged and solutions can become genuinely disconnected.<</replace>><<script>>typesetMath();<</script>><</button>>
+<<button "D) Narrow networks have more modes but they are all linearly connected">><<replace "#moc-q8">>8. D) — ''Incorrect.'' Narrow networks may have genuinely disconnected modes. Less overparameterization means //less// connectivity, not more.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

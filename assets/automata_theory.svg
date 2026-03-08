@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E" text-anchor="middle">The Chomsky Hierarchy of Automata</text>
+
+  <!-- ===== LEFT PANEL: Nested rectangles showing hierarchy ===== -->
+
+  <!-- Turing Machine (outermost) -->
+  <rect x="30" y="50" width="440" height="330" rx="10" fill="#EDE3D0" stroke="#C4A87A" stroke-width="2"/>
+  <text x="50" y="74" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">Type 0 — Turing Machine</text>
+  <text x="50" y="89" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">Recursively enumerable languages</text>
+
+  <!-- Context-Sensitive -->
+  <rect x="55" y="100" width="390" height="260" rx="8" fill="#DDD3B8" stroke="#C4A87A" stroke-width="2"/>
+  <text x="75" y="122" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C3D1E">Type 1 — Linear Bounded Automaton</text>
+  <text x="75" y="137" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">Context-sensitive languages</text>
+
+  <!-- Context-Free -->
+  <rect x="80" y="150" width="340" height="190" rx="8" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="100" y="172" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">Type 2 — Pushdown Automaton</text>
+  <text x="100" y="187" font-family="Georgia, serif" font-size="10" fill="#2D5A8E" font-style="italic">Context-free languages</text>
+
+  <!-- Regular -->
+  <rect x="110" y="200" width="280" height="120" rx="8" fill="#F0DCD0" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="130" y="225" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">Type 3 — Finite Automaton</text>
+  <text x="130" y="242" font-family="Georgia, serif" font-size="10" fill="#7C2530" font-style="italic">Regular languages</text>
+
+  <!-- DFA diagram inside regular box -->
+  <!-- States -->
+  <circle cx="175" cy="285" r="14" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+  <text x="175" y="290" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">q0</text>
+
+  <circle cx="250" cy="285" r="14" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+  <text x="250" y="290" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">q1</text>
+
+  <!-- Double circle for accept state -->
+  <circle cx="325" cy="285" r="14" fill="#FDFAF4" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="325" cy="285" r="10" fill="#FDFAF4" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="325" y="290" font-family="Georgia, serif" font-size="11" fill="#7C2530" text-anchor="middle">q2</text>
+
+  <!-- Arrows between states -->
+  <defs>
+    <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowN" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+
+  <!-- Start arrow -->
+  <line x1="145" y1="285" x2="159" y2="285" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowR)"/>
+
+  <!-- q0 -> q1 -->
+  <line x1="190" y1="285" x2="234" y2="285" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="212" y="278" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">a</text>
+
+  <!-- q1 -> q2 -->
+  <line x1="265" y1="285" x2="309" y2="285" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="287" y="278" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">b</text>
+
+  <!-- Self-loop on q1 -->
+  <path d="M250,270 C237,248 263,248 250,270" fill="none" stroke="#7C2530" stroke-width="1.3" marker-end="url(#arrowR)"/>
+  <text x="250" y="252" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle">a</text>
+
+  <!-- ===== RIGHT PANEL: Key concepts ===== -->
+  <line x1="500" y1="50" x2="500" y2="380" stroke="#D4C5A9" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <text x="650" y="72" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Computational Power</text>
+
+  <!-- Finite Automaton -->
+  <rect x="525" y="85" width="230" height="55" rx="6" fill="#F0DCD0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="535" y="104" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#7C2530">Finite Automaton</text>
+  <text x="535" y="119" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">No memory — only current state</text>
+  <text x="535" y="133" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">regex, grep, lexers</text>
+
+  <!-- PDA -->
+  <rect x="525" y="150" width="230" height="55" rx="6" fill="#C8D8E8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="535" y="169" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2D5A8E">Pushdown Automaton</text>
+  <text x="535" y="184" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Stack memory — LIFO</text>
+  <text x="535" y="198" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">parsers, compilers, HTML</text>
+
+  <!-- LBA -->
+  <rect x="525" y="215" width="230" height="55" rx="6" fill="#DDD3B8" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="535" y="234" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E">Linear Bounded Automaton</text>
+  <text x="535" y="249" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Tape bounded by input length</text>
+  <text x="535" y="263" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">natural language syntax</text>
+
+  <!-- TM -->
+  <rect x="525" y="280" width="230" height="55" rx="6" fill="#EDE3D0" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="535" y="299" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#5C3D1E">Turing Machine</text>
+  <text x="535" y="314" font-family="Georgia, serif" font-size="10" fill="#5C3D1E">Infinite tape — universal</text>
+  <text x="535" y="328" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" font-style="italic">any computable function</text>
+
+  <!-- Arrow showing increasing power -->
+  <line x1="770" y1="330" x2="770" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrowN)"/>
+  <text x="780" y="215" font-family="Georgia, serif" font-size="10" fill="#5C3D1E" transform="rotate(-90, 780, 215)">increasing power</text>
+
+  <!-- Bottom note -->
+  <rect x="525" y="348" width="230" height="30" rx="5" fill="#F5EDD8" stroke="#C4A87A" stroke-width="1.2"/>
+  <text x="640" y="366" font-family="Georgia, serif" font-size="10" fill="#7C2530" text-anchor="middle" font-style="italic">Each level strictly more powerful than the last</text>
+
+</svg>

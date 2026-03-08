@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background and border -->
+  <rect x="0" y="0" width="800" height="400" rx="18" ry="18" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="3"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#7C2530">The Halting Problem: Diagonalization Argument</text>
+
+  <!-- Step 1: Assume H exists -->
+  <rect x="40" y="60" width="200" height="70" rx="10" fill="#2D5A8E" opacity="0.12" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="140" y="85" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Step 1: Assume</text>
+  <text x="140" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">H(P, I) decides if</text>
+  <text x="140" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">program P halts on input I</text>
+
+  <!-- Arrow 1 -->
+  <line x1="240" y1="95" x2="290" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Step 2: Construct D -->
+  <rect x="295" y="60" width="210" height="70" rx="10" fill="#5C3D1E" opacity="0.12" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="85" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Step 2: Construct D(P)</text>
+  <text x="400" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">If H(P, P) = "halts"</text>
+  <text x="400" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">then D loops forever; else D halts</text>
+
+  <!-- Arrow 2 -->
+  <line x1="505" y1="95" x2="555" y2="95" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Step 3: Feed D to itself -->
+  <rect x="560" y="60" width="200" height="70" rx="10" fill="#7C2530" opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="660" y="85" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Step 3: Run D(D)</text>
+  <text x="660" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">Feed D its own</text>
+  <text x="660" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">source code as input</text>
+
+  <!-- Central contradiction diagram -->
+  <rect x="150" y="165" width="500" height="200" rx="14" fill="#FDFAF4" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#7C2530">Contradiction!</text>
+
+  <!-- Left branch: H says halts -->
+  <rect x="175" y="210" width="200" height="55" rx="8" fill="#2D5A8E" opacity="0.15" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="275" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">If H(D, D) = "halts"</text>
+  <text x="275" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">then D(D) loops forever</text>
+
+  <!-- Right branch: H says loops -->
+  <rect x="425" y="210" width="200" height="55" rx="8" fill="#7C2530" opacity="0.15" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="525" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">If H(D, D) = "loops"</text>
+  <text x="525" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">then D(D) halts</text>
+
+  <!-- Crossed arrows showing contradiction -->
+  <line x1="375" y1="230" x2="425" y2="245" stroke="#C4A87A" stroke-width="2.5"/>
+  <line x1="375" y1="245" x2="425" y2="230" stroke="#C4A87A" stroke-width="2.5"/>
+
+  <!-- Bottom conclusion arrows -->
+  <line x1="275" y1="265" x2="275" y2="300" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="525" y1="265" x2="525" y2="300" stroke="#7C2530" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Conclusion boxes -->
+  <rect x="185" y="300" width="180" height="40" rx="6" fill="#2D5A8E" opacity="0.08" stroke="#2D5A8E" stroke-width="1"/>
+  <text x="275" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">H was wrong! (said halts)</text>
+
+  <rect x="435" y="300" width="180" height="40" rx="6" fill="#7C2530" opacity="0.08" stroke="#7C2530" stroke-width="1"/>
+  <text x="525" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">H was wrong! (said loops)</text>
+
+  <!-- Final conclusion -->
+  <rect x="225" y="358" width="350" height="32" rx="8" fill="#C4A87A" opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">Therefore H cannot exist. QED.</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C3D1E"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+  </defs>
+</svg>

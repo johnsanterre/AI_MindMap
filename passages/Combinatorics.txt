@@ -1,0 +1,159 @@
+<<include "Header">>
+
+! Combinatorics
+
+<img src="assets/combinatorics.svg" alt="Hub-and-spoke diagram showing major branches of combinatorics: counting, graph theory, design theory, coding theory, and extremal combinatorics" style="width:100%;max-width:620px;display:block;margin:16px auto 24px auto;">
+
+Combinatorics is the mathematics of choosing, arranging, and counting. Imagine a restaurant menu with 5 appetizers, 8 entrees, and 4 desserts — how many distinct three-course meals can you order? The answer ($5 \times 8 \times 4 = 160$) follows from the ''product rule'', the most basic counting principle. From this humble starting point, combinatorics scales up to handle questions like "how many distinct neural network architectures can be built from a menu of layer types?" or "how many subsets of features should we consider in model selection?" Whenever a problem asks //how many//, combinatorics provides the language — and often the answer.
+
+!! The Core Insight
+
+Every finite counting problem reduces to establishing a ''bijection'' — a one-to-one correspondence — between the objects you want to count and a set whose size you already know. The ''sum rule'' says: if choices $A$ and $B$ are mutually exclusive, the total count is $|A| + |B|$. The ''product rule'' says: if you make choice $A$ followed by independent choice $B$, the total is $|A| \times |B|$. ''Permutations'' count ordered arrangements ($n!$ ways to arrange $n$ distinct objects), while ''combinations'' count unordered selections ($\binom{n}{k}$ ways to choose $k$ objects from $n$). The deep insight is that //symmetry reduces counting//: if every arrangement has exactly $k!$ equivalent orderings, you divide by $k!$ to get unordered counts.
+
+!! Permutations, Combinations, and Beyond
+
+''Permutations'' of $n$ objects taken $k$ at a time: $P(n,k) = \frac{n!}{(n-k)!}$. Order matters — seating 3 people in 5 chairs gives $5 \times 4 \times 3 = 60$ arrangements.
+
+''Combinations'': $\binom{n}{k} = \frac{n!}{k!(n-k)!}$. Order does not matter — choosing a 3-person committee from 5 people gives $\binom{5}{3} = 10$.
+
+''Binomial theorem'': $(1 + x)^n = \sum_{k=0}^{n} \binom{n}{k} x^k$. This connects algebra to counting: the coefficient of $x^k$ //is// the number of ways to choose $k$ items from $n$.
+
+''Multinomial coefficients'': $\binom{n}{k_1, k_2, \ldots, k_r} = \frac{n!}{k_1! k_2! \cdots k_r!}$ counts ways to partition $n$ objects into groups of specified sizes. These appear in the multinomial distribution used in text classification.
+
+''Stars and bars'': The number of ways to distribute $n$ identical objects into $k$ distinct bins is $\binom{n+k-1}{k-1}$. This counts multisets and arises in polynomial feature counting.
+
+''Burnside's lemma'': When a group $G$ acts on a set $X$, the number of distinct objects (up to symmetry) is $\frac{1}{|G|} \sum_{g \in G} |X^g|$, where $X^g$ is the set of elements fixed by $g$. This is how you count distinct necklaces, molecular configurations, or equivalence classes of model architectures under permutation symmetries.
+
+!! What the Math Is Actually Doing
+
+''The binomial coefficient identity:''
+
+$$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$$
+
+This is ''Pascal's rule'' — each entry in Pascal's triangle is the sum of the two entries above it. It encodes a recursive decomposition: either the $n$-th element is in the chosen subset (reducing to choosing $k-1$ from $n-1$) or it is not (choosing $k$ from $n-1$).
+
+''Generating function encoding:'' The ordinary generating function for the sequence $\binom{n}{0}, \binom{n}{1}, \ldots, \binom{n}{n}$ is simply $(1+x)^n$. For the number of partitions of $n$ into parts of size $\leq k$, the generating function is $\prod_{i=1}^{k} \frac{1}{1-x^i}$.
+
+''Inclusion-exclusion principle:''
+
+$$\left|\bigcup_{i=1}^{n} A_i\right| = \sum_{i} |A_i| - \sum_{i<j} |A_i \cap A_j| + \sum_{i<j<k} |A_i \cap A_j \cap A_k| - \cdots$$
+
+This alternating sum corrects for overcounting when sets overlap — essential for derangement counting, Euler's totient function, and computing the number of surjections.
+
+''Stirling's approximation:'' $n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n$, which gives $\log \binom{n}{k} \approx n \cdot H(k/n)$ where $H$ is the binary entropy function. This connects combinatorics directly to [[Binomial Distribution|Binomial Distribution]] and information theory.
+
+!! Combinatorics in Machine Learning
+
+''Feature subset selection:'' With $d$ features, there are $2^d$ possible subsets. This exponential blowup is why exhaustive feature search is infeasible for even moderate $d$, motivating greedy methods, L1 regularization, and random search.
+
+''Architecture enumeration:'' Neural architecture search (NAS) operates over a combinatorial space of layer types, widths, connections, and activation functions. The search space for a cell with $B$ blocks, each choosing from $O$ operations, grows as $O(O^{2B} \cdot B!)$ — motivating differentiable architecture search (DARTS) and other relaxations.
+
+''Combinatorial optimization:'' Problems like the traveling salesman ($n!/2$ tours), graph partitioning, and maximum clique are NP-hard combinatorial problems that arise in circuit design, scheduling, and cluster assignment. ML approaches (e.g., pointer networks, graph neural networks for TSP) attempt to learn heuristics for these.
+
+''Hashing and sketching:'' Locality-sensitive hashing counts collisions in combinatorial bucket assignments to approximate nearest neighbors in high dimensions. The analysis relies on combinatorial probability.
+
+''Data augmentation counting:'' If you apply $k$ independent binary augmentations, you generate $2^k$ augmented versions of each example — a direct application of the product rule.
+
+!! When Combinatorics Breaks Down
+
+''Exponential explosion.'' The most common failure mode: the number of objects grows so fast that exact enumeration is impossible. With 100 features, $2^{100} \approx 10^{30}$ subsets cannot be searched exhaustively. The practical response is to use //approximation algorithms//, randomized sampling, or structural constraints (sparsity, modularity) that prune the search space. This is the fundamental reason L1 regularization, which implicitly selects sparse subsets, is preferred over exhaustive search.
+
+''Symmetry blindness.'' Naive counting often overcounts by ignoring symmetries. A graph with $n$ labeled vertices has $2^{\binom{n}{2}}$ possible edge sets, but the number of //non-isomorphic// graphs is vastly smaller. Burnside's lemma and Polya enumeration correct for this, but computing the number of orbits under a group action can itself be #P-hard for complex symmetry groups. In ML, permutation symmetries in neural networks (neuron relabeling) mean that the true space of functionally distinct networks is much smaller than the parameter space suggests.
+
+''Continuous relaxation mismatch.'' Many combinatorial problems are solved in practice by relaxing discrete variables to continuous ones (e.g., replacing binary selection with soft attention weights). But the relaxed solution may not round cleanly back to a valid combinatorial object. The //integrality gap// — the difference between the relaxed optimum and the true discrete optimum — can be arbitrarily large for some problems. This affects NAS, sparse subset selection, and any method that treats a fundamentally discrete problem as continuous optimization.
+
+!! Technical Details
+
+''Catalan numbers:'' $C_n = \frac{1}{n+1}\binom{2n}{n}$ count the number of full binary trees with $n$ internal nodes, the number of valid parenthesizations of $n+1$ factors, and the number of monotone lattice paths that stay below the diagonal. Their generating function satisfies $C(x) = \frac{1 - \sqrt{1-4x}}{2x}$.
+
+''Ramsey theory:'' For any $r, s \geq 2$, there exists a minimum $R(r,s)$ such that any 2-coloring of edges of $K_{R(r,s)}$ contains a monochromatic $K_r$ or $K_s$. Known exact values are sparse: $R(3,3) = 6$, $R(4,4) = 18$, while $R(5,5)$ is unknown (bounded $43 \leq R(5,5) \leq 48$).
+
+''The twelvefold way:'' A systematic classification of all problems of distributing $n$ balls into $k$ boxes under combinations of: balls distinct/identical, boxes distinct/identical, any/injective/surjective mappings. This gives 12 fundamental counting problems whose solutions involve permutations, combinations, Stirling numbers, partitions, and compositions.
+
+''Polya enumeration theorem:'' Extends Burnside's lemma by incorporating weights. The cycle index polynomial $Z_G(x_1, \ldots, x_n)$ of a permutation group $G$ encodes all the combinatorial information needed to count colored objects up to symmetry.
+
+''Connections:'' [[Graph Theory|Graph Theory]] | [[Generating Functions|Generating Functions]] | [[Permutations and Combinations|Permutations and Combinations]] | [[Binomial Distribution|Binomial Distribution]] | [[Pigeonhole Principle|Pigeonhole Principle]] | [[Inclusion-Exclusion Principle|Inclusion-Exclusion Principle]]
+
+!! Quiz
+
+<span id="comb-q1">''Question 1.'' How many ways can you choose 3 items from a set of 10, where order does not matter?</span>
+
+<<button "A. 720">><<replace "#comb-q1">>Incorrect. 720 = P(10,3) counts ordered arrangements (permutations), not unordered selections.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. 120">><<replace "#comb-q1">>Correct! $\binom{10}{3} = \frac{10!}{3! \cdot 7!} = 120$. We divide the permutation count by $3! = 6$ because order does not matter.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. 1000">><<replace "#comb-q1">>Incorrect. $10^3 = 1000$ counts ordered selections with replacement, which is a different problem.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. 30">><<replace "#comb-q1">>Incorrect. 30 = 10 × 3, which does not correspond to any standard counting formula here.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q2">''Question 2.'' What does the product rule in combinatorics state?</span>
+
+<<button "A. The total count is the product of all elements">><<replace "#comb-q2">>Incorrect. The product rule applies to sequential independent choices, not to elements themselves.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. If you make independent sequential choices from sets of size $a$ and $b$, the total number of outcomes is $a \times b$">><<replace "#comb-q2">>Correct! The product rule says that for independent sequential decisions, you multiply the number of options at each step.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. Permutations equal combinations times the product of factorials">><<replace "#comb-q2">>This is a consequence, not the statement of the product rule itself.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The number of subsets of a set is the product of its elements">><<replace "#comb-q2">>Incorrect. The number of subsets of an $n$-element set is $2^n$, derived from the product rule ($n$ binary choices), but the statement here is imprecise.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q3">''Question 3.'' Why is exhaustive feature subset search infeasible for $d = 100$ features?</span>
+
+<<button "A. There are $100!$ subsets to check">><<replace "#comb-q3">>Incorrect. The number of subsets is $2^{100}$, not $100!$ (though both are astronomically large).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. There are $2^{100} \approx 10^{30}$ subsets, far too many to enumerate">><<replace "#comb-q3">>Correct! Each feature is either included or excluded, giving $2^{100}$ subsets by the product rule. This exponential blowup motivates L1 regularization and greedy search.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of subsets grows linearly with $d$">><<replace "#comb-q3">>Incorrect. Subset count grows exponentially ($2^d$), not linearly.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Feature subsets cannot be enumerated because features are continuous">><<replace "#comb-q3">>Incorrect. Features themselves may be continuous, but the selection problem (include or exclude each feature) is discrete and finite.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q4">''Question 4.'' What does Burnside's lemma compute?</span>
+
+<<button "A. The number of permutations of a multiset">><<replace "#comb-q4">>Incorrect. Multiset permutations are counted by multinomial coefficients, not Burnside's lemma.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The number of distinct objects up to symmetry, as the average number of fixed points across group elements">><<replace "#comb-q4">>Correct! Burnside's lemma counts equivalence classes (orbits) under a group action: $\frac{1}{|G|}\sum_{g \in G} |X^g|$. It tells you how many truly distinct configurations exist when symmetries are accounted for.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of spanning trees in a graph">><<replace "#comb-q4">>Incorrect. That is Kirchhoff's matrix tree theorem, a different result.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The chromatic number of a graph">><<replace "#comb-q4">>Incorrect. The chromatic number concerns graph coloring, not group action counting.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q5">''Question 5.'' Pascal's rule states $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$. What is the combinatorial interpretation?</span>
+
+<<button "A. You can always split a set into two equal halves">><<replace "#comb-q5">>Incorrect. Pascal's rule is about including or excluding one specific element, not splitting into equal halves.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. Either the $n$-th element is chosen (leaving $k-1$ to choose from $n-1$) or it is not (leaving $k$ to choose from $n-1$)">><<replace "#comb-q5">>Correct! This is a case split on one element: include it (and choose $k-1$ more from the remaining $n-1$) or exclude it (and choose all $k$ from the remaining $n-1$).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The binomial coefficients are symmetric">><<replace "#comb-q5">>Symmetry ($\binom{n}{k} = \binom{n}{n-k}$) is a different identity, not Pascal's rule.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. Combinations are always larger than permutations">><<replace "#comb-q5">>Incorrect. Combinations are always smaller than or equal to the corresponding permutation count.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q6">''Question 6.'' What is the integrality gap?</span>
+
+<<button "A. The difference between integer and floating-point precision">><<replace "#comb-q6">>Incorrect. The integrality gap is a concept from optimization, not numerical precision.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The gap between the optimal value of a discrete combinatorial problem and its continuous relaxation">><<replace "#comb-q6">>Correct! When you relax integer variables to continuous ones, the relaxed optimum can be better than the true discrete optimum. This gap measures how much you lose when rounding back to a valid combinatorial solution.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The number of infeasible solutions in a search space">><<replace "#comb-q6">>Incorrect. The integrality gap is about optimal values, not solution counts.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The difference between $n!$ and $n^n$">><<replace "#comb-q6">>Incorrect. While both quantities appear in combinatorics, their difference is not called the integrality gap.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q7">''Question 7.'' Stirling's approximation gives $\log \binom{n}{k} \approx n \cdot H(k/n)$. What is $H$?</span>
+
+<<button "A. The harmonic series">><<replace "#comb-q7">>Incorrect. The harmonic series $H_n = \sum 1/k$ is unrelated to this approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. The Hamiltonian of the system">><<replace "#comb-q7">>Incorrect. This $H$ is an entropy function, not a Hamiltonian.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. The binary entropy function $H(p) = -p\log p - (1-p)\log(1-p)$">><<replace "#comb-q7">>Correct! The logarithm of the central binomial region is approximated by $n$ times the binary entropy evaluated at the fraction $k/n$. This bridges combinatorics and information theory.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. The Hessian matrix">><<replace "#comb-q7">>Incorrect. The Hessian is a matrix of second derivatives, unrelated to this approximation.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="comb-q8">''Question 8.'' How many ways can you distribute 5 identical balls into 3 distinct bins?</span>
+
+<<button "A. $\binom{5}{3} = 10$">><<replace "#comb-q8">>Incorrect. $\binom{5}{3}$ counts choosing 3 items from 5, not distributing identical items into bins.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "B. $3^5 = 243$">><<replace "#comb-q8">>Incorrect. $3^5$ counts distributions when the balls are //distinct// (each of 5 balls independently chooses among 3 bins).<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "C. $\binom{7}{2} = 21$">><<replace "#comb-q8">>Correct! By stars and bars, the answer is $\binom{n+k-1}{k-1} = \binom{5+3-1}{3-1} = \binom{7}{2} = 21$. You place 2 dividers among 7 positions to separate 5 identical balls into 3 bins.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<button "D. $5! = 120$">><<replace "#comb-q8">>Incorrect. $5!$ counts permutations of 5 distinct objects, but here the balls are identical.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>

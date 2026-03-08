@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="34" font-family="Georgia,serif" font-size="16" fill="#2C2C2C" text-anchor="middle" font-weight="bold">Binary Search Tree: Structure and Lookup</text>
+
+  <!-- Main BST -->
+  <text x="240" y="58" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">Balanced BST</text>
+
+  <!-- Root node: 40 -->
+  <circle cx="240" cy="95" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="240" y="100" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">40</text>
+
+  <!-- Left child: 20 -->
+  <line x1="224" y1="112" x2="160" y2="148" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="150" cy="165" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="150" y="170" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">20</text>
+
+  <!-- Right child: 60 -->
+  <line x1="256" y1="112" x2="320" y2="148" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="330" cy="165" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="330" y="170" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle" font-weight="bold">60</text>
+
+  <!-- Left-Left child: 10 -->
+  <line x1="135" y1="182" x2="100" y2="218" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="90" cy="235" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="90" y="240" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle">10</text>
+
+  <!-- Left-Right child: 30 -->
+  <line x1="165" y1="182" x2="200" y2="218" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="210" cy="235" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="210" y="240" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle">30</text>
+
+  <!-- Right-Left child: 50 -->
+  <line x1="315" y1="182" x2="280" y2="218" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="270" cy="235" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="270" y="240" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle">50</text>
+
+  <!-- Right-Right child: 70 -->
+  <line x1="345" y1="182" x2="380" y2="218" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="390" cy="235" r="20" fill="#EEF2F8" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="390" y="240" font-family="Georgia,serif" font-size="14" fill="#2D5A8E" text-anchor="middle">70</text>
+
+  <!-- Search path highlight: finding 50 -->
+  <text x="240" y="290" font-family="Georgia,serif" font-size="11" fill="#7C2530" text-anchor="middle" font-style="italic">Search for 50: 40 → 60 → 50</text>
+  <!-- Highlight arrows for search path -->
+  <path d="M 255,108 L 318,150" stroke="#7C2530" stroke-width="2.5" fill="none" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <path d="M 316,178 L 283,218" stroke="#7C2530" stroke-width="2.5" fill="none" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <defs>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+
+  <!-- BST Property label -->
+  <text x="240" y="318" font-family="Georgia,serif" font-size="11" fill="#5C3D1E" text-anchor="middle">left &lt; parent &lt; right</text>
+
+  <!-- Divider -->
+  <line x1="460" y1="50" x2="460" y2="360" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Degenerate BST -->
+  <text x="630" y="58" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">Degenerate BST (sorted insert)</text>
+
+  <!-- Node 10 -->
+  <circle cx="560" cy="95" r="18" fill="#FDF0F0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="560" y="100" font-family="Georgia,serif" font-size="13" fill="#7C2530" text-anchor="middle">10</text>
+
+  <!-- Node 20 -->
+  <line x1="575" y1="110" x2="610" y2="138" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="620" cy="155" r="18" fill="#FDF0F0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="620" y="160" font-family="Georgia,serif" font-size="13" fill="#7C2530" text-anchor="middle">20</text>
+
+  <!-- Node 30 -->
+  <line x1="635" y1="170" x2="670" y2="198" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="680" cy="215" r="18" fill="#FDF0F0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="680" y="220" font-family="Georgia,serif" font-size="13" fill="#7C2530" text-anchor="middle">30</text>
+
+  <!-- Node 40 -->
+  <line x1="695" y1="230" x2="720" y2="258" stroke="#7C2530" stroke-width="1.5"/>
+  <circle cx="730" cy="275" r="18" fill="#FDF0F0" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="730" y="280" font-family="Georgia,serif" font-size="13" fill="#7C2530" text-anchor="middle">40</text>
+
+  <!-- Complexity labels -->
+  <text x="240" y="348" font-family="Georgia,serif" font-size="12" fill="#2D5A8E" text-anchor="middle" font-weight="bold">O(log n) average</text>
+  <text x="630" y="328" font-family="Georgia,serif" font-size="12" fill="#7C2530" text-anchor="middle" font-weight="bold">O(n) worst case</text>
+  <text x="630" y="348" font-family="Georgia,serif" font-size="10" fill="#C4A87A" text-anchor="middle" font-style="italic">degenerates to linked list</text>
+</svg>

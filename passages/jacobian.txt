@@ -1,0 +1,117 @@
+<<include "Header">>
+
+! Jacobian
+
+[img[assets/jacobian.svg]]
+
+Imagine you are standing on a hillside and you want to know which direction is steepest. A single derivative tells you the slope along one axis. But if the terrain depends on two variables — latitude and longitude — you need slopes in both directions simultaneously. Now imagine the terrain is not a single elevation but an entire weather system: temperature, pressure, and humidity all changing with position. The ''Jacobian'' is the complete bookkeeping device that captures //every// rate of change of //every// output with respect to //every// input, organized into a single matrix. It is the multivariate generalization of the derivative, and it is the engine that makes [[Backpropagation]] possible in deep networks with millions of parameters.
+
+---
+
+!! The Core Insight
+
+A scalar function of one variable has a derivative — a single number. A scalar function of several variables has a gradient — a vector of partial derivatives. But what happens when the function itself is vector-valued, mapping $n$ inputs to $m$ outputs? You need a partial derivative of each output with respect to each input. That gives $m \times n$ numbers. Arrange them in a matrix and you have the ''Jacobian matrix''.
+
+The Jacobian captures the best //linear approximation// to a function near a point. If you nudge the input by a tiny vector $\Delta x$, the output changes by approximately $J \Delta x$. This is the multivariate [[Chain Rule]] in matrix form: composing two functions means multiplying their Jacobians. Every layer in a neural network is a function, and [[Backpropagation]] works by multiplying Jacobians layer by layer — propagating how small input changes ripple through to the final loss.
+
+The determinant of a square Jacobian has a geometric meaning: it measures how much the function locally stretches or compresses volume. A determinant of zero means the function collapses a dimension — information is lost, and the function is not locally invertible. This concept appears in normalizing flows, change-of-variables formulas in probability, and anywhere you need to track how transformations distort space.
+
+---
+
+!! Jacobians in Neural Networks
+
+In a feedforward network, each layer computes $h_{l+1} = f_l(W_l h_l + b_l)$, where $f_l$ is an activation function. The Jacobian of layer $l$ with respect to its input $h_l$ is $\frac{\partial h_{l+1}}{\partial h_l} = \text{diag}(f_l') \cdot W_l$, where $\text{diag}(f_l')$ is a diagonal matrix of activation derivatives. During backpropagation, the gradient of the loss with respect to an early layer's activations is the product of all intervening layer Jacobians — a ''Jacobian chain''.
+
+This chain product is the source of both the ''vanishing gradient'' and ''exploding gradient'' problems. If the singular values of each layer's Jacobian are consistently less than one, repeated multiplication drives the gradient toward zero. If they are consistently greater than one, the gradient blows up. The entire art of initialization schemes, [[Gradient Descent]] learning rate tuning, residual connections, and normalization layers can be understood as efforts to keep the Jacobian's singular values near one throughout the network.
+
+In recurrent neural networks the problem is even more severe: the Jacobian is multiplied across //time steps//, so a 100-step sequence involves a product of 100 Jacobians. The sensitivity of the hidden state to inputs from the distant past decays or explodes exponentially with sequence length, which is why vanilla RNNs struggle with long-range dependencies.
+
+---
+
+!! What the Math Is Actually Doing
+
+For a function $\mathbf{f}: \mathbb{R}^n \to \mathbb{R}^m$, the Jacobian matrix at a point $\mathbf{x}$ is:
+
+$$J = \begin{pmatrix} \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_n} \\ \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_n} \\ \vdots & \vdots & \ddots & \vdots \\ \frac{\partial f_m}{\partial x_1} & \frac{\partial f_m}{\partial x_2} & \cdots & \frac{\partial f_m}{\partial x_n} \end{pmatrix}$$
+
+The first-order Taylor approximation of $\mathbf{f}$ near $\mathbf{x}_0$ is:
+
+$$\mathbf{f}(\mathbf{x}_0 + \Delta \mathbf{x}) \approx \mathbf{f}(\mathbf{x}_0) + J(\mathbf{x}_0) \, \Delta \mathbf{x}$$
+
+For a composition $\mathbf{g} \circ \mathbf{f}$, the chain rule gives $J_{\mathbf{g} \circ \mathbf{f}} = J_{\mathbf{g}} \cdot J_{\mathbf{f}}$. In backpropagation, if $L$ is the scalar loss and the network has layers $f_1, f_2, \ldots, f_K$, then:
+
+$$\frac{\partial L}{\partial \mathbf{h}_0} = \frac{\partial L}{\partial \mathbf{h}_K} \cdot J_{f_K} \cdot J_{f_{K-1}} \cdots J_{f_1}$$
+
+Each $J_{f_l}$ is the Jacobian of layer $l$. In practice, we never form the full Jacobian matrices explicitly. Instead, ''Jacobian-vector products'' (JVPs) compute $J \cdot v$ in forward mode, and ''vector-Jacobian products'' (VJPs) compute $v^T \cdot J$ in reverse mode. Reverse-mode [[Automatic Differentiation]] uses VJPs because a single backward pass computes the gradient of one scalar loss with respect to all parameters — far more efficient than computing the full Jacobian column by column.
+
+When $m = n$ (square Jacobian), the ''Jacobian determinant'' $\det(J)$ measures local volume change. For a change of variables $\mathbf{y} = \mathbf{f}(\mathbf{x})$ in a probability density:
+
+$$p_Y(\mathbf{y}) = p_X(\mathbf{f}^{-1}(\mathbf{y})) \cdot |\det(J_{\mathbf{f}^{-1}}(\mathbf{y}))|$$
+
+This is the foundation of normalizing flows, where invertible transformations with tractable Jacobian determinants allow exact density evaluation.
+
+---
+
+!! Practical Applications
+
+''Normalizing flows'' are generative models built from chains of invertible transformations. Training requires evaluating the log-determinant of the Jacobian at each layer. Architectures like RealNVP and GLOW use coupling layers whose Jacobians are triangular, making the determinant a simple product of diagonal entries — reducing an $O(n^3)$ computation to $O(n)$.
+
+''Fisher information matrix'' is the expected value of the outer product of the gradient of the log-likelihood — equivalently, the expected [[Hessian]] of the negative log-likelihood. It can be written as $F = \mathbb{E}[J^T J]$ where $J$ is the Jacobian of the log-likelihood with respect to parameters. The Fisher matrix defines a Riemannian metric on parameter space and is central to natural gradient descent.
+
+''Sensitivity analysis'' in scientific computing uses Jacobians to determine how model outputs respond to parameter perturbations. In physics-informed neural networks and differentiable simulators, Jacobians connect learned representations to physical constraints, enabling end-to-end gradient-based optimization of complex systems.
+
+''Jacobian regularization'' penalizes the Frobenius norm of the Jacobian $\|J\|_F$ to encourage the network to be locally smooth — small input perturbations should not cause large output changes. This is a principled form of robustness training related to adversarial defense, and it connects to the Lipschitz constant of the network.
+
+---
+
+!! When Jacobian Computation Breaks Down
+
+''High-dimensional Jacobians:'' For a layer mapping $\mathbb{R}^{4096}$ to $\mathbb{R}^{4096}$, the full Jacobian is a $4096 \times 4096$ matrix with over 16 million entries. Storing and manipulating full Jacobians is prohibitive in modern networks. This is why [[Automatic Differentiation]] frameworks never materialize the full Jacobian — they compute only the JVPs or VJPs needed for gradient computation. Any algorithm that requires the explicit Jacobian (such as exact second-order methods needing $J^T J$) must use approximations like Kronecker factorization (K-FAC) or stochastic estimation.
+
+''Singular or near-singular Jacobians:'' When the Jacobian has singular values near zero, the function is locally collapsing dimensions and the linear approximation breaks down in those directions. In neural networks, this manifests as vanishing gradients: the loss surface becomes flat in certain parameter directions, and gradient-based optimization stalls. ReLU activations that are exactly zero produce Jacobians with entire zero rows, creating hard non-differentiabilities that complicate theoretical analysis even though autodiff handles them in practice.
+
+''Non-differentiable operations:'' The Jacobian is undefined at points where the function is not differentiable — discrete operations like argmax, hard thresholding, or integer rounding have no Jacobian. In practice, techniques like the straight-through estimator, Gumbel-Softmax relaxation, and score-function estimators provide surrogate gradients, but these are approximations with no guarantee of behaving like a true Jacobian. Algorithms that rely on Jacobian properties (like volume preservation or invertibility) can fail silently when the underlying function is only piecewise differentiable.
+
+---
+
+!! Technical Details
+
+The Jacobian is named after Carl Gustav Jacob Jacobi (1804--1851), who used the determinant form extensively in his work on partial differential equations and the change-of-variables formula. The matrix generalization to non-square cases is a modern development tied to multivariable calculus and differential geometry.
+
+''Forward-mode vs. reverse-mode:'' For $\mathbf{f}: \mathbb{R}^n \to \mathbb{R}^m$, forward-mode autodiff computes one column of $J$ per pass (cost proportional to $n$ passes for the full Jacobian), while reverse-mode computes one row per pass (cost proportional to $m$ passes). Since neural network training computes gradients of a scalar loss ($m = 1$), reverse mode requires only one pass — this asymmetry is why [[Backpropagation]] is so efficient.
+
+The ''Jacobian spectrum'' (its singular values) controls the conditioning of the linear approximation. The condition number $\kappa(J) = \sigma_{\max}/\sigma_{\min}$ determines how much the function amplifies perturbations in the worst vs. best directions. Networks with well-conditioned Jacobians throughout their depth are easier to train. Orthogonal initialization, spectral normalization, and careful residual scaling all target Jacobian conditioning.
+
+''Gauss-Newton approximation:'' For a loss $L = \|r(\theta)\|^2$ where $r$ is a residual vector, the [[Hessian]] decomposes as $H = J_r^T J_r + \sum_i r_i \nabla^2 r_i$. The Gauss-Newton method drops the second term, approximating the Hessian as $J_r^T J_r$ — a positive semidefinite matrix that is cheaper to compute and avoids negative curvature. This approximation is exact at a minimum where residuals are zero, and it underlies the Levenberg-Marquardt algorithm and natural gradient methods.
+
+In differential geometry, the Jacobian of a coordinate transformation is the matrix representation of the ''pushforward'' map between tangent spaces. This perspective unifies the Jacobian with concepts from information geometry, where the Fisher information metric on a statistical manifold is defined through the Jacobian of the log-likelihood map.
+
+---
+
+!! Quiz
+
+<span id="jac-q1">''1. What does the Jacobian matrix represent for a function f: R^n -> R^m?''</span>
+<<button "A) The second derivatives of each output">><<replace "#jac-q1">>Incorrect. Second derivatives belong to the [[Hessian]], not the Jacobian. The Jacobian contains only first-order partial derivatives.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The matrix of all first partial derivatives of each output with respect to each input">><<replace "#jac-q1">>Correct! The Jacobian is the $m \times n$ matrix where entry $(i,j)$ is $\partial f_i / \partial x_j$. It captures every first-order rate of change between outputs and inputs.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The covariance matrix of the outputs">><<replace "#jac-q1">>Incorrect. The covariance matrix describes statistical relationships between random variables, not the derivatives of a deterministic function.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The eigendecomposition of the weight matrix">><<replace "#jac-q1">>Incorrect. Eigendecomposition is a factorization of a square matrix. The Jacobian is a matrix of partial derivatives, not a factorization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q2">''2. Why does backpropagation use vector-Jacobian products (VJPs) rather than forming full Jacobians?''</span>
+<<button "A) Full Jacobians are always singular and therefore useless">><<replace "#jac-q2">>Incorrect. Jacobians are not always singular. The issue is computational cost and memory, not singularity.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) VJPs are numerically more stable than full Jacobians">><<replace "#jac-q2">>Incorrect. While numerical considerations matter, the primary reason is efficiency: a single reverse pass computes the gradient of one scalar loss with respect to all parameters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) A single reverse-mode pass computes the gradient of one scalar loss with respect to all parameters, without ever materializing the full Jacobian">><<replace "#jac-q2">>Correct! Since the loss is scalar ($m=1$), reverse-mode autodiff needs only one pass to compute the entire gradient. Forming the full Jacobian would require $n$ forward passes or $m$ reverse passes for each layer — vastly more expensive.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) VJPs only work for linear functions">><<replace "#jac-q2">>Incorrect. VJPs work for any differentiable function, not just linear ones. They are the fundamental operation of reverse-mode [[Automatic Differentiation]].<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q3">''3. What does the determinant of a square Jacobian measure geometrically?''</span>
+<<button "A) The curvature of the function at that point">><<replace "#jac-q3">>Incorrect. Curvature involves second derivatives (the [[Hessian]]). The Jacobian determinant measures local volume change, a first-order property.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The local volume scaling factor of the transformation">><<replace "#jac-q3">>Correct! The absolute value of $\det(J)$ tells you how much the function locally stretches or compresses volumes. A determinant of zero means the function collapses at least one dimension — it is not locally invertible at that point.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The total number of parameters in the function">><<replace "#jac-q3">>Incorrect. The determinant is a scalar computed from the matrix entries, not a count of parameters.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The distance between input and output spaces">><<replace "#jac-q3">>Incorrect. There is no single "distance" between input and output spaces. The determinant measures local volume distortion, not distance.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q4">''4. In a feedforward neural network, the vanishing gradient problem is caused by:''</span>
+<<button "A) The Jacobian having too many rows">><<replace "#jac-q4">>Incorrect. The number of rows in the Jacobian determines the output dimension, not gradient magnitude. The problem is in the singular values, not the shape.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The product of layer Jacobians having singular values consistently less than one">><<replace "#jac-q4">>Correct! When each layer's Jacobian has singular values below one, their product shrinks exponentially with depth. The gradient signal decays to near zero before reaching early layers, stalling learning.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) Using too few training examples">><<replace "#jac-q4">>Incorrect. The vanishing gradient problem is a property of the network architecture and initialization, not the dataset size.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The learning rate being set too high">><<replace "#jac-q4">>Incorrect. A high learning rate causes instability, but vanishing gradients arise from the Jacobian product shrinking, regardless of the learning rate.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q5">''5. In normalizing flows, why are coupling layers designed to have triangular Jacobians?''</span>
+<<button "A) Triangular matrices have eigenvalues on the diagonal, which simplifies training">><<replace "#jac-q5">>Incorrect. While triangular matrices do have eigenvalues on the diagonal, the specific advantage for normalizing flows is the cheap determinant computation.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) Triangular Jacobians guarantee the transformation is always invertible">><<replace "#jac-q5">>Incorrect. A triangular matrix is invertible only if no diagonal entry is zero. The main advantage is computational: the determinant is the product of diagonal entries.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The determinant of a triangular matrix is the product of its diagonal entries, reducing an O(n^3) computation to O(n)">><<replace "#jac-q5">>Correct! Normalizing flows require evaluating the Jacobian determinant at every training step. A triangular structure makes this a simple product of diagonal entries, turning a cubic-cost operation into a linear one.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) Triangular matrices use less memory than dense matrices">><<replace "#jac-q5">>Incorrect. While triangular matrices store fewer non-zero entries, the primary motivation in normalizing flows is the O(n) determinant computation, not memory savings.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q6">''6. For f: R^n -> R^m, how many forward-mode passes are needed to compute the full Jacobian?''</span>
+<<button "A) 1">><<replace "#jac-q6">>Incorrect. One forward pass computes a single Jacobian-vector product — one column of the Jacobian. You need $n$ passes for all columns.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) m">><<replace "#jac-q6">>Incorrect. $m$ is the number of passes needed in //reverse// mode (one row per pass). Forward mode computes one column per pass, so it needs $n$ passes.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) n">><<replace "#jac-q6">>Correct! Each forward-mode pass computes a Jacobian-vector product $J \cdot e_i$, yielding one column of $J$. With $n$ input dimensions, you need $n$ passes to assemble the full matrix.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) m x n">><<replace "#jac-q6">>Incorrect. You do not need one pass per entry. Each forward pass computes an entire column ($m$ entries at once), so $n$ passes suffice.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q7">''7. The Gauss-Newton approximation replaces the Hessian with:''</span>
+<<button "A) The identity matrix scaled by the learning rate">><<replace "#jac-q7">>Incorrect. That describes simple gradient descent, not the Gauss-Newton method.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The diagonal of the Hessian">><<replace "#jac-q7">>Incorrect. Diagonal Hessian approximations (like AdaGrad) are a different family of methods. Gauss-Newton specifically uses $J^T J$.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) J^T J, where J is the Jacobian of the residual vector">><<replace "#jac-q7">>Correct! The full [[Hessian]] is $J^T J + \sum_i r_i \nabla^2 r_i$. Gauss-Newton drops the second-order residual term, keeping only the positive semidefinite $J^T J$. This is exact when residuals are zero at the optimum.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The inverse of the Jacobian">><<replace "#jac-q7">>Incorrect. The inverse Jacobian appears in Newton's method for root-finding, not in the Gauss-Newton approximation for least-squares optimization.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<span id="jac-q8">''8. What happens at a point where the Jacobian determinant is zero?''</span>
+<<button "A) The function achieves its global minimum">><<replace "#jac-q8">>Incorrect. A zero Jacobian determinant says nothing about optimality. It indicates a loss of local invertibility, not a minimum.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "B) The gradient is guaranteed to explode">><<replace "#jac-q8">>Incorrect. A zero determinant means the Jacobian is singular (collapsing a dimension), which is associated with //vanishing//, not exploding, gradients in that direction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "C) The function locally collapses at least one dimension and is not locally invertible">><<replace "#jac-q8">>Correct! A zero determinant means the Jacobian is singular — the linear approximation maps some nonzero input perturbation to zero output change. The function is not locally invertible, and information is lost in at least one direction.<</replace>><<script>>typesetMath();<</script>><</button>> <<button "D) The function is linear at that point">><<replace "#jac-q8">>Incorrect. A zero determinant does not imply linearity. It means the linear approximation is degenerate — it has a non-trivial null space.<</replace>><<script>>typesetMath();<</script>><</button>>
+
+<<include "Footer">>
