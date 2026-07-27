@@ -6,7 +6,7 @@
   <!-- Title -->
   <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C3D1E">Prefix Tuning — Only 0.1% of Parameters Trained</text>
 
-  <!-- ===== MAIN DIAGRAM (top half) ===== -->
+  <!-- MAIN DIAGRAM (top half) -->
 
   <!-- Prefix tokens label -->
   <text x="62" y="68" text-anchor="middle" font-size="11" font-weight="bold" fill="#7C2530">Prefix (trainable)</text>
@@ -71,12 +71,12 @@
   <rect x="10" y="148" width="780" height="26" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1.5"/>
   <text x="400" y="165" text-anchor="middle" font-size="12" fill="#5C3D1E" font-weight="bold">Only prefix parameters trained: ~0.1% of model   |   Prefix injects via K,V at EVERY layer   |   Swap prefix to switch tasks</text>
 
-  <!-- ===== COMPARISON DIAGRAMS (bottom half) ===== -->
+  <!-- COMPARISON DIAGRAMS (bottom half) -->
   <line x1="10" y1="186" x2="790" y2="186" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,3"/>
 
   <text x="400" y="206" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C3D1E">Comparison: PEFT Methods</text>
 
-  <!-- --- Full Fine-Tuning --- -->
+  <!-- Full Fine=Tuning -->
   <text x="130" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#555">Full Fine-Tuning</text>
   <!-- Model block fully colored -->
   <rect x="50" y="236" width="160" height="50" rx="6" fill="#B0C8E8" stroke="#2D5A8E" stroke-width="2"/>
@@ -85,7 +85,7 @@
   <rect x="50" y="296" width="160" height="22" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1"/>
   <text x="130" y="311" text-anchor="middle" font-size="10" fill="#555">high cost, best quality</text>
 
-  <!-- --- Prefix Tuning --- -->
+  <!-- Prefix Tuning -->
   <text x="400" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#7C2530">Prefix Tuning  &#x2190; you are here</text>
   <!-- Prefix tokens small boxes -->
   <rect x="298" y="236" width="18" height="50" rx="3" fill="#7C2530" stroke="#5C3D1E" stroke-width="1.5"/>
@@ -99,13 +99,13 @@
   <rect x="278" y="296" width="204" height="22" rx="4" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
   <text x="380" y="311" text-anchor="middle" font-size="10" fill="#5C3D1E">~0.1% params — inject via K,V every layer</text>
 
-  <!-- --- LoRA --- -->
+  <!-- LoRA -->
   <text x="666" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#2D5A8E">LoRA</text>
-  <!-- Frozen model + low-rank adapters -->
+  <!-- Frozen model + low=rank adapters -->
   <rect x="590" y="236" width="90" height="50" rx="4" fill="#E8E8E8" stroke="#999" stroke-width="1.5"/>
   <text x="635" y="257" text-anchor="middle" font-size="10" fill="#777">Frozen</text>
   <text x="635" y="271" text-anchor="middle" font-size="10" fill="#777">Weights</text>
-  <!-- Low-rank arrows/boxes -->
+  <!-- Low=rank arrows/boxes -->
   <rect x="688" y="243" width="28" height="16" rx="3" fill="#2D5A8E"/>
   <text x="702" y="254" text-anchor="middle" font-size="9" fill="white">A</text>
   <rect x="688" y="264" width="28" height="16" rx="3" fill="#2D5A8E"/>
@@ -115,7 +115,7 @@
   <rect x="578" y="296" width="164" height="22" rx="4" fill="#E8E4F5" stroke="#2D5A8E" stroke-width="1"/>
   <text x="660" y="311" text-anchor="middle" font-size="10" fill="#2D5A8E">1–5% params — weight matrix adapters</text>
 
-  <!-- --- Legend box --- -->
+  <!-- Legend box -->
   <rect x="10" y="338" width="780" height="50" rx="5" fill="#F5ECD7" stroke="#C4A87A" stroke-width="1"/>
   <rect x="22" y="355" width="14" height="14" rx="2" fill="#7C2530"/>
   <text x="42" y="366" font-size="11" fill="#5C3D1E">Trainable prefix vectors (K &amp; V per layer)</text>

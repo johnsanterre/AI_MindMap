@@ -103694,9 +103694,9 @@ This means small perturbations in the data produce small changes in the persiste
 &lt;&lt;button "D"&gt;&gt;&lt;&lt;replace "#q8"&gt;&gt;Incorrect. A solid ball has $\beta_0 = 1$, $\beta_1 = 0$, $\beta_2 = 0$ — no loops or voids.&lt;&lt;/replace&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 
 &lt;&lt;include "Footer"&gt;&gt;</tw-passagedata>
-<tw-passagedata pid="681" name="Cramér-Rao Bound" tags="" position="2000,4400" size="100,200">&amp;lt;&amp;lt;include &amp;quot;Header&amp;quot;&amp;gt;&amp;gt;
+<tw-passagedata pid="681" name="Cramér-Rao Bound" tags="" position="2000,4400" size="100,200">&amp;lt;&amp;lt;include &amp;quot;Header&amp;quot;&gt;&gt;
 ! Cramér-Rao Bound
-&amp;lt;img src=&amp;quot;assets/cramer_rao_bound.svg&amp;quot; alt=&amp;quot;Cramér-Rao Bound&amp;quot; width=&amp;quot;800&amp;quot;&amp;gt;
+&lt;img src=&amp;quot;assets/cramer_rao_bound.svg&amp;quot; alt=&amp;quot;Cramér-Rao Bound&amp;quot; width=&amp;quot;800&amp;quot;&gt;
 
 Imagine you are trying to weigh a squirming toddler on a bathroom scale. No matter how many times you repeat the measurement, there is a fundamental floor on how precise your estimate of the child&amp;#39;s weight can be — set not by your patience but by the physics of the scale itself. The ''Cramér-Rao Bound'' (CRB) is exactly that floor for //any// estimation problem: it tells you the absolute best precision an unbiased estimator can ever achieve, given the statistical model you are working with. If your estimator already hits that floor, congratulations — you cannot do better. If it does not, you know there is room to improve.
 
@@ -103756,7 +103756,7 @@ The Cramér-Rao Bound is far from a textbook curiosity; it appears throughout mo
 
 !! Technical Details
 
-''Regularity conditions.'' The standard CRB requires: (1) the parameter space is an open subset of $\mathbb{R}^k$; (2) the support $\{x : p(x|\theta) &amp;gt; 0\}$ does not depend on $\theta$; (3) $\log p(x|\theta)$ is twice continuously differentiable in $\theta$; (4) the order of integration and differentiation can be interchanged.
+''Regularity conditions.'' The standard CRB requires: (1) the parameter space is an open subset of $\mathbb{R}^k$; (2) the support $\{x : p(x|\theta) &gt; 0\}$ does not depend on $\theta$; (3) $\log p(x|\theta)$ is twice continuously differentiable in $\theta$; (4) the order of integration and differentiation can be interchanged.
 
 ''Bhattacharyya bound.'' By using higher-order derivatives of the log-likelihood, one obtains a sequence of increasingly tight bounds. The $m$-th order Bhattacharyya bound uses derivatives up to order $m$ and is never looser than the CRB (which is the first-order case).
 
@@ -103774,79 +103774,79 @@ where $I_\pi = \int (\pi&amp;#39;(\theta))^2 / \pi(\theta)\,d\theta$ is the Fish
 
 !! Quiz
 
-&amp;lt;div id=&amp;quot;crb-q1&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q1&amp;quot;&gt;&amp;lt;/div&gt;
 ''1. The Cramér-Rao Bound provides:''
 (A) An upper limit on estimator bias
 (B) A lower limit on the variance of any unbiased estimator
 (C) The exact variance of the MLE
 (D) A lower limit on the mean squared error of biased estimators
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q1&amp;quot;&amp;gt;&amp;gt;''Answer: (B)'' The CRB is a //lower bound// on the variance of any unbiased estimator.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q1&amp;quot;&gt;&gt;''Answer: (B)'' The CRB is a //lower bound// on the variance of any unbiased estimator.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q2&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q2&amp;quot;&gt;&amp;lt;/div&gt;
 ''2. An estimator that achieves the CRB exactly is called:''
 (A) Consistent
 (B) Robust
 (C) Efficient
 (D) Sufficient
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q2&amp;quot;&amp;gt;&amp;gt;''Answer: (C)'' An estimator whose variance equals $1/I(\theta)$ is called //efficient//.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q2&amp;quot;&gt;&gt;''Answer: (C)'' An estimator whose variance equals $1/I(\theta)$ is called //efficient//.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q3&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q3&amp;quot;&gt;&amp;lt;/div&gt;
 ''3. The Fisher information $I(\theta)$ measures:''
 (A) The prior probability of $\theta$
 (B) The variance of the score function
 (C) The bias of the MLE
 (D) The entropy of the data distribution
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q3&amp;quot;&amp;gt;&amp;gt;''Answer: (B)'' The Fisher information is the variance of the score (derivative of the log-likelihood with respect to $\theta$).&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q3&amp;quot;&gt;&gt;''Answer: (B)'' The Fisher information is the variance of the score (derivative of the log-likelihood with respect to $\theta$).&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q4&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q4&amp;quot;&gt;&amp;lt;/div&gt;
 ''4. Which condition would violate the regularity requirements for the standard CRB?''
 (A) The likelihood is Gaussian
 (B) The support of the distribution depends on $\theta$
 (C) The sample size is large
 (D) The parameter space is open
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q4&amp;quot;&amp;gt;&amp;gt;''Answer: (B)'' If the support depends on $\theta$ (e.g., $U(0,\theta)$), the standard CRB does not apply.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q4&amp;quot;&gt;&gt;''Answer: (B)'' If the support depends on $\theta$ (e.g., $U(0,\theta)$), the standard CRB does not apply.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q5&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q5&amp;quot;&gt;&amp;lt;/div&gt;
 ''5. The MLE is said to be asymptotically efficient because:''
 (A) It is always unbiased
 (B) Its variance approaches $1/I(\theta)$ as $n \to \infty$
 (C) It minimises the prior
 (D) It has zero variance for large $n$
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q5&amp;quot;&amp;gt;&amp;gt;''Answer: (B)'' Asymptotic efficiency means the MLE&amp;#39;s variance converges to the CRB as sample size grows.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q5&amp;quot;&gt;&gt;''Answer: (B)'' Asymptotic efficiency means the MLE&amp;#39;s variance converges to the CRB as sample size grows.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q6&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q6&amp;quot;&gt;&amp;lt;/div&gt;
 ''6. In the multivariate CRB, the bound is expressed as:''
 (A) A scalar inequality on the determinant
 (B) A matrix inequality: $\text{Cov}(\hat{\boldsymbol{\theta}}) \succeq \mathbf{I}(\boldsymbol{\theta})^{-1}$
 (C) An equality between covariance and Fisher information
 (D) A bound on the trace of the Hessian
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q6&amp;quot;&amp;gt;&amp;gt;''Answer: (B)'' The multivariate CRB states that the difference $\text{Cov}(\hat{\boldsymbol{\theta}}) - \mathbf{I}(\boldsymbol{\theta})^{-1}$ is positive semi-definite.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q6&amp;quot;&gt;&gt;''Answer: (B)'' The multivariate CRB states that the difference $\text{Cov}(\hat{\boldsymbol{\theta}}) - \mathbf{I}(\boldsymbol{\theta})^{-1}$ is positive semi-definite.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q7&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q7&amp;quot;&gt;&amp;lt;/div&gt;
 ''7. The van Trees inequality extends the CRB to:''
 (A) Biased frequentist estimators
 (B) Non-parametric models
 (C) The Bayesian setting with a prior on $\theta$
 (D) Discrete parameter spaces
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q7&amp;quot;&amp;gt;&amp;gt;''Answer: (C)'' The van Trees inequality is the Bayesian analogue of the CRB, incorporating prior information about $\theta$.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q7&amp;quot;&gt;&gt;''Answer: (C)'' The van Trees inequality is the Bayesian analogue of the CRB, incorporating prior information about $\theta$.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;div id=&amp;quot;crb-q8&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;crb-q8&amp;quot;&gt;&amp;lt;/div&gt;
 ''8. In neural networks, the Fisher information matrix is used for all of the following EXCEPT:''
 (A) Elastic Weight Consolidation for continual learning
 (B) Natural gradient descent
 (C) Dropout regularisation
 (D) Laplace approximation for Bayesian posteriors
 
-&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&amp;gt;&amp;gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q8&amp;quot;&amp;gt;&amp;gt;''Answer: (C)'' Dropout does not use the Fisher information matrix. EWC, natural gradient, and Laplace approximation all rely on it.&amp;lt;&amp;lt;/replace&amp;gt;&amp;gt;&amp;lt;&amp;lt;script&amp;gt;&amp;gt;typesetMath();&amp;lt;/script&amp;gt;&amp;gt;&amp;lt;/button&amp;gt;&amp;gt;
+&amp;lt;&amp;lt;button &amp;quot;Show Answer&amp;quot;&gt;&gt;&amp;lt;&amp;lt;replace &amp;quot;#crb-q8&amp;quot;&gt;&gt;''Answer: (C)'' Dropout does not use the Fisher information matrix. EWC, natural gradient, and Laplace approximation all rely on it.&amp;lt;&amp;lt;/replace&gt;&gt;&amp;lt;&amp;lt;script&gt;&gt;typesetMath();&amp;lt;/script&gt;&gt;&amp;lt;/button&gt;&gt;
 
-&amp;lt;&amp;lt;include &amp;quot;Footer&amp;quot;&amp;gt;&amp;gt;</tw-passagedata>
+&amp;lt;&amp;lt;include &amp;quot;Footer&amp;quot;&gt;&gt;</tw-passagedata>
 <tw-passagedata pid="682" name="Extreme Value Theory" tags="" position="2000,4600" size="100,200">&lt;&lt;include "Header"&gt;&gt;
 ! Extreme Value Theory
 &lt;img src="assets/extreme_value_theory.svg" alt="Extreme Value Theory" width="800"&gt;

@@ -20,7 +20,7 @@
   <!-- Divider -->
   <line x1="520" y1="40" x2="520" y2="380" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
 
-  <!-- ===== LEFT PANEL: LSTM Cell Detail ===== -->
+  <!-- LEFT PANEL: LSTM Cell Detail -->
 
   <!-- Cell body background -->
   <rect x="40" y="55" width="440" height="280" fill="#F8F4EC" stroke="#D4C5A9" stroke-width="1.5" rx="10"/>
@@ -38,7 +38,7 @@
   <text x="30" y="274" font-size="10" fill="#2D5A8E">hₜ₋₁</text>
   <text x="488" y="274" font-size="10" fill="#2D5A8E">hₜ</text>
 
-  <!-- ---- Forget Gate ---- -->
+  <!-- Forget Gate -->
   <rect x="80" y="160" width="80" height="50" rx="8" fill="#7C2530" stroke="#5a1a22" stroke-width="1.5"/>
   <text x="120" y="182" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Forget</text>
   <text x="120" y="200" text-anchor="middle" fill="#e8c0c5" font-size="11">fₜ = σ</text>
@@ -51,7 +51,7 @@
   <line x1="120" y1="160" x2="120" y2="109" stroke="#7C2530" stroke-width="1.5"/>
   <polygon points="117,111 120,104 123,111" fill="#7C2530"/>
 
-  <!-- ---- Input Gate ---- -->
+  <!-- Input Gate -->
   <rect x="200" y="160" width="80" height="50" rx="8" fill="#2D5A8E" stroke="#1e3f63" stroke-width="1.5"/>
   <text x="240" y="182" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Input</text>
   <text x="240" y="200" text-anchor="middle" fill="#b8d0e8" font-size="11">iₜ = σ</text>
@@ -71,7 +71,7 @@
   <line x1="260" y1="128" x2="260" y2="109" stroke="#2D5A8E" stroke-width="1.5"/>
   <polygon points="257,111 260,104 263,111" fill="#2D5A8E"/>
 
-  <!-- ---- Output Gate ---- -->
+  <!-- Output Gate -->
   <rect x="360" y="160" width="80" height="50" rx="8" fill="#5C3D1E" stroke="#3d2914" stroke-width="1.5"/>
   <text x="400" y="182" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Output</text>
   <text x="400" y="200" text-anchor="middle" fill="#d4c5a0" font-size="11">oₜ = σ</text>
@@ -95,7 +95,7 @@
   <line x1="440" y1="240" x2="460" y2="240" stroke="#2D5A8E" stroke-width="1.5"/>
   <text x="490" y="244" fill="#2D5A8E" font-size="10" font-weight="bold">hₜ output</text>
 
-  <!-- ===== RIGHT PANEL: Unrolled LSTM ===== -->
+  <!-- RIGHT PANEL: Unrolled LSTM -->
 
   <!-- Cell state flow -->
   <line x1="545" y1="105" x2="778" y2="105" stroke="#7C2530" stroke-width="2"/>
@@ -107,7 +107,7 @@
   <polygon points="772,252 780,255 772,258" fill="#2D5A8E"/>
   <text x="660" y="282" font-size="10" fill="#2D5A8E" text-anchor="middle" font-style="italic">hidden state h</text>
 
-  <!-- LSTM cell t-1 -->
+  <!-- LSTM cell t=1 -->
   <rect x="555" y="135" width="70" height="85" fill="#F8F4EC" stroke="#C4A87A" stroke-width="1.5" rx="6"/>
   <text x="590" y="172" text-anchor="middle" fill="#5C3D1E" font-size="12" font-weight="bold">LSTM</text>
   <text x="590" y="192" text-anchor="middle" fill="#6B5D4F" font-size="10">t-1</text>
