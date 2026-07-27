@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Tabular Q-Learning: the Update Loop</text>
+
+  <!-- Q-table -->
+  <rect x="50" y="80" width="180" height="130" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="140" y="102" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Q-table</text>
+  <line x1="50" y1="112" x2="230" y2="112" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="110" y1="112" x2="110" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="170" y1="112" x2="170" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="50" y1="145" x2="230" y2="145" stroke="#C4A87A" stroke-width="1"/>
+  <line x1="50" y1="178" x2="230" y2="178" stroke="#C4A87A" stroke-width="1"/>
+  <text x="140" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">states &#215; actions</text>
+
+  <!-- Loop: select action -->
+  <rect x="320" y="70" width="200" height="54" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="420" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E">&#949;-greedy in state s</text>
+  <text x="420" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">explore (prob &#949;) or argmax Q(s,&#183;)</text>
+
+  <!-- Environment -->
+  <rect x="600" y="70" width="150" height="54" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="675" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">Environment</text>
+  <text x="675" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">returns r, s'</text>
+
+  <!-- TD update -->
+  <rect x="320" y="180" width="430" height="70" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="535" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Temporal-difference update</text>
+  <text x="535" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Q(s,a) &#8592; Q(s,a) + &#945; [ r + &#947; max Q(s',&#183;) &#8722; Q(s,a) ]</text>
+
+  <!-- Arrows -->
+  <line x1="230" y1="97" x2="314" y2="97" stroke="#333" stroke-width="1.5"/>
+  <path d="M 314 97 l -8 -4 v 8 z" fill="#333"/>
+  <text x="272" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">action a</text>
+
+  <line x1="520" y1="97" x2="594" y2="97" stroke="#333" stroke-width="1.5"/>
+  <path d="M 594 97 l -8 -4 v 8 z" fill="#333"/>
+  <text x="557" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">step</text>
+
+  <line x1="675" y1="124" x2="675" y2="174" stroke="#7C2530" stroke-width="1.5"/>
+  <path d="M 675 174 l -4 -8 h 8 z" fill="#7C2530"/>
+  <text x="700" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">r, s'</text>
+
+  <line x1="314" y1="215" x2="140" y2="215" stroke="#5C3D1E" stroke-width="1.5" transform="translate(0,0)"/>
+  <path d="M 236 215 l 8 -4 v 8 z" fill="#5C3D1E"/>
+  <text x="272" y="206" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">write back</text>
+
+  <!-- loop back s <- s' -->
+  <path d="M 535 250 L 535 290 L 420 290 L 420 130" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <path d="M 420 130 l -4 8 h 8 z" fill="#2D5A8E"/>
+  <text x="478" y="282" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">s &#8592; s' ; repeat until done</text>
+
+  <!-- Hyperparameters strip -->
+  <line x1="40" y1="316" x2="760" y2="316" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Key hyperparameters</text>
+  <text x="400" y="366" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">&#945; = 0.1 learning rate &#183; &#947; = 0.99 discount on future reward &#183; &#949; = 0.1 exploration rate (often decayed over training)</text>
+</svg>

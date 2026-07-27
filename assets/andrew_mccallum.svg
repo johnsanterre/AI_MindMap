@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Andrew McCallum — Conditional Random Fields</text>
+  <text x="400" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">Sequence labeling: finding names in text (Lafferty, McCallum &amp; Pereira, ICML 2001)</text>
+
+  <!-- Label chain (y) -->
+  <line x1="200" y1="150" x2="320" y2="150" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="360" y1="150" x2="480" y2="150" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="520" y1="150" x2="640" y2="150" stroke="#5C3D1E" stroke-width="2"/>
+
+  <circle cx="180" cy="150" r="24" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="180" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O</text>
+  <circle cx="340" cy="150" r="24" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="340" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">B-PER</text>
+  <circle cx="500" cy="150" r="24" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="500" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">I-PER</text>
+  <circle cx="660" cy="150" r="24" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="660" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">O</text>
+
+  <!-- Arrows word -> label -->
+  <line x1="180" y1="238" x2="180" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="340" y1="238" x2="340" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="500" y1="238" x2="500" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="660" y1="238" x2="660" y2="180" stroke="#C4A87A" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- Word boxes (x) -->
+  <rect x="135" y="242" width="90" height="40" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="180" y="267" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">The</text>
+  <rect x="295" y="242" width="90" height="40" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="340" y="267" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Andrew</text>
+  <rect x="455" y="242" width="90" height="40" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="500" y="267" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">spoke</text>
+  <rect x="615" y="242" width="90" height="40" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="660" y="267" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">today</text>
+
+  <!-- Row labels -->
+  <text x="70" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">labels y</text>
+  <text x="70" y="267" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">words x</text>
+
+  <!-- Formula + notes -->
+  <text x="400" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">p(y | x) &#8733; exp( &#931; &#955;&#8342; f&#8342;(y&#8348;, y&#8348;&#8331;&#8321;, x, t) )</text>
+  <text x="400" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Globally normalized over the whole sequence &#8594; no label-bias problem (unlike HMM/MEMM)</text>
+
+  <text x="250" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">&#9679; person entity (B/I tags)</text>
+  <text x="420" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">&#9675; outside (O)</text>
+  <text x="620" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#5C3D1E">MALLET toolkit &#183; NELL &#183; UMass</text>
+</svg>

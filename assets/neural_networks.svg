@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Neural Networks</text>
+  <text x="400" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">Layers of connected neurons learn to transform inputs into outputs</text>
+
+  <!-- Connections input -> hidden -->
+  <g stroke="#C4A87A" stroke-width="1.5">
+    <line x1="200" y1="140" x2="400" y2="115"/><line x1="200" y1="140" x2="400" y2="180"/>
+    <line x1="200" y1="140" x2="400" y2="245"/><line x1="200" y1="140" x2="400" y2="310"/>
+    <line x1="200" y1="210" x2="400" y2="115"/><line x1="200" y1="210" x2="400" y2="180"/>
+    <line x1="200" y1="210" x2="400" y2="245"/><line x1="200" y1="210" x2="400" y2="310"/>
+    <line x1="200" y1="280" x2="400" y2="115"/><line x1="200" y1="280" x2="400" y2="180"/>
+    <line x1="200" y1="280" x2="400" y2="245"/><line x1="200" y1="280" x2="400" y2="310"/>
+    <line x1="400" y1="115" x2="600" y2="175"/><line x1="400" y1="115" x2="600" y2="245"/>
+    <line x1="400" y1="180" x2="600" y2="175"/><line x1="400" y1="180" x2="600" y2="245"/>
+    <line x1="400" y1="245" x2="600" y2="175"/><line x1="400" y1="245" x2="600" y2="245"/>
+    <line x1="400" y1="310" x2="600" y2="175"/><line x1="400" y1="310" x2="600" y2="245"/>
+  </g>
+
+  <!-- Input neurons -->
+  <circle cx="200" cy="140" r="15" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="200" cy="210" r="15" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="200" cy="280" r="15" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <!-- Hidden neurons -->
+  <circle cx="400" cy="115" r="15" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <circle cx="400" cy="180" r="15" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <circle cx="400" cy="245" r="15" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <circle cx="400" cy="310" r="15" fill="#FDFAF4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <!-- Output neurons -->
+  <circle cx="600" cy="175" r="15" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <circle cx="600" cy="245" r="15" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+
+  <!-- Flow labels -->
+  <text x="110" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">data in &#8594;</text>
+  <text x="690" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">&#8594; prediction</text>
+
+  <!-- Layer labels -->
+  <text x="200" y="348" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Input layer</text>
+  <text x="400" y="348" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Hidden layer</text>
+  <text x="600" y="348" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Output layer</text>
+
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#5C3D1E">Training adjusts every connection weight &#8212; the foundation of deep learning</text>
+</svg>

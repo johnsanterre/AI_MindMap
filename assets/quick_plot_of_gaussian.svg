@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Plotting a Gaussian: Samples vs. the Density</text>
+
+  <!-- Axes -->
+  <line x1="120" y1="310" x2="690" y2="310" stroke="#333" stroke-width="1.5"/>
+  <line x1="120" y1="310" x2="120" y2="90" stroke="#333" stroke-width="1.5"/>
+  <text x="100" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90 100 200)">density</text>
+
+  <!-- Histogram bars (1000 samples, ~30 bins) -->
+  <g fill="#C4A87A" stroke="#FDFAF4" stroke-width="1">
+    <rect x="176" y="299" width="28" height="11"/>
+    <rect x="206" y="287" width="28" height="23"/>
+    <rect x="236" y="268" width="28" height="42"/>
+    <rect x="266" y="240" width="28" height="70"/>
+    <rect x="296" y="207" width="28" height="103"/>
+    <rect x="326" y="174" width="28" height="136"/>
+    <rect x="356" y="150" width="28" height="160"/>
+    <rect x="386" y="140" width="28" height="170"/>
+    <rect x="416" y="150" width="28" height="160"/>
+    <rect x="446" y="174" width="28" height="136"/>
+    <rect x="476" y="207" width="28" height="103"/>
+    <rect x="506" y="240" width="28" height="70"/>
+    <rect x="536" y="268" width="28" height="42"/>
+    <rect x="566" y="287" width="28" height="23"/>
+    <rect x="596" y="299" width="28" height="11"/>
+  </g>
+
+  <!-- Density curve overlay -->
+  <path d="M 160 308 C 240 306 270 290 300 250 C 330 210 355 138 400 138 C 445 138 470 210 500 250 C 530 290 560 306 640 308"
+        fill="none" stroke="#7C2530" stroke-width="3"/>
+
+  <!-- Mean line -->
+  <line x1="400" y1="310" x2="400" y2="120" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="400" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E">&#956; = 0</text>
+
+  <!-- Sigma bracket -->
+  <line x1="400" y1="230" x2="490" y2="230" stroke="#2D5A8E" stroke-width="1.5"/>
+  <path d="M 490 230 l -8 -4 v 8 z" fill="#2D5A8E"/>
+  <text x="447" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">&#963; = 0.1</text>
+
+  <!-- x tick labels -->
+  <text x="220" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#8722;2&#963;</text>
+  <text x="310" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#8722;&#963;</text>
+  <text x="490" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">+&#963;</text>
+  <text x="580" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">+2&#963;</text>
+
+  <!-- Legend -->
+  <rect x="560" y="90" width="16" height="16" fill="#C4A87A"/>
+  <text x="584" y="103" font-family="Georgia, serif" font-size="13" fill="#333">histogram of 1000 samples</text>
+  <line x1="560" y1="126" x2="576" y2="126" stroke="#7C2530" stroke-width="3"/>
+  <text x="584" y="131" font-family="Georgia, serif" font-size="13" fill="#333">true density (red curve)</text>
+
+  <!-- Bottom formula -->
+  <line x1="40" y1="348" x2="760" y2="348" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">np.random.normal(&#956;, &#963;, 1000) &#8594; plt.hist(&#183;, 30, density=True) &#8594; overlay  f(x) = (1/&#963;&#8730;2&#960;) e^(&#8722;(x&#8722;&#956;)&#178;/2&#963;&#178;)</text>
+</svg>

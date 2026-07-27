@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Suchi Saria — Research Landscape</text>
+  <text x="400" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">Machine learning for safe, reliable clinical decision-making</text>
+
+  <!-- Four research theme boxes -->
+  <rect x="30" y="85" width="170" height="90" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="115" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Sepsis Early Warning</text>
+  <text x="115" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">Bayesian patient</text>
+  <text x="115" y="143" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">trajectories detect sepsis</text>
+  <text x="115" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">hours before onset (2015)</text>
+
+  <rect x="225" y="85" width="170" height="90" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="310" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">ICU Monitoring</text>
+  <text x="310" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">Temporal models of</text>
+  <text x="310" y="143" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">continuous physiological</text>
+  <text x="310" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">streams, personalized</text>
+
+  <rect x="420" y="85" width="170" height="90" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="505" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Causal Treatment Effects</text>
+  <text x="505" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">Individualized treatment</text>
+  <text x="505" y="143" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">rules from EHR data;</text>
+  <text x="505" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">handles confounding</text>
+
+  <rect x="615" y="85" width="155" height="90" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="692" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Robustness to Shift</text>
+  <text x="692" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">Train population &#8800;</text>
+  <text x="692" y="143" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">deploy population;</text>
+  <text x="692" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">model monitoring</text>
+
+  <!-- Cross-links -->
+  <line x1="200" y1="130" x2="225" y2="130" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="590" y1="130" x2="615" y2="130" stroke="#C4A87A" stroke-width="2"/>
+
+  <!-- Arrows converging -->
+  <line x1="115" y1="175" x2="300" y2="288" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="310" y1="175" x2="365" y2="285" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="505" y1="175" x2="440" y2="285" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="692" y1="175" x2="505" y2="288" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- Goal box -->
+  <rect x="255" y="292" width="290" height="60" fill="#7C2530"/>
+  <text x="400" y="317" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#FDFAF4">Safe, Reliable Clinical AI</text>
+  <text x="400" y="338" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">calibration + causal validity for high-stakes decisions</text>
+
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#5C3D1E">Johns Hopkins ML &amp; Healthcare Lab (founded 2013)</text>
+</svg>

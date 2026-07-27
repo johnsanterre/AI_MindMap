@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="400" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Natural Language Processing</text>
+  <text x="400" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">Teaching computers to understand, generate, and manipulate human language</text>
+
+  <!-- Stage 1: raw text -->
+  <rect x="35" y="160" width="150" height="80" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="110" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Human text</text>
+  <text x="110" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">&#8220;The cat sat&#8221;</text>
+  <text x="110" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">massive corpora</text>
+
+  <line x1="185" y1="200" x2="223" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- Stage 2: tokens -->
+  <rect x="230" y="160" width="150" height="80" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="305" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Tokens</text>
+  <text x="305" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">[The] [cat] [sat]</text>
+  <text x="305" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">text as units the model reads</text>
+
+  <line x1="380" y1="200" x2="418" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- Stage 3: transformer stack -->
+  <rect x="425" y="130" width="170" height="140" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="510" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Transformer LLM</text>
+  <rect x="445" y="164" width="130" height="22" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="510" y="179" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">attention layer</text>
+  <rect x="445" y="192" width="130" height="22" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="510" y="207" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">attention layer</text>
+  <rect x="445" y="220" width="130" height="22" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="510" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">attention layer &#8230;</text>
+  <text x="510" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#333">learns rich representations</text>
+
+  <line x1="595" y1="175" x2="638" y2="150" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="595" y1="225" x2="638" y2="250" stroke="#5C3D1E" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- Outputs -->
+  <rect x="645" y="112" width="120" height="70" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="705" y="136" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Understand</text>
+  <text x="705" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">classify, extract,</text>
+  <text x="705" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">answer questions</text>
+
+  <rect x="645" y="218" width="120" height="70" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="705" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Generate</text>
+  <text x="705" y="261" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">write, translate,</text>
+  <text x="705" y="276" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#333">converse</text>
+
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Modern NLP is dominated by large language models trained on massive text corpora</text>
+  <text x="400" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#5C3D1E">One pipeline, many tasks: the representation in the middle does the work</text>
+</svg>

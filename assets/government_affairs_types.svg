@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">AI Policy: Domains, Institutions, Technical Tools</text>
+
+  <!-- Column 1: Policy domains -->
+  <rect x="40" y="58" width="230" height="26" fill="#7C2530"/>
+  <text x="155" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4">Policy domains (what)</text>
+  <rect x="40" y="90" width="230" height="204" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="55" y="114" font-family="Georgia, serif" font-size="13" fill="#333">Safety: pre-deployment testing</text>
+  <text x="55" y="146" font-family="Georgia, serif" font-size="13" fill="#333">Liability: who pays for harm?</text>
+  <text x="55" y="178" font-family="Georgia, serif" font-size="13" fill="#333">IP: training data, AI output</text>
+  <text x="55" y="210" font-family="Georgia, serif" font-size="13" fill="#333">Antitrust: compute + data power</text>
+  <text x="55" y="242" font-family="Georgia, serif" font-size="13" fill="#333">National security: export controls</text>
+  <text x="55" y="274" font-family="Georgia, serif" font-size="13" fill="#333">Labor: displacement, retraining</text>
+
+  <!-- Column 2: Institutions -->
+  <rect x="300" y="58" width="230" height="26" fill="#2D5A8E"/>
+  <text x="415" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4">Institutions (who)</text>
+  <rect x="300" y="90" width="230" height="204" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="315" y="114" font-family="Georgia, serif" font-size="13" fill="#333">EU: AI Act (2024), risk tiers</text>
+  <text x="315" y="151" font-family="Georgia, serif" font-size="13" fill="#333">US: Exec. Order (2023),</text>
+  <text x="330" y="169" font-family="Georgia, serif" font-size="13" fill="#333">NIST AI RMF</text>
+  <text x="315" y="206" font-family="Georgia, serif" font-size="13" fill="#333">UK: AI Safety Institute,</text>
+  <text x="330" y="224" font-family="Georgia, serif" font-size="13" fill="#333">Bletchley Declaration</text>
+  <text x="315" y="261" font-family="Georgia, serif" font-size="13" fill="#333">China: Algorithmic Rec.</text>
+  <text x="330" y="279" font-family="Georgia, serif" font-size="13" fill="#333">Regulation (2022)</text>
+
+  <!-- Column 3: Technical tools -->
+  <rect x="560" y="58" width="210" height="26" fill="#5C3D1E"/>
+  <text x="665" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#FDFAF4">Technical tools (how)</text>
+  <rect x="560" y="90" width="210" height="204" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="575" y="118" font-family="Georgia, serif" font-size="13" fill="#333">Evaluations + red-teaming</text>
+  <text x="575" y="156" font-family="Georgia, serif" font-size="13" fill="#333">Compute thresholds</text>
+  <text x="590" y="174" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">(&gt;10&#178;&#8310; FLOP &#8776; frontier)</text>
+  <text x="575" y="212" font-family="Georgia, serif" font-size="13" fill="#333">Watermarking / provenance</text>
+  <text x="575" y="250" font-family="Georgia, serif" font-size="13" fill="#333">Frontier governance</text>
+  <text x="590" y="268" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">frameworks</text>
+
+  <!-- Flow arrows between columns -->
+  <line x1="270" y1="192" x2="296" y2="192" stroke="#333" stroke-width="1.5"/>
+  <path d="M 296 192 l -8 -4 v 8 z" fill="#333"/>
+  <line x1="530" y1="192" x2="556" y2="192" stroke="#333" stroke-width="1.5"/>
+  <path d="M 556 192 l -8 -4 v 8 z" fill="#333"/>
+
+  <!-- Bottom caption -->
+  <line x1="40" y1="318" x2="760" y2="318" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="344" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">Harms and stakes define the domains; governments and agencies write the rules; technical mechanisms make them enforceable.</text>
+  <text x="400" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">Civil society (e.g. AI Now) pushes across all three columns: accountability, competition, governance.</text>
+</svg>

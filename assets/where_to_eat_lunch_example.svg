@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="4" y="4" width="792" height="392" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="34" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Where to Eat Lunch: a Multi-Armed Bandit</text>
+
+  <!-- You -->
+  <circle cx="400" cy="90" r="26" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="95" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5C3D1E">You</text>
+
+  <!-- Arrows to three restaurants -->
+  <line x1="380" y1="108" x2="185" y2="180" stroke="#333" stroke-width="1.5"/>
+  <line x1="400" y1="116" x2="400" y2="180" stroke="#333" stroke-width="1.5"/>
+  <line x1="420" y1="108" x2="615" y2="180" stroke="#333" stroke-width="1.5"/>
+
+  <!-- Restaurant A -->
+  <rect x="90" y="184" width="190" height="96" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="185" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Restaurant A</text>
+  <text x="185" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">reliable, always good</text>
+  <!-- narrow reward distribution -->
+  <line x1="130" y1="266" x2="240" y2="266" stroke="#C4A87A" stroke-width="1.5"/>
+  <path d="M 150 266 Q 185 234 220 266" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="185" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">known, low variance</text>
+
+  <!-- Restaurant B -->
+  <rect x="305" y="184" width="190" height="96" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Restaurant B</text>
+  <text x="400" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">variable, sometimes great</text>
+  <!-- wide reward distribution -->
+  <line x1="330" y1="266" x2="470" y2="266" stroke="#C4A87A" stroke-width="1.5"/>
+  <path d="M 332 266 Q 400 244 468 266" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">high variance</text>
+
+  <!-- Restaurant C -->
+  <rect x="520" y="184" width="190" height="96" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="615" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">Restaurant C</text>
+  <text x="615" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">never tried</text>
+  <text x="615" y="262" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5C3D1E">? ? ?</text>
+
+  <!-- Exploit / Explore labels -->
+  <text x="185" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">EXPLOIT</text>
+  <text x="510" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">EXPLORE</text>
+
+  <!-- Bottom strategy strip -->
+  <line x1="40" y1="316" x2="760" y2="316" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">Each restaurant is an "arm" with an unknown reward distribution. Explore to learn the arms, then exploit the best.</text>
+  <text x="400" y="366" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">Same algorithms at every scale: &#949;-greedy &#183; UCB (bonus for the understudied) &#183; Thompson Sampling (sample your beliefs)</text>
+</svg>
