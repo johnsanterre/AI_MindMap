@@ -1,31 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Spectral Normalization</text>
-  <!-- Singular values diagram -->
-  <text x="200" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Weight Matrix Singular Values</text>
-  <rect x="40" y="90" width="320" height="220" rx="8" fill="#f8f8f8" stroke="#ccc" stroke-width="1.5"/>
-  <!-- Bars for singular values before -->
-  <text x="90" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#e74c3c">Before SN</text>
-  <rect x="60" y="130" width="30" height="150" rx="3" fill="#e74c3c" opacity="0.7"/>
-  <rect x="100" y="190" width="30" height="90" rx="3" fill="#e74c3c" opacity="0.7"/>
-  <rect x="140" y="240" width="30" height="40" rx="3" fill="#e74c3c" opacity="0.7"/>
-  <rect x="180" y="260" width="30" height="20" rx="3" fill="#e74c3c" opacity="0.7"/>
-  <text x="75" y="126" font-family="Arial" font-size="10" fill="#e74c3c">σ₁=8</text>
-  <!-- After SN bars -->
-  <text x="290" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#27ae60">After SN</text>
-  <rect x="260" y="205" width="30" height="75" rx="3" fill="#27ae60" opacity="0.7"/>
-  <rect x="300" y="235" width="30" height="45" rx="3" fill="#27ae60" opacity="0.7"/>
-  <rect x="260" y="200" width="30" height="3" fill="#27ae60"/>
-  <text x="275" y="197" font-family="Arial" font-size="10" fill="#27ae60">σ₁=1</text>
-  <!-- Formula box -->
-  <rect x="400" y="90" width="360" height="220" rx="10" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="580" y="118" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Spectral Normalization</text>
-  <text x="580" y="150" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">W̄ = W / σ(W)</text>
-  <text x="580" y="175" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">σ(W) = largest singular value</text>
-  <line x1="410" y1="190" x2="750" y2="190" stroke="#ddd" stroke-width="1"/>
-  <text x="580" y="215" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Constrains Lipschitz constant ≤ 1</text>
-  <text x="580" y="238" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Stabilizes GAN discriminator training</text>
-  <text x="580" y="261" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Prevents gradient explosion</text>
-  <text x="580" y="285" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Power iteration approximates σ(W) cheaply</text>
-  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Used in GANs, normalizing flows — controls how much a layer can amplify inputs</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Spectral Normalization</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">cap how much a layer can stretch its input</text>
+
+  <defs>
+    <marker id="snArr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#5C3D1E"/></marker>
+  </defs>
+
+  <!-- Left: before, circle stretched into long ellipse -->
+  <text x="210" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Before: W stretches wildly</text>
+  <circle cx="115" cy="195" r="32" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="115" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">inputs x</text>
+  <line x1="160" y1="195" x2="200" y2="195" stroke="#5C3D1E" stroke-width="2" marker-end="url(#snArr)"/>
+  <text x="180" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Wx</text>
+  <ellipse cx="290" cy="195" rx="85" ry="24" fill="none" stroke="#7C2530" stroke-width="2.5" transform="rotate(-18 290 195)"/>
+  <line x1="290" y1="195" x2="371" y2="169" stroke="#7C2530" stroke-width="2" marker-end="url(#snArr)"/>
+  <text x="322" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">&#963;&#8321; large</text>
+  <text x="290" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">tiny input nudge &#8594; huge</text>
+  <text x="290" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">output swing (brittle)</text>
+
+  <!-- Right: after, gentle ellipse -->
+  <text x="595" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">After: W&#772; = W / &#963;&#8321;(W)</text>
+  <circle cx="500" cy="195" r="32" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="500" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">inputs x</text>
+  <line x1="545" y1="195" x2="585" y2="195" stroke="#5C3D1E" stroke-width="2" marker-end="url(#snArr)"/>
+  <text x="565" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">W&#772;x</text>
+  <ellipse cx="665" cy="195" rx="38" ry="26" fill="none" stroke="#2D5A8E" stroke-width="2.5" transform="rotate(-18 665 195)"/>
+  <text x="665" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">&#963;&#8321; = 1</text>
+  <text x="665" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">amplification &#8804; 1 in every</text>
+  <text x="665" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">direction (1-Lipschitz)</text>
+
+  <!-- Divider between panels -->
+  <line x1="425" y1="95" x2="425" y2="280" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Bottom strip -->
+  <line x1="60" y1="296" x2="740" y2="296" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="322" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Why: stable GAN training</text>
+  <text x="400" y="344" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#963;&#8321; = largest singular value = the layer's maximum stretch factor; dividing by it bounds the Lipschitz constant,</text>
+  <text x="400" y="362" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">so the discriminator stays smooth and the generator receives useful gradients &#8212; estimated cheaply by power iteration</text>
 </svg>

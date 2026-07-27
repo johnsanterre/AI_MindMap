@@ -1,81 +1,49 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="34" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">Frobenius Norm: Square Every Entry, Sum, Take the Root</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Frobenius Norm: the Euclidean Length of a Matrix</text>
+  <text x="400" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Treat the whole table as one long vector: square every entry, sum, take the root</text>
 
-  <!-- Matrix A (3x3) -->
-  <!-- Bracket left -->
-  <path d="M 68 70 L 58 70 L 58 310 L 68 310" fill="none" stroke="#2C5F8A" stroke-width="3"/>
-  <!-- Bracket right -->
-  <path d="M 222 70 L 232 70 L 232 310 L 222 310" fill="none" stroke="#2C5F8A" stroke-width="3"/>
+  <!-- Matrix A -->
+  <path d="M110,110 L100,110 L100,270 L110,270" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <path d="M240,110 L250,110 L250,270 L240,270" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="141" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#2D5A8E">a&#8321;&#8321;</text>
+  <text x="209" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#2D5A8E">a&#8321;&#8322;</text>
+  <text x="141" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#2D5A8E">a&#8322;&#8321;</text>
+  <text x="209" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#2D5A8E">a&#8322;&#8322;</text>
+  <text x="141" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#2D5A8E">a&#8323;&#8321;</text>
+  <text x="209" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#2D5A8E">a&#8323;&#8322;</text>
+  <text x="175" y="298" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">matrix A</text>
 
-  <!-- Row 1 -->
-  <rect x="75" y="78" width="60" height="64" rx="5" fill="#2C5F8A" fill-opacity="0.10" stroke="#2C5F8A" stroke-width="1.2"/>
-  <text x="105" y="117" text-anchor="middle" font-size="19" fill="#2C5F8A" font-weight="bold">a₁₁</text>
-  <rect x="145" y="78" width="60" height="64" rx="5" fill="#2C5F8A" fill-opacity="0.10" stroke="#2C5F8A" stroke-width="1.2"/>
-  <text x="175" y="117" text-anchor="middle" font-size="19" fill="#2C5F8A" font-weight="bold">a₁₂</text>
-  <rect x="75" y="154" width="60" height="64" rx="5" fill="#2C5F8A" fill-opacity="0.10" stroke="#2C5F8A" stroke-width="1.2"/>
-  <text x="105" y="193" text-anchor="middle" font-size="19" fill="#2C5F8A" font-weight="bold">a₂₁</text>
-  <rect x="145" y="154" width="60" height="64" rx="5" fill="#2C5F8A" fill-opacity="0.10" stroke="#2C5F8A" stroke-width="1.2"/>
-  <text x="175" y="193" text-anchor="middle" font-size="19" fill="#2C5F8A" font-weight="bold">a₂₂</text>
-  <rect x="75" y="230" width="60" height="64" rx="5" fill="#2C5F8A" fill-opacity="0.10" stroke="#2C5F8A" stroke-width="1.2"/>
-  <text x="105" y="269" text-anchor="middle" font-size="19" fill="#2C5F8A" font-weight="bold">a₃₁</text>
-  <rect x="145" y="230" width="60" height="64" rx="5" fill="#2C5F8A" fill-opacity="0.10" stroke="#2C5F8A" stroke-width="1.2"/>
-  <text x="175" y="269" text-anchor="middle" font-size="19" fill="#2C5F8A" font-weight="bold">a₃₂</text>
+  <!-- unroll arrow -->
+  <line x1="270" y1="190" x2="330" y2="190" stroke="#5C3D1E" stroke-width="2.5"/>
+  <path d="M338,190 L324,183 L324,197 Z" fill="#5C3D1E"/>
+  <text x="303" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">unroll</text>
 
-  <!-- Label -->
-  <text x="145" y="345" text-anchor="middle" font-size="13" fill="#555">Matrix A  (m × n)</text>
+  <!-- long vector -->
+  <rect x="352" y="170" width="330" height="40" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="407" y1="170" x2="407" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="462" y1="170" x2="462" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="517" y1="170" x2="517" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="572" y1="170" x2="572" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="627" y1="170" x2="627" y2="210" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="379" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">a&#8321;&#8321;</text>
+  <text x="434" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">a&#8321;&#8322;</text>
+  <text x="489" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">a&#8322;&#8321;</text>
+  <text x="544" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">a&#8322;&#8322;</text>
+  <text x="599" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">a&#8323;&#8321;</text>
+  <text x="654" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">a&#8323;&#8322;</text>
+  <text x="517" y="238" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">one long vector &#8212; then measure its ordinary Euclidean length</text>
 
-  <!-- Arrow 1: matrix → squared entries -->
-  <line x1="250" y1="190" x2="305" y2="190" stroke="#888" stroke-width="2"/>
-  <polygon points="305,184 318,190 305,196" fill="#888"/>
-  <text x="282" y="180" text-anchor="middle" font-size="12" fill="#888">square</text>
-  <text x="282" y="207" text-anchor="middle" font-size="12" fill="#888">entries</text>
+  <!-- arrow down to result -->
+  <line x1="517" y1="252" x2="517" y2="286" stroke="#5C3D1E" stroke-width="2.5"/>
+  <path d="M517,294 L510,280 L524,280 Z" fill="#5C3D1E"/>
 
-  <!-- Squared entries grid (3x2, shaded orange) -->
-  <path d="M 330 70 L 320 70 L 320 310 L 330 310" fill="none" stroke="#E07B39" stroke-width="3"/>
-  <path d="M 484 70 L 494 70 L 494 310 L 484 310" fill="none" stroke="#E07B39" stroke-width="3"/>
+  <!-- formula -->
+  <rect x="255" y="302" width="420" height="52" fill="#7C2530" opacity="0.07"/>
+  <rect x="255" y="302" width="420" height="52" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="465" y="335" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#7C2530">&#8214;A&#8214;F = &#8730;( &#931;&#7522;&#8342; a&#7522;&#8342;&#178; ) = &#8730;( tr(A&#7488;A) )</text>
 
-  <rect x="337" y="78" width="60" height="64" rx="5" fill="#E07B39" fill-opacity="0.12" stroke="#E07B39" stroke-width="1.2"/>
-  <text x="367" y="117" text-anchor="middle" font-size="16" fill="#E07B39">a₁₁²</text>
-  <rect x="407" y="78" width="60" height="64" rx="5" fill="#E07B39" fill-opacity="0.12" stroke="#E07B39" stroke-width="1.2"/>
-  <text x="437" y="117" text-anchor="middle" font-size="16" fill="#E07B39">a₁₂²</text>
-  <rect x="337" y="154" width="60" height="64" rx="5" fill="#E07B39" fill-opacity="0.12" stroke="#E07B39" stroke-width="1.2"/>
-  <text x="367" y="193" text-anchor="middle" font-size="16" fill="#E07B39">a₂₁²</text>
-  <rect x="407" y="154" width="60" height="64" rx="5" fill="#E07B39" fill-opacity="0.12" stroke="#E07B39" stroke-width="1.2"/>
-  <text x="437" y="193" text-anchor="middle" font-size="16" fill="#E07B39">a₂₂²</text>
-  <rect x="337" y="230" width="60" height="64" rx="5" fill="#E07B39" fill-opacity="0.12" stroke="#E07B39" stroke-width="1.2"/>
-  <text x="367" y="269" text-anchor="middle" font-size="16" fill="#E07B39">a₃₁²</text>
-  <rect x="407" y="230" width="60" height="64" rx="5" fill="#E07B39" fill-opacity="0.12" stroke="#E07B39" stroke-width="1.2"/>
-  <text x="437" y="269" text-anchor="middle" font-size="16" fill="#E07B39">a₃₂²</text>
-
-  <text x="407" y="345" text-anchor="middle" font-size="13" fill="#555">Squared entries  aᵢⱼ²</text>
-
-  <!-- Arrow 2: squared entries → sum -->
-  <line x1="512" y1="190" x2="567" y2="190" stroke="#888" stroke-width="2"/>
-  <polygon points="567,184 580,190 567,196" fill="#888"/>
-  <text x="544" y="180" text-anchor="middle" font-size="12" fill="#888">sum</text>
-  <text x="544" y="207" text-anchor="middle" font-size="12" fill="#888">all</text>
-
-  <!-- Sum bubble -->
-  <rect x="585" y="140" width="100" height="100" rx="12" fill="#4A7C59" fill-opacity="0.13" stroke="#4A7C59" stroke-width="2"/>
-  <text x="635" y="182" text-anchor="middle" font-size="14" fill="#4A7C59" font-weight="bold">Σ aᵢⱼ²</text>
-  <text x="635" y="206" text-anchor="middle" font-size="12" fill="#4A7C59">i,j</text>
-
-  <text x="635" y="345" text-anchor="middle" font-size="13" fill="#555">Sum of squares</text>
-
-  <!-- Arrow 3: sum → scalar -->
-  <line x1="695" y1="190" x2="730" y2="190" stroke="#888" stroke-width="2"/>
-  <polygon points="730,184 743,190 730,196" fill="#888"/>
-  <text x="714" y="180" text-anchor="middle" font-size="11" fill="#888">√</text>
-
-  <!-- Scalar result -->
-  <circle cx="762" cy="190" r="30" fill="#4A7C59" fill-opacity="0.18" stroke="#4A7C59" stroke-width="2.5"/>
-  <text x="762" y="186" text-anchor="middle" font-size="13" fill="#4A7C59" font-weight="bold">‖A‖</text>
-  <text x="762" y="202" text-anchor="middle" font-size="12" fill="#4A7C59" font-weight="bold">F</text>
-
-  <text x="762" y="345" text-anchor="middle" font-size="13" fill="#555">Scalar norm</text>
-
-  <!-- Formula bar at bottom -->
-  <rect x="175" y="360" width="450" height="32" rx="7" fill="#f5f5f5" stroke="#ddd"/>
-  <text x="400" y="381" text-anchor="middle" font-size="14" fill="#333">‖A‖_F  =  √( Σᵢ Σⱼ aᵢⱼ² )  =  √( tr(AᵀA) )</text>
+  <text x="150" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">every entry counts</text>
+  <text x="150" y="358" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">equally, like &#8214;v&#8214;&#8322;</text>
 </svg>

@@ -1,30 +1,47 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Left: L1 constraint diamond -->
-  <text x="200" y="35" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">L1 Constraint (Lasso)</text>
-  <polygon points="200,120 300,220 200,320 100,220" fill="#FF9800" fill-opacity="0.15" stroke="#FF9800" stroke-width="2"/>
-  <!-- Loss contours -->
-  <ellipse cx="310" cy="130" rx="60" ry="40" fill="none" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <ellipse cx="310" cy="130" rx="115" ry="80" fill="none" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <ellipse cx="310" cy="130" rx="175" ry="125" fill="none" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <!-- OLS solution -->
-  <circle cx="310" cy="130" r="5" fill="#E91E63"/>
-  <text x="320" y="125" font-size="12" fill="#E91E63">OLS min</text>
-  <!-- Lasso solution at corner = sparsity! -->
-  <circle cx="200" cy="120" r="6" fill="#FF9800"/>
-  <text x="210" y="115" font-size="12" fill="#FF9800">Lasso solution</text>
-  <text x="210" y="129" font-size="11" fill="#FF9800">(corner → sparse!)</text>
-  <!-- Right: sparse coefficients -->
-  <text x="590" y="35" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Sparsity: Coefficients → 0</text>
-  <line x1="420" y1="320" x2="760" y2="320" stroke="#333" stroke-width="2"/>
-  <line x1="420" y1="320" x2="420" y2="60" stroke="#333" stroke-width="2"/>
-  <text x="590" y="345" text-anchor="middle" font-size="12" fill="#666">λ (regularization)</text>
-  <path d="M430,80 C470,100 530,200 600,320" fill="none" stroke="#FF9800" stroke-width="2.5"/>
-  <path d="M430,130 C480,160 560,260 650,320" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
-  <path d="M430,200 C460,230 500,290 560,320" fill="none" stroke="#2196F3" stroke-width="2.5"/>
-  <!-- Zero annotations -->
-  <line x1="600" y1="310" x2="760" y2="310" stroke="#FF9800" stroke-width="2.5"/>
-  <line x1="650" y1="310" x2="760" y2="310" stroke="#4CAF50" stroke-width="2.5"/>
-  <text x="710" y="300" font-size="11" fill="#666">= 0 (sparse)</text>
-  <text x="400" y="20" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Lasso Regularization</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Lasso: Weak Features Get Zeroed Out</text>
+
+  <!-- Left: diamond constraint with corner solution -->
+  <text x="200" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Why corners create zeros</text>
+  <line x1="70" y1="230" x2="335" y2="230" stroke="#333" stroke-width="1.2"/>
+  <line x1="200" y1="105" x2="200" y2="355" stroke="#333" stroke-width="1.2"/>
+  <text x="340" y="234" font-family="Georgia, serif" font-size="12" fill="#333">w&#8321;</text>
+  <text x="206" y="102" font-family="Georgia, serif" font-size="12" fill="#333">w&#8322;</text>
+  <!-- L1 diamond -->
+  <polygon points="200,130 290,230 200,330 110,230" fill="#C4A87A" fill-opacity="0.3" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="153" y="322" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">|w&#8321;| + |w&#8322;| &#8804; budget</text>
+  <!-- loss contours -->
+  <ellipse cx="310" cy="150" rx="34" ry="22" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="150" rx="70" ry="45" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <ellipse cx="310" cy="150" rx="110" ry="72" fill="none" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <circle cx="310" cy="150" r="5" fill="#7C2530"/>
+  <text x="250" y="122" font-family="Georgia, serif" font-size="12" fill="#7C2530">unconstrained fit</text>
+  <!-- lasso solution at top corner -->
+  <circle cx="200" cy="130" r="7" fill="#2D5A8E"/>
+  <text x="103" y="128" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">lasso lands on</text>
+  <text x="103" y="144" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#2D5A8E">a corner: w&#8321; = 0</text>
+
+  <!-- Divider -->
+  <line x1="410" y1="65" x2="410" y2="360" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Right: coefficient paths hitting zero -->
+  <text x="600" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Coefficient paths as &#955; grows</text>
+  <line x1="455" y1="310" x2="765" y2="310" stroke="#333" stroke-width="1.5"/>
+  <line x1="455" y1="310" x2="455" y2="110" stroke="#333" stroke-width="1.5"/>
+  <text x="610" y="334" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">penalty strength &#955; &#8594;</text>
+  <text x="440" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90 440 205)">weight w&#7522;</text>
+  <!-- strong feature: shrinks but survives -->
+  <path d="M460,125 C540,140 650,180 760,215" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="700" y="200" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">strong feature: survives</text>
+  <!-- medium feature: hits zero -->
+  <path d="M460,185 C520,205 580,275 640,308" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <line x1="640" y1="309" x2="760" y2="309" stroke="#5C3D1E" stroke-width="2.5"/>
+  <!-- weak/noise feature: hits zero early -->
+  <path d="M460,245 C490,265 520,295 550,308" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <line x1="550" y1="309" x2="760" y2="309" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="560" y="295" font-family="Georgia, serif" font-size="12" fill="#7C2530">noise feature: exactly 0</text>
+
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">The absolute-value penalty makes zeroing a weak feature cheaper than keeping it &#8212; selection, not just shrinkage.</text>
 </svg>

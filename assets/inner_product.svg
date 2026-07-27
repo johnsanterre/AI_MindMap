@@ -1,34 +1,54 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Inner Product (Dot Product)</text>
-  <!-- Left: geometric view -->
-  <text x="190" y="58" text-anchor="middle" font-size="14" fill="#333">Geometric Interpretation</text>
-  <defs><marker id="a11" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
-  <!-- u vector -->
-  <line x1="80" y1="280" x2="260" y2="140" stroke="#2196F3" stroke-width="3" marker-end="url(#a11)"/>
-  <text x="265" y="135" font-size="14" fill="#2196F3">u</text>
-  <!-- v vector -->
-  <line x1="80" y1="280" x2="310" y2="230" stroke="#E91E63" stroke-width="3" marker-end="url(#a11)"/>
-  <text x="315" y="228" font-size="14" fill="#E91E63">v</text>
-  <!-- projection of v onto u -->
-  <line x1="240" y1="152" x2="280" y2="220" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <line x1="80" y1="280" x2="241" y2="152" stroke="#FF9800" stroke-width="3"/>
-  <text x="120" y="248" font-size="12" fill="#FF9800">‖v‖cosθ</text>
-  <!-- Angle arc -->
-  <path d="M120,263 A50,50 0 0,1 145,249" fill="none" stroke="#555" stroke-width="1.5"/>
-  <text x="145" y="262" font-size="12" fill="#555">θ</text>
-  <!-- Right: formulas -->
-  <rect x="380" y="60" width="380" height="280" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="570" y="92" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Formulas</text>
-  <text x="570" y="120" text-anchor="middle" font-size="13" fill="#2196F3">⟨u,v⟩ = Σ uᵢvᵢ = uᵀv</text>
-  <text x="570" y="148" text-anchor="middle" font-size="13" fill="#E91E63">= ‖u‖ ‖v‖ cos θ</text>
-  <line x1="400" y1="162" x2="742" y2="162" stroke="#ddd"/>
-  <text x="570" y="188" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">Properties</text>
-  <text x="570" y="213" text-anchor="middle" font-size="12" fill="#555">⟨u,v⟩ &gt; 0 : same direction</text>
-  <text x="570" y="235" text-anchor="middle" font-size="12" fill="#555">⟨u,v⟩ = 0 : orthogonal</text>
-  <text x="570" y="257" text-anchor="middle" font-size="12" fill="#555">⟨u,v⟩ &lt; 0 : opposite direction</text>
-  <text x="570" y="279" text-anchor="middle" font-size="12" fill="#555">⟨u,u⟩ = ‖u‖²</text>
-  <line x1="400" y1="295" x2="742" y2="295" stroke="#ddd"/>
-  <text x="570" y="318" text-anchor="middle" font-size="11" fill="#888">Kernel = generalized inner product</text>
-  <text x="570" y="333" text-anchor="middle" font-size="11" fill="#888">Cosine similarity = ⟨u,v⟩/(‖u‖‖v‖)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="arrR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
+    </marker>
+  </defs>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Inner Product: How Much of One Vector Lands on Another</text>
+
+  <!-- Left: projection picture -->
+  <text x="210" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Geometric view</text>
+  <line x1="90" y1="290" x2="350" y2="290" stroke="#2D5A8E" stroke-width="3" marker-end="url(#arrB)"/>
+  <text x="358" y="294" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#2D5A8E">u</text>
+  <line x1="90" y1="290" x2="270" y2="150" stroke="#7C2530" stroke-width="3" marker-end="url(#arrR)"/>
+  <text x="278" y="146" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#7C2530">v</text>
+  <!-- projection drop -->
+  <line x1="270" y1="150" x2="270" y2="290" stroke="#5C3D1E" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <line x1="90" y1="298" x2="270" y2="298" stroke="#C4A87A" stroke-width="6"/>
+  <text x="180" y="320" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">shadow of v on u  =  &#8214;v&#8214; cos &#952;</text>
+  <!-- angle -->
+  <path d="M135,290 A45,45 0 0,0 126,262" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="146" y="274" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">&#952;</text>
+  <text x="210" y="352" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">&#9001;u, v&#9002; = &#931; u&#7522;v&#7522; = &#8214;u&#8214;&#8214;v&#8214; cos &#952;</text>
+
+  <!-- Divider -->
+  <line x1="430" y1="65" x2="430" y2="360" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Right: three sign cases -->
+  <text x="612" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">The sign is the story</text>
+
+  <!-- case 1: same direction -->
+  <line x1="470" y1="120" x2="540" y2="120" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrB)"/>
+  <line x1="470" y1="134" x2="530" y2="134" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrR)"/>
+  <text x="565" y="131" font-family="Georgia, serif" font-size="13" fill="#333">&#9001;u,v&#9002; &gt; 0 &#8212; aligned, similar</text>
+
+  <!-- case 2: orthogonal -->
+  <line x1="470" y1="200" x2="540" y2="200" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrB)"/>
+  <line x1="482" y1="212" x2="482" y2="164" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrR)"/>
+  <rect x="482" y="190" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="565" y="197" font-family="Georgia, serif" font-size="13" fill="#333">&#9001;u,v&#9002; = 0 &#8212; orthogonal,</text>
+  <text x="565" y="214" font-family="Georgia, serif" font-size="13" fill="#333">unrelated</text>
+
+  <!-- case 3: opposite -->
+  <line x1="510" y1="270" x2="560" y2="270" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#arrB)"/>
+  <line x1="510" y1="284" x2="470" y2="284" stroke="#7C2530" stroke-width="2.5" marker-end="url(#arrR)"/>
+  <text x="585" y="281" font-family="Georgia, serif" font-size="13" fill="#333">&#9001;u,v&#9002; &lt; 0 &#8212; opposed</text>
+
+  <text x="612" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">Search ranking, recommendations, cosine</text>
+  <text x="612" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">similarity &#8212; all measure &#8220;how alike?&#8221; this way.</text>
 </svg>

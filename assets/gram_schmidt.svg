@@ -1,34 +1,55 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Gram-Schmidt Orthogonalization</text>
-  <!-- Step 1: original vectors -->
-  <text x="140" y="60" text-anchor="middle" font-size="13" fill="#333">Original: v₁, v₂</text>
-  <line x1="80" y1="200" x2="200" y2="130" stroke="#9E9E9E" stroke-width="2" marker-end="url(#a5)"/>
-  <line x1="80" y1="200" x2="220" y2="170" stroke="#9E9E9E" stroke-width="2" marker-end="url(#a5)"/>
-  <text x="205" y="125" font-size="12" fill="#9E9E9E">v₁</text>
-  <text x="225" y="168" font-size="12" fill="#9E9E9E">v₂</text>
-  <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
-  <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2196F3"/></marker></defs>
-  <defs><marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E91E63"/></marker></defs>
-  <!-- Step 2: e1 = normalize v1 -->
-  <text x="420" y="60" text-anchor="middle" font-size="13" fill="#2196F3">Step 1: e₁ = v₁ / ‖v₁‖</text>
-  <line x1="380" y1="200" x2="500" y2="130" stroke="#2196F3" stroke-width="3" marker-end="url(#a6)"/>
-  <text x="505" y="125" font-size="12" fill="#2196F3">e₁</text>
-  <!-- Step 3: project v2 onto e1, subtract -->
-  <text x="420" y="85" text-anchor="middle" font-size="12" fill="#E91E63">Step 2: e₂ = (v₂ − proj) / ‖…‖</text>
-  <!-- Projection dashed -->
-  <line x1="380" y1="200" x2="490" y2="170" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,3"/>
-  <text x="445" y="193" font-size="11" fill="#FF9800">proj</text>
-  <!-- Orthogonal e2 -->
-  <line x1="380" y1="200" x2="370" y2="110" stroke="#E91E63" stroke-width="3" marker-end="url(#a7)"/>
-  <text x="352" y="108" font-size="12" fill="#E91E63">e₂</text>
-  <!-- Right angle mark -->
-  <rect x="378" y="174" width="12" height="12" fill="none" stroke="#E91E63" stroke-width="1.5"/>
-  <!-- Result annotation -->
-  <rect x="530" y="120" width="240" height="120" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="650" y="145" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Result: ONB</text>
-  <text x="650" y="170" text-anchor="middle" font-size="12" fill="#2196F3">e₁ · e₂ = 0 (orthogonal)</text>
-  <text x="650" y="193" text-anchor="middle" font-size="12" fill="#555">‖e₁‖ = ‖e₂‖ = 1 (normal)</text>
-  <text x="650" y="218" text-anchor="middle" font-size="11" fill="#888">span{e₁,e₂} = span{v₁,v₂}</text>
-  <text x="400" y="360" text-anchor="middle" font-size="12" fill="#555">Foundation for QR decomposition and orthogonal projections</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="gsN" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="gsR" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#7C2530"/>
+    </marker>
+    <marker id="gsT" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#C4A87A"/>
+    </marker>
+  </defs>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Gram-Schmidt: Straightening a Tilted Basis</text>
+
+  <!-- Panel 1: tilted vectors -->
+  <text x="160" y="86" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#333">Before: leaning axes</text>
+  <line x1="80" y1="280" x2="230" y2="190" stroke="#C4A87A" stroke-width="3" marker-end="url(#gsT)"/>
+  <line x1="80" y1="280" x2="245" y2="245" stroke="#C4A87A" stroke-width="3" marker-end="url(#gsT)"/>
+  <text x="242" y="185" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">v&#8321;</text>
+  <text x="256" y="248" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">v&#8322;</text>
+  <text x="160" y="320" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">independent, but they</text>
+  <text x="160" y="338" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">lean into each other</text>
+
+  <!-- Panel 2: subtract projection -->
+  <text x="435" y="86" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#333">The step: subtract the overlap</text>
+  <line x1="340" y1="280" x2="530" y2="280" stroke="#2D5A8E" stroke-width="3" marker-end="url(#gsN)"/>
+  <text x="540" y="285" font-family="Georgia, serif" font-size="15" fill="#2D5A8E">e&#8321;</text>
+  <!-- v2 -->
+  <line x1="340" y1="280" x2="470" y2="170" stroke="#C4A87A" stroke-width="3" marker-end="url(#gsT)"/>
+  <text x="478" y="166" font-family="Georgia, serif" font-size="15" fill="#5C3D1E">v&#8322;</text>
+  <!-- projection along e1 -->
+  <line x1="340" y1="280" x2="470" y2="280" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="405" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">proj (the overlap)</text>
+  <!-- vertical remainder dashed -->
+  <line x1="470" y1="280" x2="470" y2="175" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4"/>
+  <!-- e2 from origin -->
+  <line x1="340" y1="280" x2="340" y2="175" stroke="#7C2530" stroke-width="3" marker-end="url(#gsR)"/>
+  <text x="322" y="168" font-family="Georgia, serif" font-size="15" fill="#7C2530">e&#8322;</text>
+  <rect x="340" y="262" width="18" height="18" fill="none" stroke="#7C2530" stroke-width="1.5"/>
+  <text x="435" y="338" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">what remains is the genuinely new direction</text>
+
+  <!-- Panel 3: result box -->
+  <rect x="590" y="110" width="180" height="180" fill="#C4A87A" opacity="0.18"/>
+  <rect x="590" y="110" width="180" height="180" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="680" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Result: orthonormal</text>
+  <text x="680" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">e&#8321; &#183; e&#8322; = 0</text>
+  <text x="680" y="194" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">&#8214;e&#8321;&#8214; = &#8214;e&#8322;&#8214; = 1</text>
+  <text x="680" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">span unchanged:</text>
+  <text x="680" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">span{e} = span{v}</text>
+  <text x="680" y="272" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">repeat for each vector</text>
+
+  <text x="400" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">e&#8321; = v&#8321;/&#8214;v&#8321;&#8214;;  then e&#8342; = (v&#8342; &#8722; all overlaps with earlier axes), normalized &#8212; the basis of QR</text>
 </svg>

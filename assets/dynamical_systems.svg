@@ -1,31 +1,54 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Dynamical Systems</text>
-  <!-- Left: phase portrait -->
-  <text x="200" y="58" text-anchor="middle" font-size="13" fill="#333">Phase Portrait: ẋ = f(x)</text>
-  <line x1="50" y1="220" x2="360" y2="220" stroke="#555" stroke-width="1.5"/>
-  <line x1="205" y1="60" x2="205" y2="350" stroke="#555" stroke-width="1.5"/>
-  <!-- Stable spiral inward -->
-  <path d="M300,130 C310,160 295,195 265,210 C235,225 200,222 175,210 C140,192 135,160 150,135 C165,110 195,100 215,103 C245,108 265,125 275,148 C285,168 278,192 260,202" fill="none" stroke="#2196F3" stroke-width="2"/>
-  <circle cx="205" cy="180" r="5" fill="#2196F3"/>
-  <text x="210" y="175" font-size="11" fill="#2196F3">stable</text>
-  <!-- Unstable saddle -->
-  <path d="M80,310 C100,290 130,270 160,265" fill="none" stroke="#E91E63" stroke-width="2"/>
-  <path d="M80,150 C100,165 130,185 160,200" fill="none" stroke="#E91E63" stroke-width="2"/>
-  <path d="M80,220 C100,218 130,218 160,220" fill="none" stroke="#FF9800" stroke-width="2"/>
-  <circle cx="80" cy="220" r="5" fill="#FF9800"/>
-  <text x="55" y="216" font-size="11" fill="#FF9800">saddle</text>
-  <!-- Right: key concepts -->
-  <text x="570" y="58" text-anchor="middle" font-size="13" fill="#333">Fixed Points &amp; Stability</text>
-  <rect x="400" y="70" width="360" height="260" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="580" y="100" text-anchor="middle" font-size="12" fill="#2196F3">Stable: trajectories converge</text>
-  <text x="580" y="125" text-anchor="middle" font-size="12" fill="#E91E63">Unstable: trajectories diverge</text>
-  <text x="580" y="150" text-anchor="middle" font-size="12" fill="#FF9800">Saddle: mixed behavior</text>
-  <line x1="420" y1="165" x2="745" y2="165" stroke="#ddd"/>
-  <text x="580" y="190" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">ML connections:</text>
-  <text x="580" y="213" text-anchor="middle" font-size="12" fill="#555">GD as continuous system ẋ = −∇L</text>
-  <text x="580" y="235" text-anchor="middle" font-size="12" fill="#555">RNNs as discrete dynamical systems</text>
-  <text x="580" y="258" text-anchor="middle" font-size="12" fill="#555">Lyapunov stability → convergence</text>
-  <text x="580" y="280" text-anchor="middle" font-size="12" fill="#555">Attractors → learned representations</text>
-  <text x="580" y="305" text-anchor="middle" font-size="11" fill="#888">Chaos: sensitive dependence on init</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="dsT" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/></marker>
+    <marker id="dsN" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#2D5A8E"/></marker>
+  </defs>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Dynamical Systems: A Field of Arrows, a Place to Settle</text>
+
+  <!-- Left: vector field flowing into attractor -->
+  <text x="220" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">The vector field: every point knows where to go</text>
+
+  <!-- small field arrows pointing roughly toward attractor at (220,230) -->
+  <g stroke="#C4A87A" stroke-width="1.8">
+    <line x1="90" y1="120" x2="112" y2="138" marker-end="url(#dsT)"/>
+    <line x1="200" y1="105" x2="204" y2="130" marker-end="url(#dsT)"/>
+    <line x1="320" y1="115" x2="300" y2="135" marker-end="url(#dsT)"/>
+    <line x1="70" y1="230" x2="98" y2="230" marker-end="url(#dsT)"/>
+    <line x1="370" y1="220" x2="342" y2="225" marker-end="url(#dsT)"/>
+    <line x1="95" y1="330" x2="118" y2="310" marker-end="url(#dsT)"/>
+    <line x1="220" y1="345" x2="220" y2="318" marker-end="url(#dsT)"/>
+    <line x1="340" y1="330" x2="318" y2="310" marker-end="url(#dsT)"/>
+  </g>
+
+  <!-- one trajectory spiraling into the fixed point -->
+  <path d="M340,130 C360,190 320,270 250,275 C185,278 145,235 165,195 C182,162 240,160 255,195 C267,222 240,242 222,232" fill="none" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#dsN)"/>
+  <circle cx="340" cy="130" r="5" fill="#2D5A8E"/>
+  <text x="352" y="125" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">start</text>
+
+  <!-- attractor -->
+  <circle cx="218" cy="226" r="7" fill="#7C2530"/>
+  <text x="218" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">attractor</text>
+
+  <text x="220" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">follow the arrows and you trace a trajectory</text>
+
+  <!-- Right panel -->
+  <line x1="450" y1="70" x2="450" y2="375" stroke="#D4C5A9" stroke-width="2"/>
+
+  <text x="620" y="95" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">The central question</text>
+  <text x="620" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">Given where you are now, where</text>
+  <text x="620" y="138" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">will you end up &#8212; and how?</text>
+
+  <line x1="480" y1="160" x2="760" y2="160" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <text x="620" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">ML processes are dynamical systems</text>
+  <text x="480" y="218" font-family="Georgia, serif" font-size="13" fill="#333">Gradient descent: parameters flow</text>
+  <text x="480" y="236" font-family="Georgia, serif" font-size="13" fill="#333">downhill on the loss surface.</text>
+  <text x="480" y="264" font-family="Georgia, serif" font-size="13" fill="#333">An RNN reading a sentence: state</text>
+  <text x="480" y="282" font-family="Georgia, serif" font-size="13" fill="#333">updated step by step.</text>
+  <text x="480" y="310" font-family="Georgia, serif" font-size="13" fill="#333">A thermostat: temperature settling</text>
+  <text x="480" y="328" font-family="Georgia, serif" font-size="13" fill="#333">to its set point.</text>
+
+  <text x="620" y="362" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">training = hoping the flow settles somewhere useful</text>
 </svg>

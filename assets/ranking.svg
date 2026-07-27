@@ -1,31 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Learning to Rank</text>
-  <!-- Query + documents -->
-  <rect x="40" y="70" width="140" height="50" rx="8" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
-  <text x="110" y="100" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Query q</text>
-  <!-- Documents -->
-  <rect x="230" y="65" width="200" height="40" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="330" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Doc A — score: 0.92</text>
-  <rect x="230" y="115" width="200" height="40" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="1.5"/>
-  <text x="330" y="140" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Doc B — score: 0.71</text>
-  <rect x="230" y="165" width="200" height="40" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="1.5"/>
-  <text x="330" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Doc C — score: 0.45</text>
-  <line x1="180" y1="95" x2="228" y2="95" stroke="#8e44ad" stroke-width="2" marker-end="url(#ark)"/>
-  <text x="204" y="87" text-anchor="middle" font-family="Arial" font-size="11" fill="#8e44ad">rank</text>
-  <!-- Three approaches -->
-  <rect x="460" y="60" width="310" height="280" rx="10" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="615" y="88" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Ranking Approaches</text>
-  <text x="615" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9" font-weight="bold">Pointwise</text>
-  <text x="615" y="138" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Score each doc independently</text>
-  <line x1="470" y1="150" x2="760" y2="150" stroke="#ddd" stroke-width="1"/>
-  <text x="615" y="175" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22" font-weight="bold">Pairwise</text>
-  <text x="615" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Is doc A better than doc B?</text>
-  <text x="615" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">RankSVM, RankNet</text>
-  <line x1="470" y1="225" x2="760" y2="225" stroke="#ddd" stroke-width="1"/>
-  <text x="615" y="250" text-anchor="middle" font-family="Arial" font-size="12" fill="#27ae60" font-weight="bold">Listwise</text>
-  <text x="615" y="270" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Optimize whole ranked list</text>
-  <text x="615" y="288" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">LambdaMART, NDCG</text>
-  <defs><marker id="ark" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8e44ad"/></marker></defs>
-  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">NDCG = Normalized Discounted Cumulative Gain — standard ranking evaluation metric</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Learning to Rank: Order Matters, Not Scores</text>
+  <text x="400" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">The task is not "is this relevant?" but "which should come first?"</text>
+
+  <!-- Query -->
+  <rect x="60" y="120" width="130" height="50" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="125" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">query q</text>
+
+  <!-- arrow -->
+  <line x1="192" y1="145" x2="232" y2="145" stroke="#5C3D1E" stroke-width="2"/>
+  <path d="M 238 145 L 228 140 L 228 150 Z" fill="#5C3D1E"/>
+  <text x="215" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">rank</text>
+
+  <!-- Ranked list -->
+  <rect x="245" y="95" width="185" height="38" fill="#2D5A8E" fill-opacity="0.12" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="337" y="119" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">1. doc A</text>
+  <rect x="245" y="143" width="185" height="38" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="337" y="167" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">2. doc B</text>
+  <rect x="245" y="191" width="185" height="38" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="337" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">3. doc C</text>
+  <text x="337" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">only relative order counts &#8212;</text>
+  <text x="337" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">A above B is the whole signal</text>
+
+  <!-- Three loss families -->
+  <rect x="480" y="95" width="270" height="235" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="615" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Three families of ranking loss</text>
+
+  <text x="615" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Pointwise</text>
+  <text x="615" y="169" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">score each item alone</text>
+  <line x1="500" y1="180" x2="730" y2="180" stroke="#C4A87A" stroke-width="1"/>
+
+  <text x="615" y="203" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">Pairwise</text>
+  <text x="615" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">is A better than B?  (RankNet)</text>
+  <line x1="500" y1="233" x2="730" y2="233" stroke="#C4A87A" stroke-width="1"/>
+
+  <text x="615" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Listwise</text>
+  <text x="615" y="275" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">optimize the whole ordering</text>
+  <text x="615" y="293" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">(LambdaMART, targets NDCG)</text>
+  <text x="615" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333" font-style="italic">each family gets closer to the true objective</text>
+
+  <text x="400" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Search, recommendations, ads, QA &#8212; anywhere an algorithm must sort items by estimated quality.</text>
 </svg>

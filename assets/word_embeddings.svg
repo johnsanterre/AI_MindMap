@@ -1,38 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Word space axes -->
-  <line x1="80" y1="330" x2="480" y2="330" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="80" y1="330" x2="80" y2="70" stroke="#ccc" stroke-width="1.5"/>
-  <text x="280" y="370" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Dimension 1 (e.g. gender)</text>
-  <text x="30" y="200" text-anchor="middle" font-family="Arial" font-size="12" fill="#555" transform="rotate(-90,30,200)">Dimension 2 (e.g. royalty)</text>
-  <!-- Word points -->
-  <circle cx="200" cy="150" r="7" fill="#4a90d9"/>
-  <text x="210" y="145" font-family="Arial" font-size="13" fill="#4a90d9">king</text>
-  <circle cx="310" cy="150" r="7" fill="#e74c3c"/>
-  <text x="320" y="145" font-family="Arial" font-size="13" fill="#e74c3c">queen</text>
-  <circle cx="185" cy="250" r="7" fill="#4a90d9"/>
-  <text x="195" y="245" font-family="Arial" font-size="13" fill="#4a90d9">man</text>
-  <circle cx="310" cy="250" r="7" fill="#e74c3c"/>
-  <text x="320" y="245" font-family="Arial" font-size="13" fill="#e74c3c">woman</text>
-  <!-- Analogy arrows -->
-  <line x1="200" y1="150" x2="310" y2="150" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arcwe)"/>
-  <line x1="185" y1="250" x2="308" y2="250" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arcwe)"/>
-  <line x1="200" y1="150" x2="185" y2="248" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arcwe)"/>
-  <line x1="310" y1="150" x2="310" y2="248" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arcwe)"/>
-  <text x="255" y="138" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">gender offset</text>
-  <text x="155" y="203" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">royalty offset</text>
-  <!-- Analogy label -->
-  <text x="420" y="200" font-family="Arial" font-size="12" fill="#555">king − man</text>
-  <text x="420" y="218" font-family="Arial" font-size="12" fill="#555">+ woman</text>
-  <text x="420" y="236" font-family="Arial" font-size="12" fill="#27ae60">≈ queen</text>
-  <!-- One-hot vs dense -->
-  <rect x="530" y="80" width="240" height="200" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="650" y="108" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">One-hot vs. Dense</text>
-  <text x="650" y="135" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">One-hot: [0,0,1,0,...,0]</text>
-  <text x="650" y="152" text-anchor="middle" font-family="Arial" font-size="10" fill="#888">50,000 dims, no similarity</text>
-  <line x1="540" y1="165" x2="760" y2="165" stroke="#ddd" stroke-width="1"/>
-  <text x="650" y="185" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Embedding: [0.3, −0.1, 0.8]</text>
-  <text x="650" y="202" text-anchor="middle" font-family="Arial" font-size="10" fill="#888">300 dims, encodes meaning</text>
-  <defs><marker id="arcwe" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#27ae60"/></marker></defs>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Word Embeddings</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Word Embeddings</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">words become points in space &#8212; geometry encodes meaning</text>
+
+  <defs>
+    <marker id="weArr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#C4A87A"/></marker>
+    <marker id="weAx" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#5C3D1E"/></marker>
+  </defs>
+
+  <!-- Axes -->
+  <line x1="90" y1="320" x2="450" y2="320" stroke="#5C3D1E" stroke-width="2" marker-end="url(#weAx)"/>
+  <line x1="90" y1="320" x2="90" y2="100" stroke="#5C3D1E" stroke-width="2" marker-end="url(#weAx)"/>
+  <text x="270" y="346" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">gender direction</text>
+  <text x="72" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" transform="rotate(-90,72,210)">royalty direction</text>
+
+  <!-- Parallelogram: king/queen/man/woman -->
+  <line x1="185" y1="150" x2="330" y2="150" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#weArr)"/>
+  <line x1="170" y1="265" x2="315" y2="265" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#weArr)"/>
+  <line x1="170" y1="265" x2="182" y2="158" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#weArr)"/>
+  <line x1="315" y1="265" x2="327" y2="158" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#weArr)"/>
+
+  <circle cx="180" cy="150" r="7" fill="#2D5A8E"/>
+  <text x="168" y="140" text-anchor="end" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">king</text>
+  <circle cx="335" cy="150" r="7" fill="#7C2530"/>
+  <text x="348" y="140" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-weight="bold">queen</text>
+  <circle cx="168" cy="268" r="7" fill="#2D5A8E"/>
+  <text x="156" y="290" text-anchor="end" font-family="Georgia, serif" font-size="14" fill="#2D5A8E" font-weight="bold">man</text>
+  <circle cx="318" cy="268" r="7" fill="#7C2530"/>
+  <text x="331" y="290" font-family="Georgia, serif" font-size="14" fill="#7C2530" font-weight="bold">woman</text>
+
+  <text x="258" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">same offset twice</text>
+  <text x="258" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">king &#8722; man + woman &#8776; queen</text>
+
+  <!-- Right panel: one-hot vs dense -->
+  <line x1="480" y1="95" x2="480" y2="330" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="630" y="118" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Symbols vs. locations</text>
+
+  <text x="510" y="150" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">One-hot</text>
+  <text x="510" y="170" font-family="Georgia, serif" font-size="12" fill="#333">[0, 0, 1, 0, &#8230;, 0] &#8212; 50,000 dims</text>
+  <text x="510" y="188" font-family="Georgia, serif" font-size="12" fill="#333">"apple" is as far from "orange"</text>
+  <text x="510" y="204" font-family="Georgia, serif" font-size="12" fill="#333">as from "parliament"</text>
+
+  <text x="510" y="238" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">Embedding</text>
+  <text x="510" y="258" font-family="Georgia, serif" font-size="12" fill="#333">[0.3, &#8722;0.1, 0.8, &#8230;] &#8212; ~300 dims</text>
+  <text x="510" y="276" font-family="Georgia, serif" font-size="12" fill="#333">learned from context, so similar</text>
+  <text x="510" y="292" font-family="Georgia, serif" font-size="12" fill="#333">meanings land near each other</text>
+
+  <!-- Bottom line -->
+  <line x1="60" y1="342" x2="740" y2="342" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="366" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">A library shelved by meaning, not alphabet: cookbooks cluster together, and directions in the space (gender, royalty) become arithmetic.</text>
 </svg>

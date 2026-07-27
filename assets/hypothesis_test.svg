@@ -1,103 +1,60 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
   <defs>
-    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
-    </marker>
-    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#27ae60"/>
-    </marker>
-    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#c0392b"/>
+    <marker id="arrN" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2D5A8E"/>
     </marker>
   </defs>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Hypothesis Testing: How Surprising Is the Evidence?</text>
 
-  <!-- Title -->
-  <text x="400" y="32" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">Hypothesis Testing Workflow</text>
+  <!-- Step 1 -->
+  <rect x="35" y="70" width="160" height="58" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="115" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Assume H&#8320;</text>
+  <text x="115" y="114" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#8220;nothing is happening&#8221;</text>
 
-  <!-- Step 1: H0 -->
-  <rect x="20" y="60" width="140" height="56" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="90" y="84" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">Null Hypothesis</text>
-  <text x="90" y="103" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">H₀: no effect</text>
+  <line x1="195" y1="99" x2="235" y2="99" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrN)"/>
 
-  <!-- Arrow 1→2 -->
-  <line x1="160" y1="88" x2="200" y2="88" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Step 2 -->
+  <rect x="238" y="70" width="150" height="58" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="313" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Collect data</text>
+  <text x="313" y="114" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the evidence</text>
 
-  <!-- Step 2: Collect data -->
-  <rect x="200" y="60" width="140" height="56" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="270" y="84" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">Collect Data</text>
-  <text x="270" y="103" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">sample of size n</text>
+  <line x1="388" y1="99" x2="428" y2="99" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrN)"/>
 
-  <!-- Arrow 2→3 -->
-  <line x1="340" y1="88" x2="380" y2="88" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Step 3 -->
+  <rect x="431" y="70" width="180" height="58" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="521" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Measure surprise</text>
+  <text x="521" y="114" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">p-value under H&#8320;</text>
 
-  <!-- Step 3: Test statistic -->
-  <rect x="380" y="60" width="155" height="56" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="457" y="84" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">Test Statistic</text>
-  <text x="457" y="103" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">t, z, χ², F …</text>
+  <line x1="611" y1="99" x2="651" y2="99" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrN)"/>
 
-  <!-- Arrow 3→4 -->
-  <line x1="535" y1="88" x2="575" y2="88" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Step 4 -->
+  <rect x="654" y="70" width="115" height="58" rx="6" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="711" y="94" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Decide</text>
+  <text x="711" y="114" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">compare p to &#945;</text>
 
-  <!-- Step 4: Null distribution box -->
-  <rect x="575" y="60" width="205" height="56" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="677" y="84" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#4a90d9">Null Distribution</text>
-  <text x="677" y="103" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">distribution under H₀</text>
+  <!-- Null distribution -->
+  <path d="M80,300 Q140,300 175,255 Q205,205 245,192 Q285,205 315,255 Q350,300 410,300"
+        fill="#C4A87A" fill-opacity="0.25" stroke="#2D5A8E" stroke-width="2"/>
+  <path d="M330,242 Q352,272 410,300 L330,300 Z" fill="#7C2530" fill-opacity="0.55"/>
+  <line x1="70" y1="300" x2="420" y2="300" stroke="#333" stroke-width="1.5"/>
+  <line x1="352" y1="215" x2="352" y2="302" stroke="#7C2530" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="358" y="210" font-family="Georgia, serif" font-size="12" fill="#7C2530">observed statistic</text>
+  <text x="245" y="322" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">what data would look like if H&#8320; were true</text>
+  <text x="392" y="292" font-family="Georgia, serif" font-size="12" fill="#7C2530" text-anchor="end" font-style="italic"> </text>
+  <text x="384" y="337" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">shaded tail = p-value</text>
 
-  <!-- Null distribution curve -->
-  <path d="M590,270 Q620,270 640,230 Q655,185 677,175 Q699,185 714,230 Q734,270 764,270"
-        fill="#dce9f7" stroke="#4a90d9" stroke-width="2"/>
-  <!-- Rejection region shading (right tail) -->
-  <path d="M730,222 Q742,240 764,270 L764,270 L730,270 Z" fill="#f7dcdc" opacity="0.85"/>
-  <!-- Rejection region left tail -->
-  <path d="M590,270 L624,270 Q608,240 600,222 Z" fill="#f7dcdc" opacity="0.85"/>
-  <!-- Baseline -->
-  <line x1="588" y1="270" x2="766" y2="270" stroke="#555" stroke-width="1.5"/>
-  <!-- Observed statistic line -->
-  <line x1="740" y1="180" x2="740" y2="272" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,3"/>
-  <text x="745" y="175" font-family="Arial" font-size="11" fill="#c0392b">observed t</text>
-  <!-- α label -->
-  <text x="592" y="265" font-family="Arial" font-size="10" fill="#c0392b">α/2</text>
-  <text x="748" y="265" font-family="Arial" font-size="10" fill="#c0392b">α/2</text>
-  <!-- p-value brace annotation -->
-  <line x1="740" y1="290" x2="764" y2="290" stroke="#c0392b" stroke-width="1.5"/>
-  <line x1="740" y1="285" x2="740" y2="295" stroke="#c0392b" stroke-width="1.5"/>
-  <line x1="764" y1="285" x2="764" y2="295" stroke="#c0392b" stroke-width="1.5"/>
-  <text x="752" y="308" text-anchor="middle" font-family="Arial" font-size="11" fill="#c0392b">p-value</text>
-  <!-- Curve label -->
-  <text x="677" y="300" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Sampling distribution under H₀</text>
+  <!-- Decision outcomes -->
+  <rect x="470" y="190" width="290" height="62" rx="6" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="2"/>
+  <text x="615" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">p &lt; &#945;  &#8594;  Reject H&#8320;</text>
+  <text x="615" y="237" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">evidence too surprising to keep the default</text>
 
-  <!-- Arrow from null distribution box down to curve -->
-  <line x1="677" y1="116" x2="677" y2="168" stroke="#555" stroke-width="1.5" marker-end="url(#arr)" stroke-dasharray="4,3"/>
+  <rect x="470" y="272" width="290" height="62" rx="6" fill="#C4A87A" fill-opacity="0.2" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="615" y="297" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">p &#8805; &#945;  &#8594;  Fail to reject H&#8320;</text>
+  <text x="615" y="319" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">not proof of H&#8320; &#8212; just insufficient evidence</text>
 
-  <!-- Decision fork: arrow down from step 4 box to compare node -->
-  <line x1="677" y1="116" x2="677" y2="148" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="711" y1="128" x2="711" y2="188" stroke="#2D5A8E" stroke-width="2" marker-end="url(#arrN)"/>
 
-  <!-- Compare node -->
-  <ellipse cx="400" cy="175" rx="90" ry="30" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="400" y="172" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#e67e22">Compare p to α</text>
-  <text x="400" y="188" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">(significance level)</text>
-
-  <!-- Arrow from step 3 down to compare -->
-  <line x1="457" y1="116" x2="430" y2="148" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
-  <!-- Arrow from null distribution box to compare -->
-  <line x1="677" y1="116" x2="490" y2="155" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Reject H0 -->
-  <rect x="185" y="310" width="180" height="56" rx="8" fill="#fde8e8" stroke="#c0392b" stroke-width="2"/>
-  <text x="275" y="334" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#c0392b">Reject H₀</text>
-  <text x="275" y="353" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">p &lt; α  →  significant</text>
-
-  <!-- Fail to reject H0 -->
-  <rect x="435" y="310" width="210" height="56" rx="8" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="540" y="334" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">Fail to Reject H₀</text>
-  <text x="540" y="353" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">p ≥ α  →  not significant</text>
-
-  <!-- Arrow compare → reject -->
-  <line x1="340" y1="190" x2="290" y2="308" stroke="#c0392b" stroke-width="2" marker-end="url(#arr-red)"/>
-  <text x="285" y="262" font-family="Arial" font-size="11" fill="#c0392b">p &lt; α</text>
-
-  <!-- Arrow compare → fail to reject -->
-  <line x1="460" y1="190" x2="510" y2="308" stroke="#27ae60" stroke-width="2" marker-end="url(#arr-green)"/>
-  <text x="503" y="262" font-family="Arial" font-size="11" fill="#27ae60">p ≥ α</text>
+  <text x="400" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">Like a jury trial: presume innocence, then ask if the evidence is surprising enough to convict.</text>
 </svg>

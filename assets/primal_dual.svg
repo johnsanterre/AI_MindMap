@@ -1,30 +1,45 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Primal and Dual Problems</text>
-  <!-- Saddle point surface sketch -->
-  <text x="220" y="58" text-anchor="middle" font-size="13" fill="#333">Saddle Point of Lagrangian</text>
-  <!-- Saddle surface approximation -->
-  <path d="M60,200 C100,160 150,140 200,160 C250,180 290,220 330,200 C360,185 370,170 380,180" fill="none" stroke="#2196F3" stroke-width="2"/>
-  <path d="M60,220 C100,180 150,160 200,180 C250,200 290,240 330,220 C360,205 370,190 380,200" fill="none" stroke="#2196F3" stroke-width="1.5" opacity="0.5"/>
-  <!-- Saddle point -->
-  <circle cx="200" cy="160" r="7" fill="#E91E63"/>
-  <text x="212" y="156" font-size="12" fill="#E91E63">saddle (x*, λ*)</text>
-  <!-- Primal and dual objectives -->
-  <line x1="200" y1="100" x2="200" y2="270" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="200" y="90" text-anchor="middle" font-size="11" fill="#2196F3">↑ max over λ</text>
-  <text x="200" y="285" text-anchor="middle" font-size="11" fill="#E91E63">↓ min over x</text>
-  <!-- Right: duality gap -->
-  <rect x="420" y="55" width="350" height="310" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="595" y="85" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Weak vs Strong Duality</text>
-  <text x="595" y="115" text-anchor="middle" font-size="13" fill="#E91E63">d* ≤ p*  (always)</text>
-  <text x="595" y="138" text-anchor="middle" font-size="12" fill="#888">duality gap = p* − d* ≥ 0</text>
-  <line x1="440" y1="155" x2="752" y2="155" stroke="#ddd"/>
-  <text x="595" y="180" text-anchor="middle" font-size="13" fill="#2196F3">d* = p*  (strong duality)</text>
-  <text x="595" y="203" text-anchor="middle" font-size="11" fill="#555">if Slater's condition holds</text>
-  <text x="595" y="223" text-anchor="middle" font-size="11" fill="#555">(feasible interior point exists)</text>
-  <line x1="440" y1="240" x2="752" y2="240" stroke="#ddd"/>
-  <text x="595" y="268" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">SVM Dual</text>
-  <text x="595" y="292" text-anchor="middle" font-size="12" fill="#555">max Σαᵢ − ½ΣΣαᵢαⱼyᵢyⱼK(xᵢ,xⱼ)</text>
-  <text x="595" y="315" text-anchor="middle" font-size="12" fill="#555">s.t. αᵢ ≥ 0, Σαᵢyᵢ = 0</text>
-  <text x="595" y="342" text-anchor="middle" font-size="11" fill="#888">Enables kernel trick — only need ⟨xᵢ,xⱼ⟩</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Primal and Dual: Two Sides of One Negotiation</text>
+
+  <!-- Buyer (primal) box -->
+  <rect x="60" y="80" width="250" height="110" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="185" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Primal (the buyer)</text>
+  <text x="185" y="133" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">min f(x)  s.t.  g&#7522;(x) &#8804; 0</text>
+  <text x="185" y="157" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">stay feasible, pay as little</text>
+  <text x="185" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">as possible: optimum p*</text>
+
+  <!-- Vendor (dual) box -->
+  <rect x="490" y="80" width="250" height="110" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="615" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Dual (the vendor)</text>
+  <text x="615" y="133" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">max over prices &#955;&#7522; &#8805; 0</text>
+  <text x="615" y="157" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">charge for each constraint;</text>
+  <text x="615" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">tightest lower bound: d*</text>
+
+  <!-- Lagrangian bridge -->
+  <line x1="310" y1="135" x2="490" y2="135" stroke="#C4A87A" stroke-width="2"/>
+  <rect x="330" y="112" width="140" height="46" fill="#FDFAF4" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="131" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">the Lagrangian</text>
+  <text x="400" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">L = f(x) + &#931; &#955;&#7522; g&#7522;(x)</text>
+
+  <!-- Gap diagram: vertical value axis -->
+  <line x1="150" y1="230" x2="150" y2="350" stroke="#333" stroke-width="1.5"/>
+  <text x="150" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">value</text>
+  <line x1="130" y1="255" x2="170" y2="255" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="185" y="260" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">p*  (best purchase price)</text>
+  <line x1="130" y1="320" x2="170" y2="320" stroke="#7C2530" stroke-width="3"/>
+  <text x="185" y="325" font-family="Georgia, serif" font-size="13" fill="#7C2530">d*  (best lower bound)</text>
+  <line x1="150" y1="258" x2="150" y2="317" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="240" y="292" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">duality gap = p* &#8722; d* &#8805; 0</text>
+
+  <!-- duality facts -->
+  <rect x="470" y="230" width="290" height="120" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="615" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Weak duality: d* &#8804; p*, always</text>
+  <text x="615" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">Strong duality: d* = p*</text>
+  <text x="615" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">when Slater's condition holds &#8212;</text>
+  <text x="615" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the best deals coincide exactly</text>
+  <text x="615" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333" font-style="italic">the SVM dual is what enables the kernel trick</text>
+
+  <text x="400" y="375" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">Every constrained minimization has a mirror-image maximization &#8212; solve whichever is easier.</text>
 </svg>

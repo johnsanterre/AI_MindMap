@@ -1,39 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Inputs -->
-  <circle cx="120" cy="120" r="28" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="120" y="125" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">x₁</text>
-  <circle cx="120" cy="200" r="28" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="120" y="205" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">x₂</text>
-  <circle cx="120" cy="280" r="28" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="120" y="285" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">x₃</text>
-  <!-- Weights labels -->
-  <text x="230" y="148" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">w₁</text>
-  <text x="230" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">w₂</text>
-  <text x="230" y="258" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">w₃</text>
-  <!-- Lines from inputs to neuron -->
-  <line x1="148" y1="120" x2="330" y2="200" stroke="#4a90d9" stroke-width="2"/>
-  <line x1="148" y1="200" x2="330" y2="200" stroke="#4a90d9" stroke-width="2"/>
-  <line x1="148" y1="280" x2="330" y2="200" stroke="#4a90d9" stroke-width="2"/>
-  <!-- Neuron -->
-  <circle cx="370" cy="200" r="40" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/>
-  <text x="370" y="196" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Σ</text>
-  <text x="370" y="214" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">+ bias</text>
-  <!-- Step function box -->
-  <rect x="460" y="175" width="100" height="50" rx="8" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="510" y="196" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">Step</text>
-  <text x="510" y="212" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">Function</text>
-  <line x1="410" y1="200" x2="460" y2="200" stroke="#e67e22" stroke-width="2.5"/>
-  <!-- Output -->
-  <circle cx="650" cy="200" r="28" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="650" y="197" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">ŷ</text>
-  <text x="650" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">0 or 1</text>
-  <line x1="560" y1="200" x2="622" y2="200" stroke="#27ae60" stroke-width="2.5" marker-end="url(#arr)"/>
-  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#27ae60"/></marker></defs>
-  <!-- Labels -->
-  <text x="80" y="340" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Inputs</text>
-  <text x="370" y="270" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Weighted Sum</text>
-  <text x="510" y="245" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Activation</text>
-  <text x="650" y="245" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">Output</text>
-  <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">The Perceptron</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">The Perceptron: A Weighted Vote and a Threshold</text>
+  <defs>
+    <marker id="pc" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#7C2530"/></marker>
+  </defs>
+
+  <!-- inputs -->
+  <circle cx="130" cy="130" r="28" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="130" y="136" text-anchor="middle" font-size="15" fill="#2D5A8E">x&#8321;</text>
+  <circle cx="130" cy="215" r="28" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="130" y="221" text-anchor="middle" font-size="15" fill="#2D5A8E">x&#8322;</text>
+  <circle cx="130" cy="300" r="28" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="130" y="306" text-anchor="middle" font-size="15" fill="#2D5A8E">x&#8323;</text>
+  <text x="130" y="352" text-anchor="middle" font-size="13" fill="#333">inputs (judges&#8217; scores)</text>
+
+  <!-- weighted connections -->
+  <line x1="158" y1="135" x2="330" y2="205" stroke="#C4A87A" stroke-width="4"/>
+  <line x1="158" y1="215" x2="330" y2="215" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="158" y1="295" x2="330" y2="225" stroke="#C4A87A" stroke-width="6"/>
+  <text x="240" y="155" text-anchor="middle" font-size="13" fill="#5C3D1E" font-weight="bold">w&#8321;</text>
+  <text x="240" y="205" text-anchor="middle" font-size="13" fill="#5C3D1E" font-weight="bold">w&#8322;</text>
+  <text x="240" y="285" text-anchor="middle" font-size="13" fill="#5C3D1E" font-weight="bold">w&#8323;</text>
+  <text x="244" y="248" text-anchor="middle" font-size="11" fill="#5C3D1E" font-style="italic">thickness = importance</text>
+
+  <!-- summing neuron -->
+  <circle cx="380" cy="215" r="46" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="380" y="210" text-anchor="middle" font-size="18" fill="#7C2530" font-weight="bold">&#931; w&#7522;x&#7522;</text>
+  <text x="380" y="232" text-anchor="middle" font-size="13" fill="#7C2530">+ b</text>
+  <text x="380" y="290" text-anchor="middle" font-size="13" fill="#333">weighted sum</text>
+
+  <!-- threshold step -->
+  <line x1="426" y1="215" x2="490" y2="215" stroke="#7C2530" stroke-width="2.5" marker-end="url(#pc)"/>
+  <rect x="495" y="165" width="120" height="100" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <polyline points="510,245 555,245 555,185 600,185" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="555" y="290" text-anchor="middle" font-size="13" fill="#333">step: over threshold?</text>
+
+  <!-- output -->
+  <line x1="615" y1="215" x2="665" y2="215" stroke="#7C2530" stroke-width="2.5" marker-end="url(#pc)"/>
+  <circle cx="700" cy="215" r="30" fill="#7C2530"/>
+  <text x="700" y="211" text-anchor="middle" font-size="15" fill="#FDFAF4" font-weight="bold">&#375;</text>
+  <text x="700" y="230" text-anchor="middle" font-size="12" fill="#FDFAF4">0 or 1</text>
+  <text x="700" y="272" text-anchor="middle" font-size="13" fill="#333">fire / stay quiet</text>
+
+  <text x="400" y="380" text-anchor="middle" font-size="12" fill="#5C3D1E" font-style="italic">Rosenblatt, 1957: the first provably-learning algorithm &#8212; ancestor of every neuron in modern deep learning.</text>
 </svg>

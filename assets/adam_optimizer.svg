@@ -1,27 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Adam Optimizer</text>
-  <!-- Algorithm steps -->
-  <rect x="40" y="65" width="440" height="300" rx="10" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="260" y="92" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">Adam Update Rule</text>
-  <text x="260" y="122" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">g_t = ∇L(θ_t)  (gradient)</text>
-  <text x="260" y="150" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">m_t = β₁m_{t-1} + (1-β₁)g_t  (1st moment)</text>
-  <text x="260" y="178" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">v_t = β₂v_{t-1} + (1-β₂)g_t²  (2nd moment)</text>
-  <text x="260" y="206" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">m̂_t = m_t / (1-β₁ᵗ)  (bias correction)</text>
-  <text x="260" y="234" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">v̂_t = v_t / (1-β₂ᵗ)  (bias correction)</text>
-  <text x="260" y="270" text-anchor="middle" font-family="Arial" font-size="14" fill="#333" font-weight="bold">θ_t = θ_{t-1} − α · m̂_t / (√v̂_t + ε)</text>
-  <text x="260" y="305" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Defaults: α=0.001, β₁=0.9, β₂=0.999, ε=1e-8</text>
-  <text x="260" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Momentum + RMSProp combined</text>
-  <!-- Comparison -->
-  <rect x="510" y="65" width="250" height="300" rx="10" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="635" y="92" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Adam vs SGD</text>
-  <text x="635" y="122" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">Adam</text>
-  <text x="635" y="142" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Adaptive per-param lr</text>
-  <text x="635" y="162" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Fast convergence</text>
-  <text x="635" y="182" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Less tuning needed</text>
-  <line x1="520" y1="200" x2="750" y2="200" stroke="#ddd" stroke-width="1"/>
-  <text x="635" y="225" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">SGD+momentum</text>
-  <text x="635" y="248" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Often better final</text>
-  <text x="635" y="268" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">generalization</text>
-  <text x="635" y="288" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Needs lr schedule</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Adam: A Memory for Every Parameter</text>
+  <defs>
+    <marker id="am" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#5C3D1E"/></marker>
+  </defs>
+  <!-- Gradient input -->
+  <rect x="60" y="150" width="150" height="70" rx="8" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="135" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#333">gradient g&#8348;</text>
+  <text x="135" y="203" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">this batch's signal</text>
+  <line x1="210" y1="165" x2="288" y2="120" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#am)"/>
+  <line x1="210" y1="205" x2="288" y2="252" stroke="#5C3D1E" stroke-width="1.5" marker-end="url(#am)"/>
+  <!-- First moment -->
+  <rect x="292" y="78" width="230" height="82" rx="8" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="407" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Direction memory  m&#8348;</text>
+  <text x="407" y="126" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">running average of gradients</text>
+  <text x="407" y="147" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">"which way has it been pointing?"</text>
+  <!-- Second moment -->
+  <rect x="292" y="212" width="230" height="82" rx="8" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="407" y="239" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Size memory  v&#8348;</text>
+  <text x="407" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">running average of gradient&#178;</text>
+  <text x="407" y="281" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">"how wildly has it been swinging?"</text>
+  <line x1="522" y1="119" x2="596" y2="168" stroke="#2D5A8E" stroke-width="1.5" marker-end="url(#am)"/>
+  <line x1="522" y1="253" x2="596" y2="205" stroke="#7C2530" stroke-width="1.5" marker-end="url(#am)"/>
+  <!-- Update -->
+  <rect x="580" y="150" width="170" height="76" rx="8" fill="#C4A87A" fill-opacity="0.25" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="665" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Per-weight step</text>
+  <text x="665" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">&#916;&#952; = &#8722;&#945; m&#770; / &#8730;v&#770;</text>
+  <!-- Bottom explanation -->
+  <text x="400" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">Steady direction &#43; small swings &#8594; confident big strides.   Noisy, erratic signal &#8594; cautious small steps.</text>
+  <text x="400" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#7C2530">Each weight gets its own learning rate &#8212; that is why Adam works out of the box.</text>
 </svg>

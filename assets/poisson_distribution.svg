@@ -1,34 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Poisson Distribution</text>
-  <!-- PMF bars for different lambda -->
-  <line x1="50" y1="300" x2="450" y2="300" stroke="#333" stroke-width="1.5"/>
-  <line x1="50" y1="300" x2="50" y2="80" stroke="#333" stroke-width="1.5"/>
-  <text x="250" y="340" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">k (number of events)</text>
-  <text x="20" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#333" transform="rotate(-90,20,190)">P(X=k)</text>
-  <!-- λ=2 -->
-  <rect x="70" y="180" width="25" height="120" fill="#4a90d9" opacity="0.8"/>
-  <rect x="100" y="200" width="25" height="100" fill="#4a90d9" opacity="0.8"/>
-  <rect x="130" y="220" width="25" height="80" fill="#4a90d9" opacity="0.8"/>
-  <rect x="160" y="255" width="25" height="45" fill="#4a90d9" opacity="0.6"/>
-  <rect x="190" y="275" width="25" height="25" fill="#4a90d9" opacity="0.4"/>
-  <rect x="220" y="288" width="25" height="12" fill="#4a90d9" opacity="0.3"/>
-  <text x="150" y="75" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">λ=2</text>
-  <!-- λ=5 -->
-  <rect x="260" y="255" width="20" height="45" fill="#e74c3c" opacity="0.6"/>
-  <rect x="283" y="230" width="20" height="70" fill="#e74c3c" opacity="0.8"/>
-  <rect x="306" y="215" width="20" height="85" fill="#e74c3c" opacity="0.9"/>
-  <rect x="329" y="230" width="20" height="70" fill="#e74c3c" opacity="0.8"/>
-  <rect x="352" y="255" width="20" height="45" fill="#e74c3c" opacity="0.6"/>
-  <rect x="375" y="270" width="20" height="30" fill="#e74c3c" opacity="0.4"/>
-  <text x="330" y="75" text-anchor="middle" font-family="Arial" font-size="12" fill="#e74c3c">λ=5</text>
-  <!-- Formula box -->
-  <rect x="490" y="80" width="280" height="180" rx="10" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="630" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Poisson PMF</text>
-  <text x="630" y="145" text-anchor="middle" font-family="Arial" font-size="15" fill="#333">P(X=k) = λᵏe⁻λ / k!</text>
-  <line x1="500" y1="162" x2="760" y2="162" stroke="#ddd" stroke-width="1"/>
-  <text x="630" y="185" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Mean = λ</text>
-  <text x="630" y="207" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Variance = λ</text>
-  <text x="630" y="242" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Counts events in fixed interval</text>
-  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Examples: website clicks/hour, typos/page, mutations/gene — rare, independent events</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Poisson Distribution: Counting Random Arrivals</text>
+  <text x="400" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">How many events land in a fixed window, given a known average rate &#955;?</text>
+
+  <!-- axes -->
+  <line x1="70" y1="300" x2="470" y2="300" stroke="#333" stroke-width="1.5"/>
+  <line x1="70" y1="300" x2="70" y2="100" stroke="#333" stroke-width="1.5"/>
+  <text x="270" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">k (events observed)</text>
+  <text x="44" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" transform="rotate(-90,44,200)">P(X = k)</text>
+
+  <!-- lambda = 2 bars (navy) -->
+  <rect x="90" y="195" width="22" height="105" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="118" y="160" width="22" height="140" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="146" y="160" width="22" height="140" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="174" y="207" width="22" height="93" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="202" y="253" width="22" height="47" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="230" y="281" width="22" height="19" fill="#2D5A8E" opacity="0.85"/>
+  <text x="140" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">&#955; = 2</text>
+
+  <!-- lambda = 6 bars (red), overlapping axis, shifted right -->
+  <rect x="258" y="286" width="22" height="14" fill="#7C2530" opacity="0.8"/>
+  <rect x="286" y="262" width="22" height="38" fill="#7C2530" opacity="0.8"/>
+  <rect x="314" y="234" width="22" height="66" fill="#7C2530" opacity="0.8"/>
+  <rect x="342" y="215" width="22" height="85" fill="#7C2530" opacity="0.8"/>
+  <rect x="370" y="215" width="22" height="85" fill="#7C2530" opacity="0.8"/>
+  <rect x="398" y="240" width="22" height="60" fill="#7C2530" opacity="0.8"/>
+  <rect x="426" y="264" width="22" height="36" fill="#7C2530" opacity="0.8"/>
+  <text x="360" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">&#955; = 6</text>
+
+  <!-- formula box -->
+  <rect x="510" y="100" width="250" height="150" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="635" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Probability of exactly k events</text>
+  <text x="635" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="17" fill="#333">P(X = k) = &#955;&#7495; e&#8315;&#7461; / k!</text>
+  <line x1="525" y1="182" x2="745" y2="182" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="635" y="207" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">mean = &#955;      variance = &#955;</text>
+  <text x="635" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">one knob controls both</text>
+
+  <!-- assumptions -->
+  <rect x="510" y="270" width="250" height="75" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="635" y="293" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">Assumptions</text>
+  <text x="635" y="313" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">events independent (memoryless)</text>
+  <text x="635" y="331" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">constant average rate</text>
+
+  <text x="270" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-style="italic">customers/hour, calls/minute, typos/page, mutations/gene</text>
 </svg>

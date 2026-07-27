@@ -1,37 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Actor box -->
-  <rect x="80" y="140" width="160" height="120" rx="10" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2.5"/>
-  <text x="160" y="193" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#4a90d9">Actor</text>
-  <text x="160" y="215" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">π(a|s; θ)</text>
-  <text x="160" y="233" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Picks actions</text>
-  <!-- Critic box -->
-  <rect x="560" y="140" width="160" height="120" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/>
-  <text x="640" y="193" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#e67e22">Critic</text>
-  <text x="640" y="215" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">V(s; w)</text>
-  <text x="640" y="233" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Evaluates states</text>
-  <!-- Environment -->
-  <rect x="300" y="290" width="200" height="70" rx="10" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="400" y="322" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#27ae60">Environment</text>
-  <text x="400" y="342" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">returns s', r</text>
-  <!-- State box -->
-  <rect x="320" y="60" width="160" height="50" rx="8" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
-  <text x="400" y="91" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#8e44ad">State s</text>
-  <!-- Arrows -->
-  <line x1="400" y1="110" x2="200" y2="140" stroke="#8e44ad" stroke-width="2" marker-end="url(#arca)"/>
-  <line x1="400" y1="110" x2="600" y2="140" stroke="#8e44ad" stroke-width="2" marker-end="url(#arca)"/>
-  <!-- Actor -> Environment (action) -->
-  <line x1="160" y1="260" x2="300" y2="305" stroke="#4a90d9" stroke-width="2" marker-end="url(#arca)"/>
-  <text x="195" y="295" font-family="Arial" font-size="11" fill="#4a90d9">action a</text>
-  <!-- Environment -> Critic (reward) -->
-  <line x1="500" y1="305" x2="640" y2="260" stroke="#27ae60" stroke-width="2" marker-end="url(#arca)"/>
-  <text x="580" y="295" font-family="Arial" font-size="11" fill="#27ae60">reward r</text>
-  <!-- Critic -> Actor (advantage) -->
-  <path d="M560,200 Q400,150 240,200" fill="none" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arca2)"/>
-  <text x="400" y="165" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">advantage A(s,a)</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Actor–Critic: One Acts, One Evaluates</text>
   <defs>
-    <marker id="arca" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8e44ad"/></marker>
-    <marker id="arca2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/></marker>
+    <marker id="an" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#2D5A8E"/></marker>
+    <marker id="ard" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#7C2530"/></marker>
+    <marker id="abr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#5C3D1E"/></marker>
   </defs>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Actor-Critic Architecture</text>
+  <!-- Actor -->
+  <rect x="90" y="110" width="180" height="100" rx="8" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="180" y="145" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E">Actor</text>
+  <text x="180" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">policy &#960;(a | s)</text>
+  <text x="180" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">chooses the action</text>
+  <!-- Critic -->
+  <rect x="530" y="110" width="180" height="100" rx="8" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="620" y="145" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#7C2530">Critic</text>
+  <text x="620" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">value V(s)</text>
+  <text x="620" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">scores each move now</text>
+  <!-- Environment -->
+  <rect x="300" y="290" width="200" height="66" rx="8" fill="#C4A87A" fill-opacity="0.25" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">Environment</text>
+  <text x="400" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">returns next state s&#8242;, reward r</text>
+  <!-- Actor -> Environment -->
+  <path d="M180,210 Q190,290 298,314" fill="none" stroke="#2D5A8E" stroke-width="2" marker-end="url(#an)"/>
+  <text x="200" y="270" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">action a</text>
+  <!-- Environment -> Critic -->
+  <path d="M502,314 Q610,290 620,212" fill="none" stroke="#7C2530" stroke-width="2" marker-end="url(#ard)"/>
+  <text x="545" y="270" font-family="Georgia, serif" font-size="13" fill="#7C2530">state, reward</text>
+  <!-- Critic -> Actor feedback -->
+  <path d="M528,130 Q400,70 272,130" fill="none" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#ard)"/>
+  <text x="400" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">TD error: "better or worse than I expected?"</text>
+  <!-- Key insight -->
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">The critic's step-by-step feedback replaces waiting for the episode's final reward &#8212; both learn together.</text>
 </svg>

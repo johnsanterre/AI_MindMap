@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="14" y="14" width="772" height="372" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- link lines (drawn first, beneath cards) -->
+  <g fill="none" stroke="#C4A87A" stroke-width="1.2" opacity="0.7">
+    <!-- cluster A (left) internal links -->
+    <path d="M 175 130 Q 205 105 240 118"/>
+    <path d="M 175 130 Q 150 165 185 195"/>
+    <path d="M 240 118 Q 250 160 215 190"/>
+    <path d="M 185 195 Q 210 225 255 215"/>
+    <path d="M 240 118 Q 285 130 280 170"/>
+    <path d="M 280 170 Q 275 200 255 215"/>
+    <!-- cluster B (center-top) internal links -->
+    <path d="M 390 90 Q 425 75 460 95"/>
+    <path d="M 390 90 Q 380 130 415 145"/>
+    <path d="M 460 95 Q 470 130 415 145"/>
+    <path d="M 415 145 Q 450 170 490 160"/>
+    <path d="M 460 95 Q 505 105 490 160"/>
+    <!-- cluster C (right) internal links -->
+    <path d="M 590 150 Q 625 130 660 145"/>
+    <path d="M 590 150 Q 575 190 615 205"/>
+    <path d="M 660 145 Q 675 185 615 205"/>
+    <path d="M 615 205 Q 640 235 675 225"/>
+    <path d="M 660 145 Q 700 165 675 225"/>
+    <!-- inter-cluster bridges -->
+    <path d="M 280 170 Q 330 150 390 90" stroke-dasharray="4 4" opacity="0.9"/>
+    <path d="M 490 160 Q 540 165 590 150" stroke-dasharray="4 4" opacity="0.9"/>
+    <path d="M 255 215 Q 400 260 615 205" stroke-dasharray="4 4" opacity="0.6"/>
+  </g>
+
+  <!-- cards: small rounded rects -->
+  <g stroke="#5C3D1E" stroke-width="0.8" stroke-opacity="0.25">
+    <!-- cluster A -->
+    <rect x="152" y="117" width="46" height="26" rx="5" fill="#7C2530"/>
+    <rect x="218" y="105" width="44" height="26" rx="5" fill="#2D5A8E"/>
+    <rect x="163" y="182" width="44" height="26" rx="5" fill="#C4A87A"/>
+    <rect x="233" y="202" width="44" height="26" rx="5" fill="#5C3D1E"/>
+    <rect x="258" y="157" width="44" height="26" rx="5" fill="#2D5A8E"/>
+    <rect x="128" y="230" width="40" height="24" rx="5" fill="#7C2530" opacity="0.85"/>
+    <!-- cluster B -->
+    <rect x="368" y="77" width="44" height="26" rx="5" fill="#2D5A8E"/>
+    <rect x="438" y="82" width="44" height="26" rx="5" fill="#7C2530"/>
+    <rect x="393" y="132" width="44" height="26" rx="5" fill="#C4A87A"/>
+    <rect x="468" y="147" width="44" height="26" rx="5" fill="#5C3D1E"/>
+    <rect x="425" y="190" width="40" height="24" rx="5" fill="#2D5A8E" opacity="0.85"/>
+    <!-- cluster C -->
+    <rect x="568" y="137" width="44" height="26" rx="5" fill="#5C3D1E"/>
+    <rect x="638" y="132" width="44" height="26" rx="5" fill="#7C2530"/>
+    <rect x="593" y="192" width="44" height="26" rx="5" fill="#2D5A8E"/>
+    <rect x="653" y="212" width="44" height="26" rx="5" fill="#C4A87A"/>
+    <rect x="690" y="105" width="40" height="24" rx="5" fill="#2D5A8E" opacity="0.85"/>
+    <!-- loose satellites -->
+    <rect x="330" y="240" width="38" height="22" rx="5" fill="#C4A87A" opacity="0.8"/>
+    <rect x="520" y="235" width="38" height="22" rx="5" fill="#7C2530" opacity="0.8"/>
+  </g>
+
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="#5C3D1E">739 ideas, one map</text>
+</svg>

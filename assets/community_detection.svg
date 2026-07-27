@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">Community Detection: Dense Inside, Sparse Between</text>
+
+  <!-- sparse bridge edges between communities -->
+  <line x1="218" y1="160" x2="352" y2="230" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,5"/>
+  <line x1="500" y1="255" x2="588" y2="170" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,5"/>
+  <line x1="235" y1="120" x2="565" y2="120" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,5"/>
+
+  <!-- Community A (deep red), left -->
+  <g stroke="#7C2530" stroke-width="2">
+    <line x1="130" y1="110" x2="200" y2="90"/>
+    <line x1="130" y1="110" x2="160" y2="165"/>
+    <line x1="200" y1="90" x2="160" y2="165"/>
+    <line x1="200" y1="90" x2="225" y2="140"/>
+    <line x1="160" y1="165" x2="225" y2="140"/>
+    <line x1="130" y1="110" x2="225" y2="140"/>
+  </g>
+  <circle cx="130" cy="110" r="12" fill="#7C2530"/>
+  <circle cx="200" cy="90" r="12" fill="#7C2530"/>
+  <circle cx="160" cy="165" r="12" fill="#7C2530"/>
+  <circle cx="225" cy="140" r="12" fill="#7C2530"/>
+  <text x="172" y="215" text-anchor="middle" font-size="15" font-weight="bold" fill="#7C2530">Community A</text>
+
+  <!-- Community B (navy), center-bottom -->
+  <g stroke="#2D5A8E" stroke-width="2">
+    <line x1="370" y1="250" x2="440" y2="230"/>
+    <line x1="370" y1="250" x2="400" y2="305"/>
+    <line x1="440" y1="230" x2="400" y2="305"/>
+    <line x1="440" y1="230" x2="470" y2="290"/>
+    <line x1="400" y1="305" x2="470" y2="290"/>
+    <line x1="370" y1="250" x2="470" y2="290"/>
+  </g>
+  <circle cx="370" cy="250" r="12" fill="#2D5A8E"/>
+  <circle cx="440" cy="230" r="12" fill="#2D5A8E"/>
+  <circle cx="400" cy="305" r="12" fill="#2D5A8E"/>
+  <circle cx="470" cy="290" r="12" fill="#2D5A8E"/>
+  <text x="420" y="345" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">Community B</text>
+
+  <!-- Community C (warm brown), right -->
+  <g stroke="#5C3D1E" stroke-width="2">
+    <line x1="600" y1="130" x2="668" y2="110"/>
+    <line x1="600" y1="130" x2="630" y2="185"/>
+    <line x1="668" y1="110" x2="630" y2="185"/>
+    <line x1="668" y1="110" x2="695" y2="170"/>
+    <line x1="630" y1="185" x2="695" y2="170"/>
+    <line x1="600" y1="130" x2="695" y2="170"/>
+  </g>
+  <circle cx="600" cy="130" r="12" fill="#5C3D1E"/>
+  <circle cx="668" cy="110" r="12" fill="#5C3D1E"/>
+  <circle cx="630" cy="185" r="12" fill="#5C3D1E"/>
+  <circle cx="695" cy="170" r="12" fill="#5C3D1E"/>
+  <text x="650" y="230" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Community C</text>
+
+  <!-- annotations -->
+  <text x="292" y="105" text-anchor="middle" font-size="13" font-style="italic" fill="#C4A87A">sparse bridges</text>
+  <text x="172" y="70" text-anchor="middle" font-size="13" font-style="italic" fill="#7C2530">dense internal edges</text>
+
+  <!-- modularity note -->
+  <rect x="90" y="270" width="200" height="80" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="190" y="296" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">Modularity Q</text>
+  <text x="190" y="318" text-anchor="middle" font-size="13" fill="#2D5A8E">observed edges inside</text>
+  <text x="190" y="336" text-anchor="middle" font-size="13" fill="#7C2530">minus expected by chance</text>
+</svg>

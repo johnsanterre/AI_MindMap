@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="38" font-size="20" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Multinomial: n Trials Sorted into k Categories</text>
+
+  <!-- Die -->
+  <rect x="70" y="90" width="90" height="90" rx="12" fill="#FDFAF4" stroke="#7C2530" stroke-width="3"/>
+  <circle cx="95" cy="115" r="7" fill="#7C2530"/>
+  <circle cx="135" cy="115" r="7" fill="#7C2530"/>
+  <circle cx="95" cy="155" r="7" fill="#7C2530"/>
+  <circle cx="135" cy="155" r="7" fill="#7C2530"/>
+  <circle cx="115" cy="135" r="7" fill="#7C2530"/>
+  <text x="115" y="205" font-size="13" fill="#5C3D1E" text-anchor="middle">one trial:</text>
+  <text x="115" y="222" font-size="13" fill="#5C3D1E" text-anchor="middle">k outcomes</text>
+  <text x="115" y="242" font-size="12" fill="#7C2530" text-anchor="middle" font-style="italic">p&#8321; &#8230; p&#8342;</text>
+
+  <!-- times n arrow -->
+  <line x1="180" y1="135" x2="265" y2="135" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="265,135 253,129 253,141" fill="#5C3D1E"/>
+  <text x="222" y="120" font-size="13" fill="#5C3D1E" text-anchor="middle">roll n = 60</text>
+  <text x="222" y="158" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">independent</text>
+
+  <!-- Count histogram -->
+  <text x="410" y="80" font-size="14" fill="#5C3D1E" text-anchor="middle">count vector (x&#8321;, &#8230;, x&#8326;)</text>
+  <line x1="290" y1="280" x2="540" y2="280" stroke="#5C3D1E" stroke-width="2"/>
+  <rect x="300" y="170" width="30" height="110" fill="#2D5A8E"/>
+  <rect x="338" y="190" width="30" height="90" fill="#7C2530"/>
+  <rect x="376" y="160" width="30" height="120" fill="#C4A87A"/>
+  <rect x="414" y="200" width="30" height="80" fill="#2D5A8E" opacity="0.7"/>
+  <rect x="452" y="180" width="30" height="100" fill="#7C2530" opacity="0.7"/>
+  <rect x="490" y="210" width="30" height="70" fill="#C4A87A" opacity="0.8"/>
+  <text x="315" y="298" font-size="12" fill="#5C3D1E" text-anchor="middle">11</text>
+  <text x="353" y="298" font-size="12" fill="#5C3D1E" text-anchor="middle">9</text>
+  <text x="391" y="298" font-size="12" fill="#5C3D1E" text-anchor="middle">12</text>
+  <text x="429" y="298" font-size="12" fill="#5C3D1E" text-anchor="middle">8</text>
+  <text x="467" y="298" font-size="12" fill="#5C3D1E" text-anchor="middle">10</text>
+  <text x="505" y="298" font-size="12" fill="#5C3D1E" text-anchor="middle">10</text>
+  <text x="415" y="322" font-size="13" fill="#7C2530" text-anchor="middle" font-weight="bold">x&#8321; + x&#8322; + &#8230; + x&#8326; = n  (fixed budget)</text>
+
+  <!-- Tower of distributions -->
+  <rect x="575" y="95" width="195" height="205" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="672" y="118" font-size="14" font-weight="bold" fill="#5C3D1E" text-anchor="middle">The tower</text>
+  <text x="590" y="145" font-size="12" fill="#2D5A8E">Bernoulli: 1 trial, 2 sides</text>
+  <text x="590" y="172" font-size="12" fill="#2D5A8E">Binomial: n trials, 2 sides</text>
+  <text x="590" y="199" font-size="12" fill="#7C2530">Categorical: 1 trial, k sides</text>
+  <text x="590" y="226" font-size="12" fill="#7C2530" font-weight="bold">Multinomial: n trials, k sides</text>
+  <line x1="590" y1="238" x2="755" y2="238" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="672" y="260" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">counts compete:</text>
+  <text x="672" y="278" font-size="12" fill="#5C3D1E" text-anchor="middle" font-style="italic">Cov(x&#7522;, x&#11388;) = &#8722;np&#7522;p&#11388;</text>
+
+  <text x="400" y="365" font-size="13" fill="#5C3D1E" text-anchor="middle" font-style="italic">P(counts) = (number of orderings) &#215; (probability of one ordering) &#8212; combinatorics times independence</text>
+</svg>

@@ -1,35 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Sparsity in Machine Learning</text>
-  <!-- Dense vs sparse vectors -->
-  <text x="160" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Dense Vector</text>
-  <rect x="40" y="85" width="240" height="50" rx="6" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="160" y="116" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">[ 0.3, −0.7, 0.1, 0.9, −0.2, 0.5, ... ]</text>
-  <text x="160" y="155" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">all values non-zero</text>
-  <text x="430" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Sparse Vector</text>
-  <rect x="310" y="85" width="240" height="50" rx="6" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="430" y="116" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">[ 0, 0, 0.9, 0, 0, 0, 0.4, 0, ... ]</text>
-  <text x="430" y="155" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">mostly zeros — interpretable</text>
-  <!-- Weight magnitude plot -->
-  <text x="180" y="200" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">L1 Regularization → Sparsity</text>
-  <line x1="40" y1="300" x2="330" y2="300" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="40" y1="300" x2="40" y2="210" stroke="#ccc" stroke-width="1.5"/>
-  <rect x="55" y="250" width="20" height="50" fill="#e74c3c"/>
-  <rect x="80" y="215" width="20" height="85" fill="#e74c3c"/>
-  <rect x="105" y="295" width="20" height="5" fill="#ccc"/>
-  <rect x="130" y="288" width="20" height="12" fill="#e74c3c"/>
-  <rect x="155" y="295" width="20" height="5" fill="#ccc"/>
-  <rect x="180" y="295" width="20" height="5" fill="#ccc"/>
-  <rect x="205" y="270" width="20" height="30" fill="#e74c3c"/>
-  <rect x="230" y="295" width="20" height="5" fill="#ccc"/>
-  <rect x="255" y="295" width="20" height="5" fill="#ccc"/>
-  <rect x="280" y="295" width="20" height="5" fill="#ccc"/>
-  <text x="185" y="325" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">L1 drives small weights to exactly zero</text>
-  <!-- Benefits -->
-  <rect x="570" y="180" width="200" height="150" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="670" y="208" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Benefits</text>
-  <text x="670" y="235" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Interpretability</text>
-  <text x="670" y="258" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Feature selection</text>
-  <text x="670" y="281" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Faster inference</text>
-  <text x="670" y="304" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Less memory</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Sparsity</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">most entries are zero &#8212; a few active components carry the signal</text>
+
+  <!-- Dense vector: 12 cells, all filled -->
+  <text x="235" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Dense</text>
+  <g stroke="#2D5A8E" stroke-width="1.5">
+    <rect x="55" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.55"/>
+    <rect x="85" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.8"/>
+    <rect x="115" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.35"/>
+    <rect x="145" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.9"/>
+    <rect x="175" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.5"/>
+    <rect x="205" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.7"/>
+    <rect x="235" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.4"/>
+    <rect x="265" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.85"/>
+    <rect x="295" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.6"/>
+    <rect x="325" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.45"/>
+    <rect x="355" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.75"/>
+    <rect x="385" y="120" width="30" height="30" fill="#2D5A8E" opacity="0.3"/>
+  </g>
+  <text x="235" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">every feature gets a little weight &#8212; signal smeared across all of them</text>
+
+  <!-- Sparse vector: 12 cells, 2 filled -->
+  <text x="235" y="212" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Sparse</text>
+  <g stroke="#7C2530" stroke-width="1.5">
+    <rect x="55" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="85" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="115" y="224" width="30" height="30" fill="#7C2530"/>
+    <rect x="145" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="175" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="205" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="235" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="265" y="224" width="30" height="30" fill="#7C2530"/>
+    <rect x="295" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="325" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="355" y="224" width="30" height="30" fill="#FDFAF4"/>
+    <rect x="385" y="224" width="30" height="30" fill="#FDFAF4"/>
+  </g>
+  <text x="235" y="276" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">most weights exactly zero &#8212; only the features that matter stay active</text>
+
+  <!-- How & why panel -->
+  <line x1="450" y1="95" x2="450" y2="290" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="610" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">How you get it</text>
+  <text x="480" y="140" font-family="Georgia, serif" font-size="12" fill="#333">&#8226; L1 penalty (lasso) pushes small</text>
+  <text x="492" y="156" font-family="Georgia, serif" font-size="12" fill="#333">weights to exactly zero</text>
+  <text x="480" y="178" font-family="Georgia, serif" font-size="12" fill="#333">&#8226; ReLU zeros out inactive units</text>
+  <text x="480" y="200" font-family="Georgia, serif" font-size="12" fill="#333">&#8226; pruning removes tiny weights</text>
+
+  <text x="610" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Why it helps</text>
+  <text x="480" y="254" font-family="Georgia, serif" font-size="12" fill="#333">automatic feature selection &#183; interpretable</text>
+  <text x="480" y="272" font-family="Georgia, serif" font-size="12" fill="#333">models &#183; less memory, faster inference</text>
+
+  <!-- Bottom claim -->
+  <line x1="60" y1="310" x2="740" y2="310" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="336" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">The deeper claim</text>
+  <text x="400" y="358" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">real-world data has sparse structure: of a thousand candidate features, only a handful genuinely drive the output</text>
 </svg>

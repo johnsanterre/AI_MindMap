@@ -1,30 +1,63 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Axes -->
-  <line x1="80" y1="320" x2="680" y2="320" stroke="#333" stroke-width="2"/>
-  <line x1="80" y1="320" x2="80" y2="40" stroke="#333" stroke-width="2"/>
-  <text x="380" y="370" text-anchor="middle" font-size="14" fill="#333">x</text>
-  <text x="35" y="185" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,35,185)">y</text>
-  <!-- Regression line -->
-  <line x1="100" y1="280" x2="660" y2="80" stroke="#2196F3" stroke-width="2.5"/>
-  <!-- Data points and residuals -->
-  <circle cx="150" cy="250" r="6" fill="#E91E63"/>
-  <line x1="150" y1="250" x2="150" y2="263" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <circle cx="250" cy="200" r="6" fill="#E91E63"/>
-  <line x1="250" y1="200" x2="250" y2="227" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <circle cx="350" cy="120" r="6" fill="#E91E63"/>
-  <line x1="350" y1="120" x2="350" y2="191" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <circle cx="450" cy="170" r="6" fill="#E91E63"/>
-  <line x1="450" y1="155" x2="450" y2="170" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <circle cx="550" cy="110" r="6" fill="#E91E63"/>
-  <line x1="550" y1="110" x2="550" y2="119" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <circle cx="620" cy="90" r="6" fill="#E91E63"/>
-  <line x1="620" y1="90" x2="620" y2="96" stroke="#E91E63" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <!-- Residual annotation -->
-  <text x="360" y="160" font-size="12" fill="#E91E63">residual eᵢ = yᵢ - ŷᵢ</text>
-  <!-- Formula -->
-  <rect x="180" y="50" width="420" height="55" rx="8" fill="#f5f5f5" stroke="#ddd"/>
-  <text x="390" y="73" text-anchor="middle" font-size="14" fill="#333" font-weight="bold">Mean Squared Error</text>
-  <text x="390" y="95" text-anchor="middle" font-size="15" fill="#2196F3">MSE = (1/n) Σ (yᵢ - ŷᵢ)²</text>
-  <text x="400" y="20" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">MSE: Penalizing Squared Errors</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Mean Squared Error: Big Misses Cost Extra</text>
+
+  <!-- Left: residuals drawn as literal squares -->
+  <text x="215" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Each error contributes its square</text>
+  <line x1="80" y1="310" x2="370" y2="310" stroke="#333" stroke-width="1.5"/>
+  <line x1="80" y1="310" x2="80" y2="100" stroke="#333" stroke-width="1.5"/>
+  <!-- fitted line -->
+  <line x1="95" y1="285" x2="360" y2="130" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="352" y="118" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">model &#375;</text>
+  <!-- point 1: small residual + small square -->
+  <circle cx="150" cy="240" r="5" fill="#7C2530"/>
+  <line x1="150" y1="240" x2="150" y2="253" stroke="#7C2530" stroke-width="1.5"/>
+  <rect x="150" y="240" width="13" height="13" fill="#7C2530" fill-opacity="0.25" stroke="#7C2530" stroke-width="1"/>
+  <!-- point 2: medium -->
+  <circle cx="225" cy="180" r="5" fill="#7C2530"/>
+  <line x1="225" y1="180" x2="225" y2="208" stroke="#7C2530" stroke-width="1.5"/>
+  <rect x="225" y="180" width="28" height="28" fill="#7C2530" fill-opacity="0.25" stroke="#7C2530" stroke-width="1"/>
+  <!-- point 3: large residual, big square -->
+  <circle cx="290" cy="115" r="5" fill="#7C2530"/>
+  <line x1="290" y1="115" x2="290" y2="172" stroke="#7C2530" stroke-width="1.5"/>
+  <rect x="290" y="115" width="57" height="57" fill="#7C2530" fill-opacity="0.25" stroke="#7C2530" stroke-width="1"/>
+  <text x="300" y="192" font-family="Georgia, serif" font-size="11" fill="#7C2530">2&#215; the miss &#8594;</text>
+  <text x="300" y="206" font-family="Georgia, serif" font-size="11" fill="#7C2530">4&#215; the penalty</text>
+  <text x="215" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">MSE = (1/n) &#931; (y&#7522; &#8722; &#375;&#7522;)&#178;</text>
+
+  <!-- Divider -->
+  <line x1="410" y1="65" x2="410" y2="360" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Right: two dart throwers -->
+  <text x="600" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Same average miss, different MSE</text>
+
+  <!-- Thrower A: consistent -->
+  <text x="518" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Consistent thrower</text>
+  <circle cx="518" cy="180" r="55" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <circle cx="518" cy="180" r="30" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <circle cx="518" cy="180" r="4" fill="#5C3D1E"/>
+  <circle cx="545" cy="168" r="4" fill="#2D5A8E"/>
+  <circle cx="497" cy="203" r="4" fill="#2D5A8E"/>
+  <circle cx="504" cy="155" r="4" fill="#2D5A8E"/>
+  <circle cx="543" cy="196" r="4" fill="#2D5A8E"/>
+  <text x="518" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">every dart 3&#8243; off</text>
+  <text x="518" y="278" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">MSE = 9</text>
+
+  <!-- Thrower B: erratic -->
+  <text x="688" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">Erratic thrower</text>
+  <circle cx="688" cy="180" r="55" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <circle cx="688" cy="180" r="30" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+  <circle cx="688" cy="180" r="4" fill="#5C3D1E"/>
+  <circle cx="690" cy="177" r="4" fill="#7C2530"/>
+  <circle cx="685" cy="183" r="4" fill="#7C2530"/>
+  <circle cx="736" cy="152" r="4" fill="#7C2530"/>
+  <circle cx="641" cy="211" r="4" fill="#7C2530"/>
+  <text x="688" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">half 0&#8243;, half 6&#8243; off</text>
+  <text x="688" y="278" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">MSE = 18</text>
+
+  <text x="600" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Average miss is 3&#8243; for both &#8212; but squaring makes</text>
+  <text x="600" y="336" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the occasional 6&#8243; miss count four times as much.</text>
+
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">MSE rewards steadiness and comes down hard on outliers &#8212; its greatest strength, and its failure mode.</text>
 </svg>

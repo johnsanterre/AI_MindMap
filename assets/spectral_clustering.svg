@@ -1,41 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Step 1: Original data (two rings) -->
-  <text x="130" y="45" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">1. Original Data</text>
-  <!-- Inner ring -->
-  <circle cx="130" cy="180" r="20" fill="none" stroke="#e74c3c" stroke-width="12" stroke-opacity="0.4"/>
-  <!-- Outer ring -->
-  <circle cx="130" cy="180" r="55" fill="none" stroke="#4a90d9" stroke-width="12" stroke-opacity="0.4"/>
-  <text x="130" y="260" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Not linearly separable</text>
-  <!-- Arrow -->
-  <text x="240" y="185" text-anchor="middle" font-family="Arial" font-size="20" fill="#888">→</text>
-  <!-- Step 2: Similarity graph -->
-  <text x="380" y="45" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">2. Similarity Graph</text>
-  <circle cx="340" cy="150" r="8" fill="#e74c3c"/>
-  <circle cx="370" cy="170" r="8" fill="#e74c3c"/>
-  <circle cx="350" cy="195" r="8" fill="#e74c3c"/>
-  <circle cx="415" cy="155" r="8" fill="#4a90d9"/>
-  <circle cx="440" cy="175" r="8" fill="#4a90d9"/>
-  <circle cx="420" cy="200" r="8" fill="#4a90d9"/>
-  <line x1="340" y1="150" x2="370" y2="170" stroke="#ccc" stroke-width="2"/>
-  <line x1="370" y1="170" x2="350" y2="195" stroke="#ccc" stroke-width="2"/>
-  <line x1="340" y1="150" x2="350" y2="195" stroke="#ccc" stroke-width="2"/>
-  <line x1="415" y1="155" x2="440" y2="175" stroke="#ccc" stroke-width="2"/>
-  <line x1="440" y1="175" x2="420" y2="200" stroke="#ccc" stroke-width="2"/>
-  <line x1="415" y1="155" x2="420" y2="200" stroke="#ccc" stroke-width="2"/>
-  <text x="380" y="260" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Laplacian eigenvectors</text>
-  <!-- Arrow -->
-  <text x="490" y="185" text-anchor="middle" font-family="Arial" font-size="20" fill="#888">→</text>
-  <!-- Step 3: Embedded + clustered -->
-  <text x="640" y="45" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">3. Eigenspace Clustering</text>
-  <circle cx="570" cy="150" r="8" fill="#e74c3c"/>
-  <circle cx="590" cy="165" r="8" fill="#e74c3c"/>
-  <circle cx="580" cy="185" r="8" fill="#e74c3c"/>
-  <circle cx="680" cy="148" r="8" fill="#4a90d9"/>
-  <circle cx="700" cy="168" r="8" fill="#4a90d9"/>
-  <circle cx="690" cy="190" r="8" fill="#4a90d9"/>
-  <!-- Dashed separation line -->
-  <line x1="635" y1="120" x2="635" y2="220" stroke="#27ae60" stroke-width="2" stroke-dasharray="6,3"/>
-  <text x="640" y="260" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Linearly separable now</text>
-  <text x="400" y="330" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Graph Laplacian L = D − W   |   Cluster using k-means on top eigenvectors</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Spectral Clustering</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">group by connectivity, not by straight-line distance</text>
+
+  <defs>
+    <marker id="stepArr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#5C3D1E"/></marker>
+  </defs>
+
+  <!-- Step 1: two rings -->
+  <text x="145" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">1. Data</text>
+  <circle cx="145" cy="200" r="26" fill="none" stroke="#7C2530" stroke-width="11" opacity="0.5"/>
+  <circle cx="145" cy="200" r="62" fill="none" stroke="#2D5A8E" stroke-width="11" opacity="0.5"/>
+  <text x="145" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">two rings: close in space,</text>
+  <text x="145" y="311" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">k-means gets this wrong</text>
+
+  <line x1="245" y1="200" x2="285" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#stepArr)"/>
+
+  <!-- Step 2: similarity graph -->
+  <text x="400" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">2. Similarity graph</text>
+  <!-- red cluster nodes -->
+  <line x1="355" y1="160" x2="395" y2="145" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="395" y1="145" x2="430" y2="165" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="355" y1="160" x2="380" y2="190" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="380" y1="190" x2="430" y2="165" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="395" y1="145" x2="380" y2="190" stroke="#C4A87A" stroke-width="2"/>
+  <!-- blue cluster nodes -->
+  <line x1="365" y1="235" x2="405" y2="225" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="405" y1="225" x2="440" y2="245" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="365" y1="235" x2="395" y2="262" stroke="#C4A87A" stroke-width="2"/>
+  <line x1="395" y1="262" x2="440" y2="245" stroke="#C4A87A" stroke-width="2"/>
+  <circle cx="355" cy="160" r="7" fill="#7C2530"/>
+  <circle cx="395" cy="145" r="7" fill="#7C2530"/>
+  <circle cx="430" cy="165" r="7" fill="#7C2530"/>
+  <circle cx="380" cy="190" r="7" fill="#7C2530"/>
+  <circle cx="365" cy="235" r="7" fill="#2D5A8E"/>
+  <circle cx="405" cy="225" r="7" fill="#2D5A8E"/>
+  <circle cx="440" cy="245" r="7" fill="#2D5A8E"/>
+  <circle cx="395" cy="262" r="7" fill="#2D5A8E"/>
+  <text x="400" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">edges join near neighbors;</text>
+  <text x="400" y="311" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">no edges bridge the gap</text>
+
+  <line x1="475" y1="200" x2="515" y2="200" stroke="#5C3D1E" stroke-width="2" marker-end="url(#stepArr)"/>
+
+  <!-- Step 3: eigenvector embedding -->
+  <text x="645" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">3. Eigenvector space</text>
+  <circle cx="575" cy="165" r="7" fill="#7C2530"/>
+  <circle cx="590" cy="185" r="7" fill="#7C2530"/>
+  <circle cx="572" cy="205" r="7" fill="#7C2530"/>
+  <circle cx="588" cy="225" r="7" fill="#7C2530"/>
+  <circle cx="700" cy="168" r="7" fill="#2D5A8E"/>
+  <circle cx="716" cy="190" r="7" fill="#2D5A8E"/>
+  <circle cx="702" cy="210" r="7" fill="#2D5A8E"/>
+  <circle cx="718" cy="228" r="7" fill="#2D5A8E"/>
+  <line x1="645" y1="140" x2="645" y2="250" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="645" y="295" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Laplacian eigenvectors pull the</text>
+  <text x="645" y="311" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">groups apart; k-means finishes</text>
+
+  <!-- Bottom formula strip -->
+  <line x1="60" y1="332" x2="740" y2="332" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">Graph Laplacian  L = D &#8722; W  &#8226;  embed points with its smallest eigenvectors  &#8226;  clusters = well-connected regions of the graph</text>
 </svg>

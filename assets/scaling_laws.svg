@@ -1,27 +1,41 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Scaling Laws in Deep Learning</text>
-  <!-- Log-log axes -->
-  <line x1="80" y1="330" x2="720" y2="330" stroke="#333" stroke-width="2"/>
-  <line x1="80" y1="330" x2="80" y2="50" stroke="#333" stroke-width="2"/>
-  <text x="400" y="370" text-anchor="middle" font-size="13" fill="#333">Scale (params / compute / data) — log scale</text>
-  <text x="28" y="190" text-anchor="middle" font-size="13" fill="#333" transform="rotate(-90,28,190)">Loss — log scale</text>
-  <!-- Power law lines (straight on log-log) -->
-  <line x1="80" y1="70" x2="720" y2="295" stroke="#2196F3" stroke-width="3"/>
-  <text x="725" y="298" font-size="12" fill="#2196F3">L(N)</text>
-  <line x1="80" y1="90" x2="720" y2="310" stroke="#E91E63" stroke-width="3" stroke-dasharray="8,4"/>
-  <text x="725" y="313" font-size="12" fill="#E91E63">L(C)</text>
-  <line x1="80" y1="110" x2="720" y2="325" stroke="#4CAF50" stroke-width="3" stroke-dasharray="4,4"/>
-  <text x="725" y="325" font-size="12" fill="#4CAF50">L(D)</text>
-  <!-- Power law annotation -->
-  <rect x="120" y="165" width="260" height="75" rx="6" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="250" y="188" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Power Law: L ∝ X⁻ᵅ</text>
-  <text x="250" y="210" text-anchor="middle" font-size="12" fill="#2196F3">N = parameters</text>
-  <text x="250" y="228" text-anchor="middle" font-size="12" fill="#E91E63">C = compute (FLOPs)</text>
-  <!-- Chinchilla box -->
-  <rect x="440" y="90" width="260" height="110" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
-  <text x="570" y="115" text-anchor="middle" font-size="13" fill="#FF9800" font-weight="bold">Chinchilla Scaling</text>
-  <text x="570" y="138" text-anchor="middle" font-size="12" fill="#333">Optimal: N ∝ C^0.5</text>
-  <text x="570" y="158" text-anchor="middle" font-size="12" fill="#333">~20 tokens per parameter</text>
-  <text x="570" y="178" text-anchor="middle" font-size="11" fill="#888">Hoffmann et al. 2022</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">Scaling Laws</text>
+  <text x="400" y="64" text-anchor="middle" font-size="12" fill="#333" font-style="italic">on log&#8211;log axes, loss falls on a straight line as scale grows</text>
+
+  <!-- Axes -->
+  <line x1="100" y1="330" x2="500" y2="330" stroke="#333" stroke-width="1.5"/>
+  <line x1="100" y1="330" x2="100" y2="90" stroke="#333" stroke-width="1.5"/>
+  <text x="300" y="362" text-anchor="middle" font-size="13" fill="#333">Scale &#8212; parameters, data, or compute (log)</text>
+  <text x="76" y="210" text-anchor="middle" font-size="13" fill="#333" transform="rotate(-90,76,210)">Test loss (log)</text>
+  <!-- gridline ticks -->
+  <text x="140" y="346" text-anchor="middle" font-size="10" fill="#5C3D1E">10&#8310;</text>
+  <text x="260" y="346" text-anchor="middle" font-size="10" fill="#5C3D1E">10&#8312;</text>
+  <text x="380" y="346" text-anchor="middle" font-size="10" fill="#5C3D1E">10&#185;&#8304;</text>
+  <text x="480" y="346" text-anchor="middle" font-size="10" fill="#5C3D1E">10&#185;&#178;</text>
+  <!-- Straight power-law line with data points -->
+  <line x1="120" y1="115" x2="480" y2="295" stroke="#2D5A8E" stroke-width="3"/>
+  <circle cx="150" cy="130" r="5" fill="#7C2530"/>
+  <circle cx="220" cy="165" r="5" fill="#7C2530"/>
+  <circle cx="290" cy="200" r="5" fill="#7C2530"/>
+  <circle cx="360" cy="235" r="5" fill="#7C2530"/>
+  <circle cx="430" cy="270" r="5" fill="#7C2530"/>
+  <text x="330" y="165" font-size="13" fill="#2D5A8E" font-weight="bold" transform="rotate(27,330,165)">L(N) &#8733; N&#8315;&#7511;</text>
+  <text x="200" y="290" font-size="11" fill="#5C3D1E" font-style="italic">each 10&#215; in scale buys a</text>
+  <text x="200" y="306" font-size="11" fill="#5C3D1E" font-style="italic">predictable, fixed loss drop</text>
+
+  <!-- Right: the three knobs + Chinchilla -->
+  <rect x="545" y="95" width="220" height="130" fill="none" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="655" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C3D1E">Same law, three knobs</text>
+  <text x="655" y="148" text-anchor="middle" font-size="12" fill="#2D5A8E">N &#8212; parameters</text>
+  <text x="655" y="172" text-anchor="middle" font-size="12" fill="#7C2530">D &#8212; training tokens</text>
+  <text x="655" y="196" text-anchor="middle" font-size="12" fill="#5C3D1E">C &#8212; compute (FLOPs)</text>
+  <text x="655" y="216" text-anchor="middle" font-size="10" fill="#333" font-style="italic">(Kaplan et al. 2020)</text>
+
+  <rect x="545" y="245" width="220" height="105" fill="#C4A87A" fill-opacity="0.25" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="655" y="270" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C2530">Compute-optimal</text>
+  <text x="655" y="294" text-anchor="middle" font-size="12" fill="#333">Grow N and D together:</text>
+  <text x="655" y="314" text-anchor="middle" font-size="12" fill="#333">~20 tokens per parameter</text>
+  <text x="655" y="336" text-anchor="middle" font-size="10" fill="#5C3D1E" font-style="italic">(Chinchilla, Hoffmann et al. 2022)</text>
 </svg>

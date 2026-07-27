@@ -1,37 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Image with grid overlay -->
-  <rect x="40" y="60" width="300" height="280" rx="6" fill="#f0f0f0" stroke="#999" stroke-width="2"/>
-  <text x="190" y="45" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Input Image + Grid</text>
-  <!-- Grid lines (5x5) -->
-  <line x1="100" y1="60" x2="100" y2="340" stroke="#ccc" stroke-width="1"/>
-  <line x1="160" y1="60" x2="160" y2="340" stroke="#ccc" stroke-width="1"/>
-  <line x1="220" y1="60" x2="220" y2="340" stroke="#ccc" stroke-width="1"/>
-  <line x1="280" y1="60" x2="280" y2="340" stroke="#ccc" stroke-width="1"/>
-  <line x1="40" y1="116" x2="340" y2="116" stroke="#ccc" stroke-width="1"/>
-  <line x1="40" y1="172" x2="340" y2="172" stroke="#ccc" stroke-width="1"/>
-  <line x1="40" y1="228" x2="340" y2="228" stroke="#ccc" stroke-width="1"/>
-  <line x1="40" y1="284" x2="340" y2="284" stroke="#ccc" stroke-width="1"/>
-  <!-- Object: person bounding box -->
-  <rect x="85" y="90" width="100" height="180" fill="none" stroke="#e74c3c" stroke-width="3"/>
-  <text x="135" y="85" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">Person 0.97</text>
-  <!-- Object: car bounding box -->
-  <rect x="200" y="200" width="120" height="80" fill="none" stroke="#4a90d9" stroke-width="3"/>
-  <text x="260" y="196" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Car 0.89</text>
-  <!-- Arrow -->
-  <line x1="350" y1="200" x2="410" y2="200" stroke="#888" stroke-width="2.5" marker-end="url(#arryolo)"/>
-  <text x="380" y="192" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Single</text>
-  <text x="380" y="207" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">pass</text>
-  <!-- Output breakdown -->
-  <rect x="420" y="80" width="340" height="240" rx="10" fill="#f8f8f8" stroke="#27ae60" stroke-width="2"/>
-  <text x="590" y="65" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#27ae60">Per-cell Prediction</text>
-  <text x="590" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">• B bounding boxes (x, y, w, h, conf)</text>
-  <text x="590" y="145" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">• C class probabilities</text>
-  <text x="590" y="175" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">• Objectness score</text>
-  <line x1="430" y1="200" x2="750" y2="200" stroke="#ddd" stroke-width="1"/>
-  <text x="590" y="225" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22" font-weight="bold">One forward pass → all detections</text>
-  <text x="590" y="250" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">NMS removes duplicate boxes</text>
-  <text x="590" y="300" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">S×S×(B×5 + C) output tensor</text>
-  <defs><marker id="arryolo" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker></defs>
-  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">YOLO: You Only Look Once</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">YOLO: You Only Look Once</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">one glance at the whole image &#8594; every object at once</text>
+
+  <defs>
+    <marker id="yoArr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#5C3D1E"/></marker>
+  </defs>
+
+  <!-- Image with grid -->
+  <text x="185" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Image split into an S&#215;S grid</text>
+  <rect x="80" y="112" width="210" height="210" fill="#C4A87A" opacity="0.15" stroke="#5C3D1E" stroke-width="2"/>
+  <line x1="150" y1="112" x2="150" y2="322" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="220" y1="112" x2="220" y2="322" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="80" y1="182" x2="290" y2="182" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="80" y1="252" x2="290" y2="252" stroke="#C4A87A" stroke-width="1.5"/>
+  <!-- Detected boxes -->
+  <rect x="102" y="135" width="62" height="130" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="133" y="129" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-weight="bold">person .97</text>
+  <rect x="185" y="235" width="92" height="60" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="231" y="229" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-weight="bold">car .89</text>
+
+  <!-- Arrow: single pass -->
+  <line x1="305" y1="215" x2="375" y2="215" stroke="#5C3D1E" stroke-width="2.5" marker-end="url(#yoArr)"/>
+  <text x="340" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">one</text>
+  <text x="340" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E" font-weight="bold">pass</text>
+
+  <!-- Prediction panel -->
+  <rect x="390" y="112" width="340" height="210" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="560" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Each grid cell predicts, in parallel</text>
+  <text x="415" y="172" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">&#8226; B boxes: (x, y, w, h) + confidence</text>
+  <text x="415" y="198" font-family="Georgia, serif" font-size="13" fill="#7C2530">&#8226; class probabilities for its object</text>
+  <line x1="410" y1="216" x2="710" y2="216" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="560" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">Detection becomes pure regression:</text>
+  <text x="560" y="262" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">image in &#8594; S&#215;S&#215;(B&#183;5 + C) tensor out</text>
+  <text x="560" y="292" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">non-max suppression trims duplicate boxes</text>
+
+  <!-- Bottom contrast -->
+  <line x1="60" y1="340" x2="740" y2="340" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="364" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Old two-stage detectors inspected hundreds of proposed regions one by one; YOLO's single sweep is fast enough for live video.</text>
 </svg>

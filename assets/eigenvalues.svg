@@ -1,31 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Eigenvalues &amp; Eigenvectors</text>
-  <!-- Before transformation -->
-  <text x="170" y="68" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Before A</text>
-  <line x1="80" y1="220" x2="260" y2="220" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="170" y1="310" x2="170" y2="100" stroke="#ccc" stroke-width="1.5"/>
-  <!-- Eigenvectors before -->
-  <line x1="170" y1="220" x2="240" y2="150" stroke="#4a90d9" stroke-width="3" marker-end="url(#aev)"/>
-  <line x1="170" y1="220" x2="100" y2="290" stroke="#e67e22" stroke-width="3" marker-end="url(#aev2)"/>
-  <text x="248" y="145" font-family="Arial" font-size="12" fill="#4a90d9">v₁</text>
-  <text x="90" y="300" font-family="Arial" font-size="12" fill="#e67e22">v₂</text>
-  <!-- Arrow showing transformation -->
-  <text x="340" y="225" text-anchor="middle" font-family="Arial" font-size="22" fill="#888">→</text>
-  <text x="340" y="248" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">A·v = λ·v</text>
-  <!-- After transformation -->
-  <text x="540" y="68" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">After A (stretched)</text>
-  <line x1="420" y1="220" x2="660" y2="220" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="540" y1="310" x2="540" y2="100" stroke="#ccc" stroke-width="1.5"/>
-  <!-- Eigenvectors after: same direction, scaled -->
-  <line x1="540" y1="220" x2="660" y2="100" stroke="#4a90d9" stroke-width="3" marker-end="url(#aev)"/>
-  <line x1="540" y1="220" x2="430" y2="330" stroke="#e67e22" stroke-width="3" marker-end="url(#aev2)"/>
-  <text x="668" y="95" font-family="Arial" font-size="12" fill="#4a90d9">λ₁·v₁</text>
-  <text x="415" y="340" font-family="Arial" font-size="12" fill="#e67e22">λ₂·v₂</text>
-  <text x="610" y="148" font-family="Arial" font-size="11" fill="#4a90d9">λ₁=2 (stretched)</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
   <defs>
-    <marker id="aev" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4a90d9"/></marker>
-    <marker id="aev2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/></marker>
+    <marker id="evN" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#2D5A8E"/></marker>
+    <marker id="evR" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#7C2530"/></marker>
+    <marker id="evT" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#C4A87A"/></marker>
+    <marker id="evB" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L0,8 L10,4 z" fill="#5C3D1E"/></marker>
   </defs>
-  <text x="400" y="370" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Eigenvectors keep their direction — eigenvalues tell you how much they stretch</text>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Eigenvectors: The Directions a Matrix Cannot Rotate</text>
+
+  <!-- Left: before -->
+  <text x="185" y="85" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#333">Before applying A</text>
+  <line x1="60" y1="230" x2="310" y2="230" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="185" y1="110" x2="185" y2="350" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ordinary vector, tan -->
+  <line x1="185" y1="230" x2="120" y2="160" stroke="#C4A87A" stroke-width="3" marker-end="url(#evT)"/>
+  <text x="100" y="150" font-family="Georgia, serif" font-size="13" fill="#C4A87A" font-style="italic">w</text>
+  <!-- eigenvector v1, navy -->
+  <line x1="185" y1="230" x2="255" y2="160" stroke="#2D5A8E" stroke-width="3.5" marker-end="url(#evN)"/>
+  <text x="264" y="153" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">v&#8321;</text>
+  <!-- eigenvector v2, red -->
+  <line x1="185" y1="230" x2="255" y2="300" stroke="#7C2530" stroke-width="3.5" marker-end="url(#evR)"/>
+  <text x="264" y="315" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">v&#8322;</text>
+
+  <!-- Center arrow -->
+  <line x1="340" y1="230" x2="420" y2="230" stroke="#5C3D1E" stroke-width="3" marker-end="url(#evB)"/>
+  <text x="380" y="212" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#5C3D1E">apply A</text>
+
+  <!-- Right: after -->
+  <text x="590" y="85" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#333">After applying A</text>
+  <line x1="465" y1="230" x2="740" y2="230" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="590" y1="110" x2="590" y2="350" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- ordinary vector rotated: new direction -->
+  <line x1="590" y1="230" x2="565" y2="135" stroke="#C4A87A" stroke-width="3" marker-end="url(#evT)"/>
+  <text x="545" y="128" font-family="Georgia, serif" font-size="13" fill="#C4A87A" font-style="italic">Aw</text>
+  <text x="518" y="175" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#C4A87A">rotated!</text>
+
+  <!-- v1 stretched, same direction: lambda=2 -->
+  <line x1="590" y1="230" x2="700" y2="120" stroke="#2D5A8E" stroke-width="3.5" marker-end="url(#evN)"/>
+  <line x1="590" y1="230" x2="660" y2="160" stroke="#2D5A8E" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="706" y="113" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">2v&#8321;   (&#955;&#8321;=2)</text>
+
+  <!-- v2 compressed, same direction: lambda=1/2 -->
+  <line x1="590" y1="230" x2="625" y2="265" stroke="#7C2530" stroke-width="3.5" marker-end="url(#evR)"/>
+  <text x="633" y="282" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">&#189;v&#8322;   (&#955;&#8322;=&#189;)</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Av = &#955;v &#8212; eigenvectors keep their direction; the eigenvalue is the stretch factor.</text>
 </svg>

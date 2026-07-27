@@ -1,92 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-
-  <!-- Title -->
-  <text x="400" y="36" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">Convex vs Non-Convex Functions</text>
-
-  <!-- ─── LEFT PANEL: Convex ─── -->
-  <text x="190" y="64" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2980b9">Convex (bowl shape)</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Convex Functions: The Bowl That Cannot Trap You</text>
 
   <!-- axes -->
-  <line x1="40" y1="310" x2="350" y2="310" stroke="#bbb" stroke-width="1.5"/>
-  <line x1="40" y1="80"  x2="40"  y2="310" stroke="#bbb" stroke-width="1.5"/>
+  <line x1="80" y1="330" x2="480" y2="330" stroke="#333" stroke-width="1.5"/>
+  <line x1="80" y1="330" x2="80" y2="90" stroke="#333" stroke-width="1.5"/>
 
-  <!-- bowl curve: parabola approximated with cubic bezier -->
-  <path d="M55,270 C100,330 280,330 335,270" fill="none" stroke="#2980b9" stroke-width="3.5"/>
+  <!-- convex bowl -->
+  <path d="M110,110 C170,270 230,308 280,310 C330,308 390,270 450,110" fill="none" stroke="#2D5A8E" stroke-width="3.5"/>
 
-  <!-- chord from left to right point — lies ABOVE the curve -->
-  <line x1="55" y1="270" x2="335" y2="270" stroke="#e67e22" stroke-width="2" stroke-dasharray="7,4"/>
-  <text x="192" y="252" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">chord lies above curve</text>
+  <!-- chord endpoints -->
+  <circle cx="145" cy="185" r="6" fill="#2D5A8E"/>
+  <circle cx="415" cy="185" r="6" fill="#2D5A8E"/>
+  <text x="130" y="172" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#333">x</text>
+  <text x="422" y="172" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#333">y</text>
 
-  <!-- global minimum dot -->
-  <circle cx="195" cy="310" r="7" fill="#2980b9"/>
-  <text x="195" y="328" text-anchor="middle" font-family="Arial" font-size="11" fill="#2980b9">global minimum</text>
+  <!-- chord above curve -->
+  <line x1="145" y1="185" x2="415" y2="185" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="7,4"/>
+  <text x="280" y="168" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">every chord lies above the curve</text>
 
-  <!-- gradient descent arrows pointing to minimum -->
-  <defs>
-    <marker id="arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#2980b9"/>
-    </marker>
-    <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#c0392b"/>
-    </marker>
-    <marker id="arrowO" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/>
-    </marker>
-  </defs>
-  <line x1="90"  y1="282" x2="162" y2="305" stroke="#2980b9" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowB)"/>
-  <line x1="305" y1="278" x2="228" y2="305" stroke="#2980b9" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowB)"/>
+  <!-- marble at the bottom -->
+  <circle cx="280" cy="303" r="8" fill="#5C3D1E"/>
+  <text x="280" y="352" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">the marble always ends here</text>
 
-  <!-- annotation -->
-  <text x="192" y="110" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Any local min</text>
-  <text x="192" y="127" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">= global min</text>
-  <text x="192" y="144" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Gradient descent</text>
-  <text x="192" y="161" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">always finds it</text>
+  <!-- descent arrows -->
+  <defs><marker id="cvA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#C4A87A"/></marker></defs>
+  <path d="M135,150 C170,240 205,280 245,297" fill="none" stroke="#C4A87A" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#cvA)"/>
+  <path d="M428,155 C395,245 355,283 315,298" fill="none" stroke="#C4A87A" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#cvA)"/>
 
-  <!-- divider -->
-  <line x1="390" y1="55" x2="390" y2="345" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- Right panel -->
+  <line x1="520" y1="70" x2="520" y2="375" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="655" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E">Why it matters</text>
 
-  <!-- ─── RIGHT PANEL: Non-Convex ─── -->
-  <text x="600" y="64" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#c0392b">Non-Convex (mountain range)</text>
+  <text x="540" y="145" font-family="Georgia, serif" font-size="13" fill="#333">Drop a marble anywhere on the</text>
+  <text x="540" y="163" font-family="Georgia, serif" font-size="13" fill="#333">rim: it rolls to the same bottom.</text>
+  <text x="540" y="181" font-family="Georgia, serif" font-size="13" fill="#333">A mountain range gives no such</text>
+  <text x="540" y="199" font-family="Georgia, serif" font-size="13" fill="#333">guarantee.</text>
 
-  <!-- axes -->
-  <line x1="415" y1="310" x2="770" y2="310" stroke="#bbb" stroke-width="1.5"/>
-  <line x1="415" y1="80"  x2="415" y2="310" stroke="#bbb" stroke-width="1.5"/>
+  <text x="540" y="238" font-family="Georgia, serif" font-size="13" fill="#333">If no nearby move improves you,</text>
+  <text x="540" y="256" font-family="Georgia, serif" font-size="13" fill="#333">nowhere far away can either:</text>
+  <text x="540" y="280" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">local min = global min.</text>
 
-  <!-- bumpy non-convex curve -->
-  <path d="M425,210
-           C440,170 455,240 470,230
-           C485,220 495,280 515,270
-           C535,260 545,190 565,200
-           C580,207 590,280 610,270
-           C625,262 635,150 655,155
-           C672,160 685,240 705,235
-           C720,230 740,260 760,250"
-        fill="none" stroke="#c0392b" stroke-width="3.5"/>
-
-  <!-- local minima dots -->
-  <circle cx="515" cy="271" r="6" fill="#e67e22"/>
-  <text x="515" y="292" text-anchor="middle" font-family="Arial" font-size="10" fill="#e67e22">local min</text>
-
-  <circle cx="610" cy="271" r="6" fill="#e67e22"/>
-  <text x="610" y="292" text-anchor="middle" font-family="Arial" font-size="10" fill="#e67e22">local min</text>
-
-  <!-- global minimum dot -->
-  <circle cx="655" cy="155" r="7" fill="#2980b9"/>
-  <text x="655" y="142" text-anchor="middle" font-family="Arial" font-size="11" fill="#2980b9">global min</text>
-
-  <!-- gradient descent arrow getting stuck at local min -->
-  <line x1="475" y1="232" x2="510" y2="268" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowR)"/>
-  <text x="468" y="222" text-anchor="middle" font-family="Arial" font-size="10" fill="#c0392b">descent</text>
-  <text x="468" y="234" text-anchor="middle" font-family="Arial" font-size="10" fill="#c0392b">gets stuck</text>
-
-  <!-- annotation -->
-  <text x="595" y="110" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Local minima ≠</text>
-  <text x="595" y="127" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">global minimum</text>
-  <text x="595" y="144" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Gradient descent</text>
-  <text x="595" y="161" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">may get trapped</text>
-
-  <!-- ─── Footer formula ─── -->
-  <text x="400" y="372" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Convex: f(λx + (1−λ)y) ≤ λf(x) + (1−λ)f(y) for all x, y and λ ∈ [0,1]</text>
-  <text x="400" y="389" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Second derivative test: f″(x) ≥ 0 everywhere ⟹ convex</text>
+  <rect x="535" y="300" width="240" height="66" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="655" y="326" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">f(&#955;x + (1&#8722;&#955;)y)</text>
+  <text x="655" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">&#8804;  &#955;f(x) + (1&#8722;&#955;)f(y)</text>
 </svg>

@@ -1,79 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
   <defs>
-    <marker id="fsm-arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <marker id="fsmA" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
       <polygon points="0 0, 9 3.5, 0 7" fill="#2D5A8E"/>
     </marker>
-    <marker id="fsm-arr-err" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-      <polygon points="0 0, 9 3.5, 0 7" fill="#B94040"/>
+    <marker id="fsmR" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#7C2530"/>
     </marker>
-    <marker id="fsm-arr-start" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-      <polygon points="0 0, 9 3.5, 0 7" fill="#555"/>
+    <marker id="fsmS" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#5C3D1E"/>
     </marker>
   </defs>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Finite State Machine</text>
+  <text x="400" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">One state at a time; inputs move it along fixed rules. This one accepts "a b*"</text>
 
-  <!-- Background -->
-  <rect width="800" height="400" fill="white"/>
+  <!-- start arrow -->
+  <line x1="70" y1="190" x2="128" y2="190" stroke="#5C3D1E" stroke-width="2" marker-end="url(#fsmS)"/>
+  <text x="72" y="178" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">start</text>
 
-  <!-- Title -->
-  <text x="400" y="30" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">Finite State Machine</text>
-  <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Accepts strings matching: a b*  (one 'a' followed by any number of 'b's)</text>
+  <!-- q0 -->
+  <circle cx="185" cy="190" r="48" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="185" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E">q&#8320;</text>
+  <text x="185" y="208" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">start</text>
 
-  <!-- ── Start arrow into q0 ── -->
-  <line x1="48" y1="190" x2="98" y2="190" stroke="#555" stroke-width="2" marker-end="url(#fsm-arr-start)"/>
-  <text x="40" y="185" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">start</text>
+  <!-- q1 accept (double circle), self-loop on b -->
+  <circle cx="470" cy="190" r="48" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="470" cy="190" r="39" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+  <text x="470" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#2D5A8E">q&#8321;</text>
+  <text x="470" y="208" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">accept</text>
 
-  <!-- ── q0: start state ── -->
-  <circle cx="148" cy="190" r="42" fill="#EEF4FC" stroke="#2D5A8E" stroke-width="2.2"/>
-  <text x="148" y="186" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#2D5A8E">q₀</text>
-  <text x="148" y="206" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">start</text>
+  <!-- q0 -> q1 on a -->
+  <line x1="233" y1="190" x2="416" y2="190" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#fsmA)"/>
+  <text x="325" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2D5A8E">a</text>
 
-  <!-- ── q1: accept state ── -->
-  <circle cx="380" cy="190" r="42" fill="#EEF4FC" stroke="#2D5A8E" stroke-width="2.2"/>
-  <circle cx="380" cy="190" r="33" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
-  <text x="380" y="186" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#2D5A8E">q₁</text>
-  <text x="380" y="206" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">accept</text>
+  <!-- q1 self loop on b -->
+  <path d="M486,144 Q540,100 556,168" fill="none" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#fsmA)"/>
+  <text x="548" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2D5A8E">b</text>
 
-  <!-- ── q2: dead/trap state ── -->
-  <circle cx="264" cy="330" r="38" fill="#FBF0F0" stroke="#B94040" stroke-width="2"/>
-  <text x="264" y="326" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#B94040">q₂</text>
-  <text x="264" y="346" text-anchor="middle" font-family="Arial" font-size="11" fill="#B94040">dead</text>
+  <!-- dead state -->
+  <circle cx="330" cy="325" r="40" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="330" y="321" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#7C2530">q&#8322;</text>
+  <text x="330" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">dead</text>
 
-  <!-- ── q3: second accept state (after b loop) — shown separately ── -->
-  <circle cx="620" cy="190" r="42" fill="#EEF4FC" stroke="#2D5A8E" stroke-width="2.2"/>
-  <circle cx="620" cy="190" r="33" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
-  <text x="620" y="186" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#2D5A8E">q₃</text>
-  <text x="620" y="206" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">accept</text>
+  <!-- q0 -> dead on b -->
+  <path d="M212,231 Q250,290 290,314" fill="none" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#fsmR)"/>
+  <text x="232" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#7C2530">b</text>
 
-  <!-- ── Transitions ── -->
+  <!-- q1 -> dead on a -->
+  <path d="M445,233 Q410,290 372,313" fill="none" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#fsmR)"/>
+  <text x="428" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#7C2530">a</text>
 
-  <!-- q0 -> q1 on 'a' -->
-  <line x1="190" y1="190" x2="334" y2="190" stroke="#2D5A8E" stroke-width="2" marker-end="url(#fsm-arr)"/>
-  <text x="262" y="178" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2D5A8E">a</text>
+  <!-- explainer panel -->
+  <rect x="590" y="230" width="180" height="130" fill="#C4A87A" opacity="0.18"/>
+  <rect x="590" y="230" width="180" height="130" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="680" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">The whole idea</text>
+  <text x="680" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Memory = current state</text>
+  <text x="680" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">only &#8212; no history kept.</text>
+  <text x="680" y="324" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Traffic lights, turnstiles,</text>
+  <text x="680" y="344" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">vending machines: all FSMs.</text>
 
-  <!-- q0 -> q2 on 'b' (reject: b before a) -->
-  <path d="M130,228 Q130,310 224,330" fill="none" stroke="#B94040" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#fsm-arr-err)"/>
-  <text x="108" y="295" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#B94040">b</text>
-
-  <!-- q1 -> q3 on 'b' -->
-  <line x1="422" y1="190" x2="574" y2="190" stroke="#2D5A8E" stroke-width="2" marker-end="url(#fsm-arr)"/>
-  <text x="498" y="178" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2D5A8E">b</text>
-
-  <!-- q3 self-loop on 'b' -->
-  <path d="M621,148 Q668,118 672,190 Q672,240 621,232" fill="none" stroke="#2D5A8E" stroke-width="2" marker-end="url(#fsm-arr)"/>
-  <text x="700" y="190" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2D5A8E">b</text>
-
-  <!-- q1 -> q2 on 'a' (reject: second a) -->
-  <path d="M360,228 Q320,290 300,326" fill="none" stroke="#B94040" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#fsm-arr-err)"/>
-  <text x="322" y="280" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#B94040">a</text>
-
-  <!-- q3 -> q2 on 'a' (reject: a after b) -->
-  <path d="M591,222 Q480,310 302,336" fill="none" stroke="#B94040" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#fsm-arr-err)"/>
-  <text x="470" y="316" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#B94040">a</text>
-
-  <!-- q2 self-loop on a,b (trap) -->
-  <path d="M264,292 Q216,268 218,330 Q218,370 264,368" fill="none" stroke="#B94040" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#fsm-arr-err)"/>
-  <text x="192" y="342" text-anchor="middle" font-family="Arial" font-size="13" fill="#B94040">a, b</text>
-
-  <!-- ── Legend ── -->
-  <text x="30" y="390" font-family="Arial" font-size="10" fill="#888">States: circles  |  Accept states: double circle  |  Transitions: labeled arrows  |  Dead state: red dashed</text>
+  <text x="185" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#333">double circle = accepting</text>
 </svg>

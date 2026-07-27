@@ -1,105 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Manhattan Distance: Travel on the Grid</text>
 
-  <!-- Title -->
-  <text x="400" y="34" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Manhattan vs. Euclidean Distance</text>
+  <!-- City grid: 4 blocks east x 3 blocks north; block = 70px. Grid from (150,320) to (430,110) -->
+  <!-- vertical streets -->
+  <line x1="150" y1="110" x2="150" y2="320" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="220" y1="110" x2="220" y2="320" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="290" y1="110" x2="290" y2="320" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="360" y1="110" x2="360" y2="320" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="430" y1="110" x2="430" y2="320" stroke="#C4A87A" stroke-width="1.5"/>
+  <!-- horizontal streets -->
+  <line x1="150" y1="110" x2="430" y2="110" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="150" y1="180" x2="430" y2="180" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="150" y1="250" x2="430" y2="250" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="150" y1="320" x2="430" y2="320" stroke="#C4A87A" stroke-width="1.5"/>
 
-  <!-- Grid background panel -->
-  <rect x="60" y="55" width="440" height="320" fill="#f8f9fa" rx="6" stroke="#ddd" stroke-width="1"/>
+  <!-- Manhattan path: staircase, red -->
+  <path d="M 150 320 L 220 320 L 220 250 L 290 250 L 290 180 L 360 180 L 360 110 L 430 110" fill="none" stroke="#7C2530" stroke-width="4"/>
+  <!-- Euclidean straight line, navy dashed -->
+  <line x1="150" y1="320" x2="430" y2="110" stroke="#2D5A8E" stroke-width="3" stroke-dasharray="8,6"/>
 
-  <!-- Grid lines (vertical) -->
-  <line x1="120" y1="55" x2="120" y2="375" stroke="#ddd" stroke-width="1"/>
-  <line x1="180" y1="55" x2="180" y2="375" stroke="#ddd" stroke-width="1"/>
-  <line x1="240" y1="55" x2="240" y2="375" stroke="#ddd" stroke-width="1"/>
-  <line x1="300" y1="55" x2="300" y2="375" stroke="#ddd" stroke-width="1"/>
-  <line x1="360" y1="55" x2="360" y2="375" stroke="#ddd" stroke-width="1"/>
-  <line x1="420" y1="55" x2="420" y2="375" stroke="#ddd" stroke-width="1"/>
-  <line x1="480" y1="55" x2="480" y2="375" stroke="#ddd" stroke-width="1"/>
+  <!-- endpoints -->
+  <circle cx="150" cy="320" r="8" fill="#5C3D1E"/>
+  <circle cx="430" cy="110" r="8" fill="#5C3D1E"/>
+  <text x="140" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">start</text>
+  <text x="446" y="97" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">coffee shop</text>
 
-  <!-- Grid lines (horizontal) -->
-  <line x1="60" y1="115" x2="500" y2="115" stroke="#ddd" stroke-width="1"/>
-  <line x1="60" y1="175" x2="500" y2="175" stroke="#ddd" stroke-width="1"/>
-  <line x1="60" y1="235" x2="500" y2="235" stroke="#ddd" stroke-width="1"/>
-  <line x1="60" y1="295" x2="500" y2="295" stroke="#ddd" stroke-width="1"/>
-  <line x1="60" y1="355" x2="500" y2="355" stroke="#ddd" stroke-width="1"/>
+  <!-- block annotations -->
+  <text x="290" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">4 blocks east</text>
+  <text x="120" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90 120 220)">3 blocks north</text>
 
-  <!-- City block fills (subtle) -->
-  <rect x="120" y="115" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="180" y="115" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="240" y="115" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="120" y="175" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="180" y="175" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="240" y="175" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="120" y="235" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="180" y="235" width="60" height="60" fill="#e8edf2" rx="2"/>
-  <rect x="240" y="235" width="60" height="60" fill="#e8edf2" rx="2"/>
+  <!-- Legend / formulas -->
+  <line x1="500" y1="130" x2="540" y2="130" stroke="#7C2530" stroke-width="4"/>
+  <text x="552" y="135" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Manhattan (L1)</text>
+  <text x="552" y="158" font-family="Georgia, serif" font-size="14" fill="#333">|&#916;x| + |&#916;y| = 4 + 3 = 7</text>
+  <text x="552" y="178" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">every staircase route: 7 blocks</text>
 
-  <!-- Defs for arrowheads -->
-  <defs>
-    <marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/>
-    </marker>
-    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#2980b9"/>
-    </marker>
-  </defs>
+  <line x1="500" y1="215" x2="540" y2="215" stroke="#2D5A8E" stroke-width="3" stroke-dasharray="8,6"/>
+  <text x="552" y="220" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Euclidean (L2)</text>
+  <text x="552" y="243" font-family="Georgia, serif" font-size="14" fill="#333">&#8730;(4&#178; + 3&#178;) = 5</text>
+  <text x="552" y="263" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">as the crow flies &#8212; but no</text>
+  <text x="552" y="281" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">taxi can drive through buildings</text>
 
-  <!-- Point A: grid intersection (120, 295) -->
-  <!-- Point B: grid intersection (360, 115) -->
-
-  <!-- Manhattan path: right along row then up (stair-step) -->
-  <!-- Segment 1: right from (120,295) to (360,295) -->
-  <line x1="120" y1="295" x2="360" y2="295" stroke="#e67e22" stroke-width="3.5" stroke-linecap="round"/>
-  <!-- Segment 2: up from (360,295) to (360,115) -->
-  <line x1="360" y1="295" x2="360" y2="115" stroke="#e67e22" stroke-width="3.5" stroke-linecap="round" marker-end="url(#arrow-orange)"/>
-
-  <!-- Corner dot at turn -->
-  <circle cx="360" cy="295" r="5" fill="#e67e22"/>
-
-  <!-- Euclidean (straight diagonal) line -->
-  <line x1="120" y1="295" x2="360" y2="115" stroke="#2980b9" stroke-width="2.5" stroke-dasharray="8,5" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
-
-  <!-- Point A dot -->
-  <circle cx="120" cy="295" r="7" fill="#333" stroke="white" stroke-width="2"/>
-  <text x="90" y="299" font-family="Arial" font-size="13" font-weight="bold" fill="#333" text-anchor="end">A</text>
-
-  <!-- Point B dot -->
-  <circle cx="360" cy="115" r="7" fill="#333" stroke="white" stroke-width="2"/>
-  <text x="370" y="111" font-family="Arial" font-size="13" font-weight="bold" fill="#333">B</text>
-
-  <!-- Dimension annotations for Manhattan -->
-  <!-- Horizontal span arrow -->
-  <line x1="120" y1="320" x2="358" y2="320" stroke="#e67e22" stroke-width="1.2" stroke-dasharray="3,3"/>
-  <text x="240" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Δx = 4 blocks</text>
-
-  <!-- Vertical span arrow -->
-  <line x1="390" y1="295" x2="390" y2="117" stroke="#e67e22" stroke-width="1.2" stroke-dasharray="3,3"/>
-  <text x="430" y="210" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Δy = 3 blocks</text>
-
-  <!-- Legend / Info box -->
-  <rect x="520" y="70" width="255" height="230" rx="10" fill="#f0f4ff" stroke="#2980b9" stroke-width="1.5"/>
-  <text x="647" y="98" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">Distance Comparison</text>
-  <line x1="530" y1="108" x2="765" y2="108" stroke="#ddd" stroke-width="1"/>
-
-  <!-- Manhattan legend row -->
-  <line x1="537" y1="130" x2="565" y2="130" stroke="#e67e22" stroke-width="3"/>
-  <text x="575" y="134" font-family="Arial" font-size="13" font-weight="bold" fill="#e67e22">Manhattan (L1)</text>
-  <text x="537" y="152" font-family="Arial" font-size="11" fill="#555">|Δx| + |Δy| = 4 + 3 = 7</text>
-  <text x="537" y="168" font-family="Arial" font-size="11" fill="#555">Stair-step along grid streets</text>
-  <text x="537" y="184" font-family="Arial" font-size="11" fill="#888">No cutting through buildings</text>
-
-  <line x1="530" y1="197" x2="765" y2="197" stroke="#eee" stroke-width="1"/>
-
-  <!-- Euclidean legend row -->
-  <line x1="537" y1="218" x2="565" y2="218" stroke="#2980b9" stroke-width="2" stroke-dasharray="6,4"/>
-  <text x="575" y="222" font-family="Arial" font-size="13" font-weight="bold" fill="#2980b9">Euclidean (L2)</text>
-  <text x="537" y="241" font-family="Arial" font-size="11" fill="#555">√(Δx² + Δy²) = √(16+9) = 5</text>
-  <text x="537" y="257" font-family="Arial" font-size="11" fill="#555">Straight-line ("as the crow flies")</text>
-  <text x="537" y="273" font-family="Arial" font-size="11" fill="#888">Physically impossible in a city</text>
-
-  <!-- Key insight box -->
-  <rect x="520" y="318" width="255" height="58" rx="8" fill="#fff8e1" stroke="#f0a500" stroke-width="1.5"/>
-  <text x="647" y="338" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#b07a00">L1 ≥ L2 always</text>
-  <text x="647" y="355" text-anchor="middle" font-family="Arial" font-size="11" fill="#7a5800">Manhattan = 7  ·  Euclidean = 5</text>
-  <text x="647" y="370" text-anchor="middle" font-family="Arial" font-size="11" fill="#7a5800">Ratio = 7/5 = 1.4 in this example</text>
+  <text x="400" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#5C3D1E">Distance is a choice: when movement along each axis is independent, count the blocks, not the ruler.</text>
 </svg>

@@ -1,48 +1,72 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- R matrix (ratings) -->
-  <rect x="30" y="100" width="160" height="200" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="110" y="85" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#4a90d9">R</text>
-  <text x="110" y="108" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">users × items</text>
-  <!-- Grid hint -->
-  <line x1="30" y1="135" x2="190" y2="135" stroke="#c0d8ee" stroke-width="1"/>
-  <line x1="30" y1="170" x2="190" y2="170" stroke="#c0d8ee" stroke-width="1"/>
-  <line x1="30" y1="205" x2="190" y2="205" stroke="#c0d8ee" stroke-width="1"/>
-  <line x1="30" y1="240" x2="190" y2="240" stroke="#c0d8ee" stroke-width="1"/>
-  <line x1="70" y1="100" x2="70" y2="300" stroke="#c0d8ee" stroke-width="1"/>
-  <line x1="110" y1="100" x2="110" y2="300" stroke="#c0d8ee" stroke-width="1"/>
-  <line x1="150" y1="100" x2="150" y2="300" stroke="#c0d8ee" stroke-width="1"/>
-  <!-- Some ratings, some missing -->
-  <text x="50" y="125" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">5</text>
-  <text x="90" y="125" text-anchor="middle" font-family="Arial" font-size="12" fill="#aaa">?</text>
-  <text x="130" y="125" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">3</text>
-  <text x="170" y="125" text-anchor="middle" font-family="Arial" font-size="12" fill="#aaa">?</text>
-  <text x="50" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#aaa">?</text>
-  <text x="90" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">4</text>
-  <text x="130" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#aaa">?</text>
-  <text x="170" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">2</text>
-  <!-- ≈ sign -->
-  <text x="218" y="208" text-anchor="middle" font-family="Arial" font-size="28" fill="#333">≈</text>
-  <!-- U matrix -->
-  <rect x="250" y="100" width="80" height="200" rx="6" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="290" y="85" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">U</text>
-  <text x="290" y="315" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">users × k</text>
-  <!-- × sign -->
-  <text x="358" y="208" text-anchor="middle" font-family="Arial" font-size="22" fill="#333">×</text>
-  <!-- V^T matrix -->
-  <rect x="378" y="155" width="200" height="90" rx="6" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="478" y="142" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#27ae60">Vᵀ</text>
-  <text x="478" y="260" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">k × items</text>
-  <!-- k label -->
-  <text x="610" y="208" text-anchor="middle" font-family="Arial" font-size="13" fill="#8e44ad">k = latent</text>
-  <text x="610" y="225" text-anchor="middle" font-family="Arial" font-size="13" fill="#8e44ad">factors</text>
-  <!-- Intuition -->
-  <rect x="630" y="100" width="150" height="160" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="705" y="125" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">Latent Factors</text>
-  <text x="705" y="148" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Action movies</text>
-  <text x="705" y="166" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Comedies</text>
-  <text x="705" y="184" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Sci-fi</text>
-  <text x="705" y="205" text-anchor="middle" font-family="Arial" font-size="10" fill="#888">(learned, not labeled)</text>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Matrix Factorization</text>
-  <text x="400" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Decompose sparse ratings matrix into dense user and item embeddings</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Matrix Factorization: Taste Is Low-Dimensional</text>
+
+  <!-- R matrix: sparse ratings -->
+  <rect x="50" y="110" width="180" height="200" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="140" y="98" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">R &#8212; ratings (mostly blank)</text>
+  <!-- grid -->
+  <line x1="50" y1="150" x2="230" y2="150" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="50" y1="190" x2="230" y2="190" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="50" y1="230" x2="230" y2="230" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="50" y1="270" x2="230" y2="270" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="95" y1="110" x2="95" y2="310" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="140" y1="110" x2="140" y2="310" stroke="#D4C5A9" stroke-width="1"/>
+  <line x1="185" y1="110" x2="185" y2="310" stroke="#D4C5A9" stroke-width="1"/>
+  <!-- entries -->
+  <text x="72" y="136" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">5</text>
+  <text x="117" y="136" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="162" y="136" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="207" y="136" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">2</text>
+  <text x="72" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="117" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">4</text>
+  <text x="162" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="207" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="72" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="117" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="162" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">1</text>
+  <text x="207" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="72" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">5</text>
+  <text x="117" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="162" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="207" y="256" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">3</text>
+  <text x="72" y="296" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="117" y="296" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">4</text>
+  <text x="162" y="296" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="207" y="296" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A">?</text>
+  <text x="140" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">users &#215; movies</text>
+
+  <!-- approx sign -->
+  <text x="272" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="#5C3D1E">&#8776;</text>
+
+  <!-- U: tall thin -->
+  <rect x="310" y="110" width="70" height="200" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="345" y="98" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">U</text>
+  <text x="345" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">users &#215; k</text>
+  <text x="345" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">taste</text>
+  <text x="345" y="221" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">profiles</text>
+
+  <text x="410" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5C3D1E">&#215;</text>
+
+  <!-- V^T: short wide -->
+  <rect x="440" y="165" width="200" height="70" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="540" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">V&#7488;</text>
+  <text x="540" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">movie profiles</text>
+  <text x="540" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">k &#215; movies</text>
+
+  <!-- k annotation -->
+  <text x="672" y="112" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">k &#8776; a few latent</text>
+  <text x="672" y="128" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">factors, e.g.</text>
+  <text x="672" y="148" font-family="Georgia, serif" font-size="12" fill="#333">&#8226; loves action</text>
+  <text x="672" y="166" font-family="Georgia, serif" font-size="12" fill="#333">&#8226; artsy films</text>
+  <text x="672" y="184" font-family="Georgia, serif" font-size="12" fill="#333">&#8226; comedy only</text>
+  <text x="672" y="204" font-family="Georgia, serif" font-size="11" fill="#5C3D1E" font-style="italic">(learned, not labeled)</text>
+
+  <!-- prediction note -->
+  <rect x="440" y="280" width="315" height="50" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="597" y="301" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">fill a blank:  r&#770;&#7524;&#11388; = u&#7524; &#183; v&#11388;</text>
+  <text x="597" y="321" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">match user taste to movie profile with a dot product</text>
+
+  <text x="400" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">A handful of factors explains millions of ratings &#8212; similar profiles, not shared history, drive recommendations.</text>
 </svg>

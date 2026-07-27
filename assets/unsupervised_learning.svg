@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">Unsupervised Learning: Structure Without Labels</text>
+
+  <!-- left: unlabeled cloud -->
+  <text x="170" y="70" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Unlabeled data</text>
+  <g fill="#C4A87A" stroke="#5C3D1E" stroke-width="1">
+    <circle cx="100" cy="120" r="7"/><circle cx="130" cy="105" r="7"/><circle cx="118" cy="140" r="7"/>
+    <circle cx="150" cy="128" r="7"/><circle cx="90" cy="155" r="7"/><circle cx="145" cy="158" r="7"/>
+    <circle cx="200" cy="220" r="7"/><circle cx="228" cy="205" r="7"/><circle cx="215" cy="240" r="7"/>
+    <circle cx="245" cy="228" r="7"/><circle cx="190" cy="250" r="7"/>
+    <circle cx="110" cy="270 " r="7"/><circle cx="140" cy="285" r="7"/><circle cx="95" cy="295" r="7"/>
+    <circle cx="128" cy="308" r="7"/>
+  </g>
+  <text x="170" y="345" text-anchor="middle" font-size="13" font-style="italic" fill="#5C3D1E">no answers given — just points</text>
+
+  <!-- arrow -->
+  <line x1="300" y1="200" x2="380" y2="200" stroke="#5C3D1E" stroke-width="2.5"/>
+  <polygon points="380,200 368,194 368,206" fill="#5C3D1E"/>
+  <text x="340" y="188" text-anchor="middle" font-size="13" fill="#5C3D1E">find structure</text>
+
+  <!-- right: discovered structure -->
+  <text x="580" y="70" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">Discovered structure</text>
+
+  <!-- cluster 1 -->
+  <ellipse cx="480" cy="130" rx="58" ry="42" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <g fill="#7C2530">
+    <circle cx="460" cy="120" r="6"/><circle cx="490" cy="110" r="6"/><circle cx="478" cy="142" r="6"/>
+    <circle cx="505" cy="132" r="6"/>
+  </g>
+  <text x="480" y="188" text-anchor="middle" font-size="12" fill="#7C2530">cluster A</text>
+
+  <!-- cluster 2 -->
+  <ellipse cx="640" cy="230" rx="58" ry="42" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <g fill="#2D5A8E">
+    <circle cx="620" cy="220" r="6"/><circle cx="650" cy="210" r="6"/><circle cx="638" cy="242" r="6"/>
+    <circle cx="662" cy="232" r="6"/>
+  </g>
+  <text x="640" y="288" text-anchor="middle" font-size="12" fill="#2D5A8E">cluster B</text>
+
+  <!-- principal axis -->
+  <line x1="430" y1="330" x2="740" y2="280" stroke="#C4A87A" stroke-width="3"/>
+  <polygon points="740,280 728,278 730,288" fill="#C4A87A"/>
+  <text x="585" y="335" text-anchor="middle" font-size="12" fill="#5C3D1E">principal axis (compression direction)</text>
+
+  <!-- three modes footer -->
+  <rect x="430" y="90" width="0" height="0" fill="none"/>
+  <text x="400" y="378" text-anchor="middle" font-size="13" font-style="italic" fill="#5C3D1E">Cluster it, compress it, or model its density — three faces of the same question</text>
+</svg>

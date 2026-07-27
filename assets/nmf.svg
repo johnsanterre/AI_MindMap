@@ -1,31 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Non-negative Matrix Factorization</text>
+
   <!-- V matrix -->
-  <rect x="40" y="100" width="80" height="200" rx="6" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="80" y="88" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#4a90d9">V</text>
-  <text x="80" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">n × m</text>
-  <text x="80" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Data</text>
-  <!-- ≈ sign -->
-  <text x="150" y="208" text-anchor="middle" font-family="Arial" font-size="28" fill="#333">≈</text>
+  <rect x="60" y="110" width="90" height="180" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="105" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2D5A8E">V</text>
+  <text x="105" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">data</text>
+  <text x="105" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">n &#215; m</text>
+  <text x="105" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">songs &#215; features</text>
+
+  <text x="185" y="208" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#333">&#8776;</text>
+
   <!-- W matrix -->
-  <rect x="190" y="100" width="60" height="200" rx="6" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="220" y="88" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">W</text>
-  <text x="220" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">n × k</text>
-  <text x="220" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Basis</text>
-  <!-- × sign -->
-  <text x="270" y="208" text-anchor="middle" font-family="Arial" font-size="22" fill="#333">×</text>
+  <rect x="220" y="110" width="55" height="180" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="247" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#7C2530">W</text>
+  <text x="247" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">parts</text>
+  <text x="247" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">n &#215; k</text>
+  <text x="247" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">the "genres"</text>
+
+  <text x="303" y="208" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#333">&#215;</text>
+
   <!-- H matrix -->
-  <rect x="300" y="155" width="200" height="60" rx="6" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="400" y="143" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#27ae60">H</text>
-  <text x="400" y="188" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">k × m</text>
-  <text x="400" y="205" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Coefficients</text>
-  <!-- Non-negativity constraint -->
-  <rect x="560" y="120" width="200" height="80" rx="8" fill="#fef9e7" stroke="#f39c12" stroke-width="2"/>
-  <text x="660" y="148" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e67e22">Non-negativity</text>
-  <text x="660" y="168" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">W ≥ 0,  H ≥ 0</text>
-  <text x="660" y="186" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">All values ≥ 0</text>
-  <!-- Parts-based example -->
-  <text x="400" y="300" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Face = eyes component + nose component + mouth component</text>
-  <text x="400" y="320" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">(Parts-based, additive representation)</text>
-  <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Non-negative Matrix Factorization (NMF)</text>
+  <rect x="330" y="160" width="180" height="55" fill="none" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="420" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E">H</text>
+  <text x="420" y="184" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">recipe weights</text>
+  <text x="420" y="204" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">k &#215; m</text>
+  <text x="420" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">each item = 30% jazz + 50% blues + 20% soul</text>
+
+  <!-- Constraint box -->
+  <rect x="565" y="105" width="185" height="90" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="657" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">The whole trick</text>
+  <text x="657" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">W &#8805; 0,  H &#8805; 0</text>
+  <text x="657" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">addition only &#8212; no cancelling</text>
+
+  <!-- Consequence -->
+  <text x="657" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">parts-based, interpretable</text>
+  <text x="657" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">face = eyes + nose + mouth</text>
+  <text x="657" y="275" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">(vs. PCA's ghostly add/subtract)</text>
+
+  <text x="400" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Non-negativity forces the factorization to build data up from real, recognizable pieces.</text>
 </svg>

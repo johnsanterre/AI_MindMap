@@ -1,23 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">SARSA vs Q-Learning</text>
-  <!-- SARSA tuple -->
-  <rect x="40" y="80" width="340" height="220" rx="10" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="210" y="108" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#4a90d9">SARSA (On-Policy)</text>
-  <text x="210" y="135" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">( S, A, R, S', A' )</text>
-  <text x="210" y="165" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Q(s,a) ← Q(s,a) + α[r + γQ(s',a') − Q(s,a)]</text>
-  <text x="210" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Uses actual next action a'</text>
-  <text x="210" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">from the current policy</text>
-  <text x="210" y="245" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Conservative — learns safe policies</text>
-  <text x="210" y="265" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">e.g. avoids cliff edge</text>
-  <!-- Q-Learning -->
-  <rect x="420" y="80" width="340" height="220" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="590" y="108" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">Q-Learning (Off-Policy)</text>
-  <text x="590" y="135" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">( S, A, R, S' )</text>
-  <text x="590" y="165" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Q(s,a) ← Q(s,a) + α[r + γ max Q(s',·) − Q(s,a)]</text>
-  <text x="590" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Uses greedy max over next actions</text>
-  <text x="590" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">regardless of policy used</text>
-  <text x="590" y="245" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Aggressive — learns optimal policy</text>
-  <text x="590" y="265" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">faster but riskier</text>
-  <text x="400" y="360" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Key difference: SARSA evaluates the policy being followed; Q-Learning evaluates the greedy policy</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-size="20" font-weight="bold" fill="#5C3D1E">SARSA: Learn From What You Actually Did</text>
+
+  <!-- The tuple timeline -->
+  <circle cx="120" cy="120" r="26" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="120" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">S</text>
+  <circle cx="260" cy="120" r="26" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="260" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#7C2530">A</text>
+  <circle cx="400" cy="120" r="26" fill="#C4A87A" fill-opacity="0.4" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="400" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C3D1E">R</text>
+  <circle cx="540" cy="120" r="26" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="540" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D5A8E">S'</text>
+  <circle cx="680" cy="120" r="26" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="680" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#7C2530">A'</text>
+  <line x1="148" y1="120" x2="232" y2="120" stroke="#333" stroke-width="1.5"/>
+  <line x1="288" y1="120" x2="372" y2="120" stroke="#333" stroke-width="1.5"/>
+  <line x1="428" y1="120" x2="512" y2="120" stroke="#333" stroke-width="1.5"/>
+  <line x1="568" y1="120" x2="652" y2="120" stroke="#333" stroke-width="1.5"/>
+  <text x="120" y="168" text-anchor="middle" font-size="11" fill="#333">state</text>
+  <text x="260" y="168" text-anchor="middle" font-size="11" fill="#333">action taken</text>
+  <text x="400" y="168" text-anchor="middle" font-size="11" fill="#333">reward felt</text>
+  <text x="540" y="168" text-anchor="middle" font-size="11" fill="#333">next state</text>
+  <text x="680" y="168" text-anchor="middle" font-size="11" fill="#333">next action</text>
+  <text x="680" y="184" text-anchor="middle" font-size="11" fill="#7C2530" font-style="italic">actually chosen</text>
+  <text x="400" y="86" text-anchor="middle" font-size="12" fill="#5C3D1E" font-style="italic">one experienced transition = the algorithm's name</text>
+
+  <!-- Update rule -->
+  <rect x="120" y="210" width="560" height="52" fill="#FDFAF4" stroke="#C4A87A" stroke-width="2"/>
+  <text x="400" y="242" text-anchor="middle" font-size="15" fill="#333">Q(S,A) &#8592; Q(S,A) + &#945; [ R + &#947; Q(S',A') &#8722; Q(S,A) ]</text>
+
+  <!-- Contrast with Q-learning -->
+  <text x="230" y="300" text-anchor="middle" font-size="14" font-weight="bold" fill="#2D5A8E">On-policy (SARSA)</text>
+  <text x="230" y="322" text-anchor="middle" font-size="12" fill="#333">Values the policy it is following,</text>
+  <text x="230" y="340" text-anchor="middle" font-size="12" fill="#333">exploration risks included &#8212;</text>
+  <text x="230" y="358" text-anchor="middle" font-size="12" fill="#2D5A8E" font-style="italic">cautious near the cliff edge</text>
+  <line x1="400" y1="285" x2="400" y2="365" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="575" y="300" text-anchor="middle" font-size="14" font-weight="bold" fill="#7C2530">Off-policy (Q-learning)</text>
+  <text x="575" y="322" text-anchor="middle" font-size="12" fill="#333">Backs up max&#8342; Q(S',a) &#8212; assumes the</text>
+  <text x="575" y="340" text-anchor="middle" font-size="12" fill="#333">best future move, whatever it does &#8212;</text>
+  <text x="575" y="358" text-anchor="middle" font-size="12" fill="#7C2530" font-style="italic">optimal but riskier while learning</text>
 </svg>

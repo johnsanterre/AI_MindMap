@@ -1,40 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Hidden states row -->
-  <text x="60" y="145" font-family="Arial" font-size="13" fill="#4a90d9" font-weight="bold">Hidden</text>
-  <text x="60" y="162" font-family="Arial" font-size="13" fill="#4a90d9" font-weight="bold">States</text>
-  <circle cx="200" cy="150" r="38" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2.5"/>
-  <text x="200" y="146" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">S₁</text>
-  <text x="200" y="164" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Rain</text>
-  <circle cx="400" cy="150" r="38" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2.5"/>
-  <text x="400" y="146" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">S₂</text>
-  <text x="400" y="164" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Sun</text>
-  <circle cx="600" cy="150" r="38" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2.5"/>
-  <text x="600" y="146" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">S₃</text>
-  <text x="600" y="164" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Cloud</text>
-  <!-- Transition arrows -->
-  <path d="M238,150 Q300,110 362,150" fill="none" stroke="#4a90d9" stroke-width="2" marker-end="url(#a1)"/>
-  <path d="M362,150 Q300,190 238,150" fill="none" stroke="#4a90d9" stroke-width="2" marker-end="url(#a1)"/>
-  <path d="M438,150 Q500,110 562,150" fill="none" stroke="#4a90d9" stroke-width="2" marker-end="url(#a1)"/>
-  <path d="M562,150 Q500,190 438,150" fill="none" stroke="#4a90d9" stroke-width="2" marker-end="url(#a1)"/>
-  <text x="300" y="105" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">0.4</text>
-  <text x="300" y="200" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">0.6</text>
-  <!-- Emission arrows (down) -->
-  <line x1="200" y1="188" x2="200" y2="250" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a2)"/>
-  <line x1="400" y1="188" x2="400" y2="250" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a2)"/>
-  <line x1="600" y1="188" x2="600" y2="250" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a2)"/>
-  <!-- Observed states row -->
-  <text x="60" y="293" font-family="Arial" font-size="13" fill="#e67e22" font-weight="bold">Observed</text>
-  <rect x="162" y="258" width="76" height="40" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="200" y="284" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Walk</text>
-  <rect x="362" y="258" width="76" height="40" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="400" y="284" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Shop</text>
-  <rect x="562" y="258" width="76" height="40" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="600" y="284" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Walk</text>
   <defs>
-    <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4a90d9"/></marker>
-    <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e67e22"/></marker>
+    <marker id="hmmT" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#2D5A8E"/>
+    </marker>
+    <marker id="hmmE" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#7C2530"/>
+    </marker>
   </defs>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Hidden Markov Model</text>
-  <text x="400" y="360" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Hidden states emit observable outputs — transitions follow Markov property</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Hidden Markov Model</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">A hidden process unrolled in time, seen only through the noisy signals it emits</text>
+
+  <!-- hidden fog band -->
+  <rect x="70" y="100" width="660" height="110" fill="#2D5A8E" opacity="0.07"/>
+  <text x="740" y="130" text-anchor="end" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#2D5A8E">hidden (never observed)</text>
+
+  <!-- hidden chain -->
+  <circle cx="180" cy="155" r="40" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="180" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">S&#8321;</text>
+  <text x="180" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">healthy</text>
+
+  <circle cx="400" cy="155" r="40" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="400" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">S&#8322;</text>
+  <text x="400" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">infected</text>
+
+  <circle cx="620" cy="155" r="40" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="620" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">S&#8323;</text>
+  <text x="620" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">recovering</text>
+
+  <!-- transitions -->
+  <line x1="222" y1="155" x2="354" y2="155" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#hmmT)"/>
+  <text x="288" y="142" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">P(S&#8322; | S&#8321;)</text>
+  <line x1="442" y1="155" x2="574" y2="155" stroke="#2D5A8E" stroke-width="2.5" marker-end="url(#hmmT)"/>
+  <text x="508" y="142" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">P(S&#8323; | S&#8322;)</text>
+
+  <!-- emissions -->
+  <line x1="180" y1="197" x2="180" y2="252" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#hmmE)"/>
+  <line x1="400" y1="197" x2="400" y2="252" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#hmmE)"/>
+  <line x1="620" y1="197" x2="620" y2="252" stroke="#7C2530" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#hmmE)"/>
+  <text x="300" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">emission P(O | S)</text>
+
+  <!-- observations -->
+  <rect x="130" y="260" width="100" height="44" fill="#7C2530" opacity="0.1"/>
+  <rect x="130" y="260" width="100" height="44" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="180" y="287" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">no fever</text>
+  <rect x="350" y="260" width="100" height="44" fill="#7C2530" opacity="0.1"/>
+  <rect x="350" y="260" width="100" height="44" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="400" y="287" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">fever</text>
+  <rect x="570" y="260" width="100" height="44" fill="#7C2530" opacity="0.1"/>
+  <rect x="570" y="260" width="100" height="44" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="620" y="287" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">cough</text>
+  <text x="740" y="287" text-anchor="end" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">observed</text>
+
+  <!-- time axis -->
+  <text x="180" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">day 1</text>
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">day 2</text>
+  <text x="620" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">day 3</text>
+
+  <text x="400" y="365" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">Markov assumption: each hidden state depends only on the previous one &#8212; infer the chain from the symptoms</text>
 </svg>

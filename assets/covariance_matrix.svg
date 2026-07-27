@@ -1,37 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Covariance Matrix</text>
-  <!-- Scatter plot -->
-  <line x1="60" y1="280" x2="300" y2="280" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="60" y1="280" x2="60" y2="80" stroke="#ccc" stroke-width="1.5"/>
-  <text x="180" y="310" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">X₁</text>
-  <text x="35" y="180" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">X₂</text>
-  <!-- Correlated data points -->
-  <circle cx="90" cy="260" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="110" cy="240" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="130" cy="225" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="150" cy="210" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="170" cy="190" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="190" cy="175" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="210" cy="158" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="230" cy="140" r="4" fill="#4a90d9" opacity="0.7"/>
-  <circle cx="255" cy="125" r="4" fill="#4a90d9" opacity="0.7"/>
-  <text x="180" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">High positive covariance</text>
-  <!-- Matrix display -->
-  <rect x="330" y="80" width="200" height="160" rx="6" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="430" y="108" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">Σ (Covariance)</text>
-  <text x="380" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">σ₁²</text>
-  <text x="480" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">σ₁₂</text>
-  <text x="380" y="180" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">σ₂₁</text>
-  <text x="480" y="180" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">σ₂²</text>
-  <text x="430" y="220" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">diagonal = variances</text>
-  <!-- Properties -->
-  <rect x="560" y="80" width="210" height="200" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="665" y="108" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Properties</text>
-  <text x="665" y="135" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Symmetric: Σ = Σᵀ</text>
-  <text x="665" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">PSD: xᵀΣx ≥ 0</text>
-  <text x="665" y="181" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Diag: uncorrelated</text>
-  <text x="665" y="204" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Used in PCA, GMM</text>
-  <text x="665" y="227" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Mahalanobis dist.</text>
-  <text x="430" y="320" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Cov(X,Y) = E[(X−μx)(Y−μy)]</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">The Covariance Matrix</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#333">The matrix is a description of the data cloud's shape</text>
+
+  <!-- Left: tilted ellipse cloud -->
+  <line x1="70" y1="310" x2="330" y2="310" stroke="#C4A87A" stroke-width="1.5"/>
+  <line x1="70" y1="310" x2="70" y2="110" stroke="#C4A87A" stroke-width="1.5"/>
+  <text x="200" y="334" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">hours studied</text>
+  <text x="52" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90,52,210)">exam score</text>
+  <ellipse cx="200" cy="210" rx="105" ry="38" fill="#2D5A8E" fill-opacity="0.10" stroke="#2D5A8E" stroke-width="2" transform="rotate(-32,200,210)"/>
+  <circle cx="130" cy="258" r="4" fill="#2D5A8E"/><circle cx="152" cy="238" r="4" fill="#2D5A8E"/>
+  <circle cx="168" cy="248" r="4" fill="#2D5A8E"/><circle cx="185" cy="220" r="4" fill="#2D5A8E"/>
+  <circle cx="200" cy="200" r="4" fill="#2D5A8E"/><circle cx="215" cy="212" r="4" fill="#2D5A8E"/>
+  <circle cx="232" cy="182" r="4" fill="#2D5A8E"/><circle cx="252" cy="170" r="4" fill="#2D5A8E"/>
+  <circle cx="268" cy="152" r="4" fill="#2D5A8E"/><circle cx="245" cy="196" r="4" fill="#2D5A8E"/>
+  <text x="200" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">tilted ellipse = variables move together</text>
+
+  <!-- Arrow -->
+  <line x1="350" y1="215" x2="410" y2="215" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="410,215 398,209 398,221" fill="#5C3D1E"/>
+  <text x="380" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">captured by</text>
+
+  <!-- Right: the matrix -->
+  <path d="M455,120 L440,120 L440,300 L455,300" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <path d="M625,120 L640,120 L640,300 L625,300" fill="none" stroke="#5C3D1E" stroke-width="2.5"/>
+  <text x="540" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5C3D1E">&#931;</text>
+  <text x="490" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#2D5A8E">&#963;&#8321;&#178;</text>
+  <text x="590" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#7C2530">&#963;&#8321;&#8322;</text>
+  <text x="490" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#7C2530">&#963;&#8322;&#8321;</text>
+  <text x="590" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#2D5A8E">&#963;&#8322;&#178;</text>
+
+  <!-- Annotations -->
+  <text x="720" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">diagonal:</text>
+  <text x="720" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">spread of each</text>
+  <text x="720" y="202" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">variable alone</text>
+  <text x="720" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">off-diagonal:</text>
+  <text x="720" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">how pairs</text>
+  <text x="720" y="274" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">move together</text>
+  <text x="540" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Cov(X,Y) = E[(X&#8722;&#956;&#8339;)(Y&#8722;&#956;&#8340;)] &#8226; symmetric, drives PCA &amp; Gaussians</text>
 </svg>

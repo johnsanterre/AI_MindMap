@@ -1,23 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Mutual Information</text>
-  <!-- Venn diagram -->
-  <circle cx="260" cy="210" r="100" fill="#4a90d9" fill-opacity="0.2" stroke="#4a90d9" stroke-width="2"/>
-  <circle cx="360" cy="210" r="100" fill="#e67e22" fill-opacity="0.2" stroke="#e67e22" stroke-width="2"/>
-  <text x="200" y="215" text-anchor="middle" font-family="Arial" font-size="13" fill="#4a90d9">H(X)</text>
-  <text x="420" y="215" text-anchor="middle" font-family="Arial" font-size="13" fill="#e67e22">H(Y)</text>
-  <text x="310" y="205" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">I(X;Y)</text>
-  <text x="310" y="222" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">shared</text>
-  <text x="260" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">H(X|Y)</text>
-  <text x="360" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">H(Y|X)</text>
-  <!-- Formula -->
-  <rect x="490" y="100" width="280" height="180" rx="10" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="630" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Mutual Information</text>
-  <text x="630" y="160" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">I(X;Y) = H(X) − H(X|Y)</text>
-  <text x="630" y="185" text-anchor="middle" font-family="Arial" font-size="13" fill="#555">= H(Y) − H(Y|X)</text>
-  <line x1="500" y1="200" x2="760" y2="200" stroke="#ddd" stroke-width="1"/>
-  <text x="630" y="222" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">I(X;Y) = 0 → independent</text>
-  <text x="630" y="245" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">I(X;Y) = H(X) → X determines Y</text>
-  <text x="630" y="265" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Always ≥ 0</text>
-  <text x="400" y="380" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">How much does knowing X reduce uncertainty about Y?</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Mutual Information: How Much Does Knowing X Drain Y&#8217;s Uncertainty?</text>
+
+  <!-- Left: Venn diagram -->
+  <text x="220" y="82" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">The overlap of two uncertainties</text>
+  <circle cx="170" cy="205" r="95" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="270" cy="205" r="95" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <text x="115" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">H(X)</text>
+  <text x="115" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">humidity&#8217;s</text>
+  <text x="115" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#2D5A8E">uncertainty</text>
+  <text x="325" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">H(Y)</text>
+  <text x="325" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">rain&#8217;s</text>
+  <text x="325" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#7C2530">uncertainty</text>
+  <text x="220" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">I(X;Y)</text>
+  <text x="220" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">shared</text>
+  <text x="220" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the overlap is what learning X removes from Y</text>
+
+  <!-- Divider -->
+  <line x1="420" y1="65" x2="420" y2="360" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Right: buckets, two extremes -->
+  <text x="608" y="82" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Y&#8217;s uncertainty bucket, after learning X</text>
+
+  <!-- Bucket 1: independent, still full -->
+  <path d="M470,120 L478,230 L562,230 L570,120" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <rect x="477" y="130" width="86" height="98" fill="#2D5A8E" fill-opacity="0.3"/>
+  <text x="520" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">bucket stays full</text>
+  <text x="520" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">I(X;Y) = 0</text>
+  <text x="520" y="288" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">independent</text>
+
+  <!-- Bucket 2: fully drained -->
+  <path d="M650,120 L658,230 L742,230 L750,120" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <rect x="659" y="216" width="82" height="12" fill="#2D5A8E" fill-opacity="0.3"/>
+  <text x="700" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">bucket drains</text>
+  <text x="700" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">I(X;Y) = H(Y)</text>
+  <text x="700" y="288" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">X determines Y</text>
+
+  <rect x="460" y="308" width="300" height="46" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="610" y="327" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">I(X;Y) = H(Y) &#8722; H(Y|X)  &#8805; 0</text>
+  <text x="610" y="346" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">symmetric: also H(X) &#8722; H(X|Y) &#8212; any dependence, not just linear</text>
+
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">Does the humidity reading tell you anything about rain? Mutual information is the answer, in bits.</text>
 </svg>

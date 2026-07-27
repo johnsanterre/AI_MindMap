@@ -1,35 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Knowledge Distillation (Student-Teacher)</text>
-  <!-- Teacher -->
-  <rect x="50" y="80" width="220" height="200" rx="10" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2.5"/>
-  <text x="160" y="115" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#4a90d9">Teacher Model</text>
-  <text x="160" y="140" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Large, accurate</text>
-  <text x="160" y="160" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">ResNet-152, GPT-4</text>
-  <text x="160" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Outputs soft labels:</text>
-  <text x="160" y="215" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">cat: 0.85, dog: 0.12</text>
-  <text x="160" y="235" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">bird: 0.03</text>
-  <!-- Arrow with soft labels -->
-  <line x1="270" y1="180" x2="380" y2="180" stroke="#8e44ad" stroke-width="2.5" marker-end="url(#ast)"/>
-  <text x="325" y="167" text-anchor="middle" font-family="Arial" font-size="11" fill="#8e44ad">soft labels</text>
-  <text x="325" y="183" text-anchor="middle" font-family="Arial" font-size="11" fill="#8e44ad">(dark knowledge)</text>
-  <!-- Student -->
-  <rect x="390" y="80" width="220" height="200" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/>
-  <text x="500" y="115" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">Student Model</text>
-  <text x="500" y="140" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Small, fast</text>
-  <text x="500" y="160" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">MobileNet, DistilBERT</text>
-  <text x="500" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Learns from teacher</text>
-  <text x="500" y="215" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">+ true labels</text>
-  <!-- Loss -->
-  <rect x="640" y="120" width="140" height="120" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="710" y="148" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">Student Loss</text>
-  <text x="710" y="172" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">α·CE(y, ŷ)</text>
-  <text x="710" y="190" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">+ (1−α)·KL</text>
-  <text x="710" y="208" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">(teacher, student)</text>
-  <line x1="610" y1="180" x2="638" y2="180" stroke="#888" stroke-width="1.5" marker-end="url(#ast2)"/>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Student&#8211;Teacher Learning</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">a small model learns from a big model's rich probabilities, not just hard labels</text>
+
   <defs>
-    <marker id="ast" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8e44ad"/></marker>
-    <marker id="ast2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker>
+    <marker id="stArr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#7C2530"/></marker>
+    <marker id="stArr2" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#C4A87A"/></marker>
   </defs>
-  <text x="400" y="340" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Student trained to mimic teacher's soft predictions — transfers rich similarity structure</text>
+
+  <!-- Teacher: big box -->
+  <rect x="60" y="100" width="200" height="170" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <text x="160" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2D5A8E">Teacher</text>
+  <text x="160" y="154" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">large, accurate, expensive</text>
+  <!-- soft label bars inside teacher -->
+  <rect x="95" y="180" width="110" height="14" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="95" y="202" width="34" height="14" fill="#2D5A8E" opacity="0.5"/>
+  <rect x="95" y="224" width="12" height="14" fill="#2D5A8E" opacity="0.35"/>
+  <text x="212" y="192" font-family="Georgia, serif" font-size="11" fill="#333">cat .85</text>
+  <text x="136" y="214" font-family="Georgia, serif" font-size="11" fill="#333">dog .12</text>
+  <text x="114" y="236" font-family="Georgia, serif" font-size="11" fill="#333">bird .03</text>
+
+  <!-- Soft labels arrow -->
+  <line x1="268" y1="185" x2="388" y2="185" stroke="#7C2530" stroke-width="3" marker-end="url(#stArr)"/>
+  <text x="328" y="168" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">soft labels</text>
+  <text x="328" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">"dark knowledge":</text>
+  <text x="328" y="221" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">how classes relate</text>
+
+  <!-- Student: small box -->
+  <rect x="400" y="135" width="140" height="110" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <text x="470" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#7C2530">Student</text>
+  <text x="470" y="187" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">small, fast,</text>
+  <text x="470" y="203" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">deployable</text>
+  <text x="470" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">(phone, browser)</text>
+
+  <!-- Hard labels arrow from below -->
+  <line x1="470" y1="310" x2="470" y2="253" stroke="#C4A87A" stroke-width="2.5" marker-end="url(#stArr2)"/>
+  <text x="470" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">true hard labels: cat = 1, else 0</text>
+
+  <!-- Loss panel -->
+  <line x1="570" y1="100" x2="570" y2="300" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="672" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Student's loss</text>
+  <text x="672" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">&#945; &#183; CE(hard labels)</text>
+  <text x="672" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">+ (1&#8722;&#945;) &#183; KL(teacher &#8214; student)</text>
+  <line x1="600" y1="196" x2="745" y2="196" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="672" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">The teacher's near-misses</text>
+  <text x="672" y="236" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">("almost dog, never bird")</text>
+  <text x="672" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">carry far more signal per</text>
+  <text x="672" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">example than a bare 1/0</text>
+
+  <!-- Bottom line -->
+  <line x1="60" y1="345" x2="740" y2="345" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Like a master chef explaining why the sauce is almost right &#8212; richer feedback than pass/fail, so the apprentice learns faster.</text>
 </svg>

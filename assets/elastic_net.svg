@@ -1,26 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Three constraint regions -->
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Elastic Net: The Best of L1 and L2</text>
+
+  <!-- Three constraint regions in weight space -->
+  <text x="400" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#333">constraint regions in weight space (w&#8321;, w&#8322;)</text>
+
   <!-- L1 diamond -->
-  <polygon points="160,200 200,160 240,200 200,240" fill="#fde8e8" stroke="#e74c3c" stroke-width="2"/>
-  <text x="200" y="290" text-anchor="middle" font-family="Arial" font-size="13" fill="#e74c3c">L1 (Lasso)</text>
-  <text x="200" y="308" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Sparse solutions</text>
+  <g>
+    <line x1="90" y1="190" x2="270" y2="190" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="180" y1="100" x2="180" y2="280" stroke="#D4C5A9" stroke-width="1"/>
+    <polygon points="180,120 250,190 180,260 110,190" fill="none" stroke="#7C2530" stroke-width="3"/>
+  </g>
+  <text x="180" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">L1 &#8212; Lasso</text>
+  <text x="180" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">sharp corners: weights hit</text>
+  <text x="180" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">exactly zero (sparse)</text>
+
   <!-- L2 circle -->
-  <circle cx="400" cy="200" r="45" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="400" y="263" text-anchor="middle" font-family="Arial" font-size="13" fill="#4a90d9">L2 (Ridge)</text>
-  <text x="400" y="281" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Shrinks all weights</text>
-  <!-- Elastic Net (rounded diamond) -->
-  <path d="M560,160 Q600,155 640,200 Q645,240 600,240 Q560,245 520,200 Q515,160 560,160 Z" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="582" y="263" text-anchor="middle" font-family="Arial" font-size="13" fill="#27ae60">Elastic Net</text>
-  <text x="582" y="281" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Sparse + grouped</text>
-  <!-- Formula -->
-  <rect x="240" y="330" width="320" height="45" rx="6" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="400" y="349" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Penalty: α·λ‖w‖₁ + (1−α)·λ‖w‖₂²</text>
-  <text x="400" y="366" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">α=1 → Lasso   α=0 → Ridge   0&lt;α&lt;1 → Elastic Net</text>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Elastic Net Regularization</text>
-  <!-- Axes hint on each -->
-  <text x="200" y="200" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">●</text>
-  <text x="400" y="204" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">●</text>
-  <text x="582" y="204" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">●</text>
-  <text x="400" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Constraint regions in weight space</text>
+  <g>
+    <line x1="310" y1="190" x2="490" y2="190" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="400" y1="100" x2="400" y2="280" stroke="#D4C5A9" stroke-width="1"/>
+    <circle cx="400" cy="190" r="70" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  </g>
+  <text x="400" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">L2 &#8212; Ridge</text>
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">smooth: shrinks all weights,</text>
+  <text x="400" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">stable with correlated features</text>
+
+  <!-- Elastic net: rounded diamond -->
+  <g>
+    <line x1="530" y1="190" x2="710" y2="190" stroke="#D4C5A9" stroke-width="1"/>
+    <line x1="620" y1="100" x2="620" y2="280" stroke="#D4C5A9" stroke-width="1"/>
+    <path d="M620,122 C650,140 668,158 686,190 C668,222 650,240 620,258 C590,240 572,222 554,190 C572,158 590,140 620,122 Z" fill="none" stroke="#5C3D1E" stroke-width="3"/>
+  </g>
+  <text x="620" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">Elastic Net</text>
+  <text x="620" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">corners softened: sparsity</text>
+  <text x="620" y="347" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">plus stability (Zou &amp; Hastie, 2005)</text>
+
+  <!-- plus / equals hints -->
+  <text x="290" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#C4A87A">+</text>
+  <text x="510" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#C4A87A">=</text>
+
+  <!-- Formula footer -->
+  <text x="400" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">penalty  =  &#945;&#183;&#955;&#8214;w&#8214;&#8321;  +  (1&#8722;&#945;)&#183;&#955;&#8214;w&#8214;&#8322;&#178;&#8195;&#8195;(&#945;=1 Lasso &#183; &#945;=0 Ridge)</text>
 </svg>

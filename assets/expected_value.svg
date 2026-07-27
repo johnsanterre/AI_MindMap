@@ -1,34 +1,33 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Expected Value</text>
-  <!-- Discrete PMF bars -->
-  <text x="220" y="58" text-anchor="middle" font-size="14" fill="#333">Discrete: E[X] = Σ xᵢ P(xᵢ)</text>
-  <line x1="60" y1="300" x2="380" y2="300" stroke="#333" stroke-width="2"/>
-  <line x1="60" y1="300" x2="60" y2="80" stroke="#333" stroke-width="2"/>
-  <!-- Bars -->
-  <rect x="90" y="220" width="50" height="80" fill="#2196F3" fill-opacity="0.7"/>
-  <text x="115" y="318" text-anchor="middle" font-size="12" fill="#333">1</text>
-  <text x="115" y="215" text-anchor="middle" font-size="11" fill="#2196F3">0.1</text>
-  <rect x="160" y="160" width="50" height="140" fill="#2196F3" fill-opacity="0.7"/>
-  <text x="185" y="318" text-anchor="middle" font-size="12" fill="#333">2</text>
-  <text x="185" y="155" text-anchor="middle" font-size="11" fill="#2196F3">0.3</text>
-  <rect x="230" y="140" width="50" height="160" fill="#2196F3" fill-opacity="0.7"/>
-  <text x="255" y="318" text-anchor="middle" font-size="12" fill="#333">3</text>
-  <text x="255" y="135" text-anchor="middle" font-size="11" fill="#2196F3">0.4</text>
-  <rect x="300" y="220" width="50" height="80" fill="#2196F3" fill-opacity="0.7"/>
-  <text x="325" y="318" text-anchor="middle" font-size="12" fill="#333">4</text>
-  <text x="325" y="215" text-anchor="middle" font-size="11" fill="#2196F3">0.2</text>
-  <!-- E[X] line -->
-  <line x1="240" y1="80" x2="240" y2="310" stroke="#E91E63" stroke-width="2.5" stroke-dasharray="7,4"/>
-  <text x="242" y="75" font-size="12" fill="#E91E63">E[X]=2.7</text>
-  <!-- Right: continuous case -->
-  <text x="610" y="58" text-anchor="middle" font-size="14" fill="#333">Continuous: E[X] = ∫ x f(x) dx</text>
-  <line x1="430" y1="300" x2="760" y2="300" stroke="#333" stroke-width="2"/>
-  <path d="M430,300 C480,295 520,180 590,100 C640,55 680,50 700,55 C730,65 750,200 760,300" fill="#4CAF50" fill-opacity="0.2" stroke="#4CAF50" stroke-width="2.5"/>
-  <!-- E[X] line -->
-  <line x1="620" y1="80" x2="620" y2="310" stroke="#E91E63" stroke-width="2.5" stroke-dasharray="7,4"/>
-  <text x="622" y="75" font-size="12" fill="#E91E63">E[X]</text>
-  <!-- Balance point analogy -->
-  <text x="400" y="360" text-anchor="middle" font-size="13" fill="#555">E[X] is the "center of gravity" / balance point of the distribution</text>
-  <text x="400" y="380" text-anchor="middle" font-size="11" fill="#888">Linearity: E[aX + bY] = aE[X] + bE[Y]</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Expected Value: the Balance Point</text>
+  <text x="400" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">E[X] = &#931; x&#7522; P(x&#7522;) &#8212; each outcome weighted by its probability</text>
+
+  <!-- probability bars sitting on the beam -->
+  <rect x="180" y="200" width="60" height="50"  fill="#2D5A8E" opacity="0.85"/>
+  <rect x="300" y="130" width="60" height="120" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="420" y="90"  width="60" height="160" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="540" y="170" width="60" height="80"  fill="#2D5A8E" opacity="0.85"/>
+
+  <text x="210" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">P=0.1</text>
+  <text x="330" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">P=0.3</text>
+  <text x="450" y="82"  text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">P=0.4</text>
+  <text x="570" y="162" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">P=0.2</text>
+
+  <!-- see-saw beam -->
+  <rect x="140" y="250" width="520" height="10" fill="#5C3D1E"/>
+  <!-- outcome labels on the beam -->
+  <text x="210" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">x = 1</text>
+  <text x="330" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">x = 2</text>
+  <text x="450" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">x = 3</text>
+  <text x="570" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">x = 4</text>
+
+  <!-- fulcrum at E[X]=2.7 -->
+  <path d="M414,260 L384,310 L444,310 Z" fill="#7C2530"/>
+  <line x1="414" y1="260" x2="414" y2="110" stroke="#7C2530" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="414" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">E[X] = 2.7</text>
+  <text x="414" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">fulcrum: the see-saw sits level here</text>
+
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">Every loss you minimize and every reward you maximize is an expectation over a distribution</text>
 </svg>

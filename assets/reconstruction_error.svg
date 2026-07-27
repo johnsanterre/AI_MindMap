@@ -1,34 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Reconstruction Error</text>
-  <!-- Autoencoder pipeline -->
-  <rect x="30" y="120" width="100" height="160" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="80" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#4a90d9">Input x</text>
-  <text x="80" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">n dims</text>
-  <!-- Encoder -->
-  <polygon points="140,120 210,180 140,240" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="165" y="185" text-anchor="middle" font-family="Arial" font-size="11" fill="#4a90d9">Enc</text>
-  <!-- Latent -->
-  <rect x="215" y="155" width="70" height="90" rx="6" fill="#f0e6ff" stroke="#8e44ad" stroke-width="2"/>
-  <text x="250" y="200" text-anchor="middle" font-family="Arial" font-size="12" fill="#8e44ad">z</text>
-  <text x="250" y="218" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">k dims</text>
-  <!-- Decoder -->
-  <polygon points="290,180 360,120 360,240" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="335" y="185" text-anchor="middle" font-family="Arial" font-size="11" fill="#e67e22">Dec</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Reconstruction Error</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333" font-style="italic">compress, rebuild, and measure what was lost</text>
+
+  <defs>
+    <marker id="arrN" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#2D5A8E"/></marker>
+    <marker id="arrR" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#7C2530"/></marker>
+  </defs>
+
+  <!-- Input x -->
+  <rect x="60" y="120" width="90" height="140" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="105" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#2D5A8E" font-weight="bold">x</text>
+  <text x="105" y="206" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">input</text>
+  <text x="105" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">high-dimensional</text>
+
+  <!-- Encoder funnel -->
+  <polygon points="165,120 250,165 250,215 165,260" fill="#C4A87A" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="205" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">encoder</text>
+
+  <!-- Latent z -->
+  <rect x="265" y="160" width="60" height="60" fill="#2D5A8E" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="295" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#FDFAF4" font-weight="bold">z</text>
+  <text x="295" y="245" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">bottleneck</text>
+  <text x="295" y="262" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">(few dims)</text>
+
+  <!-- Decoder funnel -->
+  <polygon points="340,165 425,120 425,260 340,215" fill="#C4A87A" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="385" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">decoder</text>
+
   <!-- Reconstruction -->
-  <rect x="365" y="120" width="100" height="160" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="415" y="195" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">x̂</text>
-  <text x="415" y="213" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">reconstructed</text>
-  <!-- Error arrow -->
-  <path d="M80,280 Q250,340 415,280" fill="none" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#are)"/>
-  <text x="250" y="340" text-anchor="middle" font-family="Arial" font-size="13" fill="#e74c3c">‖x − x̂‖²  (reconstruction error)</text>
-  <!-- Use cases -->
-  <rect x="510" y="100" width="260" height="200" rx="10" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="640" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Use Cases</text>
-  <text x="640" y="158" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Anomaly detection</text>
-  <text x="640" y="180" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">(high error = anomaly)</text>
-  <text x="640" y="205" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Compression quality</text>
-  <text x="640" y="230" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Generative models (VAE)</text>
-  <text x="640" y="255" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Denoising autoencoders</text>
-  <defs><marker id="are" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e74c3c"/></marker></defs>
+  <rect x="440" y="120" width="90" height="140" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="6,4"/>
+  <text x="485" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#7C2530" font-weight="bold">x&#770;</text>
+  <text x="485" y="206" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">rebuilt</text>
+  <text x="485" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">blurry copy</text>
+
+  <!-- Error comparison arc -->
+  <path d="M105,265 Q295,350 480,265" fill="none" stroke="#7C2530" stroke-width="2.5" stroke-dasharray="7,4" marker-end="url(#arrR)"/>
+  <text x="295" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#7C2530" font-weight="bold">error = &#8214;x &#8722; x&#770;&#8214;&#178;</text>
+  <text x="295" y="352" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the training signal: what compression threw away</text>
+
+  <!-- Right panel: what error tells you -->
+  <line x1="565" y1="100" x2="565" y2="330" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="672" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">What the error means</text>
+
+  <text x="590" y="158" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">Low error</text>
+  <text x="590" y="176" font-family="Georgia, serif" font-size="12" fill="#333">structure was learned;</text>
+  <text x="590" y="192" font-family="Georgia, serif" font-size="12" fill="#333">data looks familiar</text>
+
+  <text x="590" y="226" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">High error</text>
+  <text x="590" y="244" font-family="Georgia, serif" font-size="12" fill="#333">novel or anomalous input</text>
+  <text x="590" y="260" font-family="Georgia, serif" font-size="12" fill="#333">&#8594; anomaly detection</text>
+
+  <text x="590" y="294" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">During training</text>
+  <text x="590" y="312" font-family="Georgia, serif" font-size="12" fill="#333">minimize it: the objective</text>
+  <text x="590" y="328" font-family="Georgia, serif" font-size="12" fill="#333">for autoencoders, VAEs</text>
 </svg>

@@ -1,31 +1,41 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="25" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Fast Fourier Transform (FFT)</text>
-  <!-- Time domain -->
-  <text x="200" y="55" text-anchor="middle" font-size="14" fill="#333">Time Domain</text>
-  <line x1="50" y1="180" x2="360" y2="180" stroke="#555" stroke-width="1.5"/>
-  <path d="M50,180 C80,100 110,260 140,180 C170,100 200,260 230,180 C260,100 290,260 320,180 C340,120 350,165 360,180" fill="none" stroke="#2196F3" stroke-width="2.5"/>
-  <text x="50" y="200" font-size="11" fill="#888">0</text>
-  <text x="355" y="200" font-size="11" fill="#888">T</text>
-  <!-- Arrow -->
-  <text x="400" y="175" text-anchor="middle" font-size="24" fill="#FF9800">→</text>
-  <text x="400" y="195" text-anchor="middle" font-size="11" fill="#FF9800">FFT</text>
-  <text x="400" y="160" text-anchor="middle" font-size="11" fill="#FF9800">O(n log n)</text>
-  <!-- Frequency domain -->
-  <text x="600" y="55" text-anchor="middle" font-size="14" fill="#333">Frequency Domain</text>
-  <line x1="440" y1="280" x2="760" y2="280" stroke="#555" stroke-width="1.5"/>
-  <line x1="440" y1="280" x2="440" y2="80" stroke="#555" stroke-width="1.5"/>
-  <!-- Spikes at frequencies -->
-  <line x1="490" y1="280" x2="490" y2="130" stroke="#E91E63" stroke-width="8"/>
-  <line x1="540" y1="280" x2="540" y2="200" stroke="#E91E63" stroke-width="8"/>
-  <line x1="590" y1="280" x2="590" y2="260" stroke="#E91E63" stroke-width="8"/>
-  <line x1="640" y1="280" x2="640" y2="270" stroke="#E91E63" stroke-width="8"/>
-  <line x1="690" y1="280" x2="690" y2="155" stroke="#E91E63" stroke-width="8"/>
-  <line x1="740" y1="280" x2="740" y2="275" stroke="#E91E63" stroke-width="8"/>
-  <text x="490" y="300" text-anchor="middle" font-size="11" fill="#888">f₁</text>
-  <text x="690" y="300" text-anchor="middle" font-size="11" fill="#888">f₂</text>
-  <text x="600" y="320" text-anchor="middle" font-size="12" fill="#333">Frequency</text>
-  <text x="430" y="185" text-anchor="middle" font-size="12" fill="#333" transform="rotate(-90,430,185)">|X(f)|</text>
-  <!-- Bottom note -->
-  <text x="400" y="370" text-anchor="middle" font-size="12" fill="#555">Used in signal processing, spectral analysis, and time-series ML</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Fast Fourier Transform: a Recipe for Any Signal</text>
+
+  <!-- ingredients: two sines -->
+  <text x="180" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Ingredients (pure tones)</text>
+  <path d="M60,110 C75,90 90,90 105,110 C120,130 135,130 150,110 C165,90 180,90 195,110 C210,130 225,130 240,110 C255,90 270,90 285,110" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="305" y="115" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">f&#8321;, loud</text>
+  <path d="M60,150 C66,142 71,142 77,150 C83,158 88,158 94,150 C100,142 105,142 111,150 C117,158 122,158 128,150 C134,142 139,142 145,150 C151,158 156,158 162,150 C168,142 173,142 179,150 C185,158 190,158 196,150 C202,142 207,142 213,150 C219,158 224,158 230,150 C236,142 241,142 247,150 C253,158 258,158 264,150 C270,142 275,142 281,150" fill="none" stroke="#C4A87A" stroke-width="2.5"/>
+  <text x="305" y="155" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">f&#8322;, quiet</text>
+
+  <!-- plus / equals -->
+  <text x="180" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#333">+ (added together) =</text>
+
+  <!-- mixture: time domain -->
+  <text x="180" y="225" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">The signal you record</text>
+  <line x1="60" y1="280" x2="300" y2="280" stroke="#333" stroke-width="1"/>
+  <path d="M60,280 C70,240 82,255 92,285 C102,315 114,300 124,260 C134,235 146,255 156,290 C166,318 178,298 188,258 C198,232 210,258 220,288 C230,314 242,296 252,262 C262,238 274,258 284,285 C290,298 296,288 300,280" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="180" y="320" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">time &#8594; one tangled wiggle</text>
+
+  <!-- FFT arrow -->
+  <line x1="330" y1="255" x2="430" y2="255" stroke="#5C3D1E" stroke-width="3"/>
+  <path d="M438,255 L422,247 L422,263 Z" fill="#5C3D1E"/>
+  <text x="384" y="240" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">FFT</text>
+  <text x="384" y="278" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">O(n log n)</text>
+
+  <!-- frequency domain -->
+  <text x="600" y="225" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">The recipe it recovers</text>
+  <line x1="470" y1="320" x2="750" y2="320" stroke="#333" stroke-width="1.5"/>
+  <line x1="470" y1="320" x2="470" y2="240" stroke="#333" stroke-width="1.5"/>
+  <rect x="520" y="248" width="16" height="72" fill="#2D5A8E"/>
+  <rect x="660" y="290" width="16" height="30" fill="#C4A87A"/>
+  <text x="528" y="338" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">f&#8321;</text>
+  <text x="668" y="338" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">f&#8322;</text>
+  <text x="610" y="358" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">frequency &#8594; which tones, how loud</text>
+
+  <text x="600" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Fourier's theorem: every signal is a</text>
+  <text x="600" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">sum of sine waves. The FFT un-mixes</text>
+  <text x="600" y="174" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">the paint &#8212; fast enough for real time.</text>
 </svg>

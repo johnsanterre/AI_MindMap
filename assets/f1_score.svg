@@ -1,28 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">F1 Score &amp; Classification Metrics</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">F1 Score: Balancing Precision and Recall</text>
+
   <!-- Confusion matrix -->
-  <text x="170" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Confusion Matrix</text>
-  <rect x="40" y="85" width="260" height="220" rx="4" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
-  <line x1="40" y1="140" x2="300" y2="140" stroke="#ccc" stroke-width="1"/>
-  <line x1="40" y1="250" x2="300" y2="250" stroke="#ccc" stroke-width="1"/>
-  <line x1="170" y1="85" x2="170" y2="305" stroke="#ccc" stroke-width="1"/>
-  <text x="105" y="122" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Pred Pos</text>
-  <text x="235" y="122" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Pred Neg</text>
-  <text x="105" y="205" text-anchor="middle" font-family="Arial" font-size="22" fill="#27ae60" font-weight="bold">TP</text>
-  <text x="235" y="205" text-anchor="middle" font-family="Arial" font-size="22" fill="#e74c3c" font-weight="bold">FN</text>
-  <text x="105" y="285" text-anchor="middle" font-family="Arial" font-size="22" fill="#e74c3c" font-weight="bold">FP</text>
-  <text x="235" y="285" text-anchor="middle" font-family="Arial" font-size="22" fill="#4a90d9" font-weight="bold">TN</text>
-  <text x="20" y="205" text-anchor="middle" font-family="Arial" font-size="10" fill="#555" transform="rotate(-90,20,205)">Act Pos</text>
-  <text x="20" y="278" text-anchor="middle" font-family="Arial" font-size="10" fill="#555" transform="rotate(-90,20,278)">Act Neg</text>
-  <!-- Formulas -->
-  <rect x="330" y="80" width="430" height="240" rx="10" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="545" y="110" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Metrics</text>
-  <text x="545" y="140" text-anchor="middle" font-family="Arial" font-size="12" fill="#27ae60">Precision = TP / (TP + FP)</text>
-  <text x="545" y="162" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">of predicted positives, how many correct?</text>
-  <text x="545" y="190" text-anchor="middle" font-family="Arial" font-size="12" fill="#e67e22">Recall = TP / (TP + FN)</text>
-  <text x="545" y="212" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">of actual positives, how many found?</text>
-  <text x="545" y="240" text-anchor="middle" font-family="Arial" font-size="13" fill="#4a90d9" font-weight="bold">F1 = 2 · P · R / (P + R)</text>
-  <text x="545" y="262" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">harmonic mean — punishes imbalance</text>
-  <text x="545" y="295" text-anchor="middle" font-family="Arial" font-size="12" fill="#8e44ad">F_β = (1+β²)·P·R / (β²·P + R)</text>
+  <text x="185" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#333">Confusion matrix</text>
+  <rect x="95" y="95" width="90" height="80" fill="#2D5A8E" opacity="0.85"/>
+  <rect x="185" y="95" width="90" height="80" fill="#C4A87A" opacity="0.5"/>
+  <rect x="95" y="175" width="90" height="80" fill="#7C2530" opacity="0.65"/>
+  <rect x="185" y="175" width="90" height="80" fill="#FDFAF4" stroke="#D4C5A9"/>
+  <rect x="95" y="95" width="180" height="160" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="140" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#FDFAF4">TP</text>
+  <text x="140" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">caught, wanted</text>
+  <text x="230" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#5C3D1E">FN</text>
+  <text x="230" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">slipped through</text>
+  <text x="140" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#FDFAF4">FP</text>
+  <text x="140" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FDFAF4">junk in the net</text>
+  <text x="230" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#333">TN</text>
+  <text x="140" y="278" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">predicted +</text>
+  <text x="230" y="278" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">predicted &#8722;</text>
+  <text x="78" y="135" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90,78,135)">actual +</text>
+  <text x="78" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90,78,215)">actual &#8722;</text>
+
+  <!-- Two questions in tension -->
+  <text x="545" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Precision = TP / (TP + FP)</text>
+  <text x="545" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">of what you caught, how much was the target?</text>
+  <text x="545" y="155" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Recall = TP / (TP + FN)</text>
+  <text x="545" y="175" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">of all the targets out there, how many did you catch?</text>
+
+  <!-- tension arrows -->
+  <line x1="430" y1="196" x2="660" y2="196" stroke="#C4A87A" stroke-width="2"/>
+  <path d="M426,196 L438,190 L438,202 Z" fill="#C4A87A"/>
+  <path d="M664,196 L652,190 L652,202 Z" fill="#C4A87A"/>
+  <text x="545" y="215" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">in tension: pushing one up usually pulls the other down</text>
+
+  <!-- F1 formula box -->
+  <rect x="380" y="235" width="330" height="80" fill="#C4A87A" opacity="0.2"/>
+  <rect x="380" y="235" width="330" height="80" fill="none" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="545" y="265" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#5C3D1E">F1 = 2 &#183; P &#183; R / (P + R)</text>
+  <text x="545" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">harmonic mean &#8212; high only when <tspan font-weight="bold">both</tspan> are high</text>
+
+  <text x="400" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">A fishing net judged on two counts at once: purity of the catch and coverage of the lake.</text>
+  <text x="400" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">P = 0.9, R = 0.1 gives F1 &#8776; 0.18 &#8212; the weak side dominates.</text>
 </svg>

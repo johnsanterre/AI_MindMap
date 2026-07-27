@@ -1,47 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Normalization Techniques</text>
-  <!-- Batch Norm -->
-  <rect x="30" y="70" width="170" height="240" rx="8" fill="#e8f4f8" stroke="#4a90d9" stroke-width="2"/>
-  <text x="115" y="98" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#4a90d9">Batch Norm</text>
-  <!-- Mini-batch grid: normalize across batch (columns) -->
-  <rect x="50" y="110" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.8"/>
-  <rect x="85" y="110" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.5"/>
-  <rect x="120" y="110" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.3"/>
-  <rect x="50" y="145" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.6"/>
-  <rect x="85" y="145" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.4"/>
-  <rect x="120" y="145" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.7"/>
-  <rect x="50" y="180" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.3"/>
-  <rect x="85" y="180" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.8"/>
-  <rect x="120" y="180" width="30" height="30" rx="2" fill="#4a90d9" opacity="0.5"/>
-  <text x="115" y="235" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">↕ normalize each</text>
-  <text x="115" y="250" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">feature across batch</text>
-  <text x="115" y="275" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Needs large batch</text>
-  <!-- Layer Norm -->
-  <rect x="215" y="70" width="170" height="240" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="300" y="98" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#e67e22">Layer Norm</text>
-  <rect x="235" y="110" width="30" height="30" rx="2" fill="#e67e22" opacity="0.8"/>
-  <rect x="270" y="110" width="30" height="30" rx="2" fill="#e67e22" opacity="0.5"/>
-  <rect x="305" y="110" width="30" height="30" rx="2" fill="#e67e22" opacity="0.3"/>
-  <rect x="235" y="145" width="30" height="30" rx="2" fill="#e67e22" opacity="0.6"/>
-  <rect x="270" y="145" width="30" height="30" rx="2" fill="#e67e22" opacity="0.4"/>
-  <rect x="305" y="145" width="30" height="30" rx="2" fill="#e67e22" opacity="0.7"/>
-  <text x="300" y="235" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">↔ normalize each</text>
-  <text x="300" y="250" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">sample across features</text>
-  <text x="300" y="275" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Used in Transformers</text>
-  <!-- Instance Norm -->
-  <rect x="400" y="70" width="170" height="240" rx="8" fill="#e8f8e8" stroke="#27ae60" stroke-width="2"/>
-  <text x="485" y="98" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#27ae60">Instance Norm</text>
-  <rect x="420" y="110" width="30" height="30" rx="2" fill="#27ae60" opacity="0.8"/>
-  <rect x="455" y="110" width="30" height="30" rx="2" fill="#27ae60" opacity="0.5"/>
-  <rect x="420" y="145" width="30" height="30" rx="2" fill="#27ae60" opacity="0.3"/>
-  <rect x="455" y="145" width="30" height="30" rx="2" fill="#27ae60" opacity="0.6"/>
-  <text x="485" y="235" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">normalize each</text>
-  <text x="485" y="250" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">channel per sample</text>
-  <text x="485" y="275" text-anchor="middle" font-family="Arial" font-size="11" fill="#888">Style transfer / CNNs</text>
-  <!-- Formula -->
-  <rect x="590" y="100" width="185" height="80" rx="8" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="682" y="125" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">General Form</text>
-  <text x="682" y="152" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">x̂ = (x − μ) / σ</text>
-  <text x="682" y="172" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">then scale &amp; shift</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Normalization: Recalibrating the Signal at Every Layer</text>
+
+  <!-- Before: wild activations -->
+  <text x="180" y="86" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Before: uncalibrated graders</text>
+  <line x1="70" y1="270" x2="290" y2="270" stroke="#333" stroke-width="1.5"/>
+  <rect x="95" y="150" width="26" height="120" fill="#7C2530" opacity="0.75"/>
+  <rect x="165" y="230" width="26" height="40" fill="#7C2530" opacity="0.5"/>
+  <rect x="235" y="110" width="26" height="160" fill="#7C2530" opacity="0.6"/>
+  <text x="108" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">unit A</text>
+  <text x="178" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">unit B</text>
+  <text x="248" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">unit C</text>
+  <text x="180" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">wide ranges dominate,</text>
+  <text x="180" y="335" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">narrow ones vanish</text>
+
+  <!-- The transform -->
+  <rect x="330" y="150" width="140" height="100" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <text x="400" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#2D5A8E" font-weight="bold">x&#770; = (x &#8722; &#956;) / &#963;</text>
+  <text x="400" y="212" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">then learnable</text>
+  <text x="400" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">scale &#947; and shift &#946;</text>
+  <line x1="298" y1="200" x2="322" y2="200" stroke="#5C3D1E" stroke-width="2"/>
+  <path d="M 328 200 L 318 195 L 318 205 Z" fill="#5C3D1E"/>
+  <line x1="474" y1="200" x2="498" y2="200" stroke="#5C3D1E" stroke-width="2"/>
+  <path d="M 504 200 L 494 195 L 494 205 Z" fill="#5C3D1E"/>
+
+  <!-- After: calibrated activations -->
+  <text x="620" y="86" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">After: common scale</text>
+  <line x1="510" y1="270" x2="730" y2="270" stroke="#333" stroke-width="1.5"/>
+  <rect x="535" y="185" width="26" height="85" fill="#2D5A8E" opacity="0.75"/>
+  <rect x="605" y="185" width="26" height="85" fill="#2D5A8E" opacity="0.6"/>
+  <rect x="675" y="185" width="26" height="85" fill="#2D5A8E" opacity="0.7"/>
+  <line x1="520" y1="185" x2="720" y2="185" stroke="#C4A87A" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="548" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">unit A</text>
+  <text x="618" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">unit B</text>
+  <text x="688" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">unit C</text>
+  <text x="620" y="318" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">mean 0, variance 1 &#8212; every</text>
+  <text x="620" y="335" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">unit contributes fairly</text>
+
+  <text x="400" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">Batch / Layer / Instance norm differ only in which axis &#956; and &#963; are computed over.</text>
 </svg>

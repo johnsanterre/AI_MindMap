@@ -1,35 +1,45 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Projection</text>
-  <defs><marker id="a12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
-  <!-- Left: vector projection -->
-  <text x="200" y="58" text-anchor="middle" font-size="14" fill="#333">Vector onto Subspace</text>
-  <!-- Subspace line -->
-  <line x1="40" y1="300" x2="380" y2="180" stroke="#4CAF50" stroke-width="2.5"/>
-  <text x="38" y="310" font-size="13" fill="#4CAF50">subspace S</text>
-  <!-- Original vector v -->
-  <line x1="80" y1="290" x2="250" y2="110" stroke="#E91E63" stroke-width="3" marker-end="url(#a12)"/>
-  <text x="255" y="105" font-size="14" fill="#E91E63">v</text>
-  <!-- Projection Pv -->
-  <line x1="80" y1="290" x2="195" y2="233" stroke="#2196F3" stroke-width="3" marker-end="url(#a12)"/>
-  <text x="190" y="225" font-size="13" fill="#2196F3">Pv</text>
-  <!-- Error vector -->
-  <line x1="195" y1="233" x2="250" y2="110" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a12)"/>
-  <text x="255" y="175" font-size="12" fill="#FF9800">v − Pv</text>
-  <text x="255" y="190" font-size="12" fill="#FF9800">(⊥ to S)</text>
-  <!-- Right angle -->
-  <rect x="193" y="225" width="12" height="12" fill="none" stroke="#2196F3" stroke-width="1.5"/>
-  <!-- Right: projection matrix -->
-  <rect x="420" y="60" width="350" height="280" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="595" y="90" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Projection Matrix</text>
-  <text x="595" y="118" text-anchor="middle" font-size="13" fill="#2196F3">P = A(AᵀA)⁻¹Aᵀ</text>
-  <text x="595" y="143" text-anchor="middle" font-size="12" fill="#555">columns of A span the subspace</text>
-  <line x1="440" y1="158" x2="752" y2="158" stroke="#ddd"/>
-  <text x="595" y="183" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">Idempotent: P² = P</text>
-  <text x="595" y="208" text-anchor="middle" font-size="12" fill="#555">Symmetric: Pᵀ = P</text>
-  <text x="595" y="233" text-anchor="middle" font-size="12" fill="#E91E63">I − P = orthogonal complement</text>
-  <line x1="440" y1="248" x2="752" y2="248" stroke="#ddd"/>
-  <text x="595" y="273" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">ML Uses</text>
-  <text x="595" y="298" text-anchor="middle" font-size="12" fill="#555">OLS: ŷ = X(XᵀX)⁻¹Xᵀy</text>
-  <text x="595" y="320" text-anchor="middle" font-size="12" fill="#555">PCA: project onto top eigenvecs</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Projection: The Nearest Point Meets at a Right Angle</text>
+
+  <!-- Geometry panel -->
+  <!-- subspace line -->
+  <line x1="60" y1="320" x2="400" y2="200" stroke="#C4A87A" stroke-width="3"/>
+  <text x="72" y="340" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">subspace S (the road)</text>
+
+  <!-- vector b -->
+  <line x1="110" y1="302" x2="290" y2="110" stroke="#7C2530" stroke-width="3"/>
+  <path d="M 294 106 L 280 112 L 289 121 Z" fill="#7C2530"/>
+  <text x="302" y="103" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">b</text>
+  <text x="330" y="103" font-family="Georgia, serif" font-size="12" fill="#333">(you, in the field)</text>
+
+  <!-- projection p -->
+  <line x1="110" y1="302" x2="238" y2="257" stroke="#2D5A8E" stroke-width="3"/>
+  <path d="M 244 255 L 230 252 L 234 263 Z" fill="#2D5A8E"/>
+  <text x="232" y="282" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">p</text>
+  <text x="180" y="300" font-family="Georgia, serif" font-size="12" fill="#333">nearest point in S</text>
+
+  <!-- error vector -->
+  <line x1="240" y1="256" x2="288" y2="114" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="268" y="195" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">e = b &#8722; p</text>
+  <text x="268" y="213" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">&#8869; to S</text>
+  <!-- right angle marker at p -->
+  <path d="M 245 243 L 258 247 L 254 260" fill="none" stroke="#2D5A8E" stroke-width="1.5"/>
+
+  <!-- Facts panel -->
+  <rect x="450" y="80" width="300" height="130" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="600" y="106" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">The projection matrix</text>
+  <text x="600" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#333">P = A(A&#7488;A)&#8315;&#185;A&#7488;</text>
+  <text x="600" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">columns of A span the subspace</text>
+  <text x="600" y="182" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">P&#178; = P (projecting twice changes nothing)</text>
+  <text x="600" y="200" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">P&#7488; = P,   I &#8722; P projects onto e's side</text>
+
+  <rect x="450" y="235" width="300" height="105" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="600" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Where it appears</text>
+  <text x="600" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Least squares: y&#770; = Py &#8212; fit = shadow of y</text>
+  <text x="600" y="305" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">PCA: project onto top eigenvectors</text>
+  <text x="600" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Gram&#8211;Schmidt: subtract projections</text>
+
+  <text x="400" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-style="italic">The shortest path to the road always meets it at a right angle &#8212; perpendicular error defines optimality.</text>
 </svg>

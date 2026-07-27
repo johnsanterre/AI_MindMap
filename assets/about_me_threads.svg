@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="14" y="14" width="772" height="372" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- four threads braiding toward one point at (660, 200) -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M 60 100 C 200 100 280 230 400 210 C 500 195 580 205 660 200" stroke="#7C2530" stroke-width="4"/>
+    <path d="M 60 165 C 210 165 300 130 420 180 C 520 220 590 198 660 200" stroke="#2D5A8E" stroke-width="4"/>
+    <path d="M 60 235 C 200 235 310 260 430 215 C 530 178 595 202 660 200" stroke="#5C3D1E" stroke-width="4"/>
+    <path d="M 60 300 C 220 300 290 175 425 195 C 525 210 590 200 660 200" stroke="#C4A87A" stroke-width="4"/>
+  </g>
+
+  <!-- convergence point -->
+  <circle cx="660" cy="200" r="7" fill="#7C2530"/>
+  <circle cx="660" cy="200" r="12" fill="none" stroke="#C4A87A" stroke-width="1.5"/>
+
+  <!-- labels at thread starts -->
+  <g font-family="Georgia, serif" font-size="16">
+    <text x="62" y="88" fill="#7C2530">Machine Learning</text>
+    <text x="62" y="153" fill="#2D5A8E">Mathematics</text>
+    <text x="62" y="223" fill="#5C3D1E">Teaching</text>
+    <text x="62" y="288" fill="#C4A87A">Photography</text>
+  </g>
+
+  <!-- right-side caption -->
+  <text x="660" y="240" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="18" fill="#5C3D1E">one practice</text>
+</svg>

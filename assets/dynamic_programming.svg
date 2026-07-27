@@ -1,44 +1,72 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Dynamic Programming</text>
-  <!-- Grid for shortest path -->
-  <text x="180" y="72" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Subproblem Grid (Shortest Path)</text>
-  <rect x="40" y="85" width="290" height="250" rx="4" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
-  <!-- Grid cells with values -->
-  <line x1="40" y1="135" x2="330" y2="135" stroke="#ddd" stroke-width="1"/>
-  <line x1="40" y1="185" x2="330" y2="185" stroke="#ddd" stroke-width="1"/>
-  <line x1="40" y1="235" x2="330" y2="235" stroke="#ddd" stroke-width="1"/>
-  <line x1="40" y1="285" x2="330" y2="285" stroke="#ddd" stroke-width="1"/>
-  <line x1="100" y1="85" x2="100" y2="335" stroke="#ddd" stroke-width="1"/>
-  <line x1="160" y1="85" x2="160" y2="335" stroke="#ddd" stroke-width="1"/>
-  <line x1="220" y1="85" x2="220" y2="335" stroke="#ddd" stroke-width="1"/>
-  <line x1="280" y1="85" x2="280" y2="335" stroke="#ddd" stroke-width="1"/>
-  <!-- Values -->
-  <text x="70" y="117" text-anchor="middle" font-family="Arial" font-size="13" fill="#27ae60" font-weight="bold">0</text>
-  <text x="130" y="117" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">1</text>
-  <text x="190" y="117" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">2</text>
-  <text x="250" y="117" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">3</text>
-  <text x="305" y="117" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">4</text>
-  <text x="70" y="167" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">1</text>
-  <text x="130" y="167" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">2</text>
-  <text x="190" y="167" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">3</text>
-  <text x="250" y="167" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">4</text>
-  <text x="305" y="167" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">5</text>
-  <text x="70" y="217" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">2</text>
-  <text x="130" y="217" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">3</text>
-  <text x="190" y="217" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">4</text>
-  <text x="250" y="217" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">5</text>
-  <text x="305" y="217" text-anchor="middle" font-family="Arial" font-size="13" fill="#4a90d9" font-weight="bold">6</text>
-  <!-- Optimal path -->
-  <polyline points="70,110 130,110 190,110 250,110 305,110 305,160 305,210" fill="none" stroke="#e74c3c" stroke-width="3" stroke-dasharray="6,3"/>
-  <!-- Two pillars -->
-  <rect x="380" y="100" width="380" height="200" rx="10" fill="#f9f9f9" stroke="#ccc" stroke-width="1.5"/>
-  <text x="570" y="128" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Two Key Properties</text>
-  <text x="570" y="158" text-anchor="middle" font-family="Arial" font-size="13" fill="#4a90d9" font-weight="bold">Optimal Substructure</text>
-  <text x="570" y="178" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Optimal solution contains</text>
-  <text x="570" y="196" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">optimal sub-solutions</text>
-  <line x1="390" y1="210" x2="750" y2="210" stroke="#ddd" stroke-width="1"/>
-  <text x="570" y="232" text-anchor="middle" font-family="Arial" font-size="13" fill="#e67e22" font-weight="bold">Overlapping Subproblems</text>
-  <text x="570" y="252" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Same sub-problems solved</text>
-  <text x="570" y="270" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">multiple times → memoize</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Dynamic Programming: Solve Each Subproblem Once</text>
+
+  <!-- Left: naive recursion tree for F(5) -->
+  <text x="210" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Naive recursion repeats work</text>
+
+  <!-- edges -->
+  <g stroke="#C4A87A" stroke-width="1.5">
+    <line x1="210" y1="120" x2="130" y2="180"/>
+    <line x1="210" y1="120" x2="290" y2="180"/>
+    <line x1="130" y1="180" x2="80" y2="240"/>
+    <line x1="130" y1="180" x2="180" y2="240"/>
+    <line x1="290" y1="180" x2="250" y2="240"/>
+    <line x1="290" y1="180" x2="330" y2="240"/>
+    <line x1="80" y1="240" x2="55" y2="300"/>
+    <line x1="80" y1="240" x2="110" y2="300"/>
+  </g>
+  <!-- nodes -->
+  <circle cx="210" cy="120" r="20" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="210" y="126" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">F(5)</text>
+  <circle cx="130" cy="180" r="20" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="130" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">F(4)</text>
+  <!-- repeated F(3)s in red -->
+  <circle cx="290" cy="180" r="20" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="290" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">F(3)</text>
+  <circle cx="80" cy="240" r="20" fill="#FDFAF4" stroke="#7C2530" stroke-width="2.5"/>
+  <text x="80" y="246" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">F(3)</text>
+  <circle cx="180" cy="240" r="18" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="180" y="246" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">F(2)</text>
+  <circle cx="250" cy="240" r="18" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="250" y="246" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">F(2)</text>
+  <circle cx="330" cy="240" r="18" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="330" y="246" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">F(1)</text>
+  <circle cx="55" cy="300" r="18" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="55" y="306" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">F(2)</text>
+  <circle cx="110" cy="300" r="18" fill="#FDFAF4" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="110" y="306" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">F(1)</text>
+
+  <text x="210" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">F(3) computed twice &#8212; redundancy explodes</text>
+  <text x="210" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">exponentially with depth</text>
+
+  <!-- divider -->
+  <line x1="420" y1="70" x2="420" y2="375" stroke="#D4C5A9" stroke-width="2"/>
+
+  <!-- Right: memo table -->
+  <text x="605" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">DP: store answers in a table</text>
+
+  <g stroke="#5C3D1E" stroke-width="1.5" fill="#FDFAF4">
+    <rect x="455" y="110" width="60" height="46"/>
+    <rect x="515" y="110" width="60" height="46"/>
+    <rect x="575" y="110" width="60" height="46"/>
+    <rect x="635" y="110" width="60" height="46"/>
+    <rect x="695" y="110" width="60" height="46"/>
+  </g>
+  <g font-family="Georgia, serif" font-size="13" fill="#5C3D1E" text-anchor="middle">
+    <text x="485" y="128">F(1)</text><text x="545" y="128">F(2)</text><text x="605" y="128">F(3)</text><text x="665" y="128">F(4)</text><text x="725" y="128">F(5)</text>
+  </g>
+  <g font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">
+    <text x="485" y="150">1</text><text x="545" y="150">1</text><text x="605" y="150">2</text><text x="665" y="150">3</text><text x="725" y="150">5</text>
+  </g>
+  <text x="605" y="184" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">each cell built once, from cells already filled</text>
+
+  <text x="605" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">Two requirements</text>
+  <text x="470" y="255" font-family="Georgia, serif" font-size="13" fill="#333"><tspan font-weight="bold" fill="#2D5A8E">Overlapping subproblems</tspan> &#8212; the same</text>
+  <text x="470" y="273" font-family="Georgia, serif" font-size="13" fill="#333">pieces recur, so caching pays off.</text>
+  <text x="470" y="300" font-family="Georgia, serif" font-size="13" fill="#333"><tspan font-weight="bold" fill="#2D5A8E">Optimal substructure</tspan> &#8212; the best answer</text>
+  <text x="470" y="318" font-family="Georgia, serif" font-size="13" fill="#333">is built from best sub-answers.</text>
+
+  <text x="605" y="355" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#7C2530">exponential time becomes polynomial</text>
 </svg>

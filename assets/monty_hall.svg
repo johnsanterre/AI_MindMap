@@ -1,113 +1,66 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="#ffffff"/>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="arrMH" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C2530"/>
+    </marker>
+  </defs>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Monty Hall: Switching Buys the Whole Group</text>
 
-  <!-- Title -->
-  <text x="400" y="28" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a1a2e" text-anchor="middle">The Monty Hall Problem</text>
+  <!-- Left: the three doors -->
+  <text x="200" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Your pick vs. the rest</text>
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- LEFT PANEL: 3 Doors                                     -->
-  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- Door 1: your pick -->
+  <rect x="75" y="100" width="75" height="120" rx="4" fill="#2D5A8E" fill-opacity="0.15" stroke="#2D5A8E" stroke-width="2"/>
+  <circle cx="138" cy="162" r="4" fill="#5C3D1E"/>
+  <text x="112" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E" font-weight="bold">Door 1</text>
+  <text x="112" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">your pick</text>
+  <text x="112" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">1/3</text>
 
-  <!-- Panel label -->
-  <text x="195" y="52" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">Game show setup</text>
+  <!-- Group bracket around doors 2 and 3 -->
+  <rect x="180" y="92" width="185" height="212" rx="8" fill="#C4A87A" fill-opacity="0.15" stroke="#5C3D1E" stroke-width="2" stroke-dasharray="7,4"/>
 
-  <!-- Door 1 -->
-  <rect x="40" y="60" width="90" height="130" rx="6" fill="#4a7fb5" stroke="#1a1a2e" stroke-width="2"/>
-  <rect x="55" y="75" width="25" height="35" rx="2" fill="#ffffff" opacity="0.25"/>
-  <rect x="90" y="75" width="25" height="35" rx="2" fill="#ffffff" opacity="0.25"/>
-  <circle cx="88" cy="132" r="5" fill="#ffd166"/>
-  <text x="85" y="208" font-family="sans-serif" font-size="12" fill="#1a1a2e" text-anchor="middle">Door 1</text>
-  <text x="85" y="222" font-family="sans-serif" font-size="10" fill="#4a7fb5" text-anchor="middle">your pick</text>
+  <!-- Door 2: opened, goat -->
+  <rect x="195" y="100" width="75" height="120" rx="4" fill="none" stroke="#C4A87A" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="232" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#C4A87A" font-style="italic">goat</text>
+  <text x="232" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">Door 2</text>
+  <text x="232" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">host opens</text>
 
-  <!-- Door 2 (goat revealed) -->
-  <rect x="150" y="60" width="90" height="130" rx="6" fill="#e8e8e8" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="6,3"/>
-  <!-- Goat icon (simple) -->
-  <ellipse cx="195" cy="140" rx="18" ry="12" fill="#888"/>
-  <ellipse cx="207" cy="128" rx="10" ry="8" fill="#888"/>
-  <line x1="186" y1="152" x2="183" y2="168" stroke="#888" stroke-width="2"/>
-  <line x1="192" y1="152" x2="190" y2="168" stroke="#888" stroke-width="2"/>
-  <line x1="198" y1="152" x2="200" y2="168" stroke="#888" stroke-width="2"/>
-  <line x1="204" y1="152" x2="206" y2="168" stroke="#888" stroke-width="2"/>
-  <!-- Horns -->
-  <line x1="201" y1="122" x2="198" y2="113" stroke="#888" stroke-width="2"/>
-  <line x1="212" y1="122" x2="216" y2="113" stroke="#888" stroke-width="2"/>
-  <text x="195" y="208" font-family="sans-serif" font-size="12" fill="#1a1a2e" text-anchor="middle">Door 2</text>
-  <text x="195" y="222" font-family="sans-serif" font-size="10" fill="#e05c5c" text-anchor="middle">host opens (goat)</text>
+  <!-- Door 3: switch target -->
+  <rect x="278" y="100" width="75" height="120" rx="4" fill="#7C2530" fill-opacity="0.12" stroke="#7C2530" stroke-width="2"/>
+  <circle cx="341" cy="162" r="4" fill="#5C3D1E"/>
+  <text x="315" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">Door 3</text>
+  <text x="315" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530">switch here</text>
+  <text x="315" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">2/3</text>
 
-  <!-- Door 3 -->
-  <rect x="260" y="60" width="90" height="130" rx="6" fill="#4a7fb5" stroke="#1a1a2e" stroke-width="2"/>
-  <rect x="275" y="75" width="25" height="35" rx="2" fill="#ffffff" opacity="0.25"/>
-  <rect x="310" y="75" width="25" height="35" rx="2" fill="#ffffff" opacity="0.25"/>
-  <circle cx="308" cy="132" r="5" fill="#ffd166"/>
-  <text x="305" y="208" font-family="sans-serif" font-size="12" fill="#1a1a2e" text-anchor="middle">Door 3</text>
-  <text x="305" y="222" font-family="sans-serif" font-size="10" fill="#4a7fb5" text-anchor="middle">switch target</text>
-
-  <!-- Question: stay or switch? -->
-  <rect x="40" y="232" width="310" height="36" rx="6" fill="#f5f0ff" stroke="#7c5cbf" stroke-width="1.5"/>
-  <text x="195" y="250" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e" text-anchor="middle">Stay with Door 1, or switch to Door 3?</text>
-  <text x="195" y="263" font-family="sans-serif" font-size="11" fill="#555" text-anchor="middle">One door hides the car · Two doors hide goats</text>
-
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- RIGHT PANEL: Probability Tree                           -->
-  <!-- ═══════════════════════════════════════════════════════ -->
-
-  <!-- Panel label -->
-  <text x="590" y="52" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">Probability tree (car behind each door)</text>
-
-  <!-- Root node -->
-  <circle cx="420" cy="85" r="18" fill="#4a7fb5" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="420" y="90" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">start</text>
-
-  <!-- Branch labels above branches -->
-  <!-- Three branches from root: car behind 1, 2, or 3 -->
-  <!-- Car behind Door 1 (left) -->
-  <line x1="413" y1="102" x2="490" y2="155" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="438" y="127" font-family="sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle">1/3</text>
-  <circle cx="497" cy="163" r="16" fill="#4a7fb5" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="497" y="168" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">car=1</text>
-
-  <!-- Car behind Door 2 (middle) -->
-  <line x1="420" y1="103" x2="590" y2="155" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="510" y="122" font-family="sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle">1/3</text>
-  <circle cx="597" cy="163" r="16" fill="#4a7fb5" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="597" y="168" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">car=2</text>
-
-  <!-- Car behind Door 3 (right) -->
-  <line x1="427" y1="102" x2="688" y2="155" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="575" y="120" font-family="sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle">1/3</text>
-  <circle cx="695" cy="163" r="16" fill="#4a7fb5" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="695" y="168" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">car=3</text>
-
-  <!-- From car=1: stay wins -->
-  <line x1="497" y1="179" x2="497" y2="228" stroke="#1a1a2e" stroke-width="1.5"/>
-  <rect x="450" y="228" width="94" height="36" rx="5" fill="#4caf50" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="497" y="244" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">STAY wins</text>
-  <text x="497" y="257" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">P = 1/3</text>
-
-  <!-- From car=2: host opens 2, switch to 3 wins -->
-  <line x1="590" y1="179" x2="570" y2="228" stroke="#1a1a2e" stroke-width="1.5"/>
-  <line x1="604" y1="179" x2="624" y2="228" stroke="#1a1a2e" stroke-width="1.5"/>
-  <!-- host opens 2 is impossible (car is behind 2) — actually host can't open car door
-       car=2: host must open door 3 (only goat door left) → switch to 3 = lose, stay = lose
-       Wait — you picked door 1. Car is behind 2. Host opens 3 (goat). Switch to 2 = win. -->
-  <rect x="527" y="228" width="86" height="36" rx="5" fill="#e05c5c" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="570" y="244" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">STAY loses</text>
-  <text x="570" y="257" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">P = 1/3</text>
-  <rect x="581" y="228" width="94" height="36" rx="5" fill="#4caf50" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="628" y="244" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">SWITCH wins</text>
-  <text x="628" y="257" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">P = 1/3</text>
-
-  <!-- From car=3: switch wins -->
-  <line x1="695" y1="179" x2="748" y2="228" stroke="#1a1a2e" stroke-width="1.5"/>
-  <rect x="701" y="228" width="94" height="36" rx="5" fill="#4caf50" stroke="#1a1a2e" stroke-width="1.5"/>
-  <text x="748" y="244" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">SWITCH wins</text>
-  <text x="748" y="257" font-family="sans-serif" font-size="10" fill="#fff" text-anchor="middle">P = 1/3</text>
-
-  <!-- Summary row -->
-  <rect x="420" y="290" width="360" height="50" rx="6" fill="#f5f0ff" stroke="#7c5cbf" stroke-width="1.5"/>
-  <text x="600" y="311" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e" text-anchor="middle">Stay wins:  1/3    |    Switch wins:  2/3</text>
-  <text x="600" y="329" font-family="sans-serif" font-size="11" fill="#555" text-anchor="middle">Switching collects both "car behind 2" and "car behind 3" branches</text>
+  <text x="272" y="326" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">the group you didn&#8217;t pick holds 2/3 &#8212;</text>
+  <text x="272" y="343" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">the host just showed you where it isn&#8217;t</text>
 
   <!-- Divider -->
-  <line x1="390" y1="45" x2="390" y2="355" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="400" y1="65" x2="400" y2="360" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Right: the three equally likely worlds -->
+  <text x="600" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Three equally likely worlds (you picked Door 1)</text>
+
+  <rect x="430" y="98" width="340" height="52" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="445" y="120" font-family="Georgia, serif" font-size="13" fill="#333">Car behind 1</text>
+  <text x="445" y="140" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">host opens 2 or 3</text>
+  <text x="755" y="120" text-anchor="end" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">stay wins</text>
+
+  <rect x="430" y="160" width="340" height="52" rx="6" fill="#7C2530" fill-opacity="0.06" stroke="#7C2530" stroke-width="2"/>
+  <text x="445" y="182" font-family="Georgia, serif" font-size="13" fill="#333">Car behind 2</text>
+  <text x="445" y="202" font-family="Georgia, serif" font-size="12" fill="#7C2530">host must open 3</text>
+  <text x="755" y="182" text-anchor="end" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">switch wins</text>
+
+  <rect x="430" y="222" width="340" height="52" rx="6" fill="#7C2530" fill-opacity="0.06" stroke="#7C2530" stroke-width="2"/>
+  <text x="445" y="244" font-family="Georgia, serif" font-size="13" fill="#333">Car behind 3</text>
+  <text x="445" y="264" font-family="Georgia, serif" font-size="12" fill="#7C2530">host must open 2</text>
+  <text x="755" y="244" text-anchor="end" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">switch wins</text>
+
+  <text x="600" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">Stay wins 1 of 3  &#183;  Switch wins 2 of 3</text>
+  <text x="600" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">The host knows where the car is &#8212; his forced reveal transfers</text>
+  <text x="600" y="349" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the group&#8217;s full 2/3 onto the one door he left closed.</text>
+
+  <text x="400" y="382" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">Switching is really choosing both other doors at once.</text>
 </svg>

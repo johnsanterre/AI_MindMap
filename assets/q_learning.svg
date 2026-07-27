@@ -1,39 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="12" y="12" width="776" height="376" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Q-Learning: A Value for Every Choice at Every Junction</text>
+
   <!-- Q-table -->
-  <rect x="40" y="80" width="220" height="220" rx="8" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="150" y="65" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#333">Q-Table</text>
-  <text x="150" y="105" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">Q(s, a)</text>
-  <!-- Table grid -->
-  <line x1="40" y1="130" x2="260" y2="130" stroke="#4a90d9" stroke-width="1"/>
-  <line x1="40" y1="165" x2="260" y2="165" stroke="#4a90d9" stroke-width="1"/>
-  <line x1="40" y1="200" x2="260" y2="200" stroke="#4a90d9" stroke-width="1"/>
-  <line x1="40" y1="235" x2="260" y2="235" stroke="#4a90d9" stroke-width="1"/>
-  <line x1="130" y1="80" x2="130" y2="300" stroke="#4a90d9" stroke-width="1"/>
-  <line x1="195" y1="80" x2="195" y2="300" stroke="#4a90d9" stroke-width="1"/>
-  <text x="85" y="120" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">State</text>
-  <text x="162" y="120" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Left</text>
-  <text x="228" y="120" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Right</text>
-  <text x="85" y="152" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">s₁</text>
-  <text x="162" y="152" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">0.8</text>
-  <text x="228" y="152" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">0.3</text>
-  <text x="85" y="187" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">s₂</text>
-  <text x="162" y="187" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">0.2</text>
-  <text x="228" y="187" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">0.9</text>
-  <text x="85" y="222" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">s₃</text>
-  <text x="162" y="222" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">0.6</text>
-  <text x="228" y="222" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">0.1</text>
-  <!-- Bellman update -->
-  <rect x="310" y="130" width="440" height="80" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
-  <text x="530" y="155" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Bellman Update</text>
-  <text x="530" y="180" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Q(s,a) ← Q(s,a) + α[r + γ·max Q(s',a') − Q(s,a)]</text>
-  <!-- Arrows and labels -->
-  <text x="350" y="265" font-family="Arial" font-size="12" fill="#555">α = learning rate</text>
-  <text x="350" y="285" font-family="Arial" font-size="12" fill="#555">γ = discount factor</text>
-  <text x="350" y="305" font-family="Arial" font-size="12" fill="#555">r = immediate reward</text>
-  <text x="560" y="265" font-family="Arial" font-size="12" fill="#555">s = current state</text>
-  <text x="560" y="285" font-family="Arial" font-size="12" fill="#555">a = action taken</text>
-  <text x="560" y="305" font-family="Arial" font-size="12" fill="#555">s' = next state</text>
-  <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Q-Learning</text>
-  <text x="150" y="350" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Best action = highest Q value</text>
+  <text x="170" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">The Q-table: learned from trial and error</text>
+  <rect x="60" y="100" width="220" height="150" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <line x1="60" y1="135" x2="280" y2="135" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="140" y1="100" x2="140" y2="250" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="210" y1="100" x2="210" y2="250" stroke="#2D5A8E" stroke-width="1.5"/>
+  <line x1="60" y1="173" x2="280" y2="173" stroke="#2D5A8E" stroke-width="0.75"/>
+  <line x1="60" y1="211" x2="280" y2="211" stroke="#2D5A8E" stroke-width="0.75"/>
+  <text x="100" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#333">state</text>
+  <text x="175" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#333">left</text>
+  <text x="245" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#333">right</text>
+  <text x="100" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">s&#8321;</text>
+  <text x="175" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">0.8</text>
+  <text x="245" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">0.3</text>
+  <text x="100" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">s&#8322;</text>
+  <text x="175" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">0.2</text>
+  <text x="245" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">0.9</text>
+  <text x="100" y="234" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">s&#8323;</text>
+  <text x="175" y="234" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7C2530">0.6</text>
+  <text x="245" y="234" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">0.1</text>
+  <text x="170" y="275" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">act greedily: pick the highest Q in your row</text>
+
+  <!-- Update rule -->
+  <rect x="330" y="100" width="430" height="90" fill="none" stroke="#7C2530" stroke-width="2"/>
+  <text x="545" y="126" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">The update, after every single step</text>
+  <text x="545" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Q(s,a) &#8592; Q(s,a) + &#945; [ r + &#947;&#183;max Q(s&#8242;,a&#8242;) &#8722; Q(s,a) ]</text>
+  <text x="545" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" font-style="italic">nudge the old estimate toward what actually happened</text>
+
+  <!-- Annotated pieces -->
+  <text x="410" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">r &#8212; reward now</text>
+  <text x="410" y="240" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#947; &#8212; discount: future counts,</text>
+  <text x="410" y="257" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">but a little less</text>
+  <text x="640" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">max Q(s&#8242;,a&#8242;) &#8212; best future</text>
+  <text x="640" y="240" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">from wherever you landed</text>
+  <text x="640" y="257" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#945; &#8212; learning rate</text>
+
+  <!-- Rat framing -->
+  <rect x="330" y="285" width="430" height="60" fill="none" stroke="#C4A87A" stroke-width="2"/>
+  <text x="545" y="309" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C3D1E">No model, no teacher, no labels</text>
+  <text x="545" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">like a rat in a maze: value flows backward from the cheese, one junction per run</text>
+
+  <text x="170" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">Q(s,a) = expected long-term</text>
+  <text x="170" y="348" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">payoff of action a in state s</text>
 </svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Georgia, serif">
+  <rect x="0" y="0" width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="38" font-size="20" font-weight="bold" fill="#5C3D1E" text-anchor="middle">Particle Filter: Predict &#8594; Weight &#8594; Resample</text>
+
+  <!-- hidden trajectory -->
+  <path d="M 70 300 C 180 240, 300 290, 420 210 C 540 140, 640 180, 740 120" fill="none" stroke="#C4A87A" stroke-width="3" stroke-dasharray="8,6"/>
+  <text x="120" y="330" font-size="12" fill="#5C3D1E" font-style="italic">hidden true state path</text>
+
+  <!-- Stage 1: Predict -->
+  <text x="160" y="72" font-size="15" font-weight="bold" fill="#2D5A8E" text-anchor="middle">1. Predict</text>
+  <text x="160" y="90" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">push particles through dynamics</text>
+  <circle cx="130" cy="270" r="5" fill="#2D5A8E"/>
+  <circle cx="155" cy="250" r="5" fill="#2D5A8E"/>
+  <circle cx="180" cy="285" r="5" fill="#2D5A8E"/>
+  <circle cx="145" cy="300" r="5" fill="#2D5A8E"/>
+  <circle cx="200" cy="255" r="5" fill="#2D5A8E"/>
+  <circle cx="175" cy="230" r="5" fill="#2D5A8E"/>
+
+  <!-- Stage 2: Weight -->
+  <text x="420" y="72" font-size="15" font-weight="bold" fill="#7C2530" text-anchor="middle">2. Weight</text>
+  <text x="420" y="90" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">score by measurement likelihood</text>
+  <!-- measurement -->
+  <g>
+    <line x1="420" y1="150" x2="420" y2="190" stroke="#7C2530" stroke-width="2"/>
+    <line x1="400" y1="170" x2="440" y2="170" stroke="#7C2530" stroke-width="2"/>
+    <circle cx="420" cy="170" r="14" fill="none" stroke="#7C2530" stroke-width="2"/>
+    <text x="420" y="135" font-size="12" fill="#7C2530" text-anchor="middle">measurement y</text>
+  </g>
+  <!-- weighted particles: size = weight -->
+  <circle cx="410" cy="205" r="9" fill="#7C2530"/>
+  <circle cx="435" cy="220" r="7" fill="#7C2530"/>
+  <circle cx="390" cy="235" r="5" fill="#7C2530" opacity="0.7"/>
+  <circle cx="455" cy="250" r="3" fill="#7C2530" opacity="0.5"/>
+  <circle cx="370" cy="265" r="2.5" fill="#7C2530" opacity="0.4"/>
+  <circle cx="470" cy="285" r="2" fill="#7C2530" opacity="0.35"/>
+
+  <!-- Stage 3: Resample -->
+  <text x="655" y="72" font-size="15" font-weight="bold" fill="#5C3D1E" text-anchor="middle">3. Resample</text>
+  <text x="655" y="90" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">clone the fit, cull the unfit</text>
+  <circle cx="640" cy="150" r="5" fill="#5C3D1E"/>
+  <circle cx="655" cy="140" r="5" fill="#5C3D1E"/>
+  <circle cx="648" cy="163" r="5" fill="#5C3D1E"/>
+  <circle cx="668" cy="152" r="5" fill="#5C3D1E"/>
+  <circle cx="662" cy="130" r="5" fill="#5C3D1E"/>
+  <circle cx="680" cy="140" r="5" fill="#5C3D1E"/>
+  <text x="672" y="190" font-size="11" fill="#5C3D1E" text-anchor="middle" font-style="italic">swarm concentrates near truth</text>
+
+  <!-- flow arrows between stages -->
+  <line x1="240" y1="110" x2="330" y2="110" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="330,110 318,104 318,116" fill="#5C3D1E"/>
+  <line x1="510" y1="110" x2="590" y2="110" stroke="#5C3D1E" stroke-width="2"/>
+  <polygon points="590,110 578,104 578,116" fill="#5C3D1E"/>
+  <!-- loop back -->
+  <path d="M 700 200 C 730 250, 700 330, 400 345 C 180 355, 110 340, 100 320" fill="none" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="6,5"/>
+  <polygon points="100,320 98,334 110,326" fill="#2D5A8E"/>
+  <text x="400" y="368" font-size="12" fill="#2D5A8E" text-anchor="middle" font-style="italic">repeat every time step: the weighted swarm IS the posterior belief</text>
+</svg>

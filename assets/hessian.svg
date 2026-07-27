@@ -1,27 +1,45 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Left: loss surface -->
-  <text x="200" y="30" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Loss Surface Curvature</text>
-  <!-- 3D-like loss bowl -->
-  <ellipse cx="200" cy="220" rx="150" ry="60" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
-  <path d="M60,220 Q200,100 340,220" fill="none" stroke="#2196F3" stroke-width="2.5"/>
-  <!-- Minimum point -->
-  <circle cx="200" cy="153" r="5" fill="#E91E63"/>
-  <text x="210" y="150" font-size="12" fill="#E91E63">minimum</text>
-  <!-- Curvature arrows -->
-  <path d="M140,170 Q145,155 155,165" fill="none" stroke="#FF9800" stroke-width="2" marker-end="url(#arr2)"/>
-  <path d="M260,170 Q255,155 245,165" fill="none" stroke="#FF9800" stroke-width="2" marker-end="url(#arr2)"/>
-  <text x="200" y="195" text-anchor="middle" font-size="12" fill="#FF9800">curvature ∝ H eigenvalues</text>
-  <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#FF9800"/></marker></defs>
-  <!-- Right: Hessian matrix -->
-  <text x="580" y="30" text-anchor="middle" font-size="15" fill="#333" font-weight="bold">Hessian Matrix H</text>
-  <rect x="400" y="55" width="360" height="260" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="580" y="90" text-anchor="middle" font-size="14" fill="#555">Hᵢⱼ = ∂²f / ∂xᵢ ∂xⱼ</text>
-  <text x="490" y="130" text-anchor="middle" font-size="13" fill="#333">⎡ ∂²f/∂x₁²    ∂²f/∂x₁∂x₂ ⎤</text>
-  <text x="490" y="160" text-anchor="middle" font-size="13" fill="#333">⎣ ∂²f/∂x₂∂x₁  ∂²f/∂x₂²   ⎦</text>
-  <text x="580" y="205" text-anchor="middle" font-size="12" fill="#2196F3">Positive definite → local min</text>
-  <text x="580" y="228" text-anchor="middle" font-size="12" fill="#E91E63">Negative definite → local max</text>
-  <text x="580" y="251" text-anchor="middle" font-size="12" fill="#FF9800">Indefinite → saddle point</text>
-  <text x="580" y="285" text-anchor="middle" font-size="11" fill="#888">Newton step: θ ← θ − H⁻¹∇f</text>
-  <text x="400" y="18" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">The Hessian Matrix</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">The Hessian: Reading Curvature</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Gradient = which way is downhill. Hessian = how the slope itself is changing.</text>
+
+  <!-- three curvature shapes -->
+  <!-- bowl -->
+  <path d="M60,200 Q135,90 210,200" fill="none" stroke="#2D5A8E" stroke-width="3"/>
+  <circle cx="135" cy="145" r="5" fill="#2D5A8E"/>
+  <text x="135" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">bowl</text>
+  <text x="135" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">H positive definite</text>
+  <text x="135" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">local minimum</text>
+
+  <!-- dome -->
+  <path d="M250,120 Q325,230 400,120" fill="none" stroke="#7C2530" stroke-width="3"/>
+  <circle cx="325" cy="175" r="5" fill="#7C2530"/>
+  <text x="325" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">dome</text>
+  <text x="325" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">H negative definite</text>
+  <text x="325" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">local maximum</text>
+
+  <!-- saddle -->
+  <path d="M440,110 Q510,190 580,110" fill="none" stroke="#C4A87A" stroke-width="3"/>
+  <path d="M445,195 Q510,130 575,195" fill="none" stroke="#5C3D1E" stroke-width="3" stroke-dasharray="7,5"/>
+  <circle cx="510" cy="160" r="5" fill="#5C3D1E"/>
+  <text x="510" y="228" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5C3D1E">saddle</text>
+  <text x="510" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">H indefinite: up one</text>
+  <text x="510" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">way, down another</text>
+
+  <!-- matrix panel -->
+  <rect x="615" y="95" width="160" height="185" fill="#C4A87A" opacity="0.16"/>
+  <rect x="615" y="95" width="160" height="185" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="695" y="122" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">H&#7522;&#8342; = &#8706;&#178;f / &#8706;x&#7522;&#8706;x&#8342;</text>
+  <text x="695" y="150" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">all second derivatives</text>
+  <text x="695" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">at one point, in a</text>
+  <text x="695" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">symmetric matrix</text>
+  <text x="695" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">eigenvalues = curvature</text>
+  <text x="695" y="242" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">along principal</text>
+  <text x="695" y="262" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">directions</text>
+
+  <!-- bottom band -->
+  <line x1="50" y1="300" x2="750" y2="300" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="400" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Signs of the eigenvalues classify the critical point; their sizes say how steeply the slope bends.</text>
+  <text x="400" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#7C2530">Newton's method uses it directly:  &#952; &#8592; &#952; &#8722; H&#8315;&#185;&#8711;f</text>
 </svg>

@@ -1,47 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Grid Search -->
-  <text x="130" y="55" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Grid Search</text>
-  <rect x="30" y="65" width="200" height="200" rx="4" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
-  <!-- Grid cells -->
-  <line x1="80" y1="65" x2="80" y2="265" stroke="#ddd" stroke-width="1"/>
-  <line x1="130" y1="65" x2="130" y2="265" stroke="#ddd" stroke-width="1"/>
-  <line x1="180" y1="65" x2="180" y2="265" stroke="#ddd" stroke-width="1"/>
-  <line x1="30" y1="115" x2="230" y2="115" stroke="#ddd" stroke-width="1"/>
-  <line x1="30" y1="165" x2="230" y2="165" stroke="#ddd" stroke-width="1"/>
-  <line x1="30" y1="215" x2="230" y2="215" stroke="#ddd" stroke-width="1"/>
-  <!-- Dots at each grid point -->
-  <circle cx="55" cy="90" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="105" cy="90" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="155" cy="90" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="205" cy="90" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="55" cy="140" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="105" cy="140" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="155" cy="140" r="8" fill="#27ae60"/><circle cx="205" cy="140" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="55" cy="190" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="105" cy="190" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="155" cy="190" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="205" cy="190" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="55" cy="240" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="105" cy="240" r="5" fill="#4a90d9" opacity="0.5"/>
-  <circle cx="155" cy="240" r="5" fill="#4a90d9" opacity="0.5"/><circle cx="205" cy="240" r="5" fill="#4a90d9" opacity="0.5"/>
-  <text x="130" y="285" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Exhaustive, expensive</text>
-  <!-- Random Search -->
-  <text x="420" y="55" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Random Search</text>
-  <rect x="320" y="65" width="200" height="200" rx="4" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
-  <circle cx="370" cy="95" r="5" fill="#e67e22" opacity="0.7"/>
-  <circle cx="450" cy="120" r="5" fill="#e67e22" opacity="0.7"/>
-  <circle cx="395" cy="170" r="5" fill="#e67e22" opacity="0.7"/>
-  <circle cx="490" cy="90" r="5" fill="#e67e22" opacity="0.7"/>
-  <circle cx="345" cy="230" r="5" fill="#e67e22" opacity="0.7"/>
-  <circle cx="480" cy="200" r="5" fill="#e67e22" opacity="0.7"/>
-  <circle cx="360" cy="145" r="8" fill="#27ae60"/>
-  <circle cx="510" cy="155" r="5" fill="#e67e22" opacity="0.7"/>
-  <text x="420" y="285" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Often better per budget</text>
-  <!-- Bayesian Opt -->
-  <text x="670" y="55" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Bayesian Opt.</text>
-  <rect x="570" y="65" width="200" height="200" rx="4" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
-  <!-- Surrogate surface hint -->
-  <path d="M575,250 Q610,180 640,140 Q670,90 700,130 Q730,160 765,230" fill="none" stroke="#8e44ad" stroke-width="2"/>
-  <circle cx="640" cy="140" r="6" fill="#27ae60"/>
-  <circle cx="590" cy="240" r="5" fill="#8e44ad" opacity="0.6"/>
-  <circle cx="700" cy="130" r="5" fill="#8e44ad" opacity="0.6"/>
-  <circle cx="730" cy="175" r="5" fill="#8e44ad" opacity="0.6"/>
-  <text x="670" y="285" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Surrogate model guides search</text>
-  <text x="400" y="360" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Green = best found   |   Each method trades off coverage vs. efficiency</text>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="#333">Hyperparameter Search Strategies</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Hyperparameter Search Strategies</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Settings chosen before training (learning rate, depth, regularization) &#8212; found by trying, not solving</text>
+
+  <!-- Panel 1: Grid -->
+  <text x="150" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Grid search</text>
+  <rect x="60" y="112" width="180" height="180" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="95" cy="147" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="150" cy="147" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="205" cy="147" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="95" cy="202" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="150" cy="202" r="7" fill="#7C2530"/>
+  <circle cx="205" cy="202" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="95" cy="257" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="150" cy="257" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <circle cx="205" cy="257" r="5" fill="#2D5A8E" opacity="0.6"/>
+  <text x="150" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">exhaustive lattice;</text>
+  <text x="150" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">cost explodes with dials</text>
+
+  <!-- Panel 2: Random -->
+  <text x="400" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Random search</text>
+  <rect x="310" y="112" width="180" height="180" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <circle cx="340" cy="140" r="5" fill="#C4A87A"/>
+  <circle cx="435" cy="128" r="5" fill="#C4A87A"/>
+  <circle cx="392" cy="180" r="5" fill="#C4A87A"/>
+  <circle cx="468" cy="205" r="5" fill="#C4A87A"/>
+  <circle cx="330" cy="235" r="5" fill="#C4A87A"/>
+  <circle cx="420" cy="262" r="5" fill="#C4A87A"/>
+  <circle cx="365" cy="210 " r="7" fill="#7C2530"/>
+  <circle cx="470" cy="150" r="5" fill="#C4A87A"/>
+  <text x="400" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">scattered tries; better</text>
+  <text x="400" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">coverage per budget</text>
+
+  <!-- Panel 3: Bayesian -->
+  <text x="650" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Bayesian optimization</text>
+  <rect x="560" y="112" width="180" height="180" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+  <path d="M570,270 Q605,200 630,165 Q655,120 685,155 Q712,185 732,255" fill="none" stroke="#2D5A8E" stroke-width="2.5"/>
+  <circle cx="585" cy="255" r="5" fill="#C4A87A"/>
+  <circle cx="700" cy="175" r="5" fill="#C4A87A"/>
+  <circle cx="722" cy="230" r="5" fill="#C4A87A"/>
+  <circle cx="632" cy="163" r="7" fill="#7C2530"/>
+  <text x="650" y="314" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">each result updates a model</text>
+  <text x="650" y="332" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">that guides the next guess</text>
+
+  <text x="400" y="370" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">Dark red dot = best found. Like tuning an espresso machine: taste, learn, guess smarter.</text>
 </svg>

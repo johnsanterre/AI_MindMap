@@ -1,23 +1,40 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Hinge Loss: Clear the Bar with Room to Spare</text>
+
   <!-- Axes -->
-  <line x1="100" y1="320" x2="700" y2="320" stroke="#333" stroke-width="2"/>
-  <line x1="100" y1="320" x2="100" y2="40" stroke="#333" stroke-width="2"/>
-  <text x="400" y="370" text-anchor="middle" font-size="14" fill="#333">Margin: y · f(x)</text>
-  <text x="40" y="185" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,40,185)">Loss</text>
-  <!-- Zero line at margin=1 -->
-  <line x1="400" y1="60" x2="400" y2="330" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
-  <text x="402" y="340" font-size="12" fill="#aaa">margin=1</text>
-  <!-- Hinge loss curve -->
-  <path d="M100,320 L400,50 L700,50" fill="none" stroke="#E91E63" stroke-width="3"/>
-  <!-- Hinge fill -->
-  <path d="M100,320 L400,50 L400,320 Z" fill="#E91E63" fill-opacity="0.1"/>
-  <!-- Zero loss region annotation -->
-  <text x="560" y="42" font-size="13" fill="#4CAF50" font-weight="bold">Loss = 0 (correct &amp; confident)</text>
-  <!-- Hinge annotation -->
-  <text x="120" y="230" font-size="13" fill="#E91E63">Loss = max(0, 1 - y·f(x))</text>
-  <!-- Compare MSE -->
-  <path d="M100,320 Q250,320 400,200 Q500,130 700,60" fill="none" stroke="#2196F3" stroke-width="2" stroke-dasharray="6,3"/>
-  <text x="580" y="100" font-size="12" fill="#2196F3">MSE (for comparison)</text>
-  <text x="400" y="25" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Hinge Loss</text>
+  <line x1="110" y1="310" x2="710" y2="310" stroke="#333" stroke-width="1.5"/>
+  <line x1="110" y1="310" x2="110" y2="80" stroke="#333" stroke-width="1.5"/>
+  <text x="410" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">margin  m = y &#183; f(x)</text>
+  <text x="72" y="195" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333" transform="rotate(-90,72,195)">loss</text>
+
+  <!-- x ticks -->
+  <text x="260" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">0</text>
+  <line x1="260" y1="306" x2="260" y2="314" stroke="#333" stroke-width="1.5"/>
+  <text x="410" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">1</text>
+  <line x1="410" y1="306" x2="410" y2="314" stroke="#333" stroke-width="1.5"/>
+
+  <!-- margin line -->
+  <line x1="410" y1="90" x2="410" y2="310" stroke="#C4A87A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="410" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">the margin (m = 1)</text>
+
+  <!-- hinge curve -->
+  <path d="M110,110 L410,310 L710,310" fill="none" stroke="#7C2530" stroke-width="3.5"/>
+  <text x="200" y="140" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">L = max(0, 1 &#8722; m)</text>
+
+  <!-- zone labels -->
+  <text x="185" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">wrong (m &lt; 0):</text>
+  <text x="185" y="268" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">penalty grows linearly</text>
+  <text x="330" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">right but timid</text>
+  <text x="330" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E">(0 &lt; m &lt; 1): still charged</text>
+  <text x="560" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">right with confidence (m &#8805; 1):</text>
+  <text x="560" y="299" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">loss exactly zero &#8212; the judge stops caring</text>
+
+  <!-- comparison: logistic -->
+  <path d="M110,140 C260,190 360,250 460,285 C560,303 640,308 710,309" fill="none" stroke="#2D5A8E" stroke-width="2" stroke-dasharray="7,5"/>
+  <text x="580" y="185" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">logistic loss: never</text>
+  <text x="580" y="203" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">quite reaches zero</text>
+
+  <text x="400" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">The loss behind SVMs: no reward for winning by more, no forgiveness for clipping the bar</text>
 </svg>

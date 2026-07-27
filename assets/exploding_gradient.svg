@@ -1,32 +1,51 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Exploding Gradients</text>
-  <!-- Left: gradient magnitude over layers -->
-  <text x="200" y="58" text-anchor="middle" font-size="13" fill="#333">Gradient Magnitude by Layer</text>
-  <line x1="60" y1="300" x2="360" y2="300" stroke="#333" stroke-width="2"/>
-  <line x1="60" y1="300" x2="60" y2="60" stroke="#333" stroke-width="2"/>
-  <text x="210" y="325" text-anchor="middle" font-size="12" fill="#666">Layer (output → input)</text>
-  <text x="35" y="185" text-anchor="middle" font-size="12" fill="#666" transform="rotate(-90,35,185)">‖∇‖</text>
-  <!-- Normal -->
-  <path d="M80,290 C130,285 180,280 270,275 C300,273 330,272 350,272" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
-  <text x="355" y="276" font-size="11" fill="#4CAF50">stable</text>
-  <!-- Vanishing -->
-  <path d="M80,290 C130,295 180,298 270,299 C310,299 340,300 350,300" fill="none" stroke="#2196F3" stroke-width="2.5"/>
-  <text x="355" y="303" font-size="11" fill="#2196F3">vanishing</text>
-  <!-- Exploding -->
-  <path d="M80,290 C100,270 130,230 160,170 C190,100 220,60 240,65" fill="none" stroke="#E91E63" stroke-width="3"/>
-  <text x="245" y="62" font-size="11" fill="#E91E63">exploding!</text>
-  <!-- Right: weight update illustration -->
-  <text x="600" y="58" text-anchor="middle" font-size="13" fill="#333">Gradient Clipping Fix</text>
-  <rect x="420" y="80" width="340" height="240" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="590" y="115" text-anchor="middle" font-size="12" fill="#E91E63" font-weight="bold">Problem: ‖g‖ → ∞</text>
-  <text x="590" y="140" text-anchor="middle" font-size="12" fill="#333">Weight updates diverge</text>
-  <text x="590" y="160" text-anchor="middle" font-size="12" fill="#333">Loss becomes NaN</text>
-  <line x1="500" y1="175" x2="680" y2="175" stroke="#aaa" stroke-width="1"/>
-  <text x="590" y="200" text-anchor="middle" font-size="12" fill="#4CAF50" font-weight="bold">Fix: Gradient Clipping</text>
-  <text x="590" y="225" text-anchor="middle" font-size="12" fill="#333">if ‖g‖ &gt; threshold:</text>
-  <text x="590" y="248" text-anchor="middle" font-size="13" fill="#2196F3">g ← g · threshold / ‖g‖</text>
-  <text x="590" y="278" text-anchor="middle" font-size="11" fill="#888">Also: careful init, smaller lr,</text>
-  <text x="590" y="296" text-anchor="middle" font-size="11" fill="#888">gradient checkpointing</text>
-  <text x="400" y="370" text-anchor="middle" font-size="12" fill="#555">Contrast with vanishing gradients — too large vs. too small</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="10" y="10" width="780" height="380" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Exploding Gradients</text>
+  <text x="400" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">Backprop multiplies layer by layer &#8212; repeated &#215;2 grows exponentially</text>
+
+  <!-- layers, gradient flowing backward (right to left), circles growing -->
+  <text x="700" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">output layer</text>
+  <circle cx="700" cy="185" r="8" fill="#2D5A8E"/>
+  <text x="700" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">&#8214;&#8711;&#8214; = 1</text>
+
+  <line x1="686" y1="185" x2="594" y2="185" stroke="#5C3D1E" stroke-width="1.5"/>
+  <path d="M594,185 L606,179 L606,191 Z" fill="#5C3D1E"/>
+  <text x="640" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">&#215;2</text>
+
+  <circle cx="575" cy="185" r="13" fill="#2D5A8E"/>
+  <text x="575" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D5A8E">2</text>
+
+  <line x1="556" y1="185" x2="474" y2="185" stroke="#5C3D1E" stroke-width="1.5"/>
+  <path d="M474,185 L486,179 L486,191 Z" fill="#5C3D1E"/>
+  <text x="515" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">&#215;2</text>
+
+  <circle cx="450" cy="185" r="20" fill="#7C2530" opacity="0.7"/>
+  <text x="450" y="230" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">4</text>
+
+  <line x1="424" y1="185" x2="344" y2="185" stroke="#5C3D1E" stroke-width="1.5"/>
+  <path d="M344,185 L356,179 L356,191 Z" fill="#5C3D1E"/>
+  <text x="385" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">&#215;2</text>
+
+  <circle cx="310" cy="185" r="32" fill="#7C2530" opacity="0.85"/>
+  <text x="310" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530">8</text>
+
+  <line x1="272" y1="185" x2="200" y2="185" stroke="#5C3D1E" stroke-width="1.5"/>
+  <path d="M200,185 L212,179 L212,191 Z" fill="#5C3D1E"/>
+  <text x="238" y="172" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">&#215;2</text>
+
+  <circle cx="145" cy="185" r="50" fill="#7C2530"/>
+  <text x="145" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#FDFAF4">16</text>
+  <text x="145" y="262" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">early layers: huge update,</text>
+  <text x="145" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7C2530">training diverges (NaN)</text>
+
+  <text x="425" y="110" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">gradient flows backward &#8592;&#8212; each layer amplifies it</text>
+
+  <!-- fix box -->
+  <rect x="430" y="290" width="330" height="70" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="595" y="315" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Fix: gradient clipping</text>
+  <text x="595" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#333">if &#8214;g&#8214; &gt; c :  g &#8592; g &#183; c / &#8214;g&#8214;</text>
+
+  <text x="220" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">Twin pathology: factors &lt; 1</text>
+  <text x="220" y="348" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">give vanishing gradients</text>
 </svg>

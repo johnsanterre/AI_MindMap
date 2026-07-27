@@ -1,30 +1,42 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="28" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Lagrangian Duality</text>
-  <!-- Primal problem -->
-  <rect x="40" y="50" width="320" height="150" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
-  <text x="200" y="80" text-anchor="middle" font-size="14" fill="#2196F3" font-weight="bold">Primal Problem</text>
-  <text x="200" y="108" text-anchor="middle" font-size="13" fill="#333">min f(x)</text>
-  <text x="200" y="130" text-anchor="middle" font-size="12" fill="#555">s.t. gᵢ(x) ≤ 0</text>
-  <text x="200" y="150" text-anchor="middle" font-size="12" fill="#555">     hⱼ(x) = 0</text>
-  <text x="200" y="175" text-anchor="middle" font-size="11" fill="#888">optimal value: p*</text>
-  <!-- Arrow -->
-  <line x1="370" y1="125" x2="430" y2="125" stroke="#555" stroke-width="2" marker-end="url(#a8)"/>
-  <defs><marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker></defs>
-  <text x="400" y="118" text-anchor="middle" font-size="11" fill="#555">Lagrangian</text>
-  <!-- Dual problem -->
-  <rect x="440" y="50" width="320" height="150" rx="8" fill="#FCE4EC" stroke="#E91E63" stroke-width="2"/>
-  <text x="600" y="80" text-anchor="middle" font-size="14" fill="#E91E63" font-weight="bold">Dual Problem</text>
-  <text x="600" y="108" text-anchor="middle" font-size="13" fill="#333">max g(λ, ν)</text>
-  <text x="600" y="130" text-anchor="middle" font-size="12" fill="#555">s.t. λ ≥ 0</text>
-  <text x="600" y="150" text-anchor="middle" font-size="12" fill="#555">g(λ,ν) = inf_x L(x,λ,ν)</text>
-  <text x="600" y="175" text-anchor="middle" font-size="11" fill="#888">optimal value: d*</text>
-  <!-- Lagrangian box -->
-  <rect x="200" y="230" width="400" height="80" rx="8" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="400" y="255" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">L(x,λ,ν) = f(x) + Σλᵢgᵢ(x) + Σνⱼhⱼ(x)</text>
-  <text x="400" y="280" text-anchor="middle" font-size="12" fill="#555">Weak duality: d* ≤ p* always</text>
-  <text x="400" y="298" text-anchor="middle" font-size="12" fill="#2196F3">Strong duality (Slater's): d* = p*</text>
-  <!-- KKT note -->
-  <text x="400" y="345" text-anchor="middle" font-size="13" fill="#E91E63">KKT conditions: necessary &amp; sufficient for convex problems</text>
-  <text x="400" y="370" text-anchor="middle" font-size="11" fill="#888">Used in SVM derivation, constrained optimization, and primal-dual methods</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="arrLD" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Lagrangian Duality: Turn Constraints into Prices</text>
+
+  <!-- Primal box -->
+  <rect x="45" y="75" width="300" height="130" rx="6" fill="#2D5A8E" fill-opacity="0.06" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="195" y="102" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#2D5A8E">Primal: obey the rule</text>
+  <text x="195" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">min f(x)   s.t.  g(x) &#8804; 0</text>
+  <text x="195" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#8220;maximize suitcase value</text>
+  <text x="195" y="173" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">under a hard weight limit&#8221;</text>
+  <text x="195" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#2D5A8E">best value: p*</text>
+
+  <!-- Dual box -->
+  <rect x="455" y="75" width="300" height="130" rx="6" fill="#7C2530" fill-opacity="0.06" stroke="#7C2530" stroke-width="2"/>
+  <text x="605" y="102" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#7C2530">Dual: pay a price instead</text>
+  <text x="605" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#333">max&#8202;&#955;&#8805;0&#8202; min&#8202;x&#8202; L(x, &#955;)</text>
+  <text x="605" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">&#8220;charge a fee &#955; per unit of</text>
+  <text x="605" y="173" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">violation, then choose freely&#8221;</text>
+  <text x="605" y="196" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#7C2530">best value: d*</text>
+
+  <!-- Bridge arrows -->
+  <line x1="345" y1="125" x2="453" y2="125" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrLD)"/>
+  <line x1="453" y1="160" x2="345" y2="160" stroke="#5C3D1E" stroke-width="2" marker-end="url(#arrLD)"/>
+  <text x="399" y="115" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">price the constraint</text>
+  <text x="399" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">same answer*</text>
+
+  <!-- Lagrangian strip -->
+  <rect x="150" y="235" width="500" height="52" rx="6" fill="#C4A87A" fill-opacity="0.2" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="400" y="257" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#5C3D1E">L(x, &#955;) = f(x) + &#955; g(x)</text>
+  <text x="400" y="278" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the constraint folded into the objective &#8212; &#955; is the Lagrange multiplier, the &#8220;fee&#8221;</text>
+
+  <!-- Duality facts -->
+  <text x="400" y="322" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#2D5A8E">Weak duality:  d* &#8804; p*  (always)</text>
+  <text x="400" y="346" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#7C2530">*Strong duality:  d* = p*  (convex + Slater&#8217;s condition)</text>
+  <text x="400" y="374" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-style="italic" fill="#5C3D1E">The right price makes the free choice respect the limit &#8212; the trick behind SVMs and convex solvers.</text>
 </svg>

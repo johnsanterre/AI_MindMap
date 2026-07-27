@@ -1,26 +1,46 @@
-<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <rect width="800" height="400" fill="white"/>
-  <!-- Axes -->
-  <line x1="100" y1="320" x2="700" y2="320" stroke="#333" stroke-width="2"/>
-  <line x1="100" y1="320" x2="100" y2="40" stroke="#333" stroke-width="2"/>
-  <text x="400" y="370" text-anchor="middle" font-size="14" fill="#333">Predicted probability p̂</text>
-  <text x="40" y="185" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90,40,185)">Loss</text>
-  <!-- Tick marks -->
-  <text x="100" y="338" text-anchor="middle" font-size="12" fill="#666">0</text>
-  <text x="700" y="338" text-anchor="middle" font-size="12" fill="#666">1</text>
-  <!-- y=1 curve: -log(p) -->
-  <path d="M680,60 C600,80 500,130 400,185 C300,240 200,295 120,340" fill="none" stroke="#2196F3" stroke-width="3"/>
-  <!-- y=0 curve: -log(1-p) -->
-  <path d="M120,60 C200,80 300,130 400,185 C500,240 600,295 680,340" fill="none" stroke="#E91E63" stroke-width="3"/>
-  <!-- Labels -->
-  <text x="650" y="75" font-size="13" fill="#2196F3">y=1: −log(p̂)</text>
-  <text x="110" y="75" font-size="13" fill="#E91E63">y=0: −log(1−p̂)</text>
-  <!-- Correct prediction regions -->
-  <text x="620" y="310" font-size="12" fill="#2196F3">low loss</text>
-  <text x="120" y="310" font-size="12" fill="#E91E63">low loss</text>
-  <!-- Formula -->
-  <rect x="220" y="160" width="360" height="42" rx="6" fill="#f9f9f9" stroke="#ddd"/>
-  <text x="400" y="178" text-anchor="middle" font-size="12" fill="#555">Log Loss = −[y log(p̂) + (1−y) log(1−p̂)]</text>
-  <text x="400" y="196" text-anchor="middle" font-size="11" fill="#888">penalizes confident wrong predictions heavily</text>
-  <text x="400" y="25" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">Log Loss (Binary Cross-Entropy)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">Log Loss: Confidence Has Consequences</text>
+
+  <!-- Left: the -log(p) curve for the true class -->
+  <text x="245" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Loss when the true class is 1:  &#8722;log(p&#770;)</text>
+  <line x1="95" y1="320" x2="400" y2="320" stroke="#333" stroke-width="1.5"/>
+  <line x1="95" y1="320" x2="95" y2="100" stroke="#333" stroke-width="1.5"/>
+  <text x="247" y="344" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">predicted probability p&#770; of the true class</text>
+  <text x="76" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333" transform="rotate(-90 76 210)">loss</text>
+  <text x="98" y="336" font-family="Georgia, serif" font-size="11" fill="#333">0</text>
+  <text x="394" y="336" font-family="Georgia, serif" font-size="11" fill="#333">1</text>
+  <!-- curve: explodes near 0, ~0 near 1 -->
+  <path d="M108,105 Q125,200 165,255 Q230,300 390,318" fill="none" stroke="#7C2530" stroke-width="2.5"/>
+  <!-- confident wrong -->
+  <circle cx="115" cy="140" r="5" fill="#7C2530"/>
+  <text x="128" y="130" font-family="Georgia, serif" font-size="12" fill="#7C2530">confident and wrong:</text>
+  <text x="128" y="146" font-family="Georgia, serif" font-size="12" fill="#7C2530">loss explodes</text>
+  <!-- hedged -->
+  <circle cx="240" cy="290" r="5" fill="#5C3D1E"/>
+  <text x="240" y="275" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">hedged: mild penalty</text>
+  <!-- confident right -->
+  <circle cx="385" cy="317" r="5" fill="#2D5A8E"/>
+  <text x="382" y="300" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#2D5A8E">confident and right: &#8776; 0</text>
+
+  <!-- Divider -->
+  <line x1="435" y1="65" x2="435" y2="355" stroke="#D4C5A9" stroke-width="1.5"/>
+
+  <!-- Right: forecaster story + formula -->
+  <text x="612" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Two forecasters, both wrong</text>
+
+  <rect x="470" y="98" width="285" height="70" rx="6" fill="#C4A87A" fill-opacity="0.2" stroke="#5C3D1E" stroke-width="2"/>
+  <text x="612" y="123" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5C3D1E" font-weight="bold">&#8220;60% chance of rain&#8221; &#8212; it rains</text>
+  <text x="612" y="147" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">said sun was likelier, but hedged: small loss</text>
+
+  <rect x="470" y="186" width="285" height="70" rx="6" fill="#7C2530" fill-opacity="0.08" stroke="#7C2530" stroke-width="2"/>
+  <text x="612" y="211" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#7C2530" font-weight="bold">&#8220;99% chance of sun&#8221; &#8212; it pours</text>
+  <text x="612" y="235" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">bet everything and lost: devastating loss</text>
+
+  <rect x="470" y="280" width="285" height="52" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="612" y="302" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2D5A8E">&#8722;[ y log p&#770; + (1&#8722;y) log(1&#8722;p&#770;) ]</text>
+  <text x="612" y="322" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#333">scores the probability, not just the final answer</text>
+
+  <text x="400" y="376" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#5C3D1E">Unlike accuracy, log loss asks how sure you were &#8212; overconfidence on the wrong answer is punished hardest.</text>
 </svg>

@@ -1,31 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="white"/>
-  <text x="400" y="38" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">The Kernel Trick</text>
-  <!-- Low dim not separable -->
-  <text x="140" y="70" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">2D: Not Separable</text>
-  <line x1="40" y1="280" x2="250" y2="280" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="40" y1="280" x2="40" y2="80" stroke="#ccc" stroke-width="1.5"/>
-  <circle cx="90" cy="180" r="7" fill="#4a90d9"/><circle cx="110" cy="200" r="7" fill="#4a90d9"/>
-  <circle cx="80" cy="220" r="7" fill="#4a90d9"/>
-  <circle cx="150" cy="175" r="7" fill="#e74c3c"/><circle cx="170" cy="190" r="7" fill="#e74c3c"/>
-  <circle cx="160" cy="215" r="7" fill="#e74c3c"/>
-  <circle cx="120" cy="130" r="7" fill="#4a90d9"/><circle cx="200" cy="230" r="7" fill="#e74c3c"/>
-  <text x="145" y="310" text-anchor="middle" font-family="Arial" font-size="11" fill="#e74c3c">No linear separator</text>
-  <!-- Arrow -->
-  <text x="315" y="195" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">→</text>
-  <text x="315" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">φ(x)</text>
-  <!-- High dim separable -->
-  <text x="520" y="70" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#333">3D: Separable</text>
-  <line x1="360" y1="280" x2="670" y2="280" stroke="#ccc" stroke-width="1.5"/>
-  <line x1="360" y1="280" x2="360" y2="80" stroke="#ccc" stroke-width="1.5"/>
-  <circle cx="400" cy="250" r="7" fill="#4a90d9"/><circle cx="430" cy="240" r="7" fill="#4a90d9"/>
-  <circle cx="410" cy="260" r="7" fill="#4a90d9"/>
-  <circle cx="550" cy="140" r="7" fill="#e74c3c"/><circle cx="580" cy="130" r="7" fill="#e74c3c"/>
-  <circle cx="560" cy="155" r="7" fill="#e74c3c"/>
-  <line x1="460" y1="85" x2="460" y2="275" stroke="#27ae60" stroke-width="2.5" stroke-dasharray="6,3"/>
-  <text x="515" y="310" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60">Hyperplane separates!</text>
-  <!-- Kernel formula -->
-  <rect x="480" y="300" width="300" height="60" rx="8" fill="#f0f4ff" stroke="#4a90d9" stroke-width="2"/>
-  <text x="630" y="322" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">Kernel: K(x,z) = φ(x)·φ(z)</text>
-  <text x="630" y="345" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Compute dot product without explicit φ — saves computation</text>
+  <rect width="800" height="400" fill="#FDFAF4"/>
+  <rect x="8" y="8" width="784" height="384" fill="none" stroke="#D4C5A9" stroke-width="2"/>
+  <defs>
+    <marker id="arrK" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5C3D1E"/>
+    </marker>
+  </defs>
+  <text x="400" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5C3D1E">The Kernel Trick: Lift, Then Slice</text>
+
+  <!-- Left: 2D rings, not linearly separable -->
+  <text x="180" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">In 2D: rings &#8212; no straight line works</text>
+  <!-- outer ring (red points) -->
+  <circle cx="180" cy="200" r="80" fill="none" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4,4"/>
+  <circle cx="180" cy="120" r="6" fill="#7C2530"/>
+  <circle cx="248" cy="160" r="6" fill="#7C2530"/>
+  <circle cx="256" cy="225" r="6" fill="#7C2530"/>
+  <circle cx="210" cy="275" r="6" fill="#7C2530"/>
+  <circle cx="132" cy="266" r="6" fill="#7C2530"/>
+  <circle cx="102" cy="205" r="6" fill="#7C2530"/>
+  <circle cx="122" cy="145" r="6" fill="#7C2530"/>
+  <!-- inner cluster (navy points) -->
+  <circle cx="180" cy="200" r="7" fill="#2D5A8E"/>
+  <circle cx="160" cy="190" r="7" fill="#2D5A8E"/>
+  <circle cx="198" cy="212" r="7" fill="#2D5A8E"/>
+  <circle cx="188" cy="185" r="7" fill="#2D5A8E"/>
+  <text x="180" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#7C2530" font-style="italic">no ruler can separate these</text>
+
+  <!-- Arrow with phi -->
+  <line x1="300" y1="200" x2="380" y2="200" stroke="#5C3D1E" stroke-width="2.5" marker-end="url(#arrK)"/>
+  <text x="340" y="188" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#5C3D1E">&#966;(x)</text>
+  <text x="340" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5C3D1E">(never computed!)</text>
+
+  <!-- Right: lifted 3D view, plane slices -->
+  <text x="565" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">Lifted: a flat plane slices them apart</text>
+  <!-- ground line -->
+  <line x1="420" y1="290" x2="720" y2="290" stroke="#333" stroke-width="1.5"/>
+  <!-- outer ring stays low -->
+  <circle cx="445" cy="278" r="6" fill="#7C2530"/>
+  <circle cx="480" cy="282" r="6" fill="#7C2530"/>
+  <circle cx="640" cy="280" r="6" fill="#7C2530"/>
+  <circle cx="675" cy="276" r="6" fill="#7C2530"/>
+  <circle cx="700" cy="282" r="6" fill="#7C2530"/>
+  <!-- inner cluster lifted up -->
+  <circle cx="545" cy="140" r="7" fill="#2D5A8E"/>
+  <circle cx="570" cy="128" r="7" fill="#2D5A8E"/>
+  <circle cx="592" cy="145" r="7" fill="#2D5A8E"/>
+  <circle cx="568" cy="155" r="7" fill="#2D5A8E"/>
+  <!-- separating plane (parallelogram) -->
+  <polygon points="440,215 660,215 720,195 500,195" fill="#C4A87A" fill-opacity="0.35" stroke="#5C3D1E" stroke-width="1.5"/>
+  <text x="700" y="185" text-anchor="end" font-family="Georgia, serif" font-size="12" fill="#5C3D1E">separating plane</text>
+  <text x="565" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#2D5A8E" font-style="italic">inner ring floats above &#8212; now linearly separable</text>
+
+  <!-- Bottom formula strip -->
+  <rect x="120" y="332" width="560" height="42" rx="6" fill="none" stroke="#2D5A8E" stroke-width="2"/>
+  <text x="400" y="350" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2D5A8E">K(x, z) = &#9001;&#966;(x), &#966;(z)&#9002;</text>
+  <text x="400" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#333">the algorithm only needs similarities &#8212; swap the dot product, never visit the high-dimensional space</text>
 </svg>
