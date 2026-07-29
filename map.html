@@ -6,16 +6,16 @@
 <title>AI Mind Map — full view</title>
 <style>
   :root {
-    --bg: #101216;
-    --card: #1c2027;
-    --card-border: #2e3440;
-    --card-hover: #262c36;
-    --ink: #e8eaed;
-    --ink-muted: #9aa3ad;
-    --edge: #39414d;
-    --edge-hot: #8ab4f8;
-    --accent: #8ab4f8;
-    --match: #f8c471;
+    --bg: #f4f1ea;
+    --card: #ffffff;
+    --card-border: #b6a98f;
+    --card-hover: #f2efe8;
+    --ink: #141414;
+    --ink-muted: #6b6b66;
+    --edge: #c3b69e;
+    --edge-hot: #7C2530;
+    --accent: #7C2530;
+    --match: #C79A2E;
     --panel-bg: #ffffff;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -54,7 +54,7 @@
     border: 1px solid var(--card-border); border-radius: 999px;
   }
   .chip:hover { color: var(--ink); border-color: var(--ink-muted); }
-  .chip.on { background: var(--accent); border-color: var(--accent); color: #10131a; font-weight: 600; }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: #fafaf8; font-weight: 600; }
   .chip .n { opacity: 0.65; margin-left: 4px; font-size: 11px; }
 
   #canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
@@ -79,7 +79,7 @@
   #panel {
     position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 92vw);
     background: var(--panel-bg); z-index: 30;
-    box-shadow: -12px 0 32px rgba(0,0,0,0.45);
+    box-shadow: -12px 0 32px rgba(20,20,20,0.14);
     transform: translateX(105%); transition: transform 200ms ease;
     display: flex; flex-direction: column;
   }
@@ -98,7 +98,7 @@
   #frame { flex: 1; border: 0; width: 100%; background: white; }
   #frame-loading {
     position: absolute; top: 42px; left: 0; right: 0; padding: 10px 14px;
-    background: var(--match); color: #10131a; font-size: 12.5px;
+    background: var(--match); color: #fafaf8; font-size: 12.5px;
     display: none; z-index: 2;
   }
   #panel.loading #frame-loading { display: block; }
