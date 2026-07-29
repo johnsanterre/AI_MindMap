@@ -369,10 +369,30 @@ function select(id) {
     try { frame.contentWindow.Engine.play(id); return; } catch (e) {}
   }
   panel.classList.add('loading');
+  pendingId = id;
   frame.src = passageUrl(id);
   frameBooted = true;
 }
-frame.addEventListener('load', () => panel.classList.remove('loading'));
+let pendingId = null;
+function playInFrame(id) {
+  try { frame.contentWindow.SugarCube.Engine.play(id); return true; } catch (e) {}
+  try { frame.contentWindow.Engine.play(id); return true; } catch (e) {}
+  return false;
+}
+frame.addEventListener('load', () => {
+  panel.classList.remove('loading');
+  // First load: the story boots to its Start passage and the ?passage param
+  // can race SugarCube's init, so jump to the wanted card ourselves once the
+  // engine is ready (retry briefly until it is).
+  if (pendingId) {
+    const want = pendingId; pendingId = null;
+    let tries = 25;
+    (function jump() {
+      if (playInFrame(want)) return;
+      if (--tries > 0) setTimeout(jump, 120);
+    })();
+  }
+});
 function closePanel() { panel.classList.remove('open'); }
 document.getElementById('panel-close').addEventListener('click', closePanel);
 document.addEventListener('keydown', (e) => {
